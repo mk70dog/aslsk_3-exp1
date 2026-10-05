@@ -1584,6 +1584,18 @@ var GUN_DATA=[
     var r=VRED[g.id]; if(r){ g.thRed=[].concat.apply([],r.map(function(v){return [v,v,v,v,v,v];})); }
   });
 })();
+// v11.335(各タブ監査(3)砲撃タブ、Kato「資料は全てアップロード済み」): 独20L・75L・88LL、米76L・105の赤TH#/赤CH#は、最新のEX1 To Hit Chart(2017)の
+// 実物(ASL_SK_EX1_to_HIT_chart.pdfカラー版・To_Hit_Chart_EX1.pdf白黒版、いずれも該当行に赤/灰色の値なし)に記載がなく「赤の記載が無ければ黒を使用」のため、
+// 旧SK3(2007)/有志版(2012)由来の赤値(黒より1低い)を廃止して赤=黒にする(赤TH#使用は捕獲・非正規・米軍1944年前のみで通常射撃には影響しない)。
+// 牽引砲側は赤配列を削除(gunTH/gunIttCHは赤未設定なら黒へフォールバック)。車両主砲側はVEH_MA_TH_TABLE_PENDING/ITT_PENDINGの該当行を直接変更済み。
+(function(){
+  ['g_105art_us','g_75pak40_ge','g_20flak38_ge','g_88pak43_ge','g_76m5_us'].forEach(function(id){
+    var g=GUN_DATA.find(function(x){return x.id===id;});
+    if(!g)return;
+    delete g.thRed; delete g.thRedItt; delete g.chRedItt;
+    if(g.ch!=null)g.chRed=g.ch;
+  });
+})();
 
 // TK_TABLE: QRDC「AP(APCR/APDS)破壊確認表」準拠(B案・ダルマ承認2026-07)。
 // 各口径キーは {ap:[8値], apcr:[8値 or null]} の形。射程バンドは8段階：
@@ -2702,6 +2714,7 @@ var SCENARIO_SSR_FLAGS={
   'S27':{nat:'GBR',noCowerEliteFirstLine:true}, // 2026-09追加: SSR2「コモンウェルス軍の乗員および1st Line MMCはCowerを行わない」
   'S20':{underlinedByNat:{USA:['6-6-7','3-4-7']},noInexpByNat:{USA:['5-3-6','2-2-6'],FFR:['5-3-6','2-2-6']},noSmokeByNat:{USA:['5-3-6','2-2-6'],FFR:['5-3-6','2-2-6']}}, // v11.301(ダルマ指示): SSR4「5-3-6/2-2-6自由フランス軍は未熟兵ペナルティを受けず、煙幕能力の乗数も適用されない。アメリカ軍6-6-7/3-4-7は下線付き士気値扱いとなりELR(5.1)の対象外」(データ上5-3-6[G]はUSA、2-2-6[G](HS)はFFR)
   'S31':{nat:'ITA',allInexperienced:true}, // v11.300(ダルマ指示): SSR2「伊軍の全MMCは未熟兵ペナルティ(5.4項)の対象となる」→指揮官同行でも解除されない(徴集兵(C)と同じ扱い)
+  'S35':{nat:'SOV',underlinedMorale:['6-2-8','3-2-8'],brokenMoraleP1:['6-2-8','3-2-8'],commissarMor:{SOV:{'8-0':2,'6+1':2}}}, // v11.340(Kato指示): SSR2 二線級6-2-8/3-2-8=下線付き士気値(ELR免除)+混乱面士気値+1、SSR4 政治委員8-0→士気10・6+1→士気8
   'S26':{nat:'SOV',underlinedMorale:['6-2-8','3-2-8']}, // v11.298(ダルマ指示): SSR2「ロシア軍の6-2-8および3-2-8は下線付き士気値を有するものとして扱い、ELR(5.1)の対象としない」
   'S23':{nat:'GBR',noCowerEliteFirstLine:true,ldr91Gun6pdr:true} // v11.297(ダルマ指示): SSR3「英軍の精鋭(Elite)および正規(1st Line)MMCはCowerを行わない」(英軍OBは4-5-8[E]・乗員(常にエリート)のみ)。SSR2: 9-1指揮官が6ポンド対戦車砲の乗員とスタックしていればTH DRに指揮修正
 };
@@ -2749,6 +2762,8 @@ var SSR_REFLECT={
   S27:{5:'マップ: 穀物地形を有効(季節内)にする(日付が5月でも麦畑のヒンドランス・1.5MFを適用)',6:'マップ(行軍ルート): AFV(装甲車・BU状態の履帯車を含む全AFV)は建物ヘクスへ進入できず、ルートに追加できない',1:'不意打ちカード: 「SSR：ニュージーランド軍 -1」ボタンで反映',2:'射撃タブ: 英連邦軍のエリート/1st LineのCowerを自動で免除',4:'射撃・砲撃/戦車・対戦車タブ: ターン1〜2に英連邦軍がドイツ軍を撃つ全ての射撃のDRMに+1を自動加算(FFMOは打ち消さず、残存火力は減らさない)。目標がドイツ山岳部隊でない場合(ラムケ戦闘団の降下猟兵)は、SSR直下のボタンでOFFにする'},
   S28:{1:'マップ(行軍ルート): AFVが非丘陵の開豁地・湿地(SSR2)に進入する各ヘクスに「判定要」の印を付け、件数を表示(DR≧11で行動不能の判定自体は手動)',2:'マップ(LOS・移動): 穀物・藪を湿地として扱う(ヒンドランスは穀物扱い、進入は歩兵1.5MF・車両2MP。盤面画像は元のまま)',4:'射撃・砲撃/戦車(TH・車載機銃・IFE)・対戦車タブ: 全ての射撃DRMに+1を自動加算(FFMOは打ち消さない)'},
   S33:{1:'マップ(LOS・移動): 穀物を耕地として扱う(LOSは開豁地＝ヒンドランスなし、進入1.5MF、季節に関係なく適用。盤面画像は元のまま)'},
+  S35:{1:'マップ(LOS・移動): 林を石造瓦礫、果樹園を砲弾孔として扱う(盤面画像は元のまま)。瓦礫は歩兵3MF・TEM+3・ヘクスサイド沿いを含むLOS遮断・待ち伏せ可、車両は林と同じ扱い(総MPの半分または全MPを消費、ボグ判定+3/+0)。砲弾孔はLOSに影響せず歩兵TEM+1、進入2MF(移動中に1MFで進入すれば開豁地・TEM0)→行軍ルートは1MFで計算',2:'士気/損耗(MC)・回復タブ: ロシア軍6-2-8/3-2-8をピッカーで選ぶと「士気値下線あり(ELR置換免除)」を自動ONにし、混乱面の士気値を+1して反映。不意打ちカード: 「SSR：露エリート/1st Line -1」ボタンで反映。移動タブの煙幕手榴弾: 独8-3-8[E]を選ぶとSmoke指数を5にして反映',3:'砲撃/戦車・対戦車(LATW)タブ: 目標車両にT-34/76(41/42)を選ぶとTH DRに+1を自動加算し、車体(Hull)命中(色付きdr≧白dr)はミスにする。AFVタブ: T-34 M41の車載機銃は前面BMGをDisabled、車体(VCA)変更は選べない。マップ(行軍ルート): T-34 M41は移動できない。(設置制限・残骸なし・TEMなし・LOSに影響なしは表示のみ)',4:'士気/損耗(MC): ロシア軍8-0・6+1を選ぶと士気値を10・8にして反映(ELR非適用)。MC・回復タブの「SSR4：政治委員とスタック」ボタンで、ロシア軍歩兵の士気値+1(回復は混乱士気値+1・DM+4なし)を反映。回復に失敗した部隊の置換・損耗(政治委員の回復義務)は注記のみで手動'},
+  S34:{1:'射撃・砲撃/戦車・対戦車タブ: 射程7ヘクス以上の砲・車載主砲のTo Hit判定と、IFTのみで解決する射撃(射撃タブ・車載機銃・IFE)に+1を自動加算(FFMOは打ち消さない)。砲の歩兵/地域目標種別攻撃のIFT・残存火力・阻止射撃には加算しない。射程は射撃タブでは先頭グループの射程'},
   S44:{2:'PAATCカード: 「SSR：ポーランド軍MMC +1」ボタンで反映'},
   S46:{1:'マップ(行軍ルート): 道路移動ボーナスを無効にし、建物・林以外に進入する歩兵に追加+0.5MFを自動加算(煙幕の使用制限は表示のみ)',2:'マップ(LOS・標高): 丘(標高1)の開豁地部分を林として扱い、標高は0にする(丘上の道路・建物は元のまま。盤面画像は元のまま)',3:'降雪の状態はこのSSR直下の「降雪中」ボタンで切替。降雪中は、射程6ヘクス以下の射撃に+1、7ヘクス以上に+2のDRMを自動加算(射撃・砲撃/戦車・対戦車タブ。FFMOは打ち消さず、残存火力・阻止射撃には適用しない。射程は射撃タブでは先頭グループの射程)'}
 };
@@ -2756,7 +2771,7 @@ var SSR_REFLECT={
 // 不意打ち(Ambush)のシナリオSSR: S18(露エリート/1st Line -1)、S27(ニュージーランド軍MMC/SMC -1)。該当しなければnull。
 function ambSsrLabel(){
   var id=S.scen&&S.scen.sel;
-  if(id==='S18')return 'SSR：露エリート/1st Line -1';
+  if(id==='S18'||id==='S35')return 'SSR：露エリート/1st Line -1'; // v11.340: S35 SSR2も同文(ロシア軍のエリートおよび1st Lineは待ち伏せdrに-1のdrm)
   if(id==='S27')return 'SSR：ニュージーランド軍 -1';
   return null;
 }
@@ -2771,7 +2786,7 @@ function rallySsrBmLabel(){
 function rallySsrBmOn(rl){return !!(rallySsrBmLabel()&&rl&&rl.ssrGreekM1);}
 function FORT16set(v){S.scenFort16=(S.scenFort16===v)?null:v;Draw();}
 function GEBtog(){S.scenGebirgOff=!S.scenGebirgOff;Draw();}
-// シナリオSSRによる射撃DRM(全射撃共通): S28(夜明け前の暗闇: 全IFT/TH射撃+1)、S4/S46(降雪中: 射程に応じたヒンドランス相当のDRM)。
+// シナリオSSRによる射撃DRM(全射撃共通): S28(夜明け前の暗闇: 全IFT/TH射撃+1)、S34(夜が迫る: 射程7ヘクス以上のTH・IFTのみの射撃+1)、S4/S46(降雪中: 射程に応じたヒンドランス相当のDRM)。
 // 妨害(Hindrance)ではなく独立のDRMとして加算するため、FFMOの不適用判定(妨害あり)には影響しない(S46 SSR3「降雪はFFMOを打ち消さない」、S28 SSR4「FFMOを打ち消さない」)。
 function fireShotPh(){var m={pfph:'PFPh',dff:'DFF',dfph:'DFPh',afph:'AFPh'};return m[S.fireSub]||'PFPh';}
 function scenShotDrm(range,ph){
@@ -2779,6 +2794,10 @@ function scenShotDrm(range,ph){
   if(!id)return 0;
   var d=0;
   if(id==='S28')d+=1;
+  // v11.339(Kato指示「S34 SSR1を適応する」): S34 SSR1「接近する夜のため射程7ヘクス以上の全てのIFT/TH判定に+1。このペナルティはTo Hit判定に適用され、
+  // 歩兵目標種別・地域目標種別攻撃のIFTには適用されない。残存火力・阻止には影響せず、FFMOを打ち消さない」。S28/S46と同じ仕組み(独立DRM、妨害ではない)で、
+  // 呼び出し側が既に区別している: 砲・車載主砲のTH(gunTotalDRM)・IFTのみで解決する射撃(射撃タブ・車載機銃/IFE)には加算、砲のIFT(ITT/ATT)・残存火力・阻止には加算しない。
+  if(id==='S34'&&range!=null&&typeof range==='number'&&range>=7)d+=1;
   // S27 SSR4: ターン1〜2は、ドイツ山岳部隊(Gebirgsjager)への全ての射撃(Ordnanceは To Hit、その他はIFT)に+1 DRM(FFMOを打ち消さず、残存火力も減らさない)。
   // 射撃側の国籍が判定できる場合(resolveFiringNat)に、英連邦軍側の射撃へ自動加算する。ドイツ軍の降下猟兵(ラムケ戦闘団)を撃つ場合はSSR直下のボタンでOFFにする。
   if(id==='S27'&&!S.scenGebirgOff&&S.turn&&S.turn.cur<=2){
@@ -2799,6 +2818,27 @@ function scenSnowHind(range){
   if(id!=='S4'||!S.scenSnow||range==null||typeof range!=='number')return 0;
   return (range>=6)?1:0;
 }
+
+// ═══ S35 SSR1〜4(2026-10、Kato指示「S35 SSR1-SSR4適応・適応済み表記」) ═══
+// SSR2: ロシア軍6-2-8/3-2-8は二線級(下線付き士気値=ELR免除、混乱面の士気値+1)。エリート/1st Lineは不意打ちdr-1(S18と同じボタン)。独8-3-8はSmoke指数5。
+// SSR3: T-34 M41は塹壕化AFV(移動・VCA変更不可、TH DR+1、車体命中はミス、前面BMGはDisabled)。シナリオのT-34/76(41/42)(afv_t3476_sov)が対象。
+// SSR4: ロシア軍8-0・6+1は政治委員(士気値10・8、ELR非適用)。スタックしたロシア軍歩兵は士気値+1、回復時に+4のDMを適用しない。
+var S35_DUGIN_AFV='afv_t3476_sov';
+function scenIsS35(){return !!(S.scen&&S.scen.sel==='S35');}
+// 目標車両が塹壕化したT-34 M41か(SSR3)。
+function ssrDugInTarget(vehId){return !!(scenIsS35()&&vehId&&vehId===S35_DUGIN_AFV);}
+// 射撃側の車両主砲が塹壕化したT-34 M41か(SSR3: VCA変更不可・前面BMGはDisabled)。
+function ssrDugInFiringGun(gd){return !!(scenIsS35()&&gd&&gd.id==='veh_ma_'+S35_DUGIN_AFV);}
+// 目標車両が塹壕化AFVで、THの色付きdr>=白dr(=車体命中)ならミス扱い(SSR3)。
+function ssrDugInHullMiss(vehId,rd,wd){return !!(ssrDugInTarget(vehId)&&rd!=null&&wd!=null&&rd>=wd);}
+// SSR2: 二線級MMCの混乱面士気値+1(対象ラベルは火力-射程-士気で照合)。
+function ssrBrokenMoraleBonus(nat,label){var f=getScenarioSSRFlags();return (f&&f.brokenMoraleP1&&f.nat===nat&&ssrUnitBase(label)&&f.brokenMoraleP1.indexOf(ssrUnitBase(label))>=0)?1:0;}
+// SSR4: 政治委員(SMC)の士気値ボーナス(8-0→10、6+1→8)。
+function ssrCommissarMorBonus(nat,label){var f=getScenarioSSRFlags();return (f&&f.commissarMor&&f.commissarMor[nat]&&label&&f.commissarMor[nat][label])?f.commissarMor[nat][label]:0;}
+function ssrCommissarOn(){var f=getScenarioSSRFlags();return !!(f&&f.commissarMor);}
+// SSR1: S35の瓦礫(元は林)は車両にとって林として扱う(総MPの半分または全MP消費・ボグ判定+3/+0)。
+function scenRubbleAsWoods(name){return !!(S_LOS&&S_LOS.ssr==='WoodsRubbleOrchardShellhole'&&name==='Stone Rubble');}
+function losBogTerrain(name){return !!(name&&(LOS_VEHICLE_BOG_TERRAINS[name]||scenRubbleAsWoods(name)));}
 function fireShotRange(f){return (f&&f.grps&&f.grps[0]&&typeof f.grps[0].range==='number')?f.grps[0].range:null;}
 function ssrReflectTag(scId,idx){
   var note=SSR_REFLECT[scId]&&SSR_REFLECT[scId][idx];
@@ -3348,7 +3388,7 @@ var UNITS={
 // 明記が無いため、既存の同系統国籍(ALM=連合中小国は一部既存、GER/USA等)の類似ユニットから類推した暫定値。要ダルマ現物確認。
 UNITS.POL={lbl:"波軍",col:"#c94f4f",
   mmc:[
-    {lbl:"4-5-8[E]",fp:4,rng:5,mor:8,bm:7,smk:2,sr:false,ei:false,hs:false,af:true,green:false,note:"波軍(連合中小国) SK_NationalityChart.pdf。bm/smkはGER5-4-8[E]類推の暫定値、要確認"},
+    {lbl:"4-5-8[E]",fp:4,rng:5,mor:8,bm:7,smk:1,sr:false,ei:false,hs:false,af:true,green:false,note:"波軍(連合中小国) SK_NationalityChart.pdf。smkは国籍別チャート画像の「4¹-5-8」(右上添字1)で確定(2026-10監査、旧2は暫定値)。bmはGER5-4-8[E]類推の暫定値、要確認"},
     {lbl:"4-5-7[1]",fp:4,rng:5,mor:7,bm:6,smk:0,sr:false,ei:false,hs:false,af:true,green:false,note:"波軍(連合中小国) 既存ALM.mmcと同一"},
     {lbl:"4-3-7[G]",fp:4,rng:3,mor:7,bm:6,smk:0,sr:false,ei:false,hs:false,af:false,green:true,note:"波軍(連合中小国) 未熟兵 既存ALM.mmcと同一"},
     {lbl:"2-4-8[E](HS)",fp:2,rng:4,mor:8,bm:7,smk:0,sr:false,ei:false,hs:true,af:false,green:false,note:"波軍(連合中小国) 損耗HS。bmはGER2-3-8[E](HS)類推の暫定値、要確認"},
@@ -3503,10 +3543,10 @@ var LOS_TERRAIN_NAME_JP={
   "Stone Rubble":"石造瓦礫",
   "MultipleWooden":"木造建物群",
   "MultipleStone":"石造建物群",
-  "PlowedFields":"耕地","SwampS28":"湿地(SSR)","FortifiedBuilding":"要塞化建物" // 2026-09追加
+  "PlowedFields":"耕地","SwampS28":"湿地(SSR)","ShellholeS35":"砲弾孔(SSR)","FortifiedBuilding":"要塞化建物" // 2026-09追加
 };
 // v11.282修正: 英語表示では日本語の地形名を出さない(従来は英語表示でも「石造建物」「林」等が日本語のままだった)。
-var LOS_TERRAIN_NAME_EN={"MarshImpassable":"Marsh","Stone Building, 1 Level":"Stone Building","MultipleWooden":"Wooden Buildings","MultipleStone":"Stone Buildings","PlowedFields":"Plowed Fields","SwampS28":"Swamp (SSR)","FortifiedBuilding":"Fortified Building"};
+var LOS_TERRAIN_NAME_EN={"MarshImpassable":"Marsh","Stone Building, 1 Level":"Stone Building","MultipleWooden":"Wooden Buildings","MultipleStone":"Stone Buildings","PlowedFields":"Plowed Fields","SwampS28":"Swamp (SSR)","ShellholeS35":"Shellholes (SSR)","FortifiedBuilding":"Fortified Building"};
 function losTerrainNameJP(name){
   if(S.lang==="en")return LOS_TERRAIN_NAME_EN[name]||name;
   return LOS_TERRAIN_NAME_JP[name]||name;
@@ -3839,7 +3879,7 @@ var SCN=[
       GER:{elr:3,u:["【SSR1により東端・西端いずれか一方をT1に、もう一方をT2に選択して進入。group1(第1装甲師団)】5-4-8[E]×3・4-6-7[1]×8・9-2×1・9-1×1・8-1×1・8-0×1・MMG5-12×2・LMG3-8×2・DC30-1×1・PSK×1・V号パンターG(75LL)×3",
      "【SSR1、group2(第503重戦車大隊・第23装甲師団)】4-6-7[1]×4・8-1×1・LMG3-8×1・PSK×1・VIティーガーIIB(KT)(88LL)×2・IV号J(75L)×3"]}}}
 ,
-  {id:"S27",seasonOverride:{grain:true},atk:"GER",vicHexes:{board:"u",hexes:["G2","H1","I3","I4","I5","K4","K5","L3","L5","L8","M3","M5","M7","M9","N7","P2","P3"]}, // 2026-09追加(Kato・実機マークモード調査結果): 勝利条件「ボードu上のすべての複数ヘクス石造建物を支配」対応。該当する複数ヘクス石造建物の全ヘクス(17件)をマーク
+  {id:"S27",seasonOverride:{grain:true},atk:"GER",vicHexes:{board:"u",hexes:["I3","I4","I5","K4","K5","L3","L5","L8","M3","M5","M7","M9","N7","P2","P3"]}, // 2026-09追加(Kato・実機マークモード調査結果): 勝利条件「ボードu上のすべての複数ヘクス石造建物を支配」対応。該当する複数ヘクス石造建物の全ヘクスをマーク。2026-10(Kato指示「G2・H1を条件から外す」): G2・H1を除外して15件
    endsOnFront:true,maps:[{id:"v",axis:"v",range:{from:"A",to:"P"},dir:"A0",letterPos:"tl",rot:90,letterRot:0,losPos:{col:0,row:0}},{id:"u",axis:"v",range:{from:"A",to:"P"},dir:"A0",letterPos:"tl",rot:90,letterRot:0,losPos:{col:645/1800,row:0}}],mapNote:"ボードv(西)とボードu(東)を横並び配置(2枚とも縦置き)、両方ともAヘクス列〜Pヘクス列のみプレイ可能、北は上方向", // 2026-09追加(ダルマ指示「S27 左回転90」): letterRotを新設フィールドで90→0に変更(バッジ表示のみ、LOSタブのrot:90は変更なし)。 // 2026-09追加(ダルマ指示「S27 LOSマップ 長辺接続」): S21/S24/S26と同じ理由でLOSタブの盤面回転を個別回転(b.rot)方式に変更。v・uとも元々letterPos:tl(0度)で相対的な反転は無いため、両方とも基準の90度回転のみ(0→90)。2枚目(u)のlosPos.colはfootprint幅基準の645/1800。サムネイルへの影響を避けるためposではなくlosPosを使用(S21/S24/S26と同じ、詳細はそちらのコメント参照)。注意: 本シナリオはrange指定(A-Pのみ使用可)があり、従来は「使用可能範囲のみ表示」トグルでクロップ表示されていたが、そのクロップ機構は90/270度回転盤面に未対応のため、回転後はこのトグルが実質無効(常に全幅表示)になる。クロップの90/270度対応は別途必要であれば対応する。 // 2026-09新規追加(ダルマ提供シナリオPDFより実装)。盤文字ラベルはv・uとも正立(無回転)で各箱の左上に描かれており、axis:"v"(縦置き)・letterPos:"tl"(上半分→0度)に対応。赤マーカーは各箱の上部約半分(A-Pレンジがdir:"A0"で0-46.9%となり上部に来る)で画像と整合。ターン記録表の最終ターン(8)が斜め着色されておりendsOnFront:trueと判断。
    jp:"ニュージーランドを守れ",en:"Stand for New Zealand",loc:"クレタ島/ガラタス",dt:"1941/5/25",trn:8,
    bg:"1941年5月25日、クレタ島、ガラタス：ガラタス村は、クレタの州都カニアへ至る東西幹線道路を見下ろす高地に位置していた。この道はスーダ湾への入口を守っており、スーダ湾はクレタ島に英軍が大規模に駐留していた理由である天然の良港だった。ガラタスはドイツ軍司令部にとって非常に重要な地点であったため、第5山岳師団の山岳部隊がこの陣地への正面攻撃を命じられた。ドイツ軍に対峙したのは、イギリス側から「キッペンバーガー旅団」と呼ばれた即席のニュージーランド部隊――ハワード・キッペンバーガー中佐率いる第10ニュージーランド旅団であった。この部隊は、2個ギリシャ連隊の残存兵、師団騎兵、そして砲兵・工兵・補給段列や燃料中隊(Petrol Company)といった後方要員から編成された第1混成大隊などから成っていた。燃料中隊は高地に陣地を構築し、老朽化したイタリア製野砲を複数鹵獲して幹線道路を制圧すべく、ドイツ軍の攻撃を待ち構えていた。",
@@ -4258,6 +4298,126 @@ var SCN=[
    // 2-4-8[E]・9-1・8-1・7-0・LMG3-8)も既存登録済み。PzKpfw IIAのみ本プロジェクト初登場のため
    // AFV_DATAに未確認プレースホルダーとして新規登録していたが、2026-09にダルマ指示で削除
    // (PzKpfw IIAの実カウンターは存在せず、実際のプレイではPzKpfw IIF=II号Fのカウンターを使う。OB表記はafvNormLabel()でII号Fとして扱う)。
+  },
+
+  // ═══ S34 Twilight at Baerendorf (2026-10追加、Kato提供シナリオカードASLSK_S34.pdf。手順書(ASLSK_Scenario_Addition_Workflow.md)に沿って確認) ═══
+  // 確認根拠: (盤面) BOARD CONFIGURATION図=縦長の箱2つが左右に並び左x・右y、北は上、配色は白一色(赤い制限領域なし)、ボード文字は各盤の左上(tl)。
+  //   visualize図でKato確認済み(「合っている」)。文字は正立(letterRot 0)。LOSタブのrotは、縦長2枚で両方の文字がtlのS27(v・u、rot90/90)と同じ扱い。
+  // (ターン記録表) 8ターン+END。ENDの欄は対角線の色分けなし(白一色)→endsOnFront:false。独軍の鉄十字がT1の左上=独軍が先に動く、アメリカの星がT3の右上=米軍増援T3。
+  // (OB) 赤字の数字の位置は、カウンター枠線とのx座標をピクセル計算(400dpi)で照合し、Katoが表で確認済み。米軍: 6-6-7[E]の下に「10」、乗員2-2-7の下に「2」、
+  //   8-1の下に「2」(9-2・9-1・8-0は無表記=×1)、HMG 8-16は無表記×1、MMG 4-10の下に「2」、BAZ 44の下に「4」、57L(M10)の下に「2」、M5A1(37LL)の下に「2」。
+  //   独軍: 4²-6-8[E]の下に「13」、SMC 10-2・9-2・9-1・8-1・8-0とMMG 5-12・PSKは無表記×1、LMG 3-8の下に「4」、Pz IVJ(75L)に「3」、Pz IVH(75L)に「2」、
+  //   StuG IIIG(L)(75L)に「2」、Pz IIIG(50)は無表記×1。車両名はカウンター印字(Pz IVJ/Pz IVH/StuG IIIG(L)/Pz IIIG/M5A1)で確認、既存AFV_DATAのIV号J・IV号H・
+  //   III号突撃砲G(L)・III号G・M3/M5スチュアート(M5A1、MP17・AF6/3は既存登録値とカウンターが一致)に対応。
+  // (SSR) SSR1(接近する夜のため射程7ヘクス以上のTH+1)はアプリに自動適用の仕組みが無いためテキスト表示のみ。SSR2(バズーカの秘密記録)も手動運用。
+  {id:"S34",atk:"GER",north:"up",
+   maps:[
+     {id:"x",axis:"v",letterPos:"tl",rot:90,letterRot:0,losPos:{col:0,row:0}},
+     {id:"y",axis:"v",letterPos:"tl",rot:90,letterRot:0,losPos:{col:0.35833333333333334,row:0}}
+   ],
+   mapNote:"ボードx(左)・y(右)を縦長のまま左右に並べて配置、北は上。全域プレイ可能(色分けなし)。",
+   jp:"ベーレンドルフの黄昏",en:"Twilight at Baerendorf",loc:"ベーレンドルフ、フランス",dt:"1944/11/23",trn:8,endsOnFront:false,
+   bg:"1944年11月23日、フランス、ベーレンドルフ。アメリカ第15軍団によるライン川への突進は、ドイツ第1軍と第19軍を分断する恐れがあり、ザール盆地の側面包囲とライン川以西のドイツ軍の壊滅につながりかねなかった。ゲルト・フォン・ルントシュテット元帥は、連合軍の突破を阻止するための強力な反撃に、装甲部隊の増援を必要としていた。11月21日、装甲教導師団はルントシュテットの指揮下に移され、前進するアメリカ軍に対する反撃のためアルザスへ送られた。",
+   after:"第106騎兵群の下車部隊は、2門のM1対戦車砲の支援を受けて、ベーレンドルフとその西の森に配置されていた。11月の夕闇が深まる中、装甲教導師団の装甲擲弾兵はアメリカ軍の戦線に激しく襲いかかり、戦車の混成部隊が突破できる隙を探った。アメリカ兵は、隠蔽された対戦車砲が戦車に射撃を浴びせられるようになるまでに、何度も陣地を移さなければならず、数両の戦車を撃破した。激戦の末、ドイツ軍はベーレンドルフを迂回することに成功したが、その戦力は大きく損なわれた。",
+   vic:"ドイツ軍は、南端から合計40VP以上を脱出させた時点で、即座に勝利する。機能するMAを持つAFVの脱出は1両につき6VP(機能するMAなしで脱出した場合は5VP)、分隊は各2VP、HSは各1VP、SMCは各1VPに、負の修正1つにつき1VPを加えた値となる。",
+   bal:{USA:"勝利条件の「40VP以上」を「46VP以上」に置き換える",GER:"SSR2を削除する"},
+   ssr:[
+     "接近する夜のため、射程7ヘクス以上のすべてのIFT/TH判定に+1のDRMが加わる。このペナルティはTo Hit判定に適用され、歩兵目標種別または地域目標種別攻撃のIFTには適用されない。残存火力や阻止には影響せず、FFMOを打ち消さない。",
+     "アメリカ軍プレイヤーは、設置時にどのユニットがバズーカを所持するかを秘密裏に記録してよい。そのユニットが発射したとき、混乱したとき、または敵ユニットがそのヘクスに進入したときに公開される。"
+   ],
+   f:{
+     USA:{elr:3,u:[
+       "【設置：ヘクス列H上またはそれより南側(第106騎兵群)】6-6-7[E]×10・2-2-7(乗員)×2・9-2×1・9-1×1・8-1×2・8-0×1・HMG8-16×1・MMG4-10×2・BAZ44×4・57mm対戦車砲M10(57L)×2",
+       "【T3、南端から進入】M3/M5スチュアート(37LL)×2"
+     ]},
+     GER:{elr:4,u:[
+       "【T1以降、北端から進入(装甲教導師団)】4-6-8[E]×13・10-2×1・9-2×1・9-1×1・8-1×1・8-0×1・MMG5-12×1・LMG3-8×4・PSK×1・IV号J(75L)×3・IV号H(75L)×2・III号突撃砲G(L)(75L)×2・III号G(50)×1"
+     ]}
+   }
+  },
+
+  // ═══ S35 The Volga is Reached! (2026-10追加、Kato提供シナリオカードASLSK_S35.pdf。手順書(ASLSK_Scenario_Addition_Workflow.md)に沿って確認) ═══
+  // 確認根拠: (盤面) BOARD CONFIGURATION図=縦長のボードz単板、北は上、上側が白・下側が赤、文字zは右下、注記「Only hexrows A-P are playable」。
+  //   visualize図でKato確認済み。赤=プレイ可能(A〜P列)。カード上の赤の割合(約57%)ではなく、アプリがヘクス列数から計算する47%(=(16-1)/32)で描画。
+  //   dir:"GG0"で赤が下側(A〜P側が南)になることをアプリ自身のサムネイル描画で確認。文字brはS50のs(rot270・letterRot180)と同じ設定。
+  // (ターン記録表) 7ターン+END。ENDの欄は白一色→endsOnFront:false。鉄十字がT1・T3(独軍進入)、赤い星がT4・T6(ロシア軍進入)。独軍が先に動く。
+  // (OB) 赤字の数字の位置は、カウンター枠線とのx座標をピクセル計算(400dpi)で照合し、Katoが表で確認済み。
+  //   ロシア(設置): 6-2-8[E]に「4」・4-2-6[C]に「7」・8-0に「2」・LMG 2-6に「2」・ATR 1-12に「2」(2-2-8乗員・6+1・MMG 4-10・歩兵砲76*・T-34 M41は無表記×1)。
+  //   ロシア(T4南端): 4-4-7[1]に「4」(2-3-7[1]・9-1・MMG・KV-1 M41は×1)。ロシア(T6東端): 4-5-8[E]に「5」・LMG 2-6に「2」(9-1・DCは×1)。
+  //   ドイツ(T1): 8-3-8[E]に「3」・4-6-7[1]に「9」・LMG 3-8に「2」(10-2・9-1・8-1・8-0・HMG・MMG・DC・FT 24-1・StuG IIIGは×1)。
+  //   ドイツ(T3): 5-4-8[E]に「5」・LMG 3-8に「2」(9-1・8-0・MMG・DC・StuG IIIGは×1)。
+  // 車両名=カウンター印字(T-34 M41→既存T-34/76(41/42)、KV-1 M41、StuG IIIG)。T-34 M41はSSR3で塹壕化(移動・VCA変更不可、TH+1、車体命中はミス)だが自動適用の仕組みは無くテキスト表示のみ。
+  // SSR2(二線級・ELR免除等)・SSR4(政治委員)・SSR5(狙撃)・SSR6(シュトゥーカ)も同様にテキスト表示のみ。
+  {id:"S35",atk:"GER",north:"up",losSSR:"WoodsRubbleOrchardShellhole",
+   maps:[
+     {id:"z",axis:"v",dir:"GG0",range:{from:"A",to:"P"},letterPos:"br",rot:270,letterRot:180,losPos:{col:0,row:0}}
+   ],
+   mapNote:"ボードzを縦長のまま単独で配置、北は上。Aヘクス列〜Pヘクス列のみプレイ可能(赤い側が南)。",
+   jp:"ヴォルガに到達！",en:"The Volga is Reached!",loc:"スターリングラード、ロシア",dt:"1942/9/14",trn:7,endsOnFront:false,
+   bg:"1942年9月14日、ロシア、スターリングラード。第71歩兵師団のスターリングラード中心部への進撃は、ロスケ大佐の第194歩兵連隊が先頭に立っていた。ロスケの連隊は朝から順調に前進しており、スターリングラード第1駅を北へ迂回することで、前進の勢いを保ち続けるつもりだった。正午ごろ、2個大隊は態勢を整えるために短時間停止し、その後、ヴォルガ川岸に達して、極めて重要な渡船場を奪取すべく、再び進撃を始めた。ロスケの進撃に立ちはだかったのは、損耗した第62軍の部隊と、軽装の予備兵力、そして第13親衛師団に交代されるまで渡船場の防衛を任務とする第10NKVD師団の民兵であった。第10NKVD師団は、徴集された地元の民兵を主体とし、実際のNKVD兵からなる幹部が加わっていた。",
+   after:"損害が増え続けたにもかかわらず、ロスケの連隊はロシア軍の防御線を突破し、15時15分、両大隊は「ヴォルガに到達」と無線で報告した。短機関銃で武装したドイツ兵は、ヴォルガの渡船場を見下ろす絶好の位置にある醸造所、国立銀行、専門家の家を占拠することに成功した。しかし、NKVD部隊の断固たる抵抗によって、実際に渡船場を奪取するまでには至らず、第13親衛師団が到着すると、この目標を達成する望みはすべて消えた。反撃により醸造所は奪還されたが、国立銀行と専門家の家はドイツ軍の手に残り、渡船場に機関銃射撃を浴びせ続けることができた。",
+   vic:"ドイツ軍は、ゲーム終了時に、ヘクス番号8以上にあるすべての建物ロケーションを支配していれば勝利する。",
+   bal:{SOV:"ロシア軍OBの9-1指揮官のいずれか1名を、9-2指揮官に置き換える",GER:"初期配置のドイツ軍OBにFTを1つ追加する"},
+   ssr:[
+     "木々は石造の瓦礫である。歩兵の進入コストは3MFで、車両は移動力の1/2を消費し、+3のDRMでボグ判定を行う危険を負う。瓦礫はTEM+3で、ヘクスサイド沿いを含めてLOSを完全に遮断する。待ち伏せは可能。果樹園は砲弾孔として扱い、LOSには影響せず、歩兵に対してTEM+1を与え、進入に2MFを要する。移動中、これらのヘクスに1MFのコストで進入した場合は、TEM 0の開豁地として扱う。",
+     "ロシア軍の6-2-8/3-2-8 MMCは二線級部隊で、士気値に下線があるものとみなされ(ELRの対象外、5.1)、混乱面の士気値が1上がる。ロシア軍のエリートおよび一線級部隊は、待ち伏せdrに-1のdrmを受ける。ドイツ軍の8-3-8分隊は、煙幕発生能力が5である。",
+     "T-34 M41は塹壕化(dug-in)したAFVである。設置ヘクスから移動してはならず、VCAも変更してはならない。このAFVに対するすべてのTH DRに+1のDRMが加わり、車体への命中はミスとして扱う。設置できるのは、道路・開豁地・砲弾孔のヘクスのみ。除去されても残骸を残さず、TEMを与えず、LOSにも影響しない。開始時に、塹壕化したAFVに「BMG Disabled」マーカーを置く。",
+     "ロシア軍の8-0と6+1の指揮官は政治委員(コミッサール)を表し、士気値はそれぞれ10と8で、ELRは適用されない。釘付け・混乱していない政治委員と同一ヘクスにいるロシア軍歩兵は、士気値が1上がり、回復時に+4のDM DRMを適用しない。政治委員は、同一ヘクスにいる混乱したロシア軍ユニットごとに、必ず回復を試みなければならない。回復できなかったユニットは、次に低い質のユニットに置き換えられ、それより低い質のユニットがない場合は損耗(Casualty Reduction)を受ける。",
+     "ロシア軍の防御射撃フェイズごとに1回、ロシア軍プレイヤーは、drが3未満(1または2)になれば狙撃攻撃を行える。対象ヘクスを1つ選び、そこに複数のユニットがいる場合(密閉状態のAFVを除く)は無作為に目標を決める。dr1は指揮官の除去、MMCの混乱、またはCE状態のAFV乗員のSTUN。dr2は指揮官の負傷、MMCの釘付け、またはCE状態のAFV乗員のSTUN。drが3以上なら効果なし。",
+     "ドイツ軍の防御射撃フェイズごとに1回、ドイツ軍プレイヤーは急降下爆撃(シュトゥーカ)攻撃を行える。目標ヘクスを選び、To Hit DRを1回振る(歩兵目標と車両目標の両方に影響する可能性がある)。歩兵に対しては、最終To Hit DR≦8でIFTの36列で解決する。AFVに対しては、最終To Hit DRが6〜10なら、最終To Kill数はT-34が7、KV-1が6となる。最終To Hit DR≦5は直撃で、AFVを自動的に除去する。"
+   ],
+   f:{
+     SOV:{elr:3,u:[
+       "【設置：ヘクス番号2以上(第10NKVD師団・第62軍)】6-2-8[E]×4・4-2-6[C]×7・2-2-8(乗員)×1・8-0×2・6+1×1・MMG4-10×1・LMG2-6×2・ATR×2・76.2mm PP obr.27歩兵砲(76*)×1・T-34/76(41/42)(76L)×1",
+       "【T4、南端から進入(第62軍司令部・第133重戦車旅団)】4-4-7[1]×4・2-3-7[1](HS)×1・9-1×1・MMG4-10×1・KV-1 M41(76L)×1",
+       "【T6、東端から進入(第13親衛師団第42連隊)】4-5-8[E]×5・9-1×1・LMG2-6×2・DC30-1×1"
+     ]},
+     GER:{elr:4,u:[
+       "【T1、G1〜P0間から進入(第194歩兵連隊・第171工兵大隊・第71歩兵師団・第244突撃砲大隊)】8-3-8[E]×3・4-6-7[1]×9・10-2×1・9-1×1・8-1×1・8-0×1・HMG7-16×1・MMG5-12×1・LMG3-8×2・DC30-1×1・FT24-1×1・III号突撃砲G(75L)×1",
+       "【T3、G1〜P0間から進入】5-4-8[E]×5・9-1×1・8-0×1・MMG5-12×1・LMG3-8×2・DC30-1×1・III号突撃砲G(75L)×1"
+     ]}
+   }
+  },
+
+  // ═══ S36 Satisfaction and Confidence (2026-10追加、Kato提供シナリオカードASLSK_S36.pdf。手順書(ASLSK_Scenario_Addition_Workflow.md)に沿って確認) ═══
+  // 確認根拠: (盤面) BOARD CONFIGURATION図=横長の盤面3枚を縦に積み、上からx・v・t、北は上、白一色(プレイ範囲の制限なし)、ボード文字は各盤の右上で90°回転。
+  //   visualize図でKato確認済み。thumbnailは文字tr・letterRot90。LOSタブのrotは、既存のS20以降の横長盤面(文字trならrot180)と同じ規則で180としたが、実物配置との一致は
+  //   MAPタブで要目視確認(白一色の盤面は実物カードから回転を読み取れない)。ただし使用盤面はゲーム長で変わる(SSR1)。
+  // (ターン記録表) 7ターン+END。ロシア軍が先に動く(星がT1)、独軍増援(鉄十字)がT2。カードは5・6・7の欄に対角線とENDがあり、ゲーム長は4.5/5.5/6.5ターン(SSR1、ロシア軍が秘密に決定)。
+  //   アプリはゲーム長を1つしか持てないため、Katoの選択により最長の6.5ターン(trn:7・endsOnFront:true)で登録し、4.5/5.5ターンはSSR1の説明文で補う。
+  // (OB) 赤字の数字の位置は、カウンター枠線とのx座標をピクセル計算(400dpi)で照合し、Katoが表で確認済み。独(設置): 4-6-7[1]に「5」・4-4-7[2]に「3」・8-1に「2」・LMG 3-8に「2」
+  //   (2-2-8乗員・9-2・MMG 5-12・PSK・75L対戦車砲(PaK 40)は無表記×1)。独(増援T2以降・北端): IV号H・IV号J・IV号F2・III号突撃砲Gの赤字は「?」=増援表(SSR2)のdr次第で数量が決まる。
+  //   ロシア(T1・南端): 6-2-8[E]に「4」・4-4-7[1]に「8」・8-1に「2」・LMG 2-6に「3」・T-34/85に「4」(9-1・7-0・MMG 4-10・DC 30-1・IS-2は無表記×1)。
+  //   ロシアOBはSSR1の除外表(4.5: 6-2-8×2・8-1・MMG・DC・T-34/85・IS-2、5.5: 4-4-7×2・7-0・LMG・IS-2)と数量が整合している(例: 6-2-8は4個≧2個)。
+  // 車両名=カウンター印字(Pz IVH/Pz IVJ/Pz IVF2/StuG IIIG、T-34/85、IS-2)。独増援表のカード上の誤植「PxIVJ」はPz IVJとして登録。
+  // SSR1(ゲーム長と使用盤面・除外戦力)・SSR3(T-34/85のAPCR枯渇ナンバー6)は自動適用の仕組みが無くテキスト表示のみ。
+  {id:"S36",atk:"SOV",north:"up",
+   maps:[
+     {id:"x",pos:{col:0,row:0},letterPos:"tr",rot:180,letterRot:90},
+     {id:"v",pos:{col:0,row:1},letterPos:"tr",rot:180,letterRot:90},
+     {id:"t",pos:{col:0,row:2},letterPos:"tr",rot:180,letterRot:90}
+   ],
+   mapNote:"ボードx(上)・v(中)・t(下)の3枚を縦に積んで配置、北は上。全域プレイ可能(色分けなし)。ゲームの長さにより使用する盤面が変わる(SSR1参照)。",
+   jp:"満足と信頼",en:"Satisfaction and Confidence",loc:"スロボトカ、ロシア",dt:"1944/6/25",trn:7,endsOnFront:true,
+   bg:"1944年6月25日、ロシア、スロボトカ。6月24日、白ロシア第1戦線の第3軍は、バグラチオン作戦の一環として、ドイツ第134歩兵師団に対し、ミンスクへ向けた10キロメートルの突破を果たした。ドイツ第9軍の司令官ヨルダン将軍は、ブッシュ元帥から主力予備である第20装甲師団を投入する許可を得た。第20装甲師団は、戦車連隊の1つがパンターへの装備更新中だったため、部分的な戦力にとどまっていたが、命じられたとおり出撃した。しかし、ソ連第65軍はボブルイスク南方の接近路でも別の突破に成功しており、この突破が深まるなか、ロコソフスキー元帥は突破口を拡大するため、第1親衛戦車軍を投入した。",
+   after:"この新たな突破の拡大は、ヨルダン将軍を深く警戒させ、彼は第20装甲師団への命令を変更して、この新たな脅威に対処するため南へ向きを変えさせた。第20装甲師団は、歩兵を先頭に、残る戦車連隊のIV号戦車がそれに続く形となった。彼らはスロボトカでロシア軍と遭遇し、まとまりのない歩兵戦と戦車戦の小競り合いを繰り広げた。ドイツ軍は60両の戦車を撃破したが、その過程で自軍の車両のほぼ半数を失い、ロシア軍の進撃を止めることはできなかった。第1親衛戦車軍の容赦ない攻撃が進むにつれ、ドイツ軍の歩兵師団数個が孤立する恐れが生じた。6月26日、ヨルダンとブッシュは、ともにヒトラーに会うため飛んだが、ヒトラーは2人とも解任し、モーデル元帥に中央軍集団の指揮を執るよう命じた。モーデルの戦争初期の指揮下にあった第9軍の幕僚たちは、ブッシュと、この1週間第9軍が受け続けている打撃にうんざりしており、公式日誌に、モーデル着任の知らせは満足と信頼をもって迎えられたと記した。",
+   vic:"ロシア軍は、北端から合計20VP以上を脱出させた時点で、即座に勝利する。分隊は各2VP、HSは各1VP、「-1」のSMCは各2VP、「0」と「+1」のSMCは各1VP。T-34/85は各7VP、IS-2は8VP。いずれもMAが故障している場合は、1VP少なくなる。",
+   bal:{GER:"ドイツ軍OBにPSKを1つ追加する",SOV:"9-1の指揮官を9-2の指揮官と交換する"},
+   ssr:[
+     "ロシア軍プレイヤーは、設置の前に、ゲームの長さが4.5・5.5・6.5ターンのどれになるかを秘密裏に記録し、ドイツ軍プレイヤーが設置を終えた後に公開する。ゲーム長ごとの使用盤面と、ロシア軍OBから除外される戦力は次のとおり。【4.5ターン】使用盤面：xと、ボードvのヘクス番号4以上のすべて／除外：6-2-8を2個・8-1・MMG・DC・T-34/85・IS-2。【5.5ターン】使用盤面：xとv／除外：4-4-7を2個・7-0・LMG・IS-2。【6.5ターン】使用盤面：3枚すべて／除外：なし。※本アプリのターン表は最長の6.5ターン(7ターン・最終は表のみ)で登録している。4.5ターンなら5ターン表で、5.5ターンなら6ターン表で終了する。",
+     "ドイツ軍ターン2の回復フェイズ開始時に、ドイツ軍プレイヤーは増援表に対してdrを1回振り、増援の構成を決定する(増援表は下表のとおり)。",
+     "ロシア軍のT-34/85は、APCR枯渇ナンバー(6.2)が6である。"
+   ],
+   reinforceChart:{nat:"GER",title:"増援表(SSR2)",cols:["dr","受け取るAFV"],rows:[["1,2","IV号H×2・III号突撃砲G×1"],["3,4","IV号F2×2・IV号H×2"],["5,6","IV号J×2・IV号F2×1"]]},
+   f:{
+     GER:{elr:3,u:[
+       "【設置：ボードvのヘクス番号4以上および/またはボードx(第20装甲師団)】4-6-7[1]×5・4-4-7[2]×3・2-2-8(乗員)×1・9-2×1・8-1×2・MMG5-12×1・LMG3-8×2・PSK×1・7.5cm PaK40 AT砲(75L)×1",
+       "【T2以降、北端から進入(増援表、SSR2)】IV号H(75L)×?・IV号J(75L)×?・IV号F2(75L)×?・III号突撃砲G(75L)×?"
+     ]},
+     SOV:{elr:4,u:[
+       "【T1、南端から進入(AFVは移動力の半分を消費済み、SSR1)(第1親衛戦車軍)】6-2-8[E]×4・4-4-7[1]×8・9-1×1・8-1×2・7-0×1・MMG4-10×1・LMG2-6×3・DC30-1×1・T-34/85(85L)×4・IS-2(122L)×1"
+     ]}
+   }
   },
 
 ];
@@ -7923,6 +8083,27 @@ var I18N_EN={
   "IFT判定実行":"Judge IFT",
   "対AFV":"vs AFV",
   "対AFV爆薬起動":"Detonate DC vs AFV",
+  "SSR4：政治委員とスタック(ロシア軍歩兵の士気値+1)":"SSR4: stacked with a Commissar (Russian infantry morale +1)",
+  "SSR4：政治委員とスタック(混乱士気値+1・DM+4なし)":"SSR4: stacked with a Commissar (broken morale +1, no +4 DM)",
+  "SSR4：政治委員は同一ヘクスの混乱したロシア軍ユニットすべての回復を必ず試みる。回復できなかったユニットは1段階低い質のユニットに置き換え、下位が無ければ損耗(Casualty Reduction)":"SSR4: the Commissar must attempt to rally every broken Russian unit stacked with it; a unit that fails is replaced by the next lowest quality unit, or suffers Casualty Reduction if none exists",
+  "SSR3適用：塹壕化したT-34への車体(Hull)命中はミスとして扱います":"SSR3 applied: a Hull hit on the dug-in T-34 is treated as a miss",
+  "SSR3適用：塹壕化したT-34はVCA(車体)を変更できません。砲塔(TCA)のみ変更できます":"SSR3 applied: the dug-in T-34 cannot change its VCA; only its turret (TCA) may change",
+  "SSR3：塹壕化したT-34は設置ヘクスから移動できません":"SSR3: the dug-in T-34 may never move from its setup hex",
+  "SSR2適用：Smoke指数5":"SSR2 applied: Smoke exponent 5",
+  "森→瓦礫・果樹園→砲弾孔":"Woods to rubble, orchards to shellholes",
+  "マップ(LOS・移動): 林を石造瓦礫、果樹園を砲弾孔として扱う(盤面画像は元のまま)。瓦礫は歩兵3MF・TEM+3・ヘクスサイド沿いを含むLOS遮断・待ち伏せ可、車両は林と同じ扱い(総MPの半分または全MPを消費、ボグ判定+3/+0)。砲弾孔はLOSに影響せず歩兵TEM+1、進入2MF(移動中に1MFで進入すれば開豁地・TEM0)→行軍ルートは1MFで計算":"Map (LOS / movement): woods are stone rubble and orchards are shellholes (board image unchanged). Rubble: 3 MF for infantry, TEM +3, blocks LOS including along hexsides, ambush possible; vehicles treat it as woods (half or all MP, Bog DRM +3/+0). Shellholes: no effect on LOS, TEM +1 for infantry, 2 MF to enter (open ground with 0 TEM if entered at 1 MF), so the route tool uses 1 MF.",
+  "士気/損耗(MC)・回復タブ: ロシア軍6-2-8/3-2-8をピッカーで選ぶと「士気値下線あり(ELR置換免除)」を自動ONにし、混乱面の士気値を+1して反映。不意打ちカード: 「SSR：露エリート/1st Line -1」ボタンで反映。移動タブの煙幕手榴弾: 独8-3-8[E]を選ぶとSmoke指数を5にして反映":"Morale / Casualty (MC) and Rally tabs: picking a Russian 6-2-8/3-2-8 turns on the underlined-morale (ELR-exempt) setting and adds +1 to its broken-side morale. Ambush card: the 'SSR: Russian Elite/1st Line -1' button. Move tab smoke grenades: a German 8-3-8 [E] uses Smoke exponent 5.",
+  "砲撃/戦車・対戦車(LATW)タブ: 目標車両にT-34/76(41/42)を選ぶとTH DRに+1を自動加算し、車体(Hull)命中(色付きdr≧白dr)はミスにする。AFVタブ: T-34 M41の車載機銃は前面BMGをDisabled、車体(VCA)変更は選べない。マップ(行軍ルート): T-34 M41は移動できない。(設置制限・残骸なし・TEMなし・LOSに影響なしは表示のみ)":"Gun / AFV / LATW tabs: choosing the T-34/76 (41/42) as target adds +1 to the To Hit DR and a Hull hit (colored dr >= white dr) is a miss. AFV tab: the dug-in T-34's bow MG is Disabled and its VCA cannot be changed. Map route: the T-34 M41 cannot move. (Setup limits, no wreck, no TEM and no LOS effect are display only.)",
+  "士気/損耗(MC): ロシア軍8-0・6+1を選ぶと士気値を10・8にして反映(ELR非適用)。MC・回復タブの「SSR4：政治委員とスタック」ボタンで、ロシア軍歩兵の士気値+1(回復は混乱士気値+1・DM+4なし)を反映。回復に失敗した部隊の置換・損耗(政治委員の回復義務)は注記のみで手動":"Morale (MC): picking the Russian 8-0 / 6+1 sets morale 10 / 8 (ELR does not apply). The 'SSR4: stacked with a Commissar' button in the MC and Rally tabs adds +1 morale for Russian infantry (rally: broken morale +1 and no +4 DM). Replacement or Casualty Reduction of units that fail to rally is a note only and handled by hand.",
+  "射撃・砲撃/戦車・対戦車タブ: 射程7ヘクス以上の砲・車載主砲のTo Hit判定と、IFTのみで解決する射撃(射撃タブ・車載機銃・IFE)に+1を自動加算(FFMOは打ち消さない)。砲の歩兵/地域目標種別攻撃のIFT・残存火力・阻止射撃には加算しない。射程は射撃タブでは先頭グループの射程":"Fire / Gun & AFV / Anti-tank tabs: +1 is added automatically to To Hit rolls of guns and vehicle main guns at range 7+ hexes, and to attacks resolved on the IFT alone (Fire tab, vehicle MGs, IFE). It is not added to the IFT of a gun's Infantry/Area Target Type attack, Residual FP or Interdiction, and FFMO is not negated. In the Fire tab the range of the first group is used.",
+  "原DR12：目標AFVがShockでもStunでもなければ、攻撃したユニットは損耗（SMCとMMCが組んだ攻撃ならランダムに決定、3.8）":"Original DR 12: unless the target AFV is Shocked or Stunned, the attacking unit suffers Casualty Reduction (random if a SMC and MMC attacked together; 3.8)",
+  "砲の種類を選択してください（修理番号R#が未設定）":"Select the type of Gun first (its repair number R# is not set)",
+  "砲塔(TCA)を回す":"Turn the turret (TCA)",
+  "車体(VCA)を回す":"Turn the hull (VCA)",
+  "車体(VCA)を回す：1ヘクスの足ごとに+3（T/ST/NT共通）、2本目以降+1ずつ":"Hull (VCA) turn: +3 per hexspine for T/ST/NT alike, +1 more for each further hexspine",
+  "変換後DR":"Converted DR",
+  "低い方のダイス×2で判定(Case 16)":"Lower die doubled (Case 16)",
+  "Motion状態の射手(Case 16): Case 14のDRM(T/ST +4・NT +5)を加算し、命中判定は振った2つのダイスの低い方を2倍にして判定。歩兵目標で射程1は+2、射程2は+1のDRMも加算。命中パネルに反映済み":"Firer in Motion (Case 16): add the Case 14 DRM (T/ST +4, NT +5), and the To Hit DR uses the lower of the two dice doubled. Against infantry, range 1 adds +2 and range 2 adds +1. All are shown in the To Hit panel.",
   "：失速！（始動失敗）":": Stalled! (failed to start)",
   "失速時の追加DR（遅延MPとして無為に消費）":"Extra DR on a stall (wasted as Delay MP)",
   "遅延MP":"Delay MP",
@@ -8939,7 +9120,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.327"; // 2026-10: Kato指示「KV2 赤字／全て修正して」(失速ルールの反映)。
+var APP_VERSION="ASLSK3M-v11.342"; // 2026-10: S27の勝利条件ヘクスからuG2・uH1を除外。
 var APP_VERSION_V11265_PREV="ASLSK3M-v11.265"; // 2026-09: ダルマ指示「装甲戦闘車両タブ 不具合、バグを確認修正実施」。弾薬供給月キー判定修正・SU-122/M4A3(105)/SU-85/M4A3(76)Wデータ修正・No IF実装。
 var APP_VERSION_V11264_PREV="ASLSK3M-v11.264"; // 2026-09: ダルマ指示「早見表 afv カウンターを追加」。早見表AFVサブタブに「カウンター」を追加(先頭・既定表示、GUN/LATWと同じ構成)。ASL_SK3_HistoricalNote12のCounter Front/Back凡例に基づき、表面4例(VIB・Sherman IIC(a)・IS-2m・T-34 M41)と裏面4例の模式図＋凡例22項目(Unit ID・車両名・MP赤字・前面/側面AFの○□・目標サイズ・AFV種別・ROF・口径・砲身長・MG・R#・固定式MG白点・Low Ammo・接地圧・砲塔旋回・HE/APDS/APCR欠乏ナンバー・sM/sN・ML:9・No IF)。CS#は扱わない方針のため除外(REF_AFV_COUNTER_DIAGRAM)。 // 2026-09: ダルマ指示「修正」。早見表GUN/LATW›破壊判定のMALF-CR説明「操作歩兵はCR（士気チェック）」を「操作歩兵は損耗（CR：Casualty Reduction）」に訂正(QRDC2 GUN DESTRUCTION TABLE「Manning Infantry suffer Casualty Reduction」)。英訳も同様に訂正。 // 2026-09: ダルマ指示「AFV(車両)タブを装甲戦闘車両タブに変更」「移動/運搬タブをボグ/人力/煙幕に変更」「早見表にSK2・SK3追加チャート追加」。(1)メインナビのタブ名を「装甲戦闘車両」「ボグ/人力/煙幕」に変更(ボタン初期値・NAV_LABELS・ヘルプ見出し。英語表示はAFV / Bog/Manhandling/Smoke) (2)早見表に新サブタブ「AFV」を追加し、SK3の車両用チャートを3画面で掲載: TH DRM・命中部位(Case 8〜11・13〜16・22・24・25、VEHICLE HIT LOCATION)、To Kill表(AP(APCR/APDS)全行＋MG/ATR/ATR r、TK#修正、HE&Flame TK、HEAT TKとHE相当FP)、破壊表・ボグ(AFV DESTRUCTION TABLE、BOG CHECK、BOG REMOVAL、DC PLACEMENT vs. AFV DR)。AP/HE/HEATの数値は判定と同じデータ(OFFICIAL_TK_ROWS/HE_TO_KILL_TABLE/HEAT_TO_KILL_TABLE)から描画(REF_AFV_CARD)。 // 2026-09: ダルマ指示「5分無操作の自動ALL CLEAR自体を廃止する」。判定後5分間操作が無いと全タブを自動でALL CLEARする機能を削除(checkIdleClearの呼び出しと定期実行を停止、関数は何もしない)。ヘルプの該当説明も削除。 // 2026-09: ダルマ指示「戦車(AFV)タブ・砲撃タブ・対戦車タブ・射撃タブ リセットボタン選択時タブ内の選択全てリセットする」。RESET(ALLCLR)で、doAllClear()の対象外だったため車両/砲を選び直すと復活していた状態もクリア: 車両ごとの状態S.mgStates(車載機銃の故障/Disabled/使用済み・Motion・Stun・Motion Status Attempt)と弾薬欠乏S.ammoDepletion(車両主砲・牽引砲)。シナリオ変更時(SSEL)と同じ扱い。5分無操作の自動ALL CLEARは従来どおり(これらは消さない)。あわせて、ROLL DICEのアニメーション中にRESETするとアニメーションの残りがダイス値を書き戻す不具合を修正(ROLL_GEN)。 // 2026-09: ダルマ指示「不具合あるのでジャッジボタン後リセットは廃止」。v11.258で追加した、ROFを維持しなかった判定の後に次の操作でタブ全体をリセットする機能(射撃・AFV・対戦車タブ、captureのclickリスナー)を削除。AFVタブのCLEAR TABが車両の射撃状態とその車両の状態を消す修正(resetAfvTabState)は残す。 // 2026-09: ダルマ指示「射撃タブ・戦車(AFV)タブ・対戦車タブ ジャッジをROFが発生しなかった場合には全てリセットする」「車両の情報、状態もリセットする」。1回の射撃の最後の判定(TH失敗/故障、またはTH命中後のIFT/TK/WP判定、車載機銃射撃、PFチェック不可、FT対車両)が終わりROFを維持していなければリセット待ちとし、次に結果カードより上の操作をした時点でタブ全体をクリアしてからその操作を実行(autoResetAnchorId/autoResetTabNow、captureのclickリスナー)。AFVタブは射撃状態に加えその車両の状態(車載機銃・Motion・Stun・MSA・弾薬欠乏・BFF/AFPh喪失マーカー)も消す(resetAfvTabState)。AFVタブのCLEAR TABが何も消していなかった不具合も同関数で修正。 // 2026-09: ダルマ確定2件を反映。(1)独37mm(PAK35/36・FlaK36/37)のHEAT(Stielgranate 41)はH_EXP1のSK補足どおりHE相当12FP(CH時24)・残留FPなし(gunHeatFp、ammo.heatFp/noResidual。旧: 6.2一般規定の1列下げで2FP) (2)対車両CCでもMMCが参加し修正前CC DR=2なら結果を問わず指揮官誕生判定(5.3、CCV_CARDに判定UIを追加。対人CCとS.cc.promoを共用、オッズ-1は無し)。対車両CCの第3のダイス(追加dr)の発生条件は変更なし。 // 2026-09: ダルマ指示「各タブごとに順番に不具合、ルールとの乖離がないか確認修正実施」。全45シナリオ×14タブの描画スイープ・ランダム操作(約5,000回)でJSエラー0件を確認のうえ、ASLSK4ルール/QRDC/QRDC2/SK3 To Hit Chart裏/シナリオカードと突合し次を修正: (1)回復: □印なしMMCの自己回復(3.1e)をターン裏(B)で一律ブロックしていた→ATTACKER=手番側(用語集)として対象ユニットの国籍が手番側陣営なら可(rallyMmcSelfSideOk) (2)砲撃/戦車: AP To Kill表の射程帯を「0|1-2」→QRDC2の「0-1|2」に(gunTKrange、射程1が1低いTK#だった) (3)砲撃: IFT列配列から存在しない3列を削除(IFT_FP_COLUMNS)、HE4FP砲のHEATが3(CH6)→2(CH4) (4)砲撃: ROF低下は無砲塔の砲のCA変更のみ(6.0)、ST/RST/1MT砲塔車両を除外(gunIsTurretedMA) (5)砲撃: ROFなし砲のCA変更後Intensive強制は非車両砲のみ (6)白兵戦: 不意打ちdrmのVehicle +2を防御側にも(旧+1) (7)S4 SSR1降雪をカード原文どおり妨害(Hindrance)として扱う(FFMO不適用・残留FP低下、scenSnowHind) (8)IFT最左列見出し0.5→1(表示のみ)。 // 2026-09: BAZ43のTH#を実物カウンター裏面の値(射程0-4: 11/9/8/7/4)に修正、誤った注記「赤TH#使用」を削除 // 2026-09: BAZ44のTH#をカウンター裏面の値(射程0-4: 11/9/8/7/4)に修正(旧BAZ43流用値) // 2026-09: ヘルプ全面改訂(各タブの手順とASLSK4準拠のルールポイント、上部ボタン・用語表、FAQ追加、英訳付き)。旧ヘルプの誤記(砲の命中でFP×2・TEM反転はCH時のみ、PF原DR12、B#は≥)を解消 // 2026-09: ソ連2-2-7[1](HS)の重複登録を1件に統合(自己回復なし、ダルマ確認) // 2026-09: ソ連6-2-8→5-2-7、3-2-8(HS)→2-2-7のELR低下先を追加(Nationality Chart) // 2026-09: 公式To Hit Chart(EX1優先・SK3)と全砲/車両主砲を照合: 露45L ATT13-24=8・CH19-24=2(v11.238の誤修正を訂正)、露57LL/独75*/露152*/独37のCH#、米57L・独37・独75LLのATT、独50LのITT 13-24を修正 // 2026-09: DC未熟兵X#-1を起爆成功表示・対AFVにも反映、LATW ATRの鹵獲/未熟兵使用時に赤TH#(7-12=8)、PIAT B#表記を「≥10」に修正 // 2026-09: 回復/士気/射撃/CC/潰走の指揮官修正に−3(10-3)を追加、損耗・指揮官誕生の国籍選択にPOL/SLOを追加、回復タブ損耗のSMC表記から乗員を除外(3.2.3) // 2026-09: ユニット監査: 損耗先の誤り(独4-3-6→2-3-6、ソ4-5-8→2-4-8)を修正、POL/SLOの損耗・ELRマップを追加、MF/PP表CX+CX指揮官列をIPC3で再計算 // 2026-09: 早見表監査: 未熟兵MF注記(新兵+指揮官は減算なし)、指揮官誕生drmに英・伊を明記、CX効果(TH+1・SW回収・MC/PTC対象外)、赤TH#条件を6章準拠(伊・波・スロバキア追加/未熟兵除外)、国別TH#表をGUN_DATAから算出、45mm PTP obr.32のATT 13-24を7に // 2026-09: LOS反映: 目標が繁み・果樹園・季節内の麦畑ならTEM「麦畑/果樹園/繁み」(FFMO無効)で反映、射撃タブのFFMOを自動OFF(1.1.1) // 2026-09: 移動タブIPC/MF計算: SMCの基本MFを6に修正(旧4)、負傷SMC(3MF・IPC0・急速歩不可)、SMCは2PP超携行不可・指揮官ボーナス非適用の注記(3.3.1/4.0) // 2026-09: CCでの指揮官誕生にオッズ1:1未満-1drmを追加(ルール例)、DC起動に未熟兵X#-1を追加(4.0) // 2026-09: PAATC +1の対象表記を3.7準拠に修正・S44 SSRとの二重加算を解消、煙幕手榴弾の原dr6でMPh終了の案内を追加(3.3.1) // 2026-09: ATR(射撃タブSW)のR#を1に設定(ダルマ確認) // 2026-09: 射撃タブにATR(1FP SW、4.4.4)を追加(遠距離射撃なし・残留FPなし・PP1・B#12)、LATWタブのATR対歩兵はTo Hitせず射撃タブへ誘導 // 2026-09: 射撃タブ監査2: SW使用時の固有FP喪失の例外にSFF・隣接への最終射撃を追加(4.0)、SMC2名のMG全FP(4.1)、過度の射撃/FPF切替でTPBF選択を保持 // 2026-09: 射撃タブ監査: AFPhの端数切上げをAssault Fire分隊のみに限定(3.5/3.2.2)、FPF NMC失敗時のELR交代判定・指揮官NMC注記を追加(3.3.3/5.1) // 2026-09: スクロール表示のSSR注記(S2/S4/S9/S10/S13/S17/S18)を英訳、LOSタブの季節表記(4-10月/6-9月)・「使用」を英語対応 // 2026-09: 英語表示の未訳を解消(AFV効果ラベル・NTC国籍/士気・車両主砲名・煙幕展張器種別・波軍SW・潰走タブ「なし」等)、NTC注記を付随攻撃欄への誘導に修正 // 2026-09: 対車両CCにOT AFV −2(7.13)を追加、原DR12の損耗条件を「Shock/Stunでない」に修正(3.8) // 2026-09: VTT/LATW/FT命中時のCE乗員付随攻撃(7.12)、ATT対車両のK/#+1判定(7.11)、HE/HEAT TK試行の残留FP・射手側TH DRMの列低下(3.3.5) // 2026-09: 歩兵射撃タブにTPBF(同ヘクス×3、3.2.2.1)を追加、TK表示「DR ≤」→「DR <」・撃破パネル値をFinal TK#−1に(7.10) // 2026-09: HE対車両TK#を砲口径(mm)で引くよう修正(旧: HE FPで引いていた重大バグ、7.9) // 2026-09: 射程0 ITT TH#8/CH#3、車両主砲ATT TH#をチャート行別に、IFEにPBF×2/TPBF×3 // 2026-09: 車両主砲ITT TH#を全ctrCodeへ拡大、ITTのCH#を射程別化(6.1)、独37/英40L MAのHE FP行別化、赤TH#を2012版で牽引砲・車両とも統一 // 2026-09: MG/ATR Ordnance TH#をチャート準拠(MG 10/9/6、ATR 10/9)に修正、牽引砲のTH配列をVTT/ITTに分離(9門のVTT修正、赤TH#整理) // 2026-09: ダルマ「車両・対戦車兵器のルール乖離確認」→「修正実施」。監査[A]AP To Killを砲身長コード/国籍別公式行(OFFICIAL_TK_ROWS/tkRowFor)で参照、[B]HEAT 95=16/105=15、[C]35(t)=GER_37・PSW234/2=GER_50L(TH行新設)、[D]judgeAFVEffects(=TK#で砲塔Shock、TK#+1でPossible Shockを命中部位不問、MG Stunを車体にも適用)とLATWのTK判定をDR<TK#撃破+7.10表へ、[E]MG/ATR TK#をQRDC2値へ、[F]ATRのTK#を独/波7-6-6-5・ソ連8-7-7-6へ。未修正(要確認): FT=TK#でELIM、LATW赤TH#、英40L HE FP、牽引砲VTT TH#、MG/ATR Ordnance TH#。
 var APP_VERSION_HIST_v11219="ASLSK3M-v11.219"; // 2026-09: Kato報告バグ「AFPhにおけるFT(火炎放射器)のFP半減ルール」に対応(ASLルール4.2、Tutorial2、ASL First Fire解説記事等の複数一次資料で確認: 「FTはDCと同様、瞬間的な攻撃のためAFPh(前進射撃)による通常のFP半減を一切受けない(移動後のAFPhでも全火力24FP)。半減されるのは2ヘクス射撃時のみ(24→12FP、ルール4.2固有の規定)」)。既存の射撃計算コア(fireCalcF、AFPh分岐)はFT選択時のグループも他のSW(支援火器)と全く同じ計算式を通っていたため、通常(1ヘクス)AFPh射撃時に24→12FPへ、2ヘクスAFPh射撃時に24→6FPへと、いずれも誤って追加半減されていた。isFTGroup(g,m)(既存ヘルパー)でFT選択グループを判定し、AFPh分岐の最後でf=(g.sh==="long")?sf/2:sf;として上書き、FT自身の2ヘクス射程による固定半減のみを残しAFPhによる追加半減を無効化する形で修正。あわせてFTタブの注記文言「PBF/TPBF/AFPh半減」がAFPhについて誤った説明のままだったため「AFPh(前進射撃フェイズ)でも半減されない(全火力)」に訂正(PBF/TPBFはFT本来1ヘクス射程のため元々影響なし、日英対訳とも修正)。TEM/指揮官修正無効・PIN状態選択不可の既存ロジックは無変更。node --checkで構文検証済み、タグ総数(div/button/svg)完全一致確認済み(JS内の計算式上書き1行+コメント追加、表示文言の訂正のみ)。
@@ -8956,6 +9137,21 @@ var APP_VERSION_HIST_v11206="ASLSK3M-v11.206"; // 2026-09: Kato指示「デフ�
 var APP_VERSION_HIST_v11205="ASLSK3M-v11.205"; // 2026-09: Kato指示「デフォルトを英語表示にできる？」に対応。初期状態オブジェクトS.langの既定値を"ja"から"en"へ変更。loadState()はlocalStorage保存データのキーを機械的に全てSへ上書き復元する実装(Object.keys(parsed).forEach)のため、既にlangを保存済みの既存ユーザー(継続利用ブラウザ)はこれまで通り自分が最後に選んだ言語のまま維持され、この変更の影響を受けるのは保存データが無い初回アクセス時のみであることを確認済み。表示言語自体の切替ロジック(ToggleLang()/T()関数/updateNavLabels()等)は無変更。node --checkで構文検証済み、タグ総数(div/button/svg)完全一致確認済み(初期値1文字の変更のみ)。
 var APP_VERSION_HIST_v11204="ASLSK3M-v11.204"; // 2026-09: Kato指示「AUTO/RECボタンも非表示にする」に対応。ASLSKWv(公開版)のツールバーから、前バージョンでtbRow1へ移動したAUTOボタン(ToggleTurnAuto、ターン表自動更新)と、REC(showRecordModal、対戦記録モーダル)ボタンも非表示化。RECボタンに新規id(tbRecBtn)を付与し、applyWebPublicUiHide()にAUTO/REC非表示処理を追加。AUTOを非表示にする以上、前バージョンで追加したtbRow1へのDOM移動処理は不要になったため削除(移動してから隠すのではなく、単純に非表示にするのみ)。結果、ASLSKWvのツールバーは上段JPのみ・下段LOG/HELPの2個という配置になる(Kato指示に再配置の指定は無かったため、個数バランスの調整は行わずボタンを消すのみに留めた)。ASLAKEXv(WEB_PUBLIC_HIDE_SCENARIO_CONTENT=false)では本関数が早期returnするため従来通りSSR/WIN/JP/AUTO/REC/LOG/HELPの7ボタン全て表示のまま。SSR/WIN非表示化・showSsrModal/showWinModal/ToggleTurnAuto/showRecordModal自体は無変更。node --checkで構文検証済み、タグ総数(div/button/svg)完全一致確認済み(id属性1件追加のみ)。
 var APP_VERSION_HIST_v11203="ASLSK3M-v11.203"; // 2026-09: Kato指示「(ASLSKWv公開版のツールバー)上段2ボタン下段3ボタンにする」に対応。SSR/WIN非表示化(v11.200)により、ASLSKWvではツールバー上段(tbRow1)がJPのみ1個、下段(tbRow2)がAUTO/REC/LOG/HELPの4個という偏った配置になっていた。上段(tbRow1)・下段(tbRow2)の各コンテナにidを付与し、applyWebPublicUiHide()内でSSR/WIN非表示に続けてAUTOボタン(tbAutoBtn)をtbRow1へDOM移動する処理を追加、上段2個(JP/AUTO)・下段3個(REC/LOG/HELP)へ再配置。ASLAKEXv(WEB_PUBLIC_HIDE_SCENARIO_CONTENT=false、本関数が早期returnするため無変更)では従来通り上段3個(SSR/WIN/JP)・下段4個(AUTO/REC/LOG/HELP)のレイアウトを維持。ボタン自体の機能・onclick・他バージョンで追加したid属性は無変更、DOM移動(appendChild)のみ。node --checkで構文検証済み、タグ総数(div/button/svg)完全一致確認済み(既存要素の並び替えのみでタグ数に変化なし)。
+var APP_VERSION_HIST_v11342="ASLSK3M-v11.342"; // 2026-10: Kato指示「S27 勝利条件: マーク済みヘクス一覧 盤面u(2ヘクス): G2, H1 を条件から外す」。S27のvicHexes(盤面uの勝利条件ヘクス、勝利条件「ボードu上のすべての複数ヘクス石造建物を支配」のマーク)から、G2・H1の2ヘクスを除外し、17件→15件(I3・I4・I5・K4・K5・L3・L5・L8・M3・M5・M7・M9・N7・P2・P3)にした。勝利条件の文面は変更なし。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11341="ASLSK3M-v11.341"; // 2026-10: Kato指示「シナリオ未登録タブは非表示にする」。シナリオタブのキット切替ボタンのうち、登録シナリオが0件のキット(SK#4・EXP#2・EXP#3・BonusPack#2)を非表示にした(従来は全表示版のみ8キットを表示し、公開版は4キット固定)。公開版・全表示版とも「登録シナリオが1件以上のキットだけ」を表示する規則に統一し、将来シナリオを登録したキットは自動で表示される(KIT_VISIBLE)。BATTLE RECORDボタンは5列グリッドの行末に置くため、表示キット数+1が5の倍数になるまで空白枠を挿入。選択中のキット(kitFilter)が未登録キットだった場合は、選択中シナリオのキット、なければ先頭の表示キットへ戻す。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11340="ASLSK3M-v11.340"; // 2026-10: Kato指示「S35 SSR1-SSR4適応・適応済み表記」。SSR1: losSSR「WoodsRubbleOrchardShellhole」を新設し、林→石造瓦礫(歩兵3MF・TEM+3・LOS遮断・待ち伏せ可は既存のStone Rubble)、果樹園→砲弾孔(新地形ShellholeS35: LOSに影響なし・歩兵TEM+1・行軍ルートは1MF、車両は果樹園と同じ)。S35の瓦礫は車両にとって林として扱う(S18の瓦礫は車両進入不可のまま。losBogTerrain()/scenRubbleAsWoods()で行軍ルート・ボグ判定に反映)。SSR2: SCENARIO_SSR_FLAGSにS35(下線付き士気値・混乱面士気値+1)を追加し、MC/回復ピッカーで6-2-8/3-2-8の混乱面士気値を+1、不意打ちの「露エリート/1st Line -1」ボタンをS35でも表示、移動タブの煙幕で独8-3-8[E]のSmoke指数を5に。SSR3: 目標車両がT-34/76(41/42)ならTH DR+1(砲・車載主砲・LATW)、色付きdr≧白dr(車体)の命中はミス(CHも不成立)、T-34 M41の車載機銃は前面BMGをDisabled(mgSt)、車体(VCA)変更は不可、行軍ルートでは移動不可。SSR4: 政治委員8-0→士気10・6+1→士気8(MCピッカー)、MC/回復タブに「SSR4：政治委員とスタック」ボタン(MC=ロシア軍歩兵の士気値+1、回復=混乱士気値+1・DM+4なし)。回復失敗時の置換/損耗は注記のみ。SSR_REFLECTにS35の4件の注記を追加し、シナリオタブとSSRポップアップのSSR1〜4直下に緑の「反映済」タグで反映内容を表示。英語辞書に追加。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11339="ASLSK3M-v11.339"; // 2026-10: Kato指示「S34 SSR1 接近する夜のため射程7ヘクス以上のすべてのIFT/TH判定に+1のDRM(To Hit判定に適用、歩兵/地域目標種別攻撃のIFTには適用せず、残存火力・阻止には影響せず、FFMOを打ち消さない)を適応する・適応済み表記」に対応。既存のシナリオSSR射撃DRMの仕組み(scenShotDrm: S28/S46/S27と同じ)にS34を追加: 射程7ヘクス以上で+1(8や10でも+1のまま)。呼び出し側が既に区別しているため、砲・車載主砲のTo Hit(gunTotalDRM)・射撃タブのIFT・車載機銃/IFEのIFTには加算され、砲のIFT(ITT/ATT、ATT対車両を含む)・LATW(射程5以下で対象外)・残存火力・阻止射撃には加算されない。独立のDRMなので妨害ではなくFFMOを打ち消さない。射程は射撃タブでは先頭グループの射程、砲撃/AFVタブでは入力した射程。SSR_REFLECTにS34の注記を追加し、シナリオタブとSSRポップアップのSSR1直下に緑の「反映済」タグで反映内容を表示。英語辞書に1キー追加。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11338="ASLSK3M-v11.338"; // 2026-10: Kato提供シナリオカード(ASLSK_S36.pdf)から、EXP#1のシナリオS36「Satisfaction and Confidence(満足と信頼)」を追加(1944/6/25、スロボトカ、ゲーム長4.5/5.5/6.5ターン、独軍設置→ロシア軍先行、ロシア軍が北端から20VP以上脱出で勝利、バランス: 独=PSK追加/ロシア=9-1を9-2に)。手順書に沿って質問選択方式で確定: 盤面=横長のx・v・t 3枚を縦に積み(上からx・v・t)、北は上、白一色、文字tr・90°回転(visualize図で確認)、ターン表=ゲーム長が可変のためKato選択により最長の6.5ターン(trn:7・endsOnFront:true)で登録し4.5/5.5ターンはSSR1の説明文で補う、OB=赤字数字を枠線とのx座標でピクセル照合しKatoが表で確認(独設置・独増援(「?」は増援表SSR2でdr次第)・ロシア)、キットはEXP#1(番号範囲どおり)。独増援表はreinforceChartで表示、カード上の誤植「PxIVJ」はIV号Jとして登録。SSR1(ゲーム長ごとの使用盤面・除外戦力)・SSR3(T-34/85のAPCR枯渇ナンバー6)は自動適用の仕組みが無くテキスト表示のみ。LOSタブの盤面回転(rot:180)は既存S20以降の規則からの推定でMAPタブでの目視確認が必要。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11337="ASLSK3M-v11.337"; // 2026-10: (SSR5の不等号「dr<3」「dr>2」は表示でHTMLのタグ記号と誤解されて欠落するため「drが3未満」「drが3以上」と表記して登録) Kato提供シナリオカード(ASLSK_S35.pdf)から、EXP#1のシナリオS35「The Volga is Reached!(ヴォルガに到達！)」を追加(1942/9/14、スターリングラード、7ターン、ロシア設置→独軍先行、独軍がヘクス番号8以上の建物ロケーションを全て支配で勝利、バランス: ロシア=9-1を9-2に/独=FT1追加)。手順書に沿って質問選択方式で確定: 盤面=ボードz単板を縦長・北が上、下側が赤(A〜P列プレイ可能、dir:GG0・rot270・文字br・letterRot180)、ターン表=ENDは対角線なし(endsOnFront:false)、独軍進入T1・T3/ロシア軍進入T4・T6、OB=赤字数字を枠線とのx座標でピクセル照合しKatoが表で確認(ロシア: 設置/T4/T6の3グループ、ドイツ: T1/T3の2グループ)、キットはEXP#1(番号範囲どおり)。T-34 M41の塹壕化(SSR3)・政治委員(SSR4)・狙撃(SSR5)・シュトゥーカ(SSR6)・瓦礫化した林(SSR1)は自動適用の仕組みが無くテキスト表示のみ。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11336="ASLSK3M-v11.336"; // 2026-10: Kato提供シナリオカード(ASLSK_S34.pdf)から、EXP#1のシナリオS34「Twilight at Baerendorf(ベーレンドルフの黄昏)」を追加(1944/11/23、フランス、8ターン、米軍設置→独軍先行、独軍が南端から40VP以上脱出で勝利、バランス: 米=46VP/独=SSR2削除)。手順書に沿って質問選択方式で確定: 盤面=ボードx(左)・y(右)を縦長で左右に並べ、北は上、白一色、文字tl(visualize図で確認)、ターン表=ENDは対角線なし(endsOnFront:false)、OB=赤字数字を枠線とのx座標でピクセル照合しKatoが表で確認(米: 6-6-7[E]×10・乗員×2・SMC 9-2/9-1/8-1×2/8-0・HMG×1・MMG×2・BAZ44×4・57L×2、T3にM5A1×2。独: 4-6-8[E]×13・SMC×5・MMG×1・LMG×4・PSK×1・IV号J×3・IV号H×2・III号突撃砲G(L)×2・III号G×1)、キットはEXP#1(番号範囲どおり、scenKit特例は不要)。SSR1(夜間の射程7以上TH+1)・SSR2(バズーカ秘密記録)は自動適用の仕組みが無くテキスト表示のみ。III号G(50)が登場する最初のシナリオ(ドイツ50mm短砲身APCR 19-24の表差異10/8は、このシナリオでAPCRを使う場合に影響)。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11335="ASLSK3M-v11.335"; // 2026-10: 確認待ちだった2件をプロジェクト内の実物チャートで確定(Kato「チャートは全てプロジェクトファイルにアップロード済み」)。(1)赤TH#: To_Hit_Chart_EX1.pdf(白黒版、赤=灰色)とASL_SK_EX1_to_HIT_chart.pdf(カラー版)の2点で、独20L・75L・88LL、米76L・105の行に赤の値が無い(=赤は黒と同じ、チャート脚注「赤の記載が無ければ黒」)ことを確認。アプリは旧SK3(2007)/有志版(2012)の赤値(黒より1低い)を使っていたため、これら5つの砲コードの赤TH#/赤CH#を黒と同値にした(牽引砲5門の赤配列を削除、車両主砲はGER_20L/75L/88LL/US_105/US_76Lの表行を変更)。影響は捕獲・非正規・米軍1944年前の使用時のみ(例: 独75L 射程7-12 対歩兵の赤 6→7、対車両 8→9)。EX1に行が無い砲(独50L・88L・英88等)は従来のまま。旧コメントにあった「Decision at Elst実測・ダルマ確認」の赤値[10,8,8,7]は、同じEX1チャート実物と矛盾するため置き換えた(戻す場合は該当表行に赤配列を復帰)。(2)早見表MF/PP表: SK4ルールブック2021(p.13)のUnit Movement Factor Chartの実物は「Base MF/MF w/Leader/Double Time No Leader/Double Time w/Leader」の4列のみ(Elite MMC 4/6/6/8、Inexperienced 3/6(5)/5/8(7)、SMC(wounded) 6(3)/6(NA)/8(NA)/8(NA))で、アプリ独自の列「CX With Leader」(PP2以下・3・4の3セルで移動タブのMF計算と不一致)は削除し、旧「CX With CX Leader」列を「CX With Leader」(=急速歩+指揮官同行=公式Double Time w/Leader)に改称。計算ロジックは無変更。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11334="ASLSK3M-v11.334"; // 2026-10: 各タブ監査(10)士気/損耗(NMC/ELR/既に混乱/#MC/PTC/LLMC/負傷判定9項目と、損耗時の分隊→HS置換を国籍別チャートと照合)は一致。(11)早見表: IFT全176セルをQRDC1と照合し一致、CCT14列・砲の破壊判定表・AFV破壊判定表・ボグ/DC表・ELRチェーン・TEM表は一致。MF/PP表の「CX With Leader」列のみ公式表(Unit Movement Factor Chart)に無く、移動タブのMF計算とも3セル食い違う(要判断、未変更)。(12)ユニット: 国籍別チャート画像と全国籍の分隊/HS/操作班の前面値・煙幕指数・ELR免除(士気値下線)を照合。不具合1件: UNITS.POLの4-5-8[E]の煙幕指数が暫定値2だったが、チャート画像「連合軍中小国 4¹-5-8」の右上添字は1のため1へ修正(bmは暫定値のまま)。SWのPP(独HMG4・ソ連MMG5・LMG1)はルールブックの例題と一致。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11333="ASLSK3M-v11.333"; // 2026-10: 各タブ監査(7)爆薬配置/起動(DC起爆・車両への配置DRM・TK・CE乗員・PAATC 19項目)・(8)潰走/阻止(阻止NMC・残留FP攻撃11項目、潰走の説明文)は一致。(9)突撃/白兵戦: CCT列14段・端数処理・CC DRM・結果判定・Motion/釘付けの半減・不意打ち判定とDRM・対車両CCV・RB例題・原DR2の追加dr、計14項目は一致。不具合1件: ルール3.8「AFVにCCを仕掛けて原DR12を出した場合、目標がShockでもStunでもなければ攻撃ユニットが損耗(SMCとMMCの組なら無作為)」が未実装で、対車両CCの原DR12は「効果なし」としか表示されなかった。対車両CCの結果カードに、原DR12のときだけ条件付きの注意を表示(目標のShock/Stun状態の入力欄が無いため判定は自動化せず注意表示)。英語辞書に1キー追加。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11332="ASLSK3M-v11.332"; // 2026-10: 各タブ監査(2)射撃/残留火力・(3)砲撃・(4)AFV・(5)LATW・(6)ボグ/人力/煙幕。(2)畏縮・残留FP表44通り・RB例題は一致。(3)TK表はSK3表222セル/QRDC2 131/132セル一致(ドイツ50mm APCR 19-24のみ公式表同士で10(10)/10(8)の食い違い→要実物確認)、TH#黒は公式(SK3/EX1)と全砲一致、THのDRM15項目一致。赤TH#のみ、アプリは旧版(SK3 2007/有志2012)の値でEX1(2017)は赤を載せない砲(独20L/75L/88LL・米105/76L)があり要確認。(4)AFV撃破表80通り・ATT対車両7.11・車載MG射程・車両データ63両は一致。(5)LATWはRB例題(BAZ43)・PF/PIAT/BAZ/PSKの数値・PFチェックDRM・最大射程・使用条件14項目一致。(6)ボグ検査DRM・RB例題・ボグ解消(Mired/始動MP)12項目、人力移動(RB例題・道路・追加分隊・下限-4)8項目は一致。不具合1件を修正: MapタブのMF計算関数losComputeEffMFFromInputs(編成から算出する行軍・手動算出)が指揮官単独(SMC)の基本MFを4としていた(ルールブック3.3.1は6MF、負傷3MF。移動タブのIPC/MFカードはv11.236で6に修正済みだがMap側が取り残されていた)。移動タブと同じ式に統一: SMC基本6MF、負傷SMCは3MF・IPC0・急速歩不可、指揮官同行ボーナス(+2MF・IPC+1)は分隊のみ。編成のピッカーで「負傷」を付けたSMCはsmcWoundedとして行軍MFへ反映。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11331="ASLSK3M-v11.331"; // 2026-10: 各タブ監査(1)回復/修理/回収タブ。実行時エラー検査(全14タブ・全サブタブ・砲撃5,100通り・AFV18,360通り)は異常なし。ルール照合: 回復3.1e/f(RB例題3問・原DR12・原DR2・指揮官自己回復・負傷指揮官)、SW回収(dr<6、CX+1)・SW修理(dr<=R#、dr6永久破壊)、車両Shock/UK回復(Shock 1-2除去/3-6でUK、UK 1-3除去/4-6撃破)はルールブックと一致。不具合1件: 砲修理サブタブで砲(R#)を選ばずに判定すると、dr1でも常に「修理失敗」と表示されていた(dr<=undefinedが偽)。SW修理と同様に、砲修理モードでR#未設定なら判定ボタンを無効化し、JUDGE関数でもトーストを出して中止するよう修正。英語辞書に1キー追加。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11330="ASLSK3M-v11.330"; // 2026-10: Kato指示「砲塔付き(T/ST)・無砲塔(NT) 一律でヘクスの足一本分で+3DRM」(v11.329で未実装と報告した「臨機射撃時の車体の向き変更のペナルティ」の数値)。車両主砲(MA)のCA変更DRM(Case 8)に「車体(VCA)を回す」選択を追加: 砲塔付き車両はCA変更欄の上に「砲塔(TCA)を回す／車体(VCA)を回す」を表示。TCAは従来どおり(T+1/ST・RST+2、2本目以降+1ずつ)、VCAはT/ST/NT共通で1ヘクスの足につき+3(2本目以降は+1ずつ=NT砲と同じ加算構造を採用、要確認)。無砲塔(NT)は元々車体向きのため選択なしで+3。車載機銃の斉射(gunFgCaBase)もVCA選択時は基本+3。CA変更数を0に戻す／釘付けにするとVCA選択も解除。ROF低下の判定(砲塔付き主砲は除外)は無変更。英語辞書に3キー追加。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11329="ASLSK3M-v11.329"; // 2026-10: Kato質問「バックブラストのペナルティは適応されている？」「臨機射撃時の車体の向き変更のペナルティは？」。(1)バックブラスト(4.4.3): 実装済み(BAZ/PSK/PF。建物内で+2 TH DRM(釘付け射手は選べない)か、1FP列のバックブラスト判定(赤dr、TEMなし、建物内全員))。調査で不具合を発見: 建物内で「+2 DRM」を選んだ後に「屋外」へ切り替えても、非表示のままdrm.backblastが残りTH DRMに+2が加算され続けていた。修正: TH DRM(判定・表示)とペナルティ注記の3箇所を、建物内かつバックブラスト武器のときだけ+2とするよう条件追加。(2)臨機射撃(DFF)のMotion射手: QRDC(SK3 To Hit Chart)のCase 16は「Motion Fire: add Case 14 & lower die x2」。アプリはCase 16の「低い方×2」と射程1・2の加算だけで、Case 14(T/ST +4／NT +5)が抜けていた。Motion状態の車両主砲にCase 14の基本段を加算(BFF宣言中・AFPh移動後は従来のbffCase14DRMで加算済みのため二重計上しない)。Motion Fireには消費MP段階が無いため基本段(>3MP相当)を採用(要確認)。車体(VCA)向き変更の固有ペナルティはルールブック・QRDCに記載が無く(SK4 7.2: TCA変更の方がペナルティが小さい旨のみ)、アプリは砲塔種別(T+1/ST・RST+2/NT+3、2本目以降+1)のCase 8のみで未実装。英語辞書の注記を更新。node --checkで構文検証済み。
+var APP_VERSION_HIST_v11328="ASLSK3M-v11.328"; // 2026-10: Kato報告2件。(1)「クリティカルヒット 車両 fp2倍が適応されていない」→「榴弾 対兵士」→「IFT結果のカードにFP列が2倍になっていない」。調査: 実判定GJUDGE_IFTはCH時にammo.chFp(公式チャートの固定値)を使い正しく倍加(全91砲・車両主砲で確認)していたが、IFTパネル(GUN_IFT_SECTION: Total FP・IFT列・合計DRM・プレビュー文)は通常FPで計算しており表示だけ食い違っていた(パネル下の説明文は「FP×2」と書くのに数値は倍加前)。修正: パネルをGJUDGE_IFTと同じ条件・式に統一(CHかつHE/HEAT・非IFEのときfp=chFp(HEATは通常×2)、drm=gunCHiftDRM)。パネルのfpは付随攻撃(車体/砲塔のShock判定・CE搭乗員)の再計算にも使われるため、そちらもCH倍加に揃った。(2)「射手がMotion状態の命中判定数値のデジタルパネル表示が反映されていない」。調査: 判定側は射手のMotion状態/Non-Stoppedで「低い方のダイス×2」(Case 16)と歩兵目標の射程1=+2/射程2=+1を適用していたが、TH パネルの「命中」は通常DRのままで変換が見えなかった。修正: 「命中」カードにC16表示を付け、ダイス入力後は変換後DR(高い方+低い方×2)と命中条件(変換後DR≤表示値)を緑/赤で併記。Motion状態の注記にCase 16の説明を追加。判定ロジック自体は無変更。未解決の確認事項: ITTのCH判定(GJUDGE_TH)はmodDr(Case 16変換後)で行われるが、コメントは「CHは通常の原DR」と記しており食い違う(挙動は今回無変更)。英語辞書に3キー追加。node --checkで構文検証済み。
 var APP_VERSION_HIST_v11327="ASLSK3M-v11.327"; // 2026-10: Kato質問「失速ペナルティは反映している？」→調査: 反映されていない(失速対象車両もDR≧breakdownDRで一律「機械的故障！Immobilized(7.10)」表示、追加DR=遅延MPなし)→「KV2 赤字／全て修正して」。H_EXP1.pdf原文: (a)V号パンターG・ヤクトパンターは始動DR12で失速、(b)ソ連軍車両特記事項「失速」(BT-7 M37・T-34 M41・KV-1 M41・KV-2)は機械的信頼性DR11で失速。失速=始動失敗(移動を開始できない)、続けて追加DRを行いその目を遅延MP(停止の1MPを含み始動の1MPは含まない)として無為に消費、MPが残れば再始動可(そのたびに失速DR)、防御射撃の対象だが新ヘクス未進入なら移動目標ではない、遅延MPが残りMPを超えれば残りMP全消費でMPh終了。実装: AFV_DATAにstall:trueを6両に追加(KV-2はKato確認でMP赤字のためmpRed:true・breakdownDR:11も追加)。motionAttemptResultHTMLにopt(stall・追加DRのダイス・ハンドラ名)を追加し、失速時は「失速！（始動失敗）」＋追加DR入力(AFVタブはROLL DICEあり、Mapタブは手動入力)＋遅延MP表示＋注意書きを表示(stallDelayHTML)。始動DRを入れ直すと追加DRはクリア。stall未指定の赤字MP車両(ティーガーIIB(KT)など)は従来どおりImmobilized表示。注意: SK4ルール2021年9月版(3.3.2)は「赤MPは12(一部ソ連車両は11)で機械的故障=Immobilized(7.10)」と記載しており、H_EXP1の「失速」(始動失敗＋遅延MP)と食い違う。今回はH_EXP1原文に従い、AFV_DATAのstall:falseで車両ごとに従来表示へ戻せる。旧コメント(T-34 M41/KV-1/Tiger IIB「Note MでImmobilized」)は当時の解釈。英語辞書に5キー追加。node --checkで構文検証済み。
 var APP_VERSION_HIST_v11326="ASLSK3M-v11.326"; // 2026-10: Kato確認「KV-1 マークなし」に対応。AFV_DATAのafv_kv1m41_sov(KV-1 M41。AFV_DATAのKV-1系は本エントリのみ)のgpをnull→"normal"(中・囲みなし・DRM+1)に確定。登録済みシナリオには登場しないが、未登録のS35に登場するKV-1がこのエントリに対応する見込み。gp未確認の残りは9両(M4A1／M4A3(75)W／M4A2/76(a)／シャーマンII(a)／V(a)／ユニバーサルキャリア／IV号駆逐/70／PSW234/2プーマ／SU-85)。node --checkで構文検証済み。
 var APP_VERSION_HIST_v11325="ASLSK3M-v11.325"; // 2026-10: Kato確認「M4A3の接地圧: なし」に対応。AFV_DATAのafv_m4a3_us(M4A3、S30に登場)のgpをnull→"normal"(中・囲みなし・DRM+1)に確定。シナリオ登録済みの45件(S1〜S33・S41〜S51・S59)に登場する車両で接地圧が未確認だったのはこのM4A3のみだったため、登録済みシナリオ内ではボグ判定の接地圧が全車両で自動設定になった。gp未確認の残り10両(M4A1／M4A3(75)W／M4A2/76(a)／シャーマンII(a)／V(a)／ユニバーサルキャリア／KV-1 M41／IV号駆逐/70／PSW234/2プーマ／SU-85)は登録済みシナリオに登場せず、シナリオ未選択で全車両表示のときのみ手動ボタンが出る(推測で値を入れない方針)。node --checkで構文検証済み。
@@ -10982,7 +11178,7 @@ function doNewGame(){
   S.ammoDepletion={}; // 修正実施(2026-08、ダルマ指摘[GUN-DEPLETE-PERSIST]) 新しい対戦開始時も弾薬欠乏の永続記憶をリセット
   S.mgStates={}; // 2026-09追加: 車載機銃の故障/Disabled/使用済み(mgSt)も新しい対戦開始時にリセット
     S.scenSnow=false; // 2026-09追加: 降雪状態(S4/S46 SSR)もリセット
-  S.scenGebirgOff=false; S.scenFort16=null; if(S.rally)S.rally.ssrGreekM1=false; // 2026-09追加: S27山岳部隊SSR・回復の混乱士気SSRの切替もリセット
+  S.scenGebirgOff=false; S.scenFort16=null; if(S.rally){S.rally.ssrGreekM1=false;S.rally.ssrCommissar=false;} if(S.mc)S.mc.ssrCommissar=false; // 2026-09追加: S27山岳部隊SSR・回復の混乱士気SSRの切替もリセット
 }
 function ConfirmNewGame(){
   S.confirmDialog={
@@ -15491,6 +15687,9 @@ function MC_PAGE(inline){
   // 2026-08修正(ダルマ指示「LLMC/LLTC〜MC Typeを折りたたみ式にする　デフォルトは閉じる」):
   // 対象ユニット選択(常時表示)より下、LLMC/LLTCブロック〜MC Typeまでの詳細設定一式を
   // 折りたたみ式にする。デフォルトは閉じた状態(m.detailOpen=false)。
+  if(ssrCommissarOn()&&m.utype==="mmc"){ // v11.340: S35 SSR4 政治委員(8-0/6+1)と同一ヘクスのロシア軍歩兵は士気値+1(詳細を開かなくても押せる位置)
+    h+='<button class="b sm'+(m.ssrCommissar?" on gld":"")+'" style="width:100%;height:auto;min-height:36px;white-space:normal;line-height:1.25;margin-bottom:6px" onclick="MC_SetCommissar('+(m.ssrCommissar?'false':'true')+')">'+T('SSR4：政治委員とスタック(ロシア軍歩兵の士気値+1)')+'</button>';
+  }
   h+='<div class="sh" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin:0 0 6px;padding:6px 8px;background:#000000;border:1px solid #404040;border-radius:3px" onclick="MC_ToggleDetail()"><span style="font-size:12px;color:#8899aa">'+T('詳細設定（LLMC/LLTC・士気値・ELR・指揮能力DRM等）')+'</span><span>'+(m.detailOpen?'▲':'▼')+'</span></div>';
   if(m.detailOpen){
   // 2026-08修正(ダルマ指示「LLMC/LLTC...カード削除」): LLMC/LLTCクイック選択カード
@@ -15775,13 +15974,27 @@ function mcRmainHTML(sm,raw){
 // v11.283修正: 対象ユニットをピッカーで選んだ後に「統制状態/既に混乱状態」を切り替えても、士気値が選択時の状態のまま
 // (統制側の士気値/混乱側の士気値)残っていた(例: 9-2指揮官を選んでから既に混乱状態にしても士気値9のまま、正しくは混乱側8)。
 // 切替時に、選択中のユニットの該当する側の士気値へ更新する(MC_PickUnitと同じ規則: 混乱側はbm、無ければmor)。
+// v11.340(S35 SSR2/SSR4): ピッカーで選んだユニットの士気値。既に混乱=混乱面の士気値(二線級はSSR2で+1)、統制=印刷士気値(政治委員SMCはSSR4で+2)、
+// 政治委員とスタックしたロシア軍歩兵(MMC)はSSR4で+1。負傷中のSMCは-1。
+function mcPickedMoraleValue(m,u,kind){
+  var base=m.alreadyBroken?((u.bm!=null?u.bm:u.mor)+ssrBrokenMoraleBonus(m.mcPickNat,m.mcPickLabel)):(u.mor+(kind==='smc'?ssrCommissarMorBonus(m.mcPickNat,m.mcPickLabel):0));
+  return base-((kind==='smc'&&m.wounded)?1:0)+((kind!=='smc'&&ssrCommissarOn()&&m.ssrCommissar&&m.mcPickNat==='SOV')?1:0);
+}
+function MC_SetCommissar(v){
+  var m=S.mc;v=!!v;
+  if(!!m.ssrCommissar===v)return;
+  m.ssrCommissar=v;m.res=null;
+  if(m.mcPickNat&&m.mcPickLabel&&(m.utype==='mmc'||m.utype==='smc'))MC_RefreshPickedMorale();
+  else if(m.mor!=null&&m.utype==='mmc')m.mor+=v?1:-1;
+  Draw();
+}
 function MC_RefreshPickedMorale(){
   var m=S.mc;
   if(!m.mcPickNat||!m.mcPickLabel||(m.utype!=='mmc'&&m.utype!=='smc'))return;
   var arr=m.utype==='smc'?scenarioSmcListForNat(m.mcPickNat):scenarioMmcListForNat(m.mcPickNat);
   var u=(arr||[]).filter(function(x){return x.lbl===m.mcPickLabel;})[0];
   if(!u)return;
-  m.mor=(m.alreadyBroken?(u.bm!=null?u.bm:u.mor):u.mor)-((m.utype==='smc'&&m.wounded)?1:0); // v11.284: 負傷中のSMCは士気値-1
+  m.mor=mcPickedMoraleValue(m,u,m.utype); // v11.284: 負傷中のSMCは士気値-1 / v11.340: S35 SSR2・SSR4
 }
 function MS(k,v){S.mc[k]=v;S.mc.res=null;if(k==='alreadyBroken')MC_RefreshPickedMorale();Draw();}
 // v11.284(ダルマ指示「自動化実施」): 対象SMCの負傷中トグル。ピッカーで選んだユニットなら印刷値から士気値-1を再計算、手入力の士気値なら±1する。
@@ -15900,7 +16113,7 @@ function MC_PickUnit(kind,label){
   // カードで改めてこのユニットから自動判定させる。
   m.casualNat=null;m.casualUnit=null;m.elrUnit=null;
   if(m.mcPickLabel!==m._woundForLabel)m.wounded=false; // v11.284: 負傷状態はユニットごと。別のユニットを選んだら解除
-  m.mor=(m.alreadyBroken?(u.bm!=null?u.bm:u.mor):u.mor)-((kind==='smc'&&m.wounded)?1:0); // v11.284: 負傷中のSMCは士気値-1
+  m.mor=mcPickedMoraleValue(m,u,kind); // v11.284: 負傷中のSMCは士気値-1 / v11.340: S35 SSR2(二線級の混乱面+1)・SSR4(政治委員)
   // 2026-08追加(ダルマ指示「mcのelrをシナリオから反映させる(選択した国籍で反映)」):
   // MMC選択時、選択した国籍のシナリオELR(sc.f[nat].elr)が判明していれば自動的に反映する
   // (シナリオ未選択・その国籍が登場しない場合は従来通り手動選択のまま)。
@@ -16659,6 +16872,9 @@ function CCV_CARD(){
     h+='<span class="rarr">→</span><div><div class="lbl">Modified DR</div>'+seg7dr(vr.mod,'gld')+'</div></div>';
     h+='<div class="rmain" style="color:'+(vr.st==='kill'?'#cc3333':(vr.st==='immob'?'#c8a032':'#556677'))+'">'+(vr.st==='kill'?KIA_IMG_TAG():'')+T({kill:'撃破',immob:'走行不能',miss:'効果なし'}[vr.st])+'</div>'; // 2026-09追加(Kato指示「全ての撃破時に画像を表示」)
     h+='</div>';
+    // v11.333(各タブ監査(9)突撃/白兵戦タブ): ルール3.8「AFVに白兵戦を仕掛けて原DR12を出した場合、目標がShockでもStunでもなければ攻撃ユニットが損耗する」
+    // (SMCとMMCが組んだ攻撃ならランダムに決定)。従来は原DR12でも「効果なし」としか表示されなかった。目標AFVの状態(Shock/Stun)は入力欄が無いため、条件付きの注意として表示する。
+    if(vr.raw===12)h+='<div class="rnote" style="color:#cc8800;font-weight:bold">'+T('原DR12：目標AFVがShockでもStunでもなければ、攻撃したユニットは損耗（SMCとMMCが組んだ攻撃ならランダムに決定、3.8）')+'</div>';
 
     // 修正前DR=2の追加dr判定
     if(vr.raw===2&&vr.st==="miss"){
@@ -17405,6 +17621,10 @@ function RALLY_CARD(){
   if(rallySsrBmLabel()){
     h+='<button class="b sm'+(rl.ssrGreekM1?" on":"")+'" style="width:100%;margin-bottom:6px" onclick="RT(\'ssrGreekM1\')">'+T(rallySsrBmLabel())+'</button>';
   }
+  if(ssrCommissarOn()){ // v11.340: S35 SSR4
+    h+='<button class="b sm'+(rl.ssrCommissar?" on gld":"")+'" style="width:100%;height:auto;min-height:36px;white-space:normal;line-height:1.25;margin-bottom:6px" onclick="RT(\'ssrCommissar\')">'+T('SSR4：政治委員とスタック(混乱士気値+1・DM+4なし)')+'</button>';
+    if(rl.ssrCommissar)h+='<div class="rnote" style="color:#3ca878">'+T('SSR4：政治委員は同一ヘクスの混乱したロシア軍ユニットすべての回復を必ず試みる。回復できなかったユニットは1段階低い質のユニットに置き換え、下位が無ければ損耗(Casualty Reduction)')+'</div>';
+  }
   h+='</div>'; // 2026-09修正(ダルマ指示「回復タブの不具合の細部まで監査実施」): Unit Setupカード(2026-08新設)の閉じdiv漏れを発見・修正。対象ユニット選択・自己回復ユニット種別ブロックの後、直下のSum行(混乱士気値/合計DRM/成功)が本来カード外の独立表示のはずが、Unit Setupカード自身の外枠divが一度も閉じられておらずカード内に取り込まれてしまっていた(node --checkでは検知できない開閉タグ数の不一致、実行時div/button開閉数の機械的監査で発見)。closing div 1個を追加しCARD構造を修正。DRM計算・onclick・表示内容は無変更、HTML構造のみの修正。
   // 2026-09修正・追加: 判定(RJUDGE_COMMON)はS10 SSR4(ギリシャ軍MMCの混乱士気値+1)を加味した値で比較するが、従来の表示はrl.bmのままだった。判定と同じ値を表示し、
   // 成功の値(修正前DR ≦ 混乱士気値 − DRM。原DR12は自動失敗のため上限11)を7セグで併記する。
@@ -17436,7 +17656,7 @@ function RALLY_CARD(){
     var R=rl.res,sm=RSTAT(R.st);
     h+='<div class="res" id="rallyResultsCard" style="border-width:0.5px;border-color:#2a2e3a">';
     h+='<div class="rrow"><div><div class="lbl">Raw DR</div><div class="rv" style="color:#8899aa">'+R.raw+'</div></div>';
-    var _lv=rallyLdrTerm(rl),_drmStr=(_lv>=0?'+':'')+_lv+(rl.bld?'−1':'')+(rl.dm?'+4':'');
+    var _lv=rallyLdrTerm(rl),_drmStr=(_lv>=0?'+':'')+_lv+(rl.bld?'−1':'')+((rl.dm&&!rallyCommissarOn(rl))?'+4':'');
     h+='<span class="rarr">→</span><div><div class="lbl">Modified DR('+_drmStr+'='+(drm>=0?'+':'')+drm+')</div><div class="rv" style="color:#c8a032">'+R.mod+'</div></div></div>';
     h+='<div class="rmain" style="color:'+sm.c+'">'+rmainHTML(sm)+'</div>';
     if(R.pro){
@@ -17764,6 +17984,8 @@ function GRdr(v){S.gunRepair.dr=v;S.gunRepair.result=null;Draw();}
 function GRJUDGE(){
   var gr=S.gunRepair;
   if(!gr.dr){showToast(''+T('サイコロを入力してください'));return;}
+  // v11.331(各タブ監査): 砲修理モードで砲(R#)が未選択のまま判定すると、dr1でも「修理失敗」と出ていた(dr<=undefinedが常に偽)。SW修理(RPJUDGE)と同様に判定させない。
+  if(gr.mode==="repair"&&gr.repairNum==null){showToast(''+T('砲の種類を選択してください（修理番号R#が未設定）'));return;}
   pushUndo('Gun修理/回収判定');
   var res={};
   var dr=gr.dr;
@@ -17965,7 +18187,7 @@ function GUN_REPAIR_CARD(){
   h+='<button class="judg3d ylw" style="flex-shrink:0;width:80px;height:40px;font-size:12px" onclick="autoRollSingle(function(){return S.gunRepair;},\'dr\',\'result\')">AUTO</button>';
   h+='</div>';
   h+='<div style="display:flex;gap:8px;margin-top:8px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
-  h+='<button class="judg3d" style="flex:1;height:40px" onclick="GRJUDGE()"'+(gr.dr&&!gr._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
+  h+='<button class="judg3d" style="flex:1;height:40px" onclick="GRJUDGE()"'+(gr.dr&&!gr._rolling&&!(gr.mode==="repair"&&gr.repairNum==null)?'':' disabled')+'>▶<span>JUDGE</span></button>';
   h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:40px;font-size:12px" onclick="ALLCLR()">RESET</button>';
   h+='</div>';
 
@@ -18056,20 +18278,20 @@ function _vehTHBand(vals, redVals){
 var VEH_MA_TH_TABLE_PENDING = (function(){
   var b=_vehTHBand;
   return {
-    "GER_20L": b([10,9,7,6],[10,8,6,5]), // v11.222: 赤値を2012版チャートより追加(2017版は赤省略)
+    "GER_20L": b([10,9,7,6]), // EX1(2017)公式チャート(白黒版・カラー版とも)に赤値の記載なし=赤は黒と同じ(2026-10監査・v11.335。旧: SK3 2007/有志2012の赤値)
     "GER_37":  b([10,9,6,5]), // 新設(2026-09、監査[C]): 独37(L無し)。PWI独To Hit Chart「37 MA」行 VTT 10/9/6/5。35(t)の実物カウンター表記「37」
     "GER_37L": b([10,9,7,6],[10,8,6,5]),
     "GER_50":  b([10,9,7,6]),
     "GER_50L": b([10,9,8,7],[10,8,7,6]), // 新設(2026-09、監査[C]): 独50L。PWI独To Hit Chart「50L G/MA」行 VTT 10/9-8/8-7/7-6。PSW234/2の実物カウンター表記「50L」
-    "GER_75L": b([10,9,9,8],[10,8,8,7]), // 修正実施(2026-09、MMP公式QRDC「Decision at Elst」実測・ダルマ確認): 赤値[10,8,8,7]を追加(Non-Qualified/Captured Use用)。ヘッツァー(38t)・IV号系が該当
+    "GER_75L": b([10,9,9,8]), // EX1(2017)公式チャート(白黒版・カラー版とも)に赤値の記載なし=赤は黒と同じ(2026-10監査・v11.335。旧: SK3 2007/有志2012の赤値)。ヘッツァー(38t)・IV号系が該当
     "GER_75LL":b([10,9,9,8]), // 新設(2026-09、MMP公式QRDC「Decision at Elst」実測・ダルマ確認): 独75LLは黒値のみ(赤値なし)。パンターG・StuG IIIG(L)・IV号駆逐/70が該当(旧GER_75Lから分離)
     "GER_88L": b([10,9,9,8],[10,8,8,7]), // v11.222: 赤値を2012版チャートより追加 // 新設(2026-09、MMP公式QRDC「Decision at Elst」実測・ダルマ確認): 独88Lは黒値のみ(赤値なし)。ティーガーI(E)/(L)が該当(旧GER_88LLから分離)
-    "GER_88LL":b([10,9,9,8],[10,8,8,7]), // 修正実施(2026-09、MMP公式QRDC「Decision at Elst」実測・ダルマ確認): 赤値[10,8,8,7]を追加(Non-Qualified/Captured Use用)。キングタイガー・ヤクトパンターが該当
+    "GER_88LL":b([10,9,9,8]), // EX1(2017)公式チャート(白黒版・カラー版とも)に赤値の記載なし=赤は黒と同じ(2026-10監査・v11.335。旧: SK3 2007/有志2012の赤値)。キングタイガー・ヤクトパンターが該当
     "US_37LL": b([10,9,7,6],[10,8,6,5]),
     "US_57L":  b([10,9,8,7],[10,8,7,6]),
     "US_75":   b([10,9,8,7]),
     "US_76L":  b([10,9,9,8]),
-    "US_105":  b([10,9,8,7],[10,8,7,6]), // v11.222: 赤値を2012版チャートより追加
+    "US_105":  b([10,9,8,7]), // EX1(2017)公式チャート(白黒版・カラー版とも)に赤値の記載なし=赤は黒と同じ(2026-10監査・v11.335。旧: SK3 2007/有志2012の赤値)
     "GBR_40L": b([10,9,7,6],[10,8,6,5]),
     "GBR_76LL":b([10,9,9,8]),
     "GBR_77L": b([10,9,9,8]),
@@ -18116,20 +18338,20 @@ var VEH_MA_TH_TABLE_ITT_PENDING = (function(){
   // ソ連/伊は常時赤のため赤値をthに格納(従来慣例)。
   var b=function(th,thRed,ch,chRed){var o=_vehTHBandItt(th,thRed);var c=_vehTHBandItt(ch,chRed);o.ch=c.th;o.chRed=c.thRed;return o;};
   return {
-    "GER_20L": b([10, 9, 8, 7, 5, 4],[10, 9, 8, 6, 4, 3],[5, 4, 3, 3, 2, 1],[5, 4, 3, 2, 1, 1]),
+    "GER_20L": b([10, 9, 8, 7, 5, 4],null,[5, 4, 3, 3, 2, 1],null), // EX1(2017)公式チャート(白黒版・カラー版とも)に赤値の記載なし=赤は黒と同じ(2026-10監査・v11.335。旧: SK3 2007/有志2012の赤値)
     "GER_37": b([10, 9, 8, 7, 4, 3],null,[5, 4, 3, 3, 1, 1],null),
     "GER_37L": b([10, 9, 8, 7, 5, 4],[10, 9, 8, 6, 4, 3],[5, 4, 3, 3, 2, 1],[5, 4, 3, 2, 1, 1]),
     "GER_50": b([10, 9, 8, 7, 5, 4],null,[5, 4, 3, 3, 2, 1],null),
     "GER_50L": b([10, 9, 8, 7, 5, 4],[10, 9, 8, 6, 4, 3],[5, 4, 3, 3, 2, 1],[5, 4, 3, 2, 1, 1]),
-    "GER_75L": b([10, 9, 8, 7, 7, 6],[10, 9, 8, 6, 6, 5],[5, 4, 3, 3, 3, 2],[5, 4, 3, 2, 2, 2]),
+    "GER_75L": b([10, 9, 8, 7, 7, 6],null,[5, 4, 3, 3, 3, 2],null), // EX1(2017)公式チャート(白黒版・カラー版とも)に赤値の記載なし=赤は黒と同じ(2026-10監査・v11.335。旧: SK3 2007/有志2012の赤値)
     "GER_75LL": b([10, 9, 8, 7, 7, 6],null,[5, 4, 3, 3, 3, 2],null),
     "GER_88L": b([10, 9, 8, 7, 7, 6],[10, 9, 8, 6, 6, 5],[5, 4, 3, 3, 3, 2],[5, 4, 3, 2, 2, 2]),
-    "GER_88LL": b([10, 9, 8, 7, 7, 6],[10, 9, 8, 6, 6, 5],[5, 4, 3, 3, 3, 2],[5, 4, 3, 2, 2, 2]),
+    "GER_88LL": b([10, 9, 8, 7, 7, 6],null,[5, 4, 3, 3, 3, 2],null), // EX1(2017)公式チャート(白黒版・カラー版とも)に赤値の記載なし=赤は黒と同じ(2026-10監査・v11.335。旧: SK3 2007/有志2012の赤値)
     "US_37LL": b([10, 9, 8, 7, 5, 4],[10, 9, 8, 6, 4, 3],[5, 4, 3, 3, 2, 1],[5, 4, 3, 2, 1, 1]),
     "US_57L": b([10, 9, 8, 7, 6, 5],[10, 9, 8, 6, 5, 4],[5, 4, 3, 3, 2, 2],[5, 4, 3, 2, 2, 1]),
     "US_75": b([10, 9, 8, 7, 6, 5],null,[5, 4, 3, 3, 2, 2],null),
-    "US_76L": b([10, 9, 8, 7, 7, 6],[10, 9, 8, 6, 6, 5],[5, 4, 3, 3, 3, 2],[5, 4, 3, 2, 2, 2]),
-    "US_105": b([10, 9, 8, 7, 6, 5],[10, 9, 8, 6, 5, 4],[5, 4, 3, 3, 2, 2],[5, 4, 3, 2, 2, 1]),
+    "US_76L": b([10, 9, 8, 7, 7, 6],null,[5, 4, 3, 3, 3, 2],null), // EX1(2017)公式チャート(白黒版・カラー版とも)に赤値の記載なし=赤は黒と同じ(2026-10監査・v11.335。旧: SK3 2007/有志2012の赤値)
+    "US_105": b([10, 9, 8, 7, 6, 5],null,[5, 4, 3, 3, 2, 2],null), // EX1(2017)公式チャート(白黒版・カラー版とも)に赤値の記載なし=赤は黒と同じ(2026-10監査・v11.335。旧: SK3 2007/有志2012の赤値)
     "GBR_40L": b([10, 9, 8, 7, 5, 4],[10, 9, 8, 6, 4, 3],[5, 4, 3, 3, 2, 1],[5, 4, 3, 2, 1, 1]),
     "GBR_76LL": b([10, 9, 8, 7, 7, 6],null,[5, 4, 3, 3, 3, 2],null),
     "GBR_77L": b([10, 9, 8, 7, 7, 6],null,[5, 4, 3, 3, 3, 2],null),
@@ -18314,7 +18536,8 @@ var FG_MG_RANGE={cmg:12,bmg:8,rmg:8,aamg:8};
 function mgSt(gd){
   if(!S.mgStates)S.mgStates={};
   var k=gd.id+'#'+(S.gun.gunInstance||1);
-  if(!S.mgStates[k])S.mgStates[k]={cmg:'ok',bmg:'ok',rmg:'ok',aamg:'ok',fired:{},motion:false,stun:0,stunActive:false,msa:{mp:0,dr:0,notInLosAtStart:false,fireMarker:false,used:false}}; // 'ok'|'malf'(故障)|'disabled'(恒久Disabled)。motion/stun/msa=車両ステータス(2026-09)
+  if(!S.mgStates[k])S.mgStates[k]={cmg:'ok',bmg:'ok',rmg:'ok',aamg:'ok',fired:{},motion:false,stun:0,stunActive:false,msa:{mp:0,dr:0,notInLosAtStart:false,fireMarker:false,used:false}};
+  if(ssrDugInFiringGun(gd)&&S.mgStates[k].bmg==='ok')S.mgStates[k].bmg='disabled'; // v11.340: S35 SSR3 塹壕化したT-34は開始時に「BMG Disabled」マーカー // 'ok'|'malf'(故障)|'disabled'(恒久Disabled)。motion/stun/msa=車両ステータス(2026-09)
   return S.mgStates[k];
 }
 function fgMgWeaponAdj(key,fp,range){
@@ -18421,6 +18644,7 @@ function gunAttVehCardHTML(g){
 }
 function gunFgCaBase(gd,key){
   if(key==="bmg")return 3; // BMG=NT
+  if(gd&&gd.isVehicleMA&&S.gun&&S.gun.drm&&S.gun.drm.ca_vca)return 3; // v11.330: 車体(VCA)を回して撃つ場合はT/ST/NT共通で基本+3
   var t=gd&&gd.turretType;
   return t==="T"?1:(t==="ST"||t==="RST"||t==="1MT")?2:3;
 }
@@ -18630,6 +18854,10 @@ function gunTotalDRM(){
   // 2026-09修正(ダルマ指示「Case14テーブル化」): 従来の一律+4固定から、砲塔タイプ・消費MP段階に応じた
   // bffCase14DRM()の算出値に置き換え。Stopped/Non-Stopped共通(値の差はCase16のdr変換側で表現)。
   total+=boundingActiveDrm?bffCase14DRM(gd):0; // Case14: Bounding Firer DRM(段階制)
+  // v11.329(Kato報告「射手がMotion状態の命中判定数値のデジタルパネル表示が反映されていない」): QRDC(SK3 To Hit Chart)Case 16「Motion Fire: add Case 14 & lower die x2」。
+  // 従来はBounding Fire宣言中/AFPh移動後のみCase 14を加算し、Motion状態の車両(臨機射撃等)にはCase 16の「低い方×2」と射程1・2の加算だけで、Case 14の加算が抜けていた。
+  // BFFのような消費MP段階が無いため基本段(AFPhと同じ「>3MP」相当: T/ST +4・NT +5)を適用する(要確認)。BFF宣言中はbffCase14DRMで加算済みのため二重計上しない。
+  if(gd&&gd.isVehicleMA&&!boundingActiveDrm&&mgSt(gd).motion)total+=gd.turretType?4:5;
   total+=d.acq; // negative = beneficial
   // 2026-08追加(SK#3): 射撃側車両がBU(密閉)状態の場合、車両主砲(MA)射撃時のみ+1 TH DRM(7.7項、一次資料確認済み)
   if(gd&&gd.isVehicleMA)total+=d.firerBU?1:0;
@@ -18682,6 +18910,7 @@ function gunTotalDRM(){
   // (旧sndr_elev/tgt_elevの無条件TH DRM加算は廃止。高度優位性はgunEffectiveTEM()内で判定し、
   //  ITT/VTT時はここ(TH DRM)へ、ATT/IFE時はgunIFTdrm()側(IFT DRM)へ、それぞれ正しく振り分けられる)
   total+=scenShotDrm(S.gun.range,S.gun.phase); // 2026-09: シナリオSSR(S28+1/降雪/S27山岳部隊)
+  if(ssrDugInTarget(S.gun.tgtVehId)&&(S.gun.tgtType==='ve'||S.gun.drm.vehTgt))total+=1; // v11.340: S35 SSR3 塹壕化したT-34 M41に対するTH DR+1
   return total;
 }
 
@@ -18977,13 +19206,13 @@ function GsetDRM(k,v){
   if(k==="vehTgt"&&v){S.gun.drm.ffmo=false;S.gun.drm.ffnam=false;S.gun.drm.hazardous=false;} // 2026-09: 車両目標(ATT対車両)ではFFMO/FFNAM/危険移動は適用しない
   if(k==="tgtIsGun"&&v){S.gun.drm.tgtCrewCE=false;S.gun.drm.hexCECrew=false;S.gun.drm.ftTargetCarrier=null;} // 2026-09修正(ダルマ指摘「FT DRMとターゲット→砲が同時に選択できてしまう」): tgtIsGun時はFTカード自体を非表示にするため、既存選択値もクリアして残留させない
   if(k==="hexCECrew"&&v)S.gun.drm.tgtIsGun=false;
-  if(k==="ca_hex"&&v===0){S.gun.caNoFireLock=false;} // CA変更を取り消したら「射撃せずCA変更のみ確定」ロックも解除
+  if(k==="ca_hex"&&v===0){S.gun.caNoFireLock=false;S.gun.drm.ca_vca=false;} // CA変更を取り消したら「射撃せずCA変更のみ確定」ロックも解除(v11.330: 車体(VCA)選択も戻す)
   // 6.3: 非正規操作(non-crew)は据付TEMの恩恵を受けられない → 据付選択中に非正規操作をONにしたら開豁地(TEM無し)へ強制リセット
   if(k==="non_qual"&&v&&S.gun.emplaced){S.gun.drm.tem=0;S.gun.drm.temId="open";S.gun.emplaced=false;}
   // 3.2.4: 釘付け状態の砲は集中射撃(Intensive Fire)不可 → 釘付けをONにしたら集中射撃を強制解除
   if(k==="pinned"&&v&&S.gun.drm.intensive){S.gun.drm.intensive=false;}
   // 修正(2026-07) 3.1.2/QRDC#2: 釘付け状態の砲はCA変更不可 → 釘付けON時にCA変更をリセット
-  if(k==="pinned"&&v){S.gun.drm.ca_hex=0;S.gun.drm.ca_change=0;S.gun.caNoFireLock=false;}
+  if(k==="pinned"&&v){S.gun.drm.ca_hex=0;S.gun.drm.ca_change=0;S.gun.caNoFireLock=false;S.gun.drm.ca_vca=false;}
   S.gun.th_result=null;S.gun.ift_result=null;Draw();
 }
 // Kato指摘[GUN-12]: 砲楯4条件はIFT(至近弾)DRMのみに影響しTH DRMには無関係(6.7)。
@@ -19349,6 +19578,9 @@ function GJUDGE_TH(){
   // ROF維持判定 (1.2.4.1)：色付きdr(=S.gun.rd)≤ROF#で維持。AFPh・故障時は機能しない。
   // 非Mortar ATT射撃はROFを全消費(3.2.4)。迫撃砲はATT使用でもROFを失わない。
   // ROF低下要因（各1、累積）：IFE使用／鹵獲使用／不正規使用／NT砲のCA変更直後の射撃（76-82mm迫撃砲・360°旋回砲は免除）
+  // v11.340: S35 SSR3 塹壕化したT-34 M41への車体(Hull)命中はミスとして扱う(車体=色付きdr≧白dr)。CHも成立しない。
+  var dugInMiss=false;
+  if(hit&&effTgt==="ve"&&ssrDugInHullMiss(S.gun.tgtVehId,S.gun.rd,S.gun.wd)){hit=false;dugInMiss=true;isCH=false;}
   var rofBase=g.rof||0;
   var caChangedThisShot=(S.gun.drm.ca_hex>0)&&!g.mount360&&!(g.gsType==="MTR"&&g.cal>60)&&!gunIsTurretedMA(g); // v11.256: 砲塔付き車両主砲は除外
   var rofReduce=(S.gun.ife_mode?1:0)+(S.gun.drm.captured?1:0)+((S.gun.drm.non_qual&&!g.mtrNoManhandle)?1:0)+(caChangedThisShot?1:0);
@@ -19361,7 +19593,7 @@ function GJUDGE_TH(){
   var smcSoleLightMtr=!!(S.gun.smcSoleMtr&&g.gsType==="MTR"&&g.cal<=60);
   var rofEligible=rofVal>0&&S.gun.phase!=="AFPh"&&!malfunction&&!areaNonMtrAtt&&!S.gun.drm.pinned&&!smcSoleLightMtr&&!(S.gun.drm.intensive&&!g.mtrNoManhandle); // v11.266: 集中射撃はそのプレイヤーターンの最後の射撃(ROF維持なし、3.2.4)
   var rofMaintained=rofEligible&&(S.gun.rd<=rofVal);
-  S.gun.th_result={hit:hit,dr:dr,modDr:modDr,thNum:thNum,drm:drm,
+  S.gun.th_result={hit:hit,dugInMiss:dugInMiss,dr:dr,modDr:modDr,thNum:thNum,drm:drm,
     malfunction:malfunction,destruction:destruction,
     bNum:bNum,xNum:xNum,isCH:isCH,permRemoved:permRemoved,useRedTH:useRedTH,
     effTgt:effTgt,rofVal:rofVal,rofBase:rofBase,rofReduce:rofReduce,rofForcedOne:rofForcedOne,rofEligible:rofEligible,rofMaintained:rofMaintained,
@@ -19993,6 +20225,7 @@ function vehStatusCardHTML(gd){
   // Motion
   h+='<div class="btns" style="margin:0;flex-wrap:nowrap"><button class="b sm'+(!st.motion?' on':'')+'" style="flex:1" onclick="VehSetMotion(false)">'+T('なし')+'</button><button class="b sm'+(st.motion?' on red':'')+'" style="flex:1" onclick="VehSetMotion(true)">'+T('Motion状態')+'</button></div>';
   if(st.motion)h+='<div style="font-size:12px;color:#c8a032;margin-top:3px">'+T('Motion状態：準備射撃(PFPh)は射撃不可（移動フェイズ(MPh)まで待つ）／目標獲得を得られない／始動済みのためMP消費が必要')+'</div>';
+  if(st.motion)h+='<div style="font-size:12px;color:#c8a032;margin-top:3px">'+T('Motion状態の射手(Case 16): Case 14のDRM(T/ST +4・NT +5)を加算し、命中判定は振った2つのダイスの低い方を2倍にして判定。歩兵目標で射程1は+2、射程2は+1のDRMも加算。命中パネルに反映済み')+'</div>';
   // Motion Status Attempt (DFF=MPh/防御割り込みのみ)
   if(g.phase==="DFF"){
     h+='<div style="background:#0d0d14;border:1px solid #404040;border-radius:3px;padding:5px;margin-top:6px">';
@@ -21469,6 +21702,10 @@ function GUN_PAGE(){
     // 未確認。QRDC実物カードでのダルマ確認待ちとし、確認が取れるまでは牽引砲と同一の加算構造を仮採用する。
     // UNCONFIRMED - PENDING CONFIRMATION(ダルマ確認待ち): T/ST/RSTの2本目以降+1ずつという加算構造そのもの。
     var gCaBaseByTurret=gd.turretType==="T"?1:(gd.turretType==="ST"||gd.turretType==="RST"||gd.turretType==="1MT")?2:(gd.turretType==="NT"||gd.turretType===null)?3:null; // 1MTはRST同様ST扱い(7.2項、一次資料確認済み)
+    // v11.330(Kato指示「砲塔付き(T/ST)・無砲塔(NT) 一律でヘクスの足一本分で+3DRM」): 車両が車体(VCA)の向きを変えて射撃する場合は、砲塔種別に関係なく
+    // 1ヘクスの足(hexspine)につき+3(2本目以降は砲・NT砲と同じ+1ずつ=要確認)。砲塔(TCA)のみ回す場合は従来の砲塔種別別(T+1/ST・RST+2/NT+3)。
+    var gCaVcaSel=!!(gd.isVehicleMA&&g.drm.ca_vca);
+    if(gCaVcaSel)gCaBaseByTurret=3;
     var gCaDrmPer=(gCaBaseByTurret!=null?gCaBaseByTurret:(gd.mount360?1:3))*gCaTerrMult; // 360°旋回砲は1本目+1（QRDC「砲の火角(CA)変更」項＝白円マウントは+1、ダルマ確認2026-07。88mm FlaK例で1ヘクス背CA変更+1を確認）、それ以外はNT砲の基本値+3
     var gCaDrmAdd=1*gCaTerrMult;
     var gCaDrm=g.drm.ca_hex>0?(gCaDrmPer+(g.drm.ca_hex-1)*gCaDrmAdd):0;
@@ -21480,8 +21717,19 @@ function GUN_PAGE(){
     // 低速回転砲塔(ST/RST/1MT、基本値+2)を選択中でもNT砲の文言(基本値+3)が誤って表示されていた。
     // gCaBaseByTurret(1/2/3)の実際の値に応じて3パターンを出し分け、現在選択中の砲/車両に実際に適用される
     // ペナルティ文言を表示するよう修正。
-    var gCaLabelTxt=(gCaBaseByTurret===1)?T('高速回転砲：1本目+1、2本目以降+1ずつ'):(gCaBaseByTurret===2)?T('低速回転砲塔：1本目+2、2本目以降+1ずつ'):T('NT砲：1本目+3、2本目以降+1ずつ');
+    var gCaLabelTxt=gCaVcaSel?T('車体(VCA)を回す：1ヘクスの足ごとに+3（T/ST/NT共通）、2本目以降+1ずつ'):(gCaBaseByTurret===1)?T('高速回転砲：1本目+1、2本目以降+1ずつ'):(gCaBaseByTurret===2)?T('低速回転砲塔：1本目+2、2本目以降+1ずつ'):T('NT砲：1本目+3、2本目以降+1ずつ');
     h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px;overflow-wrap:break-word">'+T('CA変更数（')+gCaLabelTxt+(S.lang==='en'?')</div>':'）</div>');
+    if(ssrDugInFiringGun(gd)){
+      // v11.340: S35 SSR3 塹壕化したT-34 M41はVCAを変更できない(砲塔(TCA)のみ変更可)
+      if(g.drm.ca_vca)S.gun.drm.ca_vca=false;
+      h+='<div class="rnote" style="color:#3ca878">'+T('SSR3適用：塹壕化したT-34はVCA(車体)を変更できません。砲塔(TCA)のみ変更できます')+'</div>';
+    } else if(gd.isVehicleMA&&gd.turretType){
+      // v11.330: 砲塔付き車両は「砲塔(TCA)を回す」か「車体(VCA)を回す」かを選ぶ。VCAを変えるとTCAも同じ数だけ動く(7.8)。無砲塔(NT)は元々車体向きなので選択不要。
+      h+='<div class="btns" style="margin:0 0 4px">';
+      h+='<button class="b sm'+(!g.drm.ca_vca?" on":"")+'" style="flex:1;height:auto;min-height:34px;white-space:normal;line-height:1.2;padding:2px 3px;font-size:12px" onclick="GsetDRM(\'ca_vca\',false)">'+T('砲塔(TCA)を回す')+'</button>';
+      h+='<button class="b sm'+(g.drm.ca_vca?" on":"")+'" style="flex:1;height:auto;min-height:34px;white-space:normal;line-height:1.2;padding:2px 3px;font-size:12px" onclick="GsetDRM(\'ca_vca\',true)">'+T('車体(VCA)を回す')+'</button>';
+      h+='</div>';
+    }
     h+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px">';
     [0,1,2,3].forEach(function(v){
       h+='<button class="b sm'+(g.drm.ca_hex===v?" on":"")+(g.drm.pinned&&v>0?' disabled':'')+'" style="height:40px;padding:0" onclick="'+(g.drm.pinned&&v>0?'':'GsetDRM(\'ca_hex\','+v+')')+'">'+v+'</button>';
@@ -22343,11 +22591,24 @@ h+='<div class="sum" style="display:flex;flex-wrap:nowrap;gap:5px;border:1px sol
   h+='<div class="sumcard" style="flex:1;min-width:0;padding:6px;min-height:52px;overflow:hidden"><div class="lbl">'+T('合計DRM')+'</div>';
   h+=seg7drm(drmTotal);
   h+='</div>';
-  h+='<div class="sumcard" style="flex:1;min-width:0;padding:6px;min-height:52px;overflow:hidden"><div class="lbl">'+T('命中')+'</div>';
+  // v11.328(Kato報告「射手がMotion状態の命中判定数値のデジタルパネル表示が反映されていない」): 射手がMotion状態/Non-Stoppedのとき、実判定(GJUDGE_TH)は
+  // Case 16により「振った2つのダイスの低い方を2倍」にした変換後DRで命中を判定するが、パネルは通常DRのままで変換が見えなかった。
+  // 変換後DR(=高い方+低い方×2)と、命中条件(変換後DR≤表示値)を併記する。故障・CH・弾薬欠乏は従来どおり通常の原DR。
+  var gNS16=gunNonStoppedFire(gunData());
+  h+='<div class="sumcard" style="flex:1;min-width:0;padding:6px;min-height:52px;overflow:hidden"><div class="lbl">'+T('命中')+(gNS16?' <span style="font-size:10px;color:#ff8844">C16</span>':'')+'</div>';
   h+='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">';
   if(curTH>0)h+=seg7dr(finalTH,'blu','DR');
   else h+='<span style="color:#556677;font-size:11px">—</span>';
-  h+='</div></div>';
+  h+='</div>';
+  if(gNS16&&curTH>0){
+    if(g.wd&&g.rd){
+      var cvDr=Math.max(g.wd,g.rd)+Math.min(g.wd,g.rd)*2;
+      h+='<div style="font-size:11px;margin-top:2px;color:'+(cvDr<=finalTH?'#00dd66':'#cc3333')+'">'+T('変換後DR')+' '+cvDr+(cvDr<=finalTH?' ≤ ':' > ')+finalTH+'</div>';
+    } else {
+      h+='<div style="font-size:10px;margin-top:2px;color:#8899aa">'+T('低い方のダイス×2で判定(Case 16)')+'</div>';
+    }
+  }
+  h+='</div>';
   var gCurCH=gunCurrentCH();
   if(gCurCH){
     h+='<div class="sumcard" style="flex:1;min-width:0;padding:6px;min-height:52px;overflow:hidden"><div class="lbl">'+T('クリティカル')+'</div>';
@@ -22530,6 +22791,10 @@ h+='<div class="sum" style="display:flex;flex-wrap:nowrap;gap:5px;border:1px sol
         h+='<div style="font-size:18px;font-weight:bold;color:#4a8a4a">'+HIT_IMG_TAG()+T('命中！ STEP 2へ進む')+'</div>';
       }
     } else {
+      if(r.dugInMiss){ // v11.340: S35 SSR3
+        h+='<div style="font-size:18px;font-weight:bold;color:#8a4a4a">'+MISS_IMG_TAG()+T('外れ')+' ('+r.modDr+' ≤ TH# '+r.thNum+')</div>';
+        h+='<div style="font-size:12px;color:#3ca878;margin-top:3px">'+T('SSR3適用：塹壕化したT-34への車体(Hull)命中はミスとして扱います')+'</div>';
+      } else
       h+='<div style="font-size:18px;font-weight:bold;color:#8a4a4a">'+(r.dr===12?ZORO6_IMG_TAG():MISS_IMG_TAG())+T('外れ')+' ('+r.modDr+' > TH# '+r.thNum+')</div>';
       if(!r.malfunction){
         h+='<div style="font-size:12px;color:#c8a032;margin-top:3px">'+T('捕捉マーカー付与（TH DR毎に自動付与 6.10）')+'</div>';
@@ -22776,6 +23041,13 @@ function GUN_IFT_SECTION(gd,showHeader){
   // プレビュー専用の不整合を解消する。車両標的(vehTgt)のAF帯/OT DRMもgunIFTdrm()内で処理済みのため、
   // 従来ここにあった重複分岐は削除した(二重管理の解消)。
   var drm=gunIFTdrm();
+  // v11.328(Kato報告「榴弾 対兵士のCHでIFT結果のFP列が2倍になっていない」): このパネル(Total FP/IFT列/合計DRM/プレビュー文)は通常FPで計算しており、
+  // 実判定(GJUDGE_IFT)がCH時に使うammo.chFp(HEATは通常FP×2)・gunCHiftDRM(TEM反転+空中炸裂等)と食い違っていた。判定と同じ条件・同じ式に揃える。
+  var chPrevApplies=!!(g.th_result&&g.th_result.isCH)&&!g.ife_mode&&(ammoObj.type==="HE"||ammoObj.type==="HEAT");
+  if(chPrevApplies){
+    fp=(ammoObj.type==="HEAT")?gunHeatFp(gd)*2:(ammoObj.chFp!=null?ammoObj.chFp:0);
+    drm=gunCHiftDRM(gd).drm;
+  }
   // 砲楯(Gunshield, 6.6)：目標が「砲(Gun)である」トグルがONの場合のみ有効。かつ防盾装備/統制状態/CA内/非正規操作でないの全条件を満たす場合のみ実際の値(gd.gs)を使う。
   // 条件を満たさない場合(通常の歩兵目標を含む)は0とし、Near Miss時に砲楯保護が誤って適用されないようにする。
   // 修正(2026-07、Kato指摘[GUN-5]) 6.3/6.6: 据付(Emplaced)TEMと砲楯DRMは併用不可(どちらか一方のみ)。
@@ -23322,7 +23594,7 @@ function latwPfMonthBlocked(w){
   var m=sc&&sc.dt?/^(\d{4})\/(\d{1,2})/.exec(sc.dt):null;
   return !!(m&&parseInt(m[1],10)===1943&&parseInt(m[2],10)<10);
 }
-function latwStatusDRM(){var d=S.latw.drm;return (d.cx?1:0)+(d.pinned?2:0)+(S.latw.tgtType==="vehicle"?0:(((d.ffmo&&latwHindTotal()<=0)?-1:0)+(d.ffnam?-1:0)+(d.hazardous?-2:0)))+(d.captured?2:0)+latwAfphDrm()+scenShotDrm(S.latw.range,S.latw.phase);} // 2026-09: 鹵獲使用(5.5)は+2 TH DR。シナリオSSR(S28+1/降雪)
+function latwStatusDRM(){var d=S.latw.drm;return ((S.latw.tgtType==="vehicle"&&ssrDugInTarget(S.latw.tgtVehId))?1:0)+(d.cx?1:0)+(d.pinned?2:0)+(S.latw.tgtType==="vehicle"?0:(((d.ffmo&&latwHindTotal()<=0)?-1:0)+(d.ffnam?-1:0)+(d.hazardous?-2:0)))+(d.captured?2:0)+latwAfphDrm()+scenShotDrm(S.latw.range,S.latw.phase);} // 2026-09: 鹵獲使用(5.5)は+2 TH DR。シナリオSSR(S28+1/降雪)
 function LATWlosI(id){var d=S.latw.drm;if(!d.losT)d.losT={};d.losT[id]=(d.losT[id]||0)+1;S.latw.th_result=null;Draw();}
 function LATWlosD(id){var d=S.latw.drm;if(!d.losT)d.losT={};d.losT[id]=Math.max(0,(d.losT[id]||0)-1);S.latw.th_result=null;Draw();}
 // 2026-08修正(ユーザー指摘・実装承認済み): 自ヘクス煙幕トグルを種類ごとの
@@ -23396,18 +23668,21 @@ function LATW_JUDGE_TH(){
   var isWpShot=!!(ammoSel&&ammoSel.type==="WP");
   var piatLeaderNA=(w.id==="piat"&&ld.piatLoneSMC); // L4修正(2026-07): PIAT単独SMC射撃時は自身の指揮修正不可(4.4.5)
   var haBonus=(!isWpShot&&latwHeightAdvActive(ld))?1:0; // 高度優位+1TEM（WP弾はTEM自体不適用のため対象外）
-  var drm=(isWpShot?0:ld.drm.tem)+haBonus+latwHindTotal()+((ld.drm.backblast&&!ld.drm.pinned)?2:0)+(piatLeaderNA?0:(ld.drm.leader||0))+latwStatusDRM()+latwVehTgtDrm(w,ld)+latwTgtSizeDrm(ld); // WP弾(BAZ45固有): TH DRにTEMを加算しない(4.4.1)。妨害=手動+地形(季節/高度差)。射手CX/釘付け・FFMO/FFNAMも適用
+  var drm=(isWpShot?0:ld.drm.tem)+haBonus+latwHindTotal()+((ld.inBuilding&&w.backblast&&ld.drm.backblast&&!ld.drm.pinned)?2:0)+(piatLeaderNA?0:(ld.drm.leader||0))+latwStatusDRM()+latwVehTgtDrm(w,ld)+latwTgtSizeDrm(ld); // WP弾(BAZ45固有): TH DRにTEMを加算しない(4.4.1)。妨害=手動+地形(季節/高度差)。射手CX/釘付け・FFMO/FFNAMも適用
   var modDr=dr+drm;
   var isCH=(dr===2)&&(modDr<=thNum);
   var pfSelfHit=w.oneShot&&(dr>=(ld.inexperienced?11:12));
   var hit=(thNum>0)&&(modDr<=thNum)&&!pfSelfHit;
+  // v11.340: S35 SSR3 塹壕化したT-34 M41への車体命中はミス(車体=色付きdr≧白dr)
+  var latwDugInMiss=false;
+  if(hit&&ld.tgtType==="vehicle"&&ssrDugInHullMiss(ld.tgtVehId,ld.rd,ld.wd)){hit=false;latwDugInMiss=true;isCH=false;}
   var malf=null;
   var effMalfThreshold=w.malfThreshold?Math.max(2,w.malfThreshold-(ld.inexperienced?1:0)-(ld.drm.captured?2:0)):null; // 2026-09: 鹵獲使用はX#/B#-2(5.5)
   if(effMalfThreshold&&dr>=effMalfThreshold){
     malf={type:w.malfType,dr:dr,threshold:effMalfThreshold,origThreshold:w.malfThreshold};
     S.latw.wepBroken=malf; // 修正(2026-07、Kato指摘[LATW-4]): 以後この武器での射撃をロック(武器切替/次の射撃へ/全リセットで解除)
   }
-  S.latw.th_result={hit:hit,dr:dr,modDr:modDr,thNum:thNum,drm:drm,isCH:isCH,pfSelfHit:pfSelfHit,malf:malf};
+  S.latw.th_result={hit:hit,dugInMiss:latwDugInMiss,dr:dr,modDr:modDr,thNum:thNum,drm:drm,isCH:isCH,pfSelfHit:pfSelfHit,malf:malf};
   // 修正(2026-07、Kato指摘[LATW-2]) 4.4.2: PFが実際に発射されたらシナリオ通算発射数カウンタを+1
   if(w.oneShot){S.pfTracker.used=(S.pfTracker.used||0)+1;ld.pf_result.shotTaken=true;} // v11.274: このPFチェックは使用済み(新たなPFチェックで解除)
   logResult(function(){return{tabLbl:T('LATW TH'),text:'TH#'+thNum+' '+diceEmojiStr(ld.rd,ld.wd)+'→'+modDr+' : '+(pfSelfHit?T('ミス+損耗'):hit?(isCH?T('命中(CH)'):T('命中')):T('ミス'))+(malf?(S.lang==='en'?', ':'・')+T('故障'):''),color:pfSelfHit||malf?'#cc3333':(hit?'#00aa55':'#8899aa'),detail:[diceBadge(ld.rd,ld.wd)].concat(latwDetailLines(ld))};});
@@ -24059,7 +24334,7 @@ function LATW_PAGE(){
   var isWpShotDisp=!!(ammoSelDisp&&ammoSelDisp.type==="WP");
   var piatLeaderNADisp=(w.id==="piat"&&ld.piatLoneSMC);
   var haBonusDisp=(!isWpShotDisp&&latwHeightAdvActive(ld))?1:0;
-  var totalDRM=(isWpShotDisp?0:ld.drm.tem)+haBonusDisp+latwHindTotal()+((ld.drm.backblast&&!ld.drm.pinned)?2:0)+(piatLeaderNADisp?0:(ld.drm.leader||0))+latwStatusDRM()+latwVehTgtDrm(w,ld)+latwTgtSizeDrm(ld);
+  var totalDRM=(isWpShotDisp?0:ld.drm.tem)+haBonusDisp+latwHindTotal()+((ld.inBuilding&&w.backblast&&ld.drm.backblast&&!ld.drm.pinned)?2:0)+(piatLeaderNADisp?0:(ld.drm.leader||0))+latwStatusDRM()+latwVehTgtDrm(w,ld)+latwTgtSizeDrm(ld);
   if(isWpShotDisp)h+='<div style="font-size:12px;color:#c8a032;margin:-2px 0 4px">'+T('WP弾(BAZ45固有): TH DRにTEMを加算しない')+'</div>';
   var curTH=ld.range>0?latwTH(w,ld.range):0;
   // 修正(2026-07、Kato指摘): 「外枠を上下の外枠と統合」対応。合計DRM/クリティカル等のサマリ(上)から
@@ -24120,7 +24395,7 @@ function LATW_PAGE(){
     }
     var lPenaltyNotes=[];
     if(ld.inexperienced)lPenaltyNotes.push(T('未熟兵（DR11-12=ミス+損耗）'));
-    if(ld.drm.backblast&&!ld.drm.pinned)lPenaltyNotes.push(T('バックブラスト回避：+2 TH DRM適用中'));
+    if(ld.inBuilding&&w.backblast&&ld.drm.backblast&&!ld.drm.pinned)lPenaltyNotes.push(T('バックブラスト回避：+2 TH DRM適用中'));
     if(lPenaltyNotes.length){
       h+='<div style="color:#ff6644;white-space:nowrap">'+T('適用中のペナルティ')+'</div><div style="color:#ffaa88">'+lPenaltyNotes.join('<br>')+'</div>';
     }
@@ -24151,7 +24426,7 @@ function LATW_PAGE(){
     if(r.pfSelfHit) h+='<div style="font-size:14px;font-weight:bold;color:#cc3333">'+PFSELFHIT_IMG_TAG()+T('ミス＋損耗（PF DR')+r.dr+T('） — 発射ユニットに損耗')+'</div>';
     else if(r.isCH) h+='<div style="font-size:14px;font-weight:bold;color:#ff6600">'+(r.malf?'':CH_IMG_TAG())+T('クリティカルヒット！（原DR=2）')+'</div>';
     else if(r.hit)  h+='<div style="font-size:15px;font-weight:bold;color:#4a8a4a">'+(r.malf?'':HIT_IMG_TAG())+T('命中！ STEP 2へ')+'</div>';
-    else            h+='<div style="font-size:14px;font-weight:bold;color:#8a4a4a">'+(r.malf?'':(r.dr===12?ZORO6_IMG_TAG():MISS_IMG_TAG()))+T('外れ')+'</div>';
+    else            h+='<div style="font-size:14px;font-weight:bold;color:#8a4a4a">'+(r.malf?'':(r.dr===12?ZORO6_IMG_TAG():MISS_IMG_TAG()))+T('外れ')+'</div>'+(r.dugInMiss?'<div style="font-size:12px;color:#3ca878;margin-top:3px">'+T('SSR3適用：塹壕化したT-34への車体(Hull)命中はミスとして扱います')+'</div>':'');
     if(r.malf){
       var mTxt=r.malf.type==="destroy"?''+T('故障判定：原DR')+r.malf.dr+'≥'+r.malf.threshold+T(' → 武器は除去されました'):''+T('故障判定：原DR')+r.malf.dr+'≥'+r.malf.threshold+T(' → 武器は故障（修理可能）しました');
       h+='<div style="font-size:11px;font-weight:bold;color:#ff8800;margin-top:5px;border-top:1px solid #ff880033;padding-top:5px">'+MALF_IMG_TAG()+mTxt+'</div>';
@@ -24503,7 +24778,7 @@ function RS_PickUnit(kind,label){
   rl._pickMor=u.mor;
   rl.unitType=(kind==='smc')?'leader':(/乗員|crew/i.test(label)?'crew':'mmc');
   rl.hasIntrinsicSR=(kind==='smc')||!!u.sr;
-  rl.bm=(u.bm!=null?u.bm:u.mor);
+  rl.bm=(u.bm!=null?u.bm:u.mor)+ssrBrokenMoraleBonus(rl.rlPickNat,label); // v11.340: S35 SSR2 二線級6-2-8/3-2-8は混乱面の士気値+1
   rl.res=null;
   Draw();
 }
@@ -24536,8 +24811,10 @@ function RSMCWound(v){S.rally.smcWoundDr=v;Draw();}
 // 指揮官回復の指揮修正は、回復を試みる指揮官が負傷中なら1悪化(ASLSK4 3.2.3)。自己回復は+1(指揮官の自己回復は自身の指揮修正を使わない、3.1e)。
 // 回復対象のSMCが負傷中なら混乱士気値-1(同3.2.3「負傷したSMCの士気値は1低下」)。
 function rallyLdrTerm(rl){return rl.self?1:((rl.ldr||0)+((rl.ldrPresent&&rl.ldrWounded)?1:0));}
-function rallyDrm(rl){return rallyLdrTerm(rl)+(rl.bld?-1:0)+(rl.dm?4:0);}
-function rallyEffBm(rl){return rl.bm+(rallySsrBmOn(rl)?1:0)-((rl._pickKind==='smc'&&rl.smcWounded)?1:0);}
+// v11.340(S35 SSR4): 政治委員(8-0/6+1)とスタックしたロシア軍歩兵の回復は、混乱士気値+1・DM(+4)を適用しない。
+function rallyCommissarOn(rl){return !!(ssrCommissarOn()&&rl&&rl.ssrCommissar);}
+function rallyDrm(rl){return rallyLdrTerm(rl)+(rl.bld?-1:0)+((rl.dm&&!rallyCommissarOn(rl))?4:0);}
+function rallyEffBm(rl){return rl.bm+(rallySsrBmOn(rl)?1:0)+(rallyCommissarOn(rl)?1:0)-((rl._pickKind==='smc'&&rl.smcWounded)?1:0);}
 function RJUDGE_COMMON(rl){
   var r=rl.rd,w=rl.wd;
   if(!r||!w)return null;
@@ -24592,7 +24869,7 @@ S.rally.res={raw:raw,mod:mod,st:st,pro:raw===2&&isMMCSelf};
     [T('士気値'),rallyEffBm(rl)],
     [T('指揮官修正'),rallyLdrTerm(rl)],
     [T('地形DRM'),rl.bld?-1:0],
-    ['DM',rl.dm?'+4':null]
+    ['DM',(rl.dm&&!rallyCommissarOn(rl))?'+4':null]
   ])};});
   Draw();
   scrollToRallyResultsCard();
@@ -25014,6 +25291,7 @@ function smkPickedValue(){
   var v=u.smk;
   // 2026-09追加(ダルマ指示「S24 SSR1を反映させる」): 独軍の8-3-8[E]/5-4-8[E]はSmoke指数+2(S24選択中のみ)。
   if(S.scen&&S.scen.sel==='S24'&&m.pickerNat==='GER'&&(m.pickerLabel==='8-3-8[E]'||m.pickerLabel==='5-4-8[E]'))v+=2;
+  if(S.scen&&S.scen.sel==='S35'&&m.pickerNat==='GER'&&m.pickerLabel==='8-3-8[E]'&&m.pickerKind!=='smc')v=5; // v11.340: S35 SSR2「ドイツ軍の8-3-8分隊は煙幕発生能力が5」(印刷値3→5)
   if(m.pickerKind!=='smc'&&ssrNoSmoke(m.pickerNat,m.pickerLabel))v=0; // v11.301: S20 SSR4 煙幕能力なし
   return v;
 }
@@ -25080,6 +25358,9 @@ function SMOKE_CARD(){
       if(m.pickerKind!=='smc'&&ssrNoSmoke(m.pickerNat,m.pickerLabel))h+='<div style="font-size:12px;color:#3ca878;margin-top:6px">'+T('SSR4適用：煙幕能力なし（煙幕指数を適用しない）')+'</div>'; // v11.301
       if(S.scen&&S.scen.sel==='S24'&&m.pickerNat==='GER'&&(m.pickerLabel==='8-3-8[E]'||m.pickerLabel==='5-4-8[E]')){
         h+='<div style="font-size:12px;color:#3ca878;margin-top:6px">'+T('SSR1適用：Smoke指数+2')+'</div>';
+      }
+      if(S.scen&&S.scen.sel==='S35'&&m.pickerNat==='GER'&&m.pickerLabel==='8-3-8[E]'&&m.pickerKind!=='smc'){
+        h+='<div style="font-size:12px;color:#3ca878;margin-top:6px">'+T('SSR2適用：Smoke指数5')+'</div>';
       }
       h+='<div class="sum" style="grid-template-columns:1fr;margin-top:6px">'+sumSuccessCard(T('成功＝DR以下'),smkVal-(m.cx?1:0),null,1,6)+'</div>'; // v11.286: CX(+1drm)時は修正前drの成功上限が1下がる(他タブの成功カードと同じく修正前の値で表示)
       h+='<button class="b sm'+(m.cx?' on red':'')+'" style="width:100%;margin-top:4px" onclick="SMKset(\'cx\','+(m.cx?'false':'true')+')">'+T('CX（配置drに+1drm）')+'</button>';
@@ -25967,6 +26248,7 @@ var LOS_TERRAIN_TABLE={
   // 2026-09追加(SSR置換専用の架空コード。盤面ピクセルの生コードとしては解釈されない): S33耕地／S28湿地／S16要塞化建物
   92:{name:"PlowedFields",obs:false,hin:false,inh:false,spl:0.0,h:0},
   93:{name:"SwampS28",obs:false,hin:true,inh:false,spl:0.0,h:0},
+  95:{name:"ShellholeS35",obs:false,hin:false,inh:false,spl:0.0,h:0}, // v11.340: S35 SSR1 果樹園は砲弾孔(LOSに影響なし)
   94:{name:"FortifiedBuilding",obs:true,hin:false,inh:false,spl:0.0,h:1},
 };
 var SCEN_KIT_BADGE_IMG={
@@ -26118,6 +26400,7 @@ var LOS_SSR_TEMPLATES={
   // 2026-09追加(ダルマ指示「マップに反映できるSSR: 実施」): S33/S20/S28のSSRによる地形置換。盤面画像は元のまま(LOS判定・移動コスト・TEM表示のみに反映)。
   GrainToPlowed:{'Grain':'PlowedFields'},          // S33 SSR1: 穀物は耕地(進入1.5MF、他は開豁地扱い＝ヒンドランスなし・季節に関係なく耕地)
   BrushToOrchard:{'Brush':'Orchard'},              // S20 SSR5: 藪のみのヘクスは果樹園(他地形と同居する藪は盤面の優勢地形で判定するため近似)
+  WoodsRubbleOrchardShellhole:{'Woods':'Stone Rubble','Orchard':'ShellholeS35'}, // v11.340: S35 SSR1 林は石造瓦礫(歩兵3MF・TEM+3・LOS遮断、車両は林と同じ)、果樹園は砲弾孔(LOSに影響なし・歩兵TEM+1・2MF)
   GrainBrushToSwamp:{'Grain':'SwampS28','Brush':'SwampS28'}, // S28 SSR2: 穀物/藪は湿地(ヒンドランスは穀物扱い、歩兵1.5MF・車両2MP)
   HillToWoods:{}, // 2026-09追加(S46 SSR2「丘は存在せず、丘の輪郭に沿った林として扱う」): 置換は地形名ではなく標高で行う(losTerrainInfoAt/losElevAtで特別処理)
   Snow:{} // 2026-08追加(Kato指示・S4専用): 積雪は地形コードを変更しない(判定には影響しない、
@@ -27335,14 +27618,14 @@ var LOS_MOVE_COST_TABLE_VEHICLE_TRACKED={
   "Dirt Road":1,"Paved Road":1,
   "Stone Building":null,"Stone Building, 1 Level":null,"Wooden Building":null,"Woods":null,
   "Stone Rubble":null,"MultipleWooden":null,"MultipleStone":null,"MarshImpassable":null,
-  "PlowedFields":1,"SwampS28":2,"FortifiedBuilding":null // 2026-09追加: S33耕地(開豁地扱い)/S28湿地(車両2MP)/S16要塞化建物(建物同様に進入不可)
+  "PlowedFields":1,"SwampS28":2,"ShellholeS35":1,"FortifiedBuilding":null // v11.340: S35砲弾孔(果樹園と同じ扱い) / 2026-09追加: S33耕地(開豁地扱い)/S28湿地(車両2MP)/S16要塞化建物(建物同様に進入不可)
 };
 var LOS_MOVE_COST_TABLE_VEHICLE_WHEELED={
   "Open Ground":3,"Marsh":null,"Grain":4,"Orchard":3,"Brush":4,
   "Dirt Road":1,"Paved Road":1,
   "Stone Building":null,"Stone Building, 1 Level":null,"Wooden Building":null,"Woods":null,
   "Stone Rubble":null,"MultipleWooden":null,"MultipleStone":null,"MarshImpassable":null,
-  "PlowedFields":3,"SwampS28":2,"FortifiedBuilding":null // 2026-09追加
+  "PlowedFields":3,"SwampS28":2,"ShellholeS35":3,"FortifiedBuilding":null // 2026-09追加
 };
 // 装甲車(装輪)として扱う車両ID一覧(それ以外のmp登録済み車両は完全装軌式として扱う)。
 var LOS_WHEELED_VEHICLE_IDS={"afv_psw232_ge":true,"afv_psw2342_ge":true,"afv_daimler_gbr":true,"afv_oavz30t_alm":true};
@@ -27384,6 +27667,7 @@ var LOS_MOVE_COST_TABLE={
   "MarshImpassable":null,     // S19専用SSR「浸水」。ダルマ指示によりMarshと同様に進入不可
   "PlowedFields":1.5,          // 2026-09追加: S33 SSR1「耕地は進入に1.5MF、他は開豁地」
   "SwampS28":1.5,              // 2026-09追加: S28 SSR2「歩兵は1.5MF(車両2MP)」
+  "ShellholeS35":1,            // v11.340: S35 SSR1「砲弾孔は進入2MF。移動中は1MFで進入すれば開豁地(TEM0)として扱う」→行軍ルートは最小の1MFで計算(2MFで進入するとTEM+1)
   "FortifiedBuilding":2        // 2026-09追加: S16 SSR2 要塞化建物(通常の建物と同じ2MF)
 };
 // 2026-08修正(ダルマ指示・麦畑の季節判定を実装): 従来は麦畑を季節に関わらず常に1.5MFと
@@ -27575,7 +27859,8 @@ function losExtractMFInputsFromSaved(saved){
   // 入れたユニットが編成内に1つでもあれば、その編成全体をCX状態として扱う(ASLでは
   // CX状態はユニット/スタック単位で成立するため)。
   var isCX=items.some(function(it){return !!it.cx;});
-  return {troopClass:troopClass,leader:leader,carrier:carrier,pp:pp,cx:isCX};
+  var smcWounded=(carrier==='smc')&&items.some(function(it){return it.kind==='smc'&&!!it.wounded;}); // v11.332: 負傷SMCは3MF・IPC0
+  return {troopClass:troopClass,leader:leader,carrier:carrier,pp:pp,cx:isCX,smcWounded:smcWounded};
 }
 // 現在の「IPC/MF動的計算」カード(SW_WEIGHT_CARD)と同一の数式で、練度・指揮官同行・
 // 携行PP・車両種別から有効MFを1組分だけ計算する(急速歩移動は常に手動設定
@@ -27583,15 +27868,21 @@ function losExtractMFInputsFromSaved(saved){
 // 2026-08修正(ダルマ指示「編成内のcxをルートに反映させる」): CX状態は、cxOverride引数が
 // 渡された場合はそちらを優先する(ピッカーユニットのCXチェックから導出した値)。渡され
 // なかった場合のみ、従来通り手動設定(S.move.mfCalc.cx)にフォールバックする。
-function losComputeEffMFFromInputs(troopClass,leader,carrier,pp,cxOverride){
+// v11.332(各タブ監査(6)ボグ/人力/煙幕タブ): このMap用の式が移動タブのIPC/MF動的計算カード(SW_WEIGHT_CARD)と食い違っていた。
+// SMC(指揮官単独)の基本MFはルールブック3.3.1で6MF(負傷3MF)だが、v11.236で移動タブだけ直され、ここは旧い4MFのままだった。
+// 負傷SMCはIPC 0・急速歩(Double Time)不可。指揮官同行ボーナス(+2MF・IPC+1)は分隊(MMC)の移動にのみ適用(SMC単独には無い)。
+function losComputeEffMFFromInputs(troopClass,leader,carrier,pp,cxOverride,smcWounded){
   var mfc=(S.move&&S.move.mfCalc)||{cx:false,doubleTime:false};
   var cx=(cxOverride!==undefined)?!!cxOverride:!!mfc.cx;
-  var baseIPC=carrier==="smc"?1:3;
-  var effIPC=Math.max(0,baseIPC+(leader?1:0)-(cx?1:0));
+  var isSmc=(carrier==="smc");
+  var wnd=(isSmc&&!!smcWounded);
+  var baseIPC=isSmc?1:3;
+  var ldrBonus=(leader&&!isSmc);
+  var effIPC=wnd?0:Math.max(0,baseIPC+(ldrBonus?1:0)-(cx?1:0));
   var greenLdrException=(troopClass==="green"&&leader);
   var baseRaw=troopClass==="reg"?4:3;
-  var baseMFEff=carrier==="smc"?4:(greenLdrException?4:baseRaw);
-  var effMF=baseMFEff+(leader?2:0)+(mfc.doubleTime?2:0)-Math.max(0,pp-effIPC);
+  var baseMFEff=isSmc?(wnd?3:6):(greenLdrException?4:baseRaw);
+  var effMF=baseMFEff+(ldrBonus?2:0)+((mfc.doubleTime&&!wnd)?2:0)-Math.max(0,pp-effIPC);
   return Math.max(0,effMF);
 }
 // 2026-09追加(ダルマ報告「このシナリオには車両が登場しません」と出るのに折りたたみバーに前シナリオの車両情報(IV号F2 有効MP/主砲FP等)が出る):
@@ -27632,13 +27923,13 @@ function losStackMFDetails(){
     }
     var slot=g.activeGroupSlot||'A';
     var inputs=losExtractMFInputsFromSaved(g);
-    var mf=losComputeEffMFFromInputs(inputs.troopClass,inputs.leader,inputs.carrier,inputs.pp,inputs.cx);
+    var mf=losComputeEffMFFromInputs(inputs.troopClass,inputs.leader,inputs.carrier,inputs.pp,inputs.cx,inputs.smcWounded);
     var member={slot:slot,saved:g,inputs:inputs,mf:mf};
     return {mf:mf,members:[member],slowestIdx:0,noGroup:false};
   }
   var mfc=(S.move&&S.move.mfCalc)||{troopClass:"reg",leader:false,pp:0,carrier:"mmc"};
-  var inputs={troopClass:mfc.troopClass||"reg",leader:!!mfc.leader,carrier:mfc.carrier||"mmc",pp:mfc.pp||0};
-  var mf=losComputeEffMFFromInputs(inputs.troopClass,inputs.leader,inputs.carrier,inputs.pp);
+  var inputs={troopClass:mfc.troopClass||"reg",leader:!!mfc.leader,carrier:mfc.carrier||"mmc",pp:mfc.pp||0,smcWounded:!!mfc.smcWounded};
+  var mf=losComputeEffMFFromInputs(inputs.troopClass,inputs.leader,inputs.carrier,inputs.pp,undefined,inputs.smcWounded);
   return {mf:mf,members:[{inputs:inputs,mf:mf}],slowestIdx:0,noGroup:false};
 }
 // 現在の「IPC/MF動的計算」カード(SW_WEIGHT_CARD)と同一の数式で有効MFを算出する
@@ -27848,7 +28139,7 @@ var LOS_TEM_BY_TERRAIN={
   "Wooden Building":2,"MultipleWooden":2,
   "Stone Building":3,"Stone Building, 1 Level":3,"MultipleStone":3,
   "Stone Rubble":3,
-  "PlowedFields":0,"SwampS28":0,
+  "PlowedFields":0,"SwampS28":0,"ShellholeS35":1, // v11.340: S35砲弾孔は歩兵に対しTEM+1(SSR1)
   "Brush":0, // v11.237: 繁みはTEMなし(ASLSK4 1.1.1)。ただし開豁地ではない→temId grain_orchard(FFMO無効)
  // 2026-09追加: 開豁地/穀物と同じ+0
   "FortifiedBuilding":4          // 2026-09追加: S16 SSR2「要塞化建物はTEM+4」
@@ -29260,7 +29551,7 @@ function LosSetRouteVCA(dir){
   var d=((dir-last.vca)%6+6)%6;
   d=Math.min(d,6-d);
   if(d===0)return;
-  var isBog=!!(last.terrain&&LOS_VEHICLE_BOG_TERRAINS[last.terrain]&&!last.onRoad); // v11.282
+  var isBog=!!(last.terrain&&losBogTerrain(last.terrain)&&!last.onRoad); // v11.282
   var cost=d*(isBog?2:1);
   var moveBase=(last.moveCum!==undefined)?last.moveCum:last.cum;
   var veh=losSelectedVehicle();
@@ -29478,7 +29769,7 @@ function losRouteVcaPanelHTML(seasonBoxH){
   var endHex=hx[hx.length-1];
   var isStartOnly=(hx.length===1);
   var baseRot=losBoardRotById(endHex.boardId)+(S_LOS.viewRot||0)+30;
-  var isBog=!!(endHex.terrain&&LOS_VEHICLE_BOG_TERRAINS[endHex.terrain]&&!endHex.onRoad); // v11.282
+  var isBog=!!(endHex.terrain&&losBogTerrain(endHex.terrain)&&!endHex.onRoad); // v11.282
   var h='<div class="lbl" style="font-size:10px;margin:0 0 3px;line-height:1.4">'; // 2026-09: ダルマ指示「車両の向き(VCA)変更…のフォントサイズダウン」12px→10px
   if(isStartOnly){
     h+=T('初期向き(VCA)を設定')+(endHex.vca!=null?T('(設定済み)'):'');
@@ -29560,7 +29851,7 @@ function LosRouteVCAChange(){
   if(!route||!route.hexes||!route.hexes.length)return;
   if(S_LOS.mfEntityType!=='vehicle')return;
   var last=route.hexes[route.hexes.length-1];
-  var isBog=!!(last.terrain&&LOS_VEHICLE_BOG_TERRAINS[last.terrain]&&!last.onRoad); // v11.282
+  var isBog=!!(last.terrain&&losBogTerrain(last.terrain)&&!last.onRoad); // v11.282
   var cost=isBog?2:1;
   var newCum=last.cum+cost;
   route.hexes.push({boardId:last.boardId,col:last.col,row:last.row,cost:cost,cum:newCum,terrain:last.terrain,roadOk:false,elev:last.elev,climbing:false,bogRequired:isBog,wreckCnt:0,wreckAddCost:0,vcaChange:true});
@@ -30828,8 +31119,9 @@ function LosMapClick(ev){
       var bogRequired=false;
       var woodsAllUsed=false;
       var mc;
-      if(isVeh&&info&&LOS_VEHICLE_BOG_TERRAINS[info.name]&&!roadSideType){
-        var isBuilding=(info.name!=='Woods');
+      if(isVeh&&ssrDugInTarget(S_LOS.mfVehicleId)){S_LOS.routeError=T('SSR3：塹壕化したT-34は設置ヘクスから移動できません');return false;} // v11.340: S35 SSR3
+      if(isVeh&&info&&losBogTerrain(info.name)&&!roadSideType){
+        var isBuilding=(info.name!=='Woods'&&!scenRubbleAsWoods(info.name)); // v11.340: S35 SSR1の瓦礫(元は林)は林扱い
         if(isBuilding&&scenRouteRule().noAfvBuilding){
           mc={cost:null,unknown:false,blockReason:'ssr'}; // 2026-09追加: S27 SSR6「AFVは建物ヘクスに進入できない」
         }else if(isWheeled&&isBuilding){
@@ -30930,7 +31222,7 @@ function LosMapClick(ev){
               var vcaRotDist=function(a,b){var d=((a-b)%6+6)%6;return Math.min(d,6-d);};
               var vcaD1=vcaRotDist(lastVcaCur,vcaC1),vcaD2=vcaRotDist(lastVcaCur,vcaC2);
               if(vcaD1<=vcaD2){vcaTurnHexspines=vcaD1;newVCA=vcaC1;}else{vcaTurnHexspines=vcaD2;newVCA=vcaC2;}
-              var vcaIsBog=!!(last.terrain&&LOS_VEHICLE_BOG_TERRAINS[last.terrain]&&!last.onRoad); // v11.282: 林-道路の道路上は道路扱い
+              var vcaIsBog=!!(last.terrain&&losBogTerrain(last.terrain)&&!last.onRoad); // v11.282: 林-道路の道路上は道路扱い
               vcaTurnCost=vcaTurnHexspines*(vcaIsBog?2:1);
             }
           }
@@ -30964,7 +31256,7 @@ function LosMapClick(ev){
       }
       if(vcaTurnCost>0){
         stepCost+=vcaTurnCost;
-        if(vcaTurnHexspines>0&&last.terrain&&LOS_VEHICLE_BOG_TERRAINS[last.terrain]&&!last.onRoad)bogRequired=true;
+        if(vcaTurnHexspines>0&&last.terrain&&losBogTerrain(last.terrain)&&!last.onRoad)bogRequired=true;
       }
       // 2026-09追加(ダルマ指示「MP上限チェックは実装必須、最少移動ルールを考慮」): 選択中車両の
       // 所持MP(veh.mp)と、ここまでの累計移動コスト(last.moveCum、停止分を含まない)を比較し、
@@ -31993,7 +32285,7 @@ function LOS_PAGE(){
   h+='<div style="flex:1;min-width:210px;border:1px solid #404040;border-radius:4px;padding:6px">'; // 2026-08修正(ダルマ指示): SSRボックスと積雪ボックスを1つの枠に統合 / 2026-08修正(ダルマ指示): 2x2グリッド表示に変更、「森を果樹園化」→「果樹園化」に短縮
   h+='<div class="sh" style="margin-top:0">SSR'+T('（地形置換・判定反映）')+'</div>';
   h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">';
-  [['WoodsToOrchard','S17',T('森→果樹園化')],['WoodsOrchardToStoneRubble','S18',T('森・果樹園→瓦礫化')],['GrainToMarsh','S19',T('麦畑→浸水化')],['GrainToPlowed','S33',T('麦畑→耕地化')],['BrushToOrchard','S20',T('藪→果樹園化')],['GrainBrushToSwamp','S28',T('麦畑・藪→湿地化')],['Snow','S04',T('積雪切替')]].forEach(function(p){
+  [['WoodsToOrchard','S17',T('森→果樹園化')],['WoodsOrchardToStoneRubble','S18',T('森・果樹園→瓦礫化')],['GrainToMarsh','S19',T('麦畑→浸水化')],['GrainToPlowed','S33',T('麦畑→耕地化')],['BrushToOrchard','S20',T('藪→果樹園化')],['GrainBrushToSwamp','S28',T('麦畑・藪→湿地化')],['WoodsRubbleOrchardShellhole','S35',T('森→瓦礫・果樹園→砲弾孔')],['Snow','S04',T('積雪切替')]].forEach(function(p){
     var _ssrOn=(S_LOS.ssr===p[0]);
     // 2026-08修正(ダルマ指示): シナリオ一覧カード(sc.id)と同じ枠線バッジスタイルをSSRコード表記にも適用
     h+='<button class="b sm xs'+(_ssrOn?' on':'')+'" onclick="LosSetSSR(\''+p[0]+'\')"><span style="display:inline-flex;align-items:center;justify-content:center;padding:1px 5px;margin-right:4px;border:1px solid '+(_ssrOn?'#c8a032':'#445566')+';border-radius:2px;font-size:11px;font-weight:bold;color:'+(_ssrOn?'#c8a032':'#556677')+';letter-spacing:0.05em">'+p[1]+'</span>'+p[2]+'</button>';
@@ -32161,16 +32453,16 @@ function REF_TEM_CARD(){
   h+='<div class="card"><div class="sh">MF/PP Chart</div>';
   h+='<div style="font-size:14px;color:#556677;margin-bottom:5px">'+T('未熟兵MMCの基本MFは3（急速歩5）。新兵(G)は指揮官同行時に減算なし（6/急速歩8）、徴集兵(C)は指揮官同行時も−1（5/急速歩7）')+'</div>'; // v11.238: 3.3.1 Unit Movement Factor Chart
   h+='<div style="overflow-x:auto"><table class="ift-table" style="font-size:14px;white-space:nowrap">';
-  h+='<tr><th style="color:#8899aa;text-align:left">'+T('移動ユニット')+'</th><th style="color:#8899aa">Alone</th><th style="color:#8899aa">Alone CX</th><th style="color:#8899aa">With Leader</th><th style="color:#8899aa">CX With Leader</th><th style="color:#8899aa">CX With CX Leader</th></tr>';
+  h+='<tr><th style="color:#8899aa;text-align:left">'+T('移動ユニット')+'</th><th style="color:#8899aa">Alone</th><th style="color:#8899aa">Alone CX</th><th style="color:#8899aa">With Leader</th><th style="color:#8899aa">CX With Leader</th></tr>'; // v11.335(各タブ監査(11)): 公式Unit Movement Factor Chart(SK4 3.3.1)は「基本/指揮官同行/急速歩(指揮官なし)/急速歩+指揮官同行」の4列のみ。旧「CX With Leader」列(公式表になく移動タブのMF計算とも不一致)を削除し、旧「CX With CX Leader」列を「CX With Leader」(=急速歩+指揮官同行)に改称
   [
-    ["MMC (PP≤2)",4,6,6,6,8],
-    ["MMC (PP3)",4,5,6,6,8], // v11.239: CX With CX Leader列をIPC3(3+1−1)で再計算(旧IPC2)。移動タブの計算と統一
-    ["MMC (PP4)",3,4,6,6,7],
-    ["MMC (PP5)",2,3,5,6,6],
-    ["MMC (PP6)",1,2,4,5,5],
-    ["MMC (PP7)",0,1,3,4,4]
+    ["MMC (PP≤2)",4,6,6,8],
+    ["MMC (PP3)",4,5,6,8], // v11.239: 急速歩+指揮官同行列をIPC3(3+1−1)で再計算。移動タブの計算と統一
+    ["MMC (PP4)",3,4,6,7],
+    ["MMC (PP5)",2,3,5,6],
+    ["MMC (PP6)",1,2,4,5],
+    ["MMC (PP7)",0,1,3,4]
   ].forEach(function(r,i){
-    h+='<tr style="background:'+(i%2===0?'#0a0e18':'#0d1020')+'"><td style="text-align:left;color:#ccddee">'+r[0]+'</td><td style="color:#c8a032;font-weight:bold">'+r[1]+'</td><td style="color:#c8a032;font-weight:bold">'+r[2]+'</td><td style="color:#c8a032;font-weight:bold">'+r[3]+'</td><td style="color:#c8a032;font-weight:bold">'+r[4]+'</td><td style="color:#c8a032;font-weight:bold">'+r[5]+'</td></tr>';
+    h+='<tr style="background:'+(i%2===0?'#0a0e18':'#0d1020')+'"><td style="text-align:left;color:#ccddee">'+r[0]+'</td><td style="color:#c8a032;font-weight:bold">'+r[1]+'</td><td style="color:#c8a032;font-weight:bold">'+r[2]+'</td><td style="color:#c8a032;font-weight:bold">'+r[3]+'</td><td style="color:#c8a032;font-weight:bold">'+r[4]+'</td></tr>';
   });
   h+='</table></div></div>';
   return h;
@@ -33060,7 +33352,12 @@ function SCEN_PAGE(){
     var na=parseInt((a.id||'').replace(/[^0-9]/g,''),10),nb=parseInt((b.id||'').replace(/[^0-9]/g,''),10);
     return na-nb;
   });
-  if(!s.kitFilter||KIT_ORDER.indexOf(s.kitFilter)<0)s.kitFilter=scenKit(s.sel)||'SK1';
+  // v11.341(Kato指示「シナリオ未登録タブは非表示にする」): シナリオが1件も登録されていないキット(SK#4・EXP#2・EXP#3・BonusPack#2など)のボタンは表示しない。
+  // 以前の選択が未登録キットのまま残っていた場合は、選択中シナリオのキット、なければ先頭の表示キットへ戻す。
+  var kitCountMap={};
+  SCN.forEach(function(sc){var k0=scenKit(sc.id);kitCountMap[k0]=(kitCountMap[k0]||0)+1;});
+  var KIT_VISIBLE=KIT_ORDER.filter(function(k0){return (kitCountMap[k0]||0)>0;});
+  if(!s.kitFilter||KIT_VISIBLE.indexOf(s.kitFilter)<0)s.kitFilter=(s.sel&&KIT_VISIBLE.indexOf(scenKit(s.sel))>=0)?scenKit(s.sel):(KIT_VISIBLE[0]||'SK1');
   var curKitKey=s.kitFilter;
   var scnFiltered=scnSorted.filter(function(sc){return scenKit(sc.id)===curKitKey;});
 
@@ -33087,19 +33384,10 @@ function SCEN_PAGE(){
   }
   h+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:6px">';
   var recOn=!!s.viewRecords;
-  if(WEB_PUBLIC_HIDE_SCENARIO_CONTENT){
-    // 2026-09追加(Kato指示「ASLSKWv シナリオ選択はsk1/sk2/sk3/exp1のみにする」): SK1/SK2/SK3/EXP1の
-    // 4ボタン+BATTLE RECORDでちょうど5列グリッド1行に収まるため、ダミー空白枠は不要。
-    ['SK1','SK2','SK3','EX1'].forEach(function(kit){h+=kitBtnHTML(kit);});
-  } else {
-  ['SK1','SK2','SK3','SK4'].forEach(function(kit){h+=kitBtnHTML(kit);});
-  ['EX1','EX2','EX3','BP2'].forEach(function(kit){h+=kitBtnHTML(kit);});
-  // 2026-09追加(ダルマ指示「BATTLE RECORDボタンを右端に移動」): 計9ボタン(SK1-4/EX1-3/BP2/BATTLE RECORD)を
-  // 5列グリッドに並べると2行目はEX2/EX3/BP2/BATTLE RECORDの4個で5列目が空き、BATTLE RECORDが右端(5列目)に
-  // 来ない。BP2とBATTLE RECORDの間にクリック不可・見た目上は何も表示されない空白枠(v7.64のEXP#1/BATTLE
-  // RECORD間ダミーと同じパターン)を1個追加し、BATTLE RECORDを5列目(右端)へ押し出す。
-  h+='<div style="visibility:hidden;height:64px" aria-hidden="true"></div>';
-  }
+  // v11.341: 表示するのは登録シナリオが1件以上のキットのみ(公開版・全表示版とも同じ規則)。BATTLE RECORDは5列グリッドの行末(右端)に置くため、
+  // 表示キット数+1が5の倍数になるまで、クリック不可で何も表示されない空白枠を挟む(従来のダミー枠と同じ方式)。
+  KIT_VISIBLE.forEach(function(kit){h+=kitBtnHTML(kit);});
+  for(var kpad=(5-((KIT_VISIBLE.length+1)%5))%5;kpad>0;kpad--)h+='<div style="visibility:hidden;height:64px" aria-hidden="true"></div>';
   h+='<button class="battle-rec-btn" onclick="SREC_VIEW()" style="position:relative;height:64px;padding:8px 5px;font-family:\'DotGothic16\',monospace;border-radius:4px;border:1px solid #404040;background:'+(recOn?'radial-gradient(ellipse at center,#0a1a2e 0%,#0a0c14 80%)':'#0a0c14')+';display:flex;align-items:center;justify-content:center;transition:all 0.15s;cursor:pointer;box-shadow:'+(recOn?'0 0 12px rgba(68,153,238,0.35),inset 0 0 8px rgba(68,153,238,0.15)':'none')+'">';
   h+='<span style="font-family:\'Courier New\',monospace;font-weight:bold;font-size:12px;letter-spacing:0.22em;color:#ffffff">BATTLE<br>RECORD</span>';
   h+='</button>';
@@ -33753,7 +34041,7 @@ function SSEL(id){
   S.ammoDepletion={}; // 修正実施(2026-08、ダルマ指摘[GUN-DEPLETE-PERSIST]) 弾薬欠乏の永続記憶はシナリオ変更時のみリセット
   S.mgStates={}; // 2026-09追加: 車載機銃の状態(mgSt)もシナリオ変更時にリセット(弾薬欠乏と同じ永続記憶方式)
     S.scenSnow=false; // 2026-09追加: 降雪状態もシナリオ変更時にリセット
-  S.scenGebirgOff=false; S.scenFort16=null; if(S.rally)S.rally.ssrGreekM1=false; // 2026-09追加: S27山岳部隊SSR・回復の混乱士気SSRの切替もリセット
+  S.scenGebirgOff=false; S.scenFort16=null; if(S.rally){S.rally.ssrGreekM1=false;S.rally.ssrCommissar=false;} if(S.mc)S.mc.ssrCommissar=false; // 2026-09追加: S27山岳部隊SSR・回復の混乱士気SSRの切替もリセット
   S.turn={cur:1,half:0,ended:false,phase:(S.turn&&S.turn.phase)||'rph',auto:(S.turn&&S.turn.auto!==false),autoSide:null}; // 2026-08 ダルマ指示：シナリオ変更でターン1Aにリセット
   syncAutoSideFromHalf(); // 2026-08追加：ターン表自動更新の基準陣営をシナリオの先手(atk)側で初期化
   renderHeaderChart();Draw();
