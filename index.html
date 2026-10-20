@@ -19,7 +19,7 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Share+Tech+Mono&display=swap" rel="stylesheet"></noscript>
 <style>
 /* pull-to-refresh 無効化 */
-html,body{overscroll-behavior-y:none;-webkit-overscroll-behavior-y:none}
+html,body{overscroll-behavior-y:none;overscroll-behavior-x:none;-webkit-overscroll-behavior-y:none}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;overflow-anchor:none}
 body{
   background:
@@ -35107,8 +35107,8 @@ document.addEventListener('DOMContentLoaded',function(){loadState();checkIdleCle
 
 </script>
 <script>
-/* iPad Safari: 画面引っ張りリロード防止 */
-(function(){
+/* iPad Safari: 画面引っ張りリロード防止 (ptrGuard) */
+(function ptrGuard(){
   var startY=0,startX=0;
   function scrollableUp(el){
     while(el&&el!==document.body&&el!==document.documentElement){
