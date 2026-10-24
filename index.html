@@ -38,10 +38,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv200">
-<title>ASL SKシリーズv200</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv201">
+<title>ASL SKシリーズv201</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv200">
+<meta property="og:title" content="ASL SKシリーズv201">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -9540,7 +9540,8 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
+var APP_VERSION="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
+var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
 var APP_VERSION_HIST_v11399="ASLSK3M-v11.399"; // 2026-10-24: Kato指示「Inherent FP→Modified／射撃相手とのレンジ→TOTAL FPのデジタル表示を2桁・横並び1列」→seg7fpのnoPad=2で2桁ゼロ埋め(100以上は桁増加)、iPad縦(is-tabp)のみ余白・間隔を詰めて1行に収める。前回v11.398は、iPad縦のテンキー3x4・選択中拡幅。
 var APP_VERSION_HIST_v11398="ASLSK3M-v11.398"; // 2026-10-24: Kato指示「射撃相手とのレンジのテンキーを6x2→3x4、選択中カード幅を広げユニット/SW/PIN/CX/混乱/負傷を1行に(iPad縦表示時のみ)」→html.is-tabpのCSSのみで適用(PC・iPad横は従来どおり)。左カードのInherent FP行は折り返し可。前回v11.397は、MAPタブ編成のVASL化。
 var APP_VERSION_HIST_v11397="ASLSK3M-v11.397"; // 2026-10-24: Kato指示「マップタブのカウンター表示をVASLカウンターに差し替え」→MAPタブの編成表示(losSlotCompositionLabel/losSlotFullCompositionHTML)がrenderUnitChipへ国籍データを渡しておらず文字チップのままだったため、UNITSを渡してVASLカウンター画像(56px)で表示。SW・車両ピッカーは既にVASL。前回v11.396は、v表記・ページ名・アイコン。
@@ -35608,11 +35609,15 @@ function rotateTacBadge(){
   tacBadgeCur=next;
 }
 // INIT
-document.addEventListener('DOMContentLoaded',function(){loadState();checkIdleClear();/* v11.261: 5分無操作の自動ALL CLEARは廃止(setInterval(checkIdleClear)を削除) */TAB(S.tab||"fire");renderPhaseTracker();renderHeaderChart();renderAutoBtn();updateNavLabels();applyWebPublicUiHide();
+document.addEventListener('DOMContentLoaded',function(){
+  // v11.401(Kato報告「この表示でフリーズ」=タブ内容が空・バージョン行も出ない): 起動処理のどれか1つが例外を出すと以降(TAB描画・バージョン行)が全部止まっていた。
+  // 各ステップを個別にtry/catchし、失敗しても残りを続行。失敗したステップ名とメッセージはバージョン行に[INIT ERR ...]として表示する(原因特定用)。
+  var _ie=[];function _st(n,f){try{f();}catch(e){_ie.push(n+':'+String(e&&e.message).slice(0,80));try{logOp('INIT_ERROR',[n,String(e&&e.message),String(e&&e.stack).slice(0,400)]);}catch(e2){}}}
+  _st('loadState',function(){loadState();});_st('checkIdleClear',function(){checkIdleClear();});/* v11.261: 5分無操作の自動ALL CLEARは廃止(setInterval(checkIdleClear)を削除) */_st('TAB',function(){TAB(S.tab||"fire");});_st('renderPhaseTracker',function(){renderPhaseTracker();});_st('renderHeaderChart',function(){renderHeaderChart();});_st('renderAutoBtn',function(){renderAutoBtn();});_st('updateNavLabels',function(){updateNavLabels();});_st('applyWebPublicUiHide',function(){applyWebPublicUiHide();});
   var vEl=document.getElementById('appVersionLine');
   var _vDisp=(function(){var m=String(APP_VERSION).match(/v11\.(\d+)/);return m?'v'+(parseInt(m[1],10)-200):APP_VERSION;})(); // v11.396: 表示は「v<n>」(n=minor-200)。ページ名はAPP_VERSIONに連動
   try{document.title='ASL SKシリーズ'+_vDisp;var _am=document.querySelector('meta[name="apple-mobile-web-app-title"]');if(_am)_am.setAttribute('content','ASL SKシリーズ'+_vDisp);}catch(e){}
-  if(vEl)vEl.textContent='ASL SKシリーズ'+_vDisp+' (build '+document.lastModified+')'+(function(){try{return ' ['+(document.documentElement.classList.contains('is-phone')?'PHONE':'WIDE')+' win '+innerWidth+'x'+innerHeight+' scr '+screen.width+'x'+screen.height+']';}catch(e){return '';}})(); // 2026-10: ダルマ指示 表示をファイル名(ASLAKEXv<n>)に合わせる。n=v11.<minor>の minor-200
+  if(vEl)vEl.textContent='ASL SKシリーズ'+_vDisp+' (build '+document.lastModified+')'+(function(){try{return ' ['+(document.documentElement.classList.contains('is-phone')?'PHONE':'WIDE')+' win '+innerWidth+'x'+innerHeight+' scr '+screen.width+'x'+screen.height+']';}catch(e){return '';}})()+(_ie.length?' [INIT ERR '+_ie.join(' | ')+']':''); // 2026-10: ダルマ指示 表示をファイル名(ASLAKEXv<n>)に合わせる。n=v11.<minor>の minor-200
   // 2026-08修正(ユーザー指示): 金属プレート画像右側のバッジ3枚(itcBadgeSlot)を削除。プレート自体は#hdr高さいっぱいに表示。
   initTacBadgeRotation();
   var mmcPool=['7-4-7','4-6-8','4-4-7','2-4-8','2-3-7','9-1','8-1','8-0','9-2','7-0'];
