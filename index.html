@@ -765,6 +765,8 @@ html.is-tabp .thc-sq[style*="width:40px"]{width:40px !important}
 html.is-tabp .thc-sq svg{width:18px !important;height:18px !important}
 html.is-tabp .thc-sq .thc-plus{font-size:9px !important}
 html.is-tabp #turnChartInner{align-self:center !important}
+html.is-tabp .gun-ifrow{flex-direction:column !important}
+html.is-tabp .gun-ifrow .b.sm{white-space:nowrap !important}
 </style>
 </head>
 <body>
@@ -10556,7 +10558,11 @@ function fitSumRows(){ // v209: iPad縦のデジタルパネル行を幅に合�
   for(var i=0;i<rows.length;i++){var r=rows[i];
     if(r.children.length<5||String(r.style.flexWrap)!=='nowrap')continue;
     r.style.zoom='';r.style.transform='';r.style.width='';r.style.marginBottom='';r.style.boxSizing='border-box';
-    var P=r.parentElement.clientWidth,sw=r.scrollWidth;
+    var eq=r.classList.contains('sum-eq'),k;
+    for(k=0;k<r.children.length;k++)r.children[k].style.removeProperty('flex');
+    if(eq){var W=0;for(k=0;k<r.children.length;k++)W=Math.max(W,r.children[k].getBoundingClientRect().width);
+      for(k=0;k<r.children.length;k++)r.children[k].style.setProperty('flex','0 0 '+Math.ceil(W)+'px','important');} // v214: 各項目の横幅を均等に
+    var pcs=getComputedStyle(r.parentElement),P=r.parentElement.clientWidth-(parseFloat(pcs.paddingLeft)||0)-(parseFloat(pcs.paddingRight)||0)-(parseFloat(getComputedStyle(r).marginLeft)||0)-(parseFloat(getComputedStyle(r).marginRight)||0),sw=r.scrollWidth;
     if(P>0&&sw>P+1){
       var z=Math.floor(P/sw*100)/100;
       r.style.width=(P/z)+'px';r.style.transformOrigin='0 0';r.style.transform='scale('+z+')';
@@ -22801,7 +22807,7 @@ function GUN_PAGE(){
   // 「射撃ユニットの地形(開豁地等/森林・建物内)」を別カード・別行の2ボタングループとして表示していたが、
   // 1つのカードにまとめ、4ボタンをflex nowrap(各flex:1)でカード幅いっぱいの横一列に表示する。
   // 軽迫撃砲(SW扱い)ではisLightMTRにより地形2ボタンのみ非表示(集中射撃2ボタンは残す)。ロジック・onclickは無変更。
-  h+='<div style="display:flex;flex-wrap:nowrap;gap:6px;margin-bottom:6px">';
+  h+='<div class="gun-ifrow" style="display:flex;flex-wrap:nowrap;gap:6px;margin-bottom:6px">';
   h+='<div style="flex:1;min-width:0;background:#000000;border:1px solid #404040;border-radius:3px;padding:5px">';
   h+='<div style="font-size:12px;color:'+(ifDisabled?'#e0c030':'#c8a032')+';margin-bottom:3px">'+ifLabel+'</div>';
   h+='<div style="display:flex;flex-wrap:nowrap;gap:4px">';
@@ -23103,7 +23109,7 @@ function GUN_PAGE(){
   var drmTotal=gunTotalDRM();
   var finalTH=curTH>0?(curTH-drmTotal):0;
     // 2026-09変更(ダルマ指示「デジタルパネル全てを横並び一列で」): grid-template-columns:repeat(auto-fit,minmax(64px,1fr))は項目数が多いと2段に折り返すことがあったため、他のデジタルパネル(射撃タブ等)と同じflex nowrapに統一し、1行に収まるよう各カードを均等に縮める。
-h+='<div class="sum" style="display:flex;flex-wrap:nowrap;gap:5px;border:1px solid #404040;border-radius:3px;padding:5px;margin:6px 0;align-items:stretch">';
+h+='<div class="sum sum-eq" style="display:flex;flex-wrap:nowrap;gap:5px;border:1px solid #404040;border-radius:3px;padding:5px;margin:6px 0;align-items:stretch">';
   h+='<div class="sumcard" style="flex:1;min-width:0;padding:6px;min-height:52px;overflow:hidden"><div class="lbl">'+T('レンジ')+'</div>';
   h+=seg7range(g.range,'HEX');
   h+='</div>';
