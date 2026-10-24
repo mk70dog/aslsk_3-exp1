@@ -778,6 +778,9 @@ html.is-tabp #hdrChart>div:first-child{padding-top:4px !important;padding-bottom
 html.is-tabp #hdrChart .tb-btns{padding:0 !important}
 html.is-tabp #hdrChart #tbRow1,html.is-tabp #hdrChart #tbRow2{display:none !important}
 html.is-tabp #hdrChart>div:last-child{align-self:center !important}
+html.is-tabp .los-sumrow{align-items:stretch !important}
+html.is-tabp .los-sumrow>.sumcard{padding:4px 5px !important;min-height:0 !important;justify-content:flex-start !important}
+html.is-tabp .los-sumrow>.sumcard .lbl{white-space:nowrap !important;margin-bottom:2px !important}
 </style>
 </head>
 <body>
@@ -32713,7 +32716,7 @@ function LOS_PAGE(){
       var temColor=(!hasResult||r.temB===null||r.temB===undefined)?'gld':'';
       // 2026-08変更(Kato指示): 横スクロールをやめ、5項目をカード幅内に均等縮小して
       // 一列に収める(各セルflex:1 1 0+min-width:0+overflow:hiddenで自動縮小)。
-      h+='<div style="display:flex;flex-wrap:nowrap;gap:4px">';
+      h+='<div class="los-sumrow" style="display:flex;flex-wrap:nowrap;gap:4px">';
       // v11.280修正: 降雪の妨害+1は、射撃/砲撃/対戦車タブと同じscenSnowHind(S4で「降雪中」ON・射程6以上)で表示する。従来はマップの
       // 積雪SSR(S_LOS.ssr==='Snow'、S4では常に自動ON)で判定していたため、降雪中OFFでもマップだけ+1されていた。また合計+6以上で
       // 各タブは射撃不可になるのに、マップは降雪分を含めずPASSと表示していた。
