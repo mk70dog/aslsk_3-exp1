@@ -38,10 +38,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SK Judge">
-<title>ASL SK Judge — ASL Starter Kit #2 判定支援ツール</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv196">
+<title>ASL SKシリーズv196</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SK Judge">
+<meta property="og:title" content="ASL SKシリーズv196">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -9529,7 +9529,8 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.395"; // 2026-10-24: Kato指示「混乱ボタンを表示に戻す」→射撃タブ「選択中」の混乱ボタンを常時表示に復元(v11.393の非表示を取り消し。スタック制限・負傷指揮官対応・はみ出し修正は維持)。前回v11.394は、選択中の行のカウンター切れ修正。
+var APP_VERSION="ASLSK3M-v11.396"; // 2026-10-24: Kato指示「v11.395表示→v195表示」「ホームページ名称を『ASL SKシリーズv195』(v連動)」「ホーム画面アイコン差し替え」→バージョン行を「ASL SKシリーズv<n>」表記に、document.title/apple-mobile-web-app-titleをAPP_VERSIONから自動設定(静的な<title>・manifestも同名)、icon-180/192/512をLEGO風ASLイラストに差し替え。前回v11.395は、混乱ボタンの表示復元。
+var APP_VERSION_HIST_v11395="ASLSK3M-v11.395"; // 2026-10-24: Kato指示「混乱ボタンを表示に戻す」→射撃タブ「選択中」の混乱ボタンを常時表示に復元(v11.393の非表示を取り消し。スタック制限・負傷指揮官対応・はみ出し修正は維持)。前回v11.394は、選択中の行のカウンター切れ修正。
 var APP_VERSION_HIST_v11394="ASLSK3M-v11.394"; // 2026-10-24: Kato指摘「選択中カウンターがはみ出して切れている」→射撃タブ「選択中」行のユニット/SWボタンを内容幅固定(flex:0 0 auto・overflow:hidden廃止)、PIN/CX/負傷は残り幅で均等(最小44px、足りなければ折返し)。前回v11.393は、スタック制限・混乱ボタン非表示・負傷指揮官対応。
 var APP_VERSION_HIST_v11393="ASLSK3M-v11.393"; // 2026-10-24: Kato指示(1)編成でオーバースタックできる→射撃タブ「選択中」への追加時にASLSK4 3.3.1のスタック制限(1ヘクス=分隊相当3個[分隊1・HS/操作班1/2]+SMC4個)を超える追加を拒否(トースト表示、混乱ユニットも枠に含む)。(2)選択中ユニットの混乱ボタンを非表示(旧データで混乱ONのユニットのみ解除用に表示)。(3)負傷時ステータス変化の確認: 士気-1・指揮修正+1悪化・3MF・IPC0・急速歩移動不可・再負傷dr+1は実装済みを確認、未対応だった「複数指揮官/複数ヘクスFGでの負傷指揮官の指揮修正悪化」を実装(最良実効値cmd+負傷を採用)。前回v11.392は、iPad縦横のフェーズバー固定。
 var APP_VERSION_HIST_v11392="ASLSK3M-v11.392"; // 2026-10: ダルマ指示「RECは消去」「EXP1シナリオ画像が薄く荒いので修正して登録」: シナリオ詳細見出しのRECボタンを削除。EXP#1カード12枚(S41〜S51・S59)を、明るさムラ補正・黒の締め・シャープ処理した高解像度(幅約2450px)で登録。前回v11.347は、ダルマ指示「ASLFULLv402と同じようにシナリオを確認できるように」: SK3のシナリオカード(S20〜S30、WebP幅2000)を埋め込み、シナリオ一覧・詳細に「CARD」ボタン→全画面ビューア(100/150/200/300%拡大)。公開版(WEB_PUBLIC_HIDE_SCENARIO_CONTENT)では非表示。前回v11.346は、砲選択ボタンの高さを自動化(カウンター画像+名称のはみ出し・重なりを解消)。前回v11.345は、砲・対戦車兵器カウンターの下にもASL公式名を表示(車両は前回のv11.344で対応)。前回v11.344は、カウンター下の車両名をASL公式名(PzKpfw IIIG等)に変更。前回v11.343は、車両・砲・対戦車兵器カウンターをVASLカウンター画像(240px高解像度)に差し替え(AFV/GUN/LATW計107件、VASL画像が無い項目は従来の文字チップのまま)。前回v11.342は、S27の勝利条件ヘクスからuG2・uH1を除外。
@@ -35593,7 +35594,9 @@ function rotateTacBadge(){
 // INIT
 document.addEventListener('DOMContentLoaded',function(){loadState();checkIdleClear();/* v11.261: 5分無操作の自動ALL CLEARは廃止(setInterval(checkIdleClear)を削除) */TAB(S.tab||"fire");renderPhaseTracker();renderHeaderChart();renderAutoBtn();updateNavLabels();applyWebPublicUiHide();
   var vEl=document.getElementById('appVersionLine');
-  if(vEl)vEl.textContent='ASL SK Judge '+(function(){var m=String(APP_VERSION).match(/v11\.(\d+)/);return m?'ASLAKEXv'+(parseInt(m[1],10)-200):APP_VERSION;})()+' (build '+document.lastModified+')'+(function(){try{return ' ['+(document.documentElement.classList.contains('is-phone')?'PHONE':'WIDE')+' win '+innerWidth+'x'+innerHeight+' scr '+screen.width+'x'+screen.height+']';}catch(e){return '';}})(); // 2026-10: ダルマ指示 表示をファイル名(ASLAKEXv<n>)に合わせる。n=v11.<minor>の minor-200
+  var _vDisp=(function(){var m=String(APP_VERSION).match(/v11\.(\d+)/);return m?'v'+(parseInt(m[1],10)-200):APP_VERSION;})(); // v11.396: 表示は「v<n>」(n=minor-200)。ページ名はAPP_VERSIONに連動
+  try{document.title='ASL SKシリーズ'+_vDisp;var _am=document.querySelector('meta[name="apple-mobile-web-app-title"]');if(_am)_am.setAttribute('content','ASL SKシリーズ'+_vDisp);}catch(e){}
+  if(vEl)vEl.textContent='ASL SKシリーズ'+_vDisp+' (build '+document.lastModified+')'+(function(){try{return ' ['+(document.documentElement.classList.contains('is-phone')?'PHONE':'WIDE')+' win '+innerWidth+'x'+innerHeight+' scr '+screen.width+'x'+screen.height+']';}catch(e){return '';}})(); // 2026-10: ダルマ指示 表示をファイル名(ASLAKEXv<n>)に合わせる。n=v11.<minor>の minor-200
   // 2026-08修正(ユーザー指示): 金属プレート画像右側のバッジ3枚(itcBadgeSlot)を削除。プレート自体は#hdr高さいっぱいに表示。
   initTacBadgeRotation();
   var mmcPool=['7-4-7','4-6-8','4-4-7','2-4-8','2-3-7','9-1','8-1','8-0','9-2','7-0'];
