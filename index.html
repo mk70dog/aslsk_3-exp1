@@ -4903,8 +4903,8 @@ function rNumpadHTMLG(gid){
 }
 // 射撃相手とのレンジ(ヘクス数)入力用テンキーHTML
 function rNumpadHTMLGRange(gid){
-  var keys=['1','2','3','4','5','BS','6','7','8','9','0','C'];
-  var h='<div class="rgrid">';
+  var keys=['1','2','3','4','5','6','7','8','9','BS','0','C']; // v11.398(サンプル): 6x2→3x4
+  var h='<div class="rgrid" style="grid-template-columns:repeat(3,40px);width:fit-content">';
   keys.forEach(function(k){
     if(k==='C'){
       h+='<button class="rbtn del" data-g="'+gid+'" data-d="C" onclick="NPADRange(parseInt(this.dataset.g),this.dataset.d)"><span class="r-clrlbl">CLR</span></button>';
@@ -13554,7 +13554,7 @@ function FIRE_PAGE(){
 
     // ── ② FP & Fire Condition：計算表示・射撃条件・内訳をまとめて1ボックス ──
     var pkHasSel=!rofMode&&fst.swMode!=="tenkey"&&((g.pickerItems||[]).length>0||(g.sw||[]).length>0);
-    if(pkHasSel)h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:stretch;margin-bottom:8px"><div>';
+    if(pkHasSel)h+='<div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:8px;align-items:stretch;margin-bottom:8px"><div>'; // v11.398(サンプル): 左カード幅を狭め選択中を広げる
     h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px 7px;margin-bottom:5px">';
     if(rofMode){
       h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+T('ROF射撃')+' SW FP → Modified</div>';
@@ -13593,7 +13593,7 @@ function FIRE_PAGE(){
             h+=(g.range==null?seg7('--','','FP'):seg7fp(gf,undefined));
             h+='</div>';
           } else {
-            h+='<div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;margin-bottom:4px">';
+            h+='<div style="display:flex;align-items:center;gap:4px;flex-wrap:'+(pkHasSel?'wrap':'nowrap')+';margin-bottom:4px">'; // v11.398(サンプル): 左カードが狭いので折り返し可
             h+=seg7fp(g.fp===0?0:g.fp,undefined);
             if(sf>0){
               h+='<span style="color:#334455;font-size:12px">+</span>';
@@ -13709,7 +13709,7 @@ function FIRE_PAGE(){
         // ユニットチップ(ピッカー本体)の直後に関連付け済みSWを配置し、続けてPIN/CX/混乱(全ユニット
         // 共通)/負傷(SMCのみ)の状態バッジを同一行にまとめる。いずれもflex:1でピッカーボタンと
         // 同じ高さ・幅比率に揃える。負傷判定はSMC(指揮官・乗員)のみが対象(3.7項)。
-        h+='<div style="display:flex;align-items:stretch;gap:3px;margin-bottom:2px;flex-wrap:wrap">';
+        h+='<div style="display:flex;align-items:stretch;gap:3px;margin-bottom:2px;flex-wrap:nowrap">';
         h+='<button class="b sm" style="flex:0 0 auto;min-width:0;white-space:nowrap" onclick="FgRemovePickItem('+g.id+','+ii+')">'+fgUnitChip(it.label,it.nat,itD?itD.col:'#4499ee',itD,it.kind==='smc')+numTag+' </button>';
         var ownedUids=Object.keys(g.swOwner||{}).filter(function(uid){return g.swOwner[uid]===it.pid;});
         ownedUids.forEach(function(uid){
@@ -13728,7 +13728,7 @@ function FIRE_PAGE(){
         ];
         if(it.kind==='smc')pkBadges.push([T('負傷'),!!it.wounded,'FgPickItemWound('+g.id+','+ii+')']);
         pkBadges.forEach(function(b){
-          h+='<button class="b sm xs'+(b[1]?" on red":"")+'" style="flex:1 1 44px;min-width:0" onclick="'+b[2]+'">'+b[0]+(b[1]?" ":"")+'</button>';
+          h+='<button class="b sm xs'+(b[1]?" on red":"")+'" style="flex:1 1 0;min-width:0;padding-left:2px;padding-right:2px" onclick="'+b[2]+'">'+b[0]+(b[1]?" ":"")+'</button>';
         });
         h+='</div>';
       });
