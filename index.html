@@ -38,10 +38,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv196">
-<title>ASL SKシリーズv196</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv197">
+<title>ASL SKシリーズv197</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv196">
+<meta property="og:title" content="ASL SKシリーズv197">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -9529,7 +9529,8 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.396"; // 2026-10-24: Kato指示「v11.395表示→v195表示」「ホームページ名称を『ASL SKシリーズv195』(v連動)」「ホーム画面アイコン差し替え」→バージョン行を「ASL SKシリーズv<n>」表記に、document.title/apple-mobile-web-app-titleをAPP_VERSIONから自動設定(静的な<title>・manifestも同名)、icon-180/192/512をLEGO風ASLイラストに差し替え。前回v11.395は、混乱ボタンの表示復元。
+var APP_VERSION="ASLSK3M-v11.397"; // 2026-10-24: Kato指示「マップタブのカウンター表示をVASLカウンターに差し替え」→MAPタブの編成表示(losSlotCompositionLabel/losSlotFullCompositionHTML)がrenderUnitChipへ国籍データを渡しておらず文字チップのままだったため、UNITSを渡してVASLカウンター画像(56px)で表示。SW・車両ピッカーは既にVASL。前回v11.396は、v表記・ページ名・アイコン。
+var APP_VERSION_HIST_v11396="ASLSK3M-v11.396"; // 2026-10-24: Kato指示「v11.395表示→v195表示」「ホームページ名称を『ASL SKシリーズv195』(v連動)」「ホーム画面アイコン差し替え」→バージョン行を「ASL SKシリーズv<n>」表記に、document.title/apple-mobile-web-app-titleをAPP_VERSIONから自動設定(静的な<title>・manifestも同名)、icon-180/192/512をLEGO風ASLイラストに差し替え。前回v11.395は、混乱ボタンの表示復元。
 var APP_VERSION_HIST_v11395="ASLSK3M-v11.395"; // 2026-10-24: Kato指示「混乱ボタンを表示に戻す」→射撃タブ「選択中」の混乱ボタンを常時表示に復元(v11.393の非表示を取り消し。スタック制限・負傷指揮官対応・はみ出し修正は維持)。前回v11.394は、選択中の行のカウンター切れ修正。
 var APP_VERSION_HIST_v11394="ASLSK3M-v11.394"; // 2026-10-24: Kato指摘「選択中カウンターがはみ出して切れている」→射撃タブ「選択中」行のユニット/SWボタンを内容幅固定(flex:0 0 auto・overflow:hidden廃止)、PIN/CX/負傷は残り幅で均等(最小44px、足りなければ折返し)。前回v11.393は、スタック制限・混乱ボタン非表示・負傷指揮官対応。
 var APP_VERSION_HIST_v11393="ASLSK3M-v11.393"; // 2026-10-24: Kato指示(1)編成でオーバースタックできる→射撃タブ「選択中」への追加時にASLSK4 3.3.1のスタック制限(1ヘクス=分隊相当3個[分隊1・HS/操作班1/2]+SMC4個)を超える追加を拒否(トースト表示、混乱ユニットも枠に含む)。(2)選択中ユニットの混乱ボタンを非表示(旧データで混乱ONのユニットのみ解除用に表示)。(3)負傷時ステータス変化の確認: 士気-1・指揮修正+1悪化・3MF・IPC0・急速歩移動不可・再負傷dr+1は実装済みを確認、未対応だった「複数指揮官/複数ヘクスFGでの負傷指揮官の指揮修正悪化」を実装(最良実効値cmd+負傷を採用)。前回v11.392は、iPad縦横のフェーズバー固定。
@@ -30615,7 +30616,7 @@ function losSlotCompositionLabel(slot,saved){
   var slotLdrItem=saved?(saved.pickerItems||[]).filter(function(it){return it.kind==='smc';})[0]:null;
   if(slotLdrItem){
     var slotLdrCol=(UNITS[saved.pickerNat]&&UNITS[saved.pickerNat].col)||'#4499ee';
-    return renderUnitChip(slotLdrItem.label,slotLdrCol,null,true);
+    return renderUnitChip(slotLdrItem.label,slotLdrCol,UNITS[slotLdrItem.nat||saved.pickerNat]||null,true); // v11.397: UNITSを渡してVASLカウンター画像化(従来はnull=文字チップ)
   }
   return T('編成')+slot;
 }
@@ -30630,7 +30631,7 @@ function losSlotFullCompositionHTML(slot,saved,includeSW){
   var col=(saved&&UNITS[saved.pickerNat]&&UNITS[saved.pickerNat].col)||'#4499ee';
   var h='<span style="display:inline-flex;gap:3px;flex-wrap:wrap;align-items:center">';
   items.forEach(function(it){
-    h+=renderUnitChip(it.label,col,null,it.kind==='smc');
+    h+=renderUnitChip(it.label,col,UNITS[it.nat||(saved&&saved.pickerNat)]||null,it.kind==='smc'); // v11.397: UNITSを渡してVASLカウンター画像化
   });
   if(includeSW){
     var swLbls=losSWLabelsFromGroup(saved);
