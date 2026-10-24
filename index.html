@@ -10538,20 +10538,27 @@ function renderMissingModal(){
 // =====================================================
 // DRAW
 // =====================================================
-function fitSumRows(){ // v208: iPad縦のデジタルパネル行(合計FP〜ROF)を幅に合わせて自動縮小・高さ統一
+function fitSumRows(){ // v209: iPad縦のデジタルパネル行を幅に合わせ自動縮小(transform方式。Safariのzoom差異を回避)・高さ統一
   if(!document.documentElement.classList.contains('is-tabp'))return;
   var rows=document.querySelectorAll('#main .sum');
   for(var i=0;i<rows.length;i++){var r=rows[i];
     if(r.children.length<5||String(r.style.flexWrap)!=='nowrap')continue;
-    r.style.zoom='';r.style.width='';
-    var cw=r.clientWidth,sw=r.scrollWidth;
-    if(cw>0&&sw>cw+1){var z=Math.floor(cw/sw*100)/100;r.style.zoom=z;r.style.width=(r.parentElement.clientWidth/z)+'px';r.style.boxSizing='border-box';}
+    r.style.zoom='';r.style.transform='';r.style.width='';r.style.marginBottom='';r.style.boxSizing='border-box';
+    var P=r.parentElement.clientWidth,sw=r.scrollWidth;
+    if(P>0&&sw>P+1){
+      var z=Math.floor(P/sw*100)/100;
+      r.style.width=(P/z)+'px';r.style.transformOrigin='0 0';r.style.transform='scale('+z+')';
+      var h=r.getBoundingClientRect().height/z; // 縮小で空く縦の余白を詰める
+      r.style.marginBottom=(-(h*(1-z))+9)+'px';
+    }
   }
 }
 window.addEventListener('resize',function(){try{fitSumRows();}catch(e){}});
+try{if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){try{fitSumRows();}catch(e){}});}catch(e){}
 function Draw(){
   document.getElementById("main").innerHTML=PAGE();
   try{fitSumRows();}catch(e){}
+  setTimeout(function(){try{fitSumRows();}catch(e){}},250); // フォント読込後の再計測
   try{hdrKitImgUpdate();}catch(e){}
   if(S.idleClearAt)S.idleClearAt=Date.now();
   saveState();renderHexCoordBG();losRestoreMapScroll();
