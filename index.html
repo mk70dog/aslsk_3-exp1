@@ -750,6 +750,9 @@ html.is-tabp .rgrid.rg-range .rbtn{width:32px !important;min-width:32px !importa
 html.is-tabp .fg-split .fg-fprow{flex-wrap:nowrap !important;gap:2px !important}
 html.is-tabp .fg-split .fg-fprow .seg7-wrap{padding-left:4px !important;padding-right:4px !important}
 html.is-tabp .fg-pk-row{flex-wrap:nowrap !important}
+html.is-tabp .sum[style*="nowrap"]{align-items:stretch !important}
+html.is-tabp .sum[style*="nowrap"]>.sumcard{flex:1 0 auto !important;overflow:visible !important;justify-content:flex-start !important}
+html.is-tabp .sum[style*="nowrap"]>.sumcard .lbl{white-space:nowrap !important}
 </style>
 </head>
 <body>
@@ -10535,8 +10538,20 @@ function renderMissingModal(){
 // =====================================================
 // DRAW
 // =====================================================
+function fitSumRows(){ // v208: iPad縦のデジタルパネル行(合計FP〜ROF)を幅に合わせて自動縮小・高さ統一
+  if(!document.documentElement.classList.contains('is-tabp'))return;
+  var rows=document.querySelectorAll('#main .sum');
+  for(var i=0;i<rows.length;i++){var r=rows[i];
+    if(r.children.length<5||String(r.style.flexWrap)!=='nowrap')continue;
+    r.style.zoom='';r.style.width='';
+    var cw=r.clientWidth,sw=r.scrollWidth;
+    if(cw>0&&sw>cw+1){var z=Math.floor(cw/sw*100)/100;r.style.zoom=z;r.style.width=(r.parentElement.clientWidth/z)+'px';r.style.boxSizing='border-box';}
+  }
+}
+window.addEventListener('resize',function(){try{fitSumRows();}catch(e){}});
 function Draw(){
   document.getElementById("main").innerHTML=PAGE();
+  try{fitSumRows();}catch(e){}
   try{hdrKitImgUpdate();}catch(e){}
   if(S.idleClearAt)S.idleClearAt=Date.now();
   saveState();renderHexCoordBG();losRestoreMapScroll();
