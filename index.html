@@ -778,6 +778,10 @@ html.is-tabp #hdrChart>div:first-child{padding-top:4px !important;padding-bottom
 html.is-tabp #hdrChart .tb-btns{padding:0 !important}
 html.is-tabp #hdrChart #tbRow1,html.is-tabp #hdrChart #tbRow2{display:none !important}
 html.is-tabp #hdrChart>div:last-child{align-self:center !important}
+html.is-tabp .los-sumrow{align-items:stretch !important}
+html.is-tabp .los-sumrow>.sumcard{flex:1 0 auto !important;overflow:visible !important;padding:4px 5px !important;min-height:0 !important;justify-content:flex-start !important}
+html.is-tabp .los-sumrow>.sumcard .lbl{white-space:nowrap !important;margin-bottom:2px !important;font-size:10px !important}
+html.is-tabp .los-sumrow .seg7-wrap,html.is-tabp .los-sumrow .seg7-wrap *{white-space:nowrap !important}
 </style>
 </head>
 <body>
@@ -10565,7 +10569,7 @@ function renderMissingModal(){
 // =====================================================
 function fitSumRows(){ // v209: iPad縦のデジタルパネル行を幅に合わせ自動縮小(transform方式。Safariのzoom差異を回避)・高さ統一
   if(!document.documentElement.classList.contains('is-tabp'))return;
-  var rows=document.querySelectorAll('#main .sum');
+  var rows=document.querySelectorAll('#main .sum,#main .los-sumrow');
   for(var i=0;i<rows.length;i++){var r=rows[i];
     if(r.children.length<5||String(r.style.flexWrap)!=='nowrap')continue;
     r.style.zoom='';r.style.transform='';r.style.width='';r.style.marginBottom='';r.style.boxSizing='border-box';
@@ -32713,7 +32717,7 @@ function LOS_PAGE(){
       var temColor=(!hasResult||r.temB===null||r.temB===undefined)?'gld':'';
       // 2026-08変更(Kato指示): 横スクロールをやめ、5項目をカード幅内に均等縮小して
       // 一列に収める(各セルflex:1 1 0+min-width:0+overflow:hiddenで自動縮小)。
-      h+='<div style="display:flex;flex-wrap:nowrap;gap:4px">';
+      h+='<div class="los-sumrow sum-eq" style="display:flex;flex-wrap:nowrap;gap:4px">';
       // v11.280修正: 降雪の妨害+1は、射撃/砲撃/対戦車タブと同じscenSnowHind(S4で「降雪中」ON・射程6以上)で表示する。従来はマップの
       // 積雪SSR(S_LOS.ssr==='Snow'、S4では常に自動ON)で判定していたため、降雪中OFFでもマップだけ+1されていた。また合計+6以上で
       // 各タブは射撃不可になるのに、マップは降雪分を含めずPASSと表示していた。
