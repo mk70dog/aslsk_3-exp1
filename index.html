@@ -748,7 +748,8 @@ html.is-tabp .rgrid.rg-range{grid-template-columns:repeat(3,40px) !important;wid
 html.is-tabp .rgrid.rg-range .rbtn[data-d="BS"]{order:1}
 html.is-tabp .rgrid.rg-range .rbtn[data-d="0"]{order:2}
 html.is-tabp .rgrid.rg-range .rbtn[data-d="C"]{order:3}
-html.is-tabp .fg-split .fg-fprow{flex-wrap:wrap !important}
+html.is-tabp .fg-split .fg-fprow{flex-wrap:nowrap !important;gap:2px !important}
+html.is-tabp .fg-split .fg-fprow .seg7-wrap{padding-left:4px !important;padding-right:4px !important}
 html.is-tabp .fg-pk-row{flex-wrap:nowrap !important}
 html.is-tabp .fg-pk-row .b.xs{flex:1 1 0 !important;padding-left:2px !important;padding-right:2px !important}
 </style>
@@ -1072,7 +1073,7 @@ function seg7(str,color,suffix){
 function seg7fp(n,suffix,color,noPad){
   var s;
   var lbl=(suffix===undefined||suffix===null)?'FP':suffix;
-  if(n===Math.floor(n)){s=String(n);if(!noPad){while(s.length<3)s=' '+s;}}
+  if(n===Math.floor(n)){s=String(n);if(!noPad||noPad===2){var _pw=(noPad===2)?2:3;while(s.length<_pw)s=' '+s;}} // v11.399: noPad===2は2桁ゼロ埋め(100以上は桁が増える)
   else{s=String(n);}  // 3.5など小数点ありはそのまま
   return seg7(s,color||'',lbl);
 }
@@ -13569,18 +13570,18 @@ function FIRE_PAGE(){
     if(rofMode){
       h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+T('ROF射撃')+' SW FP → Modified</div>';
       h+='<div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;margin-bottom:4px">';
-      h+=seg7fp(sf,undefined);
+      h+=seg7fp(sf,undefined,'',2);
       h+='<span style="color:#556677;font-size:13px">→</span>';
-      h+=seg7fp(gf,undefined);
+      h+=seg7fp(gf,undefined,'',2);
       h+='</div>';
       h+='<div style="background:#1a1200;border:1px solid #c8a03266;border-radius:3px;padding:4px 7px;color:#c8a032;font-size:12px;margin-bottom:4px">'+T('ROF継続射撃：全FP（×½なし）で再射撃。固有FP不使用。DFF(防御臨機射撃)のROF維持は残留FP不発生（放棄で発生も選択可）')+'</div>';
     } else if(g.ut!=="smc"){
       if(isGFT){
         h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">Inherent FP → Modified</div>';
         h+='<div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;margin-bottom:4px">';
-        h+=seg7fp(24,undefined);
+        h+=seg7fp(24,undefined,'',2);
         h+='<span style="color:#556677;font-size:13px">→</span>';
-        h+=seg7fp(gf,undefined);
+        h+=seg7fp(gf,undefined,'',2);
         h+='</div>';
         h+='<div style="background:#1a0808;border:1px solid #cc333366;border-radius:3px;padding:4px 7px;color:#cc8888;font-size:12px;margin-bottom:4px">'+T('FT固定：24FP(2ヘクスのみ半減し12FP)。AFPh(前進射撃フェイズ)でも半減されない(全火力)。TEM/指揮官修正すべて無効。PIN状態は射撃不可')+'<br>'+T('X#はエリート/未熟兵の設定に応じ自動調整（エリートX#10、エリート以外X#8、未熟兵は更に−1）')+'</div>';
       } else {
@@ -13590,27 +13591,27 @@ function FIRE_PAGE(){
           // 修正(2026-07、Kato指摘): AFPhでAF選択時はパネルが最大4枚横並びとなり横幅が窮屈なため、2枚×2段に折り返して表示する
           if(showNoAF){
             h+='<div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;margin-bottom:3px">';
-            h+=seg7fp(g.fp===0?0:g.fp,undefined);
+            h+=seg7fp(g.fp===0?0:g.fp,undefined,'',2);
             h+='<span style="color:#334455;font-size:12px">+</span>';
-            h+=seg7fp(g.fpNoAF||0,undefined);
+            h+=seg7fp(g.fpNoAF||0,undefined,'',2);
             h+='</div>';
             h+='<div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;margin-bottom:4px">';
             if(sf>0){
               h+='<span style="color:#334455;font-size:12px">+</span>';
-              h+=seg7fp(sf,undefined);
+              h+=seg7fp(sf,undefined,'',2);
             }
             h+='<span style="color:#556677;font-size:13px">→</span>';
-            h+=(g.range==null?seg7('--','','FP'):seg7fp(gf,undefined));
+            h+=(g.range==null?seg7('--','','FP'):seg7fp(gf,undefined,'',2));
             h+='</div>';
           } else {
             h+='<div class="fg-fprow" style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;margin-bottom:4px">'; // v11.398: iPad縦のみCSSで折り返し可
-            h+=seg7fp(g.fp===0?0:g.fp,undefined);
+            h+=seg7fp(g.fp===0?0:g.fp,undefined,'',2);
             if(sf>0){
               h+='<span style="color:#334455;font-size:12px">+</span>';
-              h+=seg7fp(sf,undefined);
+              h+=seg7fp(sf,undefined,'',2);
             }
             h+='<span style="color:#556677;font-size:13px">→</span>';
-            h+=(g.range==null?seg7('--','','FP'):seg7fp(gf,undefined));
+            h+=(g.range==null?seg7('--','','FP'):seg7fp(gf,undefined,'',2));
             h+='</div>';
           }
           if(fst.swMode==="tenkey"){
@@ -13632,17 +13633,17 @@ function FIRE_PAGE(){
           h+='<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px">';
           h+='<span style="font-size:12px;color:#8899aa">'+(hs?'HS+SW':T('分隊+SW×2(固有FP喪失)'))+'</span>';
           h+='<span style="color:#556677;font-size:13px">→</span>';
-          h+=seg7fp(gf,undefined);
+          h+=seg7fp(gf,undefined,'',2);
           h+='</div>';
         }
       }
     } else {
       h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+T('固有FP')+' → Modified</div>';
       h+='<div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;margin-bottom:4px">';
-      h+=seg7fp(0,undefined);
-      if(sf>0){h+='<span style="color:#334455;font-size:12px">+</span>';h+=seg7fp(sf,undefined);}
+      h+=seg7fp(0,undefined,'',2);
+      if(sf>0){h+='<span style="color:#334455;font-size:12px">+</span>';h+=seg7fp(sf,undefined,'',2);}
       h+='<span style="color:#556677;font-size:13px">→</span>';
-      h+=seg7fp(gf,undefined);
+      h+=seg7fp(gf,undefined,'',2);
       h+='</div>';
       h+='<div style="background:#1a1200;border:1px solid #c8a03266;border-radius:3px;padding:4px 7px;color:#c8a032;font-size:12px;margin-bottom:4px">'+(g.smcCount>=2?T('指揮官2名：MG1挺を全FPで射撃可（4.1）。SW不使用時はFP=0で射撃不可'):T('指揮官単独：SW地域射撃(×½)のみ。SW不使用時はFP=0で射撃不可。FG連結不可（MG所有時を除く）'))+'</div>';
     }
@@ -13663,9 +13664,9 @@ function FIRE_PAGE(){
       h+='<div id="fireRangeG'+g.id+'" style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px 7px;margin-bottom:5px">';
       h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px"><span class="pdot'+(g.range!=null?" off":"")+'"></span><span class="plbl'+(g.range!=null?" off":"")+'">'+T('射撃相手とのレンジ (ヘクス数)')+'</span> <span style="color:#556677">→</span> TOTAL FP</div>';
       h+='<div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;margin-bottom:4px">';
-      h+=seg7range(g.range,'HEX');
+      h+=seg7range(g.range,'HEX','',2);
       h+='<span style="color:#556677;font-size:13px">→</span>';
-      h+=seg7range(g.range==null?null:rangedFp,undefined,rangeOver?'red':'');
+      h+=seg7range(g.range==null?null:rangedFp,undefined,rangeOver?'red':'',2);
       h+='</div>';
       h+=rNumpadHTMLGRange(g.id);
       if(rangeOver){
