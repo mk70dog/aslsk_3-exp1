@@ -782,6 +782,7 @@ html.is-tabp .los-sumrow{align-items:stretch !important}
 html.is-tabp .los-sumrow>.sumcard{flex:1 0 auto !important;overflow:visible !important;padding:4px 5px !important;min-height:0 !important;justify-content:flex-start !important}
 html.is-tabp .los-sumrow>.sumcard .lbl{white-space:nowrap !important;margin-bottom:2px !important;font-size:10px !important}
 html.is-tabp .los-sumrow .seg7-wrap,html.is-tabp .los-sumrow .seg7-wrap *{white-space:nowrap !important}
+html.is-tabp .card:has(>.los-sumrow){padding:6px 8px !important}
 </style>
 </head>
 <body>
@@ -10577,12 +10578,12 @@ function fitSumRows(){ // v209: iPad縦のデジタルパネル行を幅に合�
     for(k=0;k<r.children.length;k++)r.children[k].style.removeProperty('flex');
     if(eq){var W=0;for(k=0;k<r.children.length;k++)W=Math.max(W,r.children[k].getBoundingClientRect().width);
       for(k=0;k<r.children.length;k++)r.children[k].style.setProperty('flex','0 0 '+Math.ceil(W)+'px','important');} // v214: 各項目の横幅を均等に
-    var pcs=getComputedStyle(r.parentElement),P=r.parentElement.clientWidth-(parseFloat(pcs.paddingLeft)||0)-(parseFloat(pcs.paddingRight)||0)-(parseFloat(getComputedStyle(r).marginLeft)||0)-(parseFloat(getComputedStyle(r).marginRight)||0),sw=r.scrollWidth;
+    var baseMb=parseFloat(getComputedStyle(r).marginBottom)||0;var pcs=getComputedStyle(r.parentElement),P=r.parentElement.clientWidth-(parseFloat(pcs.paddingLeft)||0)-(parseFloat(pcs.paddingRight)||0)-(parseFloat(getComputedStyle(r).marginLeft)||0)-(parseFloat(getComputedStyle(r).marginRight)||0),sw=r.scrollWidth;
     if(P>0&&sw>P+1){
       var z=Math.floor(P/sw*100)/100;
       r.style.width=(P/z)+'px';r.style.transformOrigin='0 0';r.style.transform='scale('+z+')';
       var h=r.getBoundingClientRect().height/z; // 縮小で空く縦の余白を詰める
-      r.style.marginBottom=(-(h*(1-z))+9)+'px';
+      r.style.marginBottom=(-(h*(1-z))+baseMb)+'px';
     }
   }
 }
