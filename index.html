@@ -38,10 +38,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv199">
-<title>ASL SKシリーズv199</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv200">
+<title>ASL SKシリーズv200</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv199">
+<meta property="og:title" content="ASL SKシリーズv200">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -751,6 +751,7 @@ html.is-tabp .rgrid.rg-range .rbtn[data-d="C"]{order:3}
 html.is-tabp .fg-split .fg-fprow{flex-wrap:nowrap !important;gap:2px !important}
 html.is-tabp .fg-split .fg-fprow .seg7-wrap{padding-left:4px !important;padding-right:4px !important}
 html.is-tabp .fg-pk-row{flex-wrap:nowrap !important}
+html.is-tabp .fg-pk-row .b.xs.fg-brk{flex:0.5 1 0 !important}
 html.is-tabp .fg-pk-row .b.xs{flex:1 1 0 !important;padding-left:2px !important;padding-right:2px !important}
 </style>
 </head>
@@ -9539,7 +9540,8 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.399"; // 2026-10-24: Kato指示「Inherent FP→Modified／射撃相手とのレンジ→TOTAL FPのデジタル表示を2桁・横並び1列」→seg7fpのnoPad=2で2桁ゼロ埋め(100以上は桁増加)、iPad縦(is-tabp)のみ余白・間隔を詰めて1行に収める。前回v11.398は、iPad縦のテンキー3x4・選択中拡幅。
+var APP_VERSION="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
+var APP_VERSION_HIST_v11399="ASLSK3M-v11.399"; // 2026-10-24: Kato指示「Inherent FP→Modified／射撃相手とのレンジ→TOTAL FPのデジタル表示を2桁・横並び1列」→seg7fpのnoPad=2で2桁ゼロ埋め(100以上は桁増加)、iPad縦(is-tabp)のみ余白・間隔を詰めて1行に収める。前回v11.398は、iPad縦のテンキー3x4・選択中拡幅。
 var APP_VERSION_HIST_v11398="ASLSK3M-v11.398"; // 2026-10-24: Kato指示「射撃相手とのレンジのテンキーを6x2→3x4、選択中カード幅を広げユニット/SW/PIN/CX/混乱/負傷を1行に(iPad縦表示時のみ)」→html.is-tabpのCSSのみで適用(PC・iPad横は従来どおり)。左カードのInherent FP行は折り返し可。前回v11.397は、MAPタブ編成のVASL化。
 var APP_VERSION_HIST_v11397="ASLSK3M-v11.397"; // 2026-10-24: Kato指示「マップタブのカウンター表示をVASLカウンターに差し替え」→MAPタブの編成表示(losSlotCompositionLabel/losSlotFullCompositionHTML)がrenderUnitChipへ国籍データを渡しておらず文字チップのままだったため、UNITSを渡してVASLカウンター画像(56px)で表示。SW・車両ピッカーは既にVASL。前回v11.396は、v表記・ページ名・アイコン。
 var APP_VERSION_HIST_v11396="ASLSK3M-v11.396"; // 2026-10-24: Kato指示「v11.395表示→v195表示」「ホームページ名称を『ASL SKシリーズv195』(v連動)」「ホーム画面アイコン差し替え」→バージョン行を「ASL SKシリーズv<n>」表記に、document.title/apple-mobile-web-app-titleをAPP_VERSIONから自動設定(静的な<title>・manifestも同名)、icon-180/192/512をLEGO風ASLイラストに差し替え。前回v11.395は、混乱ボタンの表示復元。
@@ -13740,7 +13742,8 @@ function FIRE_PAGE(){
         ];
         if(it.kind==='smc')pkBadges.push([T('負傷'),!!it.wounded,'FgPickItemWound('+g.id+','+ii+')']);
         pkBadges.forEach(function(b){
-          h+='<button class="b sm xs'+(b[1]?" on red":"")+'" style="flex:1 1 44px;min-width:0" onclick="'+b[2]+'">'+b[0]+(b[1]?" ":"")+'</button>';
+          var _brk=(b[2].indexOf('FgPickItemBroken')===0); // v11.400: 混乱ボタンは小さく(幅50%・文字10px)
+          h+='<button class="b sm xs'+(b[1]?" on red":"")+(_brk?' fg-brk':'')+'" style="flex:'+(_brk?'0.5':'1')+' 1 44px;min-width:0'+(_brk?';font-size:10px;padding-top:6px':'')+'" onclick="'+b[2]+'">'+b[0]+(b[1]?" ":"")+'</button>';
         });
         h+='</div>';
       });
