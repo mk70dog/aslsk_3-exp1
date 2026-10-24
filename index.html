@@ -751,6 +751,7 @@ html.is-tabp .rgrid.rg-range .rbtn[data-d="C"]{order:3}
 html.is-tabp .fg-split .fg-fprow{flex-wrap:nowrap !important;gap:2px !important}
 html.is-tabp .fg-split .fg-fprow .seg7-wrap{padding-left:4px !important;padding-right:4px !important}
 html.is-tabp .fg-pk-row{flex-wrap:nowrap !important}
+html.is-tabp .fg-pk-row .b.xs.fg-brk{flex:0.7 1 0 !important}
 html.is-tabp .fg-pk-row .b.xs{flex:1 1 0 !important;padding-left:2px !important;padding-right:2px !important}
 </style>
 </head>
@@ -13740,7 +13741,8 @@ function FIRE_PAGE(){
         ];
         if(it.kind==='smc')pkBadges.push([T('負傷'),!!it.wounded,'FgPickItemWound('+g.id+','+ii+')']);
         pkBadges.forEach(function(b){
-          h+='<button class="b sm xs'+(b[1]?" on red":"")+'" style="flex:1 1 44px;min-width:0" onclick="'+b[2]+'">'+b[0]+(b[1]?" ":"")+'</button>';
+          var _brk=(b[2].indexOf('FgPickItemBroken')===0); // v11.400: 混乱ボタンは少し小さく(幅70%・文字11px)
+          h+='<button class="b sm xs'+(b[1]?" on red":"")+(_brk?' fg-brk':'')+'" style="flex:'+(_brk?'0.7':'1')+' 1 44px;min-width:0'+(_brk?';font-size:11px':'')+'" onclick="'+b[2]+'">'+b[0]+(b[1]?" ":"")+'</button>';
         });
         h+='</div>';
       });
