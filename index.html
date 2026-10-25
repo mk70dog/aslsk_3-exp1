@@ -5993,6 +5993,7 @@ var I18N_EN={
   "森・果樹園→瓦礫化":"Woods/Orchard -> converted to Rubble",
   "機動状態（+2）":"Motion status (+2)",
   "機動状態（FP半減）":"Motion status (FP halved)",
+  "失速(Stall)判定（車両注記、始動時DR":"Stall check (vehicle note, startup DR",
   "機械的信頼性判定（Motion Attempt、始動時DR":"Mechanical Reliability check (Motion Attempt, startup DR",
   "次回のボグ解消判定に色付drへ+1drm(累積しない)。":"+1 DRM to the colored dr on the next Unbog check (does not accumulate).",
   "武器":"Weapon",
@@ -9579,7 +9580,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.420"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
+var APP_VERSION="ASLSK3M-v11.421"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
@@ -20732,7 +20733,7 @@ function GsetMotionAttemptDelayAutoDice(){
 function motionAttemptCardHTML(afv){
   var m=S.gun.motionAttempt;
   var h='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px">';
-  h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+T('機械的信頼性判定（Motion Attempt、始動時DR')+breakdownDR2Text(afv.breakdownDR)+(S.lang==='en'?')</div>':'）</div>');
+  h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+maTitleHTML(afv)+'</div>';
   h+='<div class="sum" style="grid-template-columns:1fr">'+sumSuccessCard(T('始動成功＝DR以下'),afv.breakdownDR-1)+'</div>'; // 2026-09追加: 始動は DR < 故障DR で成功
   // 2026-09修正(ダルマ指示「射撃タブと同じダイスロール表示にする」): 射撃タブ(FIRE_PAGE)・車両煙幕展張判定
   // (smokeDispCardHTML)と同一のラッパー構造・ラベル配色・ROLL DICEボタン(judg3d grn)に統一。
@@ -20746,6 +20747,11 @@ function motionAttemptCardHTML(afv){
   h+=motionAttemptResultHTML(afv.breakdownDR,m.wd,m.rd,{stall:!!afv.stall,dwd:m.dwd,drd:m.drd,dwdFn:'GsetMotionAttemptDWD',drdFn:'GsetMotionAttemptDRD',delayAutoFn:'GsetMotionAttemptDelayAutoDice',delayRolling:m._drolling});
   h+='</div>';
   return h;
+}
+// 赤MP=機械的信頼性(3.3.2)。黒MPでstall:true(パンターG・ヤクトパンター)は車両注記の失速(Stall)判定のみで、機械的信頼性は適用されない。
+function maTitleHTML(v){
+  if(v.stall&&v.mpRed===false)return T('失速(Stall)判定（車両注記、始動時DR')+breakdownDR2Text(v.breakdownDR)+(S.lang==='en'?')':'）');
+  return T('機械的信頼性判定（Motion Attempt、始動時DR')+breakdownDR2Text(v.breakdownDR)+(S.lang==='en'?')':'）');
 }
 function breakdownDR2Text(v){return '≧'+v;}
 // ═══ 車両ステータスカード(2026-09、ダルマ指示「実施」: 戦車タブ監査B群) ═══
@@ -30881,7 +30887,7 @@ function losVehicleMFSummaryHTML(){
   if(veh.breakdownDR!=null){
     var m=S_LOS.motionAttempt;
     h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px;margin-top:6px">';
-    h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+T('機械的信頼性判定（Motion Attempt、始動時DR')+breakdownDR2Text(veh.breakdownDR)+(S.lang==='en'?')</div>':'）</div>');
+    h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+maTitleHTML(veh)+'</div>';
     h+='<div class="lbl">WHITE DIE</div>'+rDiceHTML(m.wd,false,'LosSetMotionAttemptWD',false);
     h+='<div class="lbl" style="margin-top:6px">RED DIE</div>'+rDiceHTML(m.rd,true,'LosSetMotionAttemptRD',false);
     h+=motionAttemptResultHTML(veh.breakdownDR,m.wd,m.rd,{stall:!!veh.stall,dwd:m.dwd,drd:m.drd,dwdFn:'LosSetMotionAttemptDWD',drdFn:'LosSetMotionAttemptDRD'});
