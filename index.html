@@ -38,10 +38,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv227">
-<title>ASL SKシリーズv227</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv228">
+<title>ASL SKシリーズv228</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv227">
+<meta property="og:title" content="ASL SKシリーズv228">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -3733,7 +3733,7 @@ var UNITS={
       {lbl:"7-0",mor:7,bm:6,cmd:0,note:"S1・S3"},{lbl:"6+1",mor:6,bm:5,cmd:1,note:"S5"}
     ],
     elr:[{f:"5-4-8[E]",t:"4-4-7[2]"},{f:"4-6-8[E]",t:"4-6-7[1]"},{f:"4-6-7[1]",t:"4-4-7[2]"},{f:"4-4-7[2]",t:"4-3-6[C]"},{f:"2-3-8[E](HS)",t:"2-3-7[2](HS)"},{f:"2-4-8[E](HS)",t:"2-4-7[1](HS)"},{f:"2-4-7[1](HS)",t:"2-3-7[2](HS)"},{f:"2-3-7[2](HS)",t:"2-3-6[C](HS)"}]},
-  SOV:{lbl:"ソ連",col:"#6e5a3e",
+  SOV:{lbl:"ソ連",col:"#d4a65a",
     mmc:[
       {lbl:"4-5-8[E]",fp:4,rng:5,mor:8,bm:8,smk:0,sr:true,ei:false,hs:false,af:false,green:false,note:"S6"},
       {lbl:"6-2-8[E]",fp:6,rng:2,mor:8,bm:7,smk:0,sr:false,ei:false,hs:false,af:true,green:false,note:"AF"},
@@ -3756,7 +3756,7 @@ var UNITS={
       {lbl:"6+1",mor:6,bm:5,cmd:1,note:"2026-09追加(S18、全シナリオOB照合で発覚)。bmは他国籍6+1からの類推暫定値、要確認"}
     ],
     elr:[{f:"4-5-8[E]",t:"4-4-7[1]"},{f:"4-4-7[1]",t:"4-2-6[C]"},{f:"6-2-8[E]",t:"5-2-7[1]"},{f:"5-2-7[1]",t:"4-2-6[C]"},{f:"3-2-8[E](HS)",t:"2-2-7[1](HS)"},{f:"2-4-8[E](HS)",t:"2-3-7[1](HS)"},{f:"2-3-7[1](HS)",t:"2-2-6[C](HS)"},{f:"2-2-7[1](HS)",t:"2-2-6[C](HS)"}]},
-  ITA:{lbl:"伊軍",col:"#5c5c5c",
+  ITA:{lbl:"伊軍",col:"#a6a6a6",
     mmc:[
       {lbl:"3-4-7[1]",fp:3,rng:4,mor:7,bm:6,smk:0,sr:false,ei:false,hs:false,af:false,green:false,note:"SK2"},
       {lbl:"3-4-6[1]",fp:3,rng:4,mor:6,bm:5,smk:0,sr:false,ei:false,hs:false,af:false,green:false,note:"SK2"},
@@ -9586,7 +9586,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.427"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
+var APP_VERSION="ASLSK3M-v11.428"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
@@ -11191,7 +11191,7 @@ function renderHeaderChart(){
     return;
   }
   var defNat=Object.keys(sc.f).filter(function(n){return n!==sc.atk;})[0];
-  var HC_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#6e5a3e",ITA:"#5c5c5c",GBR:"#c9b48a",ALM:"#4a8f6f",POL:"#c94f4f",SLO:"#4a72c9"};
+  var HC_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#d4a65a",ITA:"#a6a6a6",GBR:"#c9b48a",ALM:"#4a8f6f",POL:"#c94f4f",SLO:"#4a72c9"};
   var atkC=HC_NAT_COL[sc.atk]||'#888',defC=HC_NAT_COL[defNat]||'#888';
   var activeC=S.turn.ended?'#888':(S.turn.half===0?atkC:defC);
   var endsOnFront=!!sc.endsOnFront;
@@ -11261,7 +11261,7 @@ function renderPhaseTracker(){
   var halfTxt=(S.turn.half===0?'A':'B'); // ターンバッジは常に英語表記
   if(sc&&sc.atk&&sc.f[sc.atk]){
     var defNat=Object.keys(sc.f).filter(function(n){return n!==sc.atk;})[0];
-    var HC_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#6e5a3e",ITA:"#5c5c5c",GBR:"#c9b48a",ALM:"#4a8f6f",POL:"#c94f4f",SLO:"#4a72c9"};
+    var HC_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#d4a65a",ITA:"#a6a6a6",GBR:"#c9b48a",ALM:"#4a8f6f",POL:"#c94f4f",SLO:"#4a72c9"};
     turnC=S.turn.ended?'#888':(S.turn.half===0?(HC_NAT_COL[sc.atk]||'#888'):(HC_NAT_COL[defNat]||'#888'));
     turnTxt=S.turn.ended?'END':('T'+S.turn.cur+halfTxt);
   } else {
@@ -18658,7 +18658,7 @@ function GUN_REPAIR_CARD(){
 
   if(gr.mode==="repair"){
     h+='<div class="lbl">'+T('砲の種類（修理番号プリセット）')+'</div>';
-    var GR_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#6e5a3e",ITA:"#5c5c5c",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
+    var GR_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#d4a65a",ITA:"#a6a6a6",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
     var GR_NAT_LBL={USA:T("米軍"),GER:T("独軍"),SOV:T("ソ連"),ITA:T("伊軍"),GBR:T("英軍"),ALM:T("連合"),FFR:T("自仏軍"),POL:T("波軍"),SLO:T("スロバキア軍")};
     if(S.lang==="en")GR_NAT_LBL={USA:"USA",GER:"GER",SOV:"SOV",ITA:"ITA",GBR:"GBR",ALM:"ALM",FFR:"FFR",POL:"POL",SLO:"SLO"};
     // 修正(2026-07、Kato指摘): 「国籍ボタンでソート」対応。SW修理カードのSW Selectionと同様、
@@ -21858,7 +21858,7 @@ function GUN_PAGE(){
   h+='</div>';
 
   // Gun selector
-  var GUN_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#6e5a3e",ITA:"#5c5c5c",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
+  var GUN_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#d4a65a",ITA:"#a6a6a6",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
   var GUN_NAT_LBL={USA:T("米軍"),GER:T("独軍"),SOV:T("ソ連"),ITA:T("伊軍"),GBR:T("英軍"),ALM:T("連合"),FFR:T("自仏軍"),POL:T("波軍"),SLO:T("スロバキア軍")};
   if(S.lang==="en")GUN_NAT_LBL={USA:"USA",GER:"GER",SOV:"SOV",ITA:"ITA",GBR:"GBR",ALM:"ALM",FFR:"FFR",POL:"POL",SLO:"SLO"};
   h+='<div class="lbl"><span class="pdot'+(g.gunId?" off":"")+'"></span><span class="plbl'+(g.gunId?" off":"")+'">'+T('砲の種類')+'</span></div>';
@@ -24359,7 +24359,7 @@ function LATW_PAGE(){
   });
   h+='</div></div>';
   }
-  var LATW_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#6e5a3e",ITA:"#5c5c5c",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
+  var LATW_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#d4a65a",ITA:"#a6a6a6",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
   var LATW_NAT_LBL={USA:T("米軍"),GER:T("独軍"),SOV:T("ソ連"),ITA:T("伊軍"),GBR:T("英軍"),ALM:T("連合"),FFR:T("自仏軍"),POL:T("波軍"),SLO:T("スロバキア軍")};
   if(S.lang==="en")LATW_NAT_LBL={USA:"USA",GER:"GER",SOV:"SOV",ITA:"ITA",GBR:"GBR",ALM:"ALM",FFR:"FFR",POL:"POL",SLO:"SLO"};
   // 修正(2026-07、Kato指摘): GUNタブの砲選択と同様、シナリオ選択ボタン(ALL/シナリオ名)＋国籍ボタンを追加し、
@@ -25609,7 +25609,7 @@ function MH_CARD(){
   var mhScenIds=scenarioGunIds();
   h+='<div class="lbl">'+T('砲の種類')+'</div>';
   h+='<div class="btns unit-picker" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:4px;border:1px solid #404040;border-radius:3px;background:#000000;padding:5px">';
-  var MH_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#6e5a3e",ITA:"#5c5c5c",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
+  var MH_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#d4a65a",ITA:"#a6a6a6",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
   var MH_NAT_LBL={USA:T("米軍"),GER:T("独軍"),SOV:T("ソ連"),ITA:T("伊軍"),GBR:T("英軍"),ALM:T("連合"),FFR:T("自仏軍"),POL:T("波軍"),SLO:T("スロバキア軍")};
   if(S.lang==="en")MH_NAT_LBL={USA:"USA",GER:"GER",SOV:"SOV",ITA:"ITA",GBR:"GBR",ALM:"ALM",FFR:"FFR",POL:"POL",SLO:"SLO"};
   GUN_DATA.filter(function(gd){
@@ -26101,7 +26101,7 @@ function SW_WEIGHT_CARD(){
   if(!swwList.length)h+='<div style="grid-column:1/-1;font-size:12px;color:#8899aa">'+T('このシナリオに登場するSWがありません')+'</div>';
   swwList.forEach(function(s){
     var cnt=(mfc.swSel&&mfc.swSel[s.id])||0;
-    var swpNatColMap={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#6e5a3e",ITA:"#5c5c5c",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
+    var swpNatColMap={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#d4a65a",ITA:"#a6a6a6",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
     var swpColor=swpNatColMap[(s.nat&&s.nat[0])||'']||'#4499ee';
     var swLp=T(s.lbl).match(/^(.*?)\s*\(([^)]+)\)\s*$/);
     var swMain=swLp?swLp[1]:T(s.lbl),swSuf=swLp?swLp[2]:null;
@@ -30811,7 +30811,7 @@ function losGroupMFSummaryHTML(){
 var LOS_VEH_NAT_LABELS={GER:'独軍',USA:'米軍',GBR:'英軍',SOV:'ソ軍',ITA:'伊軍',ALM:'連少軍',POL:'波軍',SLO:'スロバキア軍'};
 // 2026-08修正(ダルマ指示「行軍 車両 国籍は他同様に国カラーを使用する」): 他タブ
 // (GUN/LATW/SW修理等)と共通の国別カラーコード(GUN_NAT_COL等と同一パレット)を適用する。
-var LOS_VEH_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#6e5a3e",ITA:"#5c5c5c",GBR:"#c9b48a",ALM:"#4a8f6f",POL:"#c94f4f",SLO:"#4a72c9"};
+var LOS_VEH_NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#d4a65a",ITA:"#a6a6a6",GBR:"#c9b48a",ALM:"#4a8f6f",POL:"#c94f4f",SLO:"#4a72c9"};
 function LosSetVehicleNatFilter(nat){
   S_LOS.mfVehicleNatFilter=nat;
   // 2026-09修正(ダルマ指示「Mapタブ 車両に戦車タブと同様にシナリオボタンを追加」): nat===nullは
@@ -33907,7 +33907,7 @@ function SCEN_PAGE(){
   function scenHiddenContentBtnHTML(){
     return '<button class="b sm" disabled style="width:100%;justify-content:center;opacity:0.55;cursor:default;background:#000000;border:1px dashed #445566;color:#8899aa" title="'+T('著作権保護のため、シナリオ本文（勝利条件・背景・戦闘後・SSR・戦闘序列等）はWeb公開版では非表示です')+'">🔒 '+T('内容は非表示（著作権保護のため）')+'</button>';
   }
-  var NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#6e5a3e",ITA:"#5c5c5c",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
+  var NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#d4a65a",ITA:"#a6a6a6",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
   var NAT_LBL={USA:T("米軍"),GER:T("独軍"),SOV:T("ソ連"),ITA:T("伊軍"),GBR:T("英軍"),ALM:T("連合"),FFR:T("自仏軍"),POL:T("波軍"),SLO:T("スロバキア軍")};
   if(S.lang==="en")NAT_LBL={USA:"USA",GER:"GER",SOV:"SOV",ITA:"ITA",GBR:"GBR",ALM:"ALM",FFR:"FFR",POL:"POL",SLO:"SLO"};
 
@@ -34755,7 +34755,7 @@ function renderNatStatsBlock(){
   var natKeys=Object.keys(stats.perNat);
   var matchKeys=Object.keys(stats.matchups);
   if(!natKeys.length)return'';
-  var NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#6e5a3e",ITA:"#5c5c5c",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
+  var NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#d4a65a",ITA:"#a6a6a6",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
   var NAT_LBL={USA:T("米軍"),GER:T("独軍"),SOV:T("ソ連"),ITA:T("伊軍"),GBR:T("英軍"),ALM:T("連合"),FFR:T("自仏軍"),POL:T("波軍"),SLO:T("スロバキア軍")};
   if(S.lang==="en")NAT_LBL={USA:"USA",GER:"GER",SOV:"SOV",ITA:"ITA",GBR:"GBR",ALM:"ALM",FFR:"FFR",POL:"POL",SLO:"SLO"};
   var h='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:7px 9px;margin-bottom:8px">';
@@ -34899,7 +34899,7 @@ var SREC_RESULT_LBL={p1:'先手勝利',p2:'後手勝利',draw:'引き分け'};
 var SREC_RESULT_COL={p1:'#7ea83f',p2:'#7ec8e3',draw:'#8899aa'};
 function natTagHTML(nat){ // 修正(2026-07、ダルマ指示): 対戦記録カードに国籍タグを表示するための共通ヘルパー
   if(!nat)return '';
-  var NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#6e5a3e",ITA:"#5c5c5c",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
+  var NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#d4a65a",ITA:"#a6a6a6",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
   var NAT_LBL={USA:T("米軍"),GER:T("独軍"),SOV:T("ソ連"),ITA:T("伊軍"),GBR:T("英軍"),ALM:T("連合"),FFR:T("自仏軍"),POL:T("波軍"),SLO:T("スロバキア軍")};
   if(S.lang==="en")NAT_LBL={USA:"USA",GER:"GER",SOV:"SOV",ITA:"ITA",GBR:"GBR",ALM:"ALM",FFR:"FFR",POL:"POL",SLO:"SLO"};
   var nc=NAT_COL[nat]||'#8899aa';
@@ -35160,7 +35160,7 @@ function renderScenRecordSection(){
   var recNatCurSc=SCN.filter(function(x){return x.id===(d.scenId||S.scen.sel);})[0];
   var recNatP1=recNatCurSc&&recNatCurSc.atk;
   var recNatP2=recNatCurSc&&recNatCurSc.f&&Object.keys(recNatCurSc.f).filter(function(n){return n!==recNatP1;})[0];
-  var recNatCol={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#6e5a3e",ITA:"#5c5c5c",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
+  var recNatCol={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#d4a65a",ITA:"#a6a6a6",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
   var recNatLbl={USA:T("米軍"),GER:T("独軍"),SOV:T("ソ連"),ITA:T("伊軍"),GBR:T("英軍"),ALM:T("連合"),FFR:T("自仏軍"),POL:T("波軍"),SLO:T("スロバキア軍")};
   if(S.lang==="en")recNatLbl={USA:"USA",GER:"GER",SOV:"SOV",ITA:"ITA",GBR:"GBR",ALM:"ALM",FFR:"FFR",POL:"POL",SLO:"SLO"};
   function recNatTag(nat){ // 修正(2026-07、ダルマ指示): 対戦者欄にシナリオから自動判定した国籍を表示
@@ -35264,7 +35264,7 @@ function renderUnitChip(lbl,bc,dat,wide){
 // 対応表(SSR_CHART_LBL_MAP)を都度指定し、一致するトークンだけをバッジ化、それ以外(DRn:/VPnn等)は
 // プレーンテキストのまま残す。S20のChart1のみが対象(汎用的だが現状の呼び出しはS20限定)。
 function ssrChartChipHTML(text,lblMap){
-  var NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#6e5a3e",ITA:"#5c5c5c",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
+  var NAT_COL={USA:"#7ea83f",GER:"#7ec8e3",SOV:"#d4a65a",ITA:"#a6a6a6",GBR:"#c9b48a",ALM:"#4a8f6f",FFR:"#8899aa",POL:"#c94f4f",SLO:"#4a72c9"};
   var groups=text.split('　');
   var htmlGroups=groups.map(function(g){
     var parts=g.split('/');
