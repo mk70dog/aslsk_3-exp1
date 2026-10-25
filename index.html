@@ -28,7 +28,7 @@ window.losTabpSplit=function(){var h=document.documentElement,tb=document.queryS
  addEventListener("scroll",q,{passive:true});addEventListener("resize",q);addEventListener("orientationchange",q);setInterval(q,400);})();
 window.stkMqTag=function(){var m=document.getElementById("main");if(!m)return;var old=m.querySelectorAll(".stk-mq"),shs=m.querySelectorAll(".card .sh"),tgt=null,pri=null,sec=[];
 function is3(sh){return !!(sh.querySelector(':scope>div[style*="height:47px"],:scope>div[style*="min-height:28px"]')&&sh.querySelector('button[onclick*="ALLCLR"]')&&sh.querySelector('button[onclick*="NumpadApplyLOS"],button[onclick*="NAVTAB(\'los\')"]'))}
-for(var i=0;i<shs.length&&i<14;i++){var sh=shs[i];if(!is3(sh))continue;if(!pri){pri=sh;var c=sh.parentElement;tgt=(c&&c.classList.contains("card")&&c.offsetHeight<130)?c:sh}else sec.push(sh)}
+for(var i=0;i<shs.length&&i<14;i++){var sh=shs[i];if(!is3(sh))continue;if(!pri){pri=sh;var c=sh.parentElement;tgt=(c&&c.classList.contains("card")&&c.offsetHeight<130)?c:sh;if(tgt===sh&&c&&c.classList.contains("card")&&c.parentElement&&(document.documentElement.classList.contains("is-tabp")||document.documentElement.classList.contains("is-tabl"))){var w=document.createElement("div");w.className="card stk-mq";var tp=c;while(tp.parentElement&&tp.parentElement!==m)tp=tp.parentElement;if(tp.parentElement!==m)tp=c;tp.parentElement.insertBefore(w,tp);w.appendChild(sh);tgt=w}}else sec.push(sh)}
 for(var k=0;k<old.length;k++)if(old[k]!==tgt)old[k].classList.remove("stk-mq");if(tgt)tgt.classList.add("stk-mq");
 if(!pri)return;
 var pm=pri.querySelector('.text-marquee-track'),extra=[];
@@ -703,7 +703,8 @@ html.is-tabp #losZoomTb>:nth-child(3),html.is-tabp #losZoomTb>:nth-child(4){orde
 /* 2026-10: ダルマ指示 iPad横のMAPタブ: 90°L〜BACKのツールバーとコンパス(N)を縦スクロール時も常時表示 */
 html.is-tabl .los-tb{position:sticky;top:var(--navh,100px);z-index:190;background:#0a0c14;padding:4px 0;box-shadow:0 4px 10px rgba(0,0,0,.6)}
 html.is-tabl .los-compass{position:sticky !important;top:calc(var(--navh,100px) + 60px);left:auto !important;height:0;margin-left:6px;z-index:195}
-html.is-tabp #main .stk-mq,html.is-tabl #main .stk-mq{position:sticky;top:var(--navh,100px);z-index:191;margin-bottom:6px;box-shadow:0 4px 10px rgba(0,0,0,.6)}
+html.is-tabp #main .stk-mq,html.is-tabl #main .stk-mq{position:sticky;top:var(--navh,100px);z-index:191;margin-bottom:6px;padding:6px 8px;box-shadow:0 4px 10px rgba(0,0,0,.6)}
+html.is-tabp #main .stk-mq>.sh,html.is-tabl #main .stk-mq>.sh,html.is-tabp #main .stk-mq .sh,html.is-tabl #main .stk-mq .sh{margin-bottom:0 !important;padding-bottom:0 !important}
 html.is-tabp #main .sh.stk-mq,html.is-tabl #main .sh.stk-mq{background:#000;padding:6px 8px;border-bottom:none}
 .card:has(.sh.stk-mq){overflow:visible !important}
 html.oplog-open #main .stk-mq{z-index:1 !important}
