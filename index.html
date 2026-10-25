@@ -14495,7 +14495,7 @@ function FIRE_PAGE(){
 
   // ダイス
   if(!activeRC){
-  h+='<div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(iftPreviewText(tp,drm),'blu',17)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="FIRE_AUTODICE()">ROLL DICE</button></div></div>';
+  h+='<div class="sh" style="flex-wrap:nowrap;display:none"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(iftPreviewText(tp,drm),'blu',17)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="FIRE_AUTODICE()">ROLL DICE</button></div></div>';
   h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:6px 8px;margin-top:6px">';
   h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">RED DIE (ROF Check)</div>';
   h+=rDiceHTML(fst.rd,true,'FdieR',fst._rolling);
@@ -23510,7 +23510,7 @@ h+='<div class="sum sum-eq" style="display:flex;flex-wrap:nowrap;gap:5px;border:
   // Dice input for TH roll
   if(_gateOK){
     var ddText=losLogMarqueeText();
-    h+='<div class="card"><div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(ddText,'blu',20)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.gun;},\'rd\',\'wd\',\'th_result\')">ROLL DICE</button></div></div>';
+    h+='<div class="card"><div class="sh" style="flex-wrap:nowrap;display:none"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(ddText,'blu',20)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.gun;},\'rd\',\'wd\',\'th_result\')">ROLL DICE</button></div></div>';
     h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:6px 8px;margin-top:6px">';
     h+='<div class="lbl">RED DIE ('+T('故障判定')+')</div>';
     h+=rDiceHTML(g.rd,true,'GsetRD',g._rolling);
@@ -25178,7 +25178,7 @@ function LATW_PAGE(){
     }
     h+='</div>';
     h+='<div style="border:1px solid #404040;border-radius:3px;background:#000000;padding:5px">';
-    h+='<div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(thPreviewText(curTH,totalDRM),'blu',15)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.latw;},\'rd\',\'wd\',\'th_result\')">ROLL DICE</button></div></div>';
+    h+='<div class="sh" style="flex-wrap:nowrap;display:none"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(thPreviewText(curTH,totalDRM),'blu',15)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.latw;},\'rd\',\'wd\',\'th_result\')">ROLL DICE</button></div></div>';
     h+='</div>';
     h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:6px 8px;margin-top:6px">';
     h+='<div class="lbl">RED DIE</div>';
