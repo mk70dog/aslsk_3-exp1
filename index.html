@@ -2550,6 +2550,7 @@ function afvSelectButtonHTML(v,selected,onclickJs){
 var INIT_GUN={
   gunId: null,       // selected gun ID
   hipOpen: false,    // HIP参照パネルの折りたたみ状態（デフォルト折りたたみ）
+  vehStatusOpen: false, smokeDispOpen: false, // v230: 車両ステータス/煙幕展張カードの折りたたみ(デフォルト折りたたみ)
   acqRefOpen: false, // 捕捉ACQUISITIONパネルの折りたたみ状態（デフォルト折りたたみ）
   airBurstOpen: false, // 空中炸裂参照パネルの折りたたみ状態（デフォルト折りたたみ）
   // 修正(2026-07、Kato指摘) デフォルトを"HE"自動選択済みから未選択(null)に変更。
@@ -20785,7 +20786,7 @@ var VEH_STUN_CARD_SHOWN=false;
 function VehStunAdd(){var gd=gunData();if(!gd)return;var st=mgSt(gd);st.stun=(st.stun||0)+1;st.stunActive=true;S.gun.drm.firerBU=true;Draw();} // Stunした車両はCEならただちにBU(7.10)
 function VehStunFlip(){var gd=gunData();if(!gd)return;var st=mgSt(gd);st.stunActive=false;S.gun.drm.firerStunPlus1=true;Draw();} // ターン終了時にStunカウンターを+1面へ(以後恒久+1)
 function VehStunReset(){var gd=gunData();if(!gd)return;var st=mgSt(gd);st.stun=0;st.stunActive=false;Draw();}
-function vehStatusCardHTML(gd){
+function vehStatusCardInnerHTML(gd){
   var g=S.gun,st=mgSt(gd),m=st.msa;
   var recall=(st.stun>=2)||(gd.turretType==="1MT"&&st.stun>=1);
   var h='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px;margin-top:6px">';
@@ -20853,6 +20854,21 @@ function vehStatusCardHTML(gd){
 var SMOKE_TYPE_LBL={sD:"煙幕展張器（Smoke Discharger, sD）",sM:"煙幕迫撃砲（Smoke Mortar, sM）",sP:"発煙筒（Smoke Pots, sP）",sN:"近接防御兵器（Nahverteidigungswaffe, sN）"};
 // v11.267(ダルマ指示「煙幕迫撃砲(sM)の砲塔CA変更DRM」、ASLSK4 7.5): AFVがsM発射のためTCAを変更する場合、使用DRに「射撃時と同様の」CA変更DRMを加える。
 // 基本値は砲塔種別(T+1/ST・RST・1MT+2/NT+3)、以降+1ずつ、森林/建物内(ca_terrain2x)は2倍(砲撃タブのCA変更カードと同一)。
+// v230: 折りたたみ式(見出し行に要約を常時表示)。Motion=ありの車両は自動展開。
+function colToggleBarHTML(title,summary,open,key,warn){
+  return '<div style="background:#000;border:1px solid '+(warn?'#c8a03288':'#404040')+';border-radius:3px;padding:5px 8px;margin-top:6px;display:flex;align-items:center;gap:8px;cursor:pointer" onclick="Gset(\''+key+'\','+(!open)+')"><span style="font-size:12px;color:#8899aa;flex:1;min-width:0">'+title+'</span><span style="font-size:12px;font-weight:bold;color:'+(warn?'#c8a032':'#4499ee')+';white-space:nowrap">'+summary+'</span><span style="color:#8899aa">'+(open?'▲':'▼')+'</span></div>';
+}
+function vehStatusCardHTML(gd){
+  var st=mgSt(gd),open=!!S.gun.vehStatusOpen||!!st.motion;
+  var sum='Motion: '+(st.motion?T('あり'):T('なし'))+(st.stun?' ／ Stun '+st.stun:'');
+  return colToggleBarHTML(T('自車の車両ステータス / Motionカウンター有無'),sum,open,'vehStatusOpen',!!st.motion)+(open?vehStatusCardInnerHTML(gd):'');
+}
+function smokeDispCardHTML(afv,g){
+  var open=!!S.gun.smokeDispOpen;
+  var sm=smokeSelectedDispenser(afv.smoke),lk=S.gun.smokeUsedDFF&&S.gun.smokeUsedDFF[smokeVehKey()];
+  var sum=sm.type+' ／ '+(lk?T('試行済み'):T('未試行'));
+  return colToggleBarHTML(T('車両煙幕展張判定（7.5）'),sum,open,'smokeDispOpen',!!lk)+(open?smokeDispCardInnerHTML(afv,g):'');
+}
 function smokeCaChangeDrm(veh,d){
   var hex=(d&&d.caHex)||0;
   if(hex<=0)return 0;
@@ -20890,7 +20906,7 @@ function smokeSelectedDispenser(sm){
   return sm;
 }
 function GsetSmokeOpt(i){S.gun.smokeDisp.optIdx=i;S.gun.smokeDisp.wd=0;S.gun.smokeDisp.rd=0;S.gun.smokeDisp.hindrance=0;S.gun.smokeDisp.caHex=0;Draw();}
-function smokeDispCardHTML(afv,g){
+function smokeDispCardInnerHTML(afv,g){
   var sm0=afv.smoke;
   var sm=smokeSelectedDispenser(sm0);
   var usageNum=smokeUsageNum(sm);
