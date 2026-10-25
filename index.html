@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script>/* 2026-10: スマホ/iPad縦(表示幅850px以下)判定。リサイズ・回転に追従 */(function(){function f(){try{var h=document.documentElement;var sm=Math.min(screen.width,screen.height)<=500,ph=sm||window.innerWidth<=850;if(ph)h.classList.add("is-phone");else h.classList.remove("is-phone");if(ph&&!sm)h.classList.add("is-tabp");else h.classList.remove("is-tabp");if(!ph&&((window.matchMedia&&matchMedia("(pointer:coarse)").matches)||navigator.maxTouchPoints>1))h.classList.add("is-tabl");else h.classList.remove("is-tabl");var nv=document.getElementById("nav");var sat=0;try{var pb=document.getElementById("satProbe");if(!pb){pb=document.createElement("div");pb.id="satProbe";pb.style.cssText="position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;padding-top:env(safe-area-inset-top,0px)";document.body.appendChild(pb);}sat=parseFloat(getComputedStyle(pb).paddingTop)||0;}catch(e){}if(nv)h.style.setProperty("--navh",(nv.offsetHeight+sat)+"px");/* v240: ステータスバー(safe-area)分を加味 */try{losTabpSplit();fireTabpSticky()}catch(e){}}catch(e){}}f();window.addEventListener("resize",f);window.addEventListener("load",function(){f();setTimeout(f,500)});document.addEventListener("DOMContentLoaded",f);window.addEventListener("orientationchange",function(){setTimeout(f,200)});
+<script>/* 2026-10: スマホ/iPad縦(表示幅850px以下)判定。リサイズ・回転に追従 */(function(){function f(){try{var h=document.documentElement;var sm=Math.min(screen.width,screen.height)<=500,ph=sm||window.innerWidth<=850;if(ph)h.classList.add("is-phone");else h.classList.remove("is-phone");if(ph&&!sm)h.classList.add("is-tabp");else h.classList.remove("is-tabp");if(!ph&&((window.matchMedia&&matchMedia("(pointer:coarse)").matches)||navigator.maxTouchPoints>1))h.classList.add("is-tabl");else h.classList.remove("is-tabl");var nv=document.getElementById("nav");var sat=0;try{var pb=document.getElementById("satProbe");if(!pb){pb=document.createElement("div");pb.id="satProbe";pb.style.cssText="position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;padding-top:env(safe-area-inset-top,0px)";document.body.appendChild(pb);}sat=parseFloat(getComputedStyle(pb).paddingTop)||0;}catch(e){}if(nv)h.style.setProperty("--navh",(nv.offsetHeight+sat)+"px");/* v240: ステータスバー(safe-area)分を加味 */try{losTabpSplit();fireTabpSticky();stkMqTag()}catch(e){}}catch(e){}}f();window.addEventListener("resize",f);window.addEventListener("load",function(){f();setTimeout(f,500)});document.addEventListener("DOMContentLoaded",f);window.addEventListener("orientationchange",function(){setTimeout(f,200)});
 /* 2026-10: ダルマ指示 iPad縦のMAPタブ: 90°L/90°R/↔/↕/－/%/＋ をマップ下に表示(画面下端に常時固定、マップを過ぎたらマップ直下に停止)。他ボタンは従来位置 */
 window.losTabpSplit=function(){var h=document.documentElement,tb=document.querySelector(".los-tb"),z=document.getElementById("losZoomTb");
  if(h.classList.contains("is-tabp")&&tb&&!z){var w=document.getElementById("losScrollWrap");if(!w||!w.parentElement||tb.children.length<14)return;
@@ -15,6 +15,7 @@ window.losTabpSplit=function(){var h=document.documentElement,tb=document.queryS
 (function(){var ph=null,raf=0;function run(){raf=0;var s=document.querySelector(".fire-phase-sticky"),h=document.documentElement;
  if(!s||!(h.classList.contains("is-tabp")||h.classList.contains("is-tabl"))){if(ph&&ph.parentNode)ph.parentNode.removeChild(ph);return}
  var nh=parseInt(getComputedStyle(h).getPropertyValue("--navh"))||136;
+ var mq=document.querySelector("#main .stk-mq");if(mq)nh+=mq.offsetHeight+6;
  if(!ph)ph=document.createElement("div");
  var pinned=s.style.position==="fixed";
  var ref=(pinned&&ph.parentNode)?ph:s;var r=ref.getBoundingClientRect();
@@ -25,6 +26,7 @@ window.losTabpSplit=function(){var h=document.documentElement,tb=document.queryS
  }
  function q(){if(!raf)raf=requestAnimationFrame(run)}
  addEventListener("scroll",q,{passive:true});addEventListener("resize",q);addEventListener("orientationchange",q);setInterval(q,400);})();
+window.stkMqTag=function(){var m=document.getElementById("main");if(!m)return;var old=m.querySelectorAll(".stk-mq"),shs=m.querySelectorAll(".card .sh"),tgt=null;for(var i=0;i<shs.length&&i<14&&!tgt;i++){var sh=shs[i];if(sh.querySelector(':scope>div[style*="height:47px"]')&&sh.querySelector('button[onclick*="ALLCLR"]')&&sh.querySelector('button[onclick*="NumpadApplyLOS"],button[onclick*="NAVTAB(\'los\')"]')){var c=sh.parentElement;tgt=(c&&c.classList.contains("card")&&c.offsetHeight<130)?c:sh}}for(var k=0;k<old.length;k++)if(old[k]!==tgt)old[k].classList.remove("stk-mq");if(tgt)tgt.classList.add("stk-mq")};
 window.fireTabpSticky=function(){var h=document.documentElement,m=document.getElementById("main");if(!m)return;
  var on=h.classList.contains("is-tabp")||h.classList.contains("is-tabl");
  var b=m.querySelector('button[onclick^="FIREsub(\'pfph\')"],button[onclick^="Gset(\'phase\',\'PFPh\')"],button[onclick^="LATWset(\'phase\',\'PFPh\')"]');
@@ -34,14 +36,14 @@ window.fireTabpSticky=function(){var h=document.documentElement,m=document.getEl
  else if(on&&tgt&&!tgt.parentElement.classList.contains("fire-phase-sticky")&&!(tgt.parentElement.parentElement===m)){tgt=tgt.parentElement;var card=tgt.parentElement;if(!card||!card.parentElement)return;tgt._card=card;tgt._next=tgt.nextSibling;tgt.classList.add("fire-phase-sticky");card.parentElement.insertBefore(tgt,card.nextSibling);}
  else if(st&&!on&&!st._card){st.classList.remove("fire-phase-sticky")}
  else if(st&&!on&&st._card){var c=st._card;c.insertBefore(st,(st._next&&st._next.parentElement===c)?st._next:null);st.classList.remove("fire-phase-sticky");}};
-function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);return;}var busy=false;new MutationObserver(function(){if(busy)return;busy=true;try{losTabpSplit();fireTabpSticky()}catch(e){}busy=false;}).observe(m,{childList:true,subtree:true});}
+function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);return;}var busy=false;new MutationObserver(function(){if(busy)return;busy=true;try{losTabpSplit();fireTabpSticky();stkMqTag()}catch(e){}busy=false;}).observe(m,{childList:true,subtree:true});}
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv254">
-<title>ASL SKシリーズv254</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv255">
+<title>ASL SKシリーズv255</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv254">
+<meta property="og:title" content="ASL SKシリーズv255">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -692,6 +694,10 @@ html.is-tabp #losZoomTb>:nth-child(3),html.is-tabp #losZoomTb>:nth-child(4){orde
 /* 2026-10: ダルマ指示 iPad横のMAPタブ: 90°L〜BACKのツールバーとコンパス(N)を縦スクロール時も常時表示 */
 html.is-tabl .los-tb{position:sticky;top:var(--navh,100px);z-index:190;background:#0a0c14;padding:4px 0;box-shadow:0 4px 10px rgba(0,0,0,.6)}
 html.is-tabl .los-compass{position:sticky !important;top:calc(var(--navh,100px) + 60px);left:auto !important;height:0;margin-left:6px;z-index:195}
+html.is-tabp #main .stk-mq,html.is-tabl #main .stk-mq{position:sticky;top:var(--navh,100px);z-index:191;margin-bottom:6px;box-shadow:0 4px 10px rgba(0,0,0,.6)}
+html.is-tabp #main .sh.stk-mq,html.is-tabl #main .sh.stk-mq{background:#000;padding:6px 8px;border-bottom:1px solid #404040}
+.card:has(.sh.stk-mq){overflow:visible !important}
+html.oplog-open #main .stk-mq{z-index:1 !important}
 .fire-phase-sticky>.lbl{display:none}
 .card:has(>.fire-phase-sticky){overflow:visible !important}
 html.is-tabp .fire-phase-sticky,html.is-tabl .fire-phase-sticky{position:relative;z-index:190;background:#0a0c14;margin:0 2px 6px;box-shadow:0 4px 10px rgba(0,0,0,.6)}
@@ -9727,7 +9733,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.454"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
+var APP_VERSION="ASLSK3M-v11.455"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
