@@ -806,6 +806,10 @@ html.is-tabl #hdrLogoR{display:block !important;align-self:stretch;flex:0 0 100p
 html.is-tabl #hdrLogoR img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;border-radius:3px;pointer-events:none}
 /* v236: 編成スロットは常に1列5ボタン固定(チップ画像入りでauto-fill 64pxに崩れるのを防ぐ) */
 #main div.fgSlotGrid[style*="display:grid"][style*="grid-template-columns:repeat("]:has(> button.b img),#main div.fgSlotGrid{grid-template-columns:repeat(5,minmax(0,1fr)) !important;justify-content:stretch !important}
+/* v237サンプル: iPad横は 目標車両の移動 / 射撃側車両の状態 / 乗員の状態 を1列に */
+html.is-tabl .c24row{display:flex;flex-wrap:nowrap;gap:6px;align-items:stretch;margin-bottom:6px}
+html.is-tabl .c24row>.c24card{flex:3 1 0;min-width:0;margin-bottom:0 !important}
+html.is-tabl .c24row>div:not(.c24card){flex:4 1 0;min-width:0;margin-bottom:0 !important}
 </style>
 </head>
 <body>
@@ -22389,8 +22393,10 @@ function GUN_PAGE(){
   // カードとして表示される(目標の移動自体はCA非適用の軽迫撃砲でも引き続き必要なため、if(!caIsLightMTR)の
   // 外に置き常時表示を維持)。
   // Target movement: FFNAM(-1)/FFMO(-1、累積可)/危険移動(-2、FFMO・FFNAMとは排他)
+  var gC24wrapOpen=false;
   if(!g.drm.tgtCrewCE||effTgtType==="ve"||g.drm.vehTgt){ // 2026-09変更(ダルマ指示「車載機銃を選択した時だけ目標は車両乗員(CE)を表示する(3点)＋Case 24の不具合修正」): 目標の移動カードは、乗員目標でも主砲の目標が車両(VTT/ATT対車両)ならCase 24/25のために表示する(乗員のスイッチは機銃の攻撃にだけ効かせる)。FFMO/FFNAMは乗員目標・車両目標では従来どおり非表示。
-  h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px;margin-bottom:6px">';
+  h+='<div class="c24row">';gC24wrapOpen=true; // v237サンプル: iPad横は目標移動/BU-CE/乗員を1列
+  h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px;margin-bottom:6px" class="c24card">';
   h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+T((effTgtType==="ve"||g.drm.vehTgt)?'目標車両の移動':'目標の移動')+'</div>';
   h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">';
   var gVehTgtMv=(effTgtType==="ve"||g.drm.vehTgt); // 2026-09修正(ダルマ指示「ルール確認→車両目標ではFFMO/FFNAM/危険移動を非表示・DRMに入れない」): FFMO/FFNAM/危険移動は移動している歩兵に対するDRM(SK4 3.3.1、QRDC 19/21)。車両目標(VTT)の移動はCase 24/25で扱う。
@@ -22458,6 +22464,7 @@ function GUN_PAGE(){
   h+='<button class="b sm'+(g.drm.firerStunPlus1?' on':'')+'" style="flex:1" onclick="GsetDRM(\'firerStunPlus1\','+(!g.drm.firerStunPlus1)+')">'+T('恒久+1カウンター所持（過去にStun経験、自車の射撃TH+1）')+'</button>';
   h+='</div>';
   h+='</div>';
+  if(gC24wrapOpen){h+='</div>';gC24wrapOpen=false;}
   // 2026-09追加(ダルマ指示「機械的信頼性判定」): AFV_DATA.breakdownDRを保持する車両のみ表示。
   // 修正実施(2026-09、マサヒコ質問「移動中射撃タブのみ表示？」): 機械的信頼性判定は車両が自身のMPh中に
   // 始動のためMPを消費するたびに行う判定(Russian Vehicle Note M/PzKpfw V G特別ルール原文)であり、
@@ -22478,6 +22485,7 @@ function GUN_PAGE(){
   if(maAfv&&maAfv.smoke&&S.gun.phase==="DFF")h+=smokeDispCardHTML(maAfv,g);
   h+=vehStatusCardHTML(gd); // 2026-09追加: Motion・Motion Status Attempt・Stun/Recall
   }
+  if(gC24wrapOpen){h+='</div>';gC24wrapOpen=false;}
   // 2026-09追加(ダルマ指示「建物内射撃/発射部隊を『ターゲット→砲』の上に移動」): 迫撃砲選択時のみ表示。
   // 修正実施(2026-09、ダルマ報告バグ「表示されない」): GUN_PAGE()内のisMTRの実定義(var isMTR=...)は
   // このRange節より後の行にあり、この時点ではまだ未代入(undefined=false相当)だったため、if(isMTR)が
