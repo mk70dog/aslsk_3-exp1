@@ -9628,7 +9628,7 @@ function hdrScenJump(){try{
 var APP_RELEASE='2026-10-26 04:00'; // リリース日時(JST)。リリースごとに更新
 var HDR_OUT_STYLE=0;
 var SEG14_MAP={'0':'abcdef','1':'bc','2':'abdeAB','3':'abcdB','4':'bcfAB','5':'acdfAB','6':'acdefAB','7':'abc','8':'abcdefAB','9':'abcdfAB',
-'A':'abcefAB','B':'abcdBil','C':'adef','D':'abcdil','E':'adefA','F':'aefA','G':'acdefB','H':'bcefAB','I':'adil','J':'bcde','K':'efAjm','L':'def','M':'bcefhj','N':'bcefhm','O':'abcdef','P':'abefAB','Q':'abcdefm','R':'abefABm','S':'acdfAB','T':'ail','U':'bcdef','V':'efjk','W':'bcefkm','X':'hjkm','Y':'hjl','Z':'adjk','-':'AB','/':'jk','+':'ABil','_':'d'};
+'A':'abcefAB','B':'abcdBil','C':'adef','D':'abcdil','E':'adefA','F':'aefA','G':'acdefB','H':'bcefAB','I':'adil','J':'bcde','K':'efAjm','L':'def','M':'bcefhj','N':'bcefhm','O':'abcdef','P':'abefAB','Q':'abcdefm','R':'abefABm','S':'acdfAB','T':'ail','U':'bcdef','V':'efjk','W':'bcefkm','X':'hjkm','Y':'hjl','Z':'adjk','А':'abcefAB','Б':'acdefAB','В':'abcdBil','Г':'aef','Д':'bcdel','Е':'adefA','Ж':'hjkmilAB','З':'abcdB','И':'bcefjk','К':'efAjm','Л':'bcjk','М':'bcefhj','Н':'bcefAB','О':'abcdef','П':'abcef','Р':'abefAB','С':'adef','Т':'ail','У':'bcdfAB','Ф':'bcefABil','Х':'hjkm','Ч':'bcfAB','Ш':'bcdefil','Ы':'efAhl','Ь':'cdefAB','Э':'abcdB','Ю':'abcdefA','Я':'abcBjk','Й':'abcefjk','-':'AB','/':'jk','+':'ABil','_':'d'};
 var SEG14_GEO={a:[2.5,1.5,7.5,1.5],b:[8.5,2.5,8.5,8],c:[8.5,10,8.5,15.5],d:[2.5,16.5,7.5,16.5],e:[1.5,10,1.5,15.5],f:[1.5,2.5,1.5,8],A:[2.5,9,4.5,9],B:[5.5,9,7.5,9],i:[5,2.5,5,8],l:[5,10,5,15.5],h:[2.5,2.5,4.5,8],j:[7.5,2.5,5.5,8],k:[2.5,15.5,4.5,10],m:[7.5,15.5,5.5,10]};
 function seg14SVG(lines,col,opt){
   opt=opt||{};var cw=11,ch=18,n=Math.max.apply(null,lines.map(function(l){return l.length}));
@@ -9656,10 +9656,13 @@ function hdrOutRender(){
   var m=String(APP_VERSION).match(/v11\.(\d+)/),v=m?String(parseInt(m[1],10)-200):'';
   var p=APP_RELEASE.split(' '),d=p[0].split('-'),tm=p[1]||'';
   var C='#38d8ff',o={glow:1};
-  var T0=[['ASL SK V'+v,d[1]+'.'+d[2]+'.'+d[0].slice(2)+' '+tm],C,o];
-  var T1=[['ASL SK V'+v,d[0]+'.'+d[1]+'.'+d[2],tm+' JST'],C,o];
-  var T2=[['V'+v,d[0].slice(2)+'/'+d[1]+'/'+d[2]+' '+tm],C,{glow:1,skew:8}];
-  var T3=[['ASLSK3M','V'+v+' '+d[1]+'/'+d[2],tm],C,{glow:1,w:1.7}];
+  var dmy=d[2]+'.'+d[1]+'.'+d[0].slice(2)+' '+tm;
+  var de=['JAN','FEB','MAR','APR','MAI','JUN','JUL','AUG','SEP','OKT','NOV','DEZ'][+d[1]-1];
+  var ru=['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'][+d[1]-1];
+  var T0=[['AUSGABE '+v,dmy],C,o];
+  var T1=[['STAND V'+v,d[2]+' '+de+' '+tm],C,o];
+  var T2=[['ВЕРСИЯ '+v,dmy],C,o];
+  var T3=[['ВЫПУСК '+v,d[2]+' '+ru+' '+tm],C,o];
   var t=[T0,T1,T2,T3][HDR_OUT_STYLE%4];
   el.innerHTML=seg14SVG(t[0],t[1],t[2]);
 }
