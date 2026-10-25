@@ -38,10 +38,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv222">
-<title>ASL SKシリーズv222</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv223">
+<title>ASL SKシリーズv223</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv222">
+<meta property="og:title" content="ASL SKシリーズv223">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -5994,6 +5994,9 @@ var I18N_EN={
   "機動状態（+2）":"Motion status (+2)",
   "機動状態（FP半減）":"Motion status (FP halved)",
   "失速(Stall)判定（車両注記、始動時DR":"Stall check (vehicle note, startup DR",
+  "機械的信頼性判定（相手MPh：Motion Status Attempt成功後、DR":"Mechanical Reliability check (enemy MPh: after a successful Motion Status Attempt, DR",
+  "失速(Stall)判定（自MPh：始動MPを払うたび、DR":"Stall check (own MPh: each time a start MP is spent, DR",
+  "機械的信頼性判定（自MPh：始動MPを払うたび、DR":"Mechanical Reliability check (own MPh: each time a start MP is spent, DR",
   "機械的信頼性判定（Motion Attempt、始動時DR":"Mechanical Reliability check (Motion Attempt, startup DR",
   "次回のボグ解消判定に色付drへ+1drm(累積しない)。":"+1 DRM to the colored dr on the next Unbog check (does not accumulate).",
   "武器":"Weapon",
@@ -9580,7 +9583,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.422"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
+var APP_VERSION="ASLSK3M-v11.423"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
@@ -20730,10 +20733,11 @@ function GsetMotionAttemptDelayAutoDice(){
   rollAnim(function(r,w,rolling){S.gun.motionAttempt.drd=r;S.gun.motionAttempt.dwd=w;S.gun.motionAttempt._drolling=rolling;Draw();});
 }
 // AFV/GUNタブ(GUN_PAGE内、gd.isVehicleMA選択時)用カード。afvはAFV_DATA該当エントリ(breakdownDR保持車両のみ呼び出し元でガード)。
-function motionAttemptCardHTML(afv){
+function motionAttemptCardHTML(afv,mode){
   var m=S.gun.motionAttempt;
   var h='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px">';
-  h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+maTitleHTML(afv)+'</div>';
+  h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+maTitleHTML(afv,mode)+'</div>';
+  if(mode==='msa')h+='<div style="font-size:11px;color:#8899aa;margin-bottom:4px;line-height:1.5">'+T('Motion Status Attempt自体は「車両ステータス」カードで行う（dr≦敵がLOS内で消費したMF/MP、ターン開始時に敵がLOS外、First/Final/Intensive Fireマーカー無し、1MPh1回）。成功してMotion化する時に、赤MPの車両はこのDRも必要（12/一部ロシア車は11で失速＝試行失敗）。')+'</div>';
   h+='<div class="sum" style="grid-template-columns:1fr">'+sumSuccessCard(T('始動成功＝DR以下'),afv.breakdownDR-1)+'</div>'; // 2026-09追加: 始動は DR < 故障DR で成功
   // 2026-09修正(ダルマ指示「射撃タブと同じダイスロール表示にする」): 射撃タブ(FIRE_PAGE)・車両煙幕展張判定
   // (smokeDispCardHTML)と同一のラッパー構造・ラベル配色・ROLL DICEボタン(judg3d grn)に統一。
@@ -20749,9 +20753,11 @@ function motionAttemptCardHTML(afv){
   return h;
 }
 // 赤MP=機械的信頼性(3.3.2)。黒MPでstall:true(パンターG・ヤクトパンター)は車両注記の失速(Stall)判定のみで、機械的信頼性は適用されない。
-function maTitleHTML(v){
-  if(v.stall&&v.mpRed===false)return T('失速(Stall)判定（車両注記、始動時DR')+breakdownDR2Text(v.breakdownDR)+(S.lang==='en'?')':'）');
-  return T('機械的信頼性判定（Motion Attempt、始動時DR')+breakdownDR2Text(v.breakdownDR)+(S.lang==='en'?')':'）');
+function maTitleHTML(v,mode){
+  var dr=breakdownDR2Text(v.breakdownDR),en=S.lang==='en';
+  if(mode==='msa')return T('機械的信頼性判定（相手MPh：Motion Status Attempt成功後、DR')+dr+(en?')':'）');
+  if(v.stall&&v.mpRed===false)return T('失速(Stall)判定（自MPh：始動MPを払うたび、DR')+dr+(en?')':'）');
+  return T('機械的信頼性判定（自MPh：始動MPを払うたび、DR')+dr+(en?')':'）');
 }
 function breakdownDR2Text(v){return '≧'+v;}
 // ═══ 車両ステータスカード(2026-09、ダルマ指示「実施」: 戦車タブ監査B群) ═══
@@ -22406,7 +22412,10 @@ function GUN_PAGE(){
   // (同種の見落とし)ため、phase==="DFF"選択時のみに限定。
   var maAfv=AFV_DATA.find(function(v){return v.id===gd.afvId;});
   // v222: 相手MPhのMotion Status Attempt(3.3.2.1)で適用されるのは機械的信頼性(赤MP車両のみ)。パンターG/ヤクトパンターの失速は「始動MPを消費するたび」(自MPh)のみで、DFFのMotion試行では判定しない。
-  if(maAfv&&maAfv.breakdownDR!=null&&maAfv.mpRed!==false&&S.gun.phase==="DFF")h+=motionAttemptCardHTML(maAfv);
+  if(maAfv&&maAfv.breakdownDR!=null&&S.gun.phase==="DFF"){
+    if(S.gun.boundingFire&&S.gun.boundingFire.active)h+=motionAttemptCardHTML(maAfv,'start'); // 自MPh(移動しながら射撃): 始動MPごとの始動DR(失速/機械的信頼性)
+    else if(maAfv.mpRed!==false)h+=motionAttemptCardHTML(maAfv,'msa'); // 相手MPh防御射撃: Motion Status Attempt成功後の機械的信頼性(赤MPのみ)
+  }
   // 2026-09追加(ダルマ指示「車両煙幕（sD/sM/sN/sP）放出判定」): AFV_DATA.smokeを保持する車両のみ表示。
   // 修正実施(2026-09、ダルマ指摘・ASLSK4_Rules_September_2021.pdf 7.5項原文確認): 煙幕展張の試行はMPh限定
   // ("may attempt to dispense smoke once per Player Turn in the MPh"、自身のMPh中または相手のMPh中に
@@ -30888,7 +30897,7 @@ function losVehicleMFSummaryHTML(){
   if(veh.breakdownDR!=null){
     var m=S_LOS.motionAttempt;
     h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px;margin-top:6px">';
-    h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+maTitleHTML(veh)+'</div>';
+    h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+maTitleHTML(veh,'start')+'</div>';
     h+='<div class="lbl">WHITE DIE</div>'+rDiceHTML(m.wd,false,'LosSetMotionAttemptWD',false);
     h+='<div class="lbl" style="margin-top:6px">RED DIE</div>'+rDiceHTML(m.rd,true,'LosSetMotionAttemptRD',false);
     h+=motionAttemptResultHTML(veh.breakdownDR,m.wd,m.rd,{stall:!!veh.stall,dwd:m.dwd,drd:m.drd,dwdFn:'LosSetMotionAttemptDWD',drdFn:'LosSetMotionAttemptDRD'});
