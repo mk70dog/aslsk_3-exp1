@@ -830,6 +830,7 @@ html.is-tabp body,html.is-tabl body{padding-top:env(safe-area-inset-top,0px) !im
 #hdrHotEn{left:57.9%;top:18.7%;width:5.76%;height:20.9%}
 #hdrHotJa{left:51.3%;top:18.7%;width:5.76%;height:20.9%}
 .hdrHot svg.hdrLbl{position:absolute;left:12%;top:42.5%;width:76%;height:15%;pointer-events:none;fill:#d9dde2;filter:drop-shadow(0 0 .6px rgba(0,0,0,.9))}
+#hdrHotEn svg.hdrLbl,#hdrHotJa svg.hdrLbl,#hdrHotLog svg.hdrLbl{top:41%;height:18%}
 /* v246サンプル: 選択中の言語ボタンの上端にランプ(緑LED)を点灯 */
 #hdrHotEn::after,#hdrHotJa::after{content:"";position:absolute;left:50%;top:9%;width:40%;height:4px;transform:translateX(-50%);border-radius:3px;background:#2fdc66;box-shadow:0 0 5px 1px rgba(47,220,102,.65),0 0 11px 3px rgba(47,220,102,.32);opacity:0;transition:opacity .15s}
 html[data-lang="en"] #hdrHotEn::after,html[data-lang="ja"] #hdrHotJa::after{opacity:1}
