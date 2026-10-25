@@ -11806,7 +11806,7 @@ function PAGE(){
       markBtnFooter+='<button class="judg3d red" style="width:44px;height:28px;font-size:16px" onclick="LosClearMarks()" title="'+T('マークを全消去')+'">✕</button>';
     }
   }
-  body+='<div style="display:flex;justify-content:flex-end;gap:6px;margin:6px 2px 16px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px"><button class="judg3d blu" style="width:80px;height:28px;font-size:12px" onclick="scrollToTop()">GO TOP</button>'+markBtnFooter+'<button class="judg3d ylw" style="width:80px;height:28px;font-size:12px" onclick="OpLogShowAndCopy()">GET LOG</button><button class="judg3d red" style="width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>'+mapBackBtn+'</div>';
+  if(t==="los")body+='<div style="display:flex;justify-content:flex-end;gap:6px;margin:6px 2px 16px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px"><button class="judg3d blu" style="width:80px;height:28px;font-size:12px" onclick="scrollToTop()">GO TOP</button>'+markBtnFooter+'<button class="judg3d ylw" style="width:80px;height:28px;font-size:12px" onclick="OpLogShowAndCopy()">GET LOG</button><button class="judg3d red" style="width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>'+mapBackBtn+'</div>';
   return body+renderLogPanel()+renderOpLogPanel()+renderHelpPanel()+renderConfirmDialog()+renderPfphChoiceDialog()+renderTurnAutoNotice()+renderMissingModal()+renderInfoModal()+renderRecordModal();
 }
 // ページ最下部のボタンで画面最上部へスクロール
