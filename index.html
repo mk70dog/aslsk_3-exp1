@@ -9654,15 +9654,11 @@ function seg14SVG(lines,col,opt){
 function hdrOutRender(){
   var el=document.getElementById('hdrOutSeg');if(!el)return;
   var m=String(APP_VERSION).match(/v11\.(\d+)/),v=m?String(parseInt(m[1],10)-200):'';
-  var p=APP_RELEASE.split(' '),d=p[0].split('-'),tm=p[1]||'';
-  var C='#38d8ff',o={glow:1};
-  var dmy=d[2]+'.'+d[1]+'.'+d[0].slice(2)+' '+tm;
-  var de=['JAN','FEB','MAR','APR','MAI','JUN','JUL','AUG','SEP','OKT','NOV','DEZ'][+d[1]-1];
-  var ru=['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'][+d[1]-1];
-  var T0=[['AUSGABE '+v,dmy],C,o];
-  var T1=[['STAND V'+v,d[2]+' '+de+' '+tm],C,o];
-  var T2=[['ВЕРСИЯ '+v,dmy],C,o];
-  var T3=[['ВЫПУСК '+v,d[2]+' '+ru+' '+tm],C,o];
+  var C='#38d8ff',o={glow:1},sc='S28',pt='01:23:45'; // サンプル用の固定値
+  var T0=[['ASL SK V'+v,'SCENARIO '+sc,'PLAY '+pt],C,o];
+  var T1=[['ASL SK V'+v+' '+sc,'PLAY '+pt],C,o];
+  var T2=[['V'+v+'  '+sc,pt],C,o];
+  var T3=[['ASL SK V'+v,sc+'  '+pt],C,o];
   var t=[T0,T1,T2,T3][HDR_OUT_STYLE%4];
   el.innerHTML=seg14SVG(t[0],t[1],t[2]);
 }
