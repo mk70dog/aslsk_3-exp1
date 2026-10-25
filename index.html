@@ -14523,7 +14523,7 @@ function FIRE_PAGE(){
   // クリック自体ができずFJUDGE()内の未選択項目モーダルが発動しなかった。ftEliteBlock同様、
   // ボタンは押せる状態にしてFJUDGE側の一括モーダル案内に委ねる（disabledでの無反応をやめる）。
   h+='<button class=\"judg3d\" style=\"flex:1;height:28px'+((ftEliteBlock||afphMgBlock||afphPfphBlock||ftDrmBlock||finalFireBlock)?';opacity:0.55':'')+'\" onclick=\"FJUDGE()\"'+(fst.rd&&fst.wd&&!fst._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
-  h+='<button class=\"judg3d red\" style=\"flex-shrink:0;width:80px;height:28px;font-size:12px\" onclick=\"ALLCLR()\">RESET</button>';
+  h+='<button class=\"judg3d grn\" style=\"flex-shrink:0;width:80px;height:28px;font-size:12px\" onclick=\"FIRE_AUTODICE()\">ROLL DICE</button>'; // Kato指示: JUDGE右のRESET→ROLL DICE
   h+='</div>';
   if(ftEliteBlock)h+='<div class="rnote" style="color:#cc8800;margin-top:6px">'+T('FTを使用するユニットがエリートかどうかを選択してください（タップするとJUDGEは実行されず警告が表示されます）')+'</div>';
   // 修正(2026-07、Kato指摘): 「下の外枠と統合」対応。上のTotal FP/DRMサマリと同じ外枠内に収めるため、
