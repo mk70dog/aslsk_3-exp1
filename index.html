@@ -13168,7 +13168,7 @@ function FIRE_TAB_PAGE(){
   var fstTop=getFireState();
   var swModeIsTenkey=fstTop.swMode==="tenkey";
   var losRangeAvailFireTop=!!(fstTop.grps.length&&S_LOS.result&&S_LOS.result.dataReady&&S_LOS.result.range!=null);
-  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d" style="flex-shrink:0;width:80px;height:28px;font-size:12px;color:#1a5599;text-shadow:0 0 6px rgba(26,85,153,0.6),0 0 10px rgba(26,85,153,0.3)" '+(losRangeAvailFireTop?'':'disabled ')+'onclick="NPADApplyLOSRange('+(fstTop.grps[0]?fstTop.grps[0].id:0)+')">LOS GET</button><button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="NAVTAB(\'los\')">GO MAP</button><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
+  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d" style="flex-shrink:0;width:80px;height:28px;font-size:12px;color:#1a5599;text-shadow:0 0 6px rgba(26,85,153,0.6),0 0 10px rgba(26,85,153,0.3)" '+(losRangeAvailFireTop?'':'disabled ')+'onclick="NPADApplyLOSRange('+(fstTop.grps[0]?fstTop.grps[0].id:0)+')">LOS GET</button><button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="NAVTAB(\'los\')">GO MAP</button><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
   h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px">';
   h+='<div class="lbl"><span class="pdot'+(S.fireSub?" off":"")+'"></span><span class="plbl'+(S.fireSub?" off":"")+'">'+T('フェイズ')+'</span></div>';
   h+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">';
@@ -14142,7 +14142,7 @@ function FIRE_PAGE(){
   // 2026-08 ダルマ指示: Terrain & DRMカードの上に、砲撃タブの2番目のスクロール表示と同じ
   // 形式(マーキー＋LOS/UNDO/RESET)を追加。LOSボタンはLOSタブで計測した射程を先頭グループへ反映する。
   var losRangeAvailFire=!!(fst.grps.length&&S_LOS.result&&S_LOS.result.dataReady&&S_LOS.result.range!=null);
-  h+='<div class="card" id="fireLosMapCard"><div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(losLogMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d" style="flex-shrink:0;width:80px;height:28px;font-size:12px;color:#1a5599;text-shadow:0 0 6px rgba(26,85,153,0.6),0 0 10px rgba(26,85,153,0.3)" '+(losRangeAvailFire?'':'disabled ')+'onclick="NPADApplyLOSRange('+(fst.grps[0]?fst.grps[0].id:0)+')">LOS GET</button><button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="NAVTAB(\'los\')">GO MAP</button><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div></div>';
+  h+='<div class="card" id="fireLosMapCard"><div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(losLogMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d" style="flex-shrink:0;width:80px;height:28px;font-size:12px;color:#1a5599;text-shadow:0 0 6px rgba(26,85,153,0.6),0 0 10px rgba(26,85,153,0.3)" '+(losRangeAvailFire?'':'disabled ')+'onclick="NPADApplyLOSRange('+(fst.grps[0]?fst.grps[0].id:0)+')">LOS GET</button><button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="NAVTAB(\'los\')">GO MAP</button><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div></div>';
 
   // STEP3 DRM
   // 2026-09変更(ダルマ指示「目標は砲(Gun)／目標は車両乗員(CE)を折りたたみ外に横並び1列で表示する」): 従来はTerrain & DRM折りたたみの内側にあった
@@ -14486,7 +14486,7 @@ function FIRE_PAGE(){
 
   // ダイス
   if(!activeRC){
-  h+='<div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(iftPreviewText(tp,drm),'blu',17)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="FIRE_AUTODICE()">ROLL DICE</button></div></div>';
+  h+='<div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(iftPreviewText(tp,drm),'blu',17)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="FIRE_AUTODICE()">ROLL DICE</button></div></div>';
   h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:6px 8px;margin-top:6px">';
   h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">RED DIE (ROF Check)</div>';
   h+=rDiceHTML(fst.rd,true,'FdieR',fst._rolling);
@@ -14523,7 +14523,7 @@ function FIRE_PAGE(){
   h+='</div>';
   } else if(activeRC.sh&&!activeRC.res){
     var rc2=activeRC;
-    h+='<div class="card" id="rofDiceCard"><div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(iftPreviewText(rcTp,drm),'blu',17)+'</div><button class="judg3d grn" style="flex-shrink:0;margin-left:auto;width:80px;height:28px;font-size:12px" onclick="RC_AUTODICE()">ROLL DICE</button></div>';
+    h+='<div class="card" id="rofDiceCard"><div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(iftPreviewText(rcTp,drm),'blu',17)+'</div><button class="judg3d grn" style="flex-shrink:0;margin-left:auto;width:80px;height:28px;font-size:12px" onclick="RC_AUTODICE()">ROLL DICE</button></div>';
     h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:6px 8px;margin-top:6px">';
     h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">RED DIE (ROF Check)</div>';
     h+=rDiceHTML(rc2.rd,true,'RCdieR',rc2._rolling);
@@ -15379,7 +15379,7 @@ function DC_AFV_CARD(){
 function DC_TAB_PAGE(){
   if(!S.dcSub)S.dcSub="place";
   var h='';
-  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
+  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
   // v11.294(ダルマ指示「爆薬配置/起動の見直し PAATCタブを左端に追加する 表記 PAATC (対AFV判定チェック)」): 対AFVでDCを置くMMCは配置前にPAATC合格が必要(4.3)。
   // 判定カードは突撃/白兵戦タブと共通(PAATC_CARD、状態S.paatcも共通)。爆薬タブから開いた場合は説明文と結果表示をDC配置向けにする。
   h+='<div class="btns" style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">';
@@ -16205,7 +16205,7 @@ function MC_PAGE(inline){
   // 先頭カード(シナリオ要約バー+UNDO/RESET、mcModeCard)を省略する(呼び出し元タブに
   // 既に同等のUNDO/RESETがあるため二重表示を避ける)。
   if(!inline){
-  h+='<div class="card" id="mcModeCard"><div class="sh"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
+  h+='<div class="card" id="mcModeCard"><div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
   h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px">';
   h+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">';
   h+='<button class="b sm'+(m.mode==="mc"?" on grn":"")+'" onclick="MCmode(\'mc\')">MC</button>';
@@ -18192,7 +18192,7 @@ function RallySub(v){S.rallySub=v;Draw();}
 function RALLY_PAGE(){
   if(!S.rallySub)S.rallySub="rally";
   var h='';
-  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
+  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
   h+='<div class="btns" style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;border:1px solid #404040;border-radius:3px;background:#000000;padding:5px">';
   h+='<button class="b sm'+(S.rallySub==="rally"?" on":"")+'" onclick="RallySub(\'rally\')">'+T('回復')+'</button>';
   h+='<button class="b sm'+(S.rallySub==="sw"?" on":"")+'" onclick="RallySub(\'sw\')">'+T('SW修理/回収')+'</button>';
@@ -22033,7 +22033,7 @@ function GUN_PAGE(){
   var cdPhase=({"PFPh":"PREP FIRE","DFF":"OPP FIRE","DFPh":"DEF FIRE","AFPh":"ADV FIRE"})[g.phase]||"NO PHASE";
   var cdGunType=gd?(gd.gsType==="MTR"?"MTR":(gd.gunCategory==="AT"?"AT GUN":gd.gunCategory==="ART"?"ART":gd.gunCategory==="AA"?(/bofors/i.test(gd.id)?"BOFORS AA":"FLAK AA"):gd.gunCategory==="VEH"?"VEHICLE MA":(gd.gunCategory||"GUN"))):"NO GUN";
   var losRangeAvailGunTop=!!(S_LOS.result&&S_LOS.result.dataReady&&S_LOS.result.range!=null);
-  h+='<div class="card" id="gunLosMapCard"><div class="sh"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d" style="flex-shrink:0;width:80px;height:28px;font-size:12px;color:#1a5599;text-shadow:0 0 6px rgba(26,85,153,0.6),0 0 10px rgba(26,85,153,0.3)" '+(losRangeAvailGunTop?'':'disabled ')+'onclick="NumpadApplyLOS(\'GRNPAD\')">LOS GET</button><button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="NAVTAB(\'los\')">GO MAP</button><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
+  h+='<div class="card" id="gunLosMapCard"><div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d" style="flex-shrink:0;width:80px;height:28px;font-size:12px;color:#1a5599;text-shadow:0 0 6px rgba(26,85,153,0.6),0 0 10px rgba(26,85,153,0.3)" '+(losRangeAvailGunTop?'':'disabled ')+'onclick="NumpadApplyLOS(\'GRNPAD\')">LOS GET</button><button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="NAVTAB(\'los\')">GO MAP</button><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
   h+='<div class="lbl"><span class="pdot'+(g.phase?" off":"")+'"></span><span class="plbl'+(g.phase?" off":"")+'">'+T('フェイズ')+'</span></div><div class="btns" style="display:grid;grid-template-columns:repeat(4,1fr);border:1px solid #404040;border-radius:3px;padding:4px 4px 9px 4px;margin-bottom:6px">';
   // 2026-09修正(ダルマ指示「AFVタブ選択時だけラベルを出し分ける」): GUN_PAGE()は砲撃/戦車(AFV)両タブ共有のため、
   // DFFボタンのラベルをS.tab==="afv"の時だけ「臨機射撃／移動中射撃」(v7.99で追加した車両煙幕展張判定カードが
@@ -22805,7 +22805,7 @@ function GUN_PAGE(){
   var trioChart=gd.ctrCode||'—';
   var trioWeaponInfo=trioWeaponEn+' / FP '+trioFP+' / '+gd.cal+'MM / CHART '+trioChart;
   var trioThText=trioWeaponInfo+' / '+(g.range>0?(trioTH===0?'OUT OF RANGE ('+g.range+' HEX)':'BASE TH# = '+trioTH+' (RANGE '+g.range+') '+(trioUseRed?'USING RED TH#':'BLACK TH#')):'NO RANGE SET');
-  h+='<div class="card"><div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(trioThText,'blu',15)+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0">'+
+  h+='<div class="card"><div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(trioThText,'blu',15)+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0">'+
     // 2026-08新規(ダルマ指示): UNDO/RESETと同じ枠内・左端にLOSボタンを追加。
     // 既存のNumpadApplyLOS('GRNPAD')を再利用し、LOSタブで計測済みの射程を
     // このGunの射程欄へ一括反映する。
@@ -23501,7 +23501,7 @@ h+='<div class="sum sum-eq" style="display:flex;flex-wrap:nowrap;gap:5px;border:
   // Dice input for TH roll
   if(_gateOK){
     var ddText=losLogMarqueeText();
-    h+='<div class="card"><div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(ddText,'blu',20)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.gun;},\'rd\',\'wd\',\'th_result\')">ROLL DICE</button></div></div>';
+    h+='<div class="card"><div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(ddText,'blu',20)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.gun;},\'rd\',\'wd\',\'th_result\')">ROLL DICE</button></div></div>';
     h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:6px 8px;margin-top:6px">';
     h+='<div class="lbl">RED DIE ('+T('故障判定')+')</div>';
     h+=rDiceHTML(g.rd,true,'GsetRD',g._rolling);
@@ -23846,7 +23846,7 @@ function GUN_IFT_SECTION(gd,showHeader){
   }
   h+='</div>';
   if(g.ife_mode)h+='<div class="notebox">'+GUN_FIRE_NOTES_LINES()+'</div>'; // 修正(2026-07、ダルマ指示): DICE ROLLカード直前に表示位置を変更
-  h+='<div class="card"><div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(iftPreviewText(fp,drm),'blu',17)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.gun;},\'ift_rd\',\'ift_wd\',\'ift_result\')">ROLL DICE</button></div></div>';
+  h+='<div class="card"><div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(iftPreviewText(fp,drm),'blu',17)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.gun;},\'ift_rd\',\'ift_wd\',\'ift_result\')">ROLL DICE</button></div></div>';
   h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:6px 8px;margin-top:6px">';
   h+='<div class="lbl">WHITE DIE</div>';
   h+=rDiceHTML(g.ift_wd,false,'GsetIFT_WD',g._rolling);
@@ -24526,7 +24526,7 @@ function LATW_PAGE(){
 
   // Card1: 武器選択
   var losRangeAvailLatwTop=!!(S_LOS.result&&S_LOS.result.dataReady&&S_LOS.result.range!=null);
-  h+='<div class="card" id="latwLosMapCard"><div class="sh"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d" style="flex-shrink:0;width:80px;height:28px;font-size:12px;color:#1a5599;text-shadow:0 0 6px rgba(26,85,153,0.6),0 0 10px rgba(26,85,153,0.3)" '+(losRangeAvailLatwTop?'':'disabled ')+'onclick="NumpadApplyLOS(\'LRNPAD\')">LOS GET</button><button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="NAVTAB(\'los\')">GO MAP</button><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
+  h+='<div class="card" id="latwLosMapCard"><div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d" style="flex-shrink:0;width:80px;height:28px;font-size:12px;color:#1a5599;text-shadow:0 0 6px rgba(26,85,153,0.6),0 0 10px rgba(26,85,153,0.3)" '+(losRangeAvailLatwTop?'':'disabled ')+'onclick="NumpadApplyLOS(\'LRNPAD\')">LOS GET</button><button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="NAVTAB(\'los\')">GO MAP</button><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
   h+='<div class="lbl" id="latwPhaseSec"><span class="pdot'+(ld.phase?" off":"")+'"></span><span class="plbl'+(ld.phase?" off":"")+'">'+T('フェイズ')+'</span></div><div class="btns" style="display:grid;grid-template-columns:repeat(4,1fr);border:1px solid #404040;border-radius:3px;padding:4px 4px 9px 4px;margin-bottom:6px">';
   [{v:"PFPh",l:"準備射撃"},{v:"DFF",l:"臨機射撃"},{v:"DFPh",l:"防御射撃"},{v:"AFPh",l:"前進射撃"}].forEach(function(p){
     h+='<button class="b sm'+(ld.phase===p.v?" on":"")+'" onclick="LATWset(\'phase\',\''+p.v+'\')">'+T(p.l)+'</button>';
@@ -24690,7 +24690,7 @@ function LATW_PAGE(){
   // 修正(2026-07、Kato指摘): 「上の外枠線と接続する」対応。マーキー行(.card個別枠)を廃止し、
   // 直後の射距離〜発射ユニットクラスの外枠に含める形で1つの外枠に統合する。
   h+='<div style="border:1px solid #404040;border-radius:3px;background:#000000;padding:6px;margin-bottom:6px">';
-  h+='<div class="sh"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(latwStep1Text,'blu',15)+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0">'+
+  h+='<div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(latwStep1Text,'blu',15)+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0">'+
     // 2026-08新規(ダルマ指示): UNDO/RESETと同じ枠内・左端にLOSボタンを追加。
     // 既存のNumpadApplyLOS('LRNPAD')を再利用し、LOSタブで計測済みの射程を
     // このLATWの射程欄へ一括反映する。
@@ -25169,7 +25169,7 @@ function LATW_PAGE(){
     }
     h+='</div>';
     h+='<div style="border:1px solid #404040;border-radius:3px;background:#000000;padding:5px">';
-    h+='<div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(thPreviewText(curTH,totalDRM),'blu',15)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.latw;},\'rd\',\'wd\',\'th_result\')">ROLL DICE</button></div></div>';
+    h+='<div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(thPreviewText(curTH,totalDRM),'blu',15)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.latw;},\'rd\',\'wd\',\'th_result\')">ROLL DICE</button></div></div>';
     h+='</div>';
     h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:6px 8px;margin-top:6px">';
     h+='<div class="lbl">RED DIE</div>';
@@ -25281,7 +25281,7 @@ function LATW_PAGE(){
     }
     if(!latwGunCHauto){ // v11.291: 砲へのCHは自動破壊のためダイス・判定を出さない
     if(ld.tgtType==="infantry"||ld.tgtType==="gun"){
-      h+='<div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(iftPreviewText(fp,0),'blu',17)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.latw;},\'ift_rd\',\'ift_wd\',\'ift_result\')">ROLL DICE</button></div></div>';
+      h+='<div class="sh" style="flex-wrap:nowrap"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(iftPreviewText(fp,0),'blu',17)+'</div><div style="flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid #404040;border-radius:3px;background:#000;padding:3px 3px 10px"><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.latw;},\'ift_rd\',\'ift_wd\',\'ift_result\')">ROLL DICE</button></div></div>';
       h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:6px 8px;margin-top:6px">';
     } else {
       h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:6px 8px">';
@@ -25765,7 +25765,7 @@ function SWPPCLR(){
 function MOVE_PAGE(){
   if(!S.moveSub)S.moveSub="smk";
   var h='';
-  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
+  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
   h+='<div class="btns" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;border:1px solid #404040;border-radius:3px;background:#000000;padding:5px">';
   h+='<button class="b sm'+(S.moveSub==="mh"?" on":"")+'" onclick="MoveSub(\'mh\')">'+T('人力移動')+'</button>';
   h+='<button class="b sm'+(S.moveSub==="pp"?" on":"")+'" onclick="MoveSub(\'pp\')">'+T('SW携行重量')+'</button>';
@@ -26386,7 +26386,7 @@ function RoutSub(v){S.routSub=v;Draw();}
 function ROUT_PAGE(){
   if(!S.routSub)S.routSub="interd";
   var h='';
-  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
+  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
   h+='<div class="btns" style="display:grid;grid-template-columns:repeat(2,1fr);gap:4px">';
   h+='<button class="b sm'+(S.routSub==="interd"?" on":"")+'" onclick="RoutSub(\'interd\')">'+T('阻止NMC')+'</button>';
   h+='<button class="b sm'+(S.routSub==="rout"?" on":"")+'" onclick="RoutSub(\'rout\')">'+T('潰走')+'</button>';
@@ -26855,7 +26855,7 @@ function AphccSub(v){S.aphccSub=v;var ph=APHCC_SUB_PHASE[v];if(ph){if(!S.turn)S.
 function APHCC_PAGE(){
   if(!S.aphccSub)S.aphccSub="ambush";
   var h='';
-  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
+  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
   h+='<div class="btns" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px">';
   // v11.296(ダルマ指示「突撃タブを左端にする 突撃/PAATC (対AFV攻撃前判定チェック)に変更」): 突撃サブタブを左端へ移し、表記を変更(並び: 突撃/PAATC・不意打ち・白兵戦)。
   h+='<button class="b sm'+(S.aphccSub==="aph"?" on":"")+'" style="height:auto;min-height:28px;white-space:normal;line-height:1.2;padding:3px 2px" onclick="AphccSub(\'aph\')">'+T('突撃/PAATC (対AFV攻撃前判定チェック)')+'</button>';
@@ -33080,7 +33080,7 @@ function LOS_PAGE(){
 function REF_PAGE(){
   if(!S.refSub)S.refSub="ift";
   var h='';
-  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div></div>';
+  h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div></div>';
   // v11.319(Kato指示「IFT/TEM/CCT/損耗等/GUN/LATW/捕捉/AFV 1列目4ボタン・2列目3ボタンに変更」): 従来は3列グリッド(3+3+1)。1段目4個・2段目3個の2段構成に変更
   h+='<div class="btns" style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">';
   h+='<button class="b sm xs'+(S.refSub==="ift"?" on":"")+'" onclick="RefSub(\'ift\')">IFT</button>';
