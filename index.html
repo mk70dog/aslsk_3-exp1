@@ -38,10 +38,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv236">
-<title>ASL SKシリーズv236</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv237">
+<title>ASL SKシリーズv237</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv236">
+<meta property="og:title" content="ASL SKシリーズv237">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -8701,6 +8701,7 @@ var I18N_EN={
   "DFFでも新ヘクス未進入なら静止扱い（始動MP・CE変更・煙幕展張など）":"Even during DFF, if the target has not entered a new hex, treat it as stationary (start MP, CE change, smoke dispenser use, etc.)",
   "静止／移動なし ±0":"Stationary / not moving +/-0",
   "Motion または >3MP +2":"Motion or >3 MP +2",
+  "Motion +2":"Motion +2",
   "≤3MP +3":"<=3 MP +3",
   "≤1MP +4":"<=1 MP +4",
   "CE DRMはTEM扱い(7.7)：ITTはTH DR、ATTはIFT DRに、地形TEMと非累積で大きい方を適用。CE乗員は命中ヘクス内のユニットとして効果を受けます（乗員のみを目標にはできない）。BU乗員は対象外。":"CE DRM is treated as TEM (7.7): applied to the TH DR for ITT and to the IFT DR for ATT, non-cumulative with terrain TEM (the larger applies). A CE crew is affected as a unit in the hit hex (it cannot be targeted alone). BU crews are not affected.",
@@ -9604,7 +9605,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.436"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
+var APP_VERSION="ASLSK3M-v11.437"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
@@ -22415,7 +22416,7 @@ function GUN_PAGE(){
   // ≤3MP/≤1MPの段階はDFPh/DFF/AFPh等、目標が既にそのプレイヤーターン中に移動している場面専用。
   var gC24IsPfph=(S.gun.phase==="PFPh"||S.gun.phase==="AFPh"||S.gun.phase==="DFPh"); // 2026-09修正(ダルマ指摘「DFPhとDFFで異なる、DFPhはPFPh/AFPhと同じ2択・DFFのみ消費MPに応じた4段階」): 従来はDFPh/DFFを一括りで4択のままにしていたが、DFPh(防御射撃フェイズ)は敵の移動フェイズが完全に終了した後の射撃であり、移動を終えた車両は消費MPの多寡に関わらず一律「移動済み目標」として扱われる(PFPh/AFPhと同じロジック)。「その瞬間までにLOS内で消費したMP量」で段階が変わる4択(+2/+3/+4)が本来意味を持つのはDFF(防御臨機射撃、移動の最中に割り込んで撃つ)のみ。DFPhをこの2択グループへ追加(DFFのみ引き続き4択)。
   if(gC24IsPfph&&(g.drm.vehMoveDrm||0)>2){S.gun.drm.vehMoveDrm=0;g.drm.vehMoveDrm=0;}
-  var gC24Opts=gC24IsPfph?[[0,T('静止／移動なし ±0')],[2,T('Motion または >3MP +2')]]:[[0,T('静止／移動なし ±0')],[2,T('Motion または >3MP +2')],[3,T('≤3MP +3')],[4,T('≤1MP +4')]];
+  var gC24Opts=gC24IsPfph?[[0,T('静止／移動なし ±0')],[2,T('Motion +2')]]:[[0,T('静止／移動なし ±0')],[2,T('Motion または >3MP +2')],[3,T('≤3MP +3')],[4,T('≤1MP +4')]];
   h+='<div style="display:grid;grid-template-columns:repeat('+gC24Opts.length+',minmax(0,1fr));gap:4px">';
   gC24Opts.forEach(function(o){
     h+='<button class="b sm'+((g.drm.vehMoveDrm||0)===o[0]?(o[0]>0?" on red":" on"):"")+'" style="height:28px;min-width:0;white-space:normal;line-height:1.15;padding:2px 3px;overflow:hidden" onclick="GsetDRM(\'vehMoveDrm\','+o[0]+')">'+o[1]+'</button>';
@@ -24702,7 +24703,7 @@ function LATW_PAGE(){
   // ≤3MP/≤1MPの段階はDFPh/DFF/AFPh等、目標が既にそのプレイヤーターン中に移動している場面専用。
   var lC24IsPfph=(S.latw.phase==="PFPh"||S.latw.phase==="AFPh"||S.latw.phase==="DFPh"); // 2026-09修正(ダルマ指摘「DFPhとDFFで異なる、DFPhはPFPh/AFPhと同じ2択・DFFのみ消費MPに応じた4段階」): GUN_PAGE側と同じ修正(理由は同箇所のコメント参照)。DFPhをこの2択グループへ追加(DFFのみ引き続き4択)。
   if(lC24IsPfph&&(ld.drm.vehMoveDrm||0)>2){S.latw.drm.vehMoveDrm=0;ld.drm.vehMoveDrm=0;}
-  var lC24Opts=lC24IsPfph?[[0,T('静止／移動なし ±0')],[2,T('Motion または >3MP +2')]]:[[0,T('静止／移動なし ±0')],[2,T('Motion または >3MP +2')],[3,T('≤3MP +3')],[4,T('≤1MP +4')]];
+  var lC24Opts=lC24IsPfph?[[0,T('静止／移動なし ±0')],[2,T('Motion +2')]]:[[0,T('静止／移動なし ±0')],[2,T('Motion または >3MP +2')],[3,T('≤3MP +3')],[4,T('≤1MP +4')]];
   h+='<div style="display:grid;grid-template-columns:repeat('+lC24Opts.length+',minmax(0,1fr));gap:4px">';
   lC24Opts.forEach(function(o){
     h+='<button class="b sm'+(((ld.drm.vehMoveDrm||0)===o[0])?(o[0]>0?' on red':' on'):'')+'" style="height:28px;min-width:0;white-space:normal;line-height:1.15;padding:2px 3px;overflow:hidden" onclick="LATWsetDRM(\'vehMoveDrm\','+o[0]+')">'+o[1]+'</button>';
