@@ -26,7 +26,15 @@ window.losTabpSplit=function(){var h=document.documentElement,tb=document.queryS
  }
  function q(){if(!raf)raf=requestAnimationFrame(run)}
  addEventListener("scroll",q,{passive:true});addEventListener("resize",q);addEventListener("orientationchange",q);setInterval(q,400);})();
-window.stkMqTag=function(){var m=document.getElementById("main");if(!m)return;var old=m.querySelectorAll(".stk-mq"),shs=m.querySelectorAll(".card .sh"),tgt=null;for(var i=0;i<shs.length&&i<14&&!tgt;i++){var sh=shs[i];if(sh.querySelector(':scope>div[style*="height:47px"]')&&sh.querySelector('button[onclick*="ALLCLR"]')&&sh.querySelector('button[onclick*="NumpadApplyLOS"],button[onclick*="NAVTAB(\'los\')"]')){var c=sh.parentElement;tgt=(c&&c.classList.contains("card")&&c.offsetHeight<130)?c:sh}}for(var k=0;k<old.length;k++)if(old[k]!==tgt)old[k].classList.remove("stk-mq");if(tgt)tgt.classList.add("stk-mq")};
+window.stkMqTag=function(){var m=document.getElementById("main");if(!m)return;var old=m.querySelectorAll(".stk-mq"),shs=m.querySelectorAll(".card .sh"),tgt=null,pri=null,sec=[];
+function is3(sh){return !!(sh.querySelector(':scope>div[style*="height:47px"],:scope>div[style*="min-height:28px"]')&&sh.querySelector('button[onclick*="ALLCLR"]')&&sh.querySelector('button[onclick*="NumpadApplyLOS"],button[onclick*="NAVTAB(\'los\')"]'))}
+for(var i=0;i<shs.length&&i<14;i++){var sh=shs[i];if(!is3(sh))continue;if(!pri){pri=sh;var c=sh.parentElement;tgt=(c&&c.classList.contains("card")&&c.offsetHeight<130)?c:sh}else sec.push(sh)}
+for(var k=0;k<old.length;k++)if(old[k]!==tgt)old[k].classList.remove("stk-mq");if(tgt)tgt.classList.add("stk-mq");
+if(!pri)return;
+var pm=pri.querySelector('.text-marquee-track'),extra=[];
+sec.forEach(function(sh){var t=sh.querySelector('.text-marquee-track');if(t&&t.textContent)extra.push(t.textContent);var c=sh.parentElement;if(c&&c.classList.contains("card")&&c.querySelectorAll(":scope>*").length===1)c.style.display="none";else sh.style.display="none"});
+if(pm){var pbox=pm.parentElement,base=pbox.getAttribute("data-mq-base");if(base===null){base=pm.textContent;pbox.setAttribute("data-mq-base",base)}
+ var want=extra.length?base+"  //  "+extra.join("  //  "):base;if(pm.textContent!==want){pbox.innerHTML=textMarqueeHTML(want,"blu",15)}}};
 window.fireTabpSticky=function(){var h=document.documentElement,m=document.getElementById("main");if(!m)return;
  var on=h.classList.contains("is-tabp")||h.classList.contains("is-tabl");
  var b=m.querySelector('button[onclick^="FIREsub(\'pfph\')"],button[onclick^="Gset(\'phase\',\'PFPh\')"],button[onclick^="LATWset(\'phase\',\'PFPh\')"]');
@@ -187,7 +195,7 @@ button{font-family:'DotGothic16',monospace,'Courier New',Courier;cursor:pointer;
   background-size:3px 3px}
 .card>*{position:relative;z-index:1}
 .sh{font-size:12px;color:#ccddee;letter-spacing:0.12em;border-bottom:1px solid #2a2e3a;padding-bottom:10px;margin-bottom:9px;text-transform:uppercase;display:flex;align-items:center;gap:5px}
-.sh:has(>div[style*="min-height:28px"]){border-bottom:none}
+.sh:has(>div[style*="min-height:28px"]){border-bottom:none;padding-bottom:0;margin-bottom:6px}
 .sh::before{content:'';width:3px;height:11px;background:linear-gradient(#4499ee,#061228)}
 .lbl{font-size:12px;color:#8899aa;letter-spacing:0.08em;margin-bottom:3px;text-transform:uppercase}
 /* ===== BUTTON A: グロー発光 ===== */
