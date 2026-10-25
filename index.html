@@ -9625,7 +9625,7 @@ function hdrScenJump(){try{
   setTimeout(go,80);setTimeout(go,400); // 描画・画像読込でレイアウトが変わる場合に備え2回
 }catch(e){}}
 // v253: OUTPUTパネル内の14セグ表示(アプリのバージョンと日付)
-var APP_DATE='2026-10-26';
+var APP_RELEASE='2026-10-26 04:00'; // リリース日時(JST)。リリースごとに更新
 var HDR_OUT_STYLE=0;
 var SEG14_MAP={'0':'abcdef','1':'bc','2':'abdeAB','3':'abcdB','4':'bcfAB','5':'acdfAB','6':'acdefAB','7':'abc','8':'abcdefAB','9':'abcdfAB',
 'A':'abcefAB','B':'abcdBil','C':'adef','D':'abcdil','E':'adefA','F':'aefA','G':'acdefB','H':'bcefAB','I':'adil','J':'bcde','K':'efAjm','L':'def','M':'bcefhj','N':'bcefhm','O':'abcdef','P':'abefAB','Q':'abcdefm','R':'abefABm','S':'acdfAB','T':'ail','U':'bcdef','V':'efjk','W':'bcefkm','X':'hjkm','Y':'hjl','Z':'adjk','-':'AB','/':'jk','+':'ABil','_':'d'};
@@ -9654,12 +9654,12 @@ function seg14SVG(lines,col,opt){
 function hdrOutRender(){
   var el=document.getElementById('hdrOutSeg');if(!el)return;
   var m=String(APP_VERSION).match(/v11\.(\d+)/),v=m?String(parseInt(m[1],10)-200):'';
-  var d=APP_DATE.split('-');
-  var T0=[['ASL SK V'+v,d[0]+'.'+d[1]+'.'+d[2]],'#3dff7a',{glow:1}];
-  var months=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-  var T1=[['VER '+v,d[2]+' '+months[+d[1]-1]+' '+d[0]],'#ffb22e',{glow:1}];
-  var T2=[['ASLSK3M','V'+v+' '+d[0].slice(2)+'/'+d[1]+'/'+d[2]],'#38d8ff',{glow:1,skew:8}];
-  var T3=[['SK SERIES','BUILD '+v+'  '+d[1]+'/'+d[2]],'#ff4a3a',{glow:1,w:1.7}];
+  var p=APP_RELEASE.split(' '),d=p[0].split('-'),tm=p[1]||'';
+  var C='#38d8ff',o={glow:1};
+  var T0=[['ASL SK V'+v,d[1]+'.'+d[2]+'.'+d[0].slice(2)+' '+tm],C,o];
+  var T1=[['ASL SK V'+v,d[0]+'.'+d[1]+'.'+d[2],tm+' JST'],C,o];
+  var T2=[['V'+v,d[0].slice(2)+'/'+d[1]+'/'+d[2]+' '+tm],C,{glow:1,skew:8}];
+  var T3=[['ASLSK3M','V'+v+' '+d[1]+'/'+d[2],tm],C,{glow:1,w:1.7}];
   var t=[T0,T1,T2,T3][HDR_OUT_STYLE%4];
   el.innerHTML=seg14SVG(t[0],t[1],t[2]);
 }
