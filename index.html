@@ -38,10 +38,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv225">
-<title>ASL SKシリーズv225</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv226">
+<title>ASL SKシリーズv226</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv225">
+<meta property="og:title" content="ASL SKシリーズv226">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -9586,7 +9586,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.425"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
+var APP_VERSION="ASLSK3M-v11.426"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
@@ -21766,6 +21766,12 @@ function GUN_ROF_RESULT_CARD(g,gd){
     } else if(r.rofMaintained){
       if(S.gun.rofChain.waived){
         h+='<div style="margin-top:6px;padding:5px 8px;background:#1a1200;border:1px solid #c8a03266;border-radius:3px;font-size:11px;font-weight:bold;color:#c8a032">'+T('ROF放棄')+(S.gun.phase==="DFF"?T('（残留FP発生）'):(S.lang==='en'?' (':'（')+T('この砲はこのフェイズ終了')+(S.lang==='en'?')':'）'))+'</div>';
+        if(S.gun.phase==="DFF"){ // v226: 残留FPの数値が見えない問題への対応(放棄直後はIFT未判定で数値が出ないため、状態を明示)
+          var wRes=gunResidualFP();
+          if(wRes&&wRes.fp>0)h+='<div class="resfp" style="margin-top:6px"><div style="color:#00aa55;font-size:11px;font-weight:bold;margin-bottom:3px">'+T('残留FP発生 — カウンターを目標ヘクスに置くこと')+'</div><div class="sumcard"><div class="lbl">'+T('残留FP')+'</div><div style="display:flex;align-items:center">'+seg7fp(wRes.fp,undefined,'gld')+'</div></div></div>';
+          else if(!g.ift_result)h+='<div class="rnote" style="margin-top:6px;color:#c8a032">'+T('残留FPの数値は、IFT（またはTK）判定を行うとここと結果カードに表示されます。')+'</div>';
+          else h+='<div class="rnote" style="margin-top:6px">'+T('残留FP: なし（命中なし・AP系弾・故障・集中射撃・TK種別などは残留FPが発生しません）')+'</div>';
+        }
       } else {
         h+='<div class="resfp" style="max-width:50%;margin-top:6px">';
         h+='<div style="color:#00dd66;font-size:12px;font-weight:bold;margin-bottom:5px">'+T(gd.lbl)+'<br>'+T('ROF Maintained ')+'</div>';
