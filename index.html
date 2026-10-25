@@ -11806,7 +11806,7 @@ function PAGE(){
       markBtnFooter+='<button class="judg3d red" style="width:44px;height:28px;font-size:16px" onclick="LosClearMarks()" title="'+T('マークを全消去')+'">✕</button>';
     }
   }
-  if(t==="los")body+='<div style="display:flex;justify-content:flex-end;gap:6px;margin:6px 2px 16px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px"><button class="judg3d blu" style="width:80px;height:28px;font-size:12px" onclick="scrollToTop()">GO TOP</button>'+markBtnFooter+'<button class="judg3d ylw" style="width:80px;height:28px;font-size:12px" onclick="OpLogShowAndCopy()">GET LOG</button><button class="judg3d red" style="width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>'+mapBackBtn+'</div>';
+  if(t==="los"&&markBtnFooter)body+='<div style="display:flex;justify-content:flex-end;gap:6px;margin:6px 2px 16px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">'+markBtnFooter+'</div>'; // Kato指示: 最下部のGO TOP/GET LOG/RESET/GO MAPを非表示(MAPタブはMARKのみ残す)
   return body+renderLogPanel()+renderOpLogPanel()+renderHelpPanel()+renderConfirmDialog()+renderPfphChoiceDialog()+renderTurnAutoNotice()+renderMissingModal()+renderInfoModal()+renderRecordModal();
 }
 // ページ最下部のボタンで画面最上部へスクロール
@@ -15211,7 +15211,7 @@ function DC_ACTIVATE_CARD(){
     h+='</div></div>';
     h+='<div style="display:flex;gap:8px;margin-top:8px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
     h+='<button class="judg3d" style="flex:1;height:28px" onclick="DCactJudge()"'+(dc.rd&&dc.wd&&!dc._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
-    h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+    h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="DCactAutoDice()">ROLL DICE</button>';
     h+='</div>';
     if(dc.result){
       var dcRes=dc.result;
@@ -18562,7 +18562,7 @@ function SW_REPAIR_CARD(){
   h+='</div>';
   h+='<div style="display:flex;gap:8px;margin-top:8px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
   h+='<button class="judg3d" style="flex:1;height:28px" onclick="RPJUDGE()"'+(S.repair.dr&&!S.repair._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
-  h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+  h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="autoRollSingle(function(){return S.repair;},\'dr\')">ROLL DICE</button>';
   h+='</div>';
   if(S.repair.result){
     var rt=S.repair.result;
@@ -18581,7 +18581,7 @@ function SW_REPAIR_CARD(){
   h+='</div>';
   h+='<div style="display:flex;gap:8px;margin-top:8px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
   h+='<button class="judg3d" style="flex:1;height:28px" onclick="PIATRPJUDGE()"'+(S.piatRepair.dr&&!S.piatRepair._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
-  h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+  h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="autoRollSingle(function(){return S.piatRepair;},\'dr\')">ROLL DICE</button>';
   h+='</div>';
   if(S.piatRepair.result){
     var prt=S.piatRepair.result;
@@ -18605,7 +18605,7 @@ function SW_REPAIR_CARD(){
   h+='</div>';
   h+='<div style="display:flex;gap:8px;margin-top:8px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
   h+='<button class="judg3d" style="flex:1;height:28px" onclick="RVJUDGE()"'+(S.recoverSW.dr&&!S.recoverSW._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
-  h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+  h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="autoRollSingle(function(){return S.recoverSW;},\'dr\')">ROLL DICE</button>';
   h+='</div>';
   if(S.recoverSW.result){
     var rvR=S.recoverSW.result;
@@ -18921,7 +18921,7 @@ function GUN_REPAIR_CARD(){
   h+='</div>';
   h+='<div style="display:flex;gap:8px;margin-top:8px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
   h+='<button class="judg3d" style="flex:1;height:28px" onclick="GRJUDGE()"'+(gr.dr&&!gr._rolling&&!(gr.mode==="repair"&&gr.repairNum==null)?'':' disabled')+'>▶<span>JUDGE</span></button>';
-  h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+  h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="autoRollSingle(function(){return S.gunRepair;},\'dr\',\'result\')">ROLL DICE</button>';
   h+='</div>';
 
   if(gr.result){
@@ -23519,7 +23519,7 @@ h+='<div class="sum sum-eq" style="display:flex;flex-wrap:nowrap;gap:5px;border:
     h+='</div>';
     h+='<div style="display:flex;gap:8px;margin-top:8px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
     h+='<button class="judg3d" style="flex:1;height:28px" onclick="GJUDGE_TH()"'+(g.rd&&g.wd&&!g._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
-    h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+    h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.gun;},\'rd\',\'wd\',\'th_result\')">ROLL DICE</button>';
     h+='</div>';
     h+='</div>';
   }
@@ -23774,7 +23774,7 @@ function GUN_WP_SECTION(gd,isCH){
   h+='</div>';
   h+='<div style="display:flex;gap:8px;margin-top:8px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
   h+='<button class="judg3d" style="flex:1;height:28px" onclick="GJUDGE_WP()"'+(g.ift_wd&&g.ift_rd&&!g._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
-  h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+  h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.gun;},\'ift_rd\',\'ift_wd\',\'ift_result\')">ROLL DICE</button>';
   h+='</div></div>';
   if(g.ift_result&&g.ift_result.type==="WP"){
     var wr=g.ift_result;
@@ -23864,7 +23864,7 @@ function GUN_IFT_SECTION(gd,showHeader){
   h+='</div>';
   h+='<div style="display:flex;gap:8px;margin-top:8px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
   h+='<button class="judg3d" style="flex:1;height:28px" onclick="GJUDGE_IFT()"'+(g.ift_wd&&g.ift_rd&&!g._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
-  h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+  h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.gun;},\'ift_rd\',\'ift_wd\',\'ift_result\')">ROLL DICE</button>';
   h+='</div>';
   h+='</div>';
 
@@ -24995,7 +24995,7 @@ function LATW_PAGE(){
     h+='</div>';
     h+='<div style="display:flex;gap:8px;margin-top:8px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
     h+='<button class="judg3d" style="flex:1;height:28px" onclick="LATW_PF_CHECK()"'+(ld.pf_dr&&!ld._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
-    h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+    h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="autoRollSingle(function(){return S.latw;},\'pf_dr\',\'pf_result\')">ROLL DICE</button>';
     h+='</div>';
     if(ld.pf_result){
       var pr=ld.pf_result;
@@ -25188,7 +25188,7 @@ function LATW_PAGE(){
     h+='</div>';
     h+='<div style="display:flex;gap:8px;margin-top:8px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
     h+='<button class="judg3d" style="flex:1;height:28px" onclick="LATW_JUDGE_TH()"'+(ld.wd&&ld.rd&&!ld._rolling&&!(w.oneShot&&(S.pfTracker.used||0)>=Math.floor((S.pfTracker.germanSquads||0)*((ld.dateIdx>=6)?2:(ld.dateIdx>=4)?1.5:1)))&&!(w.oneShot&&ld.pf_result&&ld.pf_result.shotTaken)?'':' disabled')+'>▶<span>JUDGE</span></button>';
-    h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+    h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.latw;},\'rd\',\'wd\',\'th_result\')">ROLL DICE</button>';
     h+='</div>';
   } else if(blocked&&!ld.wepBroken&&!latwLosBlk){
     h+='<div class="infobox" style="color:#cc3333">'+T('上記の制約により発射できません')+'</div>';
@@ -25303,7 +25303,7 @@ function LATW_PAGE(){
     h+='</div>';
     h+='<div style="display:flex;gap:8px;margin-top:8px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
     h+='<button class="judg3d" style="flex:1;height:28px" onclick="LATW_JUDGE_IFT()"'+(ld.ift_wd&&ld.ift_rd&&!ld._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
-    h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+    h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.latw;},\'ift_rd\',\'ift_wd\',\'ift_result\')">ROLL DICE</button>';
     h+='</div>';
     if(ld.ift_result){
       var ir=ld.ift_result;
@@ -25951,7 +25951,7 @@ function MH_CARD(){
   h+='</div>';
   h+='<div style="display:flex;gap:8px;margin-top:8px;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
   h+='<button class="judg3d" style="flex:1;height:28px" onclick="MHJUDGE()"'+(mh.rd&&mh.wd&&!mh._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
-  h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+  h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.move.mh;},\'rd\',\'wd\',\'result\')">ROLL DICE</button>';
   h+='</div>';
 
   if(mh.result){
@@ -26648,7 +26648,7 @@ function RESID_SECTION(){
   h+=rDiceHTML(rs.rd,true,'RESID_dieR',rs._rolling);
   h+='<div style="display:flex;gap:8px;margin:8px 0;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
   h+='<button class="judg3d" style="flex:1;height:28px" onclick="RESID_JUDGE()"'+(rs.rd&&rs.wd&&rs.rfp>0&&!rs._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
-  h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+  h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="RESID_AUTODICE()">ROLL DICE</button>';
   h+='</div>';
 
   if(rs.res){
@@ -26846,7 +26846,7 @@ function INTERD_SECTION(){
   h+='</div>';
   h+='<div style="display:flex;gap:8px;margin:8px 0;background:#000;border:1px solid #404040;border-radius:3px;padding:6px">';
   h+='<button class="judg3d" style="flex:1;height:28px" onclick="INTERD_JUDGE()"'+(rs.rd&&rs.wd&&!rs._rolling?'':' disabled')+'>▶<span>JUDGE</span></button>';
-  h+='<button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button>';
+  h+='<button class="judg3d grn" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.resid;},\'rd\',\'wd\',\'intrd\')">ROLL DICE</button>';
   h+='</div>';
 
   h+=interdResultHTML(rs);
