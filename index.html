@@ -5264,6 +5264,10 @@ function rmainHTML(entry,raw,allowZoro6,hasMalf){
     var rest4=txt.replace(/^KIA/,'');
     return (hasMalf?'':(isSnakeEyes?SNAKE_EYES_IMG_TAG():BIG_SUCCESS_IMG_TAG()))+seg14('KIA',col)+rest4;
   }
+  // 2026-10-25 Kato報告「人力移動 判定移動失敗だが任務成功画像が出てしまう」: codeを持たない汎用結果でも、type==='fail'(失敗)のときは
+  // 任務成功画像ではなく失敗(ミス)バッジを出す。
+  if(entry.type==='fail'&&!WEB_PUBLIC_HIDE_SCENARIO_CONTENT&&!hasMalf)return '<img src="data:image/png;base64,'+pickNoEffectBadgeImg()+'" style="height:150px;width:267px;vertical-align:middle;margin-right:8px;border-radius:5px;object-fit:contain" alt="任務失敗">'+txt;
+  if(entry.type==='fail')return txt;
   return (hasMalf?'':SUCCESS_IMG_TAG())+txt;
 }
 // ===== NMC/PTC 判定ジャンプ =====
