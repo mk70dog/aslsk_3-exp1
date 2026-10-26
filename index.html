@@ -13556,7 +13556,7 @@ function FIRE_PAGE(){
         h+='<div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:6px">';
         // 2026-08修正(ダルマ指示「4:6に変更」): 国籍/編成パネル幅比率をflex1:2(1/3・2/3)
         // からflex4:6(2/5・3/5)に変更。
-        h+='<div style="flex:4;min-width:0;border:1px solid #404040;border-radius:3px;padding:5px">';
+        h+='<div style="flex:1;min-width:0;border:1px solid #404040;border-radius:3px;padding:5px">';
         // 2026-08修正(ダルマ指示): 国籍セクションの枠内にも、グループ枠と同じスタイルの
         // 「国籍」ラベルを追加する(従来は枠だけでラベルが無かった)。
         h+='<div style="font-size:11px;color:#8899aa;margin-bottom:3px">'+T('国籍')+'</div>';
@@ -13578,12 +13578,12 @@ function FIRE_PAGE(){
         });
         h+='</div>';
         h+='</div>';
-        h+='<div style="flex:6;min-width:0;border:1px solid #404040;border-radius:3px;padding:5px">';
+        h+='<div style="flex:1;min-width:0;border:1px solid #404040;border-radius:3px;padding:5px">';
         if(curScenIdForGroups){
           h+='<div style="font-size:11px;color:#8899aa;margin-bottom:3px">'+T('編成')+'</div>';
           // 2026-08修正(ダルマ指示「1列目ABCDE 2列目FGHIJに変更」): GROUP_SLOTSをA〜H(8個)
           // からA〜J(10個)に拡張し、表示を4列→5列に変更(2行、1行目ABCDE/2行目FGHIJ)。
-          var fgWideSlots=document.documentElement.classList.contains('is-tabl');var fgCols=window.FG_SLOT_COLS||14,fgGap=(window.FG_SLOT_GAP==null?0:window.FG_SLOT_GAP),fgNSlots=2*(fgCols-1); // v265: iPad横=2段x14列(A〜M+登録 / N〜Z+解除)
+          var fgWideSlots=document.documentElement.classList.contains('is-tabl');var fgCols=window.FG_SLOT_COLS||12,fgGap=(window.FG_SLOT_GAP==null?0:window.FG_SLOT_GAP),fgNSlots=2*(fgCols-1); // v265: iPad横=2段x14列(A〜M+登録 / N〜Z+解除)
           h+='<div class="btns fgSlotGrid'+(fgWideSlots?' fgSlotWide':'')+'" style="margin:0 0 4px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;--fgc:'+fgCols+';--fgg:'+fgGap+'px">';
           // 2026-08修正(ダルマ指示「一列目5番目を登録に変更、2列目5番目を解除に変更する」):
           // 5列×2行のグリッドのうち、1行目5番目(インデックス4=E)を「登録」ボタン、
@@ -13665,13 +13665,13 @@ function FIRE_PAGE(){
             // 2026-08修正(ダルマ指示「通常表記をMMC（タップで追加、同一ユニットも複数回可）
             // に変更」): 上部にあった共通見出し(MMC（タップで追加…）)を削除し、その文言を
             // 「通常」パネル側のラベルとして直接表示するよう統合。
-            h+=(S.lang==='en'?'<div style="flex:4;min-width:0;background:#000000;border:1px solid #404040;border-radius:3px;padding:5px"><div style="font-size:12px;color:#6a7a8a;margin-bottom:2px">MMC (':'<div style="flex:4;min-width:0;background:#000000;border:1px solid #404040;border-radius:3px;padding:5px"><div style="font-size:12px;color:#6a7a8a;margin-bottom:2px">MMC（')+T('タップで追加、同一ユニットも複数回可')+(S.lang==='en'?')</div><div class="btns unit-picker" style="margin:0">':'）</div><div class="btns unit-picker" style="margin:0">');
+            h+=(S.lang==='en'?'<div style="flex:1;min-width:0;background:#000000;border:1px solid #404040;border-radius:3px;padding:5px"><div style="font-size:12px;color:#6a7a8a;margin-bottom:2px">MMC (':'<div style="flex:1;min-width:0;background:#000000;border:1px solid #404040;border-radius:3px;padding:5px"><div style="font-size:12px;color:#6a7a8a;margin-bottom:2px">MMC（')+T('タップで追加、同一ユニットも複数回可')+(S.lang==='en'?')</div><div class="btns unit-picker" style="margin:0">':'）</div><div class="btns unit-picker" style="margin:0">');
             pkMmcNormal.forEach(function(u){
               var cnt=pkItems.filter(function(it){return it.nat===g.pickerNat&&it.kind==='mmc'&&it.label===u.lbl;}).length;
               h+='<button class="b sm" onclick="FgAddPickItem('+g.id+',\''+g.pickerNat+'\',\'mmc\',\''+u.lbl+'\')">'+fgUnitChip(u.lbl,g.pickerNat,pkD.col,pkD,false)+(cnt?' ×'+cnt:'')+'</button>';
             });
             h+='</div></div>';
-            h+='<div style="flex:6;min-width:0;background:#000000;border:1px solid #404040;border-radius:3px;padding:5px"><div style="font-size:12px;color:#6a7a8a;margin-bottom:2px">'+T('損耗・クラス低下')+'</div><div class="btns unit-picker" style="margin:0">';
+            h+='<div style="flex:1;min-width:0;background:#000000;border:1px solid #404040;border-radius:3px;padding:5px"><div style="font-size:12px;color:#6a7a8a;margin-bottom:2px">'+T('損耗・クラス低下')+'</div><div class="btns unit-picker" style="margin:0">';
             pkMmcDegraded.forEach(function(u){
               var cnt=pkItems.filter(function(it){return it.nat===g.pickerNat&&it.kind==='mmc'&&it.label===u.lbl;}).length;
               h+='<button class="b sm" onclick="FgAddPickItem('+g.id+',\''+g.pickerNat+'\',\'mmc\',\''+u.lbl+'\')">'+fgUnitChip(u.lbl,g.pickerNat,pkD.col,pkD,false)+(cnt?' ×'+cnt:'')+'</button>';
