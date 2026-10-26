@@ -812,9 +812,12 @@ html .unit-picker .b.on:has(img),html .los-vehpick .b.on,html #main div[style*="
 html .unit-picker .b.on:has(img)::after,html .los-vehpick .b.on::after,html #main div[style*="display:grid"]:has(> button.b img) > button.b.on::after{display:none !important}
 html .unit-picker .b.on:has(img)::before,html .los-vehpick .b.on::before,html #main div[style*="display:grid"]:has(> button.b img) > button.b.on::before{content:"✓" !important;background-image:none !important;position:absolute !important;top:-5px !important;right:-5px !important;left:auto !important;bottom:auto !important;width:16px !important;height:16px !important;border-radius:50% !important;background:#ffd54a !important;color:#000 !important;font-size:12px !important;font-weight:bold !important;line-height:16px !important;text-align:center !important;z-index:9 !important;display:block !important;opacity:1 !important}
 /* v264: iPad横 射撃タブ編成スロット=カウンターと同サイズ(45x45)・2段・隙間なし / 選択中のPIN CX 混乱 負傷=45x45の正方形 */
-html.is-tabl #main div.fgSlotGrid.fgSlotWide[style][class]:has(> button.b img),html.is-tabl #main div.fgSlotGrid.fgSlotWide[style][class]{grid-template-columns:repeat(14,45px) !important;grid-auto-rows:45px !important;gap:0 !important;justify-content:start !important;margin-bottom:0 !important}
+html.is-tabl #main div.fgSlotGrid.fgSlotWide[style][class]:has(> button.b img),html.is-tabl #main div.fgSlotGrid.fgSlotWide[style][class]{grid-template-columns:repeat(var(--fgc,14),45px) !important;grid-auto-rows:45px !important;gap:var(--fgg,0px) !important;justify-content:start !important;margin-bottom:0 !important}
 html.is-tabl #main div.fgSlotGrid.fgSlotWide[style][class]:has(> button.b img) > button.b,html.is-tabl #main div.fgSlotGrid.fgSlotWide[style][class] > button.b{width:45px !important;min-width:0 !important;max-width:45px !important;height:45px !important;min-height:0 !important;padding:0 !important;margin:0 !important;display:flex !important;align-items:center;justify-content:center;font-size:11px !important;line-height:1.1 !important;border-radius:0 !important}
 html.is-tabl #main button.fg-bdg[style][class]{flex:0 0 45px !important;width:45px !important;min-width:45px !important;max-width:45px !important;height:45px !important;min-height:45px !important;padding:0 !important;align-self:center !important}
+html #main div.los-grpgrid[style][class] > button.b{min-width:49px !important;min-height:49px !important}
+.los-slottxt{font-size:10px;line-height:1.25;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:45px;min-height:45px}
+.los-slotltr{font-size:22px;font-weight:bold;line-height:1;display:flex;align-items:center;justify-content:center;min-width:45px;min-height:45px}
 /* v264: MAPタブ 対象グループ選択ボタンをカウンター(45px)にぴったり合わせる(固定64x34pxだと枠から画像がはみ出す) */
 html #main div.los-grpgrid[style][class]:has(> button.b img){grid-template-columns:repeat(auto-fill,minmax(0,max-content)) !important;justify-content:start !important}
 html #main div.los-grpgrid[style][class]:has(> button.b img) > button.b{width:auto !important;min-width:0 !important;height:auto !important;padding:2px !important;display:inline-flex !important;align-items:center;justify-content:center}
@@ -13580,14 +13583,14 @@ function FIRE_PAGE(){
           h+='<div style="font-size:11px;color:#8899aa;margin-bottom:3px">'+T('編成')+'</div>';
           // 2026-08修正(ダルマ指示「1列目ABCDE 2列目FGHIJに変更」): GROUP_SLOTSをA〜H(8個)
           // からA〜J(10個)に拡張し、表示を4列→5列に変更(2行、1行目ABCDE/2行目FGHIJ)。
-          var fgWideSlots=document.documentElement.classList.contains('is-tabl'); // v265: iPad横=2段x14列(A〜M+登録 / N〜Z+解除)
-          h+='<div class="btns fgSlotGrid'+(fgWideSlots?' fgSlotWide':'')+'" style="margin:0 0 4px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px">';
+          var fgWideSlots=document.documentElement.classList.contains('is-tabl');var fgCols=window.FG_SLOT_COLS||14,fgGap=(window.FG_SLOT_GAP==null?0:window.FG_SLOT_GAP),fgNSlots=2*(fgCols-1); // v265: iPad横=2段x14列(A〜M+登録 / N〜Z+解除)
+          h+='<div class="btns fgSlotGrid'+(fgWideSlots?' fgSlotWide':'')+'" style="margin:0 0 4px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;--fgc:'+fgCols+';--fgg:'+fgGap+'px">';
           // 2026-08修正(ダルマ指示「一列目5番目を登録に変更、2列目5番目を解除に変更する」):
           // 5列×2行のグリッドのうち、1行目5番目(インデックス4=E)を「登録」ボタン、
           // 2行目5番目(インデックス9=J)を「解除」ボタンに置き換える(通常のスロット選択
           // ボタンではなく、既存のFgSaveActiveSlot/FgDisbandGroupの機能ボタンとして機能する)。
           var saveFlashingGrid=(g.saveFlashUntil&&Date.now()<g.saveFlashUntil);
-          (fgWideSlots?GROUP_SLOTS:GROUP_SLOTS.slice(0,10)).forEach(function(slot,slotIdx){
+          (fgWideSlots?GROUP_SLOTS.slice(0,fgNSlots):GROUP_SLOTS.slice(0,10)).forEach(function(slot,slotIdx){
             if(!fgWideSlots&&slotIdx===4){
               h+='<button class="b sm'+(saveFlashingGrid?' on':' xs')+'" style="width:100%;box-sizing:border-box;overflow:hidden" onclick="FgSaveActiveSlot('+g.id+')">'+T('登録')+'</button>';
               return;
@@ -13619,8 +13622,8 @@ function FIRE_PAGE(){
             // に付けていた丸囲み「済」バッジを廃止。「編成A」(登録済み)と「－」(未登録)の
             // テキスト自体で区別が付くため、済バッジは冗長だった。
             h+='<button class="b sm'+(isActive?' on':(occupied?'':' xs'))+'" style="width:100%;box-sizing:border-box;overflow:hidden" onclick="FgSelectGroupSlot('+g.id+',\''+slot+'\')">'+slotLabel+'</button>';
-            if(fgWideSlots&&slotIdx===12)h+='<button class="b sm'+(saveFlashingGrid?' on':' xs')+'" style="width:100%;box-sizing:border-box;overflow:hidden" onclick="FgSaveActiveSlot('+g.id+')">'+T('登録')+'</button>';
-            if(fgWideSlots&&slotIdx===25)h+='<button class="b sm xs" style="width:100%;box-sizing:border-box;overflow:hidden'+(g.activeGroupSlot?'':';opacity:0.35')+'" '+(g.activeGroupSlot?'':'disabled ')+'onclick="FgDisbandGroup('+g.id+')">'+T('解除')+'</button>';
+            if(fgWideSlots&&slotIdx===fgCols-2)h+='<button class="b sm'+(saveFlashingGrid?' on':' xs')+'" style="width:100%;box-sizing:border-box;overflow:hidden" onclick="FgSaveActiveSlot('+g.id+')">'+T('登録')+'</button>';
+            if(fgWideSlots&&slotIdx===fgNSlots-1)h+='<button class="b sm xs" style="width:100%;box-sizing:border-box;overflow:hidden'+(g.activeGroupSlot?'':';opacity:0.35')+'" '+(g.activeGroupSlot?'':'disabled ')+'onclick="FgDisbandGroup('+g.id+')">'+T('解除')+'</button>';
           });
           h+='</div>';
           // 2026-08修正(ダルマ指示「登録（編成C） 解散　削除」): グリッド内(1行目5番目=登録、
@@ -30940,7 +30943,10 @@ function losSlotCompositionLabel(slot,saved){
     var slotLdrCol=(UNITS[saved.pickerNat]&&UNITS[saved.pickerNat].col)||'#4499ee';
     return renderUnitChip(slotLdrItem.label,slotLdrCol,UNITS[slotLdrItem.nat||saved.pickerNat]||null,slotLdrItem.kind==='smc'); // v11.397: UNITSを渡してVASLカウンター画像化(従来はnull=文字チップ)
   }
-  return T('編成')+slot;
+  var _mv=window.__mapSlotVar||1;
+  if(_mv===2)return '<span class="los-slotltr">'+slot+'</span>';
+  if(_mv===3&&saved){var _swl=losSWLabelsFromGroup(saved);if(_swl.length)return renderSWChipFromLabel(_swl[0],(UNITS[saved.pickerNat]&&UNITS[saved.pickerNat].col)||'#4499ee');}
+  return '<span class="los-slottxt">'+T('編成')+'<br>'+slot+'</span>';
 }
 // 2026-08追加(ダルマ指示「mmc smc sw を全て表示する」): 登録済みスロットの全ユニット
 // (mmc/smc)をFireタブと同じチップ表示(renderUnitChip)で列挙し、続けて携行SWのラベルも
