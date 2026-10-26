@@ -48,10 +48,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv263">
-<title>ASL SKシリーズv263</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv264">
+<title>ASL SKシリーズv264</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv263">
+<meta property="og:title" content="ASL SKシリーズv264">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -811,6 +811,14 @@ html.is-tabp .sum[style*="nowrap"],html.is-tabl .sum[style*="nowrap"]{padding:2p
 html .unit-picker .b.on:has(img),html .los-vehpick .b.on,html #main div[style*="display:grid"]:has(> button.b img) > button.b.on{box-shadow:0 0 0 2px #ffd54a !important;border-color:#ffd54a !important;background:#2a2308 !important;position:relative !important;overflow:visible !important}
 html .unit-picker .b.on:has(img)::after,html .los-vehpick .b.on::after,html #main div[style*="display:grid"]:has(> button.b img) > button.b.on::after{display:none !important}
 html .unit-picker .b.on:has(img)::before,html .los-vehpick .b.on::before,html #main div[style*="display:grid"]:has(> button.b img) > button.b.on::before{content:"✓" !important;background-image:none !important;position:absolute !important;top:-5px !important;right:-5px !important;left:auto !important;bottom:auto !important;width:16px !important;height:16px !important;border-radius:50% !important;background:#ffd54a !important;color:#000 !important;font-size:12px !important;font-weight:bold !important;line-height:16px !important;text-align:center !important;z-index:9 !important;display:block !important;opacity:1 !important}
+/* v264: iPad横 射撃タブ編成スロット=カウンターと同サイズ(45x45)・2段・隙間なし / 選択中のPIN CX 混乱 負傷=45x45の正方形 */
+html.is-tabl #main div.fgSlotGrid[style][class]{grid-template-columns:repeat(5,45px) !important;grid-auto-rows:45px !important;gap:0 !important;justify-content:start !important;margin-bottom:0 !important}
+html.is-tabl #main div.fgSlotGrid[style][class] > button.b{width:45px !important;min-width:0 !important;max-width:45px !important;height:45px !important;min-height:0 !important;padding:0 !important;margin:0 !important;display:flex !important;align-items:center;justify-content:center;font-size:11px !important;line-height:1.1 !important;border-radius:0 !important}
+html.is-tabl #main button.fg-bdg[style][class]{flex:0 0 45px !important;width:45px !important;min-width:45px !important;max-width:45px !important;height:45px !important;min-height:45px !important;padding:0 !important;align-self:center !important}
+/* v264: MAPタブ 対象グループ選択ボタンをカウンター(45px)にぴったり合わせる(固定64x34pxだと枠から画像がはみ出す) */
+html #main div.los-grpgrid[style][class]:has(> button.b img){grid-template-columns:repeat(auto-fill,minmax(0,max-content)) !important;justify-content:start !important}
+html #main div.los-grpgrid[style][class]:has(> button.b img) > button.b{width:auto !important;min-width:0 !important;height:auto !important;padding:2px !important;display:inline-flex !important;align-items:center;justify-content:center}
+html #main div.los-grpgrid > button.b img{display:block}
 /* v231: iPad横(is-tabl): ターン表枠をターン表に合わせて詰め、右のバッジ画像を選択中シナリオのキット画像に変更して枠の高さに縮小 */
 html.is-tabl #tacBadgeRow{display:none !important}
 html.is-tabl #hdrKitImgL{cursor:pointer;-webkit-tap-highlight-color:transparent;display:block !important;align-self:stretch;flex:0 0 64px;width:64px;position:relative}
@@ -9743,7 +9751,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.463"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
+var APP_VERSION="ASLSK3M-v11.464"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
@@ -11735,6 +11743,8 @@ function appForceUpdate(){
   try{if(window.caches)p.push(caches.keys().then(function(ks){return Promise.all(ks.map(function(k){return caches.delete(k);}));}));}catch(e){}
   Promise.all(p).catch(function(){}).then(function(){location.replace(location.pathname+'?u='+Date.now());});
 }
+// v264: 更新後の再読込完了時に14セグで「UPDATES IMPLEMENTED」を表示(URLの?u=を目印にし、表示後はURLから除去)
+(function(){try{if(/[?&]u=\d+/.test(location.search)){var go=function(){setTimeout(function(){try{showToast('UPDATES IMPLEMENTED','blu');var el=document.getElementById('toastMsg');el.innerHTML=seg14('UPDATES IMPLEMENTED','blu',0.6);if(TOAST_TIMER)clearTimeout(TOAST_TIMER);TOAST_TIMER=setTimeout(function(){el.style.display='none';},2600);}catch(e){}try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}},900);};if(document.readyState==='complete')go();else window.addEventListener('load',go);}}catch(e){}})();
 function TAB(t){
   var _tabChanged=(t!==S.tab);
   if(t!==S.tab)hdrLogoRand(); // v235: メインタブ変更時に右画像をランダム切替
@@ -30473,7 +30483,7 @@ function losTargetGroupPickerHTML(){
   var activeSlot=g&&g.activeGroupSlot;
   var scId=S.scen&&S.scen.sel;
   var savedForScen=(scId&&S.savedGroups&&S.savedGroups[scId])||{};
-  h+='<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;margin-bottom:6px">';
+  h+='<div class="los-grpgrid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;margin-bottom:6px">';
   availSlots.forEach(function(slot){
     var dataForLabel=(slot===activeSlot)?g:savedForScen[slot];
     var lbl=losSlotCompositionLabel(slot,dataForLabel);
