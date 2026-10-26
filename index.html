@@ -13816,7 +13816,7 @@ function FIRE_PAGE(){
                 opLblSeen[k2]=(opLblSeen[k2]||0)+1;
                 var opNumTag=opLblTotal[k2]>1?' #'+opLblSeen[k2]:'';
                 var _otv=window.__opTagVar||1; // 運搬/操作ボタンの#番号: 1=枠の外(右)に表示 / 2=カウンター右下に重ねて表示
-                var _opBtn='<button class="b sm xs'+(itOn?' on':'')+'" onclick="FgSetSwOwner('+g.id+',\''+sw.uid+'\','+it.pid+')"'+' style="padding:2px;min-width:0;'+(_otv===2&&opNumTag?'position:relative':'')+'"'+'>'+fgUnitChip(it.label,it.nat,itD?itD.col:'#4499ee',itD,it.kind==='smc')+(_otv===2&&opNumTag?'<span class="op-numbadge">'+opNumTag.replace(' ','')+'</span>':'')+'</button>';
+                var _opBtn='<button class="b sm xs'+(itOn?' on':'')+'" onclick="FgSetSwOwner('+g.id+',\''+sw.uid+'\','+it.pid+')"'+' style="padding:2px;min-width:0;height:auto !important;min-height:0 !important;'+(_otv===2&&opNumTag?'position:relative':'')+'"'+'>'+fgUnitChip(it.label,it.nat,itD?itD.col:'#4499ee',itD,it.kind==='smc')+(_otv===2&&opNumTag?'<span class="op-numbadge">'+opNumTag.replace(' ','')+'</span>':'')+'</button>';
                 h+=(_otv===2||!opNumTag)?_opBtn:('<span class="op-numwrap" style="display:inline-flex;align-items:center;gap:2px">'+_opBtn+'<span class="op-numtag">'+opNumTag.replace(' ','')+'</span></span>');
               });
             }
