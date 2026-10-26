@@ -48,10 +48,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv280">
-<title>ASL SKシリーズv280</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv281">
+<title>ASL SKシリーズv281</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv280">
+<meta property="og:title" content="ASL SKシリーズv281">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -9833,7 +9833,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.480"; // 2026-10-24: Kato指示「選択中PIN CX 混乱ボタンを32x32に固定」→射撃タブ「選択中」の状態バッジ(PIN/CX/混乱/負傷)を全て32x32px固定(幅の伸縮・折返し用のiPad縦CSSも撤去)。前回v11.402は、横黒線対策。
+var APP_VERSION="ASLSK3M-v11.481"; // 2026-10-27 v281(ダルマ指示「続ける」「実施」): 対戦モード段階4(自己対戦での強さ調整)。(1)バグ修正: 移動射撃(BFF)した車両の射撃済みの印が外れず、以後ずっと撃てなかった→前進射撃フェイズの終わりに外す。(2)規則追加: AFV/残骸のLOS妨害(ASLSK4 7.4.1、同一高度で通過するヘクスごとに+1、移動目標は除く、両側から見えるヘクスのみ)。(3)AIの重み調整: 移動射撃は期待値0.5以上の時だけ、攻撃側の危険の重み1.25→1.7(自己対戦でドイツ軍の建物確保 平均2.1→3.6)。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
@@ -28528,10 +28528,51 @@ function btPreciseLOS(a,b){
 }
 function btLOS(a,b,fast){
   var base=fast?btFLOS(a,b):btPreciseLOS(a,b);
-  if(!base.ok||!BT.smoke)return base;
-  var sm=btSmokeDRM(a,b);if(!sm)return base;
-  var h=(base.hind||0)+sm;
-  return {ok:h<6,hind:h,why:h>=6?'煙幕と妨害の合計+6以上':base.why,smoke:sm};
+  if(!base.ok)return base;
+  var sm=BT.smoke?btSmokeDRM(a,b):0;
+  var vh=btVehHindDRM(a,b,fast);
+  if(!sm&&!vh)return base;
+  var h=(base.hind||0)+sm+vh;
+  var o={ok:h<6,hind:h,why:h>=6?((sm?'煙幕と':'')+'妨害の合計+6以上'):base.why};
+  if(sm)o.smoke=sm;if(vh)o.veh=vh;
+  return o;
+}
+// v281(ダルマ指示「実施」、ASLSK4 7.4.1): AFV/残骸のLOS妨害。同一高度のLOSが、残骸/AFVのいるヘクスを「通過」する(射撃側・目標のヘクスは除く)ごとに+1。
+// 移動目標の車両は妨害にならない(Motion中、移動中、またはこのプレイヤーターンに移動した車両は前進射撃フェイズが終わるまで)。
+// 射撃側と目標の両方からそのヘクスが見えない場合は適用しない。
+function btVehHindNodes(){
+  var m={},ph=BT_PHASES[BT.ph]?BT_PHASES[BT.ph][0]:'',afterAF=(ph==='RtPh'||ph==='APh'||ph==='CCPh');
+  BT.stacks.forEach(function(s){
+    if(s.n==null||s.n<0||m[s.n])return;
+    if(s.u.some(function(u){
+      var k=btInfo(s.side,u.nm).kind;
+      if(k==='wreck')return true;
+      if(k!=='afv')return false;
+      if(btIsWreck(u))return true;
+      if(u.mot)return false;
+      if(BT.mv&&BT.mv.uid===u.id)return false;
+      if(u.mvd&&!afterAF)return false;
+      return true;
+    }))m[s.n]=1;
+  });
+  return m;
+}
+function btLineNodes(a,b){
+  var key=a<b?(a*4096+b):(b*4096+a);
+  BTG.lineC=BTG.lineC||{};var c=BTG.lineC[key];if(c)return c;
+  c=btSmokeHexesOnLine(a,b);BTG.lineC[key]=c;return c;
+}
+function btVehHindDRM(a,b,fast){
+  if(a===b||!BTG)return 0;
+  var H=btVehHindNodes(),keys=Object.keys(H);if(!keys.length)return 0;
+  var A=BTG.nodes[a],B=BTG.nodes[b];if(A.elev!==B.elev)return 0; // 同一高度のLOSのみ
+  var d=0;
+  btLineNodes(a,b).forEach(function(n){
+    if(!H[n]||BTG.nodes[n].elev!==A.elev)return;
+    var la=fast?btFLOS(a,n):btPreciseLOS(a,n),lb=fast?btFLOS(n,b):btPreciseLOS(n,b);
+    if(la.ok&&lb.ok)d++;
+  });
+  return d;
 }
 // 射撃可能か(マーカー)。戻り値: null=不可, 'full'|'half'|'fpf'
 function btFireMode(u,ph,dist){
@@ -29183,7 +29224,7 @@ function btPhaseLeave(id){
   if(id==='PFPh'){BT.stacks.forEach(function(s){if(s.side!==att)return;s.u.forEach(function(u){if(u.fire==='R')u.fire='P';});});}
   if(id==='MPh'){if(BT.mv){if(BT.mv.veh)btVMoveEnd();else btMoveEnd();}BT.resid={};BT.pend=null;btSmokeClear('g');}
   if(id==='DFPh'){btClearMarks(def,['F1','F2','R']);}
-  if(id==='AFPh'){btClearMarks(att,['P','A','R']);}
+  if(id==='AFPh'){btClearMarks(att,['P','A','R','B']);} // v281: 移動射撃(B)の印も前進射撃フェイズの終わりに外す(外し忘れで、移動射撃した車両がその後ずっと撃てなかった)
   if(id==='APh'){ // 進入予定ターンに入らなかった歩兵は除去(車両は段階3cで対応するまで盤外に残す)
     var log=[];
     BT.stacks.forEach(function(s){if(s.side!==att||!(s.n==null||s.n<0)||s.due!==BT.turn)return;
@@ -29350,6 +29391,14 @@ function btFireOptions(side,ph,targetsN,ctx){
       var ev=btFireEval(fd);if(!ev.ok)continue;
       var v=btEV(ev,ctx);
       if(v>single[i].val+single[j].val+0.02)res.push({fd:fd,ev:ev,val:v,pair:true});
+      // v281(段階4): 3ヘクスの射撃グループ(石造建物の守備隊に火力を集中する)
+      if(BT_AIW.fg3)for(var k=j+1;k<single.length;k++){
+        var c=btStackById(single[k].p.sid);if(!(btDist(c.n,a.n)===1||btDist(c.n,b.n)===1))continue;
+        var fd3={side:side,ph:ph,parts:[single[i].p,single[j].p,single[k].p],tgtN:tn,fast:true};
+        var ev3=btFireEval(fd3);if(!ev3.ok)continue;
+        var v3=btEV(ev3,ctx);
+        if(v3>Math.max(v,single[i].val+single[j].val)+single[k].val+0.02)res.push({fd:fd3,ev:ev3,val:v3,pair:true});
+      }
     }
   });
   res.sort(function(a,b){return b.val-a.val;});
@@ -29405,18 +29454,30 @@ function btThreatAt0(side,n,moving,ignoreFired){
       else if(I.kind==='smc'&&u.s==='ok'){ldr=Math.min(ldr,btCmdOf(e.side,u));}
       else if(I.kind==='mg'&&u.s!=='br'){var o=btOwner(e,u);if(o&&btGO(o)&&d<=I.rng*2){var f2=I.fp;if(d===1)f2*=2;else if(d===0)f2*=3;if(d>I.rng)f2*=0.5;fp+=f2;}}
     });
-    if(fp<1)return;
+    // 車両(機銃・主砲HE)の脅威 v281(段階4): 重みBT_AIW.afvTh
+    var mgfp=0,he=[],aw=BT_AIW.afvTh;
+    if(aw&&d<=16)btAFVs(e).forEach(function(u){
+      if(btIsWreck(u)||u.shock||u.stun)return;var v=btAfvData(u.nm);if(!v)return;
+      if(v.mg&&!(ignoreFired&&u.mgF&&Object.keys(u.mgF).length)){[['bmg',8],['cmg',12],['aamg',8]].forEach(function(m){var f=v.mg[m[0]];if(!f||(u.mgS&&u.mgS[m[0]]==='br'))return;if(m[0]==='aamg'&&!u.ce)return;if(d>m[1]*2)return;var k=1;if(d===0)k=3;else if(d===1)k=2;if(d>m[1])k*=0.5;mgfp+=f*k;});}
+      if(v.ma&&u.maS==='ok'&&!(ignoreFired&&u.fire&&u.fire!=='R')&&d>=1&&d<=12){var gd=afvToGunData(v);var hx=gd&&VEH_MA_HE_FP_BY_CAL[gd.cal];if(hx)he.push({fp:hx.itt,ph:d<=6?0.55:0.4});}
+    });
+    if(fp<1&&mgfp<1&&!he.length)return;
     var los=btLOS(e.n,n,true);if(!los.ok)return;
     var drm=N.tem+los.hind+ldr;
     if(moving){if(N.og&&!los.hind)drm-=1;drm-=1;}
-    var col=ci(fp),p=0;
-    // 1個分隊(士気7)が混乱する確率の近似
-    for(var a=2;a<=12;a++){var r=IFT[Math.max(0,Math.min(15,a+drm))][col];var pb=0;
-      if(/KIA$/.test(r))pb=1;else if(/^K(\d+)/.test(r))pb=0.8;else{var mm=r.match(/^(\d*)MC$/);if(mm){var dd=mm[1]?parseInt(mm[1],10):0;var q=btPMC(7,dd);pb=q.brk+q.pin*0.3;}else if(r==='PTC')pb=0.1;}
-      p+=BT_P2[a]*pb;}
-    tot+=p;
+    if(fp>=1)tot+=btPBreakFP(fp,drm);
+    if(mgfp>=1)tot+=aw*btPBreakFP(mgfp,drm-ldr);
+    he.forEach(function(h){tot+=aw*h.ph*btPBreakFP(h.fp,drm-ldr);});
   });
   return tot;
+}
+// 1個分隊(士気7)が混乱する確率の近似(FP,DRM)
+function btPBreakFP(fp,drm){
+  var col=ci(fp),p=0;
+  for(var a=2;a<=12;a++){var r=IFT[Math.max(0,Math.min(15,a+drm))][col];var pb=0;
+    if(/KIA$/.test(r))pb=1;else if(/^K(\d+)/.test(r))pb=0.8;else{var mm=r.match(/^(\d*)MC$/);if(mm){var dd=mm[1]?parseInt(mm[1],10):0;var q=btPMC(7,dd);pb=q.brk+q.pin*0.3;}else if(r==='PTC')pb=0.1;}
+    p+=BT_P2[a]*pb;}
+  return p;
 }
 // 目標ヘクスの価値 G[n](side視点)
 function btGoalMap(side){
@@ -29431,8 +29492,9 @@ function btGoalMap(side){
       if(!enemyIn.length){ns.forEach(function(n){G[n]=Math.max(G[n]||0,10);});}
       else{
         // 敵のいる建物ヘクスに隣接する遮蔽ヘクス(白兵戦の起点)
-        enemyIn.forEach(function(en0){BTG.nodes[en0].nb.forEach(function(m){if(btEnemyAt(m,side))return;var v=6+(btInCover(m)?2:0)+(BTG.nodes[m].bldg===B.id?2:0);G[m]=Math.max(G[m]||0,v);});});
-        ns.forEach(function(n){if(enemyIn.indexOf(n)<0&&!btEnemyAt(n,side))G[n]=Math.max(G[n]||0,8);});
+        var ab=(btFirst()===side)?(BT_AIW.gAdjAtt||0):0; // v281(段階4): 攻撃側は敵の建物への接敵を重く見る
+        enemyIn.forEach(function(en0){BTG.nodes[en0].nb.forEach(function(m){if(btEnemyAt(m,side))return;var v=6+ab+(btInCover(m)?2:0)+(BTG.nodes[m].bldg===B.id?2:0);G[m]=Math.max(G[m]||0,v);});});
+        ns.forEach(function(n){if(enemyIn.indexOf(n)<0&&!btEnemyAt(n,side))G[n]=Math.max(G[n]||0,8+ab);});
       }
     }else{
       // 自軍の建物: 脅威があれば守備(建物ヘクスに価値)
@@ -29451,7 +29513,7 @@ function btGoalField(side,G){
   if(!keys.length)return F;
   // 多始点の幅優先(移動コスト)
   var dist=new Float32Array(BTG.nodes.length);for(var i=0;i<dist.length;i++)dist[i]=1e9;
-  var q=[];keys.forEach(function(k){dist[k]=0;q.push(k);});
+  var q=[];keys.forEach(function(k){dist[k]=BT_AIW.fieldG?Math.min(0,-(G[k]-9)/0.75):0;q.push(k);}); // fieldG: 目標の価値の差を誘導にも反映
   while(q.length){q.sort(function(a,b){return dist[a]-dist[b];});var a=q.shift();
     BTG.nodes[a].nb.forEach(function(b){var ic=btInfCost(b,a);if(!ic)return;var nd=dist[a]+ic.c;if(nd<dist[b]){dist[b]=nd;q.push(b);}});}
   for(var j=0;j<F.length;j++){var g=G[j]||0;F[j]=Math.max(g,dist[j]>=1e9?0:Math.max(0,9-0.75*dist[j]));}
@@ -29492,10 +29554,12 @@ function btPathOf(sr,k){var p=[];while(k){p.unshift(sr.best[k].n);k=sr.prev[k];}
 function btAIPlanMoves(side){
   BT_THM={};try{return btAIPlanMoves0(side);}finally{BT_THM=null;}
 }
+// AIの重み(段階4: 自己対戦で調整)
+var BT_AIW={bffMin:0.5,attRisk:1.7,attPath:1.2,attUrg:0.1,defRisk:2.2,defPath:2.0,afvTh:0,vFlank:0,vOff:0,vSup:0};
 function btRoleW(side){ // シナリオの攻撃側は危険を受け入れ、ターンが進むほど目標を急ぐ
-  var att=(btFirst()===side);
-  var urg=1+0.1*Math.max(0,BT.turn-1);
-  return att?{risk:1.25,path:1.2,goal:urg}:{risk:2.2,path:2.0,goal:1};
+  var att=(btFirst()===side),A=BT_AIW;
+  var urg=1+A.attUrg*Math.max(0,BT.turn-1);
+  return att?{risk:A.attRisk,path:A.attPath,goal:urg}:{risk:A.defRisk,path:A.defPath,goal:1};
 }
 function btAIPlanMoves0(side){
   var W=btRoleW(side);
@@ -29512,7 +29576,9 @@ function btAIPlanMoves0(side){
     var here=(s.n!=null&&s.n>=0)?s.n:null;
     var allIds=s.u.filter(function(u){return btIsInfK(btI(u,side).kind)&&btCanMove(s,u);}).map(function(u){return u.id;});
     var hold=btHoldValue(side,s);
-    var base0=here!=null?(F[here]+BTG.nodes[here].tem*0.9-btThreatAt(side,here,false,false)*W.risk):-99;
+    var sv0=0;btInf(s).forEach(function(u){var k=btI(u,side).kind;if(k==='mmc'||k==='smc')sv0+=btUVal(side,u);});
+    var rk0=BT_AIW.riskStk?Math.pow(Math.max(1,sv0),BT_AIW.riskStk):1;
+    var base0=here!=null?(F[here]+BTG.nodes[here].tem*0.9-btThreatAt(side,here,false,false)*W.risk*rk0):-99;
     var variants=[{uids:allIds,stay:base0+hold}];
     // 建物を保持しつつ前進: 最も弱いMMC(HS優先)を守備に残し、残りが動く
     var mm=s.u.filter(function(u){return allIds.indexOf(u.id)>=0&&btI(u,side).kind==='mmc';});
@@ -29526,6 +29592,9 @@ function btAIPlanMoves0(side){
       var units=s.u.filter(function(u){return uids.indexOf(u.id)>=0||(u.own&&uids.indexOf(u.own)>=0);});
       if(!units.some(function(u){return btI(u,side).kind==='mmc'||btI(u,side).kind==='smc';}))return;
       var base=btMMF(side,units.filter(function(u){return uids.indexOf(u.id)>=0;}));
+      // v281(段階4): 大きなスタックほど1回の射撃で失うものが大きい(危険度をスタックの価値で増やす)
+      var sv=0;units.forEach(function(u){var k=btI(u,side).kind;if(k==='mmc'||k==='smc')sv+=btUVal(side,u);});
+      var rk=BT_AIW.riskStk?Math.pow(Math.max(1,sv),BT_AIW.riskStk):1;
       var opts=[{dt:false,mf:base.mf-btPortageExcess(side,units,false)}];
       if(!units.some(function(u){return u.cx||u.wd;}))opts.push({dt:true,mf:base.mf+2-btPortageExcess(side,units,true)});
       opts.forEach(function(o){
@@ -29535,7 +29604,7 @@ function btAIPlanMoves0(side){
           var e=sr.ends[nk],n=e.n,N=BTG.nodes[n];
           if(n===here)return;
           var endTh=btThreatAt(side,n,false,false);
-          var sc=F[n]+N.tem*0.9-e.d*W.path-endTh*W.risk-(o.dt?0.4:0);
+          var sc=F[n]+N.tem*0.9-(e.d*W.path+endTh*W.risk)*rk-(o.dt?0.4:0);
           var already=plans.filter(function(p){return p.to===n;}).length;sc-=already*1.5;
           var gain=sc-v.stay;
           if(!bestPlan||gain>bestPlan.gain)bestPlan={sid:s.id,uids:uids,dt:o.dt,to:n,path:btPathOf(sr,e.k).filter(function(x,ix){return !(ix===0&&x===here);}),sc:sc,gain:gain,m:e.m,mf:o.mf,keep:v.keep};
@@ -29816,9 +29885,9 @@ function btAppMoveTick(){
         av.endDone=1;
         var bffDone=false;
         if(BT.mv.started&&!BT.mv.stopped&&BT.mv.path.length)btVStop(lg);
-        if(BT.mv.stopped){var bo=btAIOrdOptions(app,'BFF',btEnemyNodes(app).concat(btEnemyAFVNodes(app)),{pf:true}).filter(function(o){return o.type==='ord';});
-          if(bo[0]&&bo[0].val>=0.15){var bl=btAIExecOpt(bo[0]);if(bl){bl[0]+='  [期待値 '+bo[0].val.toFixed(2)+']';btLog(bl);bffDone=true;}}}
-        if(!bffDone&&vs.n!=null&&vs.n>=0&&btVehSmokeNum(vu)&&!vu.smokeUsed&&!vu.fire){var dg=btVehDanger(vu,app,vs.n,vu.vca);if(dg>=0.2)btVehSmoke(lg);}
+        if(BT.mv.stopped&&!BT_AIW.noBFF){var bo=btAIOrdOptions(app,'BFF',btEnemyNodes(app).concat(btEnemyAFVNodes(app)),{pf:true}).filter(function(o){return o.type==='ord';});
+          if(bo[0]&&bo[0].val>=(BT_AIW.bffMin||0.15)){var bl=btAIExecOpt(bo[0]);if(bl){bl[0]+='  [期待値 '+bo[0].val.toFixed(2)+']';btLog(bl);bffDone=true;}}}
+        if(!bffDone&&!BT_AIW.noVSmk&&vs.n!=null&&vs.n>=0&&btVehSmokeNum(vu)&&!vu.smokeUsed&&!vu.fire){var dg=btVehDanger(vu,app,vs.n,vu.vca);if(dg>=0.2)btVehSmoke(lg);}
       }
       else{btVMoveEnd();BT.amV=null;if(lg.length)btLog(lg);btSave();Draw();btKick(250);return false;}
     }
@@ -29829,13 +29898,13 @@ function btAppMoveTick(){
   }
   if(BT.mv){
     var p=BT.amPlan,s=btStackById(BT.mv.sid);
-    if(p&&s&&p.i>=p.path.length&&!p.dcTried&&btInf(s).some(function(u){return u.s==='ok';})){
+    if(p&&s&&p.i>=p.path.length&&!p.dcTried&&!BT_AIW.noDC&&btInf(s).some(function(u){return u.s==='ok';})){
       p.dcTried=1;var dco=btAIDCChoice(s);
       if(dco){var dr=btDCPlace(dco.n);if(typeof dr!=='string'){dr[0]+='  [期待損害 '+dco.val.toFixed(2)+']';btLog(dr);if(BT.mv&&btHumanCanReact())BT.pend='react';btSave();Draw();if(!BT.pend)btKick(BT.fastApp?60:450);return false;}}
     }
     if(!p||!s||p.i>=p.path.length||!btInf(s).some(function(u){return u.s==='ok';})){btMoveEnd();BT.amPlan=null;btSave();Draw();btKick(250);return false;}
     var to=p.path[p.i];
-    if(!BT.mv.smokeTried&&!p.smk&&s.n!=null&&s.n>=0){
+    if(!BT.mv.smokeTried&&!p.smk&&!BT_AIW.noSmk&&s.n!=null&&s.n>=0){
       p.smk=1;var smU=btInf(s).some(function(u){return u.s==='ok'&&(btI(u,s.side).smk||0)>0;});
       var ic0=btInfCost(s.n,to);
       if(smU&&ic0&&BTG.nodes[to].og&&btThreatAt(s.side,to,true,true)>=0.3&&BT.mv.mfUsed+2+ic0.c<=BT.mv.mfMax+(BT.mv.road?1:0)){
@@ -29852,6 +29921,14 @@ function btAppMoveTick(){
     return false;
   }
   // 次のスタック
+  if(BT_AIW.replan){ // 毎回全体を計画し直し、最初の案のスタックを動かす(状況の変化に追従)
+    for(var g3=0;g3<30;g3++){
+      var pl3=btAIPlanMoves(app).filter(function(x){return !BT.amq.done[x.sid];})[0];if(!pl3)break;
+      BT.amq.done[pl3.sid]=1;var e3=btMoveStart(pl3.sid,pl3.uids,{dt:pl3.dt,assault:pl3.assault});
+      if(!e3){BT.amPlan={path:pl3.path,i:0};btSave();Draw();btKick(250);return false;}
+    }
+    BT.amq.list=[];
+  }
   while(BT.amq.list.length){
     var sid=BT.amq.list.shift();if(BT.amq.done[sid])continue;BT.amq.done[sid]=1;
     var s2=btStackById(sid);if(!s2)continue;
@@ -29868,7 +29945,7 @@ function btAppMoveTick(){
     var acts=btVehActions(plan);
     var vu2=btAFVs(vS)[0];
     if(!acts.length&&(plan.face==null||plan.face===vu2.vca)){
-      if(!(btVehSmokeNum(vu2)&&!vu2.smokeUsed&&!vu2.fire&&vS.n!=null&&vS.n>=0&&btVehDanger(vu2,app,vS.n,vu2.vca)>=0.2))continue;
+      if(BT_AIW.noVSmk||!(btVehSmokeNum(vu2)&&!vu2.smokeUsed&&!vu2.fire&&vS.n!=null&&vS.n>=0&&btVehDanger(vu2,app,vS.n,vu2.vca)>=0.2))continue;
     }
     var e2=btVMoveStart(vS.id,vu2.id);if(e2)continue;
     BT.amV={acts:acts,i:0,face:plan.face};
@@ -30844,21 +30921,58 @@ function btVehOffense(w,n,face){ // その位置から(停止して)撃つ最大
   return best;
 }
 function btVehDanger(u,side,n,face){ // その位置にいる自車が敵から撃破される見込みの合計
-  var tot=0,me={kind:'afv'},v=btAfvData(u.nm);
+  var tot=0,me={kind:'afv'},v=btAfvData(u.nm),A=BT_AIW;
   var tu=Object.assign({},u,{vca:face,tca:face,mvd:0,mot:0});
-  BT.stacks.forEach(function(s){
-    if(s.side===side||s.n==null||s.n<0)return;
+  function odd(w,from){
+    var o={w:w,tgtN:n,tgt:tu,mode:'VTT',ammo:(w.kind==='PSK'?'HEAT':'AP'),ph:'PF',fast:true};
+    if(from!=null)o.w=btTmpW(w,from,w.u.vca);
+    var ev=btOrdEval(o);if(!ev.ok)return 0;
+    var od=btVTTOdds(o,ev);var r=od.kill+od.imm*0.3+od.shock*0.4;
+    // v281(段階4): 動ける敵車両は側面に回り込める。正面以外に当たった場合の見込みを混ぜる
+    if(A.vFlank&&w.kind==='MA'&&!w.u.imm&&from==null){var t2=Object.assign({},tu,{vca:(face+2)%6,tca:(face+2)%6});var o2=Object.assign({},o,{tgt:t2});var ev2=btOrdEval(o2);if(ev2.ok){var od2=btVTTOdds(o2,ev2);r=(1-A.vFlank)*r+A.vFlank*(od2.kill+od2.imm*0.3+od2.shock*0.4);}}
+    return r;
+  }
+  btVirtualEnemyAFV(side).concat(BT.stacks).forEach(function(s){
+    if(s.side===side)return;
+    if(s.n==null||s.n<0){
+      // v281(段階4): 盤外で待機中の敵車両(増援)は、最寄りの進入盤端から撃てるとみなす
+      if(!A.vOff||!s.off||!btAFVs(s).length)return;
+      var en=btEntryFirePos(s.off,n);if(en==null)return;
+      btOrdWeapons(s).forEach(function(w){if(w.kind!=='MA')return;tot+=A.vOff*odd(w,en);});
+      return;
+    }
     var d=btDist(s.n,n);if(d>16)return;
     btOrdWeapons(s).forEach(function(w){
       if(w.kind==='PSK'&&d>4)return;
       if(w.kind==='MA'&&(w.u.shock||w.u.stun))return;
-      var o={w:w,tgtN:n,tgt:tu,mode:'VTT',ammo:(w.kind==='PSK'?'HEAT':'AP'),ph:'PF',fast:true};
-      var ev=btOrdEval(o);if(!ev.ok)return;
-      var od=btVTTOdds(o,ev);tot+=od.kill+od.imm*0.3+od.shock*0.4;
+      tot+=odd(w,null);
     });
     if(d<=1&&btInf(s).some(btGO))tot+=0.08*btInf(s).filter(btGO).length; // 白兵戦の危険
   });
   return tot;
+}
+// v281(段階4): まだ盤外にも出ていない敵の増援車両(S26: ソ連T1の第71重戦車連隊)を、進入盤端に待機しているものとして扱う
+var BT_VEA=null,BT_EFP=null;
+// 盤外の敵車両が進入して(約9ヘクス前進して)撃てる位置: 進入盤端から9ヘクス以内の開けたヘクスのうち、nに最も近くLOSのあるもの
+function btEntryFirePos(off,n){
+  var key=BT.turn+'|'+BT.half+'|'+off;
+  if(!BT_EFP||BT_EFP.key!==key){
+    var edge=BTG.nodes.filter(function(N){return (off==='E'&&N.eE)||(off==='W'&&N.eW)||(off==='N'&&N.eN);}).map(function(N){return N.i;});
+    var zone=BTG.nodes.filter(function(N){if(N.cover||N.cost==null)return false;for(var i=0;i<edge.length;i++)if(btDist(edge[i],N.i)<=9)return true;return false;}).map(function(N){return N.i;});
+    BT_EFP={key:key,zone:zone,pos:{}};
+  }
+  if(BT_EFP.pos[n]!==undefined)return BT_EFP.pos[n];
+  var c=BT_EFP.zone.map(function(m){return {m:m,d:btDist(m,n)};}).filter(function(x){return x.d>=2&&x.d<=16;}).sort(function(a,b){return a.d-b.d;}).slice(0,14);
+  var r=null;for(var i=0;i<c.length;i++){if(btLOS(c[i].m,n,true).ok){r=c[i].m;break;}}
+  BT_EFP.pos[n]=r;return r;
+}
+function btVirtualEnemyAFV(side){
+  if(!BT_AIW.vOff||btScId()!=='S26'||side!=='GER'||BT.turn!==1)return [];
+  if(BT.stacks.some(function(s){return s.side==='SOV'&&s.off==='N';}))return [];
+  var key=BT.turn+'|'+BT.half;if(BT_VEA&&BT_VEA.key===key)return BT_VEA.list;
+  var list=[];btObItems().forEach(function(o){if(o.side!=='SOV'||btGroupOf(o)!=='sovT1'||btInfo('SOV',o.name).kind!=='afv')return;
+    for(var i=0;i<o.total;i++){var u={id:'vt'+o.key+i,k:o.key,nm:o.name,s:'ok',fire:'',own:null};btVInit(u,'SOV',0);list.push({id:'vt'+o.key+i,side:'SOV',n:-1,off:'N',u:[u],mel:false,afv:true});}});
+  BT_VEA={key:key,list:list};return list;
 }
 function btBestFace(u,side,n){ // 最も危険な敵に正面を向ける
   var best=0,bd=1e9;
@@ -30904,6 +31018,8 @@ function btAIVehPlan(s){
     var bf=btBestFace(u,side,n);
     var off=w?btVehOffense(w,n,bf.f):0;
     var sup=att?F[n]*0.04:0;
+    // v281(段階4): 味方歩兵から離れすぎない(歩兵の支援・敵歩兵の対戦車攻撃からの保護)
+    if(BT_AIW.vSup){var dm=99;BT.stacks.forEach(function(x){if(x.side===side&&x.n!=null&&x.n>=0&&btInf(x).some(btGO))dm=Math.min(dm,btDist(x.n,n));});if(dm>3)sup-=BT_AIW.vSup*Math.min(6,dm-3);}
     return {sc:off-bf.d*btVehVal(u)*0.9+sup,f:bf.f,off:off,dng:bf.d};
   }
   var here=(s.n!=null&&s.n>=0)?s.n:null;
