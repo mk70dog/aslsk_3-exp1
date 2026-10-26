@@ -2573,7 +2573,7 @@ function vaslCtrHTML(id,px,capTxt,capCol,uPx){ // 2026-10追加: VASLカウン�
   var k=VASL_CTR_MAP[id],src=k&&VASL_CTR_IMG[k];if(!src)return '';
   if(String(id).indexOf('u:')===0)capTxt=''; // 2026-10: ダルマ指示 MMC/SMC/SWカウンターは下部の名称を表示しない
   if(capTxt===undefined&&ORD_OFFICIAL_NAME[id])capTxt=ORD_OFFICIAL_NAME[id]; // 砲・対戦車兵器は公式名を自動で下に表示
-  var d=VASL_CTR_DIM[k]||[60,60],sc=px/60;if(String(id).indexOf('u:')===0)sc=(uPx||36)/d[0]; // v204: MMC/SMC/SWは36x36固定(画像は192px原寸なので高解像度のまま縮小)
+  var d=VASL_CTR_DIM[k]||[60,60],sc=px/60;if(String(id).indexOf('u:')===0)sc=(uPx||(document.documentElement.classList.contains('is-tabl')?45:36))/d[0]; // v204: MMC/SMC/SWは36x36固定(画像は192px原寸なので高解像度のまま縮小)
   var im='<img src="'+src+'" alt="" draggable="false" style="width:'+Math.round(d[0]*sc)+'px;height:'+Math.round(d[1]*sc)+'px;display:block;flex-shrink:0;pointer-events:none;-webkit-user-select:none;user-select:none">';
   if(!capTxt)return im;
   return '<span style="display:inline-flex;flex-direction:column;align-items:center;gap:2px;max-width:100%">'+im+'<span style="font-size:9px;font-weight:bold;color:'+(capCol||'#ccddee')+';white-space:normal;line-height:1.15;text-align:center">'+capTxt+'</span></span>';
