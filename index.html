@@ -825,6 +825,8 @@ html #main .fgNatBox[style][class]{padding:var(--np,5px) !important}
 html #main .fgNatBox[style][class] > div[style*="flex-direction:column"]{gap:var(--ng,4px) !important}
 html #main .fgNatBox[style][class] .btns{gap:var(--ng,4px) !important}
 html #main .fgNatBox[style][class] > div:first-child{margin-bottom:var(--ng,3px) !important}
+.op-numtag{font-size:12px;color:#8899aa;white-space:nowrap}
+.op-numbadge{position:absolute;right:1px;bottom:1px;background:#000c;color:#fff;font-size:10px;font-weight:bold;line-height:1;padding:1px 3px;border-radius:3px;pointer-events:none}
 /* v264: MAPタブ 対象グループ選択ボタンをカウンター(45px)にぴったり合わせる(固定64x34pxだと枠から画像がはみ出す) */
 html #main div.los-grpgrid[style][class]:has(> button.b img){grid-template-columns:repeat(auto-fill,minmax(0,max-content)) !important;justify-content:start !important}
 html #main div.los-grpgrid[style][class]:has(> button.b img) > button.b{width:auto !important;min-width:0 !important;height:auto !important;padding:2px !important;display:inline-flex !important;align-items:center;justify-content:center}
@@ -13813,7 +13815,9 @@ function FIRE_PAGE(){
                 var k2=it.nat+'|'+it.kind+'|'+it.label;
                 opLblSeen[k2]=(opLblSeen[k2]||0)+1;
                 var opNumTag=opLblTotal[k2]>1?' #'+opLblSeen[k2]:'';
-                h+='<button class="b sm xs'+(itOn?' on':'')+'" onclick="FgSetSwOwner('+g.id+',\''+sw.uid+'\','+it.pid+')">'+fgUnitChip(it.label,it.nat,itD?itD.col:'#4499ee',itD,it.kind==='smc')+opNumTag+'</button>';
+                var _otv=window.__opTagVar||1; // 運搬/操作ボタンの#番号: 1=枠の外(右)に表示 / 2=カウンター右下に重ねて表示
+                var _opBtn='<button class="b sm xs'+(itOn?' on':'')+'" onclick="FgSetSwOwner('+g.id+',\''+sw.uid+'\','+it.pid+')"'+' style="padding:2px;min-width:0;'+(_otv===2&&opNumTag?'position:relative':'')+'"'+'>'+fgUnitChip(it.label,it.nat,itD?itD.col:'#4499ee',itD,it.kind==='smc')+(_otv===2&&opNumTag?'<span class="op-numbadge">'+opNumTag.replace(' ','')+'</span>':'')+'</button>';
+                h+=(_otv===2||!opNumTag)?_opBtn:('<span class="op-numwrap" style="display:inline-flex;align-items:center;gap:2px">'+_opBtn+'<span class="op-numtag">'+opNumTag.replace(' ','')+'</span></span>');
               });
             }
             h+='</div>';
