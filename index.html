@@ -13587,7 +13587,7 @@ function FIRE_PAGE(){
           h+='<div style="font-size:11px;color:#8899aa;margin-bottom:3px">'+T('編成')+'</div>';
           // 2026-08修正(ダルマ指示「1列目ABCDE 2列目FGHIJに変更」): GROUP_SLOTSをA〜H(8個)
           // からA〜J(10個)に拡張し、表示を4列→5列に変更(2行、1行目ABCDE/2行目FGHIJ)。
-          var fgWideSlots=document.documentElement.classList.contains('is-tabl');var fgCols=window.FG_SLOT_COLS||12,fgGap=(window.FG_SLOT_GAP==null?0:window.FG_SLOT_GAP),fgNSlots=2*(fgCols-1); // v265: iPad横=2段x14列(A〜M+登録 / N〜Z+解除)
+          var fgWideSlots=document.documentElement.classList.contains('is-tabl');var fgCols=window.FG_SLOT_COLS||12,fgGap=(window.FG_SLOT_GAP==null?0:window.FG_SLOT_GAP),fgOne=(window.FG_SLOT_ROWS===1),fgNSlots=fgOne?fgCols-2:2*(fgCols-1); // v265: iPad横=2段x14列(A〜M+登録 / N〜Z+解除)
           h+='<div class="btns fgSlotGrid'+(fgWideSlots?' fgSlotWide':'')+'" style="margin:0 0 4px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;--fgc:'+fgCols+';--fgg:'+fgGap+'px">';
           // 2026-08修正(ダルマ指示「一列目5番目を登録に変更、2列目5番目を解除に変更する」):
           // 5列×2行のグリッドのうち、1行目5番目(インデックス4=E)を「登録」ボタン、
@@ -13626,8 +13626,8 @@ function FIRE_PAGE(){
             // に付けていた丸囲み「済」バッジを廃止。「編成A」(登録済み)と「－」(未登録)の
             // テキスト自体で区別が付くため、済バッジは冗長だった。
             h+='<button class="b sm'+(isActive?' on':(occupied?'':' xs'))+'" style="width:100%;box-sizing:border-box;overflow:hidden" onclick="FgSelectGroupSlot('+g.id+',\''+slot+'\')">'+slotLabel+'</button>';
-            if(fgWideSlots&&slotIdx===fgCols-2)h+='<button class="b sm'+(saveFlashingGrid?' on':' xs')+'" style="width:100%;box-sizing:border-box;overflow:hidden" onclick="FgSaveActiveSlot('+g.id+')">'+T('登録')+'</button>';
-            if(fgWideSlots&&slotIdx===fgNSlots-1)h+='<button class="b sm xs" style="width:100%;box-sizing:border-box;overflow:hidden'+(g.activeGroupSlot?'':';opacity:0.35')+'" '+(g.activeGroupSlot?'':'disabled ')+'onclick="FgDisbandGroup('+g.id+')">'+T('解除')+'</button>';
+            if(fgWideSlots&&(fgOne?slotIdx===fgNSlots-1:slotIdx===fgCols-2))h+='<button class="b sm'+(saveFlashingGrid?' on':' xs')+'" style="width:100%;box-sizing:border-box;overflow:hidden" onclick="FgSaveActiveSlot('+g.id+')">'+T('登録')+'</button>';
+            if(fgWideSlots&&(fgOne?slotIdx===fgNSlots-1:slotIdx===fgNSlots-1))h+='<button class="b sm xs" style="width:100%;box-sizing:border-box;overflow:hidden'+(g.activeGroupSlot?'':';opacity:0.35')+'" '+(g.activeGroupSlot?'':'disabled ')+'onclick="FgDisbandGroup('+g.id+')">'+T('解除')+'</button>';
           });
           h+='</div>';
           // 2026-08修正(ダルマ指示「登録（編成C） 解散　削除」): グリッド内(1行目5番目=登録、
