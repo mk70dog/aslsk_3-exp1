@@ -14003,7 +14003,7 @@ function FIRE_PAGE(){
         // 共通)/負傷(SMCのみ)の状態バッジを同一行にまとめる。いずれもflex:1でピッカーボタンと
         // 同じ高さ・幅比率に揃える。負傷判定はSMC(指揮官・乗員)のみが対象(3.7項)。
         h+='<div class="fg-pk-row" style="display:flex;align-items:stretch;gap:3px;margin-bottom:2px;flex-wrap:wrap">';
-        h+='<button class="b sm" style="flex:0 0 auto;min-width:0;white-space:nowrap" onclick="FgRemovePickItem('+g.id+','+ii+')">'+fgUnitChip(it.label,it.nat,itD?itD.col:'#4499ee',itD,it.kind==='smc')+numTag+' </button>';
+        h+='<button class="b sm" style="flex:0 0 auto;min-width:0;white-space:nowrap;position:relative;padding:2px" onclick="FgRemovePickItem('+g.id+','+ii+')">'+fgUnitChip(it.label,it.nat,itD?itD.col:'#4499ee',itD,it.kind==='smc')+(numTag?'<span class="op-numbadge">'+numTag.replace(' ','')+'</span>':'')+'</button>'; // v268: #番号はカウンター左上に小さく重ねる(運搬/操作ボタンと同じ)
         var ownedUids=Object.keys(g.swOwner||{}).filter(function(uid){return g.swOwner[uid]===it.pid;});
         ownedUids.forEach(function(uid){
           var osw=m[uid];if(!osw)return;
