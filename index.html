@@ -48,10 +48,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv282">
-<title>ASL SKシリーズv282</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv283">
+<title>ASL SKシリーズv283</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv282">
+<meta property="og:title" content="ASL SKシリーズv283">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -818,6 +818,10 @@ html.is-tabl #main button.fg-bdg[style][class]{flex:0 0 45px !important;width:45
 html #main div.los-grpgrid[style][class] > button.b{min-width:49px !important;min-height:49px !important}
 .los-slottxt{font-size:10px;line-height:1.25;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:45px;min-height:45px}
 .los-slotltr{font-size:22px;font-weight:bold;line-height:1;display:flex;align-items:center;justify-content:center;min-width:45px;min-height:45px}
+/* v283(ダルマ指示「ボタンの四隅のドットをカウンター表示時には表示しない」): カウンター画像を表示しているボタンは四隅のドット(::before)を消す */
+.b:has(img[data-ctr])::before,.nb:has(img[data-ctr])::before,.judg3d:has(img[data-ctr])::before,.phz-sq:has(img[data-ctr])::before{display:none !important}
+/* v283(ダルマ指示「iPad横 射撃タブ 左端カウンターの左側余白を広げる」): 枠の左端からカウンターまでを広げる(+9px、見出しの位置は変えない) */
+html.is-tabl #main .btns.unit-picker[class],html.is-tabl #main .fg-pk-row[class],html.is-tabl #main .fgNatBox .fgSlotGrid[class]{margin-left:9px !important}
 /* v265: iPad横のみ 射撃タブ 国籍:編成・MMC:損耗を1:1均等分割、国籍/編成の余白10px */
 html.is-tabl{--np:12px;--ng:12px}
 html.is-tabl #main .fgHalf[style][class]{flex:1 1 0 !important}
@@ -847,8 +851,8 @@ html.is-tabl #hdrLogoR img{position:absolute;left:0;top:0;width:100%;height:100%
 #main div.fgSlotGrid[style*="display:grid"][style*="grid-template-columns:repeat("]:has(> button.b img),#main div.fgSlotGrid{grid-template-columns:repeat(5,minmax(0,1fr)) !important;justify-content:stretch !important}
 /* v237サンプル: iPad横は 目標車両の移動 / 射撃側車両の状態 / 乗員の状態 を1列に */
 html.is-tabl .c24row{display:flex;flex-wrap:nowrap;gap:6px;align-items:stretch;margin-bottom:6px}
-html.is-tabl .c24row>.c24card{flex:3 1 0;min-width:0;margin-bottom:0 !important}
-html.is-tabl .c24row>div:not(.c24card){flex:4 1 0;min-width:0;margin-bottom:0 !important}
+html.is-tabl .c24row>.c24card{flex:0 0 calc(50% - 3px);min-width:0;margin-bottom:0 !important} /* v283(ダルマ指示「戦車タブ 目標車両の移動カードの横幅を全体の幅の半分にする」): 3:4→全体の半分 */
+html.is-tabl .c24row>div:not(.c24card){flex:1 1 0;min-width:0;margin-bottom:0 !important}
 /* ボタン行を全カード同じ高さ位置(見出しの直下)・同じ高さに揃える */
 html.is-tabl .c24row .c24card,html.is-tabl .c24row>div:not(.c24card)>div{display:flex;flex-direction:column}
 html.is-tabl .c24row>div:not(.c24card){display:flex;flex-direction:row;gap:6px}
@@ -2595,7 +2599,7 @@ function afvOfficialName(v){return AFV_OFFICIAL_NAME[v.id]||T(v.lbl);}
 function vaslCtrHTML(id,px,capTxt,capCol,uPx){ // 2026-10追加: VASLカウンター画像(あれば)のHTMLを返す。無ければ''(呼び出し側が従来の文字チップへフォールバック)。px=60x60カウンターの表示幅。capTxtを渡すと下に名称キャプション(車両カウンターは名称が印字されないため)。
   var k=VASL_CTR_MAP[id],src=k&&VASL_CTR_IMG[k];if(!src)return '';
   if(String(id).indexOf('u:')===0)capTxt=''; // 2026-10: ダルマ指示 MMC/SMC/SWカウンターは下部の名称を表示しない
-  if(capTxt===undefined&&ORD_OFFICIAL_NAME[id])capTxt=ORD_OFFICIAL_NAME[id]; // 砲・対戦車兵器は公式名を自動で下に表示
+  if(capTxt===undefined&&ORD_OFFICIAL_NAME[id]&&id!=='psk')capTxt=ORD_OFFICIAL_NAME[id]; // v283(ダルマ指示「pskカウンター 下表記削除」): PSKはカウンターに名称が印字されているので下の名称を出さない(長押しの情報には出す) // 砲・対戦車兵器は公式名を自動で下に表示
   var d=VASL_CTR_DIM[k]||[60,60],sc=px/60;if(String(id).indexOf('u:')===0)sc=(uPx||(document.documentElement.classList.contains('is-tabl')?45:36))/d[0]; // v204: MMC/SMC/SWは36x36固定(画像は192px原寸なので高解像度のまま縮小)
   var im='<img src="'+src+'" data-ctr="'+String(id).replace(/"/g,'&quot;')+'" alt="" draggable="false" style="width:'+Math.round(d[0]*sc)+'px;height:'+Math.round(d[1]*sc)+'px;display:block;flex-shrink:0;pointer-events:none;-webkit-user-select:none;user-select:none">';
   if(!capTxt)return im;
@@ -9833,7 +9837,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.482"; // 2026-10-27 v282(ダルマ指示「続ける」「実施」): (1)射撃タブ: 国籍の枠の縦幅を編成の枠に揃える。(2)対戦モード段階4: アプリのドイツ軍はgroup2(西端・ティーガーII/IV号J)をT1に入れる、戦車の射撃目標で敵車両の価値を1.5倍、攻撃側は守備兵2個以下の敵建物への射撃を重視(自己対戦でドイツ軍の建物確保 平均3.45→4.12)。v281: BFF射撃済み印のバグ修正、AFV/残骸のLOS妨害(7.4.1)、移動射撃のしきい値0.5、攻撃側の危険の重み1.7。
+var APP_VERSION="ASLSK3M-v11.483"; // 2026-10-27 v283(ダルマ指示「全て実施」「実施」): (1)iPad横 射撃タブ: 左端カウンターの左側余白を+9px。(2)編成のAマークを丸(15px・10px字)にし角から少しはみ出す(切れないようスロットのoverflowを可視に)。(3)PSKカウンター下の名称を表示しない。(4)戦車タブ: 目標車両の移動カードを全体幅の半分に。(5)カウンター画像を表示するボタンは四隅のドットを表示しない。(6)対戦モード段階4: 白兵戦の価値に「勝てば得る建物の価値」を入れる(いまの位置の目標値を敵ヘクスを取る価値より高く見て白兵戦をしなかった)。自己対戦でドイツ軍の白兵戦 1局0.6→1.9回、建物確保 平均3.75→4.1。v282: 国籍枠の高さ、ドイツ軍AI(西端先行・敵車両優先・守備の薄い建物へ射撃集中)。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
@@ -13689,7 +13693,7 @@ function FIRE_PAGE(){
             if(slotLdrItem){
               var slotLdrCol=(UNITS[slotSaved.pickerNat]&&UNITS[slotSaved.pickerNat].col)||'#4499ee';
               slotLabel=fgUnitChip(slotLdrItem.label,slotSaved.pickerNat,slotLdrCol,null,slotLdrItem.kind==='smc',56);
-              if(/<img/.test(slotLabel))slotLabel='<span style="position:relative;display:inline-flex">'+slotLabel+'<span class="op-numbadge" style="z-index:1;left:auto;right:-3px;top:-3px;font-size:8px;padding:1px 2px">'+slot+'</span></span>'; // v277(ダルマ指示「編成のAのマークを#1#2のマークと同じようにする」): 運搬/操作の#番号と同じバッジ(黒地・白字、カウンター右上の角から少しはみ出す小さめのバッジ、v278ダルマ指示「案1で実施」)
+              if(/<img/.test(slotLabel))slotLabel='<span style="position:relative;display:inline-flex">'+slotLabel+'<span class="op-numbadge" style="z-index:1;left:auto;right:-4px;top:-4px;font-size:10px;padding:0;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center">'+slot+'</span></span>'; // v277(ダルマ指示「編成のAのマークを#1#2のマークと同じようにする」): 運搬/操作の#番号と同じバッジ(黒地・白字、カウンター右上の角から少しはみ出す小さめのバッジ、v278ダルマ指示「案1で実施」)
             } else if(occupied){
               slotLabel=T('編成')+slot;
             } else {
@@ -13700,7 +13704,7 @@ function FIRE_PAGE(){
             // 2026-08修正(ダルマ指示「編成A済→編成Ａに変更」): 登録済み(指揮官なし)ボタン
             // に付けていた丸囲み「済」バッジを廃止。「編成A」(登録済み)と「－」(未登録)の
             // テキスト自体で区別が付くため、済バッジは冗長だった。
-            h+='<button class="b sm'+(isActive?' on':(occupied?'':' xs'))+'" style="width:100%;box-sizing:border-box;overflow:hidden" onclick="FgSelectGroupSlot('+g.id+',\''+slot+'\')">'+slotLabel+'</button>';
+            h+='<button class="b sm'+(isActive?' on':(occupied?'':' xs'))+'" style="width:100%;box-sizing:border-box;overflow:'+(/<img/.test(slotLabel)?'visible':'hidden')+'" onclick="FgSelectGroupSlot('+g.id+',\''+slot+'\')">'+slotLabel+'</button>';
             if(fgWideSlots&&(fgOne?slotIdx===fgNSlots-1:slotIdx===fgCols-2))h+='<button class="b sm'+(saveFlashingGrid?' on':' xs')+'" style="width:100%;box-sizing:border-box;overflow:hidden" onclick="FgSaveActiveSlot('+g.id+')">'+T('登録')+'</button>';
             if(fgWideSlots&&(fgOne?slotIdx===fgNSlots-1:slotIdx===fgNSlots-1))h+='<button class="b sm xs" style="width:100%;box-sizing:border-box;overflow:hidden'+(g.activeGroupSlot?'':';opacity:0.35')+'" '+(g.activeGroupSlot?'':'disabled ')+'onclick="FgDisbandGroup('+g.id+')">'+T('解除')+'</button>';
           });
@@ -29557,7 +29561,7 @@ function btAIPlanMoves(side){
   BT_THM={};try{return btAIPlanMoves0(side);}finally{BT_THM=null;}
 }
 // AIの重み(段階4: 自己対戦で調整)
-var BT_AIW={gerT1:'g2',tgtM:1.5,fireBldg:1,bffMin:0.5,attRisk:1.7,attPath:1.2,attUrg:0.1,defRisk:2.2,defPath:2.0,afvTh:0,vFlank:0,vOff:0,vSup:0};
+var BT_AIW={ccCap:10,gerT1:'g2',tgtM:1.5,fireBldg:1,bffMin:0.5,attRisk:1.7,attPath:1.2,attUrg:0.1,defRisk:2.2,defPath:2.0,afvTh:0,vFlank:0,vOff:0,vSup:0};
 function btRoleW(side){ // シナリオの攻撃側は危険を受け入れ、ターンが進むほど目標を急ぐ
   var att=(btFirst()===side),A=BT_AIW;
   var urg=1+A.attUrg*Math.max(0,BT.turn-1);
@@ -29662,6 +29666,12 @@ function btAIAdvance0(side){
         var atk=c.inf;var ev=btCCEval(side,atk,def,btOpp(side));
         // 敵ヘクスが建物なら支配の価値
         sc=F[to]+ev.val*6+(N.bldg?3:0);
+        if(BT_AIW.ccCap&&here!=null){
+          // v283(段階4): 白兵戦の価値=いまの位置の価値+勝てば得る建物の価値。いまの位置の目標値(敵に接している価値)を、敵ヘクスを取る価値より高く見てしまい、白兵戦をしなかった
+          var hv=btHoldValue(side,s),sameB=N.bldg&&N.bldg===BTG.nodes[here].bldg;
+          var cap=0;if(N.bldg){var blc=btBldgs().filter(function(b){return b.id===N.bldg;})[0];var rest=0;if(blc)BT.stacks.forEach(function(x){if(x.side!==side&&x.n!==to&&btBldgNodes(blc).indexOf(x.n)>=0)rest+=btInf(x).filter(btGO).length;});cap=BT_AIW.ccCap*(rest?0.4:1);}
+          sc=stay-(sameB?0:hv*0.5)+(ev.pKill+ev.pCas*0.5)*cap+ev.val*6;
+        }
         if(ev.pKill+ev.pCas*0.5<0.33)sc-=6;
         if(window.BT_DBG)BT_DBG.push({t:'T'+BT.turn+side+'CC',from:here!=null?BTG.nodes[here].nm:'off',to:N.nm,atk:atk.map(function(u){return u.nm;}).join(','),def:def.map(function(u){return u.nm+u.s;}).join(','),pK:+ev.pKill.toFixed(2),pB:+ev.pBack.toFixed(2),val:+ev.val.toFixed(2),sc:+sc.toFixed(2),stay:+stay.toFixed(2)});
         if(c.needCX)sc-=0.5;
