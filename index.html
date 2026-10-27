@@ -48,10 +48,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv281">
-<title>ASL SKシリーズv281</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv282">
+<title>ASL SKシリーズv282</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv281">
+<meta property="og:title" content="ASL SKシリーズv282">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -9833,7 +9833,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.481"; // 2026-10-27 v281(ダルマ指示「続ける」「実施」): 対戦モード段階4(自己対戦での強さ調整)。(1)バグ修正: 移動射撃(BFF)した車両の射撃済みの印が外れず、以後ずっと撃てなかった→前進射撃フェイズの終わりに外す。(2)規則追加: AFV/残骸のLOS妨害(ASLSK4 7.4.1、同一高度で通過するヘクスごとに+1、移動目標は除く、両側から見えるヘクスのみ)。(3)AIの重み調整: 移動射撃は期待値0.5以上の時だけ、攻撃側の危険の重み1.25→1.7(自己対戦でドイツ軍の建物確保 平均2.1→3.6)。
+var APP_VERSION="ASLSK3M-v11.482"; // 2026-10-27 v282(ダルマ指示「続ける」「実施」): (1)射撃タブ: 国籍の枠の縦幅を編成の枠に揃える。(2)対戦モード段階4: アプリのドイツ軍はgroup2(西端・ティーガーII/IV号J)をT1に入れる、戦車の射撃目標で敵車両の価値を1.5倍、攻撃側は守備兵2個以下の敵建物への射撃を重視(自己対戦でドイツ軍の建物確保 平均3.45→4.12)。v281: BFF射撃済み印のバグ修正、AFV/残骸のLOS妨害(7.4.1)、移動射撃のしきい値0.5、攻撃側の危険の重み1.7。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
@@ -13632,7 +13632,7 @@ function FIRE_PAGE(){
         var pkNatListForSplit=pkNatsForSplit?Object.keys(pkNatsForSplit):Object.keys(UNITS);
         // 2026-08修正(ダルマ指示): 左右の順序を入れ替え(左=国籍、右=グループ)、
         // それぞれを枠線で囲んで視覚的に区切る。
-        h+='<div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:6px">';
+        h+='<div style="display:flex;gap:6px;align-items:stretch;margin-bottom:6px">'; // v282(ダルマ指示「射撃タブ 国籍の枠の縦幅を編成の枠の縦幅に合わせる」): flex-start→stretch(左右の枠の高さを揃える)
         // 2026-08修正(ダルマ指示「4:6に変更」): 国籍/編成パネル幅比率をflex1:2(1/3・2/3)
         // からflex4:6(2/5・3/5)に変更。
         h+='<div class="fgNatBox fgHalf" style="flex:4;min-width:0;border:1px solid #404040;border-radius:3px;padding:5px">';
@@ -29401,6 +29401,8 @@ function btFireOptions(side,ph,targetsN,ctx){
       }
     }
   });
+  // v282(段階4): 攻撃側は、守備兵の少ない敵の建物への射撃を重く見る(崩せば前進で建物を取れる)
+  if(BT_AIW.fireBldg&&btFirst()===side)res.forEach(function(r){var N=BTG.nodes[r.fd.tgtN];if(!N.bldg)return;var bl=btBldgs().filter(function(b){return b.id===N.bldg;})[0];if(!bl)return;var ns=btBldgNodes(bl);var go=0;BT.stacks.forEach(function(x){if(x.side!==side&&ns.indexOf(x.n)>=0)go+=btInf(x).filter(function(u){return btGO(u)&&btI(u,x.side).kind==='mmc';}).length;});if(go<=2)r.val*=1+BT_AIW.fireBldg;});
   res.sort(function(a,b){return b.val-a.val;});
   return res;
 }
@@ -29555,7 +29557,7 @@ function btAIPlanMoves(side){
   BT_THM={};try{return btAIPlanMoves0(side);}finally{BT_THM=null;}
 }
 // AIの重み(段階4: 自己対戦で調整)
-var BT_AIW={bffMin:0.5,attRisk:1.7,attPath:1.2,attUrg:0.1,defRisk:2.2,defPath:2.0,afvTh:0,vFlank:0,vOff:0,vSup:0};
+var BT_AIW={gerT1:'g2',tgtM:1.5,fireBldg:1,bffMin:0.5,attRisk:1.7,attPath:1.2,attUrg:0.1,defRisk:2.2,defPath:2.0,afvTh:0,vFlank:0,vOff:0,vSup:0};
 function btRoleW(side){ // シナリオの攻撃側は危険を受け入れ、ターンが進むほど目標を急ぐ
   var att=(btFirst()===side),A=BT_AIW;
   var urg=1+A.attUrg*Math.max(0,BT.turn-1);
@@ -29809,7 +29811,8 @@ function BtAppSetup(){
   if(!btActive()||!BT.app)return;
   btEnsureGraph().then(function(){
     if(BT.app==='GER'){
-      BT.gerPlan={t1:'g1',t2:'g2',why:'建物の掃討に歩兵(分隊11)が要るため、歩兵の多いgroup1(東端)をT1に入れる'};
+      var t1=BT_AIW.gerT1||'g2'; // v282(段階4): 自己対戦で比べ、重戦車のいるgroup2(西端)を先に入れる方が強かった
+      BT.gerPlan={t1:t1,t2:t1==='g1'?'g2':'g1',why:t1==='g2'?'ティーガーIIとIV号J(group2・西端)を先に入れ、T1に北端から来るソ連重戦車連隊を迎え撃つ。歩兵の多いgroup1(東端)はT2に入れて建物を攻める':'建物の掃討に歩兵(分隊11)が要るため、歩兵の多いgroup1(東端)をT1に入れる'};
     }else{
       BT.stacks=BT.stacks.filter(function(s){return s.side!=='SOV';});
       btAppSetupSOV();
@@ -30824,7 +30827,7 @@ function btITTValue(o,ev,tS,ctx){
   var pN=ev.pHit-ev.pCH;
   return pN*lossAt(fpN,0)+ev.pCH*lossAt(fpC,-Math.max(0,TN.tem));
 }
-function btVTTValue(o,ev){var od=btVTTOdds(o,ev);return (od.kill+od.imm*0.35+od.shock*0.45)*btVehVal(o.tgt);}
+function btVTTValue(o,ev){var od=btVTTOdds(o,ev);return (od.kill+od.imm*0.35+od.shock*0.45)*btVehVal(o.tgt)*(BT_AIW.tgtM||1);}
 // 射撃候補(車両主砲・砲・PSK・車載機銃)
 function btAIOrdOptions(side,ph,targetsN,ctx,filterStack){
   var res=[];
