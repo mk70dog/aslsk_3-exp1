@@ -48,10 +48,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv286">
-<title>ASL SKシリーズv286</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv287">
+<title>ASL SKシリーズv287</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv286">
+<meta property="og:title" content="ASL SKシリーズv287">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -689,6 +689,10 @@ html.is-phone #nav .nav-row-2 .nb:nth-child(n+4){grid-column:span 5}
 /* 2026-10: ダルマ指示 iPad縦(is-tabp): HELP右のバッジ画像を非表示、縦スクロール時もメインタブを常時表示 */
 html.is-tabp #tacBadgeRow{display:none !important}
 html.is-tabp #nav-sticky-wrap,html.is-tabl #nav-sticky-wrap{display:contents !important}
+html.is-tabl:has(#btBand.bt-band-on) #nav{position:relative !important;top:auto !important} /* v287(ダルマ指示): iPad横 対戦モード中はメインタブを固定しない(地図を広く) */
+html.is-tabl:has(#btBand.bt-band-on) .los-tb{top:env(safe-area-inset-top,0px)}
+html.is-tabl:has(#btBand.bt-band-on) #main .bt-cmd{top:calc(env(safe-area-inset-top,0px) + var(--lostbh,56px))}
+html.is-tabl:has(#btBand.bt-band-on) .los-compass{top:calc(env(safe-area-inset-top,0px) + 60px + var(--btcmdh,0px))}
 /* 2026-10: ダルマ指示 iPad縦のMAPタブ: 90°L〜BACKのツールバーを縦スクロール時もメインタブの下に常時表示 */
 html.is-tabp .los-tb{position:sticky;top:var(--navh,136px);z-index:190;background:#0a0c14;padding:4px 0;margin-top:-4px;box-shadow:0 4px 10px rgba(0,0,0,.6)}
 html.is-tabp #losZoomTb{position:sticky;bottom:0;z-index:190;background:#0a0c14;padding:4px 0;box-shadow:0 -4px 10px rgba(0,0,0,.6)}
@@ -9840,7 +9844,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.486"; // 2026-10-27 v286(ダルマ指示「スタック長押しで詳細をポップアップ」「フェイズ表示・説明・選択中スタックは常時表示から外す」「実施」): (1)対戦モードで地図のスタックを0.5秒長押しすると、そのヘクスの詳細(ヘクス名・地形・TEM・高度・煙幕・残留火力・建物の支配・混戦、軍ごとの部隊をカウンター画像付きで: 火力・射程・士気・指揮修正・SWの所有者/ROF/故障番号・車両のMP/装甲/主砲/機銃・各状態)を画面中央に表示。指を動かすと取り消し(スクロール優先)、長押し後に指を離しても選択・移動は起きない。✕か外側のタップで閉じる。パソコンは左ボタン長押し。地図の長押しで画像保存メニュー・文字選択を出さない。(2)ツールバー直下の固定パネルは「車両の移動・射撃・反応の確認・A▶︎B測定」だけにし、操作中でなければ出さない。フェイズ表示と次のフェイズ・説明・選択中スタックは地図上の帯(スクロールで流れる)に戻した。 / v285(ダルマ報告バグ「全消去で『もう一度押すと全てを消します』が出ない」): 対戦モードの通知は共通のshowToast(英語の14セグ表示、日本語の文字は除去)を使っていたため、文字が全部消えて何も表示されなかった。全消去の確認・開始の確認・射撃/移動できない理由など対戦モードの通知22か所を、日本語のまま表示する対戦専用の通知(btToast、画面中央・2.5秒)に変更。 / v284(ダルマ指示「一部の細かい規則が未実装に着手」「実施」): 対戦モード (1)追加規則: 集中射撃(3.2.4、TH+2・B#-2、原B#で砲撤去/主砲故障+Recall)、移動中の射撃(Case16: 高い目+低い目×2、Case14、ITT近距離)、Recall車両の味方盤端からの退出(7.10、盤外へ退出ボタン・アプリも退出)、2回目のスタン→Recall、昇進(5.3: 自己回復・白兵戦の原DR2で指揮官登場表)、鹵獲SW(5.5: ROF-1・B#-2、PSK TH+2・X#8、DC X#-2)、回復の順序と原DR2の自動成功。(2)地図の部隊をVASLカウンター画像で表示(重ね7px・最大6枚+N、マーカー画像、Aマーク、選択枠)。「簡易表示」ボタンで文字表示に戻せる。(3)車両・ユニットの指示パネル(フェイズ・説明・選択中スタック・射撃・車両の移動)を90°L〜BACKのツールバー直下へ移し、iPad横では固定表示(最大画面の42%、超える分はパネル内スクロール)。(4)対戦中もA▶︎BでLOS測定(射撃と同じ判定: 地形・煙幕・車両/残骸の妨害、どのヘクスの車両かも表示、地図に線と点線丸)。対戦中は煙幕・敵軍・残骸ボタンを暗くして無効。(5)準備画面の古い注記を更新。
+var APP_VERSION="ASLSK3M-v11.487"; // 2026-10-27 v287(ダルマ指示「アプリ対戦モード時 iPad横 メインタブ常時表示を解除」「実施」): iPad横でMAPタブの対戦がONのときは、メインタブ(2段)を固定しない(スクロールで流れる)。90°L〜BACKのツールバーと指示パネルは画面の最上部に固定(地図が約100px広く見える)。対戦OFF・他のタブ・iPad縦は従来どおり。対戦の帯にclass bt-band-onを付け、CSSの:has()で切り替え。AI: ドイツ軍の作戦の試験用設定(BT_AIW.dV/dVV/dFG、既定は無効)を追加。 / v286(ダルマ指示「スタック長押しで詳細をポップアップ」「フェイズ表示・説明・選択中スタックは常時表示から外す」「実施」): (1)対戦モードで地図のスタックを0.5秒長押しすると、そのヘクスの詳細(ヘクス名・地形・TEM・高度・煙幕・残留火力・建物の支配・混戦、軍ごとの部隊をカウンター画像付きで: 火力・射程・士気・指揮修正・SWの所有者/ROF/故障番号・車両のMP/装甲/主砲/機銃・各状態)を画面中央に表示。指を動かすと取り消し(スクロール優先)、長押し後に指を離しても選択・移動は起きない。✕か外側のタップで閉じる。パソコンは左ボタン長押し。地図の長押しで画像保存メニュー・文字選択を出さない。(2)ツールバー直下の固定パネルは「車両の移動・射撃・反応の確認・A▶︎B測定」だけにし、操作中でなければ出さない。フェイズ表示と次のフェイズ・説明・選択中スタックは地図上の帯(スクロールで流れる)に戻した。 / v285(ダルマ報告バグ「全消去で『もう一度押すと全てを消します』が出ない」): 対戦モードの通知は共通のshowToast(英語の14セグ表示、日本語の文字は除去)を使っていたため、文字が全部消えて何も表示されなかった。全消去の確認・開始の確認・射撃/移動できない理由など対戦モードの通知22か所を、日本語のまま表示する対戦専用の通知(btToast、画面中央・2.5秒)に変更。 / v284(ダルマ指示「一部の細かい規則が未実装に着手」「実施」): 対戦モード (1)追加規則: 集中射撃(3.2.4、TH+2・B#-2、原B#で砲撤去/主砲故障+Recall)、移動中の射撃(Case16: 高い目+低い目×2、Case14、ITT近距離)、Recall車両の味方盤端からの退出(7.10、盤外へ退出ボタン・アプリも退出)、2回目のスタン→Recall、昇進(5.3: 自己回復・白兵戦の原DR2で指揮官登場表)、鹵獲SW(5.5: ROF-1・B#-2、PSK TH+2・X#8、DC X#-2)、回復の順序と原DR2の自動成功。(2)地図の部隊をVASLカウンター画像で表示(重ね7px・最大6枚+N、マーカー画像、Aマーク、選択枠)。「簡易表示」ボタンで文字表示に戻せる。(3)車両・ユニットの指示パネル(フェイズ・説明・選択中スタック・射撃・車両の移動)を90°L〜BACKのツールバー直下へ移し、iPad横では固定表示(最大画面の42%、超える分はパネル内スクロール)。(4)対戦中もA▶︎BでLOS測定(射撃と同じ判定: 地形・煙幕・車両/残骸の妨害、どのヘクスの車両かも表示、地図に線と点線丸)。対戦中は煙幕・敵軍・残骸ボタンを暗くして無効。(5)準備画面の古い注記を更新。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
@@ -29439,7 +29443,7 @@ function btFireOptions(side,ph,targetsN,ctx){
       var v=btEV(ev,ctx);
       if(v>single[i].val+single[j].val+0.02)res.push({fd:fd,ev:ev,val:v,pair:true});
       // v281(段階4): 3ヘクスの射撃グループ(石造建物の守備隊に火力を集中する)
-      if(BT_AIW.fg3)for(var k=j+1;k<single.length;k++){
+      if(BT_AIW.fg3||(side==='GER'&&BT_AIW.dFG))for(var k=j+1;k<single.length;k++){
         var c=btStackById(single[k].p.sid);if(!(btDist(c.n,a.n)===1||btDist(c.n,b.n)===1))continue;
         var fd3={side:side,ph:ph,parts:[single[i].p,single[j].p,single[k].p],tgtN:tn,fast:true};
         var ev3=btFireEval(fd3);if(!ev3.ok)continue;
@@ -29450,9 +29454,16 @@ function btFireOptions(side,ph,targetsN,ctx){
   });
   // v282(段階4): 攻撃側は、守備兵の少ない敵の建物への射撃を重く見る(崩せば前進で建物を取れる)
   if(BT_AIW.fireBldg&&btFirst()===side)res.forEach(function(r){var N=BTG.nodes[r.fd.tgtN];if(!N.bldg)return;var bl=btBldgs().filter(function(b){return b.id===N.bldg;})[0];if(!bl)return;var ns=btBldgNodes(bl);var go=0;BT.stacks.forEach(function(x){if(x.side!==side&&ns.indexOf(x.n)>=0)go+=btInf(x).filter(function(u){return btGO(u)&&btI(u,x.side).kind==='mmc';}).length;});if(go<=2)r.val*=1+BT_AIW.fireBldg;});
+  // v287(ダルマ指示「歩兵はFGを組んで高火力で建物内のソ連軍ユニットを攻撃」): ドイツ軍は建物内の目標へは火力dFG以上の射撃だけ(射撃グループを組む)
+  if(side==='GER'&&BT_AIW.dFG)res=res.filter(function(r){var N=BTG.nodes[r.fd.tgtN];if(!N.bldg)return true;return r.ev.fp>=BT_AIW.dFG||btDistMin(r)<=1&&BT_AIW.dFGadj;});
   res.sort(function(a,b){return b.val-a.val;});
   return res;
 }
+function btDistMin(r){var m=99;r.fd.parts.forEach(function(p){var s=btStackById(p.sid);if(s)m=Math.min(m,btDist(s.n,r.fd.tgtN));});return m;}
+// v287: ドイツ軍の作戦(ダルマ指示)
+function btDocVV(side){return side==='GER'&&!!BT_AIW.dVV;} // 車両は車両を攻撃する(主砲で歩兵を撃たない)
+var BT_DOC_C=null;
+function btDocCenter(){if(BT_DOC_C==null||!BTG.nodes[BT_DOC_C]||BTG.nodes[BT_DOC_C].nm!=='uJ4'){BT_DOC_C=-1;BTG.nodes.forEach(function(N){if(N.nm==='uJ4')BT_DOC_C=N.i;});}return BT_DOC_C>=0?BT_DOC_C:null;}
 // 射撃を実行(厳密LOSで再評価してから)。成功時ログ、不可ならnull
 function btAIFire(opt){
   var fd={side:opt.fd.side,ph:opt.fd.ph,parts:opt.fd.parts,tgtN:opt.fd.tgtN,fast:false};
@@ -30268,7 +30279,7 @@ function btUnitLine(s,u,selIds,canSel){
 function btBandHTML(){
   if(!btAvail())return '';
   var on=btActive();
-  var h='<div id="btBand" style="margin:4px 0;border:1px solid '+(on?'#c0a030':'#404040')+';border-radius:4px;background:#080a10;padding:5px 6px">';
+  var h='<div id="btBand"'+(on?' class="bt-band-on"':'')+' style="margin:4px 0;border:1px solid '+(on?'#c0a030':'#404040')+';border-radius:4px;background:#080a10;padding:5px 6px">';
   h+='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">';
   h+=btBtn(T('対戦')+(on?' ON':' OFF'),'BtToggle()',{on:on});
   if(!on){h+='<span style="font-size:11px;color:#667788">'+T('アプリと対戦(S26)')+'</span></div></div>';return h;}
@@ -30959,7 +30970,7 @@ function btAIOrdOptions(side,ph,targetsN,ctx,filterStack){
             });
           });
           // 歩兵目標(HE)
-          if(w.kind!=='PSK'&&btInf(t).length){
+          if(w.kind!=='PSK'&&btInf(t).length&&!(w.kind==='MA'&&btDocVV(side))){
             var o2={w:w,tgtN:tn,mode:'ITT',ammo:'HE',ph:ph,fast:true,intensive:isIF};
             var ev2=btOrdEval(o2);if(ev2.ok){var v2=btITTValue(o2,ev2,t,ctx)*ifK;if(v2>0.01)res.push({type:'ord',o:o2,ev:ev2,val:v2});}
           }
@@ -30967,7 +30978,7 @@ function btAIOrdOptions(side,ph,targetsN,ctx,filterStack){
       });
     });
     // 車載機銃(歩兵のみ)
-    if(ph!=='DFF'||true)btAFVs(s).forEach(function(u){
+    if(!(btDocVV(side)&&BT_AIW.dVV>=2))btAFVs(s).forEach(function(u){
       if(u.shock||u.stun)return;
       targetsN.forEach(function(tn){
         var tS=BT.stacks.filter(function(t){return t.n===tn&&t.side!==side&&btInf(t).length&&(!mvS||t===mvS);})[0];if(!tS)return;
@@ -31023,7 +31034,7 @@ function btVehOffense(w,n,face){ // その位置から(停止して)撃つ最大
     if(t.side===side||t.n==null||t.n<0)return;
     var d=btDist(n,t.n);if(d>16)return;
     btAFVs(t).forEach(function(tu){var o={w:tw,tgtN:t.n,tgt:tu,mode:'VTT',ammo:'AP',ph:'PF',fast:true};var ev=btOrdEval(o);if(ev.ok)best=Math.max(best,btVTTValue(o,ev));});
-    if(btInf(t).length&&d<=12){var o2={w:tw,tgtN:t.n,mode:'ITT',ammo:'HE',ph:'PF',fast:true};var ev2=btOrdEval(o2);if(ev2.ok)best=Math.max(best,btITTValue(o2,ev2,t,ctx));}
+    if(btInf(t).length&&d<=12&&!btDocVV(side)){var o2={w:tw,tgtN:t.n,mode:'ITT',ammo:'HE',ph:'PF',fast:true};var ev2=btOrdEval(o2);if(ev2.ok)best=Math.max(best,btITTValue(o2,ev2,t,ctx));}
   });
   return best;
 }
@@ -31128,6 +31139,7 @@ function btAIVehPlan(s){
     var sup=att?F[n]*0.04:0;
     // v281(段階4): 味方歩兵から離れすぎない(歩兵の支援・敵歩兵の対戦車攻撃からの保護)
     if(BT_AIW.vSup){var dm=99;BT.stacks.forEach(function(x){if(x.side===side&&x.n!=null&&x.n>=0&&btInf(x).some(btGO))dm=Math.min(dm,btDist(x.n,n));});if(dm>3)sup-=BT_AIW.vSup*Math.min(6,dm-3);}
+    if(side==='GER'&&BT_AIW.dV){var cn=btDocCenter();if(cn!=null)sup+=BT_AIW.dV*Math.max(0,6-btDist(n,cn));} // v287(ダルマ指示): ドイツ軍の車両はuJ4付近へ素早く入る
     return {sc:off-bf.d*btVehVal(u)*(BT_AIW.vDng!=null?BT_AIW.vDng:0.9)+sup,f:bf.f,off:off,dng:bf.d};
   }
   var here=(s.n!=null&&s.n>=0)?s.n:null;
