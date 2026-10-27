@@ -48,10 +48,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv284">
-<title>ASL SKシリーズv284</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv285">
+<title>ASL SKシリーズv285</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv284">
+<meta property="og:title" content="ASL SKシリーズv285">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -9839,7 +9839,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.484"; // 2026-10-27 v284(ダルマ指示「一部の細かい規則が未実装に着手」「実施」): 対戦モード (1)追加規則: 集中射撃(3.2.4、TH+2・B#-2、原B#で砲撤去/主砲故障+Recall)、移動中の射撃(Case16: 高い目+低い目×2、Case14、ITT近距離)、Recall車両の味方盤端からの退出(7.10、盤外へ退出ボタン・アプリも退出)、2回目のスタン→Recall、昇進(5.3: 自己回復・白兵戦の原DR2で指揮官登場表)、鹵獲SW(5.5: ROF-1・B#-2、PSK TH+2・X#8、DC X#-2)、回復の順序と原DR2の自動成功。(2)地図の部隊をVASLカウンター画像で表示(重ね7px・最大6枚+N、マーカー画像、Aマーク、選択枠)。「簡易表示」ボタンで文字表示に戻せる。(3)車両・ユニットの指示パネル(フェイズ・説明・選択中スタック・射撃・車両の移動)を90°L〜BACKのツールバー直下へ移し、iPad横では固定表示(最大画面の42%、超える分はパネル内スクロール)。(4)対戦中もA▶︎BでLOS測定(射撃と同じ判定: 地形・煙幕・車両/残骸の妨害、どのヘクスの車両かも表示、地図に線と点線丸)。対戦中は煙幕・敵軍・残骸ボタンを暗くして無効。(5)準備画面の古い注記を更新。
+var APP_VERSION="ASLSK3M-v11.485"; // 2026-10-27 v285(ダルマ報告バグ「全消去で『もう一度押すと全てを消します』が出ない」): 対戦モードの通知は共通のshowToast(英語の14セグ表示、日本語の文字は除去)を使っていたため、文字が全部消えて何も表示されなかった。全消去の確認・開始の確認・射撃/移動できない理由など対戦モードの通知22か所を、日本語のまま表示する対戦専用の通知(btToast、画面中央・2.5秒)に変更。 / v284(ダルマ指示「一部の細かい規則が未実装に着手」「実施」): 対戦モード (1)追加規則: 集中射撃(3.2.4、TH+2・B#-2、原B#で砲撤去/主砲故障+Recall)、移動中の射撃(Case16: 高い目+低い目×2、Case14、ITT近距離)、Recall車両の味方盤端からの退出(7.10、盤外へ退出ボタン・アプリも退出)、2回目のスタン→Recall、昇進(5.3: 自己回復・白兵戦の原DR2で指揮官登場表)、鹵獲SW(5.5: ROF-1・B#-2、PSK TH+2・X#8、DC X#-2)、回復の順序と原DR2の自動成功。(2)地図の部隊をVASLカウンター画像で表示(重ね7px・最大6枚+N、マーカー画像、Aマーク、選択枠)。「簡易表示」ボタンで文字表示に戻せる。(3)車両・ユニットの指示パネル(フェイズ・説明・選択中スタック・射撃・車両の移動)を90°L〜BACKのツールバー直下へ移し、iPad横では固定表示(最大画面の42%、超える分はパネル内スクロール)。(4)対戦中もA▶︎BでLOS測定(射撃と同じ判定: 地形・煙幕・車両/残骸の妨害、どのヘクスの車両かも表示、地図に線と点線丸)。対戦中は煙幕・敵軍・残骸ボタンを暗くして無効。(5)準備画面の古い注記を更新。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
@@ -28258,6 +28258,19 @@ function btFixStacks(){
   BT.stacks.forEach(function(s){var i=btNodeOf(s.boardId,s.col,s.row);if(i==null)return;var n=BTG.nodes[i];s.n=i;s.boardId=n.b;s.col=n.c;s.row=n.r;});
   btMergeAll();
 }
+// v285(ダルマ報告バグ「全消去でメッセージが出ない」): 共通のshowToastは英語の14セグ表示で日本語を消すため、対戦モードの通知が空になっていた。対戦モード専用の通知(日本語のまま表示、2.5秒)
+var BT_TOAST_T=null;
+function btToast(msg){
+  try{
+    var m=(typeof T==='function')?T(msg):msg;
+    var el=document.getElementById('btToast');
+    if(!el){el=document.createElement('div');el.id='btToast';document.body.appendChild(el);}
+    el.style.cssText='position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#101820;border:2px solid #ffd040;color:#ffe080;font-size:15px;font-weight:bold;padding:10px 16px;border-radius:6px;z-index:10000;box-shadow:0 6px 20px rgba(0,0,0,.6);max-width:88vw;text-align:center;pointer-events:none';
+    el.textContent=m;el.style.display='block';
+    if(BT_TOAST_T)clearTimeout(BT_TOAST_T);
+    BT_TOAST_T=setTimeout(function(){el.style.display='none';},2500);
+  }catch(e){}
+}
 
 // ---------- [B1] 部隊のデータ ----------
 var BT_HS_MAP={ // 損耗(分隊→HS)。ASL標準の減少に従う。要確認: カウンター実物で照合すること
@@ -29866,9 +29879,9 @@ function BtAppSetup(){
 function BtGerPlan(first){if(BT.app==='GER')return;BT.gerPlan={t1:first,t2:first==='g1'?'g2':'g1'};btSave();Draw();}
 function BtStart(){
   if(!btActive())return;
-  if(!BT.gerPlan){if(typeof showToast==='function')showToast('ドイツ軍の進入順(T1/T2)を決めてください');return;}
+  if(!BT.gerPlan){btToast('ドイツ軍の進入順(T1/T2)を決めてください');return;}
   var sovLeft=btObItems().filter(function(o){return o.side==='SOV'&&btGroupOf(o)==='setup';}).reduce(function(a,o){return a+(o.total-btPlacedCount(o.key));},0);
-  if(sovLeft>0&&BT.__startWarn!==1){BT.__startWarn=1;if(typeof showToast==='function')showToast('ソ連の未配置部隊が'+sovLeft+'個あります。もう一度押すと開始します');return;}
+  if(sovLeft>0&&BT.__startWarn!==1){BT.__startWarn=1;btToast('ソ連の未配置部隊が'+sovLeft+'個あります。もう一度押すと開始します');return;}
   BT.started=true;BT.turn=1;BT.half=0;BT.ph=0;BT.finished=false;
   BT.stacks.forEach(function(s){btGiveSW(s);});
   btInitCtl();
@@ -30043,7 +30056,7 @@ function BtFast(){BT.fastApp=!BT.fastApp;btSave();Draw();}
 var BT_CONFIRM_RESET=0;
 function BtReset(){
   var now=Date.now();
-  if(now-BT_CONFIRM_RESET>3000){BT_CONFIRM_RESET=now;if(typeof showToast==='function')showToast('もう一度押すと全てを消します');return;}
+  if(now-BT_CONFIRM_RESET>3000){BT_CONFIRM_RESET=now;btToast('もう一度押すと全てを消します');return;}
   var keepApp=BT.app;var d=btNewState();for(var k in d)BT[k]=d[k];BT.on=true;BT.sc=btScId();BT.app=keepApp;btInitCtl();btSave();Draw();
 }
 function btSelUnits(s){ // 選択中のユニット(既定は全員)
@@ -30079,7 +30092,7 @@ function btHumanFirePh(side){
 function BtFireStart(){
   var s=BT.sel&&btStackById(BT.sel);if(!s)return;
   var ph=btHumanFirePh(s.side);
-  if(!ph){if(typeof showToast==='function')showToast('今のフェイズでは射撃できません');return;}
+  if(!ph){btToast('今のフェイズでは射撃できません');return;}
   var ids=btSelUnits(s).map(function(u){return u.id;});
   BT.fire={side:s.side,ph:ph,parts:[{sid:s.id,uids:ids}],tgtN:null,err:null};
   if(ph==='DFF'){var m=btStackById(BT.mv.sid);if(m)BT.fire.tgtN=m.n;}
@@ -30112,21 +30125,21 @@ function BtMoveStart(opt){
   var s=BT.sel&&btStackById(BT.sel);if(!s)return;
   var ids=btSelUnits(s).map(function(u){return u.id;});
   var e=btMoveStart(s.id,ids,opt||{});
-  if(e){if(typeof showToast==='function')showToast(e);return;}
+  if(e){btToast(e);return;}
   btSave();Draw();
 }
 function BtMoveEnd(){btMoveEnd();btUpdateCtl();btSave();Draw();}
-function BtMoveCancel(){if(!btMoveCancel()){if(typeof showToast==='function')showToast('射撃を受けた後は取り消せません');return;}btSave();Draw();}
+function BtMoveCancel(){if(!btMoveCancel()){btToast('射撃を受けた後は取り消せません');return;}btSave();Draw();}
 function btMoveTap(n){
   var r=btMoveStep(n);
-  if(typeof r==='string'){if(typeof showToast==='function')showToast(r);return;}
+  if(typeof r==='string'){btToast(r);return;}
   btLog(r);btAfterHit();
   if(BT.mv&&BT.app&&BT.app!==BT.mv.side){btAIReactDFF(BT.app).forEach(btLog);}
   btUpdateCtl();btSave();Draw();
 }
 // 前進(人間)
 function BtAdvStart(){var s=BT.sel&&btStackById(BT.sel);if(!s)return;BT.advMode={sid:s.id,uids:btSelUnits(s).map(function(u){return u.id;})};btSave();Draw();}
-function btAdvTap(n){var a=BT.advMode;var e=btAdvance(a.sid,a.uids,n);if(e){if(typeof showToast==='function')showToast(e);return;}BT.advMode=null;btUpdateCtl();btSave();Draw();}
+function btAdvTap(n){var a=BT.advMode;var e=btAdvance(a.sid,a.uids,n);if(e){btToast(e);return;}BT.advMode=null;btUpdateCtl();btSave();Draw();}
 // 地図タップ
 function btMapTap(boardId,col,row){
   if(!btGraphReady()){btEnsureGraph().then(function(){Draw();});return;}
@@ -30146,8 +30159,8 @@ function btMapTap(boardId,col,row){
     var o=btObItems().filter(function(x){return x.key===BT.placing;})[0];
     if(!o){BT.placing=null;return;}
     if(btPlacedCount(o.key)>=o.total){BT.placing=null;btSave();Draw();return;}
-    if(btEnemyAt(n,o.side)){if(typeof showToast==='function')showToast('敵のいるヘクスには置けません');return;}
-    if(!BT.edit&&o.side==='SOV'&&!btInSovZone(o,n)){if(typeof showToast==='function')showToast('配置範囲外です('+(/親衛/.test(o.group)?'uZ5から2ヘクス以内':'Yヘクス列以南')+')');return;}
+    if(btEnemyAt(n,o.side)){btToast('敵のいるヘクスには置けません');return;}
+    if(!BT.edit&&o.side==='SOV'&&!btInSovZone(o,n)){btToast('配置範囲外です('+(/親衛/.test(o.group)?'uZ5から2ヘクス以内':'Yヘクス列以南')+')');return;}
     var r=btPlace(o,n);btGiveSW(r.s);BT.sel=r.s.id;
     if(btPlacedCount(o.key)>=o.total)BT.placing=null;
     btSave();Draw();return;
@@ -31156,15 +31169,15 @@ function btHumanOrdPh(side){
 }
 function BtOFire(sid,uid,mode,ammo,phX,isIF){
   var s=btStackById(sid);if(!s)return;
-  var ph=phX||btHumanOrdPh(s.side);if(!ph){if(typeof showToast==='function')showToast('今のフェイズでは射撃できません');return;}
+  var ph=phX||btHumanOrdPh(s.side);if(!ph){btToast('今のフェイズでは射撃できません');return;}
   var w0=btOrdWeapons(s).filter(function(x){return x.u.id===uid;})[0];
-  if(!w0||!(isIF?btOrdCanIF(w0,ph):btOrdCanFire(w0,ph))){if(typeof showToast==='function')showToast('この兵器は今は射撃できません(Motion・射撃済み・故障・CE中のRST等)');return;}
+  if(!w0||!(isIF?btOrdCanIF(w0,ph):btOrdCanFire(w0,ph))){btToast('この兵器は今は射撃できません(Motion・射撃済み・故障・CE中のRST等)');return;}
   BT.ofire={sid:sid,uid:uid,mode:mode,ammo:ammo,ph:ph,tgtN:null,tgtUid:null,err:null,intensive:!!isIF};
   if(ph==='DFF'&&BT.mv){var m=btStackById(BT.mv.sid);if(m){BT.ofire.tgtN=m.n;var av=btAFVs(m)[0];if(mode==='VTT'&&av)BT.ofire.tgtUid=av.id;}}
   BT.fire=null;BT.mgfire=null;btSave();Draw();
 }
 function BtMGFire(sid,uid,phX){
-  var s=btStackById(sid);if(!s)return;var ph=phX||btHumanOrdPh(s.side);if(!ph){if(typeof showToast==='function')showToast('今のフェイズでは射撃できません');return;}
+  var s=btStackById(sid);if(!s)return;var ph=phX||btHumanOrdPh(s.side);if(!ph){btToast('今のフェイズでは射撃できません');return;}
   BT.mgfire={sid:sid,uid:uid,ph:ph,tgtN:null,err:null};
   if(ph==='DFF'&&BT.mv){var m=btStackById(BT.mv.sid);if(m)BT.mgfire.tgtN=m.n;}
   BT.fire=null;BT.ofire=null;btSave();Draw();
@@ -31197,18 +31210,18 @@ function BtMGRoll(){
   btLog(r.log);BT.mgfire=null;btUpdateCtl();btSave();Draw();
 }
 // 車両の移動(人間)
-function BtVMove(sid,uid){var e=btVMoveStart(sid,uid);if(e){if(typeof showToast==='function')showToast(e);return;}btSave();Draw();}
+function BtVMove(sid,uid){var e=btVMoveStart(sid,uid);if(e){btToast(e);return;}btSave();Draw();}
 function btVAfterStep(lg){if(lg&&lg.length)btLog(lg);btAfterHit();if(BT.mv&&BT.app&&BT.app!==BT.mv.side)btAIReactDFF(BT.app).forEach(btLog);btUpdateCtl();btSave();Draw();}
-function BtVPivot(d){var lg=[];var e=btVPivot(d,lg);if(e&&typeof e==='string'){if(typeof showToast==='function')showToast(e);if(lg.length)btLog(lg);btSave();Draw();return;}btVAfterStep(lg);}
-function btVMoveTap(n){var r=btVMoveStep(n);if(typeof r==='string'){if(typeof showToast==='function')showToast(r);return;}btVAfterStep(r);}
+function BtVPivot(d){var lg=[];var e=btVPivot(d,lg);if(e&&typeof e==='string'){btToast(e);if(lg.length)btLog(lg);btSave();Draw();return;}btVAfterStep(lg);}
+function btVMoveTap(n){var r=btVMoveStep(n);if(typeof r==='string'){btToast(r);return;}btVAfterStep(r);}
 function BtVStopEnd(){var lg=[];if(BT.mv&&BT.mv.started)btVStop(lg);if(lg.length)btLog(lg);btVMoveEnd();btUpdateCtl();btSave();Draw();}
 function BtVEnd(){btVMoveEnd();btUpdateCtl();btSave();Draw();}
 function BtVCE(sid,uid){
   var s=btStackById(sid);if(!s)return;var u=s.u.filter(function(x){return x.id===uid;})[0];if(!u)return;
   var ph=btPhId();
-  if(!BT.edit&&!((ph==='MPh'||ph==='APh')&&s.side===btSideNow())){if(typeof showToast==='function')showToast('CE/BUの切替は自軍の移動・前進フェイズ');return;}
+  if(!BT.edit&&!((ph==='MPh'||ph==='APh')&&s.side===btSideNow())){btToast('CE/BUの切替は自軍の移動・前進フェイズ');return;}
   if(!u.ce&&BTG.nodes[s.n]&&BTG.nodes[s.n].bldgT&&false){}
-  if(u.shock||u.stun){if(typeof showToast==='function')showToast('ショック/スタン中はCEになれません');return;}
+  if(u.shock||u.stun){btToast('ショック/スタン中はCEになれません');return;}
   u.ce=u.ce?0:1;btSave();Draw();
 }
 function BtVRot(sid,uid,which,d){var s=btStackById(sid);if(!s)return;var u=s.u.filter(function(x){return x.id===uid;})[0];if(!u)return;
@@ -31313,15 +31326,15 @@ function btVehOverlaySVG(dispLayout){
   return h;
 }
 
-function BtVExit(){var lg=[];var e=btVExit(lg);if(e){if(typeof showToast==='function')showToast(e);return;}if(lg.length)btLog(lg);btUpdateCtl();btSave();Draw();btKick();}
-function BtVStop(){var lg=[];if(BT.mv&&!BT.mv.started){if(typeof showToast==='function')showToast('始動していません');return;}btVStop(lg);btVAfterStep(lg);}
-function BtVSmoke(){var lg=[];var e=btVehSmoke(lg);if(e){if(typeof showToast==='function')showToast(e);return;}btVAfterStep(lg);}
+function BtVExit(){var lg=[];var e=btVExit(lg);if(e){btToast(e);return;}if(lg.length)btLog(lg);btUpdateCtl();btSave();Draw();btKick();}
+function BtVStop(){var lg=[];if(BT.mv&&!BT.mv.started){btToast('始動していません');return;}btVStop(lg);btVAfterStep(lg);}
+function BtVSmoke(){var lg=[];var e=btVehSmoke(lg);if(e){btToast(e);return;}btVAfterStep(lg);}
 // 歩兵の移動中のツール(発煙手榴弾・DC)
 function BtMvTool(t){BT.mvTool=(BT.mvTool===t)?null:t;btSave();Draw();}
 function btMvToolTap(n){
   var t=BT.mvTool;BT.mvTool=null;
   var r=(t==='smoke')?btSmokeGrenade(n):btDCPlace(n);
-  if(typeof r==='string'){if(typeof showToast==='function')showToast(r);btSave();Draw();return;}
+  if(typeof r==='string'){btToast(r);btSave();Draw();return;}
   btLog(r);btAfterHit();
   if(BT.mv&&BT.app&&BT.app!==BT.mv.side)btAIReactDFF(BT.app).forEach(btLog);
   btUpdateCtl();btSave();Draw();
