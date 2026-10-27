@@ -48,10 +48,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv285">
-<title>ASL SKシリーズv285</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv286">
+<title>ASL SKシリーズv286</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv285">
+<meta property="og:title" content="ASL SKシリーズv286">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -702,6 +702,7 @@ html.is-tabp .kit-grid>.battle-rec-btn,html.is-tabp .kit-grid>*:last-child{grid-
 html.is-tabp #losZoomTb>:nth-child(3),html.is-tabp #losZoomTb>:nth-child(4){order:10}
 /* 2026-10: ダルマ指示 iPad横のMAPタブ: 90°L〜BACKのツールバーとコンパス(N)を縦スクロール時も常時表示 */
 html.is-tabl .los-tb{position:sticky;top:var(--navh,100px);z-index:190;background:#0a0c14;padding:4px 0;box-shadow:0 4px 10px rgba(0,0,0,.6)}
+#losMapWrap{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none} /* v286: 長押しで画像の保存メニューや文字選択を出さない */
 html.is-tabl .los-compass{position:sticky !important;top:calc(var(--navh,100px) + 60px + var(--btcmdh,0px));left:auto !important;height:0;margin-left:6px;z-index:195} /* v284: 指示パネルの分だけ下げる */
 #main .bt-cmd{margin:4px 0;border:1px solid #c0a030;border-radius:4px;background:#080a10;padding:5px 6px}
 html.is-tabl #main .bt-cmd{position:sticky;top:calc(var(--navh,100px) + var(--lostbh,56px));z-index:189;max-height:42vh;overflow-y:auto;box-shadow:0 4px 10px rgba(0,0,0,.6)} /* v284(ダルマ指示): iPad横は90°L〜BACKのツールバーの直下に固定 */
@@ -9839,7 +9840,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.485"; // 2026-10-27 v285(ダルマ報告バグ「全消去で『もう一度押すと全てを消します』が出ない」): 対戦モードの通知は共通のshowToast(英語の14セグ表示、日本語の文字は除去)を使っていたため、文字が全部消えて何も表示されなかった。全消去の確認・開始の確認・射撃/移動できない理由など対戦モードの通知22か所を、日本語のまま表示する対戦専用の通知(btToast、画面中央・2.5秒)に変更。 / v284(ダルマ指示「一部の細かい規則が未実装に着手」「実施」): 対戦モード (1)追加規則: 集中射撃(3.2.4、TH+2・B#-2、原B#で砲撤去/主砲故障+Recall)、移動中の射撃(Case16: 高い目+低い目×2、Case14、ITT近距離)、Recall車両の味方盤端からの退出(7.10、盤外へ退出ボタン・アプリも退出)、2回目のスタン→Recall、昇進(5.3: 自己回復・白兵戦の原DR2で指揮官登場表)、鹵獲SW(5.5: ROF-1・B#-2、PSK TH+2・X#8、DC X#-2)、回復の順序と原DR2の自動成功。(2)地図の部隊をVASLカウンター画像で表示(重ね7px・最大6枚+N、マーカー画像、Aマーク、選択枠)。「簡易表示」ボタンで文字表示に戻せる。(3)車両・ユニットの指示パネル(フェイズ・説明・選択中スタック・射撃・車両の移動)を90°L〜BACKのツールバー直下へ移し、iPad横では固定表示(最大画面の42%、超える分はパネル内スクロール)。(4)対戦中もA▶︎BでLOS測定(射撃と同じ判定: 地形・煙幕・車両/残骸の妨害、どのヘクスの車両かも表示、地図に線と点線丸)。対戦中は煙幕・敵軍・残骸ボタンを暗くして無効。(5)準備画面の古い注記を更新。
+var APP_VERSION="ASLSK3M-v11.486"; // 2026-10-27 v286(ダルマ指示「スタック長押しで詳細をポップアップ」「フェイズ表示・説明・選択中スタックは常時表示から外す」「実施」): (1)対戦モードで地図のスタックを0.5秒長押しすると、そのヘクスの詳細(ヘクス名・地形・TEM・高度・煙幕・残留火力・建物の支配・混戦、軍ごとの部隊をカウンター画像付きで: 火力・射程・士気・指揮修正・SWの所有者/ROF/故障番号・車両のMP/装甲/主砲/機銃・各状態)を画面中央に表示。指を動かすと取り消し(スクロール優先)、長押し後に指を離しても選択・移動は起きない。✕か外側のタップで閉じる。パソコンは左ボタン長押し。地図の長押しで画像保存メニュー・文字選択を出さない。(2)ツールバー直下の固定パネルは「車両の移動・射撃・反応の確認・A▶︎B測定」だけにし、操作中でなければ出さない。フェイズ表示と次のフェイズ・説明・選択中スタックは地図上の帯(スクロールで流れる)に戻した。 / v285(ダルマ報告バグ「全消去で『もう一度押すと全てを消します』が出ない」): 対戦モードの通知は共通のshowToast(英語の14セグ表示、日本語の文字は除去)を使っていたため、文字が全部消えて何も表示されなかった。全消去の確認・開始の確認・射撃/移動できない理由など対戦モードの通知22か所を、日本語のまま表示する対戦専用の通知(btToast、画面中央・2.5秒)に変更。 / v284(ダルマ指示「一部の細かい規則が未実装に着手」「実施」): 対戦モード (1)追加規則: 集中射撃(3.2.4、TH+2・B#-2、原B#で砲撤去/主砲故障+Recall)、移動中の射撃(Case16: 高い目+低い目×2、Case14、ITT近距離)、Recall車両の味方盤端からの退出(7.10、盤外へ退出ボタン・アプリも退出)、2回目のスタン→Recall、昇進(5.3: 自己回復・白兵戦の原DR2で指揮官登場表)、鹵獲SW(5.5: ROF-1・B#-2、PSK TH+2・X#8、DC X#-2)、回復の順序と原DR2の自動成功。(2)地図の部隊をVASLカウンター画像で表示(重ね7px・最大6枚+N、マーカー画像、Aマーク、選択枠)。「簡易表示」ボタンで文字表示に戻せる。(3)車両・ユニットの指示パネル(フェイズ・説明・選択中スタック・射撃・車両の移動)を90°L〜BACKのツールバー直下へ移し、iPad横では固定表示(最大画面の42%、超える分はパネル内スクロール)。(4)対戦中もA▶︎BでLOS測定(射撃と同じ判定: 地形・煙幕・車両/残骸の妨害、どのヘクスの車両かも表示、地図に線と点線丸)。対戦中は煙幕・敵軍・残骸ボタンを暗くして無効。(5)準備画面の古い注記を更新。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
@@ -30144,6 +30145,7 @@ function btAdvTap(n){var a=BT.advMode;var e=btAdvance(a.sid,a.uids,n);if(e){btTo
 function btMapTap(boardId,col,row){
   if(!btGraphReady()){btEnsureGraph().then(function(){Draw();});return;}
   var n=btNodeOf(boardId,col,row);if(n==null)return;
+  if(btLPTap(n))return; // v286: 長押しでスタックの詳細
   if(BT.losAB){btLosABTap(n);return;} // v284: A▶︎B測定中は測定だけ
   if(BT.fire){btFireTap(n);return;}
   if(BT.ofire){btOFireTap(n);return;}
@@ -30273,9 +30275,12 @@ function btBandHTML(){
   if(!btGraphReady()){h+='<span style="font-size:12px;color:#ffd060">'+T('地形を解析中…(数秒)')+'</span></div></div>';btEnsureGraph().then(function(){Draw();});return h;}
   if(BT.started&&BT.app&&!BT.finished&&!BT_TICK)btKick(700); // 再読込後などにアプリの進行を再開
   var sn=btSideNow(),ph=BT_PHASES[BT.ph];
-  // v284: 進行中のフェイズ表示と「次のフェイズ」は指示パネル(btCmdHTML)にある
-  if(BT.finished)h+='<span style="font-size:12px;color:#ccddee;font-weight:bold">'+(BT.finished?T('ゲーム終了'):('T'+BT.turn+' '+BT_SIDE_NAME[sn]+' <span style="color:'+BT_SIDE_COL[sn]+'">'+ph[0]+'</span> '+ph[1]))+'</span>';
-  else if(!BT.started)h+='<span style="font-size:12px;color:#ccddee;font-weight:bold">'+T('準備(初期配置)')+'</span>';
+  if(BT.started)h+='<span style="font-size:12px;color:#ccddee;font-weight:bold">'+(BT.finished?T('ゲーム終了'):('T'+BT.turn+' '+BT_SIDE_NAME[sn]+' <span style="color:'+BT_SIDE_COL[sn]+'">'+ph[0]+'</span> '+ph[1]))+'</span>';
+  else h+='<span style="font-size:12px;color:#ccddee;font-weight:bold">'+T('準備(初期配置)')+'</span>';
+  if(BT.started&&!BT.finished){
+    var canNext=!(BT.mv&&BT.app&&BT.mv.side===BT.app);
+    h+=btBtn(T('次のフェイズ')+' ▶','BtNext()',{dim:!canNext});
+  }
   h+='<span style="font-size:11px;color:#8899aa;margin-left:auto">'+T('アプリの軍')+':</span>';
   [['',T('なし')],['GER',T('ドイツ')],['SOV',T('ソ連')]].forEach(function(o){h+=btBtn(o[1],"BtSetApp('"+o[0]+"')",{on:(BT.app||'')===o[0],dim:BT.started&&(BT.app||'')!==o[0],st:';padding:3px 6px'});});
   h+=btBtn(T('編集'),'BtEdit()',{on:BT.edit});
@@ -30290,7 +30295,8 @@ function btBandHTML(){
   if(BT.finished)h+='<b style="color:#ffd060;font-size:14px">'+(vc.ger>=btNeedVic()?T('ドイツ勝利'):T('ソ連勝利'))+'</b>';
   h+='</div>';
   if(!BT.started)h+=btSetupHTML();
-  // v284: 進行中の待ち・選択中スタック・射撃・車両の移動の各パネルは、ツールバーの下の指示パネル(btCmdHTML)に移した
+  else h+=btPhaseHelpHTML();
+  h+=btSelPanelHTML(); // v286: 選択中スタックは帯に戻した(反応の確認・射撃・車両の移動はツールバー下の指示パネル)
   // 盤外の部隊
   var offs=BT.stacks.filter(function(s){return s.n==null||s.n<0;});
   if(offs.length){
@@ -30410,26 +30416,19 @@ function btObHTML(){
 function btCmdHTML(){
   if(!btAvail()||!btActive()||!btGraphReady()){setTimeout(btCmdMeasure,0);return '';}
   if(!BT.started||BT.finished){if(!BT.losAB){setTimeout(btCmdMeasure,0);return '';}setTimeout(btCmdMeasure,0);return '<div id="btCmd" class="bt-cmd">'+btLosABHTML()+'</div>';}
-  var h='<div id="btCmd" class="bt-cmd">';
+  // v286(ダルマ指示): フェイズ表示・説明・選択中スタックは常時表示から外し、帯(btBandHTML)に戻した。ここは測定・反応の確認・射撃・車両の移動だけ
+  var h='';
   h+=btLosABHTML(); // v284: A▶︎B測定
-  var sn=btSideNow(),ph=BT_PHASES[BT.ph];
-  h+='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span style="font-size:12px;color:#ccddee;font-weight:bold">T'+BT.turn+' '+BT_SIDE_NAME[sn]+' <span style="color:'+BT_SIDE_COL[sn]+'">'+ph[0]+'</span> '+ph[1]+'</span>';
-  var canNext=!(BT.mv&&BT.app&&BT.mv.side===BT.app);
-  h+=btBtn(T('次のフェイズ')+' ▶','BtNext()',{dim:!canNext})+'</div>';
-  h+=btPhaseHelpHTML();
   // 進行中の待ち
   if(BT.pend==='react'&&BT.mv){var ms=btStackById(BT.mv.sid);
     h+='<div style="margin-top:6px;border:1px solid #ff8040;border-radius:3px;padding:5px 7px;font-size:12px;color:#ffd0a0">'+T('アプリが移動中')+': '+(ms?btInf(ms).map(function(u){return u.nm;}).join(','):'')+' @ '+(ms&&ms.n>=0?BTG.nodes[ms.n].nm:'')+' (MF '+BT.mv.mfUsed+'/'+BT.mv.mfMax+')<br>'+T('撃つ場合は自軍のスタックを選んで「射撃」。撃たないなら「続ける」')+'<br>';
     if(BT.mv.veh&&btReactionCCOptions(btHuman()).length)h+=btBtn(T('反応白兵戦(車両に)'),'BtReactCC()',{warn:true})+' ';
     h+=btBtn(T('続ける'),'BtReactContinue(false)',{on:true})+' '+btBtn(T('このフェイズは撃たない'),'BtReactContinue(true)')+'</div>';}
-  // 選択中スタック
-  h+=btSelPanelHTML();
   h+=btFirePanelHTML();
   h+=btVMovePanelHTML();
   h+=btOFirePanelHTML();
-  h+='</div>';
   setTimeout(btCmdMeasure,0);
-  return h;
+  return h?'<div id="btCmd" class="bt-cmd">'+h+'</div>':'';
 }
 function btCmdMeasure(){
   try{var de=document.documentElement,tb=document.querySelector('#main .los-tb'),c=document.getElementById('btCmd');
@@ -31129,7 +31128,7 @@ function btAIVehPlan(s){
     var sup=att?F[n]*0.04:0;
     // v281(段階4): 味方歩兵から離れすぎない(歩兵の支援・敵歩兵の対戦車攻撃からの保護)
     if(BT_AIW.vSup){var dm=99;BT.stacks.forEach(function(x){if(x.side===side&&x.n!=null&&x.n>=0&&btInf(x).some(btGO))dm=Math.min(dm,btDist(x.n,n));});if(dm>3)sup-=BT_AIW.vSup*Math.min(6,dm-3);}
-    return {sc:off-bf.d*btVehVal(u)*0.9+sup,f:bf.f,off:off,dng:bf.d};
+    return {sc:off-bf.d*btVehVal(u)*(BT_AIW.vDng!=null?BT_AIW.vDng:0.9)+sup,f:bf.f,off:off,dng:bf.d};
   }
   var here=(s.n!=null&&s.n>=0)?s.n:null;
   var stay=here!=null?score(here):{sc:-99};
@@ -31709,6 +31708,90 @@ function btLosABSVG(dispLayout){
 }
 function btLosABPin(d,t){
   return '<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><circle cx="'+d.x+'" cy="'+d.y+'" r="11" fill="#66ccff" stroke="#000" stroke-width="2"/><text x="'+d.x+'" y="'+(d.y+4)+'" text-anchor="middle" font-size="13" font-weight="bold" fill="#000" font-family="monospace">'+t+'</text></g>';
+}
+
+// ---------- [D8] v286(ダルマ指示「スタック長押しでスタックの詳細をポップアップ」) ----------
+// 地図のスタックを0.5秒押し続けると、そのヘクスの全スタックの詳細を表示する。指を動かすと取り消し(地図のスクロールを優先)。
+var BT_LP={t:null,x:0,y:0,eat:false},BT_LPQ=false;
+function BtLPStart(ev){
+  if(typeof btActive!=='function'||!btActive()||!btGraphReady())return;
+  if(ev.touches&&ev.touches.length>1){BtLPEnd();return;}
+  if(ev.button!=null&&ev.button!==0)return;
+  var t=ev.touches?ev.touches[0]:ev,el=ev.currentTarget;
+  BT_LP.x=t.clientX;BT_LP.y=t.clientY;BT_LP.eat=false;
+  clearTimeout(BT_LP.t);
+  BT_LP.t=setTimeout(function(){BT_LP.t=null;BT_LPQ=true;try{LosMapClick({currentTarget:el,clientX:BT_LP.x,clientY:BT_LP.y});}catch(e){}finally{BT_LPQ=false;}},500);
+}
+function BtLPMove(ev){
+  if(!BT_LP.t)return;var t=ev.touches?ev.touches[0]:ev;
+  if(Math.abs(t.clientX-BT_LP.x)>10||Math.abs(t.clientY-BT_LP.y)>10)BtLPEnd();
+}
+function BtLPEnd(){if(BT_LP.t){clearTimeout(BT_LP.t);BT_LP.t=null;}}
+// btMapTapの入口から呼ぶ: true=このタップは処理済み(長押しの表示、または長押し直後のクリック)
+function btLPTap(n){
+  if(BT_LPQ){if(btStacksAtN(n).length){BT_LP.eat=true;btStackPopup(n);}return true;}
+  if(BT_LP.eat){BT_LP.eat=false;return true;}
+  return false;
+}
+function btStackPopup(n){
+  var el=document.getElementById('btPop');
+  if(!el){el=document.createElement('div');el.id='btPop';document.body.appendChild(el);}
+  el.innerHTML=btStackPopupHTML(n);
+  el.style.cssText='position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px';
+  // 長押しの指を離した直後のクリックが背景に当たって閉じないよう、指を離してから0.4秒は背景のタップを無視する
+  BT_LP.held=true;
+  var rel=function(){BT_LP.held=false;BT_LP.relT=Date.now();window.removeEventListener('touchend',rel,true);window.removeEventListener('mouseup',rel,true);};
+  window.addEventListener('touchend',rel,true);window.addEventListener('mouseup',rel,true);
+  el.onclick=function(e){if(e.target!==el)return;if(BT_LP.held||Date.now()-(BT_LP.relT||0)<400)return;BtPopClose();};
+  try{if(navigator.vibrate)navigator.vibrate(15);}catch(e){}
+}
+function BtPopClose(){var el=document.getElementById('btPop');if(el)el.style.display='none';}
+function btPopUnitHTML(s,u){
+  var side=s.side,I=btI(u,side),k=I.kind,im=btVcUnitImg(side,u);
+  var img=im&&im.src?'<img src="'+im.src+'" style="width:46px;height:46px;flex-shrink:0;border-radius:3px;'+(im.dim?'opacity:.5;':'')+'">':'<div style="width:46px;height:46px;flex-shrink:0;border:1px solid #445;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#889">'+(k==='afv'?'車両':k)+'</div>';
+  var nm=u.nm,sub=[],st=[];
+  if(k==='mmc'){sub.push('火力'+I.fp+' 射程'+I.rng+' 士気'+btMorale(side,u)+(I.bm?'(混乱時'+I.bm+')':''));if(I.smk)sub.push('発煙'+I.smk);}
+  else if(k==='smc'){sub.push('指揮修正'+(I.cmd>0?'+':'')+I.cmd+' 士気'+btMorale(side,u));}
+  else if(k==='mg'){var o=btOwner(s,u);sub.push('火力'+I.fp+' 射程'+I.rng+' ROF'+I.rof+' 故障'+I.b+(u.capFrom?' (鹵獲)':''));nm+=o?'　所有: '+o.nm:'　(未所有)';}
+  else if(k==='dc'||k==='latw'){var o2=btOwner(s,u);nm+=o2?'　所有: '+o2.nm:'　(未所有)';if(u.capFrom)sub.push('鹵獲');}
+  else if(k==='afv'||k==='wreck'){
+    var v=btAfvData(k==='wreck'?u.nm.replace(/^残骸\(|\)$/g,''):u.nm);
+    if(k==='afv'&&v){var gd=afvToGunData(v);
+      sub.push('MP'+v.mp+'　装甲 正面'+v.afFront.hull+'/'+v.afFront.turret+' 側面'+v.afSide.hull+'/'+v.afSide.turret+(gd?'　主砲'+gd.cal+'mm':''));
+      var mg=[];if(v.mg){if(v.mg.bmg)mg.push('車体'+v.mg.bmg);if(v.mg.cmg)mg.push('同軸'+v.mg.cmg);if(v.mg.aamg)mg.push('対空'+v.mg.aamg);}if(mg.length)sub.push('機銃 '+mg.join(' '));
+      st.push(u.ce?'CE':'BU');if(u.mot)st.push('Motion');if(u.imm)st.push('走行不能');if(u.bog)st.push('ボグ');if(u.shock)st.push(u.shock==='UK'?'UK':'ショック');if(u.stun)st.push('スタン');if(u.recall)st.push('Recall');if(u.maS&&u.maS!=='ok')st.push(u.maS==='dis'?'主砲使用不能':'主砲故障');
+      if(u.mgS)Object.keys(u.mgS).forEach(function(m){if(u.mgS[m]==='br')st.push({bmg:'車体',cmg:'同軸',aamg:'対空'}[m]+'機銃故障');});
+      if(u.acq)st.push('捕捉あり');
+    }
+  }
+  if(btIsInfK(k)){if(u.s==='br')st.push('<b style="color:#ff8040">混乱</b>');else if(u.s==='pn')st.push('<b style="color:#ffd060">釘付け</b>');else st.push('統制');if(u.dm)st.push('DM');if(u.cx)st.push('CX');if(u.wd)st.push('負傷');if(u.mv)st.push('移動済');if(u.adv)st.push('前進済');}
+  else if((btIsSWK(k)||k==='gun')&&u.s==='br')st.push('<b style="color:#ff8040">故障</b>');
+  if(u.fire)st.push({P:'準備射撃済',F1:'第1射済',F2:'最終射済',A:'前進射撃済',R:'ROFで再射撃可',B:'移動射撃済',I:'集中射撃済'}[u.fire]||u.fire);
+  var h='<div style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-top:1px dashed #2a3040">'+img+'<div style="min-width:0;flex:1">';
+  h+='<div style="font-size:13px;color:#e8eef4;font-weight:bold">'+nm+'</div>';
+  if(sub.length)h+='<div style="font-size:11px;color:#9ab">'+sub.join('<br>')+'</div>';
+  if(st.length)h+='<div style="font-size:11px;color:#ccd">'+st.join('　')+'</div>';
+  return h+'</div></div>';
+}
+function btStackPopupHTML(n){
+  var N=BTG.nodes[n],ss=btStacksAtN(n);
+  var h='<div style="background:#0c1018;border:2px solid #c0a030;border-radius:6px;max-width:min(560px,100%);width:100%;max-height:82vh;overflow-y:auto;padding:8px 10px;box-shadow:0 8px 30px rgba(0,0,0,.7)">';
+  h+='<div style="display:flex;align-items:center;gap:8px"><b style="font-size:15px;color:#ffd060">'+N.nm+'</b><span style="font-size:12px;color:#ccddee">'+N.terr+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')+'</span>';
+  h+='<button class="tb-reset" style="'+BT_BS+';margin-left:auto;padding:3px 10px" onclick="BtPopClose()">✕</button></div>';
+  var ex=[];
+  if(BT.smoke&&BT.smoke[n])ex.push('煙幕 +'+BT.smoke[n].v);
+  if(BT.resid&&BT.resid[n])ex.push('残留火力 '+BT.resid[n]);
+  if(N.bldg&&BT.ctl&&BT.ctl[N.bldg])ex.push('建物'+N.bldg+'号: '+BT_SIDE_NAME[BT.ctl[N.bldg]]+'の支配');
+  if(ss.some(function(s){return s.mel;}))ex.push('<b style="color:#ff6060">混戦中</b>');
+  if(ex.length)h+='<div style="font-size:12px;color:#ccddee;margin-top:2px">'+ex.join('　')+'</div>';
+  ss.forEach(function(s){
+    var col=BT_SIDE_COL[s.side];
+    h+='<div style="margin-top:6px;border:1px solid '+col+'88;border-radius:4px;padding:3px 7px">';
+    h+='<div style="font-size:12px;color:'+col+';font-weight:bold">'+BT_SIDE_NAME[s.side]+(BT.app===s.side?'(アプリ)':'')+'</div>';
+    btVcPieces(s).slice().reverse().forEach(function(p){h+=btPopUnitHTML(s,p.u);});
+    h+='</div>';
+  });
+  return h+'</div>';
 }
 
 function losEnemyHexOverlaySVG(dispLayout){
@@ -36572,7 +36655,7 @@ function LOS_PAGE(){
   // クリック判定・スクロール枠として常に軸並行(非回転)の外接ボックスサイズを保ち、内側の
   // コンテナだけを中心基準でCSS回転させることで、90/270度時の縦横入れ替えにも対応する
   // (盤面画像・A/B地点・LOS線はすべて内側コンテナの子要素としてまとめて回転する)。
-  h+='<div id="losMapWrap" onclick="LosMapClick(event)" oncontextmenu="return false" onmousedown="if(event.button===2){LosPanStart(event,true);return;}LosPanStart(event);LosEnemyDragStart(event);LosRouteVcaDragStart(event)" ontouchstart="LosPanStart(event);LosEnemyDragStart(event);LosRouteVcaDragStart(event)" ontouchmove="LosPanMove(event);LosEnemyDragMove(event);LosRouteVcaDragMove(event)" ontouchend="LosPanEnd();LosEnemyDragEnd();LosRouteVcaDragEnd()" style="position:relative;width:'+outerWpx+'px;height:'+outerHpx+'px;margin:auto;flex-shrink:0;cursor:'+(S_LOS.panMode?'grab':'crosshair')+'">'; // 2026-09修正(ダルマ指摘「行軍の際に最初に向きの設定ができない、敵軍と同じ仕組みで向きを設定できるようにする」): LosRouteVcaDragStart/Move/Endを既存のPan/敵軍ドラッグ系ハンドラと並記(routeVcaMode時のみ動作するようガード済み、他モードとの競合なし)
+  h+='<div id="losMapWrap" onclick="LosMapClick(event)" oncontextmenu="return false" onmousedown="if(event.button===2){LosPanStart(event,true);return;}LosPanStart(event);LosEnemyDragStart(event);LosRouteVcaDragStart(event);if(window.BtLPStart)BtLPStart(event)" ontouchstart="LosPanStart(event);LosEnemyDragStart(event);LosRouteVcaDragStart(event);if(window.BtLPStart)BtLPStart(event)" ontouchmove="LosPanMove(event);LosEnemyDragMove(event);LosRouteVcaDragMove(event);if(window.BtLPMove)BtLPMove(event)" ontouchend="LosPanEnd();LosEnemyDragEnd();LosRouteVcaDragEnd();if(window.BtLPEnd)BtLPEnd()" ontouchcancel="if(window.BtLPEnd)BtLPEnd()" onmousemove="if(window.BtLPMove)BtLPMove(event)" onmouseup="if(window.BtLPEnd)BtLPEnd()" onmouseleave="if(window.BtLPEnd)BtLPEnd()" style="position:relative;width:'+outerWpx+'px;height:'+outerHpx+'px;margin:auto;flex-shrink:0;cursor:'+(S_LOS.panMode?'grab':'crosshair')+'">'; // 2026-09修正(ダルマ指摘「行軍の際に最初に向きの設定ができない、敵軍と同じ仕組みで向きを設定できるようにする」): LosRouteVcaDragStart/Move/Endを既存のPan/敵軍ドラッグ系ハンドラと並記(routeVcaMode時のみ動作するようガード済み、他モードとの競合なし)
   h+='<div style="position:absolute;left:50%;top:50%;width:'+innerWpx+'px;height:'+innerHpx+'px;transform:translate(-50%,-50%) rotate('+S_LOS.viewRot+'deg);transform-origin:center center">';
   S_LOS.boards.forEach(function(b,bi){
     // 2026-08削除(Kato指示): SSR画像丸ごと差し替え方式(GrainToMarsh/WoodsToOrchard)は
