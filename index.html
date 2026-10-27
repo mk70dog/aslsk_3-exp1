@@ -48,10 +48,10 @@ function ob(){var m=document.getElementById("main");if(!m){setTimeout(ob,300);re
 document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",ob);
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv289">
-<title>ASL SKシリーズv289</title>
+<meta name="apple-mobile-web-app-title" content="ASL SKシリーズv290">
+<title>ASL SKシリーズv290</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv289">
+<meta property="og:title" content="ASL SKシリーズv290">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230a0c14'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%234499ee' font-family='monospace'%3E%3C/text%3E%3C/svg%3E">
@@ -9844,7 +9844,7 @@ var APP_VERSION_HIST_v11243="ASLSK3M-v11.243";
 var APP_VERSION_HIST_v11244="ASLSK3M-v11.244";
 var APP_VERSION_HIST_v11245="ASLSK3M-v11.245";
 var APP_VERSION_HIST_v11246="ASLSK3M-v11.246";
-var APP_VERSION="ASLSK3M-v11.489"; // 2026-10-27 v289(バグ修正、ダルマ報告の画面で判明): 対戦モードで「駆け足」で移動を始め、1ヘクスも進まずに「移動終了」すると、CXだけが残っていた(盤外の部隊がCXのまま進入待ちになる)。1ヘクスも進まずMFも使わずに終了した場合は、移動しなかったことにする(移動前の状態に戻す)。 / v288(ダルマ指示「実施」「二つ作る 実施」): 対戦モード (1)指示カード: 自軍スタックを選ぶと、ツールバー直下の枠にフェイズと次のフェイズ・見出し(車両の移動: 名前 MP 装甲 状態 / 軍 @ ヘクス)・ユニット・行動のボタンを全部まとめ、なるべく縦幅を小さく(車両の移動中は2行、説明文は外す)。歩兵・SWはカウンター画像を横一列(タップで動かすユニットを選択、外したものは暗く、状態は下端に小さく)。帯の選択中スタックの枠は出さない(編集中を除く)。(2)車両の移動に「一つ戻る」(直前の前進・向き変更・停止を取り消し)と「やり直す」(この車両の移動を最初から)。サイコロを振った操作より前には戻れない(振った回数BT.dieNで判定)。戻した操作は戦闘記録からも消す。(3)盤外(進入待ち)を各スタックの一番上のカウンター+盤端+枚数で横一列。(4)SWの譲渡: カードでSWのカウンターをタップ→渡す相手(統制状態の分隊・指揮官、点線の枠)をタップ。回復フェイズと自軍の移動フェイズ(移動中を除く)、編集中はいつでも。(5)盤外スタックの組み替え(進入前・車両を除く): 選んだユニットを分ける/同じ盤端の待機スタックとまとめる。 / v287(ダルマ指示「アプリ対戦モード時 iPad横 メインタブ常時表示を解除」「実施」): iPad横でMAPタブの対戦がONのときは、メインタブ(2段)を固定しない(スクロールで流れる)。90°L〜BACKのツールバーと指示パネルは画面の最上部に固定(地図が約100px広く見える)。対戦OFF・他のタブ・iPad縦は従来どおり。対戦の帯にclass bt-band-onを付け、CSSの:has()で切り替え。AI: ドイツ軍の作戦の試験用設定(BT_AIW.dV/dVV/dFG、既定は無効)を追加。 / v286(ダルマ指示「スタック長押しで詳細をポップアップ」「フェイズ表示・説明・選択中スタックは常時表示から外す」「実施」): (1)対戦モードで地図のスタックを0.5秒長押しすると、そのヘクスの詳細(ヘクス名・地形・TEM・高度・煙幕・残留火力・建物の支配・混戦、軍ごとの部隊をカウンター画像付きで: 火力・射程・士気・指揮修正・SWの所有者/ROF/故障番号・車両のMP/装甲/主砲/機銃・各状態)を画面中央に表示。指を動かすと取り消し(スクロール優先)、長押し後に指を離しても選択・移動は起きない。✕か外側のタップで閉じる。パソコンは左ボタン長押し。地図の長押しで画像保存メニュー・文字選択を出さない。(2)ツールバー直下の固定パネルは「車両の移動・射撃・反応の確認・A▶︎B測定」だけにし、操作中でなければ出さない。フェイズ表示と次のフェイズ・説明・選択中スタックは地図上の帯(スクロールで流れる)に戻した。 / v285(ダルマ報告バグ「全消去で『もう一度押すと全てを消します』が出ない」): 対戦モードの通知は共通のshowToast(英語の14セグ表示、日本語の文字は除去)を使っていたため、文字が全部消えて何も表示されなかった。全消去の確認・開始の確認・射撃/移動できない理由など対戦モードの通知22か所を、日本語のまま表示する対戦専用の通知(btToast、画面中央・2.5秒)に変更。 / v284(ダルマ指示「一部の細かい規則が未実装に着手」「実施」): 対戦モード (1)追加規則: 集中射撃(3.2.4、TH+2・B#-2、原B#で砲撤去/主砲故障+Recall)、移動中の射撃(Case16: 高い目+低い目×2、Case14、ITT近距離)、Recall車両の味方盤端からの退出(7.10、盤外へ退出ボタン・アプリも退出)、2回目のスタン→Recall、昇進(5.3: 自己回復・白兵戦の原DR2で指揮官登場表)、鹵獲SW(5.5: ROF-1・B#-2、PSK TH+2・X#8、DC X#-2)、回復の順序と原DR2の自動成功。(2)地図の部隊をVASLカウンター画像で表示(重ね7px・最大6枚+N、マーカー画像、Aマーク、選択枠)。「簡易表示」ボタンで文字表示に戻せる。(3)車両・ユニットの指示パネル(フェイズ・説明・選択中スタック・射撃・車両の移動)を90°L〜BACKのツールバー直下へ移し、iPad横では固定表示(最大画面の42%、超える分はパネル内スクロール)。(4)対戦中もA▶︎BでLOS測定(射撃と同じ判定: 地形・煙幕・車両/残骸の妨害、どのヘクスの車両かも表示、地図に線と点線丸)。対戦中は煙幕・敵軍・残骸ボタンを暗くして無効。(5)準備画面の古い注記を更新。
+var APP_VERSION="ASLSK3M-v11.490"; // 2026-10-27 v290(ダルマ指示「赤枠内を対戦時はデフォルトで折りたたむ」「ユニットとSWの関連 C案」「まとめる・分けるをわかりやすく」「実施」): 対戦モード (1)対戦中はMAPタブの測定ツール(編成A・有効MF、シナリオと季節、歩兵/車両、対象グループ)を「▶ 測定ツール…」の1行に畳む(右端に果樹園/麦畑の状態)。タップで開閉、新しい対戦は畳んだ状態から。対戦OFFは従来どおり。(2)指示カードのカウンター: ユニットとその持つSWを1つの枠で囲み、間に「+」(C案)。(3)盤外の待機スタックの「まとめる/分ける」を「編成を変える」1つに: 同じ盤端の待機スタックを行で並べ、移したいユニット(SWは持ち主と一緒)をタップ→移す先の「ここへ移す」または「新しい待機スタックへ移す」→完了。空になったスタックは消す。(4)盤外のスタックに「射撃」ボタンを出さない(盤外からは撃てない)。 / v289(バグ修正、ダルマ報告の画面で判明): 対戦モードで「駆け足」で移動を始め、1ヘクスも進まずに「移動終了」すると、CXだけが残っていた(盤外の部隊がCXのまま進入待ちになる)。1ヘクスも進まずMFも使わずに終了した場合は、移動しなかったことにする(移動前の状態に戻す)。 / v288(ダルマ指示「実施」「二つ作る 実施」): 対戦モード (1)指示カード: 自軍スタックを選ぶと、ツールバー直下の枠にフェイズと次のフェイズ・見出し(車両の移動: 名前 MP 装甲 状態 / 軍 @ ヘクス)・ユニット・行動のボタンを全部まとめ、なるべく縦幅を小さく(車両の移動中は2行、説明文は外す)。歩兵・SWはカウンター画像を横一列(タップで動かすユニットを選択、外したものは暗く、状態は下端に小さく)。帯の選択中スタックの枠は出さない(編集中を除く)。(2)車両の移動に「一つ戻る」(直前の前進・向き変更・停止を取り消し)と「やり直す」(この車両の移動を最初から)。サイコロを振った操作より前には戻れない(振った回数BT.dieNで判定)。戻した操作は戦闘記録からも消す。(3)盤外(進入待ち)を各スタックの一番上のカウンター+盤端+枚数で横一列。(4)SWの譲渡: カードでSWのカウンターをタップ→渡す相手(統制状態の分隊・指揮官、点線の枠)をタップ。回復フェイズと自軍の移動フェイズ(移動中を除く)、編集中はいつでも。(5)盤外スタックの組み替え(進入前・車両を除く): 選んだユニットを分ける/同じ盤端の待機スタックとまとめる。 / v287(ダルマ指示「アプリ対戦モード時 iPad横 メインタブ常時表示を解除」「実施」): iPad横でMAPタブの対戦がONのときは、メインタブ(2段)を固定しない(スクロールで流れる)。90°L〜BACKのツールバーと指示パネルは画面の最上部に固定(地図が約100px広く見える)。対戦OFF・他のタブ・iPad縦は従来どおり。対戦の帯にclass bt-band-onを付け、CSSの:has()で切り替え。AI: ドイツ軍の作戦の試験用設定(BT_AIW.dV/dVV/dFG、既定は無効)を追加。 / v286(ダルマ指示「スタック長押しで詳細をポップアップ」「フェイズ表示・説明・選択中スタックは常時表示から外す」「実施」): (1)対戦モードで地図のスタックを0.5秒長押しすると、そのヘクスの詳細(ヘクス名・地形・TEM・高度・煙幕・残留火力・建物の支配・混戦、軍ごとの部隊をカウンター画像付きで: 火力・射程・士気・指揮修正・SWの所有者/ROF/故障番号・車両のMP/装甲/主砲/機銃・各状態)を画面中央に表示。指を動かすと取り消し(スクロール優先)、長押し後に指を離しても選択・移動は起きない。✕か外側のタップで閉じる。パソコンは左ボタン長押し。地図の長押しで画像保存メニュー・文字選択を出さない。(2)ツールバー直下の固定パネルは「車両の移動・射撃・反応の確認・A▶︎B測定」だけにし、操作中でなければ出さない。フェイズ表示と次のフェイズ・説明・選択中スタックは地図上の帯(スクロールで流れる)に戻した。 / v285(ダルマ報告バグ「全消去で『もう一度押すと全てを消します』が出ない」): 対戦モードの通知は共通のshowToast(英語の14セグ表示、日本語の文字は除去)を使っていたため、文字が全部消えて何も表示されなかった。全消去の確認・開始の確認・射撃/移動できない理由など対戦モードの通知22か所を、日本語のまま表示する対戦専用の通知(btToast、画面中央・2.5秒)に変更。 / v284(ダルマ指示「一部の細かい規則が未実装に着手」「実施」): 対戦モード (1)追加規則: 集中射撃(3.2.4、TH+2・B#-2、原B#で砲撤去/主砲故障+Recall)、移動中の射撃(Case16: 高い目+低い目×2、Case14、ITT近距離)、Recall車両の味方盤端からの退出(7.10、盤外へ退出ボタン・アプリも退出)、2回目のスタン→Recall、昇進(5.3: 自己回復・白兵戦の原DR2で指揮官登場表)、鹵獲SW(5.5: ROF-1・B#-2、PSK TH+2・X#8、DC X#-2)、回復の順序と原DR2の自動成功。(2)地図の部隊をVASLカウンター画像で表示(重ね7px・最大6枚+N、マーカー画像、Aマーク、選択枠)。「簡易表示」ボタンで文字表示に戻せる。(3)車両・ユニットの指示パネル(フェイズ・説明・選択中スタック・射撃・車両の移動)を90°L〜BACKのツールバー直下へ移し、iPad横では固定表示(最大画面の42%、超える分はパネル内スクロール)。(4)対戦中もA▶︎BでLOS測定(射撃と同じ判定: 地形・煙幕・車両/残骸の妨害、どのヘクスの車両かも表示、地図に線と点線丸)。対戦中は煙幕・敵軍・残骸ボタンを暗くして無効。(5)準備画面の古い注記を更新。
 var APP_VERSION_HIST_v11402="ASLSK3M-v11.402"; // 2026-10-24: Kato報告「画面の同じ高さ(約694px)に出る横黒線(射撃/MAPタブ共通)」→修正実施。再現不能のため推定対応: 画面全体に固定された装飾レイヤーbody::after(白2%×不透明度30%のドット、実質不可視)を無効化し、iPadの固定全画面レイヤーのタイル境界線の可能性を排除。実機で要確認(残る場合は次はbody::beforeの枠・固定フェーズバーを疑う)。前回v11.401は、起動処理の個別try/catch化。
 var APP_VERSION_HIST_v11401="ASLSK3M-v11.401"; // 2026-10-24: Kato報告「この表示でフリーズ」(タブ内容空・バージョン行なし)→起動処理(loadState/TAB/renderPhaseTracker等)を個別try/catch化し、1つが失敗しても残りを続行。失敗内容はバージョン行の[INIT ERR ...]とログ(INIT_ERROR)に出力。再現はできず原因は未特定。前回v11.400は、混乱ボタン縮小。
 var APP_VERSION_HIST_v11400="ASLSK3M-v11.400"; // 2026-10-24: Kato指示「選択中の混乱ボタンを少し小さく→もう少し小さく」→射撃タブ「選択中」の混乱ボタンのみ幅を他ボタンの約50%・文字10pxに縮小(文字の上寄りも補正)。前回v11.399は、FP/レンジ2桁表示。
@@ -30083,7 +30083,7 @@ function BtPrev(){ // 編集用: フェイズ表示だけを戻す(結果は戻�
   if(BT.ph>0)BT.ph--;else{BT.ph=BT_PHASES.length-1;if(BT.half===1)BT.half=0;else if(BT.turn>1){BT.turn--;BT.half=1;}else BT.ph=0;}
   btSave();Draw();
 }
-function BtSelect(id){BT.sel=(BT.sel===id)?null:id;BT.placing=null;BT.selU=null;BT.swGive=null;btSave();Draw();}
+function BtSelect(id){BT.sel=(BT.sel===id)?null:id;BT.placing=null;BT.selU=null;BT.swGive=null;BT.regroup=null;btSave();Draw();}
 function BtEdit(){BT.edit=!BT.edit;BT.fire=null;BT.advMode=null;btSave();Draw();if(!BT.edit)btKick();}
 function BtFast(){BT.fastApp=!BT.fastApp;btSave();Draw();}
 var BT_CONFIRM_RESET=0;
@@ -30483,7 +30483,7 @@ function btCmdCardOn(s){if(!s||!BT.started||BT.finished||BT.edit)return false;va
 function btInfActHTML(s){
   var ph=btPhId(),att=btSideNow(),h='';
     var fph=btHumanFirePh(s.side);
-  if(fph&&!BT.fire&&btInf(s).length)h+=btBtn(T('射撃'),'BtFireStart()',{on:true});
+  if(fph&&!BT.fire&&btInf(s).length&&s.n!=null&&s.n>=0)h+=btBtn(T('射撃'),'BtFireStart()',{on:true}); // v290: 盤外からは撃てない
   if(ph==='MPh'&&s.side===att&&!BT.mv){h+=btBtn(T('移動開始'),'BtMoveStart()',{on:true});h+=btBtn(T('駆け足(+2MF・CX)'),'BtMoveStart({dt:true})');h+=btBtn(T('突撃移動(1ヘクス)'),'BtMoveStart({assault:true})');}
   if(BT.mv&&!BT.mv.veh&&BT.mv.sid===s.id&&BT.mv.side===s.side){h+='<span style="font-size:12px;color:#ffd060">MF '+BT.mv.mfUsed+'/'+BT.mv.mfMax+(BT.mv.dt?' 駆け足':'')+(BT.mv.assault?' 突撃移動':'')+'</span>';h+=btBtn(T('移動終了'),'BtMoveEnd()',{on:true});h+=btBtn(T('取消'),'BtMoveCancel()');
     if(btInf(s).some(function(u){return u.s==='ok'&&(btI(u,s.side).smk||0)>0;})&&!BT.mv.smokeTried)h+=btBtn(BT.mvTool==='smoke'?T('発煙先をタップ(自ヘクス1MF/隣接2MF)'):T('発煙手榴弾'),"BtMvTool('smoke')",{on:BT.mvTool==='smoke'});
@@ -30502,6 +30502,7 @@ function btCmdCardHTML(){ // v288(ダルマ指示「なるべく縦幅が大き�
   var vu=vm?btStackById(mv.sid).u[0]:null,vv=vu&&btAfvData(vu.nm);
   var title=vm?vm.head+' <span style="color:#8899aa">'+(vv?'AF'+vv.afFront.hull+'/'+vv.afSide.hull+' ':'')+btVehStatTxt(vu)+'</span>':'<span style="color:#ffd060;font-weight:bold">'+BT_SIDE_NAME[s.side]+' @ '+((s.n!=null&&s.n>=0)?BTG.nodes[s.n].nm+' '+BTG.nodes[s.n].terr:(T('盤外')+'('+({E:'東端',W:'西端',N:'北端'}[s.off]||'')+')'))+'</span>';
   h+='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span style="font-weight:bold">T'+BT.turn+' '+BT_SIDE_NAME[sn]+' <span style="color:'+BT_SIDE_COL[sn]+'">'+ph[0]+'</span> '+ph[1]+'</span>'+btBtn(T('次のフェイズ')+' ▶','BtNext()',{dim:!canNext,st:P})+'<span style="color:#404858">│</span>'+title+'</div>';
+  if(BT.regroup&&btRegroupOK(s)){h+=btRegroupPanelHTML(s);return h+'</div>';} // v290: 編成を変える画面
   // ユニット: 車両は「▲名前 状態」、歩兵・SWはチェック付きの札を横に並べる
   var chips=[],selIds=(BT.selU&&BT.selU.sid===s.id)?BT.selU.ids:null,canSel=!BT.fire&&!vm;
   s.u.forEach(function(u){
@@ -30516,7 +30517,9 @@ function btCmdCardHTML(){ // v288(ダルマ指示「なるべく縦幅が大き�
   // v288(ダルマ指示「カードで表示 横並び一列」): 歩兵・SWはカウンター画像を横一列(タップで動かすユニットの選択を切替。選ばないユニットは暗く)
   if(BT.vasl!==false){
     var vehChips=chips.filter(function(c){return c.indexOf('▲')>=0;});
-    var row=btVcPieces(s).filter(function(p){var k=btI(p.u,s.side).kind;return k!=='afv'&&k!=='wreck';}).map(function(p){
+    var pcs=btVcPieces(s).filter(function(p){var k=btI(p.u,s.side).kind;return k!=='afv'&&k!=='wreck';});
+    var gIdx=[],gi=-1;pcs.forEach(function(p){var k=btI(p.u,s.side).kind;var owned=btIsSWK(k)&&btOwner(s,p.u);if(!owned)gi++;gIdx.push(gi);});
+    var row=pcs.map(function(p){
       var u=p.u,k=btI(u,s.side).kind,on=!selIds||selIds.indexOf(u.id)>=0||btIsSWK(k);
       var tg=[];if(u.s==='br')tg.push(btIsSWK(k)?'故障':'混乱');else if(u.s==='pn')tg.push('釘付');if(u.cx)tg.push('CX');if(u.dm)tg.push('DM');if(u.wd)tg.push('負傷');if(u.fire)tg.push('射');if(u.mv)tg.push('移');if(u.adv)tg.push('前');
       var gv=BT.swGive&&BT.swGive.sid===s.id?BT.swGive:null,canGive=btSWGiveOK(s);
@@ -30530,7 +30533,18 @@ function btCmdCardHTML(){ // v288(ダルマ指示「なるべく縦幅が大き�
       return '<div title="'+u.nm+'" style="position:relative;flex:0 0 auto;cursor:'+(click?'pointer':'default')+';opacity:'+(on?1:.35)+';outline:'+ol+';outline-offset:-1px;border-radius:3px"'+click+'>'+img+(tg.length?'<span style="position:absolute;left:0;right:0;bottom:0;background:#000b;color:#ffd060;font-size:9px;line-height:11px;text-align:center">'+tg.join(' ')+'</span>':'')+'</div>';
     });
     if(vehChips.length)h+='<div style="display:flex;gap:4px 12px;flex-wrap:wrap;margin-top:3px">'+vehChips.join('')+'</div>';
-    if(row.length)h+='<div style="display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;margin-top:4px;padding:2px">'+row.join('')+'</div>';
+    // v290(ダルマ指示「ユニットとSWの関連をわかりやすく」): ユニットとその持つSWを1つの枠で囲み、間に「+」
+    if(row.length){
+      var st=window.BT_SWSTYLE||'both',grp=[];
+      row.forEach(function(c,i){var g=gIdx[i];if(!grp[g])grp[g]=[];grp[g].push(c);});
+      var gh=grp.map(function(cs){
+        var sep=(st==='frame')?'':'<span style="color:#ffd060;font-weight:bold;font-size:14px;align-self:center;margin:0 1px">+</span>';
+        var inner=cs.join(sep);
+        if(st==='plus')return '<div style="display:flex;gap:2px;flex:0 0 auto">'+inner+'</div>';
+        return '<div style="display:flex;gap:2px;flex:0 0 auto;border:1px solid '+(cs.length>1?'#7a8aa8':'#3a4250')+';border-radius:5px;padding:2px;background:'+(cs.length>1?'#141a26':'transparent')+'">'+inner+'</div>';
+      });
+      h+='<div style="display:flex;gap:'+(st==='plus'?10:5)+'px;flex-wrap:nowrap;overflow-x:auto;margin-top:4px;padding:2px">'+gh.join('')+'</div>';
+    }
     if(BT.swGive&&BT.swGive.sid===s.id){var gw=s.u.filter(function(x){return x.id===BT.swGive.uid;})[0];h+='<div style="color:#40e0ff;font-size:11px;margin-top:2px">'+(gw?gw.nm:'SW')+' '+T('を渡す相手(点線の枠)をタップ。もう一度SWをタップで取消')+'</div>';}
     else if(btSWGiveOK(s)&&s.u.some(function(x){return btIsSWK(btI(x,s.side).kind);}))h+='<div style="color:#667788;font-size:10px;margin-top:1px">'+T('SWのカウンターをタップすると持ち主を替えられます')+'</div>';
   }
@@ -30577,14 +30591,56 @@ function BtSWGiveTo(sid,toId){
   btSave();Draw();
 }
 // 盤外スタックの組み替え(進入前): 選んだユニットを別の待機スタックに分ける / 同じ盤端の待機スタックとまとめる
-function btOffRegroupHTML(s,P){
-  if(!s||(s.n!=null&&s.n>=0)||BT.mv||btAFVs(s).length)return '';
-  if(BT.started&&s.side!==btSideNow()&&!BT.edit)return '';
-  var h='',sel=(BT.selU&&BT.selU.sid===s.id)?BT.selU.ids:null;
-  var inf=btInf(s).filter(function(u){return btIsInfK(btI(u,s.side).kind);});
-  if(sel&&sel.length&&sel.length<inf.length)h+=btBtn(T('選んだユニットを分ける'),"BtOffSplit('"+s.id+"')",{st:P});
-  BT.stacks.filter(function(x){return x!==s&&x.side===s.side&&(x.n==null||x.n<0)&&x.off===s.off&&!btAFVs(x).length&&btInf(x).length;}).forEach(function(x){
-    var g=btStackGlyph(x);h+=btBtn(T('まとめる')+'←'+({E:'東',W:'西',N:'北'}[x.off]||'')+g.main,"BtOffMerge('"+s.id+"','"+x.id+"')",{st:P});});
+function btOffRegroupHTML(s,P){ // v290: 「編成を変える」1つのボタンに(押すと同じ盤端の待機スタックを並べて、ユニットを移し替える画面)
+  if(!btRegroupOK(s))return '';
+  return btBtn(T('編成を変える'),"BtRegroup('"+s.id+"')",{st:P});
+}
+function btRegroupOK(s){
+  if(!s||(s.n!=null&&s.n>=0)||BT.mv||btAFVs(s).length||!btInf(s).length)return false;
+  if(BT.started&&s.side!==btSideNow()&&!BT.edit)return false;
+  return true;
+}
+function btRgStacks(s){return BT.stacks.filter(function(x){return x.side===s.side&&(x.n==null||x.n<0)&&x.off===s.off&&!btAFVs(x).length&&x.u.length;});}
+function btGroupsOf(s){ // [ [ユニット, そのSW...], ... ] 持ち主のいないSWは単独
+  var out=[],P=btVcPieces(s).filter(function(p){var k=btI(p.u,s.side).kind;return k!=='afv'&&k!=='wreck';});
+  P.forEach(function(p){var k=btI(p.u,s.side).kind;if(btIsSWK(k)&&btOwner(s,p.u)&&out.length&&out[out.length-1].some(function(q){return q.u.id===p.u.own;}))out[out.length-1].push(p);else out.push([p]);});
+  return out;
+}
+function BtRegroup(sid){BT.regroup=BT.regroup?null:{sid:sid,pick:null};BT.selU=null;Draw();}
+function BtRgPick(sid,uid){var R=BT.regroup;if(!R)return;R.pick=(R.pick&&R.pick.uid===uid)?null:{sid:sid,uid:uid};Draw();}
+function BtRgMove(toSid){
+  var R=BT.regroup;if(!R||!R.pick)return;var from=btStackById(R.pick.sid);if(!from)return;
+  var head=from.u.filter(function(u){return u.id===R.pick.uid;})[0];if(!head)return;
+  var mv=from.u.filter(function(u){return u===head||(u.own===head.id&&btIsSWK(btI(u,from.side).kind));});
+  var to;
+  if(toSid==='new'){to={id:'s'+(++BT.seq),side:from.side,n:from.n,off:from.off,group:from.group,u:[],mel:false};BT.stacks.push(to);}
+  else to=btStackById(toSid);
+  if(!to||to===from)return;
+  from.u=from.u.filter(function(u){return mv.indexOf(u)<0;});to.u=to.u.concat(mv);
+  if(!from.u.length){BT.stacks=BT.stacks.filter(function(x){return x!==from;});if(R.sid===from.id)R.sid=to.id;}
+  btLog([BT_SIDE_NAME[to.side]+' 盤外の編成を変更: '+mv.map(function(u){return u.nm;}).join('+')+' を移した']);
+  R.pick=null;BT.sel=R.sid;btSave();Draw();
+}
+function btRegroupPanelHTML(s){
+  var R=BT.regroup,P=';padding:2px 7px',h='';
+  var rows=btRgStacks(s);
+  h+='<div style="font-size:11px;color:#40e0ff;margin-top:3px">'+(R.pick?T('移す先の「ここへ移す」をタップ(もう一度ユニットをタップで取消)'):T('移したいユニットをタップ(SWは持ち主と一緒に移ります)'))+'</div>';
+  rows.forEach(function(x,i){
+    var cur=(x.id===s.id);
+    h+='<div style="display:flex;align-items:center;gap:6px;margin-top:4px;padding:3px 4px;border:1px solid '+(cur?'#c0a030':'#2f3540')+';border-radius:4px;background:#0c1018">';
+    h+='<span style="flex:0 0 auto;font-size:11px;color:'+(cur?'#ffd060':'#8899aa')+';min-width:58px">'+T('待機')+(i+1)+(cur?'<br>('+T('選択中')+')':'')+'</span>';
+    h+='<div style="display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto;flex:1;min-width:0">';
+    btGroupsOf(x).forEach(function(g){
+      var hd=g[0].u,pk=R.pick&&R.pick.uid===hd.id;
+      var inner=g.map(function(p){return p.src?'<img src="'+p.src+'" style="width:36px;height:36px;display:block;border-radius:2px">':'<div style="width:36px;height:36px;font-size:9px;border:1px solid #556">'+p.u.nm+'</div>';}).join('<span style="color:#ffd060;font-weight:bold;align-self:center">+</span>');
+      h+='<div onclick="BtRgPick(\''+x.id+'\',\''+hd.id+'\')" style="cursor:pointer;display:flex;gap:2px;flex:0 0 auto;border:'+(pk?'2px solid #40e0ff':'1px solid '+(g.length>1?'#7a8aa8':'#3a4250'))+';border-radius:5px;padding:2px;background:'+(g.length>1?'#141a26':'transparent')+'">'+inner+'</div>';
+    });
+    h+='</div>';
+    if(R.pick&&R.pick.sid!==x.id)h+=btBtn(T('ここへ移す'),"BtRgMove('"+x.id+"')",{on:true,st:P});
+    h+='</div>';
+  });
+  if(R.pick)h+='<div style="margin-top:4px">'+btBtn('＋ '+T('新しい待機スタックへ移す'),"BtRgMove('new')",{st:P})+'</div>';
+  h+='<div style="margin-top:5px">'+btBtn(T('完了'),'BtRegroup()',{on:true,st:P})+'</div>';
   return h;
 }
 function btCarry(s,ids){ // 選んだユニットと、その持つSW
@@ -30601,6 +30657,17 @@ function BtOffMerge(sid,tid){
   var s=btStackById(sid),t=btStackById(tid);if(!s||!t||s.off!==t.off)return;
   t.u=t.u.concat(s.u);s.u=[];BT.stacks=BT.stacks.filter(function(x){return x!==s;});
   BT.sel=t.id;BT.selU=null;btLog([BT_SIDE_NAME[t.side]+' 盤外の待機スタックをまとめた']);btSave();Draw();
+}
+// ---------- v290(ダルマ指示「対戦時は赤枠内(編成・季節・歩兵/車両・対象グループ)をデフォルトで折りたたむ」) ----------
+function btLosToolsFolded(){return btAvail()&&btActive()&&!BT.losToolsOpen;}
+function BtLosToolsToggle(){BT.losToolsOpen=!BT.losToolsOpen;btSave();Draw();}
+function btLosToolsBarHTML(){
+  if(!btAvail()||!btActive())return '';
+  var open=!!BT.losToolsOpen;
+  var sea=T('果樹園')+(S_LOS.orchardSeason?'<span style="color:#3ca878">●</span>':'<span style="color:#556677">○</span>')+' '+T('麦畑')+(S_LOS.grainSeason?'<span style="color:#3ca878">●</span>':'<span style="color:#556677">○</span>');
+  return '<div onclick="BtLosToolsToggle()" style="cursor:pointer;display:flex;align-items:center;gap:8px;margin:0 0 6px;padding:5px 8px;border:1px solid #2f3540;border-radius:4px;background:#0a0c14;font-size:12px;color:#8899aa">'
+    +'<span style="color:#c0a030">'+(open?'▼':'▶')+'</span><span>'+T('測定ツール(編成・季節・歩兵/車両・対象グループ)')+'</span>'
+    +'<span style="margin-left:auto;font-size:11px">'+sea+'</span><span style="font-size:11px;color:#667788">'+(open?T('タップで閉じる'):T('タップで開く'))+'</span></div>';
 }
 
 // ---------- [E1] 車両・砲(段階3c) ----------
@@ -36689,7 +36756,9 @@ function LOS_PAGE(){
   // 2026-09修正(ダルマ指示「VCA変更が自動で反映されない、進行方向を変更時に自動で反映させる」):
   // 従来の手動VCA変更ボタンを廃止(rtPushHex内の自動旋回検出に置き換え済み、LosRouteVCAChange関数は
   // 呼び出し元が無くなったため未使用のまま残置。将来の直接呼び出し用に関数自体は削除していない)。
-  h+=losCompactSWPickerHTML();
+  var btFold=(typeof btLosToolsFolded==='function'&&btLosToolsFolded()); // v290(ダルマ指示): 対戦中はデフォルトで折りたたむ
+  if(typeof btLosToolsBarHTML==='function')h+=btLosToolsBarHTML();
+  if(!btFold)h+=losCompactSWPickerHTML();
 
   if(S_LOS.boards.length===0){
     h+='<div class="card"><div style="text-align:center;color:#8899aa;padding:20px 0">'+T('盤面を選択してください')+'</div></div>';
@@ -36701,6 +36770,7 @@ function LOS_PAGE(){
   var innerWpx=totalW*S_LOS.zoom,innerHpx=totalH*S_LOS.zoom;
   var rotSwap=(S_LOS.viewRot===90||S_LOS.viewRot===270);
   var outerWpx=rotSwap?innerHpx:innerWpx,outerHpx=rotSwap?innerWpx:innerHpx;
+  if(!btFold){ // v290
   h+='<div class="card" style="padding:6px">';
   // 2026-08修正(ダルマ指示「LOSチェッカー表記をLOS & MPチェックに、右端にシナリオ/月・
   // 果樹園/麦畑季節状態を四角枠線で表示、90°L左の月ボタン削除」): 見出し文言を変更し、
@@ -36728,6 +36798,7 @@ function LOS_PAGE(){
   seasonBoxH+='</div>';
   h+=losRouteVcaPanelHTML(seasonBoxH); // v11.280: 直後にあった対応する開始タグの無い</span>を削除
   h+='</div>';
+  } // v290
   // 2026-08修正(ダルマ指示「LOS結果の右横にFP値電子パネルを追加」): 見出し直下の
   // 独立パネルは廃止し、LOS結果パネル(レンジ/HEX/LOS妨害/DRM/B地点地形/TEM/高低差A→B)
   // の右横に、他項目と統一されたseg7デザインのFP表示カードとして追加する(下記参照)。
