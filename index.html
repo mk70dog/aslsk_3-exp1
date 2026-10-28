@@ -33052,7 +33052,7 @@ function BtRecExport(){
   var fn='ASLSK_'+btScId()+'_'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'_'+p(d.getHours())+p(d.getMinutes())+'_T'+BT.turn+'.json';
   try{
     var blob=new Blob([txt],{type:'application/json'});
-    if(navigator.canShare&&navigator.share){var f=new File([blob],fn,{type:'application/json'});if(navigator.canShare({files:[f]})){navigator.share({files:[f]}).catch(function(){});return;} // v326: 題名(ファイル名の文字)を付けない(共有先によってはファイルではなく題名の文字だけが送られていた)}
+    if(navigator.canShare&&navigator.share){var f=new File([blob],fn,{type:'application/json'});if(navigator.canShare({files:[f]})){navigator.share({files:[f]}).catch(function(){});return;}/* v326: 題名(ファイル名の文字)を付けない(共有先によってはファイルではなく題名の文字だけが送られていた) */}
     var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},2000);
     btToast('記録を書き出しました('+Math.round(txt.length/1024)+'KB)');
   }catch(e){btToast('書き出せませんでした');}
