@@ -1,6 +1,6 @@
 {
- "name": "ASL SKシリーズv313",
- "short_name": "ASL SKシリーズv313",
+ "name": "ASL SKシリーズv314",
+ "short_name": "ASL SKシリーズv314",
  "description": "ASL Starter Kit 判定支援ツール(非公式ファン制作)",
  "start_url": "./index.html",
  "scope": "./",
@@ -22,7 +22,7 @@
    "purpose": "any"
   },
   {
-   "src": "icon-512.png",
+   "src": "icon-512m.png",
    "sizes": "512x512",
    "type": "image/png",
    "purpose": "maskable"
