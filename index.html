@@ -25903,14 +25903,14 @@ function MOVE_PAGE(){
   if(!S.moveSub)S.moveSub="smk";
   var h='';
   h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
-  h+='<div class="btns" style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;border:1px solid #404040;border-radius:3px;background:#000000;padding:5px">'; /* v348: 7項目になったので4列 */
-  h+='<button class="b sm'+(S.moveSub==="mh"?" on":"")+'" onclick="MoveSub(\'mh\')">'+T('人力移動')+'</button>';
-  h+='<button class="b sm'+(S.moveSub==="pp"?" on":"")+'" onclick="MoveSub(\'pp\')">'+T('SW携行重量')+'</button>';
-  h+='<button class="b sm'+(S.moveSub==="smk"?" on":"")+'" onclick="MoveSub(\'smk\')">'+T('煙幕手榴弾')+'</button>';
-  h+='<button class="b sm'+(S.moveSub==="mf"?" on":"")+'" onclick="MoveSub(\'mf\')">'+T('地形別移動コスト')+'</button>';
-  h+='<button class="b sm'+(S.moveSub==="type"?" on":"")+'" onclick="MoveSub(\'type\')">'+T('移動種別')+'</button>';
-  h+='<button class="b sm'+(S.moveSub==="bog"?" on":"")+'" onclick="MoveSub(\'bog\')">'+T('ボグ判定')+'</button>';
-  h+='<button class="b sm'+(S.moveSub==="mr"?" on":"")+'" onclick="MoveSub(\'mr\')">'+T('機械的信頼性')+'</button>'; /* v348(ダルマ指示「ボグ/人力/煙幕タブに移動時の機械的信頼性判定を追加」) */
+  h+='<div class="btns" style="display:grid;grid-template-columns:repeat(12,1fr);gap:4px;border:1px solid #404040;border-radius:3px;background:#000000;padding:5px">'; /* v348: 7項目=1段目4つ・2段目3つ、どちらも横幅いっぱい(12分割) */
+  h+='<button style="grid-column:span 3" class="b sm'+(S.moveSub==="mh"?" on":"")+'" onclick="MoveSub(\'mh\')">'+T('人力移動')+'</button>';
+  h+='<button style="grid-column:span 3" class="b sm'+(S.moveSub==="pp"?" on":"")+'" onclick="MoveSub(\'pp\')">'+T('SW携行重量')+'</button>';
+  h+='<button style="grid-column:span 3" class="b sm'+(S.moveSub==="smk"?" on":"")+'" onclick="MoveSub(\'smk\')">'+T('煙幕手榴弾')+'</button>';
+  h+='<button style="grid-column:span 3" class="b sm'+(S.moveSub==="mf"?" on":"")+'" onclick="MoveSub(\'mf\')">'+T('地形別移動コスト')+'</button>';
+  h+='<button style="grid-column:span 4" class="b sm'+(S.moveSub==="type"?" on":"")+'" onclick="MoveSub(\'type\')">'+T('移動種別')+'</button>';
+  h+='<button style="grid-column:span 4" class="b sm'+(S.moveSub==="bog"?" on":"")+'" onclick="MoveSub(\'bog\')">'+T('ボグ判定')+'</button>';
+  h+='<button style="grid-column:span 4" class="b sm'+(S.moveSub==="mr"?" on":"")+'" onclick="MoveSub(\'mr\')">'+T('機械的信頼性')+'</button>'; /* v348(ダルマ指示「ボグ/人力/煙幕タブに移動時の機械的信頼性判定を追加」) */
   h+='</div></div>';
   if(!S.bog)S.bog=deepCopy(INIT_BOG);
   if(S.moveSub==="mh")h+=MH_CARD();
