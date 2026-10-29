@@ -33520,6 +33520,22 @@ function BtRmCenter(n){
   },30);
 }
 // 地図に重ねる
+/* v352: 見える範囲(起点)=青の双眼鏡、撃てる敵(目標)=マゼンタの照準、移動コスト(行き先)=水色の道+MF/MP。A/Bと同じく、カウンター(スタック)のあるヘクス=左上に小さく、空き=中央 */
+function nmNodeOcc(n){
+  try{if(typeof btActive==='function'&&btActive())return btLosABOcc(n);
+    var H=nmHexOfNode(n);if(!H)return false;return !!((S_LOS.wreckHexes||{})[H.boardId+':'+H.col+':'+H.row])||nmHexHasOther(H);}catch(e){return false;}
+}
+function nmFeatMarkSVG(k,d,occ,lab){
+  var big=!occ,r=big?20:12,x=big?d.x:d.x-24,y=big?d.y:d.y-24,sc=r/14;
+  var h='<g transform="rotate('+(-S_LOS.viewRot)+' '+x+' '+y+')"><g transform="translate('+x+' '+y+') scale('+sc+')">';
+  if(k==='eye')h+='<circle r="14" fill="#123a6a" stroke="#7fc0ff" stroke-width="2"/><circle cx="-5" cy="1" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><circle cx="5" cy="1" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M-1.5 -0.5h3M-8 -2.5l2.5-4h3M8 -2.5l-2.5-4h-3" stroke="#fff" stroke-width="2" fill="none" stroke-linejoin="round"/>';
+  else if(k==='tgt')h+='<circle r="14" fill="#4a0a4a" stroke="#ff70ff" stroke-width="2"/><circle r="7" fill="none" stroke="#fff" stroke-width="2.2"/><circle r="1.8" fill="#ff70ff"/><path d="M-12 0h6M6 0h6M0 -12v6M0 6v6" stroke="#fff" stroke-width="2.2"/>';
+  else h+='<circle r="14" fill="#0d3340" stroke="#40e0ff" stroke-width="2"/><circle cx="-7.5" cy="7" r="2.6" fill="#fff"/><path d="M-5.5 5.5Q-4 -2 2 -1.5T6.5 -6" fill="none" stroke="#fff" stroke-width="2.2" stroke-dasharray="3 2.4" stroke-linecap="round"/><path d="M3.5 -9.5l6 1.8-3.2 5.2z" fill="#fff"/>';
+  h+='</g>';
+  if(lab){var tw=Math.max(26,lab.t.length*7.5+8),bx=big?x-tw/2:x+r+2,by=big?y+r+3:y-7;
+    h+='<rect x="'+bx+'" y="'+by+'" width="'+tw+'" height="15" rx="3" fill="#0f0f0f" stroke="'+lab.col+'" stroke-width="1.4"/><text x="'+(bx+tw/2)+'" y="'+(by+11.5)+'" text-anchor="middle" font-size="11.5" font-weight="900" fill="'+lab.col+'" font-family="Arial">'+lab.t+'</text>';}
+  return h+'</g>';
+}
 function btRmShowSVG(dl){
   var o=btRmLive();if(!o)return '';var h='',c=btDispPt(o.n,dl);
   if(o.k==='nthreat'){ /* v346: 撃てる敵 — 選んだ敵から目標へ太い線と距離、他は細い点線 */
@@ -33528,7 +33544,8 @@ function btRmShowSVG(dl){
       h+='<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="#000" stroke-width="7" stroke-opacity="0.55"/><line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="#ffd040" stroke-width="3.5" stroke-dasharray="12 6"/>';
       h+='<polygon points="'+btHexPoly(x.sn,dl)+'" fill="none" stroke="#ff5050" stroke-width="4"/>';
       var mx=(a.x+c.x)/2,my=(a.y+c.y)/2;h+=btRmTxt({x:mx,y:my-6},'距離'+x.d,'#ffd040');});
-    h+='<polygon points="'+btHexPoly(o.n,dl)+'" fill="#ff3030" fill-opacity="0.18" stroke="#ff5050" stroke-width="4"/>';
+    h+='<polygon points="'+btHexPoly(o.n,dl)+'" fill="#ff3030" fill-opacity="0.14" stroke="#ff5050" stroke-width="2.5"/>';
+    h+=nmFeatMarkSVG('tgt',c,nmNodeOcc(o.n)); /* v352 */
     return h;
   }
   if(o.k==='view'){
@@ -33537,12 +33554,14 @@ function btRmShowSVG(dl){
       else if(v===0)h+='<polygon points="'+btHexPoly(i,dl)+'" fill="#40ff60" fill-opacity="0.16"/>';
       else{h+='<polygon points="'+btHexPoly(i,dl)+'" fill="#ffd040" fill-opacity="0.26"/>';}});
     Object.keys(o.m).forEach(function(k){var v=o.m[k];if(v>0)h+=btRmTxt(btDispPt(+k,dl),'+'+v);});
-    h+='<polygon points="'+btHexPoly(o.n,dl)+'" fill="none" stroke="#66ccff" stroke-width="4"/>';
+    h+='<polygon points="'+btHexPoly(o.n,dl)+'" fill="none" stroke="#66ccff" stroke-width="2.5"/>';
+    h+=nmFeatMarkSVG('eye',c,nmNodeOcc(o.n)); /* v352(ダルマ指示「ここから見える・ここを撃てる・ここまでのマップ上のマークを変更」) */
   }else if(o.k==='threat'){
     o.list.forEach(function(x){var s=btStackById(x.sid);var sn=s&&s.n!=null&&s.n>=0?s.n:x.sn;var a=btDispPt(sn,dl);
       h+='<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="#000" stroke-width="5" stroke-opacity="0.5"/><line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="#ff5050" stroke-width="2.5" stroke-dasharray="8 5"/>';
       h+='<circle cx="'+a.x+'" cy="'+a.y+'" r="28" fill="none" stroke="#ff5050" stroke-width="3.5"/>';});
-    h+='<polygon points="'+btHexPoly(o.n,dl)+'" fill="#ff3030" fill-opacity="0.22" stroke="#ff5050" stroke-width="4"/>';
+    h+='<polygon points="'+btHexPoly(o.n,dl)+'" fill="#ff3030" fill-opacity="0.16" stroke="#ff5050" stroke-width="2.5"/>';
+    h+=nmFeatMarkSVG('tgt',c,nmNodeOcc(o.n)); /* v352 */
   }else if(o.k==='ca'){
     var I=btRmCAInfo(o);if(!I)return '';var cc=btDispPt(I.n,dl),R=btHexR()*Math.sqrt(3)*40;
     I.arcs.slice().reverse().forEach(function(ar){
@@ -33551,12 +33570,12 @@ function btRmShowSVG(dl){
     I.arcs.forEach(function(ar){[-30,30].forEach(function(dd){var a=(btFaceAng(ar.f)+dd)*Math.PI/180;
       h+='<line x1="'+cn.x+'" y1="'+cn.y+'" x2="'+(cn.x+R*Math.cos(a)).toFixed(1)+'" y2="'+(cn.y+R*Math.sin(a)).toFixed(1)+'" stroke="'+ar.col+'" stroke-width="3" stroke-opacity="0.9"/>';});});
     h+='<polygon points="'+btHexPoly(I.n,dl)+'" fill="none" stroke="#ff9030" stroke-width="4"/>';
-  }else if(o.k==='cost'){
+  }else if(o.k==='cost'||o.k==='ncost'){ /* v352: 通常MAP(ncost)も経路の線を出す */
     (o.res||[]).forEach(function(r,ri){if(!r.path||r.path.length<2)return;var col=ri===0?'#40e0ff':'#ffd040';
       var pts=r.path.map(function(i){var d=btDispPt(i,dl);return d.x.toFixed(1)+','+d.y.toFixed(1);}).join(' ');
       h+='<polyline points="'+pts+'" fill="none" stroke="#000" stroke-width="7" stroke-opacity="0.5" stroke-linejoin="round"/><polyline points="'+pts+'" fill="none" stroke="'+col+'" stroke-width="3.5" stroke-linejoin="round"'+(r.ok?'':' stroke-dasharray="9 6"')+'/>';});
-    h+='<polygon points="'+btHexPoly(o.n,dl)+'" fill="#40e0ff" fill-opacity="0.15" stroke="#40e0ff" stroke-width="4"/>';
-    var r0=(o.res||[])[0];if(r0&&r0.c!=null)h+=btRmTxt(c,r0.c+r0.u,r0.ok?'#40ff60':'#ff8060');
+    h+='<polygon points="'+btHexPoly(o.n,dl)+'" fill="#40e0ff" fill-opacity="0.12" stroke="#40e0ff" stroke-width="2.5"/>';
+    var r0=(o.res||[])[0];h+=nmFeatMarkSVG('route',c,nmNodeOcc(o.n),r0&&r0.c!=null?{t:r0.c+r0.u,col:r0.ok?'#40ff60':'#ff8060'}:null); /* v352 */
   }
   return h;
 }
