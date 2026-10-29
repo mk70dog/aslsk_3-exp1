@@ -30596,7 +30596,7 @@ function btOverlaySVG(dispLayout){
   if(!btActive()&&btGraphReady()){ /* v335: 通常のMAPタブでも右クリックの表示(見える範囲など)を重ねる */
     var hn=btRmShowSVG(dispLayout);
     if(BT.rmHex!=null&&BTG.nodes[BT.rmHex]){var rmn=btDispPt(BT.rmHex,dispLayout);hn+='<circle id="btRmHexC" cx="'+rmn.x+'" cy="'+rmn.y+'" r="28" fill="#ffffff" fill-opacity="0.15" stroke="#ffffff" stroke-width="3"/>';}
-    return hn?'<g id="btOvG">'+hn+'</g>':'';
+    return '<g id="btOvG">'+hn+'</g><g id="nmDropG">'+(NM_DRAG&&NM_DRAG.moving&&typeof nmDropSVG==='function'?nmDropSVG():'')+'</g>'; /* v354: ドラッグの置き先の表示 */
   }
   if(!btActive()||!btGraphReady())return '';
   var h='';
@@ -33071,8 +33071,38 @@ function nmDragGhost(x,y){
     document.body.appendChild(g);}
   g.style.left=x+'px';g.style.top=y+'px';
   var hx=losHexAtClient(x,y),ok=hx&&!(nmUnitAt(hx,NM_DRAG.sd)&&nmUnitAt(hx,NM_DRAG.sd)!==NM_DRAG.ref);
-  g.style.outline=ok?'':'3px solid #ff4040';
+  g.style.outline=(ok||NM_DROP_STYLE)?'':'3px solid #ff4040';
+  NM_DRAG.hx=hx;NM_DRAG.ok=!!ok;NM_DRAG.tn=hx?btNodeOf(hx.boardId,hx.col,hx.row):null;
+  if(NM_DROP_STYLE==='snap')g.style.opacity=(NM_DRAG.tn!=null)?'0.35':'0.9';
+  var dg=document.getElementById('nmDropG');if(dg)dg.innerHTML=nmDropSVG();
 }
+/* v354(ダルマ指示「ドラッグ&ドロップでドロップ前に候補ヘクスを分かるように」): NM_DROP_STYLE
+   'hex'=置き先のヘクスを塗る(緑=置ける/赤=置けない) / 'snap'=置き先にカウンターの影+ヘクスの縁 / 'line'=元の位置から点線と距離+ヘクスの縁 / null=なし */
+var NM_DROP_STYLE='hex';
+function nmDropSVG(){
+  var D=NM_DRAG;if(!D||!D.moving||D.tn==null||!NM_DROP_STYLE||!btGraphReady())return '';
+  var dl=losComputeDisplayLayout(),c=btDispPt(D.tn,dl),ok=D.ok,col=ok?'#40ff70':'#ff4040',h='';
+  var poly=btHexPoly(D.tn,dl,1);
+  var on=btNodeOf(D.ref.boardId,D.ref.col,D.ref.row);
+  if(NM_DROP_STYLE==='hex'){
+    h+='<polygon points="'+poly+'" fill="'+col+'" fill-opacity="0.32" stroke="#000" stroke-width="6" stroke-opacity=".45"/><polygon points="'+poly+'" fill="none" stroke="'+col+'" stroke-width="3.5"/>';
+    if(!ok)h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+c.x+' '+c.y+')"><path d="M'+(c.x-12)+' '+(c.y-12)+'l24 24M'+(c.x+12)+' '+(c.y-12)+'l-24 24" stroke="#ff4040" stroke-width="5" stroke-linecap="round"/></g>';
+  }else if(NM_DROP_STYLE==='snap'){
+    var src=D.ref.veh?nmVaslSrc(D.ref.veh):null,S=50;
+    h+='<polygon points="'+poly+'" fill="none" stroke="#000" stroke-width="6" stroke-opacity=".45"/><polygon points="'+poly+'" fill="none" stroke="'+col+'" stroke-width="3" stroke-dasharray="7 4"/>';
+    h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+c.x+' '+c.y+')" opacity="'+(ok?0.75:0.4)+'">'+(src?'<image href="'+src+'" x="'+(c.x-S/2)+'" y="'+(c.y-S/2)+'" width="'+S+'" height="'+S+'"/>':'<rect x="'+(c.x-S/2)+'" y="'+(c.y-S/2)+'" width="'+S+'" height="'+S+'" rx="5" fill="#0d2a4a" stroke="#33aaff" stroke-width="2.5"/>')+'</g>';
+    if(!ok)h+=btRmTxt({x:c.x,y:c.y+40},'置けない','#ff6060');
+  }else{
+    var o2=on!=null?btDispPt(on,dl):null;
+    if(o2&&on!==D.tn){h+='<line x1="'+o2.x+'" y1="'+o2.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="#000" stroke-width="6" stroke-opacity=".5"/><line x1="'+o2.x+'" y1="'+o2.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="'+col+'" stroke-width="3" stroke-dasharray="10 6"/>';
+      h+='<polygon points="'+btHexPoly(on,dl,1)+'" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="4 4" stroke-opacity=".8"/>';}
+    h+='<polygon points="'+poly+'" fill="'+col+'" fill-opacity="0.18" stroke="'+col+'" stroke-width="3.5"/>';
+    var lb=(on!=null?btDist(on,D.tn)+'ヘクス ':'')+BTG.nodes[D.tn].nm+(ok?'':' ×');
+    h+=btRmTxt({x:c.x,y:c.y-34},lb,col);
+  }
+  return h;
+}
+function nmDropKeep(){}
 function nmDragStart(x,y,touch){var p=nmDragPick(x,y);if(!p)return false;NM_DRAG={sd:p.sd,ref:p.ref,x0:x,y0:y,moving:false,touch:touch};return true;}
 function nmDragMove(x,y){
   if(!NM_DRAG)return false;
