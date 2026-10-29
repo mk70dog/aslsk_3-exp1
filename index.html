@@ -34559,13 +34559,16 @@ function btCamReactNodes(){
 /* v356(ダルマ指示「ノーマルの自軍・敵軍マーカーを変更」): 車両を決めていない自軍・敵のマーク。NM_PLAIN_STYLE
    'nato'=NATOの部隊記号(自軍=青の長方形・敵=赤のひし形、歩兵の×) / 'ctr'=カウンター風(兵士の絵と「自軍/敵軍」) / 'disc'=丸い札(ヘルメット) / null=従来 */
 var NM_PLAIN_STYLE='nato';
-function nmPlainMarkSVG(sd,d){
+function nmPlainMarkSVG(sd,d,eh){
   var F=sd==='f',x=d.x,y=d.y,en=(typeof S!=='undefined'&&S.lang==='en'),lb=F?(en?'OWN':'自軍'):(en?'ENEMY':'敵軍'),h='<g transform="rotate('+(-S_LOS.viewRot)+' '+x+' '+y+')">',st=NM_PLAIN_STYLE;
   var c1=F?'#2a6fdb':'#d62839',c2=F?'#bfe0ff':'#ffd0d6';
   if(st==='nato'){
     if(F)h+='<rect x="'+(x-22)+'" y="'+(y-15)+'" width="44" height="30" fill="'+c2+'" stroke="#000" stroke-width="2.5"/><path d="M'+(x-22)+' '+(y-15)+'L'+(x+22)+' '+(y+15)+'M'+(x+22)+' '+(y-15)+'L'+(x-22)+' '+(y+15)+'" stroke="#000" stroke-width="2.2"/>';
     else h+='<path d="M'+x+' '+(y-23)+'L'+(x+23)+' '+y+'L'+x+' '+(y+23)+'L'+(x-23)+' '+y+'z" fill="'+c2+'" stroke="#000" stroke-width="2.5"/><path d="M'+(x-11.5)+' '+(y-11.5)+'L'+(x+11.5)+' '+(y+11.5)+'M'+(x+11.5)+' '+(y-11.5)+'L'+(x-11.5)+' '+(y+11.5)+'" stroke="#000" stroke-width="2.2"/>';
-    h+='<rect x="'+(x-15)+'" y="'+(y+(F?17:25))+'" width="30" height="13" rx="3" fill="'+c1+'"/><text x="'+x+'" y="'+(y+(F?27:35))+'" text-anchor="middle" font-size="9.5" font-weight="900" fill="#fff" font-family="sans-serif">'+lb+'</text>';
+    /* 札は矢印と重ならない側(矢印が下向きなら上)に置く */
+    var up=false;if(eh&&eh.facing!=null){var sa=((eh.facing*60+(losBoardRotById(eh.boardId)||0)+30+(S_LOS.viewRot||0))%360+360)%360;up=sa>90&&sa<270;}
+    var ly=up?(y-(F?17:25)-13):(y+(F?17:25));
+    h+='<rect x="'+(x-15)+'" y="'+ly+'" width="30" height="13" rx="3" fill="'+c1+'"/><text x="'+x+'" y="'+(ly+10)+'" text-anchor="middle" font-size="9.5" font-weight="900" fill="#fff" font-family="sans-serif">'+lb+'</text>';
   }else if(st==='ctr'){
     var S=48,x0=x-S/2,y0=y-S/2;
     h+='<rect x="'+(x0+2)+'" y="'+(y0+3)+'" width="'+S+'" height="'+S+'" rx="4" fill="#000" opacity=".4"/><rect x="'+x0+'" y="'+y0+'" width="'+S+'" height="'+S+'" rx="4" fill="'+c1+'" stroke="#000" stroke-width="1.5"/><rect x="'+(x0+2.5)+'" y="'+(y0+2.5)+'" width="'+(S-5)+'" height="'+(S-5)+'" rx="3" fill="none" stroke="#ffffff66" stroke-width="1"/>';
@@ -34596,7 +34599,7 @@ function nmEnemyVehSVG(eh,d,src,frameCol){ /* 対戦モード(btVehOverlaySVG)�
   if(eh.tca!=null&&eh.tca!==eh.facing)h+=arrow(eh.tca,50,5,'#ffd040','badge');
   var fc=frameCol||'#ff00ff';
   if(src)h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><image href="'+src+'" x="'+(d.x-S/2)+'" y="'+(d.y-S/2)+'" width="'+S+'" height="'+S+'"/></g>';
-  else if(NM_PLAIN_STYLE)h+=nmPlainMarkSVG(frameCol==='#33aaff'?'f':'e',d);
+  else if(NM_PLAIN_STYLE)h+=nmPlainMarkSVG(frameCol==='#33aaff'?'f':'e',d,eh);
   else h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><rect x="'+(d.x-S/2)+'" y="'+(d.y-S/2)+'" width="'+S+'" height="'+S+'" rx="5" fill="#0d2a4a" stroke="'+fc+'" stroke-width="2.5"/><text x="'+d.x+'" y="'+(d.y+5)+'" text-anchor="middle" font-size="14" font-weight="900" fill="#cfe8ff" font-family="sans-serif">'+(S_LOS&&typeof window!=='undefined'&&window.S&&window.S.lang==='en'?'OWN':'自軍')+'</text></g>';
   return h;
 }
@@ -34678,7 +34681,7 @@ function losEnemyHexOverlaySVG(dispLayout){
     if(nmUnitAt(eh,'f'))d={x:d.x+8,y:d.y+8}; /* v345: 同じヘクスに自軍もいる時は少しずらす */
     var evSrc=eh.veh?nmVaslSrc(eh.veh):null;
     if(evSrc){h+=nmEnemyVehSVG(eh,d,evSrc);return;} /* v343: 車両を選んだ敵はVASLカウンター+対戦モードと同じ矢印 */
-    if(NM_PLAIN_STYLE)h+=nmPlainMarkSVG('e',d)+'<g>'; /* v356: 車両を決めていない敵の新しいマーク */
+    if(NM_PLAIN_STYLE)h+=nmPlainMarkSVG('e',d,eh)+'<g>'; /* v356: 車両を決めていない敵の新しいマーク */
     else h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
     if(!NM_PLAIN_STYLE)h+='<image href="data:image/png;base64,'+(S.lang==="en"?LOS_ENEMY_MARKER_EN_IMG_B64:LOS_ENEMY_MARKER_IMG_B64)+'" x="'+(d.x-eiw/2)+'" y="'+(d.y-eih/2)+'" width="'+eiw+'" height="'+eih+'" preserveAspectRatio="xMidYMid meet"/>'; // 2026-09追加(Kato指示「敵軍マーカー英語対応」): バッジ内「敵軍」の英語版(ENEMY)へS.lang==="en"時に差し替え
     if(eh.veh){var evd=nmAfv(eh.veh);if(evd)h+='<text x="'+d.x+'" y="'+(d.y+eih/2+13)+'" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffd0ff" stroke="#000" stroke-width="3.5" paint-order="stroke" font-family="sans-serif">'+nmAfvName(evd)+'</text>';} /* v337: 敵の車両名 */
