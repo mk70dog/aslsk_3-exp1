@@ -33262,6 +33262,7 @@ var NM_RM_SUB=null;
 var NM_TABS=[['rally','回復/修理/回収'],['fire','射撃/残留火力'],['gun','砲撃'],['afv','装甲戦闘車両'],['latw','軽対戦車兵器'],['move','ボグ/人力/煙幕'],['dc','爆薬配置/起動'],['rout','潰走/阻止'],['aphcc','突撃/白兵戦'],['mc','士気/損耗'],['ref','早見表'],['unit','ユニット'],['scen','シナリオ']];
 var NM_FULL_RESUME=false;
 var NM_FULL_TABS=['fire','gun','afv','latw','move','ref','scen'];
+var NM_FULL_DEFAULT=true; /* v361: MAPタブを開いた時は全画面(falseで従来どおり) */
 function nmRmTabItems(n){
   var it=[{ic:'back',t:'← 戻る',sub:'タブを選ぶ'+(btMapFullOn()?'(MAPに戻ると全画面のまま)':''),f:"btRmReopen("+n+")"},{sep:1}];
   NM_TABS.forEach(function(t){it.push({ic:'tabgo',t:T(t[1]),f:"nmRmTabGo('"+t[0]+"')"});});
@@ -33272,10 +33273,18 @@ function nmRmTabGo(t){
   if(full){NM_FULL_RESUME=true;document.documentElement.classList.remove('bt-mapfull');try{btMapFullSync();}catch(e){}}
   NAVTAB(t);try{window.scrollTo(0,0);}catch(e){}
 }
+(function(){ /* v361: 起動時にMAPタブが開いていたら全画面にする */
+  if(typeof window==='undefined'||window.__nmFullBoot)return;window.__nmFullBoot=1;
+  var tries=0,iv=setInterval(function(){tries++;if(tries>40){clearInterval(iv);return;}
+    if(typeof S==='undefined'||!S||!document.getElementById('losScrollWrap'))return;clearInterval(iv);
+    if(S.tab==='los'&&NM_FULL_DEFAULT&&!btMapFullOn()&&!(typeof btActive==='function'&&btActive()))BtMapFull(null);},250);
+})();
 (function(){ /* MAPに戻った時に全画面へ戻す */
   if(typeof window==='undefined'||window.__nmTabWrap)return;window.__nmTabWrap=1;
   var orig=window.NAVTAB;if(typeof orig!=='function')return;
-  window.NAVTAB=function(t){var r=orig.apply(this,arguments);
+  window.NAVTAB=function(t){var prev=S.tab,r=orig.apply(this,arguments);
+    /* v361(ダルマ指示「マップタブはデフォルトを全画面表示にする」): 通常モードでMAPタブを開いたら全画面にする(全画面オフで普通の表示にできる) */
+    if(t==='los'&&prev!=='los'&&NM_FULL_DEFAULT&&!NM_FULL_RESUME){setTimeout(function(){if(S.tab!=='los'||btMapFullOn()||(typeof btActive==='function'&&btActive()))return;if(!document.getElementById('losScrollWrap'))return;BtMapFull(null);},60);}
     if(t==='los'&&NM_FULL_RESUME){NM_FULL_RESUME=false;setTimeout(function(){if(!document.getElementById('losScrollWrap'))return;document.documentElement.classList.add('bt-mapfull');try{localStorage.setItem('aslsk_bt_mapfull','1');}catch(e){}Draw();setTimeout(btMapFullSync,0);},0);}
     return r;};
 })();
