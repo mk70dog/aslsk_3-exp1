@@ -32831,7 +32831,7 @@ function nmCost(o){
 function nmRMenuItems(n){
   var H=NM_RM_HEX,it=[],N=(n>=0)?BTG.nodes[n]:null;
   if(NM_RM_VEH){var vsd=NM_RM_VEH===1?'e':NM_RM_VEH;NM_RM_VEH=0;return nmRmVehItems(n,vsd);}
-  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);}
+  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);}
   var nm=N?N.nm:btHexName(H.boardId,H.col,H.row),terr=N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')):'';
   var hasA=!!S_LOS.pxA;
   it.push({ic:'los',t:'ここを地点Aに',sub:nm+(terr?'　'+terr:''),f:"nmRmAB('a')"});
@@ -32875,8 +32875,12 @@ function nmRMenuItems(n){
     it.push({row:1,ic:'rot',t:'回転',btns:[['90°L',"BtRmRot("+n+",-90)"],['90°R',"BtRmRot("+n+",90)"]]});
   }
   it.push({ic:'full',t:btMapFullOn()?'全画面を終わる':'マップを全画面に',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに',f:"BtMapFull("+(n>=0?n:'null')+")"});
+  it.push({sep:1});
+  it.push({ic:'x',t:'全てクリア',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを全部消す(確認あり)',f:"nmRmSubOpen('clear',"+n+")"}); /* v345(ダルマ指示「右クリックに全てクリアを追加」) */
   return it;
 }
+function nmRmClearItems(n){return [{ic:'los',t:'← 戻る',sub:'消さずにメニューへ',f:"btRmReopen("+n+")"},{sep:1},{ic:'x',t:'<span style="color:#ff7070">全てクリアする</span>',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを消す(元に戻せません)',f:"nmRmClearAll()"}];}
+function nmRmClearAll(){BtRmClose();BT_RMS=null;if(typeof NM_TH_CAM!=='undefined')NM_TH_CAM=null;S_LOS.nmStallPop=false;LosClearMapAll();try{saveState();}catch(e){}}
 /* ---------- v337(ダルマ指示): 通常MAPの右クリック 行軍・地点Aからの移動コスト・敵の車両と砲塔の向き ---------- */
 var NM_RM_VEH=0;
 function nmNodeOfPx(p){ /* 地点A(全体の正準ピクセル)→いちばん近いヘクスのノード */
