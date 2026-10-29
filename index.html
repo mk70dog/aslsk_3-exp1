@@ -33261,6 +33261,7 @@ var NM_RM_SUB=null;
 /* v360(ダルマ指示「右クリックメニューにタブ移動。全画面表示からタブ移動で移動してマップに戻る際は全画面表示のまま」) */
 var NM_TABS=[['rally','回復/修理/回収'],['fire','射撃/残留火力'],['gun','砲撃'],['afv','装甲戦闘車両'],['latw','軽対戦車兵器'],['move','ボグ/人力/煙幕'],['dc','爆薬配置/起動'],['rout','潰走/阻止'],['aphcc','突撃/白兵戦'],['mc','士気/損耗'],['ref','早見表'],['unit','ユニット'],['scen','シナリオ']];
 var NM_FULL_RESUME=false;
+var NM_FULL_TABS=['fire','gun','afv','latw','move','ref','scen'];
 function nmRmTabItems(n){
   var it=[{ic:'back',t:'← 戻る',sub:'タブを選ぶ'+(btMapFullOn()?'(MAPに戻ると全画面のまま)':''),f:"btRmReopen("+n+")"},{sep:1}];
   NM_TABS.forEach(function(t){it.push({ic:'tabgo',t:T(t[1]),f:"nmRmTabGo('"+t[0]+"')"});});
@@ -33562,6 +33563,7 @@ function btRmLos(n,ab){
    +'html.bt-mapfull #losScrollWrap{position:fixed !important;left:0;right:0;bottom:0;top:var(--btfullt,0px);width:auto !important;max-height:none !important;z-index:8900;background:#0a0c14;border:0 !important;border-radius:0 !important;margin:0 !important}'
    +'html.bt-mapfull #main .bt-cmd{position:fixed !important;top:0 !important;left:0;right:0;margin:0 !important;z-index:8910;max-height:40vh;overflow-y:auto}'
    +'html.bt-mapfull .los-compass{display:none !important}'
+   +'#nmFullTabs{position:fixed;left:0;right:0;top:0;z-index:8912;display:flex;gap:3px;padding:3px 4px;background:#0a0c14;box-shadow:0 4px 14px #000a}#nmFullTabs .nb{flex:1 1 0;min-width:0;height:30px;padding:0 2px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
    +'html.nm-sumfix #losScrollWrap{bottom:var(--nmsumh,0px) !important}html.nm-sumfix #losSumRow{position:fixed !important;left:0;right:0;bottom:0;z-index:8912;background:#0a0c14;padding:3px 4px;margin:0 !important;box-shadow:0 -4px 14px #000a;gap:3px !important}'
    /* v361(ダルマ指示「なるべく縦幅を低く」): 全画面の固定行は1段(見出しを左・数字を右)にして低く */
    +'html.nm-sumfix #losSumRow .sumcard{min-height:0 !important;padding:2px 5px !important;flex-direction:row !important;align-items:center !important;justify-content:space-between !important;gap:4px}'
@@ -33894,6 +33896,13 @@ function btMapFullSync(){
   if(btMapFullOn()&&!on)de.classList.remove('bt-mapfull');
   var c=document.getElementById('btCmd');de.style.setProperty('--btfullt',(on&&c?c.offsetHeight:0)+'px');
   var sr=document.getElementById('losSumRow'),fixSum=on&&!!sr&&!(typeof btActive==='function'&&btActive()); /* v361: 通常モードの全画面はLOS結果の行を下に固定 */
+  /* v361(ダルマ指示「全画面表示時に上部に(射撃〜シナリオの7タブを)横並び1列で常時表示」) */
+  var tb=document.getElementById('nmFullTabs'),nmOn=on&&!(typeof btActive==='function'&&btActive());
+  if(nmOn&&!tb){tb=document.createElement('div');tb.id='nmFullTabs';
+    tb.innerHTML=NM_FULL_TABS.map(function(k){var t=NM_TABS.filter(function(x){return x[0]===k;})[0];return '<button class="nb" onclick="nmRmTabGo(\''+k+'\')">'+T(t?t[1]:k)+'</button>';}).join('');
+    document.body.appendChild(tb);}
+  if(!nmOn&&tb){tb.remove();tb=null;}
+  if(nmOn&&tb)de.style.setProperty('--btfullt',tb.offsetHeight+'px');
   de.classList.toggle('nm-sumfix',fixSum);de.style.setProperty('--nmsumh',(fixSum?sr.offsetHeight+8:0)+'px');
   var x=document.getElementById('btFullX');
   if(NM_HIDE_FULLX){if(x)x.remove();return;} /* v349(ダルマ指示「マップ上の全画面を終わるを非表示」): 終わるのは右クリック/長押しメニューの最上部かEscキー。戻す時はNM_HIDE_FULLXをfalseに */
