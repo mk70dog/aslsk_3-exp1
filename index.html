@@ -38656,6 +38656,8 @@ function losSmokeMarkerSVG(cx,cy,label,drmVal,type){
 // compassAngle分回転して実際の北の方角を指す(実物のコンパスと同じ挙動)。
 // SVG filterは使わず(iOS/Safari既知バグ回避)、リング/針とも二重ストローク・
 // 二重塗りでグロー風の縁取りを表現する。
+var NM_HIDE_LOSTB=true; /* v343: 通常のMAPタブの90°L〜BACKのツールバーを隠す(falseで元に戻す) */
+function btOnTbHide(){return typeof btActive==='function'&&btActive();}
 function losCompassSVG(angleDeg){
   var cx=20,cy=20,R=16;
   function ln(x1,y1,x2,y2,w,color,op){return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+color+'" stroke-width="'+w+'" stroke-linecap="round"'+(op?' opacity="'+op+'"':'')+'/>';}
@@ -38871,7 +38873,8 @@ function LOS_PAGE(){
   // 2026-08修正(ダルマ指示「LOS結果の右横にFP値電子パネルを追加」): 見出し直下の
   // 独立パネルは廃止し、LOS結果パネル(レンジ/HEX/LOS妨害/DRM/B地点地形/TEM/高低差A→B)
   // の右横に、他項目と統一されたseg7デザインのFP表示カードとして追加する(下記参照)。
-  h+='<div class="los-tb" style="display:flex;justify-content:center;align-items:center;gap:0.5px;margin-bottom:6px;flex-wrap:nowrap">';
+  /* v343(ダルマ指示「(90°L〜BACKのツールバーを)非表示にする。後で戻す可能性あり」): 通常のMAPタブでは出さない。戻す時は NM_HIDE_LOSTB を false に */
+  h+='<div class="los-tb" style="display:'+((NM_HIDE_LOSTB&&!btOnTbHide())?'none':'flex')+';justify-content:center;align-items:center;gap:0.5px;margin-bottom:6px;flex-wrap:nowrap">';
   // 2026-08修正(ダルマ指示「フォントは照準線判定と同じで」): tbBaseが明示的に
   // font-family:'Courier New',monospaceを指定していたため、Courier Newに日本語
   // グリフが無く、敵軍/条件/行軍/煙幕等の日本語ラベルがブラウザのフォールバック
