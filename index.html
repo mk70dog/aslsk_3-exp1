@@ -33563,7 +33563,7 @@ function btRmLos(n,ab){
    +'html.bt-mapfull #losScrollWrap{position:fixed !important;left:0;right:0;bottom:0;top:var(--btfullt,0px);width:auto !important;max-height:none !important;z-index:8900;background:#0a0c14;border:0 !important;border-radius:0 !important;margin:0 !important}'
    +'html.bt-mapfull #main .bt-cmd{position:fixed !important;top:0 !important;left:0;right:0;margin:0 !important;z-index:8910;max-height:40vh;overflow-y:auto}'
    +'html.bt-mapfull .los-compass{display:none !important}'
-   +'#nmFullTabs{position:fixed;left:0;right:0;top:0;z-index:8912;display:flex;gap:3px;padding:3px 4px;background:#0a0c14;box-shadow:0 4px 14px #000a}#nmFullTabs .nb{flex:1 1 0;min-width:0;height:30px;padding:0 2px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
+   +'#nmFullTabs{position:fixed;left:0;right:0;top:0;z-index:8912;display:flex;gap:3px;padding:3px 4px;background:#0a0c14;box-shadow:0 4px 14px #000a}#nmFullTabs .nb{flex:1 1 0;min-width:0;height:30px;padding:0 2px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#nmFullTabs .nmFullOff{flex:0 0 auto;padding:0 10px;color:#ffd060;display:flex;align-items:center;gap:4px}html.nm-sumfix #losSumRow button.sumcard{display:none !important}'
    +'html.nm-sumfix #losScrollWrap{bottom:var(--nmsumh,0px) !important}html.nm-sumfix #losSumRow{position:fixed !important;left:0;right:0;bottom:0;z-index:8912;background:#0a0c14;padding:3px 4px;margin:0 !important;box-shadow:0 -4px 14px #000a;gap:3px !important}'
    /* v361(ダルマ指示「なるべく縦幅を低く」): 全画面の固定行は1段(見出しを左・数字を右)にして低く */
    +'html.nm-sumfix #losSumRow .sumcard{min-height:0 !important;padding:2px 5px !important;flex-direction:row !important;align-items:center !important;justify-content:space-between !important;gap:4px}'
@@ -33899,7 +33899,8 @@ function btMapFullSync(){
   /* v361(ダルマ指示「全画面表示時に上部に(射撃〜シナリオの7タブを)横並び1列で常時表示」) */
   var tb=document.getElementById('nmFullTabs'),nmOn=on&&!(typeof btActive==='function'&&btActive());
   if(nmOn&&!tb){tb=document.createElement('div');tb.id='nmFullTabs';
-    tb.innerHTML=NM_FULL_TABS.map(function(k){var t=NM_TABS.filter(function(x){return x[0]===k;})[0];return '<button class="nb" onclick="nmRmTabGo(\''+k+'\')">'+T(t?t[1]:k)+'</button>';}).join('');
+    tb.innerHTML=NM_FULL_TABS.map(function(k){var t=NM_TABS.filter(function(x){return x[0]===k;})[0];return '<button class="nb" onclick="nmRmTabGo(\''+k+'\')">'+T(t?t[1]:k)+'</button>';}).join('')
+      +'<button class="nb nmFullOff" onclick="BtMapFull(null)" title="'+T('全画面表示オフ')+'"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M20 15h-5v5M4 15h5v5"/></svg>'+T('全画面オフ')+'</button>'; /* v361(ダルマ指示「全画面表示ボタンを上のタブ右端に移動」) */
     document.body.appendChild(tb);}
   if(!nmOn&&tb){tb.remove();tb=null;}
   if(nmOn&&tb)de.style.setProperty('--btfullt',tb.offsetHeight+'px');
