@@ -25903,13 +25903,14 @@ function MOVE_PAGE(){
   if(!S.moveSub)S.moveSub="smk";
   var h='';
   h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div><span style="display:inline-flex;gap:4px;background:#000;border:1px solid #404040;border-radius:3px;padding:2px 4px 9px 4px;flex-shrink:0"><button class="judg3d red" style="flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="ALLCLR()">RESET</button></span></div>';
-  h+='<div class="btns" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;border:1px solid #404040;border-radius:3px;background:#000000;padding:5px">';
+  h+='<div class="btns" style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;border:1px solid #404040;border-radius:3px;background:#000000;padding:5px">'; /* v348: 7項目になったので4列 */
   h+='<button class="b sm'+(S.moveSub==="mh"?" on":"")+'" onclick="MoveSub(\'mh\')">'+T('人力移動')+'</button>';
   h+='<button class="b sm'+(S.moveSub==="pp"?" on":"")+'" onclick="MoveSub(\'pp\')">'+T('SW携行重量')+'</button>';
   h+='<button class="b sm'+(S.moveSub==="smk"?" on":"")+'" onclick="MoveSub(\'smk\')">'+T('煙幕手榴弾')+'</button>';
   h+='<button class="b sm'+(S.moveSub==="mf"?" on":"")+'" onclick="MoveSub(\'mf\')">'+T('地形別移動コスト')+'</button>';
   h+='<button class="b sm'+(S.moveSub==="type"?" on":"")+'" onclick="MoveSub(\'type\')">'+T('移動種別')+'</button>';
   h+='<button class="b sm'+(S.moveSub==="bog"?" on":"")+'" onclick="MoveSub(\'bog\')">'+T('ボグ判定')+'</button>';
+  h+='<button class="b sm'+(S.moveSub==="mr"?" on":"")+'" onclick="MoveSub(\'mr\')">'+T('機械的信頼性')+'</button>'; /* v348(ダルマ指示「ボグ/人力/煙幕タブに移動時の機械的信頼性判定を追加」) */
   h+='</div></div>';
   if(!S.bog)S.bog=deepCopy(INIT_BOG);
   if(S.moveSub==="mh")h+=MH_CARD();
@@ -25918,6 +25919,54 @@ function MOVE_PAGE(){
   else if(S.moveSub==="pp")h+=SW_WEIGHT_CARD();
   else if(S.moveSub==="type")h+=MOVE_TYPE_CARD();
   else if(S.moveSub==="bog")h+=BOG_CARD();
+  else if(S.moveSub==="mr")h+=MR_CARD();
+  return h;
+}
+/* v348(ダルマ指示「ボグ/人力/煙幕タブに移動時の機械的信頼性判定を追加」): 車両を選んで始動(自MPh)/Motion Status Attempt後(相手MPh)のDR。
+   判定・結果の表示はAFVタブ/MAPタブと同じ(maTitleHTML・motionAttemptResultHTML)。状態はこのタブ専用(S.mr) */
+function mrSt(){if(!S.mr)S.mr={vid:null,mode:'start',all:false,wd:0,rd:0};return S.mr;}
+function mrList(){var m=mrSt(),all=AFV_DATA.filter(function(v){return v.breakdownDR!=null;}),ids=scenarioAfvIdsByVehId();
+  var sc=ids?all.filter(function(v){return ids[v.id];}):all;return {all:all,sc:sc,list:(m.all||!ids)?all:sc,hasScen:!!ids};}
+function MrPick(id){var m=mrSt();if(m.vid!==id){m.wd=0;m.rd=0;m.dwd=0;m.drd=0;}m.vid=id;Draw();}
+function MrMode(k){var m=mrSt();m.mode=k;m.wd=0;m.rd=0;m.dwd=0;m.drd=0;Draw();}
+function MrAll(){var m=mrSt();m.all=!m.all;Draw();}
+function MrWD(v){var m=mrSt();m.wd=v;m.dwd=0;m.drd=0;Draw();}
+function MrRD(v){var m=mrSt();m.rd=v;m.dwd=0;m.drd=0;Draw();}
+function MrDWD(v){mrSt().dwd=v;Draw();}
+function MrDRD(v){mrSt().drd=v;Draw();}
+function MrReset(){var m=mrSt();m.wd=0;m.rd=0;m.dwd=0;m.drd=0;Draw();}
+function MrAuto(){rollAnim(function(r,w,rolling){var m=mrSt();m.rd=r;m.wd=w;m._rolling=rolling;m.dwd=0;m.drd=0;Draw();});}
+function MrDelayAuto(){rollAnim(function(r,w,rolling){var m=mrSt();m.drd=r;m.dwd=w;m._drolling=rolling;Draw();});}
+function MR_CARD(){
+  var m=mrSt(),L=mrList(),list=L.list,v=list.filter(function(x){return x.id===m.vid;})[0]||null;
+  var h='<div class="card">';
+  h+='<div style="font-size:13px;color:#c8a032;font-weight:bold;margin-bottom:4px">'+T('移動時の機械的信頼性判定')+'</div>';
+  h+='<div style="font-size:11px;color:#8899aa;line-height:1.6;margin-bottom:6px">'+T('赤いMPの車両(と注記のある車両)は、自軍の移動フェイズで始動のMPを払うたびにDRを行う。DRが故障番号以上なら、機械的故障(走行不能)または失速(その時点で始動失敗)。相手の移動フェイズにMotion Status Attemptに成功してMotionになる時も同じDRが必要(3.3.2・車両注記)。')+'</div>';
+  // 車両
+  h+='<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span class="lbl" style="margin:0">'+T('車両')+'</span>';
+  if(L.hasScen)h+='<button class="b sm'+(m.all?' on':'')+'" style="height:24px;padding:0 8px;font-size:11px;margin-left:auto" onclick="MrAll()">'+(m.all?T('全車両を表示中'):T('シナリオの車両のみ'))+'</button>';
+  h+='</div>';
+  if(!list.length)h+='<div style="font-size:12px;color:#8899aa;margin-bottom:6px">'+T('このシナリオには判定が必要な車両は登場しません。')+(L.hasScen?T('「シナリオの車両のみ」を押すと全車両から選べます。'):'')+'</div>';
+  else{h+='<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px">';
+    list.forEach(function(x){var on=v&&v.id===x.id,bc=(UNITS[x.nat]&&UNITS[x.nat].col)||'#8899aa',cv=LOS_VEH_SHORT_LBL[x.id]?Object.assign({},x,{lbl:LOS_VEH_SHORT_LBL[x.id]}):x;
+      h+='<button class="b sm'+(on?' on':'')+'" style="height:auto;min-height:69px;width:64px;flex:0 0 64px;padding:3px 1px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;white-space:normal;line-height:1.2" onclick="MrPick(\''+x.id+'\')"><span style="zoom:0.8;display:flex;justify-content:center">'+afvCategoryChip(cv,bc)+'</span><span style="color:#c8a032">DR≧'+x.breakdownDR+'</span></button>';});
+    h+='</div>';}
+  if(!v){h+='<div style="font-size:12px;color:#8899aa">'+T('車両を選んでください。')+'</div></div>';return h;}
+  // 場面
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px">';
+  h+='<button class="b sm'+(m.mode==='start'?' on':'')+'" style="height:auto;min-height:32px;white-space:normal;line-height:1.25;font-size:11px" onclick="MrMode(\'start\')">'+T('自軍の移動フェイズ: 始動のMPを払う時')+'</button>';
+  h+='<button class="b sm'+(m.mode==='msa'?' on':'')+'" style="height:auto;min-height:32px;white-space:normal;line-height:1.25;font-size:11px" onclick="MrMode(\'msa\')">'+T('相手の移動フェイズ: Motion Status Attempt成功後')+'</button>';
+  h+='</div>';
+  h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px">';
+  h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+maTitleHTML(v,m.mode)+'</div>';
+  h+='<div class="sum" style="grid-template-columns:1fr">'+sumSuccessCard(T('始動成功＝DR以下'),v.breakdownDR-1)+'</div>';
+  h+='<div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:6px"><button class="judg3d red" style="width:70px;height:28px;font-size:12px" onclick="MrReset()">CLR</button><button class="judg3d grn" style="width:80px;height:28px;font-size:12px" onclick="MrAuto()">ROLL DICE</button></div>';
+  h+='<div style="background:#0d0d14;border:1px solid #404040;border-radius:3px;padding:6px 8px">';
+  h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">RED DIE</div>'+rDiceHTML(m.rd,true,'MrRD',m._rolling);
+  h+='<div style="font-size:12px;color:#4499ee;margin:7px 0 3px">WHITE DIE</div>'+rDiceHTML(m.wd,false,'MrWD',m._rolling);
+  h+='</div>';
+  h+=motionAttemptResultHTML(v.breakdownDR,m.wd,m.rd,{stall:!!v.stall,dwd:m.dwd,drd:m.drd,dwdFn:'MrDWD',drdFn:'MrDRD',delayAutoFn:'MrDelayAuto',delayRolling:m._drolling});
+  h+='</div></div>';
   return h;
 }
 
