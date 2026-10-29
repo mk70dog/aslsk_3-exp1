@@ -32748,7 +32748,7 @@ function nmRmWreck(){var H=NM_RM_HEX;if(!H)return;BtRmClose();losCycleWreckHexAt
 function nmRmSmoke(){var H=NM_RM_HEX;if(!H)return;BtRmClose();losCycleSmokeAt(H.hid);if(S_LOS.pxA&&S_LOS.pxB){LosRunPixel();return;}Draw();}
 function nmRmInfo(n){BtRmClose();var sv=BT.stacks;BT.stacks=[];try{btStackPopup(n,true,true);}finally{BT.stacks=sv;}}
 function nmRmShow(k,n,src){
-  BtRmClose();var o={k:k,n:n,st:btRmStamp(),g:BTG,src:src||'r'};
+  BtRmClose();var o={k:k,n:n,st:btRmStamp(),g:BTG,src:src||'r',H:NM_RM_HEX?{boardId:NM_RM_HEX.boardId,col:NM_RM_HEX.col,row:NM_RM_HEX.row}:null};
   try{
     if(k==='view')btRmView(o);
     else if(k==='nthreat')nmThreat(o);
@@ -32761,10 +32761,60 @@ function nmThreat(o){
   (S_LOS.enemyHexes||[]).forEach(function(eh,idx){
     var m=btNodeOf(eh.boardId,eh.col,eh.row);if(m==null||m===n)return;
     var los=btLOS(m,n,false);if(!los.ok)return;
-    out.push({sid:null,sn:m,hex:(typeof losEnemyLetter==='function'?losEnemyLetter(idx)+' ':'')+BTG.nodes[m].nm,d:btDist(m,n),what:['LOSが通る'+(los.hind?'(妨害+'+los.hind+')':'(妨害なし)')]});
+    var x={sid:null,sn:m,eh:eh,let:(typeof losEnemyLetter==='function'?losEnemyLetter(idx):''),hex:(typeof losEnemyLetter==='function'?losEnemyLetter(idx)+' ':'')+BTG.nodes[m].nm,d:btDist(m,n),hind:los.hind||0,what:['LOSが通る'+(los.hind?'(妨害+'+los.hind+')':'(妨害なし)')]};
+    try{x.calc=nmThreatCalc(eh,m,n,o.H);}catch(e){x.calc={note:'計算できませんでした',lines:[]};console.log('nmThreatCalc',e);}
+    out.push(x);
   });
   out.sort(function(a,b){return a.d-b.d;});o.list=out;o.tot=(S_LOS.enemyHexes||[]).length;
 }
+/* v346(ダルマ指示「ポップアップの項目をボタンに」「選ぶとマップで両軍をクローズアップしライン」「対戦モード同様に命中%・撃破%をポップアップ」) */
+function nmToBtFace(f,boardId){return btFaceToward(((f*60+(losBoardRotById(boardId)||0)+30-90)%360+360)%360);} /* 通常MAPの向き(画面上=0・時計回り・頂点)→対戦モードの向き */
+function nmThreatCalc(eh,sn,n,H){
+  var r={lines:[],note:'',tgt:null};
+  var v=eh.veh?nmAfv(eh.veh):null;
+  if(!v){r.note='車両を決めていない敵(敵軍マーカー)のため、命中の見込みは出せません';return r;}
+  var gd=v.ma?afvToGunData(v):null;if(!gd){r.note=nmAfvName(v)+'の主砲のデータがありません';return r;}
+  var toward=btFaceToward(btAng(sn,n)),vca=eh.facing!=null?nmToBtFace(eh.facing,eh.boardId):toward,tca=eh.tca!=null?nmToBtFace(eh.tca,eh.boardId):vca;
+  if(eh.facing==null)r.note='敵の向きが未設定のため、目標の方を向いているとして計算';
+  var nat=v.nat.split('/')[0],w={kind:'MA',s:{id:'nmE',n:sn,side:nat,u:[]},u:{id:'nmE',nm:v.lbl,vca:vca,tca:tca,ce:false,maS:'ok'},v:v,gd:gd};
+  var f=H?nmUnitAt(H,'f'):null,fv=f&&f.veh?nmAfv(f.veh):null,tu=null;
+  if(fv){var tv=btFaceToward(btAng(n,sn));tu={id:'nmF',nm:fv.lbl,vca:f.facing!=null?nmToBtFace(f.facing,f.boardId):tv,tca:f.tca!=null?nmToBtFace(f.tca,f.boardId):(f.facing!=null?nmToBtFace(f.facing,f.boardId):tv),mot:false,mvd:false};
+    r.tgt=fv;if(f.facing==null)r.note=(r.note?r.note+'。':'')+'自軍の向きが未設定のため、敵の方を向いているとして計算';}
+  var ammos=fv?(btAPCRAvail(w)?['AP','HE','APCR']:['AP','HE']):['HE'];
+  ammos.forEach(function(am){
+    if(am==='AP'&&gd.ammo&&!gd.ammo.some(function(a){return a.type==='AP';}))return;
+    var o={w:w,tgtN:n,tgt:tu,mode:fv?'VTT':'ITT',ammo:am,ph:'PF',fast:false};
+    var ev=btOrdEval(o);if(!ev.ok){r.lines.push({ammo:am,err:ev.err});return;}
+    var L={ammo:am,mode:o.mode,th:ev.th,ch:ev.ch,drm:ev.drm,drmL:ev.drmL,pHit:ev.pHit,pCH:ev.pCH};
+    if(fv){try{var od=btVTTOdds(o,ev);L.kill=od.kill;L.imm=od.imm;L.shock=od.shock;}catch(e){}}
+    r.lines.push(L);
+  });
+  return r;
+}
+function nmThreatBest(c){var b=null;(c&&c.lines||[]).forEach(function(L){if(L.err)return;var k=L.kill!=null?L.kill:L.pHit;if(!b||k>(b.kill!=null?b.kill:b.pHit))b=L;});return b;}
+var NM_TH_CAM=null;
+function nmThreatPick(i){
+  var o=btRmLive();if(!o||o.k!=='nthreat'||!o.list[i])return;
+  o.sel=(o.sel===i)?null:i;Draw();
+  if(o.sel!=null)setTimeout(function(){nmCamPair(o.list[i].sn,o.n);},30);
+}
+function nmCamPair(a,b){ /* 2つのヘクスが地図の見えている所(下のポップアップを除く)に入るよう拡大・縮小して寄せる */
+  var el=document.getElementById('losScrollWrap');if(!el)return;
+  if(!NM_TH_CAM)NM_TH_CAM={z:S_LOS.zoom,l:el.scrollLeft,t:el.scrollTop};
+  function free(){var r=el.getBoundingClientRect(),pop=document.getElementById('nmRmPop'),pb=pop?pop.getBoundingClientRect().top-8:innerHeight;
+    return {l:Math.max(r.left,0),t:Math.max(r.top,0),r:Math.min(r.right,innerWidth),b:Math.min(r.bottom,innerHeight,pb)};}
+  function pts(){return [nmClientOfNode(a),nmClientOfNode(b)];}
+  var f=free(),P=pts();if(!P[0]||!P[1])return;
+  var hex=LOS_GEO_HEX_W*S_LOS.zoom,m=hex*1.4;
+  var k=Math.min((f.r-f.l)/Math.max(1,Math.abs(P[0].x-P[1].x)+2*m),(f.b-f.t)/Math.max(1,Math.abs(P[0].y-P[1].y)+2*m));
+  var z=Math.max(LOS_ZOOM_MIN,Math.min(1.4,Math.round(S_LOS.zoom*k*20)/20)); /* 対戦モードと同じく最大140% */
+  if(Math.abs(z-S_LOS.zoom)>=0.04){S_LOS.zoom=z;try{losSaveZoom();}catch(e){}Draw();}
+  function adj(it){var e2=document.getElementById('losScrollWrap');if(!e2)return;el=e2;f=free();P=pts();if(!P[0]||!P[1])return;
+    var dx=(P[0].x+P[1].x)/2-(f.l+f.r)/2,dy=(P[0].y+P[1].y)/2-(f.t+f.b)/2;if((Math.abs(dx)<4&&Math.abs(dy)<4)||it>5)return;
+    e2.scrollLeft+=dx;e2.scrollTop+=dy;try{losSaveMapScroll();}catch(e){}setTimeout(function(){adj(it+1);},60);}
+  setTimeout(function(){adj(0);},120);
+}
+function nmCamBack(){var el=document.getElementById('losScrollWrap'),c=NM_TH_CAM;NM_TH_CAM=null;if(!c)return;S_LOS.zoom=c.z;S_LOS.scrollLeft=c.l;S_LOS.scrollTop=c.t;Draw();}
 function nmCost(o){
   var s0;
   if(o.src==='a'){s0=nmNodeOfPx(S_LOS.pxA);if(s0==null)return false;} /* v337: 地点Aから */
@@ -33031,11 +33081,23 @@ function nmRmSetTca(n,d){var eh=nmEnemyAt(NM_RM_HEX);if(!eh)return;eh.tca=(d==nu
 function nmRmPanelHTML(){ /* 通常のMAPタブ: 右クリックの表示結果(画面下に固定) */
   if(btActive()||!btGraphReady())return '';
   var o=btRmLive();if(!o||!BTG.nodes[o.n])return '';
-  var N=BTG.nodes[o.n],h='<div style="position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:8915;max-width:min(640px,96vw);background:#0a1420;border:1px solid #66ccff;border-radius:6px;padding:6px 9px;box-shadow:0 4px 20px #000a;font:12px/1.5 sans-serif;color:#ccddee"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">',body='';
+  var N=BTG.nodes[o.n],h='<div id="nmRmPop" style="position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:8915;max-width:min(640px,96vw);background:#0a1420;border:1px solid #66ccff;border-radius:6px;padding:6px 9px;box-shadow:0 4px 20px #000a;font:12px/1.5 sans-serif;color:#ccddee"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">',body='';
   if(o.k==='view'){h+='<b style="color:#66ccff">見える範囲: '+N.nm+' から</b>';
     body=(o.todo?'<span style="color:#ffd040">精密な判定中 '+Math.round(100*o.done/Math.max(1,o.tot))+'%(今は簡易判定)</span>　':'')+'見える '+((o.c0||0)+(o.c1||0))+'ヘクス(うち妨害あり '+(o.c1||0)+')　黒=見えない・緑=妨害なし・黄=妨害あり(+数字=LOS妨害)';}
-  else if(o.k==='nthreat'){h+='<b style="color:#ff8080">'+N.nm+' を撃てる敵(登録した敵ヘクス)</b>';
-    body=(o.list.length?o.list.map(function(x){return '<div style="cursor:pointer" onclick="BtRmCenter('+x.sn+')"><b style="color:#ffd0a0">'+x.hex+'(距離'+x.d+')</b> '+x.what.join(' / ')+'</div>';}).join(''):'<div>'+(o.tot?'LOSが通る敵ヘクスはありません':'敵マーカーが登録されていません')+'</div>')+'<div style="color:#8899aa">LOSだけで判定(射程・向きは見ません)。行をタップでそのヘクスへ</div>';}
+  else if(o.k==='nthreat'){var fT=o.H?nmUnitAt(o.H,'f'):null,fTV=fT&&fT.veh?nmAfv(fT.veh):null;
+    h+='<b style="color:#ff8080">'+N.nm+(fTV?'('+nmAfvName(fTV)+')':'')+' を撃てる敵</b>';
+    body=(o.list.length?'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:2px">'+o.list.map(function(x,i){var on=o.sel===i,ev=x.eh.veh?nmAfv(x.eh.veh):null,b=nmThreatBest(x.calc);
+      return '<button onclick="nmThreatPick('+i+')" style="display:flex;gap:7px;align-items:center;text-align:left;cursor:pointer;flex:1 1 180px;min-width:0;padding:5px 8px;border-radius:6px;font:inherit;color:#e8eef4;background:'+(on?'#3a2a08':'#13202e')+';border:'+(on?'2px solid #ffd060':'1px solid #4a6a8a')+'">'+(ev?vaslCtrHTML(ev.id,34,''):'<span style="width:34px;height:34px;border-radius:4px;background:#3a0d3a;color:#ffb0ff;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">敵軍</span>')
+        +'<span style="display:flex;flex-direction:column;line-height:1.3;min-width:0"><b style="color:#ffd0a0">'+x.hex+' 距離'+x.d+'</b><span style="font-size:11px;color:#9ab">'+(ev?nmAfvName(ev)+'　':'')+(x.hind?'妨害+'+x.hind:'妨害なし')+'</span>'
+        +(b?'<span style="font-size:11.5px">命中 <b style="color:#fff">'+Math.round(b.pHit*100)+'%</b>'+(b.kill!=null?'・撃破 <b style="color:#ff8080">'+Math.round(b.kill*100)+'%</b>':'')+'('+b.ammo+')</span>':'<span style="font-size:11px;color:#8899aa">LOSが通る</span>')+'</span></button>';}).join('')+'</div>':'<div>'+(o.tot?'LOSが通る敵ヘクスはありません':'敵マーカーが登録されていません')+'</div>');
+    var X=o.sel!=null?o.list[o.sel]:null;
+    if(X){var c=X.calc||{lines:[]};body+='<div style="margin-top:6px;border:1px solid #ffd060;border-radius:6px;padding:5px 8px;background:#0d1622"><div style="color:#ffd060;font-weight:bold">'+X.hex+' → '+N.nm+'　距離'+X.d+(c.tgt?'　目標: '+nmAfvName(c.tgt):'　目標: 歩兵など(HE)')+'</div>';
+      c.lines.forEach(function(L){if(L.err){body+='<div style="color:#ff8060">'+L.ammo+': '+L.err+'</div>';return;}
+        body+='<div style="border-top:1px dashed #23404f;padding-top:2px;margin-top:2px"><b>'+L.ammo+'</b>　TH#'+L.th+(L.ch!=null?'('+L.ch+')':'')+'　DRM '+(L.drm>=0?'+':'')+L.drm+(L.drmL&&L.drmL.length?' <span style="color:#8899aa">['+L.drmL.join(' ')+']</span>':'')
+          +'<br>命中 <b style="color:#fff">'+Math.round(L.pHit*100)+'%</b>'+(L.kill!=null?' / 撃破 <b style="color:#ff8080">'+Math.round(L.kill*100)+'%</b> / 走行不能 '+Math.round((L.imm||0)*100)+'% / ショック '+Math.round((L.shock||0)*100)+'%':(L.pCH?' / CH '+Math.round(L.pCH*100)+'%':''))+'</div>';});
+      if(c.note)body+='<div style="color:#c8a032;font-size:11px">'+c.note+'</div>';
+      body+='</div>';}
+    body+='<div style="color:#8899aa;font-size:11px">ボタンを押すと両方のヘクスを地図に寄せて線で結び、命中・撃破の見込みを出します(準備射撃として計算・射程と向きを含む)</div>';}
   else if(o.k==='ncost'){h+='<b style="color:#40e0ff">'+N.nm+' までの移動コスト</b>';
     var r=o.res[0];body='<div>歩兵: <b style="color:'+(r.ok?'#60e060':'#ff8060')+'">'+(r.c==null?'—(経路なし)':r.c+'MF')+'</b>(起点 '+o.from+' から。道路1・稜線越え2倍・煙幕+1)</div>';}
   h+='<button class="tb-reset" style="margin-left:auto;padding:3px 10px" onclick="BtRmShowOff()">消す</button></div><div style="margin-top:3px">'+body+'</div></div>';
@@ -33119,7 +33181,7 @@ var BT_RMS=null,BT_HEXR=null;
 function btRmStamp(){return BT.turn+'.'+BT.half+'.'+BT.ph;}
 function btRmShowName(){return BT_RMS?({view:'見える範囲',threat:'撃てる部隊',ca:'射界',cost:'移動コスト'}[BT_RMS.k]+' @ '+BTG.nodes[BT_RMS.n].nm):'';}
 function btTerrJP(t){try{return LOS_TERRAIN_NAME_JP[t]||t;}catch(e){return t;}}
-function BtRmShowOff(){BT_RMS=null;BtRmClose();Draw();}
+function BtRmShowOff(){var hadCam=!!(typeof NM_TH_CAM!=='undefined'&&NM_TH_CAM);BT_RMS=null;BtRmClose();if(hadCam)nmCamBack();else Draw();}
 function BtRmShow(k,n,a,b){
   BtRmClose();
   var o={k:k,n:n,st:btRmStamp(),g:BTG};
@@ -33327,6 +33389,15 @@ function BtRmCenter(n){
 // 地図に重ねる
 function btRmShowSVG(dl){
   var o=btRmLive();if(!o)return '';var h='',c=btDispPt(o.n,dl);
+  if(o.k==='nthreat'){ /* v346: 撃てる敵 — 選んだ敵から目標へ太い線と距離、他は細い点線 */
+    (o.list||[]).forEach(function(x,i){var a=btDispPt(x.sn,dl),on=o.sel===i;
+      if(!on){h+='<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="#ff5050" stroke-width="1.6" stroke-opacity="0.55" stroke-dasharray="6 5"/>';return;}
+      h+='<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="#000" stroke-width="7" stroke-opacity="0.55"/><line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="#ffd040" stroke-width="3.5" stroke-dasharray="12 6"/>';
+      h+='<polygon points="'+btHexPoly(x.sn,dl)+'" fill="none" stroke="#ff5050" stroke-width="4"/>';
+      var mx=(a.x+c.x)/2,my=(a.y+c.y)/2;h+=btRmTxt({x:mx,y:my-6},'距離'+x.d,'#ffd040');});
+    h+='<polygon points="'+btHexPoly(o.n,dl)+'" fill="#ff3030" fill-opacity="0.18" stroke="#ff5050" stroke-width="4"/>';
+    return h;
+  }
   if(o.k==='view'){
     Object.keys(o.m).forEach(function(k){var v=o.m[k],i=+k;
       if(v<0)h+='<polygon points="'+btHexPoly(i,dl)+'" fill="#000" fill-opacity="0.5"/>';
