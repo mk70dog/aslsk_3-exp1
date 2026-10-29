@@ -32909,6 +32909,10 @@ function nmCamPair(a,b){ /* 2つのヘクスが地図の見えている所(下�
   var hex=LOS_GEO_HEX_W*S_LOS.zoom,m=hex*1.4;
   var k=Math.min((f.r-f.l)/Math.max(1,Math.abs(P[0].x-P[1].x)+2*m),(f.b-f.t)/Math.max(1,Math.abs(P[0].y-P[1].y)+2*m));
   var z=Math.max(LOS_ZOOM_MIN,Math.min(1.4,Math.round(S_LOS.zoom*k*20)/20)); /* 対戦モードと同じく最大140% */
+  /* v353(バグ修正 ダルマ報告「ボタンを押すとマップが縮小される」): ポップアップが高く見える所が狭い時に倍率が下限まで下がっていた。
+     今の倍率の6割・地図の横幅に合う倍率より小さくしない(入りきらない分は寄せるだけ) */
+  var fitW=0;try{var dl0=losComputeDisplayLayout(),rs0=(S_LOS.viewRot===90||S_LOS.viewRot===270);fitW=el.clientWidth/((rs0?dl0.totalH:dl0.totalW)||1);}catch(e){}
+  z=Math.max(z,Math.round(S_LOS.zoom*0.6*20)/20,Math.floor(fitW*20)/20);
   if(Math.abs(z-S_LOS.zoom)>=0.04){S_LOS.zoom=z;try{losSaveZoom();}catch(e){}Draw();}
   function adj(it){var e2=document.getElementById('losScrollWrap');if(!e2)return;el=e2;f=free();P=pts();if(!P[0]||!P[1])return;
     var dx=(P[0].x+P[1].x)/2-(f.l+f.r)/2,dy=(P[0].y+P[1].y)/2-(f.t+f.b)/2;if((Math.abs(dx)<4&&Math.abs(dy)<4)||it>5)return;
@@ -33218,7 +33222,7 @@ function nmRmSetTca(n,d){var eh=nmEnemyAt(NM_RM_HEX);if(!eh)return;eh.tca=(d==nu
 function nmRmPanelHTML(){ /* 通常のMAPタブ: 右クリックの表示結果(画面下に固定) */
   if(btActive()||!btGraphReady())return '';
   var o=btRmLive();if(!o||!BTG.nodes[o.n])return '';
-  var N=BTG.nodes[o.n],h='<div id="nmRmPop" style="position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:8915;max-width:min(640px,96vw);background:#0a1420;border:1px solid #66ccff;border-radius:6px;padding:6px 9px;box-shadow:0 4px 20px #000a;font:12px/1.5 sans-serif;color:#ccddee"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">',body='';
+  var N=BTG.nodes[o.n],h='<div id="nmRmPop" style="position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:8915;max-height:42vh;overflow-y:auto;max-width:min(640px,96vw);background:#0a1420;border:1px solid #66ccff;border-radius:6px;padding:6px 9px;box-shadow:0 4px 20px #000a;font:12px/1.5 sans-serif;color:#ccddee"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">',body='';
   if(o.k==='view'){h+='<b style="color:#66ccff">見える範囲: '+N.nm+' から</b>';
     body=(o.todo?'<span style="color:#ffd040">精密な判定中 '+Math.round(100*o.done/Math.max(1,o.tot))+'%(今は簡易判定)</span>　':'')+'見える '+((o.c0||0)+(o.c1||0))+'ヘクス(うち妨害あり '+(o.c1||0)+')　黒=見えない・緑=妨害なし・黄=妨害あり(+数字=LOS妨害)';}
   else if(o.k==='nthreat'||o.k==='nfire'){var FR=o.k==='nfire',fT=o.H?nmUnitAt(o.H,'f'):null,fTV=fT&&fT.veh?nmAfv(fT.veh):null;
