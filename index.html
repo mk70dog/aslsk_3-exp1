@@ -10975,6 +10975,7 @@ function saveState(){
       // 敵ヘクス登録(enemyHexes)と同じ方式で作った機能だが、永続化対象に含め忘れていた。
       // 同じくページ再読込を跨いでは保持し、マップ変更時にはクリアされる仕様にする。
       enemyHexes:S_LOS.enemyHexes,
+      friendHexes:S_LOS.friendHexes||[], /* v345 */
       wreckHexes:S_LOS.wreckHexes,
       wreckVeh:S_LOS.wreckVeh||{} /* v343: 残骸の車両 */
     }});
@@ -32779,7 +32780,7 @@ function nmCost(o){
 }
 function nmRMenuItems(n){
   var H=NM_RM_HEX,it=[],N=(n>=0)?BTG.nodes[n]:null;
-  if(NM_RM_VEH){NM_RM_VEH=0;return nmRmVehItems(n);}
+  if(NM_RM_VEH){var vsd=NM_RM_VEH===1?'e':NM_RM_VEH;NM_RM_VEH=0;return nmRmVehItems(n,vsd);}
   if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);}
   var nm=N?N.nm:btHexName(H.boardId,H.col,H.row),terr=N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')):'';
   var hasA=!!S_LOS.pxA;
@@ -32811,14 +32812,8 @@ function nmRMenuItems(n){
   var eOn=(S_LOS.enemyHexes||[]).some(function(e){return e.boardId===H.boardId&&e.col===H.col&&e.row===H.row;});
   var wc=(S_LOS.wreckHexes||{})[H.boardId+':'+H.col+':'+H.row]||0,wn=(wc+1)%4;
   var sm=S_LOS.smoke&&S_LOS.smoke[H.hid.id],sl=sm?sm.level:0,sn=sl<3?sl+1:0;
-  /* v343(ダルマ指示「敵軍マーカーをシナリオ登場車両選択に変更」「対戦モードと同じVASLカウンターで矢印を設定」) */
-  if(!eOn)it.push({ic:'enemy',t:'ここに敵を置く',sub:'シナリオに登場する車両(カウンター)か敵軍マーカーを選ぶ',f:"nmRmVehOpen("+n+")"});
-  if(eOn){var eh=nmEnemyAt(H),ev=eh&&eh.veh?nmAfv(eh.veh):null;
-    it.push({ic:'turret',img:ev?vaslCtrHTML(ev.id,34,''):'',t:ev?'敵: '+nmAfvName(ev):'敵: 敵軍マーカー',sub:(ev?ev.nat+'　':'')+'タップで車両を変える',f:"nmRmVehOpen("+n+")"});
-    it.push({arr:1,ic:'rot',t:'車体の向き',sub:eh.facing==null?'未設定':'矢印の向き(前方の2ヘクスが正面)',cur:eh.facing,rot:losBoardRotById(eh.boardId)+(S_LOS.viewRot||0)+30,fn:'nmRmSetFace',n:n});
-    if(ev&&nmAfvTurret(ev))it.push({arr:1,ic:'rot',t:'砲塔の向き',sub:eh.tca==null?'未設定':(eh.facing!=null?(eh.tca===eh.facing?'車体と同じ向き':'車体から'+nmTurRel(eh)):'設定済み'),cur:eh.tca,rot:losBoardRotById(eh.boardId)+(S_LOS.viewRot||0)+30,fn:'nmRmSetTca',n:n});
-    else if(ev)it.push({ic:'info',t:'砲塔なし(無砲塔)',sub:'主砲の向き=車体の向き'});
-    it.push({ic:'x',t:'ここの敵を外す',f:"nmRmEnemy()"});}
+  /* v343(ダルマ指示「敵軍マーカーをシナリオ登場車両選択に変更」「対戦モードと同じVASLカウンターで矢印を設定」) / v345(ダルマ指示「右クリックで自軍カウンターを配置・設定は敵軍と同じ」) */
+  nmUnitMenu(it,H,n,'f');nmUnitMenu(it,H,n,'e');
   var wl=nmWreckList(H);
   it.push({ic:'wreck',img:wl.length&&wl[wl.length-1]?nmWreckCtrHTML(wl[wl.length-1],34):'',t:'残骸の配置',sub:'ここ: '+wc+'個'+(wl.filter(Boolean).length?'('+wl.filter(Boolean).map(function(id){var v=nmAfv(id);return v?nmAfvName(v):'?';}).join('・')+')':'')+'　タップで車両を選ぶ',f:"nmRmSubOpen('wreck',"+n+")"});
   var smT=sm?nmSmkType(sm):null;
@@ -32870,7 +32865,70 @@ function nmAfvName(v){return (typeof LOS_VEH_SHORT_LBL!=='undefined'&&LOS_VEH_SH
 function nmAfvTurret(v){return !!(v&&v.turretType&&v.turretType!=='NT'&&v.afFront&&v.afFront.turret!=null);}
 function nmTurRel(eh){var d=((eh.tca-eh.facing)%6+6)%6;return d<=3?'右へ'+d:'左へ'+(6-d);}
 function nmScenAfvs(){var ids=scenarioAfvIdsByVehId();return AFV_DATA.filter(function(v){return v.lbl&&(!ids||ids[v.id]);});}
-function nmRmVehOpen(n){NM_RM_VEH=1;btRmReopen(n);}
+function nmRmVehOpen(n,sd){NM_RM_VEH=sd||'e';btRmReopen(n);}
+/* v345: 自軍('f')・敵軍('e')のカウンター(S_LOS.friendHexes / S_LOS.enemyHexes、どちらも {boardId,col,row,veh,facing,tca}) */
+var NM_SIDE_LBL={e:{nm:'敵',mk:'敵軍マーカー',col:'#ff00ff'},f:{nm:'自軍',mk:'自軍マーカー',col:'#33aaff'}};
+function nmSideList(sd){if(sd==='f'){if(!S_LOS.friendHexes)S_LOS.friendHexes=[];return S_LOS.friendHexes;}return S_LOS.enemyHexes||(S_LOS.enemyHexes=[]);}
+function nmUnitAt(H,sd){if(sd!=='f')return nmEnemyAt(H);return nmSideList('f').filter(function(e){return e.boardId===H.boardId&&e.col===H.col&&e.row===H.row;})[0]||null;}
+function nmUnitMenu(it,H,n,sd){
+  var L=NM_SIDE_LBL[sd],eh=nmUnitAt(H,sd);
+  if(!eh){it.push({ic:sd==='f'?'sel':'enemy',t:'ここに'+L.nm+'を置く',sub:'シナリオに登場する車両(カウンター)か'+L.mk+'を選ぶ',f:"nmRmVehOpen("+n+",'"+sd+"')"});return;}
+  var ev=eh.veh?nmAfv(eh.veh):null,rot=losBoardRotById(eh.boardId)+(S_LOS.viewRot||0)+30;
+  it.push({ic:'turret',img:ev?vaslCtrHTML(ev.id,34,''):'',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+(ev?nmAfvName(ev):L.mk)+'</span>',sub:(ev?ev.nat+'　':'')+'タップで車両を変える・地図ではドラッグで動かせる',f:"nmRmVehOpen("+n+",'"+sd+"')"});
+  it.push({arr:1,ic:'rot',t:'車体の向き',sub:eh.facing==null?'未設定':'矢印の向き(前方の2ヘクスが正面)',cur:eh.facing,rot:rot,fn:sd==='f'?'nmRmSetFaceF':'nmRmSetFace',n:n});
+  if(ev&&nmAfvTurret(ev))it.push({arr:1,ic:'rot',t:'砲塔の向き',sub:eh.tca==null?'未設定':(eh.facing!=null?(eh.tca===eh.facing?'車体と同じ向き':'車体から'+nmTurRel(eh)):'設定済み'),cur:eh.tca,rot:rot,fn:sd==='f'?'nmRmSetTcaF':'nmRmSetTca',n:n});
+  else if(ev)it.push({ic:'info',t:'砲塔なし(無砲塔)',sub:'主砲の向き=車体の向き'});
+  it.push({ic:'x',t:'ここの'+L.nm+'を外す',f:sd==='f'?"nmRmFriendDel()":"nmRmEnemy()"});
+}
+/* v345(ダルマ指示「自軍・敵軍カウンターをドラッグ&ドロップ可能にする」): 通常のMAPタブで自軍・敵軍のカウンターを掴んで別のヘクスへ。
+   マウス=左ボタン、指=1本。8px動いたらドラッグ開始(動かさずに長押し=メニューは従来どおり)。カウンターの上から始めた指の操作では地図をスクロールしない。
+   同じ側のカウンターがいるヘクスには置けない(元に戻す)。離した後のタップは捨てる */
+var NM_DRAG=null;
+function nmDragPick(cx,cy){
+  if(typeof btActive!=='function'||btActive()||S_LOS.panMode||S_LOS.routeMode&&false)return null;
+  var hx=losHexAtClient(cx,cy);if(!hx)return null;
+  var f=nmUnitAt(hx,'f'),e=nmUnitAt(hx,'e');
+  if(f)return {sd:'f',ref:f};if(e)return {sd:'e',ref:e};return null;
+}
+function nmDragGhost(x,y){
+  var g=document.getElementById('nmDragG');
+  if(!g){g=document.createElement('div');g.id='nmDragG';g.style.cssText='position:fixed;z-index:9400;pointer-events:none;width:50px;height:50px;margin:-25px 0 0 -25px;border-radius:5px;box-shadow:0 6px 18px #000c;opacity:.9';
+    var r=NM_DRAG.ref,src=r.veh?nmVaslSrc(r.veh):null,fc=NM_DRAG.sd==='f'?'#33aaff':'#ff00ff';
+    g.style.border='2.5px solid '+fc;g.innerHTML=src?'<img src="'+src+'" style="width:100%;height:100%;display:block">':'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#0d2a4a;color:#fff;font-weight:900;font-size:13px">'+(NM_DRAG.sd==='f'?'自軍':'敵軍')+'</div>';
+    document.body.appendChild(g);}
+  g.style.left=x+'px';g.style.top=y+'px';
+  var hx=losHexAtClient(x,y),ok=hx&&!(nmUnitAt(hx,NM_DRAG.sd)&&nmUnitAt(hx,NM_DRAG.sd)!==NM_DRAG.ref);
+  g.style.outline=ok?'':'3px solid #ff4040';
+}
+function nmDragStart(x,y,touch){var p=nmDragPick(x,y);if(!p)return false;NM_DRAG={sd:p.sd,ref:p.ref,x0:x,y0:y,moving:false,touch:touch};return true;}
+function nmDragMove(x,y){
+  if(!NM_DRAG)return false;
+  if(!NM_DRAG.moving){if(Math.abs(x-NM_DRAG.x0)<8&&Math.abs(y-NM_DRAG.y0)<8)return true;NM_DRAG.moving=true;try{BtLPEnd();}catch(e){}Draw();}
+  nmDragGhost(x,y);return true;
+}
+function nmDragEnd(x,y){
+  var D=NM_DRAG;NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();
+  if(!D||!D.moving)return false;
+  var hx=losHexAtClient(x,y);
+  if(hx&&!(nmUnitAt(hx,D.sd)&&nmUnitAt(hx,D.sd)!==D.ref)){D.ref.boardId=hx.boardId;D.ref.col=hx.col;D.ref.row=hx.row;
+    if(D.sd==='e')S_LOS.enemyActive={boardId:hx.boardId,col:hx.col,row:hx.row};try{saveState();}catch(e){}}
+  else btToast(hx?'そのヘクスには'+NM_SIDE_LBL[D.sd].nm+'がいます':'地図の外には置けません');
+  BT_LP.eat=true;Draw();return true;
+}
+(function(){
+  if(typeof document==='undefined'||window.__nmDragInit)return;window.__nmDragInit=1;
+  function onMap(e){return e.target&&e.target.closest&&e.target.closest('#losMapWrap');}
+  document.addEventListener('mousedown',function(e){if(e.button!==0||!onMap(e))return;if(nmDragStart(e.clientX,e.clientY,false))e.preventDefault();},true);
+  document.addEventListener('mousemove',function(e){if(NM_DRAG&&!NM_DRAG.touch){nmDragMove(e.clientX,e.clientY);if(NM_DRAG&&NM_DRAG.moving)e.preventDefault();}},true);
+  document.addEventListener('mouseup',function(e){if(NM_DRAG&&!NM_DRAG.touch){if(nmDragEnd(e.clientX,e.clientY)){e.preventDefault();e.stopPropagation();}}},true);
+  document.addEventListener('touchstart',function(e){if(!onMap(e)||e.touches.length!==1){if(NM_DRAG&&NM_DRAG.touch){NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();Draw();}return;}var t=e.touches[0];nmDragStart(t.clientX,t.clientY,true);},{capture:true,passive:true});
+  document.addEventListener('touchmove',function(e){if(!NM_DRAG||!NM_DRAG.touch)return;if(e.touches.length!==1){NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();Draw();return;}var t=e.touches[0];e.preventDefault();nmDragMove(t.clientX,t.clientY);},{capture:true,passive:false});
+  document.addEventListener('touchend',function(e){if(!NM_DRAG||!NM_DRAG.touch)return;var t=e.changedTouches[0];if(nmDragEnd(t.clientX,t.clientY))e.preventDefault();},{capture:true,passive:false});
+  document.addEventListener('touchcancel',function(){if(NM_DRAG&&NM_DRAG.touch){var mv=NM_DRAG.moving;NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();if(mv)Draw();}},true);
+})();
+function nmRmFriendDel(){var H=NM_RM_HEX;if(!H)return;BtRmClose();var l=nmSideList('f');for(var i=l.length-1;i>=0;i--)if(l[i].boardId===H.boardId&&l[i].col===H.col&&l[i].row===H.row)l.splice(i,1);try{saveState();}catch(e){}Draw();}
+function nmRmSetFaceF(n,d){var eh=NM_RM_HEX&&nmUnitAt(NM_RM_HEX,'f');if(!eh||d==null)return;eh.facing=(eh.facing===d)?null:d;try{saveState();}catch(e){}Draw();btRmReopen(n);}
+function nmRmSetTcaF(n,d){var eh=NM_RM_HEX&&nmUnitAt(NM_RM_HEX,'f');if(!eh)return;eh.tca=(d==null||eh.tca===d)?null:d;try{saveState();}catch(e){}Draw();btRmReopen(n);}
 /* v338(ダルマ指示「行軍もシナリオ登場車両を選択式にして車両の能力を反映(カウンター)」「煙幕もカウンター・種類選択」) */
 var NM_RM_SUB=null;
 function nmRmSubOpen(k,n){NM_RM_SUB=k;btRmReopen(n);}
@@ -32934,18 +32992,19 @@ function nmRmSmokeSet(n,k){
   if(t)S_LOS.smoke[H.hid.id]={level:t.v,type:t.k,boardId:H.boardId,col:H.col,row:H.row};else delete S_LOS.smoke[H.hid.id];
   if(S_LOS.pxA&&S_LOS.pxB){LosRunPixel();return;}Draw();
 }
-function nmRmVehItems(n){
-  var eh=nmEnemyAt(NM_RM_HEX),it=[],list=nmScenAfvs(),ids=scenarioAfvIdsByVehId();
-  it.push({ic:'los',t:'← 戻る',sub:'敵の車両を選ぶ'+(ids?'(このシナリオに登場する車両)':'(シナリオ未選択: 全車両)'),f:"btRmReopen("+n+")"});
+function nmRmVehItems(n,sd){
+  sd=sd||'e';var L=NM_SIDE_LBL[sd],eh=nmUnitAt(NM_RM_HEX,sd),it=[],list=nmScenAfvs(),ids=scenarioAfvIdsByVehId();
+  it.push({ic:'los',t:'← 戻る',sub:L.nm+'の車両を選ぶ'+(ids?'(このシナリオに登場する車両)':'(シナリオ未選択: 全車両)'),f:"btRmReopen("+n+")"});
   it.push({sep:1});
-  it.push({ic:'enemy',t:'敵軍マーカー',sub:'車両を決めずに敵ヘクスだけ登録',on:!!eh&&!eh.veh,f:"nmRmSetVeh("+n+",null)"});
+  it.push({ic:sd==='f'?'sel':'enemy',t:L.mk,sub:'車両を決めずに'+L.nm+'のヘクスだけ登録',on:!!eh&&!eh.veh,f:"nmRmSetVeh("+n+",null,'"+sd+"')"});
   var nats={};list.forEach(function(v){(nats[v.nat]=nats[v.nat]||[]).push(v);});
   Object.keys(nats).forEach(function(k){it.push({sep:1});nats[k].forEach(function(v){
-    it.push({ic:'turret',img:vaslCtrHTML(v.id,34,''),t:'<span style="color:'+((UNITS[v.nat.split('/')[0]]&&UNITS[v.nat.split('/')[0]].col)||'#e8eef4')+'">'+nmAfvName(v)+'</span>',sub:v.nat+(nmAfvTurret(v)?'':'・無砲塔'),on:eh&&eh.veh===v.id,f:"nmRmSetVeh("+n+",'"+v.id+"')"});});});
+    it.push({ic:'turret',img:vaslCtrHTML(v.id,34,''),t:'<span style="color:'+((UNITS[v.nat.split('/')[0]]&&UNITS[v.nat.split('/')[0]].col)||'#e8eef4')+'">'+nmAfvName(v)+'</span>',sub:v.nat+(nmAfvTurret(v)?'':'・無砲塔'),on:eh&&eh.veh===v.id,f:"nmRmSetVeh("+n+",'"+v.id+"','"+sd+"')"});});});
   if(!list.length)it.push({ic:'info',t:'このシナリオには車両が登場しません'});
   return it;
 }
-function nmRmSetVeh(n,id){var H=NM_RM_HEX;if(!H)return;var eh=nmEnemyAt(H);if(!eh){losToggleEnemyHexAt(H.boardId,H.col,H.row);eh=nmEnemyAt(H);if(!eh)return;}eh.veh=id||null;if(!id||!nmAfvTurret(nmAfv(id)))eh.tca=null;try{saveState();}catch(e){}Draw();btRmReopen(n);}
+function nmRmSetVeh(n,id,sd){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);
+  if(!eh){if(sd==='f'){eh={boardId:H.boardId,col:H.col,row:H.row};nmSideList('f').push(eh);}else{losToggleEnemyHexAt(H.boardId,H.col,H.row);eh=nmEnemyAt(H);}if(!eh)return;}eh.veh=id||null;if(!id||!nmAfvTurret(nmAfv(id)))eh.tca=null;try{saveState();}catch(e){}Draw();btRmReopen(n);}
 function nmRmSetFace(n,d){var H=NM_RM_HEX,eh=H&&nmEnemyAt(H);if(!eh)return;losSetEnemyHexFacing(eh.boardId,eh.col,eh.row,d==null?eh.facing:d);try{saveState();}catch(e){}Draw();btRmReopen(n);}
 /* v343(ダルマ指示「残骸もVASLカウンター」): 残骸の車両(S_LOS.wreckVeh[key]=[車両id|null,...] 件数はwreckHexesのまま) */
 function nmWreckKey(H){return H.boardId+':'+H.col+':'+H.row;}
@@ -34118,7 +34177,14 @@ function btCamReactNodes(){
     return r;};
 })();
 
-function nmEnemyVehSVG(eh,d,src){ /* 対戦モード(btVehOverlaySVG)と同じ形: 車体=国籍色の矢印(三角)、砲塔=車体と違う向きの時に黄色の「砲」 */
+function nmFriendOverlaySVG(dl){ /* v345: 自軍のカウンター(青の枠)。車両未定は「自軍」の札 */
+  var h='';(S_LOS.friendHexes||[]).forEach(function(eh){var g=losColRowToGlobalCanon(eh.boardId,eh.col,eh.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);
+    if(NM_DRAG&&NM_DRAG.moving&&NM_DRAG.ref===eh)return;
+    if(nmUnitAt(eh,'e'))d={x:d.x-8,y:d.y-8}; /* 同じヘクスに敵もいる時は少しずらす */
+    h+=nmEnemyVehSVG(eh,d,eh.veh?nmVaslSrc(eh.veh):null,'#33aaff');});
+  return h;
+}
+function nmEnemyVehSVG(eh,d,src,frameCol){ /* 対戦モード(btVehOverlaySVG)と同じ形: 車体=国籍色の矢印(三角)、砲塔=車体と違う向きの時に黄色の「砲」 */
   var v=nmAfv(eh.veh),nat=v?v.nat.split('/')[0]:'',col=(typeof BT_SIDE_COL!=='undefined'&&BT_SIDE_COL[nat])||((UNITS[nat]&&UNITS[nat].col)||'#ff00ff');
   var bRot=losBoardRotById(eh.boardId)||0,h='',S=46;
   function arrow(f,len,wid,c2,tip){var a=(f*60+bRot+30)*Math.PI/180,ux=Math.sin(a),uy=-Math.cos(a),p1x=d.x+ux*len,p1y=d.y+uy*len,L=wid*2.6+4,W=wid*1.6+2,bx=p1x-ux*L,by=p1y-uy*L;
@@ -34127,7 +34193,9 @@ function nmEnemyVehSVG(eh,d,src){ /* 対戦モード(btVehOverlaySVG)と同じ�
     return ln(wid+3,'#000',bx,by)+ln(wid,c2,bx,by)+'<polygon points="'+p1x+','+p1y+' '+(bx-uy*W)+','+(by+ux*W)+' '+(bx+uy*W)+','+(by-ux*W)+'" fill="'+c2+'" stroke="#000" stroke-width="1.5" stroke-linejoin="round"/>';}
   if(eh.facing!=null)h+=arrow(eh.facing,54,4,col);
   if(eh.tca!=null&&eh.tca!==eh.facing)h+=arrow(eh.tca,50,5,'#ffd040','badge');
-  h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><rect x="'+(d.x-S/2-2)+'" y="'+(d.y-S/2-2)+'" width="'+(S+4)+'" height="'+(S+4)+'" rx="4" fill="none" stroke="#ff00ff" stroke-width="2.5"/><image href="'+src+'" x="'+(d.x-S/2)+'" y="'+(d.y-S/2)+'" width="'+S+'" height="'+S+'"/></g>';
+  var fc=frameCol||'#ff00ff';
+  if(src)h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><rect x="'+(d.x-S/2-2)+'" y="'+(d.y-S/2-2)+'" width="'+(S+4)+'" height="'+(S+4)+'" rx="4" fill="none" stroke="'+fc+'" stroke-width="2.5"/><image href="'+src+'" x="'+(d.x-S/2)+'" y="'+(d.y-S/2)+'" width="'+S+'" height="'+S+'"/></g>';
+  else h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><rect x="'+(d.x-S/2)+'" y="'+(d.y-S/2)+'" width="'+S+'" height="'+S+'" rx="5" fill="#0d2a4a" stroke="'+fc+'" stroke-width="2.5"/><text x="'+d.x+'" y="'+(d.y+5)+'" text-anchor="middle" font-size="14" font-weight="900" fill="#cfe8ff" font-family="sans-serif">'+(S_LOS&&typeof window!=='undefined'&&window.S&&window.S.lang==='en'?'OWN':'自軍')+'</text></g>';
   return h;
 }
 function losEnemyHexOverlaySVG(dispLayout){
@@ -34204,6 +34272,8 @@ function losEnemyHexOverlaySVG(dispLayout){
     // 保存するよう修正済みのため、この打ち消しグループの外側でマップと一緒に回転させる
     // 対応が正しく機能するはず)。マーカー画像の打ち消しグループをここで閉じ、矢印はその
     // 外側(=マップの+viewRot回転をそのまま受ける)で描画するよう分離した。
+    if(NM_DRAG&&NM_DRAG.moving&&NM_DRAG.ref===eh)return; /* v345: ドラッグ中は元の位置に描かない */
+    if(nmUnitAt(eh,'f'))d={x:d.x+8,y:d.y+8}; /* v345: 同じヘクスに自軍もいる時は少しずらす */
     var evSrc=eh.veh?nmVaslSrc(eh.veh):null;
     if(evSrc){h+=nmEnemyVehSVG(eh,d,evSrc);return;} /* v343: 車両を選んだ敵はVASLカウンター+対戦モードと同じ矢印 */
     h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
@@ -35991,7 +36061,7 @@ function LosToggleBoardButton(letter){
   S_LOS.pxA=null;S_LOS.pxB=null;S_LOS.result=null;S_LOS.scrollLeft=0;S_LOS.scrollTop=0;
   // 2026-08修正(ダルマ指示): 敵ヘクス登録はマップ変更時にクリアする(盤面が変わると
   // 登録済みヘクスの意味が失われるため)。
-  S_LOS.enemyHexes=[];
+  S_LOS.enemyHexes=[];S_LOS.friendHexes=[];
   // 2026-08修正(ダルマ報告バグ「残骸/他車両ヘクスの登録がページ再読込で消える」対応の
   // 一環): 敵ヘクス登録と同様、マップ変更時にもクリアする。
   S_LOS.wreckHexes={};S_LOS.wreckVeh={};
@@ -36157,7 +36227,7 @@ function LosToggleEnemyHexMode(){
   var wasOn=S_LOS.enemyHexMode;
   S_LOS.enemyHexMode=!S_LOS.enemyHexMode;
   if(wasOn&&!S_LOS.enemyHexMode){
-    S_LOS.enemyHexes=[];
+    S_LOS.enemyHexes=[];S_LOS.friendHexes=[];
     S_LOS.enemyHexWarn=null;
   }
   // 2026-08追加(ダルマ指示「opps root 選択時ab地点をクリア」): OPPSモードをONにした際、
@@ -36173,7 +36243,7 @@ function LosToggleEnemyAllLos(){
   Draw();
 }
 function LosClearEnemyHexes(){
-  S_LOS.enemyHexes=[];
+  S_LOS.enemyHexes=[];S_LOS.friendHexes=[];
   S_LOS.enemyHexWarn=null;
   Draw();
 }
@@ -37787,7 +37857,7 @@ function LosClearMapAll(){
   S_LOS.smoke={};
   S_LOS.route=null;
   S_LOS.routeError=null;
-  S_LOS.enemyHexes=[];
+  S_LOS.enemyHexes=[];S_LOS.friendHexes=[];
   S_LOS.wreckHexes={};S_LOS.wreckVeh={};
   S_LOS.buildingMarks={};
   S_LOS.panMode=false;S_LOS.smokeMode=false;S_LOS.markMode=false;S_LOS.routeMode=false;
@@ -38780,7 +38850,7 @@ function LOS_PAGE(){
       S_LOS.enemyHexMode=false;S_LOS.enemyHexAllMode=false;S_LOS.wreckHexMode=false;S_LOS.abMode=false;
       // 2026-08修正(ダルマ指示): 敵ヘクス登録はマップ変更(シナリオ選択による盤面自動設定)
       // 時にもクリアする。
-      S_LOS.enemyHexes=[];
+      S_LOS.enemyHexes=[];S_LOS.friendHexes=[];
       // 2026-08修正(ダルマ報告バグ「残骸/他車両ヘクスの登録がページ再読込で消える」対応の
       // 一環): 敵ヘクス登録と同様、マップ変更時にもクリアする。
       S_LOS.wreckHexes={};S_LOS.wreckVeh={};
@@ -39130,6 +39200,7 @@ function LOS_PAGE(){
   h+=losBuildingMarksOverlaySVG(dispLayout);
   h+=losMoveRouteOverlaySVG(dispLayout);
   h+=losEnemyHexOverlaySVG(dispLayout);
+  h+=nmFriendOverlaySVG(dispLayout); /* v345 */
   h+=btBldgOverlaySVG(dispLayout); // v11.474: 建物の支配の旗
   h+=btOverlaySVG(dispLayout); // v11.473: 対戦モードの部隊スタック
   h+=losWreckHexOverlaySVG(dispLayout);
