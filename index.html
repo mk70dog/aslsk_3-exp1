@@ -33154,12 +33154,14 @@ function nmDragStart(x,y,touch){var p=nmDragPick(x,y);if(!p)return false;NM_DRAG
 function nmDragMove(x,y){
   if(!NM_DRAG)return false;
   if(!NM_DRAG.moving){if(Math.abs(x-NM_DRAG.x0)<8&&Math.abs(y-NM_DRAG.y0)<8)return true;NM_DRAG.moving=true;try{BtLPEnd();}catch(e){}Draw();}
-  nmDragGhost(x,y);return true;
+  NM_DRAG.lx=x;NM_DRAG.ly=y;nmDragGhost(x,y);return true;
 }
 function nmDragEnd(x,y){
   var D=NM_DRAG;NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();
   if(!D||!D.moving)return false;
-  var hx=losHexAtClient(x,y);
+  if(D.lx!=null){x=D.lx;y=D.ly;} /* v361: 指を離した位置は最後に動かした位置を使う(touchendの座標が取れない端末対策) */
+  var mw=document.getElementById('losMapWrap'),mr=mw&&mw.getBoundingClientRect(),inMap=!!mr&&x>=mr.left&&x<=mr.right&&y>=mr.top&&y<=mr.bottom;
+  var hx=inMap?losHexAtClient(x,y):null; /* 地図の外で離したら置かない(従来は端のヘクスに置かれていた) */
   if(hx&&!(nmUnitAt(hx,D.sd)&&nmUnitAt(hx,D.sd)!==D.ref)){D.ref.boardId=hx.boardId;D.ref.col=hx.col;D.ref.row=hx.row;
     if(D.sd==='e')S_LOS.enemyActive={boardId:hx.boardId,col:hx.col,row:hx.row};try{saveState();}catch(e){}}
   else btToast(hx?'そのヘクスには'+NM_SIDE_LBL[D.sd].nm+'がいます':'地図の外には置けません');
@@ -33171,10 +33173,17 @@ function nmDragEnd(x,y){
   document.addEventListener('mousedown',function(e){if(e.button!==0||!onMap(e))return;if(nmDragStart(e.clientX,e.clientY,false))e.preventDefault();},true);
   document.addEventListener('mousemove',function(e){if(NM_DRAG&&!NM_DRAG.touch){nmDragMove(e.clientX,e.clientY);if(NM_DRAG&&NM_DRAG.moving)e.preventDefault();}},true);
   document.addEventListener('mouseup',function(e){if(NM_DRAG&&!NM_DRAG.touch){if(nmDragEnd(e.clientX,e.clientY)){e.preventDefault();e.stopPropagation();}}},true);
-  document.addEventListener('touchstart',function(e){if(!onMap(e)||e.touches.length!==1){if(NM_DRAG&&NM_DRAG.touch){NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();Draw();}return;}var t=e.touches[0];nmDragStart(t.clientX,t.clientY,true);},{capture:true,passive:true});
-  document.addEventListener('touchmove',function(e){if(!NM_DRAG||!NM_DRAG.touch)return;if(e.touches.length!==1){NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();Draw();return;}var t=e.touches[0];e.preventDefault();nmDragMove(t.clientX,t.clientY);},{capture:true,passive:false});
-  document.addEventListener('touchend',function(e){if(!NM_DRAG||!NM_DRAG.touch)return;var t=e.changedTouches[0];if(nmDragEnd(t.clientX,t.clientY))e.preventDefault();},{capture:true,passive:false});
-  document.addEventListener('touchcancel',function(){if(NM_DRAG&&NM_DRAG.touch){var mv=NM_DRAG.moving;NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();if(mv)Draw();}},true);
+  /* v361(バグ修正): ドラッグ開始の描き直しで指を置いた要素が地図から外れると、iPadではtouchmove/touchendがdocumentまで届かずドロップできなかった。
+     指を置いた要素にも同じ処理を付ける(二重に処理しない) */
+  function tMove(e){if(e.__nmT)return;e.__nmT=1;if(!NM_DRAG||!NM_DRAG.touch)return;if(e.touches.length!==1){NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();Draw();return;}var t=e.touches[0];e.preventDefault();nmDragMove(t.clientX,t.clientY);}
+  function tEnd(e){if(e.__nmT)return;e.__nmT=1;if(!NM_DRAG||!NM_DRAG.touch)return;var t=e.changedTouches&&e.changedTouches[0];if(nmDragEnd(t?t.clientX:NM_DRAG.lx,t?t.clientY:NM_DRAG.ly))e.preventDefault();unbind();}
+  function tCancel(e){if(e.__nmT)return;e.__nmT=1;if(NM_DRAG&&NM_DRAG.touch){var mv=NM_DRAG.moving;NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();if(mv)Draw();}unbind();}
+  var tgt=null;function unbind(){if(!tgt)return;tgt.removeEventListener('touchmove',tMove,{capture:true});tgt.removeEventListener('touchend',tEnd,{capture:true});tgt.removeEventListener('touchcancel',tCancel,{capture:true});tgt=null;}
+  document.addEventListener('touchstart',function(e){if(!onMap(e)||e.touches.length!==1){if(NM_DRAG&&NM_DRAG.touch){NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();Draw();}return;}var t=e.touches[0];
+    if(nmDragStart(t.clientX,t.clientY,true)){unbind();tgt=e.target;tgt.addEventListener('touchmove',tMove,{capture:true,passive:false});tgt.addEventListener('touchend',tEnd,{capture:true,passive:false});tgt.addEventListener('touchcancel',tCancel,{capture:true});}},{capture:true,passive:true});
+  document.addEventListener('touchmove',tMove,{capture:true,passive:false});
+  document.addEventListener('touchend',tEnd,{capture:true,passive:false});
+  document.addEventListener('touchcancel',tCancel,true);
 })();
 /* v356(ダルマ指示「自軍・敵軍カウンター選択時に方向画面を表示」): 車両を選んだら(またはメニューの「向きを決める」)、カウンターの周りに6方向のボタンを並べた画面。車体=国籍の色、砲塔=黄色 */
 var NM_FACE=null;
