@@ -33084,7 +33084,7 @@ function nmUnitMenu(it,H,n,sd){
   if(!eh){it.push({ic:sd==='f'?'sel':'enemy',t:'ヘクスに'+L.nm+'を置く',sub:'シナリオに登場する車両(カウンター)か'+L.mk+'を選ぶ',f:"nmRmVehOpen("+n+",'"+sd+"')"});return;}
   var ev=eh.veh?nmAfv(eh.veh):null,rot=losBoardRotById(eh.boardId)+(S_LOS.viewRot||0)+30;
   if(sd==='f'&&eh.grp&&!ev){var gs=nmGrpSrcs(eh.grp); /* v358 */
-    it.push({ic:'sel',img:gs.length?'<img src="'+gs[0]+'" style="width:34px;height:34px;display:block">':'',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+T('編成')+eh.grp+'</span>',sub:(nmGrpText(eh.grp)||'(中身なし)')+'　タップで変える・ドラッグで動かせる',f:"nmRmVehOpen("+n+",'f')"});
+    it.push({ic:'sel',img:gs.length?nmGrpImgHTML(gs[0],eh.grp):'',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+T('編成')+eh.grp+'</span>',sub:(nmGrpText(eh.grp)||'(中身なし)')+'　タップで変える・ドラッグで動かせる',f:"nmRmVehOpen("+n+",'f')"});
     it.push({ic:'x',t:'ヘクスの'+L.nm+'を外す',f:"nmRmFriendDel()"});return;}
   it.push({ic:'turret',img:ev?vaslCtrHTML(ev.id,34,''):'',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+(ev?nmAfvName(ev):L.mk)+'</span>',sub:(ev?ev.nat+'　':'')+'タップで車両を変える・地図ではドラッグで動かせる',f:"nmRmVehOpen("+n+",'"+sd+"')"});
   it.push({ic:'rot',t:'向きを決める',sub:'車体'+(eh.facing==null?'未設定':'設定済み')+(ev&&nmAfvTurret(ev)?'・砲塔'+(eh.tca==null?'未設定':'設定済み'):'')+'　方向の画面を開く',f:"nmRmFaceOpen("+n+",'"+sd+"')"});
@@ -33216,10 +33216,14 @@ function nmGrpText(slot){var it=nmGrpItems(slot),m={},o=[];it.forEach(function(x
 function nmRmSetGrp(n,slot){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,'f');if(!eh){eh={boardId:H.boardId,col:H.col,row:H.row};nmSideList('f').push(eh);}eh.veh=null;eh.tca=null;eh.facing=null;eh.grp=slot;NM_FACE=null;try{saveState();}catch(e){}Draw();btRmReopen(n);}
 /* v358(ダルマ指示「編成A もう少しかっこよく」「何種類か」): NM_GRP_BADGE
    'shield'=部隊章の帯(濃紺+金縁+盾) / 'tab'=カウンターの上にタブ(大きなA) / 'coin'=右上に丸いメダル / 'plate'=VASL風の白い札 */
-var NM_GRP_BADGE='shield';
+var NM_GRP_BADGE='num'; /* ダルマ指示「射撃タブの編成マークと同じ○A」 */
 function nmGrpBadge(d,S0,g,more){
   var h='',st=NM_GRP_BADGE,en=(S.lang==='en');
-  if(st==='tab'){var x=d.x-S0/2+10,y=d.y-S0/2-17-10;
+  if(st==='num'){ /* 射撃タブの編成ボタン(.op-numbadge)と同じ: 黒の丸に白字、カウンターの右上の角から少しはみ出す */
+    var cx=d.x+S0/2+4-8,cy=d.y-S0/2-4+8-((Math.min(3,1+(more?3:2))-1)*5*0);
+    h+='<circle cx="'+cx+'" cy="'+cy+'" r="8" fill="#000" fill-opacity=".85"/><text x="'+cx+'" y="'+(cy+3.8)+'" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#fff" font-family="sans-serif">'+g+'</text>';
+    if(more)h+='<text x="'+(cx+10)+'" y="'+(cy+4)+'" font-size="8.5" font-weight="900" fill="#fff" stroke="#000" stroke-width="2.5" paint-order="stroke">+'+more+'</text>';}
+  else if(st==='tab'){var x=d.x-S0/2+10,y=d.y-S0/2-17-10;
     h+='<path d="M'+(x)+' '+(y+17)+'v-12q0-5 5-5h16q5 0 5 5v12z" fill="#2a6fdb" stroke="#fff" stroke-width="1.4"/><text x="'+(x+13)+'" y="'+(y+14)+'" text-anchor="middle" font-size="13" font-weight="900" fill="#fff" font-family="Arial">'+g+'</text>';
     if(more)h+='<text x="'+(x+30)+'" y="'+(y+14)+'" font-size="9" font-weight="900" fill="#fff" stroke="#000" stroke-width="2.5" paint-order="stroke">+'+more+'</text>';}
   else if(st==='coin'){var cx=d.x+S0/2+2,cy=d.y-S0/2-8;
@@ -33237,6 +33241,7 @@ function nmGrpBadge(d,S0,g,more){
     if(more)h+='<text x="'+(bx+bw-4)+'" y="'+(by+12)+'" text-anchor="end" font-size="8" font-weight="700" fill="#cfd8e8">+'+more+'</text>';}
   return h;
 }
+function nmGrpImgHTML(src,slot){return '<span style="position:relative;display:block;width:34px;height:34px"><img src="'+src+'" style="width:34px;height:34px;display:block"><span class="op-numbadge" style="left:auto;right:-4px;top:-4px;font-size:9px;padding:0;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center">'+slot+'</span></span>';}
 function nmGrpSVG(eh,d){
   var srcs=nmGrpSrcs(eh.grp),S0=46,h='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">',k=Math.min(3,srcs.length);
   if(!k)return nmPlainMarkSVG('f',d,eh);
@@ -33317,7 +33322,7 @@ function nmRmVehItems(n,sd){
   it.push({ic:sd==='f'?'sel':'enemy',t:L.mk,sub:'車両を決めずに'+L.nm+'のヘクスだけ登録',on:!!eh&&!eh.veh&&!eh.grp,f:"nmRmSetVeh("+n+",null,'"+sd+"')"});
   if(sd==='f'){var sl=[];try{sl=losAvailableGroupSlots();}catch(e){}var any=false;
     sl.forEach(function(slot){var srcs=nmGrpSrcs(slot);if(!srcs.length)return;if(!any){it.push({sep:1});any=true;}
-      it.push({ic:'sel',img:'<img src="'+srcs[0]+'" style="width:34px;height:34px;display:block">',t:'<span><span style="color:#33aaff">'+T('編成')+slot+'</span></span>',sub:nmGrpText(slot),on:!!eh&&eh.grp===slot&&!eh.veh,f:"nmRmSetGrp("+n+",'"+slot+"')"});});
+      it.push({ic:'sel',img:nmGrpImgHTML(srcs[0],slot),t:'<span><span style="color:#33aaff">'+T('編成')+slot+'</span></span>',sub:nmGrpText(slot),on:!!eh&&eh.grp===slot&&!eh.veh,f:"nmRmSetGrp("+n+",'"+slot+"')"});});
     if(!any){it.push({sep:1});it.push({ic:'info',t:'射撃タブの編成がありません',sub:'射撃タブで編成(A/B/C)にユニットを登録すると、ここで選べます'});}}
   var nats={};list.forEach(function(v){(nats[v.nat]=nats[v.nat]||[]).push(v);});
   Object.keys(nats).forEach(function(k){it.push({sep:1});nats[k].forEach(function(v){
