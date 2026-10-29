@@ -32962,8 +32962,8 @@ function nmRMenuItems(n){
   var sm=S_LOS.smoke&&S_LOS.smoke[H.hid.id],sl=sm?sm.level:0,sn=sl<3?sl+1:0;
   /* v343(ダルマ指示「敵軍マーカーをシナリオ登場車両選択に変更」「対戦モードと同じVASLカウンターで矢印を設定」) / v345(ダルマ指示「右クリックで自軍カウンターを配置・設定は敵軍と同じ」) */
   nmUnitMenu(it,H,n,'f');nmUnitMenu(it,H,n,'e');
-  var wl=nmWreckList(H);
-  it.push({ic:'wreck',img:wl.length&&wl[wl.length-1]?nmWreckCtrHTML(wl[wl.length-1],34):'',t:'残骸の配置',sub:'ここ: '+wc+'個'+(wl.filter(Boolean).length?'('+wl.filter(Boolean).map(function(id){var v=nmAfv(id);return v?nmAfvName(v):'?';}).join('・')+')':'')+'　タップで車両を選ぶ',f:"nmRmSubOpen('wreck',"+n+")"});
+  /* v351(ダルマ指示「(残骸の)設定時車両の選択をしない」): メニューの行で −/＋(1ヘクス3個まで) */
+  it.push({row:1,ic:'wreck',img:wc?nmWreckCtrHTML(null,30,wc):'',t:'残骸',btns:[['－',"nmRmWreckStep("+n+",-1)",wc<=0],[wc?'+'+wc:'なし',null],['＋',"nmRmWreckStep("+n+",1)",wc>=3]]});
   var smT=sm?nmSmkType(sm):null;
   it.push({ic:'smoke',img:smT?nmSmkCtrHTML(smT.k,34):'',t:'煙幕の配置',sub:'ここ: '+(smT?smT.nm+' +'+smT.v:'なし')+'　タップで種類を選ぶ',f:"nmRmSubOpen('smoke',"+n+")"});
   it.push({sep:1});
@@ -33173,7 +33173,7 @@ function nmWreckMarkSVG(d,n,small){
   h+='<rect x="'+(x0+S-17)+'" y="'+(y0+2)+'" width="15" height="13" rx="2" fill="#000"/><text x="'+(x0+S-9.5)+'" y="'+(y0+12)+'" text-anchor="middle" font-size="10.5" font-weight="900" fill="#ffd040" font-family="Arial">+'+n+'</text>';
   return h+'</g>';
 }
-function nmWreckCtrHTML(id,px){return '<svg viewBox="-22 -22 44 44" width="'+px+'" height="'+px+'" style="display:block;flex-shrink:0">'+nmWreckMarkSVG({x:0,y:0},1,false).replace(/rotate\([^)]*\)/,'rotate(0 0 0)')+'</svg>';} /* v351: メニューも統一マーク */
+function nmWreckCtrHTML(id,px,cnt){return '<svg viewBox="-22 -22 44 44" width="'+px+'" height="'+px+'" style="display:block;flex-shrink:0">'+nmWreckMarkSVG({x:0,y:0},cnt||1,false).replace(/rotate\([^)]*\)/,'rotate(0 0 0)')+'</svg>';} /* v351: メニューも統一マーク */
 function nmWreckKey(H){return H.boardId+':'+H.col+':'+H.row;}
 function nmWreckList(H){var k=nmWreckKey(H),c=(S_LOS.wreckHexes||{})[k]||0,l=((S_LOS.wreckVeh||{})[k]||[]).slice(0,c);while(l.length<c)l.push(null);return l;}
 function nmVaslSrc(id){var k=VASL_CTR_MAP[id];return k&&VASL_CTR_IMG[k]||null;}
@@ -33192,6 +33192,7 @@ function nmRmWreckItems(n){
 function nmWreckSave(H,l){var k=nmWreckKey(H);if(!S_LOS.wreckHexes)S_LOS.wreckHexes={};S_LOS.wreckVeh={};if(!S_LOS.wreckVeh)S_LOS.wreckVeh={};
   if(l.length){S_LOS.wreckHexes[k]=l.length;S_LOS.wreckVeh[k]=l;}else{delete S_LOS.wreckHexes[k];delete S_LOS.wreckVeh[k];}
   try{saveState();}catch(e){}if(S_LOS.pxA&&S_LOS.pxB){try{LosRunPixel();}catch(e){}}Draw();}
+function nmRmWreckStep(n,d){var H=NM_RM_HEX;if(!H)return;var l=nmWreckList(H);if(d>0){if(l.length>=3)return;l.push(null);}else{if(!l.length)return;l.pop();}nmWreckSave(H,l);btRmReopen(n);}
 function nmRmWreckAdd(n,id){var H=NM_RM_HEX;if(!H)return;var l=nmWreckList(H);if(l.length>=3)return;l.push(id||null);nmWreckSave(H,l);NM_RM_SUB='wreck';btRmReopen(n);}
 function nmRmWreckDel(n,i){var H=NM_RM_HEX;if(!H)return;var l=nmWreckList(H);l.splice(i,1);nmWreckSave(H,l);NM_RM_SUB='wreck';btRmReopen(n);}
 function nmRmSetTca(n,d){var eh=nmEnemyAt(NM_RM_HEX);if(!eh)return;eh.tca=(d==null||eh.tca===d)?null:d;try{saveState();}catch(e){}Draw();btRmReopen(n);}
@@ -33243,6 +33244,15 @@ function btRmDo(i){
   var keep=/BtRmCenter|BtRmZoom|BtRmRot|BtMapFull/.test(f)?null:nmScrollKeep();
   try{(new Function(f))();}finally{if(keep)keep();}
 }
+/* v351(ダルマ指示「ここから見える・ここを撃てる・ここまでの各マークを変更」): A/Bのマークと同じ系統の色付きの丸(見える=青の双眼鏡、撃てる=マゼンタの照準、移動=水色の足あと) */
+var NM_MENU_MARK={eye:1,tgt:1,route:1};
+function nmMenuMark(k){
+  var h='<svg viewBox="0 0 32 32" width="30" height="30" style="display:block;flex-shrink:0">';
+  if(k==='eye')h+='<circle cx="16" cy="16" r="14" fill="#123a6a" stroke="#7fc0ff" stroke-width="2"/><circle cx="11" cy="17" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><circle cx="21" cy="17" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M14.5 15.5h3M8 13.5l2.5-4h3M24 13.5l-2.5-4h-3" stroke="#fff" stroke-width="2" fill="none" stroke-linejoin="round"/>';
+  else if(k==='tgt')h+='<circle cx="16" cy="16" r="14" fill="#4a0a4a" stroke="#ff70ff" stroke-width="2"/><circle cx="16" cy="16" r="7" fill="none" stroke="#fff" stroke-width="2.2"/><circle cx="16" cy="16" r="1.8" fill="#ff70ff"/><path d="M4 16h6M22 16h6M16 4v6M16 22v6" stroke="#fff" stroke-width="2.2"/>';
+  else if(k==='route')h+='<circle cx="16" cy="16" r="14" fill="#0d3340" stroke="#40e0ff" stroke-width="2"/><circle cx="8.5" cy="23" r="2.6" fill="#fff"/><path d="M10.5 21.5Q12 14 18 14.5T22.5 10" fill="none" stroke="#fff" stroke-width="2.2" stroke-dasharray="3 2.4" stroke-linecap="round"/><path d="M19.5 6.5l6 1.8-3.2 5.2z" fill="#fff"/>';
+  return h+'</svg>';
+}
 function btRMenu(n,lp){ // lp=長押しで開いた(指を離した直後のクリックで閉じない)
   var keepO=nmScrollKeep();
   BtRmClose();BT_RM_FN=[];var it=btActive()?btRMenuItems(n):nmRMenuItems(n);
@@ -33251,8 +33261,8 @@ function btRMenu(n,lp){ // lp=長押しで開いた(指を離した直後のク�
     if(x.arr){h+='<div class="rmIt rmRow" style="flex-wrap:wrap" onclick="event.stopPropagation()"><span class="rmIc">'+btRmIcon(x.ic)+'</span><span class="rmTx">'+x.t+(x.sub?'<span class="rmSub">'+x.sub+'</span>':'')+'</span><span class="rmBtns" style="flex:1 0 100%;justify-content:flex-end;margin-top:4px">';
       for(var ai=0;ai<6;ai++)h+='<button class="rmB" style="min-width:30px;padding:3px 4px;'+(x.cur===ai?'background:#ff9030;color:#000;border-color:#ffb060':'')+'" onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push(x.fn+'('+x.n+','+ai+')')-1)+')"><span style="display:inline-block;transform:rotate('+(ai*60+x.rot)+'deg)">&#8593;</span></button>';
       if(!x.noClr)h+='<button class="rmB" style="min-width:30px;padding:3px 6px"'+(x.cur==null?' disabled':'')+' onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push(x.fn+'('+x.n+',null)')-1)+')">×</button>';h+='</span></div>';return;}
-    if(x.row){h+='<div class="rmIt rmRow" onclick="event.stopPropagation()"><span class="rmIc">'+btRmIcon(x.ic)+'</span><span class="rmTx">'+x.t+'</span><span class="rmBtns">'+x.btns.map(function(b){return b[1]?'<button class="rmB"'+(b[2]?' disabled':'')+' onclick="event.stopPropagation();'+b[1]+'">'+b[0]+'</button>':'<span class="rmVal">'+b[0]+'</span>';}).join('')+'</span></div>';return;}
-    h+='<div class="rmIt"'+(x.f?' onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push(x.f)-1)+')"':' style="cursor:default"')+'><span class="rmIc"'+(x.img?' style="flex:0 0 36px;justify-content:center"':'')+'>'+(x.img||btRmIcon(x.ic))+'</span><span class="rmTx">'+x.t+(x.sub?'<span class="rmSub">'+x.sub+'</span>':'')+'</span>'+(x.on?'<span style="margin-left:auto;color:#ff9030;font-size:13px">✓</span>':'')+'</div>';});
+    if(x.row){h+='<div class="rmIt rmRow" onclick="event.stopPropagation()"><span class="rmIc"'+(x.img?' style="flex:0 0 36px;justify-content:center"':'')+'>'+(x.img||btRmIcon(x.ic))+'</span><span class="rmTx">'+x.t+'</span><span class="rmBtns">'+x.btns.map(function(b){return b[1]?'<button class="rmB"'+(b[2]?' disabled':'')+' onclick="event.stopPropagation();'+b[1]+'">'+b[0]+'</button>':'<span class="rmVal">'+b[0]+'</span>';}).join('')+'</span></div>';return;}
+    h+='<div class="rmIt"'+(x.f?' onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push(x.f)-1)+')"':' style="cursor:default"')+'><span class="rmIc"'+((x.img||NM_MENU_MARK[x.ic])?' style="flex:0 0 36px;justify-content:center"':'')+'>'+(x.img||(NM_MENU_MARK[x.ic]?nmMenuMark(x.ic):btRmIcon(x.ic)))+'</span><span class="rmTx">'+x.t+(x.sub?'<span class="rmSub">'+x.sub+'</span>':'')+'</span>'+(x.on?'<span style="margin-left:auto;color:#ff9030;font-size:13px">✓</span>':'')+'</div>';});
   h+='</div>';
   var el=document.createElement('div');el.id='btRm';el.innerHTML=h;
   var held=!!lp,relT=0;
