@@ -33562,6 +33562,7 @@ function btRmLos(n,ab){
    +'html.bt-mapfull #losScrollWrap{position:fixed !important;left:0;right:0;bottom:0;top:var(--btfullt,0px);width:auto !important;max-height:none !important;z-index:8900;background:#0a0c14;border:0 !important;border-radius:0 !important;margin:0 !important}'
    +'html.bt-mapfull #main .bt-cmd{position:fixed !important;top:0 !important;left:0;right:0;margin:0 !important;z-index:8910;max-height:40vh;overflow-y:auto}'
    +'html.bt-mapfull .los-compass{display:none !important}'
+   +'html.nm-sumfix #losScrollWrap{bottom:var(--nmsumh,0px) !important}html.nm-sumfix #losSumRow{position:fixed !important;left:0;right:0;bottom:0;z-index:8912;background:#0a0c14;padding:4px 6px;margin:0 !important;box-shadow:0 -4px 14px #000a}'
    +'html.bt-mapfull #main{z-index:8900 !important}'
    +'#btFullX{position:fixed;right:14px;bottom:14px;z-index:8920;background:#1c1f26ee;border:1px solid #4a5262;color:#e8eef4;border-radius:22px;padding:9px 16px;font-size:14px;box-shadow:0 6px 20px #000a;cursor:pointer;font-family:inherit}';
   document.head.appendChild(st);
@@ -33887,6 +33888,8 @@ function btMapFullSync(){
   var de=document.documentElement,on=btMapFullOn()&&!!document.getElementById('losScrollWrap');
   if(btMapFullOn()&&!on)de.classList.remove('bt-mapfull');
   var c=document.getElementById('btCmd');de.style.setProperty('--btfullt',(on&&c?c.offsetHeight:0)+'px');
+  var sr=document.getElementById('losSumRow'),fixSum=on&&!!sr&&!(typeof btActive==='function'&&btActive()); /* v361: 通常モードの全画面はLOS結果の行を下に固定 */
+  de.classList.toggle('nm-sumfix',fixSum);de.style.setProperty('--nmsumh',(fixSum?sr.offsetHeight+8:0)+'px');
   var x=document.getElementById('btFullX');
   if(NM_HIDE_FULLX){if(x)x.remove();return;} /* v349(ダルマ指示「マップ上の全画面を終わるを非表示」): 終わるのは右クリック/長押しメニューの最上部かEscキー。戻す時はNM_HIDE_FULLXをfalseに */
   if(on&&!x){x=document.createElement('button');x.id='btFullX';x.textContent='✕ 全画面を終わる';x.onclick=function(){BtMapFull();};document.body.appendChild(x);}
@@ -39804,7 +39807,7 @@ function LOS_PAGE(){
       var temColor=(!hasResult||r.temB===null||r.temB===undefined)?'gld':'';
       // 2026-08変更(Kato指示): 横スクロールをやめ、5項目をカード幅内に均等縮小して
       // 一列に収める(各セルflex:1 1 0+min-width:0+overflow:hiddenで自動縮小)。
-      h+='<div class="los-sumrow sum-eq" style="display:flex;flex-wrap:nowrap;gap:4px">';
+      h+='<div class="los-sumrow sum-eq" id="losSumRow" style="display:flex;flex-wrap:nowrap;gap:4px">';
       // v11.280修正: 降雪の妨害+1は、射撃/砲撃/対戦車タブと同じscenSnowHind(S4で「降雪中」ON・射程6以上)で表示する。従来はマップの
       // 積雪SSR(S_LOS.ssr==='Snow'、S4では常に自動ON)で判定していたため、降雪中OFFでもマップだけ+1されていた。また合計+6以上で
       // 各タブは射撃不可になるのに、マップは降雪分を含めずPASSと表示していた。
@@ -39870,6 +39873,11 @@ function LOS_PAGE(){
       // 添えることで、デジタル部分の文字数を他パネルと揃えた。
       h+='<div class="sumcard" style="flex:1 1 0;min-width:0;overflow:hidden"><div class="lbl">MF'+(mfAvail!=null?'<span style="font-size:9px;color:#6a7a8a">('+T('可')+mfAvail+')</span>':'')+'</div>'
         +(mfAvail!=null?seg7(String(mfUsed),'gld',T('使用')):seg7('--','',T('使用')))+'</div>';
+      /* v361(ダルマ指示「通常モードの全画面表示時、LOS結果〜MFを常時表示。右端に全画面表示オン/オフボタン」) */
+      if(!(typeof btActive==='function'&&btActive())){var fOn=btMapFullOn();
+        h+='<button class="sumcard" onclick="BtMapFull(null)" title="'+(fOn?T('全画面表示オフ'):T('全画面表示オン'))+'" style="flex:0 0 64px;min-width:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:inherit;color:'+(fOn?'#ffd060':'#9ab')+';border-color:'+(fOn?'#ffd06088':'')+'">'
+          +'<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+(fOn?'<path d="M9 4v5H4M15 4v5h5M20 15h-5v5M4 15h5v5"/>':'<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/>')+'</svg>'
+          +'<span style="font-size:9.5px;line-height:1.1;text-align:center">'+(fOn?T('全画面')+'<br>'+T('オフ'):T('全画面')+'<br>'+T('オン'))+'</span></button>';}
       h+='</div>';
       // v11.316(Kato指示「修正は？」): 編成・携行PPを変更するとMFが変わるが、引き済みのルートは再検証されず、上限を超えたヘクスが
       // 色分け(超過表示)で残るだけで理由が分からなかった。MFパネルの直下に警告を出す。あわせて編成算出の行軍で出なかったSMC 2PP上限(4.0)の警告も追加。
