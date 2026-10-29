@@ -33003,7 +33003,38 @@ function nmRMenuItems(n){
   }
   return it;
 }
-function nmRmClearItems(n){return [{ic:'back',t:'← 戻る',sub:'消さずにメニューへ',f:"btRmReopen("+n+")"},{sep:1},{ic:'trash',t:'<span style="color:#ff7070">全てクリアする</span>',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを消す(元に戻せません)',f:"nmRmClearAll()"}];}
+/* v358(ダルマ指示「全てクリアの確認に、配置中の全敵軍マーカー・全自軍マーカー・全残骸などを表示」): 種類ごとの数と、その種類だけ消すボタン */
+function nmClearCats(){
+  var sm=Object.keys(S_LOS.smoke||{}).length,wk=0;Object.keys(S_LOS.wreckHexes||{}).forEach(function(k){wk+=S_LOS.wreckHexes[k]||0;});
+  return [
+    {k:'ab',ic:'los',t:'地点A・B',n:(S_LOS.pxA?1:0)+(S_LOS.pxB?1:0),u:'か所'},
+    {k:'route',ic:'move',t:'行軍',n:(S_LOS.route&&S_LOS.route.hexes)?S_LOS.route.hexes.filter(function(x){return !x.vcaChange;}).length:0,u:'ヘクス'},
+    {k:'friend',ic:'sel',t:'自軍マーカー',n:(S_LOS.friendHexes||[]).length,u:'個'},
+    {k:'enemy',ic:'enemy',t:'敵軍マーカー',n:(S_LOS.enemyHexes||[]).length,u:'個'},
+    {k:'wreck',ic:'wreck',t:'残骸',n:wk,u:'個'},
+    {k:'smoke',ic:'smoke',t:'煙幕',n:sm,u:'個'},
+    {k:'mark',ic:'hex',t:'建物のマーク',n:Object.keys(S_LOS.buildingMarks||{}).length,u:'個'}];
+}
+function nmRmClearItems(n){
+  var it=[{ic:'back',t:'← 戻る',sub:'消さずにメニューへ',f:"btRmReopen("+n+")"},{sep:1}],cs=nmClearCats(),tot=0;
+  cs.forEach(function(c){tot+=c.n;if(!c.n)return;it.push({ic:c.ic,t:'全'+c.t+'をクリア',sub:'配置中: '+c.n+c.u,f:"nmRmClearCat("+n+",'"+c.k+"')"});});
+  if(!tot)it.push({ic:'info',t:'地図に配置中のものはありません'});
+  it.push({sep:1});
+  it.push({ic:'trash',t:'<span style="color:#ff7070">全てクリアする</span>',sub:tot?'上の全部を消す(元に戻せません)':'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを消す',f:"nmRmClearAll()"});
+  return it;
+}
+function nmRmClearCat(n,k){
+  if(k==='ab'){S_LOS.pxA=null;S_LOS.pxB=null;S_LOS.result=null;}
+  else if(k==='route'){S_LOS.route=null;S_LOS.routeError=null;}
+  else if(k==='friend')S_LOS.friendHexes=[];
+  else if(k==='enemy'){S_LOS.enemyHexes=[];S_LOS.enemyActive=null;}
+  else if(k==='wreck'){S_LOS.wreckHexes={};S_LOS.wreckVeh={};}
+  else if(k==='smoke')S_LOS.smoke={};
+  else if(k==='mark')S_LOS.buildingMarks={};
+  BT_RMS=null;try{saveState();}catch(e){}
+  if((k==='smoke'||k==='wreck')&&S_LOS.pxA&&S_LOS.pxB){try{LosRunPixel();}catch(e){}}
+  Draw();NM_RM_SUB='clear';btRmReopen(n);
+}
 function nmRmClearAll(){BtRmClose();BT_RMS=null;if(typeof NM_TH_CAM!=='undefined')NM_TH_CAM=null;S_LOS.nmStallPop=false;LosClearMapAll();try{saveState();}catch(e){}}
 /* ---------- v337(ダルマ指示): 通常MAPの右クリック 行軍・地点Aからの移動コスト・敵の車両と砲塔の向き ---------- */
 var NM_RM_VEH=0;
@@ -33183,19 +33214,34 @@ function nmGrpItems(slot){ /* 表示する順: 指揮官→分隊(火力の高�
 function nmGrpSrcs(slot){return nmGrpItems(slot).map(function(x){return nmVaslSrc('u:'+x.nat+'|'+x.label);}).filter(Boolean);}
 function nmGrpText(slot){var it=nmGrpItems(slot),m={},o=[];it.forEach(function(x){var k=x.label.replace(/\[.*$/,'');if(!m[k]){m[k]=0;o.push(k);}m[k]++;});return o.map(function(k){return k+(m[k]>1?'×'+m[k]:'');}).join(' ');}
 function nmRmSetGrp(n,slot){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,'f');if(!eh){eh={boardId:H.boardId,col:H.col,row:H.row};nmSideList('f').push(eh);}eh.veh=null;eh.tca=null;eh.facing=null;eh.grp=slot;NM_FACE=null;try{saveState();}catch(e){}Draw();btRmReopen(n);}
+/* v358(ダルマ指示「編成A もう少しかっこよく」「何種類か」): NM_GRP_BADGE
+   'shield'=部隊章の帯(濃紺+金縁+盾) / 'tab'=カウンターの上にタブ(大きなA) / 'coin'=右上に丸いメダル / 'plate'=VASL風の白い札 */
+var NM_GRP_BADGE='shield';
+function nmGrpBadge(d,S0,g,more){
+  var h='',st=NM_GRP_BADGE,en=(S.lang==='en');
+  if(st==='tab'){var x=d.x-S0/2+10,y=d.y-S0/2-17-10;
+    h+='<path d="M'+(x)+' '+(y+17)+'v-12q0-5 5-5h16q5 0 5 5v12z" fill="#2a6fdb" stroke="#fff" stroke-width="1.4"/><text x="'+(x+13)+'" y="'+(y+14)+'" text-anchor="middle" font-size="13" font-weight="900" fill="#fff" font-family="Arial">'+g+'</text>';
+    if(more)h+='<text x="'+(x+30)+'" y="'+(y+14)+'" font-size="9" font-weight="900" fill="#fff" stroke="#000" stroke-width="2.5" paint-order="stroke">+'+more+'</text>';}
+  else if(st==='coin'){var cx=d.x+S0/2+2,cy=d.y-S0/2-8;
+    h+='<circle cx="'+(cx+1)+'" cy="'+(cy+2)+'" r="11" fill="#000" opacity=".4"/><circle cx="'+cx+'" cy="'+cy+'" r="11" fill="#1b3a78" stroke="#d4af37" stroke-width="2"/><circle cx="'+cx+'" cy="'+cy+'" r="8" fill="none" stroke="#d4af37" stroke-width=".8" stroke-dasharray="1.5 1.5"/><text x="'+cx+'" y="'+(cy+4.5)+'" text-anchor="middle" font-size="12.5" font-weight="900" fill="#ffd45a" font-family="Georgia,serif">'+g+'</text>';
+    if(more)h+='<text x="'+cx+'" y="'+(cy+20)+'" text-anchor="middle" font-size="8.5" font-weight="900" fill="#fff" stroke="#000" stroke-width="2.5" paint-order="stroke">+'+more+'</text>';}
+  else if(st==='plate'){var bw=more?50:40,bx=d.x-bw/2,by=d.y+S0/2+3;
+    h+='<rect x="'+(bx+1)+'" y="'+(by+2)+'" width="'+bw+'" height="15" rx="2" fill="#000" opacity=".4"/><rect x="'+bx+'" y="'+by+'" width="'+bw+'" height="15" rx="2" fill="#f4f0e0" stroke="#000" stroke-width="1.2"/><rect x="'+(bx+1.8)+'" y="'+(by+1.8)+'" width="'+(bw-3.6)+'" height="11.4" rx="1" fill="none" stroke="#2a6fdb" stroke-width="1"/>';
+    h+='<text x="'+(d.x-(more?5:0))+'" y="'+(by+11.3)+'" text-anchor="middle" font-size="9.5" font-weight="900" fill="#13254a" font-family="Arial">'+(en?'GRP ':'編成 ')+g+'</text>';
+    if(more)h+='<text x="'+(bx+bw-3)+'" y="'+(by+11)+'" text-anchor="end" font-size="8" font-weight="700" fill="#555">+'+more+'</text>';}
+  else{var bw=more?54:44,bx=d.x-bw/2,by=d.y+S0/2+3;
+    h+='<rect x="'+(bx+1)+'" y="'+(by+2)+'" width="'+bw+'" height="16" rx="3" fill="#000" opacity=".45"/><rect x="'+bx+'" y="'+by+'" width="'+bw+'" height="16" rx="3" fill="#13254a" stroke="#d4af37" stroke-width="1.3"/>';
+    h+='<path d="M'+(bx+4)+' '+(by+3.5)+'h9v5.5q0 4-4.5 5.5q-4.5-1.5-4.5-5.5z" fill="#2a6fdb" stroke="#d4af37" stroke-width="1"/>';
+    h+='<text x="'+(bx+16)+'" y="'+(by+12)+'" font-size="8" font-weight="700" fill="#cfd8e8" font-family="sans-serif" letter-spacing=".5">'+(en?'GRP':'編成')+'</text>';
+    h+='<text x="'+(bx+bw-(more?16:5))+'" y="'+(by+12.5)+'" text-anchor="end" font-size="11.5" font-weight="900" fill="#ffd45a" font-family="Georgia,serif">'+g+'</text>';
+    if(more)h+='<text x="'+(bx+bw-4)+'" y="'+(by+12)+'" text-anchor="end" font-size="8" font-weight="700" fill="#cfd8e8">+'+more+'</text>';}
+  return h;
+}
 function nmGrpSVG(eh,d){
   var srcs=nmGrpSrcs(eh.grp),S0=46,h='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">',k=Math.min(3,srcs.length);
   if(!k)return nmPlainMarkSVG('f',d,eh);
   for(var i=k-1;i>=0;i--){var o=i*5;h+='<rect x="'+(d.x-S0/2+o+1.5)+'" y="'+(d.y-S0/2-o+2)+'" width="'+S0+'" height="'+S0+'" rx="3" fill="#000" opacity=".35"/><image href="'+srcs[i]+'" x="'+(d.x-S0/2+o)+'" y="'+(d.y-S0/2-o)+'" width="'+S0+'" height="'+S0+'"/>';}
-  /* v358(ダルマ指示「編成A もう少しかっこよく」): 部隊章風の札(濃紺の帯に金の縁、左に盾、右に文字A/B) */
-  var more=srcs.length>3?srcs.length-3:0,bw=more?54:44,bx=d.x-bw/2,by=d.y+S0/2+3;
-  h+='<g filter="none"><rect x="'+(bx+1)+'" y="'+(by+2)+'" width="'+bw+'" height="16" rx="3" fill="#000" opacity=".45"/>';
-  h+='<rect x="'+bx+'" y="'+by+'" width="'+bw+'" height="16" rx="3" fill="#13254a" stroke="#d4af37" stroke-width="1.3"/>';
-  h+='<path d="M'+(bx+4)+' '+(by+3.5)+'h9v5.5q0 4-4.5 5.5q-4.5-1.5-4.5-5.5z" fill="#2a6fdb" stroke="#d4af37" stroke-width="1"/>';
-  h+='<text x="'+(bx+16)+'" y="'+(by+12)+'" font-size="8" font-weight="700" fill="#cfd8e8" font-family="sans-serif" letter-spacing=".5">'+(S.lang==='en'?'GRP':'編成')+'</text>';
-  h+='<text x="'+(bx+bw-(more?16:5))+'" y="'+(by+12.5)+'" text-anchor="end" font-size="11.5" font-weight="900" fill="#ffd45a" font-family="Georgia,serif">'+eh.grp+'</text>';
-  if(more)h+='<text x="'+(bx+bw-4)+'" y="'+(by+12)+'" text-anchor="end" font-size="8" font-weight="700" fill="#cfd8e8">+'+more+'</text>';
-  h+='</g>';
+  h+=nmGrpBadge(d,S0,eh.grp,srcs.length>3?srcs.length-3:0);
   return h+'</g>';
 }
 function nmRmFriendDel(){var H=NM_RM_HEX;if(!H)return;BtRmClose();var l=nmSideList('f');for(var i=l.length-1;i>=0;i--)if(l[i].boardId===H.boardId&&l[i].col===H.col&&l[i].row===H.row)l.splice(i,1);try{saveState();}catch(e){}Draw();}
