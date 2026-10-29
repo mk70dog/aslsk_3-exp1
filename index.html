@@ -33078,7 +33078,7 @@ function nmDragGhost(x,y){
 }
 /* v354(ダルマ指示「ドラッグ&ドロップでドロップ前に候補ヘクスを分かるように」): NM_DROP_STYLE
    'hex'=置き先のヘクスを塗る(緑=置ける/赤=置けない) / 'snap'=置き先にカウンターの影+ヘクスの縁 / 'line'=元の位置から点線と距離+ヘクスの縁 / null=なし */
-var NM_DROP_STYLE='hex';
+var NM_DROP_STYLE='line'; /* ダルマ選択: 案3 */
 function nmDropSVG(){
   var D=NM_DRAG;if(!D||!D.moving||D.tn==null||!NM_DROP_STYLE||!btGraphReady())return '';
   var dl=losComputeDisplayLayout(),c=btDispPt(D.tn,dl),ok=D.ok,col=ok?'#40ff70':'#ff4040',h='';
@@ -33724,7 +33724,9 @@ function btRmKeep(n){
     if(g&&el&&p){var r=g.getBoundingClientRect();el.scrollLeft+=(r.left+r.width/2)-p.x;el.scrollTop+=(r.top+r.height/2)-p.y;try{losSaveMapScroll();}catch(e){}}
   },0);
 }
-function btRmReopen(n){var keep=BT_RM_XY;btRMenu(n);BT_RM_XY=keep;}
+function btRmReopen(n){var keep=BT_RM_XY,ob=document.querySelector('#btRm .rmBox'),st=ob?ob.scrollTop:0,pos=ob?{l:ob.style.left,t:ob.style.top}:null;btRMenu(n);BT_RM_XY=keep;
+  /* v354(バグ修正 ダルマ報告「車両の向き・砲塔の向き変更時にボタンを押すとメニューが上にスクロールする」): 開き直した時に、メニューの中のスクロール位置と置き場所を保つ(同じメニューの中で操作した時) */
+  var nb=document.querySelector('#btRm .rmBox');if(nb&&ob){if(pos&&nb.offsetHeight<=innerHeight-16){nb.style.left=pos.l;nb.style.top=pos.t;var r=nb.getBoundingClientRect();if(r.bottom>innerHeight-8)nb.style.top=Math.max(8,innerHeight-8-r.height)+'px';}nb.scrollTop=st;}}
 function BtRmZoom(n,d){LosZoom(d);BT.rmHex=n;Draw();btRmKeep(n);setTimeout(function(){btRmReopen(n);},10);}
 function BtRmRot(n,d){LosRotateViewBy(d);BT.rmHex=n;Draw();btRmKeep(n);setTimeout(function(){btRmReopen(n);},10);}
 // マップの全画面: 地図の枠を画面いっぱいに固定(指示パネルがあれば上に固定して、その下から地図)
