@@ -27888,6 +27888,21 @@ function losVehicleRouteMarkerImg(isStart){
   return isStart?(en?LOS_ROUTE_VEHICLE_START_DEFAULT_EN_IMG_B64:LOS_ROUTE_VEHICLE_START_DEFAULT_IMG_B64):LOS_ROUTE_VEHICLE_MARKER_IMG_B64;
 }
 
+/* v343(ダルマ指示「マップ上のカウンターもVASLカウンターで表示」): 行軍のマーカーをVASLカウンターに(車両=その車両、歩兵=射撃判定タブの編成の分隊→指揮官)。画像が無ければ従来のマーカー */
+function nmRouteCtrSrc(){
+  if(S_LOS.mfEntityType==='vehicle')return S_LOS.mfVehicleId?nmVaslSrc(S_LOS.mfVehicleId):null;
+  var g=null;try{g=losPrimaryFireGroup();}catch(e){}var it=(g&&g.pickerItems)||[],src=null;
+  ['mmc','smc'].some(function(k){return it.some(function(x){if(x.kind!==k)return false;var v=nmVaslSrc('u:'+x.nat+'|'+x.label);if(v){src=v;return true;}return false;});});
+  return src;
+}
+function nmRouteCtrSVG(src,d,o){
+  var Z=46,h='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"'+(o.start||o.last?'':' opacity="0.8"')+'>';
+  h+='<rect x="'+(d.x-Z/2-2)+'" y="'+(d.y-Z/2-2)+'" width="'+(Z+4)+'" height="'+(Z+4)+'" rx="4" fill="none" stroke="#4499ee" stroke-width="2"/>';
+  h+='<image href="'+src+'" x="'+(d.x-Z/2)+'" y="'+(d.y-Z/2)+'" width="'+Z+'" height="'+Z+'"/>';
+  if(o.start)h+='<rect x="'+(d.x-13)+'" y="'+(d.y-Z/2-15)+'" width="26" height="13" rx="3" fill="#0f0f0f" stroke="#fff" stroke-width="1.2"/><text x="'+d.x+'" y="'+(d.y-Z/2-5)+'" text-anchor="middle" font-size="9" font-weight="900" fill="#fff" font-family="sans-serif">'+(S.lang==='en'?'START':'起点')+'</text>';
+  if(o.cx){var cxs=btVcImg('MS/cx.gif');if(cxs)h+='<image href="'+cxs+'" x="'+(d.x+Z/2-18)+'" y="'+(d.y-Z/2-4)+'" width="22" height="22"/>';}
+  return h+'</g>';
+}
 function losMoveRouteOverlaySVG(dispLayout){
   var rt=S_LOS.route;
   if(!rt||!rt.hexes||!rt.hexes.length)return '';
@@ -27927,9 +27942,12 @@ function losMoveRouteOverlaySVG(dispLayout){
       // 動的バッジ描画(Arial Black指定・和文非対応でフォールバックし見た目が不一致だった)
       // を廃止し、兵士版と完全に同一デザイン(Noto Sans CJK JP Black焼き込み)に統一する。
       var startImg=(S_LOS.mfEntityType==='vehicle')?losVehicleRouteMarkerImg(true):(S.lang==="en"?LOS_ROUTE_START_MARKER_EN_IMG_B64:LOS_ROUTE_START_MARKER_IMG_B64); // 2026-09追加(Kato指示「起点マーカー英語対応: 方針1」): 歩兵用起点マーカーもS.lang==="en"時はバッジ部分を「START」に差し替え済みのEN版を使用
+      var nmSrcS=nmRouteCtrSrc();
+      if(nmSrcS)h+=nmRouteCtrSVG(nmSrcS,d,{start:true}); /* v343(ダルマ指示「マップ上のカウンターもVASLカウンターで表示」) */
+      else{
       h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
       h+='<image href="data:image/png;base64,'+startImg+'" x="'+(d.x-siw/2)+'" y="'+(d.y-sih/2)+'" width="'+siw+'" height="'+sih+'" preserveAspectRatio="xMidYMid meet"/>';
-      h+='</g>';
+      h+='</g>';}
       // 2026-09追加(ダルマ指摘「行軍の際に最初に向きの設定ができない、敵軍と同じ仕組みで向きを
       // 設定できるようにする」): 起点ヘクスに初期VCA(cell.vca)が設定済みの場合、敵軍マーカーと
       // 全く同じ頂点向きモデル(fOffset=盤面回転+固定30度)で方角矢印を描画する。アイコンの
@@ -27957,7 +27975,9 @@ function losMoveRouteOverlaySVG(dispLayout){
       var routeImg=(S_LOS.mfEntityType==='vehicle')?losVehicleRouteMarkerImg():(inCX?LOS_ROUTE_CX_MARKER_IMG_B64:LOS_ROUTE_NORMAL_MARKER_IMG_B64);
       // 2026-09追加(ダルマ指示「移動時の車両方向変更にも使用」): 向き変更ステップ(vcaChange)は
       // 直前のヘクスと同座標のため、マーカー画像は重ねて描かない(MPバッジと矢印のみ更新する)。
-      if(!cell.vcaChange){
+      var nmSrcR=cell.vcaChange?null:nmRouteCtrSrc();
+      if(nmSrcR)h+=nmRouteCtrSVG(nmSrcR,d,{cx:inCX,last:idx===rt.hexes.length-1}); /* v343: VASLカウンター */
+      else if(!cell.vcaChange){
       h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
       h+='<image href="data:image/png;base64,'+routeImg+'" x="'+(d.x-riw/2)+'" y="'+(d.y-rih/2)+'" width="'+riw+'" height="'+rih+'" preserveAspectRatio="xMidYMid meet"/>';
       h+='</g>';
@@ -28009,6 +28029,7 @@ function losMoveRouteOverlaySVG(dispLayout){
     var mfTotalH=mfLines.length*mfBoxH+(mfLines.length-1)*mfGap;
     h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
     var mfRowY=d.y+rih/2-mfMargin-mfTotalH;
+    if(nmRouteCtrSrc())mfRowY=d.y+rih/2+1; /* v343: VASLカウンターの数値を隠さないよう、カウンターの下に出す */
     for(var mfi=0;mfi<mfLines.length;mfi++){
       var mfTxt=mfLines[mfi];
       var mfBoxW=Math.round(mfTxt.length*mfFontSize*0.62)+mfPadX*2;
