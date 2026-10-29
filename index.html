@@ -32699,8 +32699,9 @@ function btLosRTap(n){
 // ---------- v309(ダルマ指示「マップを右クリック時に選択メニュー(LOS・スタックの詳細など)」) ----------
 var BT_RM_XY=null;
 function btRMenuItems(n){
+  if(NM_RM_SUB==='tabs'){NM_RM_SUB=null;return nmRmTabItems(n);}
   var it=[],L=BT.losAB,here=btStacksAtN(n),N=BTG.nodes[n];
-  it.push({ic:'full',t:btMapFullOn()?'全画面表示オフ':'全画面表示オン',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに(指示パネルは上に表示)',f:"BtMapFull("+n+")"});it.push({sep:1}); /* v349(ダルマ指示「全画面表示切り替えをメニューの最上部に」) */
+  it.push({ic:'full',t:btMapFullOn()?'全画面表示オフ':'全画面表示オン',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに(指示パネルは上に表示)',f:"BtMapFull("+n+")"});it.push({ic:'tabs',t:'タブ移動',sub:'ほかのタブへ移る(全画面はMAPに戻ると全画面のまま)',f:"nmRmSubOpen('tabs',"+n+")"});it.push({sep:1}); /* v349(ダルマ指示「全画面表示切り替えをメニューの最上部に」)・v360 タブ移動 */
   // LOS
   if(L&&L.a!=null&&L.a!==n)it.push({ic:'losB',t:'このヘクスまでのLOS(B)',sub:BTG.nodes[L.a].nm+' → '+N.nm,f:"btRmLos("+n+",'b')"});
   it.push({ic:'los',t:'このヘクスからLOS(A)',sub:'次に右クリックした地点までを測る',f:"btRmLos("+n+",'a')"});
@@ -32956,10 +32957,11 @@ function nmRMenuItems(n){
   var H=NM_RM_HEX,it=[],N=(n>=0)?BTG.nodes[n]:null;
   if(NM_FACE)return nmRmFaceItems(n,NM_FACE.sd);
   if(NM_RM_VEH){var vsd=NM_RM_VEH===1?'e':NM_RM_VEH;NM_RM_VEH=0;return nmRmVehItems(n,vsd);}
-  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);}
+  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);if(sk==='tabs')return nmRmTabItems(n);}
   var nm=N?N.nm:btHexName(H.boardId,H.col,H.row),terr=N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')):'';
   var hasA=!!S_LOS.pxA;
   it.push({ic:'full',t:btMapFullOn()?'全画面表示オフ':'全画面表示オン',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに',f:"BtMapFull("+(n>=0?n:'null')+")"}); /* v349: 最上部 */
+  it.push({ic:'tabs',t:'タブ移動',sub:'ほかのタブへ移る(全画面はMAPに戻ると全画面のまま)',f:"nmRmSubOpen('tabs',"+n+")"}); /* v360 */
   it.push({ic:'trash',t:'全てクリア',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを全部消す(確認あり)',f:"nmRmSubOpen('clear',"+n+")"});it.push({sep:1}); /* v345(ダルマ指示「右クリックに全てクリアを追加」)・v349「2番目に」 */
   it.push({ic:'los',t:'このヘクスを地点Aに',sub:nm+(terr?'　'+terr:''),f:"nmRmAB('a')"});
   if(hasA)it.push({ic:'losB',t:'このヘクスを地点Bに(LOS判定)',sub:'A → '+nm,f:"nmRmAB('b')"});
@@ -33256,6 +33258,26 @@ function nmRmSetFaceF(n,d){var eh=NM_RM_HEX&&nmUnitAt(NM_RM_HEX,'f');if(!eh||d==
 function nmRmSetTcaF(n,d){var eh=NM_RM_HEX&&nmUnitAt(NM_RM_HEX,'f');if(!eh)return;eh.tca=(d==null||(eh.tca===d&&!NM_FACE))?null:d;try{saveState();}catch(e){}Draw();btRmReopen(n);}
 /* v338(ダルマ指示「行軍もシナリオ登場車両を選択式にして車両の能力を反映(カウンター)」「煙幕もカウンター・種類選択」) */
 var NM_RM_SUB=null;
+/* v360(ダルマ指示「右クリックメニューにタブ移動。全画面表示からタブ移動で移動してマップに戻る際は全画面表示のまま」) */
+var NM_TABS=[['rally','回復/修理/回収'],['fire','射撃/残留火力'],['gun','砲撃'],['afv','装甲戦闘車両'],['latw','軽対戦車兵器'],['move','ボグ/人力/煙幕'],['dc','爆薬配置/起動'],['rout','潰走/阻止'],['aphcc','突撃/白兵戦'],['mc','士気/損耗'],['ref','早見表'],['unit','ユニット'],['scen','シナリオ']];
+var NM_FULL_RESUME=false;
+function nmRmTabItems(n){
+  var it=[{ic:'back',t:'← 戻る',sub:'タブを選ぶ'+(btMapFullOn()?'(MAPに戻ると全画面のまま)':''),f:"btRmReopen("+n+")"},{sep:1}];
+  NM_TABS.forEach(function(t){it.push({ic:'tabgo',t:T(t[1]),f:"nmRmTabGo('"+t[0]+"')"});});
+  return it;
+}
+function nmRmTabGo(t){
+  var full=btMapFullOn();BtRmClose();
+  if(full){NM_FULL_RESUME=true;document.documentElement.classList.remove('bt-mapfull');try{btMapFullSync();}catch(e){}}
+  NAVTAB(t);try{window.scrollTo(0,0);}catch(e){}
+}
+(function(){ /* MAPに戻った時に全画面へ戻す */
+  if(typeof window==='undefined'||window.__nmTabWrap)return;window.__nmTabWrap=1;
+  var orig=window.NAVTAB;if(typeof orig!=='function')return;
+  window.NAVTAB=function(t){var r=orig.apply(this,arguments);
+    if(t==='los'&&NM_FULL_RESUME){NM_FULL_RESUME=false;setTimeout(function(){if(!document.getElementById('losScrollWrap'))return;document.documentElement.classList.add('bt-mapfull');try{localStorage.setItem('aslsk_bt_mapfull','1');}catch(e){}Draw();setTimeout(btMapFullSync,0);},0);}
+    return r;};
+})();
 function nmRmSubOpen(k,n){NM_RM_SUB=k;btRmReopen(n);}
 function nmMarchVehList(){var ids=scenarioAfvIdsByVehId();return AFV_DATA.filter(function(v){return v.mp!=null&&v.lbl&&(!ids||ids[v.id]);});}
 function nmMarchVeh(){var l=nmMarchVehList();return l.filter(function(v){return v.id===S_LOS.mfVehicleId;})[0]||null;}
@@ -33440,6 +33462,8 @@ var NM_IC={
   eye:['#2a6fdb','<circle cx="8" cy="14" r="3.6"/><circle cx="16" cy="14" r="3.6"/><path d="M10.8 12.5h2.4M5.2 11l2-4.5h2.6M18.8 11l-2-4.5h-2.6"/>'],
   tgt:['#c026d3','<circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="1" fill="#fff"/><path d="M12 3.5v4M12 16.5v4M3.5 12h4M16.5 12h4"/>'],
   fire:['#c026d3','<circle cx="12" cy="12" r="5.5"/><path d="M12 3.5v4M12 16.5v4M3.5 12h4M16.5 12h4"/>'],
+  tabs:['#5a6f8a','<rect x="4" y="7" width="16" height="12" rx="2"/><path d="M4 10h16M7 7V5h5v2"/>'],
+  tabgo:['#5a6f8a','<path d="M9 6l6 6-6 6"/>'],
   firefrom:['#e08a1a','<circle cx="7" cy="17" r="3"/><path d="M9.6 14.4L18 6M13.5 6H18v4.5"/><path d="M17 15.5l2 2M15 18.5l1.5 1.5" stroke-width="1.6"/>'],
   fan:['#d08a2a','<path d="M12 19L5.5 8a12 12 0 0 1 13 0z"/>'],
   route:['#0ea5b7','<circle cx="6.5" cy="17.5" r="2"/><path d="M8.5 16Q10 9 15 10T18 6" stroke-dasharray="2.6 2.2"/><path d="M15.5 4.5l4.5 1-2.3 4" />'],
