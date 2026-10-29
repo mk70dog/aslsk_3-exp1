@@ -32743,7 +32743,7 @@ function btRMenuItems(n){
   it.push({ic:'ctr',t:'このヘクスを画面の中央に',f:"BtRmCenter("+n+")"}); // v309-7
   // v310(ダルマ指示「右クリ 追加 マップ拡大縮小 マップ回転 マップ全画面表示」): メニューを閉じずに操作できる行
   it.push({sep:1});
-  it.push({row:1,ic:'zoom',t:'拡大・縮小',btns:[['－',"BtRmZoom("+n+",-1)",S_LOS.zoom<=LOS_ZOOM_MIN],[Math.round(S_LOS.zoom*100)+'%',null],['＋',"BtRmZoom("+n+",1)",S_LOS.zoom>=LOS_ZOOM_MAX]]});
+  it.push({row:1,ic:'zoom',t:'拡大・縮小',btns:[['－',"BtRmZoom("+n+",-1)",S_LOS.zoom<=LOS_ZOOM_MIN],[Math.round(S_LOS.zoom*100)+'%',null],['＋',"BtRmZoom("+n+",1)",S_LOS.zoom>=LOS_ZOOM_MAX]]});it.push({row:1,ic:'fitw',t:'合わせる',btns:[['↔ 横幅',"BtRmFit("+n+",'width')"],['↕ 縦幅',"BtRmFit("+n+",'height')"]]}); /* v361(ダルマ指示「メニューに↔↕を追加」) */
   it.push({row:1,ic:'rot',t:'回転',btns:[['90°L',"BtRmRot("+n+",-90)"],['90°R',"BtRmRot("+n+",90)"]]});
   return it;
 }
@@ -33002,7 +33002,7 @@ function nmRMenuItems(n){
   it.push({sep:1});
   if(n>=0){it.push({ic:'hex',t:'このヘクスの情報・地形のルール',sub:nm+' '+terr,f:"nmRmInfo("+n+")"});
     it.push({ic:'ctr',t:'このヘクスを画面の中央に',f:"BtRmCenter("+n+")"});
-    it.push({row:1,ic:'zoom',t:'拡大・縮小',btns:[['－',"BtRmZoom("+n+",-1)",S_LOS.zoom<=LOS_ZOOM_MIN],[Math.round(S_LOS.zoom*100)+'%',null],['＋',"BtRmZoom("+n+",1)",S_LOS.zoom>=LOS_ZOOM_MAX]]});
+    it.push({row:1,ic:'zoom',t:'拡大・縮小',btns:[['－',"BtRmZoom("+n+",-1)",S_LOS.zoom<=LOS_ZOOM_MIN],[Math.round(S_LOS.zoom*100)+'%',null],['＋',"BtRmZoom("+n+",1)",S_LOS.zoom>=LOS_ZOOM_MAX]]});it.push({row:1,ic:'fitw',t:'合わせる',btns:[['↔ 横幅',"BtRmFit("+n+",'width')"],['↕ 縦幅',"BtRmFit("+n+",'height')"]]}); /* v361(ダルマ指示「メニューに↔↕を追加」) */
     it.push({row:1,ic:'rot',t:'回転',btns:[['90°L',"BtRmRot("+n+",-90)"],['90°R',"BtRmRot("+n+",90)"]]});
   }
   return it;
@@ -33472,6 +33472,7 @@ var NM_IC={
   eye:['#2a6fdb','<circle cx="8" cy="14" r="3.6"/><circle cx="16" cy="14" r="3.6"/><path d="M10.8 12.5h2.4M5.2 11l2-4.5h2.6M18.8 11l-2-4.5h-2.6"/>'],
   tgt:['#c026d3','<circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="1" fill="#fff"/><path d="M12 3.5v4M12 16.5v4M3.5 12h4M16.5 12h4"/>'],
   fire:['#c026d3','<circle cx="12" cy="12" r="5.5"/><path d="M12 3.5v4M12 16.5v4M3.5 12h4M16.5 12h4"/>'],
+  fitw:['#5a6f8a','<path d="M4 12h16M7 9l-3 3 3 3M17 9l3 3-3 3M12 4v16M9 7l3-3 3 3M9 17l3 3 3-3" stroke-width="1.7"/>'],
   tabs:['#5a6f8a','<rect x="4" y="7" width="16" height="12" rx="2"/><path d="M4 10h16M7 7V5h5v2"/>'],
   tabgo:['#5a6f8a','<path d="M9 6l6 6-6 6"/>'],
   firefrom:['#e08a1a','<circle cx="7" cy="17" r="3"/><path d="M9.6 14.4L18 6M13.5 6H18v4.5"/><path d="M17 15.5l2 2M15 18.5l1.5 1.5" stroke-width="1.6"/>'],
@@ -33891,6 +33892,10 @@ function btRmKeep(n){
     var g=document.getElementById('btRmHexC'),el=document.getElementById('losScrollWrap'),p=BT_RM_XY;
     if(g&&el&&p){var r=g.getBoundingClientRect();el.scrollLeft+=(r.left+r.width/2)-p.x;el.scrollTop+=(r.top+r.height/2)-p.y;try{losSaveMapScroll();}catch(e){}}
   },0);
+}
+function BtRmFit(n,ax){ /* v361: ツールバーの↔(横幅に合わせる)・↕(縦幅に合わせる)。メニューは開いたまま */
+  losSaveMapScroll();losApplyFit(ax);try{losSaveZoom();}catch(e){}S_LOS.vStep=0;BT.rmHex=n;Draw();
+  setTimeout(function(){var e=document.getElementById('losScrollWrap');if(e){e.scrollLeft=S_LOS.scrollLeft;e.scrollTop=S_LOS.scrollTop;}btRmReopen(n);},30);
 }
 function btRmReopen(n){var keep=BT_RM_XY,ob=document.querySelector('#btRm .rmBox'),st=ob?ob.scrollTop:0,pos=ob?{l:ob.style.left,t:ob.style.top}:null;btRMenu(n);BT_RM_XY=keep;
   /* v354(バグ修正 ダルマ報告「車両の向き・砲塔の向き変更時にボタンを押すとメニューが上にスクロールする」): 開き直した時に、メニューの中のスクロール位置と置き場所を保つ(同じメニューの中で操作した時) */
