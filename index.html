@@ -31874,12 +31874,17 @@ function btVehOverlaySVG(dispLayout){
       if(k==='wreck'){var d=btDispPt(s.n,dispLayout);h+='<text x="'+(d.x+22)+'" y="'+(d.y-14)+'" font-size="16" font-weight="bold" fill="#ff5050" stroke="#000" stroke-width="3" paint-order="stroke">✕</text>';return;}
       if(k!=='afv'&&k!=='gun')return;
       var col=BT_SIDE_COL[s.side];
-      function arrow(f,len,wid,c2){var a=btFaceAng(f)*Math.PI/180;var p0=losCanonicalToDisplay(N.x,N.y,dispLayout),p1=losCanonicalToDisplay(N.x+Math.cos(a)*len,N.y+Math.sin(a)*len,dispLayout);
-        return '<line x1="'+p0.x+'" y1="'+p0.y+'" x2="'+p1.x+'" y2="'+p1.y+'" stroke="#000" stroke-width="'+(wid+3)+'" stroke-linecap="round"/><line x1="'+p0.x+'" y1="'+p0.y+'" x2="'+p1.x+'" y2="'+p1.y+'" stroke="'+c2+'" stroke-width="'+wid+'" stroke-linecap="round"/><circle cx="'+p1.x+'" cy="'+p1.y+'" r="'+(wid+1)+'" fill="'+c2+'" stroke="#000" stroke-width="1.5"/>';}
+      /* v331(ダルマ指示): 車両の向きの棒の先を丸から矢印(三角)に。砲塔の棒の先には丸い「砲」マークを直接置く */
+      function arrow(f,len,wid,c2,tip){var a=btFaceAng(f)*Math.PI/180;var p0=losCanonicalToDisplay(N.x,N.y,dispLayout),p1=losCanonicalToDisplay(N.x+Math.cos(a)*len,N.y+Math.sin(a)*len,dispLayout);
+        var dx=p1.x-p0.x,dy=p1.y-p0.y,dl=Math.sqrt(dx*dx+dy*dy)||1,ux=dx/dl,uy=dy/dl,L=wid*2.6+4,W=wid*1.6+2;
+        var bx=p1.x-ux*L,by=p1.y-uy*L;
+        function ln(w,c,x2,y2){return '<line x1="'+p0.x+'" y1="'+p0.y+'" x2="'+x2+'" y2="'+y2+'" stroke="'+c+'" stroke-width="'+w+'" stroke-linecap="round"/>';}
+        if(tip==='badge')return ln(wid+3,'#000',p1.x,p1.y)+ln(wid,c2,p1.x,p1.y)
+          +'<g transform="rotate('+(-S_LOS.viewRot)+' '+p1.x+' '+p1.y+')"><circle cx="'+p1.x+'" cy="'+p1.y+'" r="11" fill="#ffd040" stroke="#000" stroke-width="1.5"/><text x="'+p1.x+'" y="'+(p1.y+4.5)+'" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">砲</text></g>';
+        return ln(wid+3,'#000',bx,by)+ln(wid,c2,bx,by)
+          +'<polygon points="'+p1.x+','+p1.y+' '+(bx-uy*W)+','+(by+ux*W)+' '+(bx+uy*W)+','+(by-ux*W)+'" fill="'+c2+'" stroke="#000" stroke-width="1.5" stroke-linejoin="round"/>';}
       h+=arrow(u.vca||0,38,4,col);
-      if(k==='afv'&&u.tca!=null&&u.tca!==u.vca){h+=arrow(u.tca,46,5,'#ffd040'); // v311(ダルマ指示「砲塔の向きを変更した場合は表示」): 砲塔の矢印を太く、先に「砲塔」の札
-        var ta=btFaceAng(u.tca)*Math.PI/180,tp=losCanonicalToDisplay(N.x+Math.cos(ta)*60,N.y+Math.sin(ta)*60,dispLayout);
-        h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+tp.x+' '+tp.y+')"><rect x="'+(tp.x-11)+'" y="'+(tp.y-9)+'" width="22" height="18" rx="4" fill="#ffd040" stroke="#000" stroke-width="1.5"/><text x="'+tp.x+'" y="'+(tp.y+5)+'" text-anchor="middle" font-size="12" font-weight="bold" fill="#000">砲</text></g>';}
+      if(k==='afv'&&u.tca!=null&&u.tca!==u.vca)h+=arrow(u.tca,46,5,'#ffd040','badge'); // v311: 砲塔の向きを変更した場合は表示
     });
   });
   return h;
