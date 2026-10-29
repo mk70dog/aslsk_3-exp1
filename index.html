@@ -32700,8 +32700,9 @@ function btLosRTap(n){
 // ---------- v309(ダルマ指示「マップを右クリック時に選択メニュー(LOS・スタックの詳細など)」) ----------
 var BT_RM_XY=null;
 function btRMenuItems(n){
+  if(NM_RM_SUB==='tabs'){NM_RM_SUB=null;return nmRmTabItems(n);}
   var it=[],L=BT.losAB,here=btStacksAtN(n),N=BTG.nodes[n];
-  it.push({ic:'full',t:btMapFullOn()?'全画面表示オフ':'全画面表示オン',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに(指示パネルは上に表示)',f:"BtMapFull("+n+")"});it.push({sep:1}); /* v349(ダルマ指示「全画面表示切り替えをメニューの最上部に」) */
+  it.push({ic:'full',t:btMapFullOn()?'全画面表示オフ':'全画面表示オン',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに(指示パネルは上に表示)',f:"BtMapFull("+n+")"});it.push({ic:'tabs',t:'タブ移動',sub:'ほかのタブへ移る(全画面はMAPに戻ると全画面のまま)',f:"nmRmSubOpen('tabs',"+n+")"});it.push({sep:1}); /* v349(ダルマ指示「全画面表示切り替えをメニューの最上部に」)・v360 タブ移動 */
   // LOS
   if(L&&L.a!=null&&L.a!==n)it.push({ic:'losB',t:'このヘクスまでのLOS(B)',sub:BTG.nodes[L.a].nm+' → '+N.nm,f:"btRmLos("+n+",'b')"});
   it.push({ic:'los',t:'このヘクスからLOS(A)',sub:'次に右クリックした地点までを測る',f:"btRmLos("+n+",'a')"});
@@ -32743,7 +32744,7 @@ function btRMenuItems(n){
   it.push({ic:'ctr',t:'このヘクスを画面の中央に',f:"BtRmCenter("+n+")"}); // v309-7
   // v310(ダルマ指示「右クリ 追加 マップ拡大縮小 マップ回転 マップ全画面表示」): メニューを閉じずに操作できる行
   it.push({sep:1});
-  it.push({row:1,ic:'zoom',t:'拡大・縮小',btns:[['－',"BtRmZoom("+n+",-1)",S_LOS.zoom<=LOS_ZOOM_MIN],[Math.round(S_LOS.zoom*100)+'%',null],['＋',"BtRmZoom("+n+",1)",S_LOS.zoom>=LOS_ZOOM_MAX]]});
+  it.push({row:1,ic:'zoom',t:'拡大・縮小',btns:[['－',"BtRmZoom("+n+",-1)",S_LOS.zoom<=LOS_ZOOM_MIN],[Math.round(S_LOS.zoom*100)+'%',null],['＋',"BtRmZoom("+n+",1)",S_LOS.zoom>=LOS_ZOOM_MAX]]});it.push({row:1,ic:'fitw',t:'合わせる',btns:[['↔ 横幅',"BtRmFit("+n+",'width')"],['↕ 縦幅',"BtRmFit("+n+",'height')"]]}); /* v361(ダルマ指示「メニューに↔↕を追加」) */
   it.push({row:1,ic:'rot',t:'回転',btns:[['90°L',"BtRmRot("+n+",-90)"],['90°R',"BtRmRot("+n+",90)"]]});
   return it;
 }
@@ -32957,10 +32958,11 @@ function nmRMenuItems(n){
   var H=NM_RM_HEX,it=[],N=(n>=0)?BTG.nodes[n]:null;
   if(NM_FACE)return nmRmFaceItems(n,NM_FACE.sd);
   if(NM_RM_VEH){var vsd=NM_RM_VEH===1?'e':NM_RM_VEH;NM_RM_VEH=0;return nmRmVehItems(n,vsd);}
-  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);}
+  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);if(sk==='tabs')return nmRmTabItems(n);}
   var nm=N?N.nm:btHexName(H.boardId,H.col,H.row),terr=N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')):'';
   var hasA=!!S_LOS.pxA;
   it.push({ic:'full',t:btMapFullOn()?'全画面表示オフ':'全画面表示オン',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに',f:"BtMapFull("+(n>=0?n:'null')+")"}); /* v349: 最上部 */
+  it.push({ic:'tabs',t:'タブ移動',sub:'ほかのタブへ移る(全画面はMAPに戻ると全画面のまま)',f:"nmRmSubOpen('tabs',"+n+")"}); /* v360 */
   it.push({ic:'trash',t:'全てクリア',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを全部消す(確認あり)',f:"nmRmSubOpen('clear',"+n+")"});it.push({sep:1}); /* v345(ダルマ指示「右クリックに全てクリアを追加」)・v349「2番目に」 */
   it.push({ic:'los',t:'このヘクスを地点Aに',sub:nm+(terr?'　'+terr:''),f:"nmRmAB('a')"});
   if(hasA)it.push({ic:'losB',t:'このヘクスを地点Bに(LOS判定)',sub:'A → '+nm,f:"nmRmAB('b')"});
@@ -33001,7 +33003,7 @@ function nmRMenuItems(n){
   it.push({sep:1});
   if(n>=0){it.push({ic:'hex',t:'このヘクスの情報・地形のルール',sub:nm+' '+terr,f:"nmRmInfo("+n+")"});
     it.push({ic:'ctr',t:'このヘクスを画面の中央に',f:"BtRmCenter("+n+")"});
-    it.push({row:1,ic:'zoom',t:'拡大・縮小',btns:[['－',"BtRmZoom("+n+",-1)",S_LOS.zoom<=LOS_ZOOM_MIN],[Math.round(S_LOS.zoom*100)+'%',null],['＋',"BtRmZoom("+n+",1)",S_LOS.zoom>=LOS_ZOOM_MAX]]});
+    it.push({row:1,ic:'zoom',t:'拡大・縮小',btns:[['－',"BtRmZoom("+n+",-1)",S_LOS.zoom<=LOS_ZOOM_MIN],[Math.round(S_LOS.zoom*100)+'%',null],['＋',"BtRmZoom("+n+",1)",S_LOS.zoom>=LOS_ZOOM_MAX]]});it.push({row:1,ic:'fitw',t:'合わせる',btns:[['↔ 横幅',"BtRmFit("+n+",'width')"],['↕ 縦幅',"BtRmFit("+n+",'height')"]]}); /* v361(ダルマ指示「メニューに↔↕を追加」) */
     it.push({row:1,ic:'rot',t:'回転',btns:[['90°L',"BtRmRot("+n+",-90)"],['90°R',"BtRmRot("+n+",90)"]]});
   }
   return it;
@@ -33266,6 +33268,36 @@ function nmRmSetFaceF(n,d){var eh=NM_RM_HEX&&nmUnitAt(NM_RM_HEX,'f');if(!eh||d==
 function nmRmSetTcaF(n,d){var eh=NM_RM_HEX&&nmUnitAt(NM_RM_HEX,'f');if(!eh)return;eh.tca=(d==null||(eh.tca===d&&!NM_FACE))?null:d;try{saveState();}catch(e){}Draw();btRmReopen(n);}
 /* v338(ダルマ指示「行軍もシナリオ登場車両を選択式にして車両の能力を反映(カウンター)」「煙幕もカウンター・種類選択」) */
 var NM_RM_SUB=null;
+/* v360(ダルマ指示「右クリックメニューにタブ移動。全画面表示からタブ移動で移動してマップに戻る際は全画面表示のまま」) */
+var NM_TABS=[['rally','回復/修理/回収'],['fire','射撃/残留火力'],['gun','砲撃'],['afv','装甲戦闘車両'],['latw','軽対戦車兵器'],['move','ボグ/人力/煙幕'],['dc','爆薬配置/起動'],['rout','潰走/阻止'],['aphcc','突撃/白兵戦'],['mc','士気/損耗'],['ref','早見表'],['unit','ユニット'],['scen','シナリオ']];
+var NM_FULL_RESUME=false;
+var NM_FULL_TABS=['fire','gun','afv','latw','move','ref','scen'];
+var NM_FULL_DEFAULT=true; /* v361: MAPタブを開いた時は全画面(falseで従来どおり) */
+function nmRmTabItems(n){
+  var it=[{ic:'back',t:'← 戻る',sub:'タブを選ぶ'+(btMapFullOn()?'(MAPに戻ると全画面のまま)':''),f:"btRmReopen("+n+")"},{sep:1}];
+  NM_TABS.forEach(function(t){it.push({ic:'tabgo',t:T(t[1]),f:"nmRmTabGo('"+t[0]+"')"});});
+  return it;
+}
+function nmRmTabGo(t){
+  var full=btMapFullOn();BtRmClose();
+  if(full){NM_FULL_RESUME=true;document.documentElement.classList.remove('bt-mapfull');try{btMapFullSync();}catch(e){}}
+  NAVTAB(t);try{window.scrollTo(0,0);}catch(e){}
+}
+(function(){ /* v361: 起動時にMAPタブが開いていたら全画面にする */
+  if(typeof window==='undefined'||window.__nmFullBoot)return;window.__nmFullBoot=1;
+  var tries=0,iv=setInterval(function(){tries++;if(tries>40){clearInterval(iv);return;}
+    if(typeof S==='undefined'||!S||!document.getElementById('losScrollWrap'))return;clearInterval(iv);
+    if(S.tab==='los'&&NM_FULL_DEFAULT&&!btMapFullOn()&&!(typeof btActive==='function'&&btActive()))BtMapFull(null);},250);
+})();
+(function(){ /* MAPに戻った時に全画面へ戻す */
+  if(typeof window==='undefined'||window.__nmTabWrap)return;window.__nmTabWrap=1;
+  var orig=window.NAVTAB;if(typeof orig!=='function')return;
+  window.NAVTAB=function(t){var prev=S.tab,r=orig.apply(this,arguments);
+    /* v361(ダルマ指示「マップタブはデフォルトを全画面表示にする」): 通常モードでMAPタブを開いたら全画面にする(全画面オフで普通の表示にできる) */
+    if(t==='los'&&prev!=='los'&&NM_FULL_DEFAULT&&!NM_FULL_RESUME){setTimeout(function(){if(S.tab!=='los'||btMapFullOn()||(typeof btActive==='function'&&btActive()))return;if(!document.getElementById('losScrollWrap'))return;BtMapFull(null);},60);}
+    if(t==='los'&&NM_FULL_RESUME){NM_FULL_RESUME=false;setTimeout(function(){if(!document.getElementById('losScrollWrap'))return;document.documentElement.classList.add('bt-mapfull');try{localStorage.setItem('aslsk_bt_mapfull','1');}catch(e){}Draw();setTimeout(btMapFullSync,0);},0);}
+    return r;};
+})();
 function nmRmSubOpen(k,n){NM_RM_SUB=k;btRmReopen(n);}
 function nmMarchVehList(){var ids=scenarioAfvIdsByVehId();return AFV_DATA.filter(function(v){return v.mp!=null&&v.lbl&&(!ids||ids[v.id]);});}
 function nmMarchVeh(){var l=nmMarchVehList();return l.filter(function(v){return v.id===S_LOS.mfVehicleId;})[0]||null;}
@@ -33450,6 +33482,9 @@ var NM_IC={
   eye:['#2a6fdb','<circle cx="8" cy="14" r="3.6"/><circle cx="16" cy="14" r="3.6"/><path d="M10.8 12.5h2.4M5.2 11l2-4.5h2.6M18.8 11l-2-4.5h-2.6"/>'],
   tgt:['#c026d3','<circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="1" fill="#fff"/><path d="M12 3.5v4M12 16.5v4M3.5 12h4M16.5 12h4"/>'],
   fire:['#c026d3','<circle cx="12" cy="12" r="5.5"/><path d="M12 3.5v4M12 16.5v4M3.5 12h4M16.5 12h4"/>'],
+  fitw:['#5a6f8a','<path d="M4 12h16M7 9l-3 3 3 3M17 9l3 3-3 3M12 4v16M9 7l3-3 3 3M9 17l3 3 3-3" stroke-width="1.7"/>'],
+  tabs:['#5a6f8a','<rect x="4" y="7" width="16" height="12" rx="2"/><path d="M4 10h16M7 7V5h5v2"/>'],
+  tabgo:['#5a6f8a','<path d="M9 6l6 6-6 6"/>'],
   firefrom:['#e08a1a','<circle cx="7" cy="17" r="3"/><path d="M9.6 14.4L18 6M13.5 6H18v4.5"/><path d="M17 15.5l2 2M15 18.5l1.5 1.5" stroke-width="1.6"/>'],
   fan:['#d08a2a','<path d="M12 19L5.5 8a12 12 0 0 1 13 0z"/>'],
   route:['#0ea5b7','<circle cx="6.5" cy="17.5" r="2"/><path d="M8.5 16Q10 9 15 10T18 6" stroke-dasharray="2.6 2.2"/><path d="M15.5 4.5l4.5 1-2.3 4" />'],
@@ -33548,6 +33583,13 @@ function btRmLos(n,ab){
    +'html.bt-mapfull #losScrollWrap{position:fixed !important;left:0;right:0;bottom:0;top:var(--btfullt,0px);width:auto !important;max-height:none !important;z-index:8900;background:#0a0c14;border:0 !important;border-radius:0 !important;margin:0 !important}'
    +'html.bt-mapfull #main .bt-cmd{position:fixed !important;top:0 !important;left:0;right:0;margin:0 !important;z-index:8910;max-height:40vh;overflow-y:auto}'
    +'html.bt-mapfull .los-compass{display:none !important}'
+   +'#nmFullTabs{position:fixed;left:0;right:0;top:0;z-index:8912;display:flex;gap:3px;padding:3px 4px;background:#0a0c14;box-shadow:0 4px 14px #000a}#nmFullTabs .nb{flex:1 1 0;min-width:0;height:30px;padding:0 2px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#nmFullTabs .nmFullOff{flex:0 0 auto;padding:0 10px;color:#ffd060;display:flex;align-items:center;gap:4px}html.nm-sumfix #losSumRow button.sumcard{display:none !important}'
+   +'html.nm-sumfix #losScrollWrap{bottom:var(--nmsumh,0px) !important}html.nm-sumfix #losSumRow{position:fixed !important;left:0;right:0;bottom:0;z-index:8912;background:#0a0c14;padding:3px 4px;margin:0 !important;box-shadow:0 -4px 14px #000a;gap:3px !important}'
+   /* v361(ダルマ指示「なるべく縦幅を低く」): 全画面の固定行は1段(見出しを左・数字を右)にして低く */
+   +'html.nm-sumfix #losSumRow .sumcard{min-height:0 !important;padding:2px 5px !important;flex-direction:row !important;align-items:center !important;justify-content:space-between !important;gap:4px}'
+   +'html.nm-sumfix #losSumRow .sumcard .lbl{font-size:9.5px !important;margin:0 !important;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}'
+   +'html.nm-sumfix #losSumRow .seg7-wrap{zoom:.62;flex-shrink:0}'
+   +'html.nm-sumfix #losSumRow button.sumcard{flex:0 0 auto !important;flex-direction:row !important;padding:2px 8px !important}html.nm-sumfix #losSumRow button.sumcard svg{width:18px;height:18px}html.nm-sumfix #losSumRow button.sumcard span br{display:none}'
    +'html.bt-mapfull #main{z-index:8900 !important}'
    +'#btFullX{position:fixed;right:14px;bottom:14px;z-index:8920;background:#1c1f26ee;border:1px solid #4a5262;color:#e8eef4;border-radius:22px;padding:9px 16px;font-size:14px;box-shadow:0 6px 20px #000a;cursor:pointer;font-family:inherit}';
   document.head.appendChild(st);
@@ -33861,6 +33903,10 @@ function btRmKeep(n){
     if(g&&el&&p){var r=g.getBoundingClientRect();el.scrollLeft+=(r.left+r.width/2)-p.x;el.scrollTop+=(r.top+r.height/2)-p.y;try{losSaveMapScroll();}catch(e){}}
   },0);
 }
+function BtRmFit(n,ax){ /* v361: ツールバーの↔(横幅に合わせる)・↕(縦幅に合わせる)。メニューは開いたまま */
+  losSaveMapScroll();losApplyFit(ax);try{losSaveZoom();}catch(e){}S_LOS.vStep=0;BT.rmHex=n;Draw();
+  setTimeout(function(){var e=document.getElementById('losScrollWrap');if(e){e.scrollLeft=S_LOS.scrollLeft;e.scrollTop=S_LOS.scrollTop;}btRmReopen(n);},30);
+}
 function btRmReopen(n){var keep=BT_RM_XY,ob=document.querySelector('#btRm .rmBox'),st=ob?ob.scrollTop:0,pos=ob?{l:ob.style.left,t:ob.style.top}:null;btRMenu(n);BT_RM_XY=keep;
   /* v354(バグ修正 ダルマ報告「車両の向き・砲塔の向き変更時にボタンを押すとメニューが上にスクロールする」): 開き直した時に、メニューの中のスクロール位置と置き場所を保つ(同じメニューの中で操作した時) */
   var nb=document.querySelector('#btRm .rmBox');if(nb&&ob){if(pos&&nb.offsetHeight<=innerHeight-16){nb.style.left=pos.l;nb.style.top=pos.t;var r=nb.getBoundingClientRect();if(r.bottom>innerHeight-8)nb.style.top=Math.max(8,innerHeight-8-r.height)+'px';}nb.scrollTop=st;}}
@@ -33873,12 +33919,36 @@ function btMapFullSync(){
   var de=document.documentElement,on=btMapFullOn()&&!!document.getElementById('losScrollWrap');
   if(btMapFullOn()&&!on)de.classList.remove('bt-mapfull');
   var c=document.getElementById('btCmd');de.style.setProperty('--btfullt',(on&&c?c.offsetHeight:0)+'px');
+  var sr=document.getElementById('losSumRow'),fixSum=on&&!!sr&&!(typeof btActive==='function'&&btActive()); /* v361: 通常モードの全画面はLOS結果の行を下に固定 */
+  /* v361(ダルマ指示「全画面表示時に上部に(射撃〜シナリオの7タブを)横並び1列で常時表示」) */
+  var tb=document.getElementById('nmFullTabs'),nmOn=on&&!(typeof btActive==='function'&&btActive());
+  if(nmOn&&!tb){tb=document.createElement('div');tb.id='nmFullTabs';
+    tb.innerHTML=NM_FULL_TABS.map(function(k){var t=NM_TABS.filter(function(x){return x[0]===k;})[0];return '<button class="nb" onclick="nmRmTabGo(\''+k+'\')">'+T(t?t[1]:k)+'</button>';}).join('')
+      +'<button class="nb nmFullOff" onclick="BtMapFull(null)" title="'+T('全画面表示オフ')+'"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M20 15h-5v5M4 15h5v5"/></svg>'+T('全画面オフ')+'</button>'; /* v361(ダルマ指示「全画面表示ボタンを上のタブ右端に移動」) */
+    document.body.appendChild(tb);}
+  if(!nmOn&&tb){tb.remove();tb=null;}
+  if(nmOn&&tb)de.style.setProperty('--btfullt',tb.offsetHeight+'px');
+  de.classList.toggle('nm-sumfix',fixSum);de.style.setProperty('--nmsumh',(fixSum?sr.offsetHeight:0)+'px'); /* v361: すき間なし(下のページが透けないように) */
   var x=document.getElementById('btFullX');
   if(NM_HIDE_FULLX){if(x)x.remove();return;} /* v349(ダルマ指示「マップ上の全画面を終わるを非表示」): 終わるのは右クリック/長押しメニューの最上部かEscキー。戻す時はNM_HIDE_FULLXをfalseに */
   if(on&&!x){x=document.createElement('button');x.id='btFullX';x.textContent='✕ 全画面を終わる';x.onclick=function(){BtMapFull();};document.body.appendChild(x);}
   if(!on&&x)x.remove();
 }
 var NM_FULL_PREV=null;
+/* v361(ダルマ指示「全画面表示時、デフォルトでは上下左右にブランクを表示しないように拡大縮小」): 地図の枠を縦・横とも盤で埋める倍率(はみ出す方はスクロール)にして、使用可能範囲の中央へ */
+function nmFullCoverFit(){
+  var el=document.getElementById('losScrollWrap');if(!el){losApplyFit('width');Draw();return;}
+  var gd=losGridDims(),rs=(S_LOS.viewRot===90||S_LOS.viewRot===270),W=rs?gd.totalH:gd.totalW,H=rs?gd.totalW:gd.totalH;
+  if(!W||!H){losApplyFit('width');Draw();return;}
+  var z=Math.max(el.clientWidth/W,el.clientHeight/H);z=Math.max(LOS_ZOOM_MIN,Math.min(LOS_ZOOM_MAX,Math.ceil(z*1000)/1000));
+  S_LOS.zoom=z;try{losSaveZoom();}catch(e){}
+  var bb=null;try{bb=losUsableBBoxCanvas();}catch(e){}
+  var cx=W/2,cy=H/2;
+  if(bb){var c=losCanonicalPtToDisplay((bb.left+bb.right)/2,(bb.top+bb.bottom)/2,gd.totalW,gd.totalH,S_LOS.viewRot);cx=c.x;cy=c.y;}
+  S_LOS.scrollLeft=Math.max(0,Math.round(cx*z-el.clientWidth/2));S_LOS.scrollTop=Math.max(0,Math.round(cy*z-el.clientHeight/2));
+  Draw();
+  setTimeout(function(){var e2=document.getElementById('losScrollWrap');if(!e2)return;e2.scrollLeft=S_LOS.scrollLeft;e2.scrollTop=S_LOS.scrollTop;try{losSaveMapScroll();}catch(e){}},30);
+}
 function BtMapFull(n){
   BtRmClose();
   var was=btMapFullOn();if(!was&&!btActive()){try{losSaveMapScroll();}catch(e){}NM_FULL_PREV={z:S_LOS.zoom,l:S_LOS.scrollLeft,t:S_LOS.scrollTop};}
@@ -33887,7 +33957,7 @@ function BtMapFull(n){
   Draw();setTimeout(function(){btMapFullSync();
     /* v337(ダルマ指示「全画面表示選択時マップ使用可能領域幅を全域表示」): 通常MAPは全画面で使用可能範囲の横幅に合わせる。終わる時は元の倍率・位置に戻す */
     if(!btActive()){
-      if(btMapFullOn()){losApplyFit('width');Draw();return;}
+      if(btMapFullOn()){nmFullCoverFit();return;}
       if(NM_FULL_PREV){S_LOS.zoom=NM_FULL_PREV.z;S_LOS.scrollLeft=NM_FULL_PREV.l;S_LOS.scrollTop=NM_FULL_PREV.t;NM_FULL_PREV=null;Draw();return;}
     }
     if(n!=null)BtRmCenter(n);},0);
@@ -39790,7 +39860,7 @@ function LOS_PAGE(){
       var temColor=(!hasResult||r.temB===null||r.temB===undefined)?'gld':'';
       // 2026-08変更(Kato指示): 横スクロールをやめ、5項目をカード幅内に均等縮小して
       // 一列に収める(各セルflex:1 1 0+min-width:0+overflow:hiddenで自動縮小)。
-      h+='<div class="los-sumrow sum-eq" style="display:flex;flex-wrap:nowrap;gap:4px">';
+      h+='<div class="los-sumrow sum-eq" id="losSumRow" style="display:flex;flex-wrap:nowrap;gap:4px">';
       // v11.280修正: 降雪の妨害+1は、射撃/砲撃/対戦車タブと同じscenSnowHind(S4で「降雪中」ON・射程6以上)で表示する。従来はマップの
       // 積雪SSR(S_LOS.ssr==='Snow'、S4では常に自動ON)で判定していたため、降雪中OFFでもマップだけ+1されていた。また合計+6以上で
       // 各タブは射撃不可になるのに、マップは降雪分を含めずPASSと表示していた。
@@ -39856,6 +39926,11 @@ function LOS_PAGE(){
       // 添えることで、デジタル部分の文字数を他パネルと揃えた。
       h+='<div class="sumcard" style="flex:1 1 0;min-width:0;overflow:hidden"><div class="lbl">MF'+(mfAvail!=null?'<span style="font-size:9px;color:#6a7a8a">('+T('可')+mfAvail+')</span>':'')+'</div>'
         +(mfAvail!=null?seg7(String(mfUsed),'gld',T('使用')):seg7('--','',T('使用')))+'</div>';
+      /* v361(ダルマ指示「通常モードの全画面表示時、LOS結果〜MFを常時表示。右端に全画面表示オン/オフボタン」) */
+      if(!(typeof btActive==='function'&&btActive())){var fOn=btMapFullOn();
+        h+='<button class="sumcard" onclick="BtMapFull(null)" title="'+(fOn?T('全画面表示オフ'):T('全画面表示オン'))+'" style="flex:0 0 64px;min-width:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:inherit;color:'+(fOn?'#ffd060':'#9ab')+';border-color:'+(fOn?'#ffd06088':'')+'">'
+          +'<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+(fOn?'<path d="M9 4v5H4M15 4v5h5M20 15h-5v5M4 15h5v5"/>':'<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/>')+'</svg>'
+          +'<span style="font-size:9.5px;line-height:1.1;text-align:center">'+(fOn?T('全画面')+'<br>'+T('オフ'):T('全画面')+'<br>'+T('オン'))+'</span></button>';}
       h+='</div>';
       // v11.316(Kato指示「修正は？」): 編成・携行PPを変更するとMFが変わるが、引き済みのルートは再検証されず、上限を超えたヘクスが
       // 色分け(超過表示)で残るだけで理由が分からなかった。MFパネルの直下に警告を出す。あわせて編成算出の行軍で出なかったSMC 2PP上限(4.0)の警告も追加。
