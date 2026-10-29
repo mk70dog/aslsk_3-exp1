@@ -32694,7 +32694,7 @@ function btRMenuItems(n){
   var it=[],L=BT.losAB,here=btStacksAtN(n),N=BTG.nodes[n];
   it.push({ic:'full',t:btMapFullOn()?'全画面を終わる':'マップを全画面に',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに(指示パネルは上に表示)',f:"BtMapFull("+n+")"});it.push({sep:1}); /* v349(ダルマ指示「全画面表示切り替えをメニューの最上部に」) */
   // LOS
-  if(L&&L.a!=null&&L.a!==n)it.push({ic:'los',t:'ここまでのLOS(B)',sub:BTG.nodes[L.a].nm+' → '+N.nm,f:"btRmLos("+n+",'b')"});
+  if(L&&L.a!=null&&L.a!==n)it.push({ic:'losB',t:'ここまでのLOS(B)',sub:BTG.nodes[L.a].nm+' → '+N.nm,f:"btRmLos("+n+",'b')"});
   it.push({ic:'los',t:'ここからLOS(A)',sub:'次に右クリックした地点までを測る',f:"btRmLos("+n+",'a')"});
   if(L)it.push({ic:'x',t:'LOS測定を終わる',f:"BT.losAB=null;BtRmClose();Draw()"});
   it.push({ic:'eye',t:'ここから見える範囲',sub:'LOSの通るヘクスを色分け',f:"BtRmShow('view',"+n+")"}); // v309-1
@@ -32932,9 +32932,9 @@ function nmRMenuItems(n){
   var nm=N?N.nm:btHexName(H.boardId,H.col,H.row),terr=N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')):'';
   var hasA=!!S_LOS.pxA;
   it.push({ic:'full',t:btMapFullOn()?'全画面を終わる':'マップを全画面に',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに',f:"BtMapFull("+(n>=0?n:'null')+")"}); /* v349: 最上部 */
-  it.push({ic:'x',t:'全てクリア',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを全部消す(確認あり)',f:"nmRmSubOpen('clear',"+n+")"});it.push({sep:1}); /* v345(ダルマ指示「右クリックに全てクリアを追加」)・v349「2番目に」 */
+  it.push({ic:'trash',t:'全てクリア',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを全部消す(確認あり)',f:"nmRmSubOpen('clear',"+n+")"});it.push({sep:1}); /* v345(ダルマ指示「右クリックに全てクリアを追加」)・v349「2番目に」 */
   it.push({ic:'los',t:'ここを地点Aに',sub:nm+(terr?'　'+terr:''),f:"nmRmAB('a')"});
-  if(hasA)it.push({ic:'los',t:'ここを地点Bに(LOS判定)',sub:'A → '+nm,f:"nmRmAB('b')"});
+  if(hasA)it.push({ic:'losB',t:'ここを地点Bに(LOS判定)',sub:'A → '+nm,f:"nmRmAB('b')"});
   if(hasA||S_LOS.pxB)it.push({ic:'x',t:'LOS測定をリセット',sub:'A・B・結果を消す',f:"BtRmClose();LosResetPoints()"});
   if(n>=0){
     it.push({ic:'eye',t:'ここから見える範囲',sub:'LOSの通るヘクスを色分け',f:"nmRmShow('view',"+n+")"});
@@ -32975,7 +32975,7 @@ function nmRMenuItems(n){
   }
   return it;
 }
-function nmRmClearItems(n){return [{ic:'los',t:'← 戻る',sub:'消さずにメニューへ',f:"btRmReopen("+n+")"},{sep:1},{ic:'x',t:'<span style="color:#ff7070">全てクリアする</span>',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを消す(元に戻せません)',f:"nmRmClearAll()"}];}
+function nmRmClearItems(n){return [{ic:'back',t:'← 戻る',sub:'消さずにメニューへ',f:"btRmReopen("+n+")"},{sep:1},{ic:'trash',t:'<span style="color:#ff7070">全てクリアする</span>',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを消す(元に戻せません)',f:"nmRmClearAll()"}];}
 function nmRmClearAll(){BtRmClose();BT_RMS=null;if(typeof NM_TH_CAM!=='undefined')NM_TH_CAM=null;S_LOS.nmStallPop=false;LosClearMapAll();try{saveState();}catch(e){}}
 /* ---------- v337(ダルマ指示): 通常MAPの右クリック 行軍・地点Aからの移動コスト・敵の車両と砲塔の向き ---------- */
 var NM_RM_VEH=0;
@@ -33086,7 +33086,7 @@ function nmMarchVehList(){var ids=scenarioAfvIdsByVehId();return AFV_DATA.filter
 function nmMarchVeh(){var l=nmMarchVehList();return l.filter(function(v){return v.id===S_LOS.mfVehicleId;})[0]||null;}
 function nmRmMarchItems(n){
   var it=[],list=nmMarchVehList(),isV=S_LOS.mfEntityType==='vehicle',cur=isV?S_LOS.mfVehicleId:null;
-  it.push({ic:'los',t:'← 戻る',sub:'行軍する部隊を選ぶ(選ぶとここから行軍を始める)',f:"btRmReopen("+n+")"});
+  it.push({ic:'back',t:'← 戻る',sub:'行軍する部隊を選ぶ(選ぶとここから行軍を始める)',f:"btRmReopen("+n+")"});
   it.push({sep:1});
   var g=null;try{g=losPrimaryFireGroup();}catch(e){}
   it.push({ic:'move',t:'歩兵',sub:'射撃判定タブの編成'+(g&&g.activeGroupSlot?' '+g.activeGroupSlot:'')+'の MF・携行PP で計算',on:!isV,f:"nmRmMarchPick(null)"});
@@ -33129,7 +33129,7 @@ function nmSmkCtrHTML(k,px){return '<svg viewBox="0 0 60 60" width="'+px+'" heig
 function nmSmkCtrSVG(k,cx,cy,sz){var sc=sz/60;return '<g transform="rotate('+(-(S_LOS.viewRot||0))+' '+cx+' '+cy+') translate('+(cx-sz/2)+' '+(cy-sz/2)+') scale('+sc+')"><rect x="2" y="3" width="58" height="58" rx="6" fill="#000" opacity="0.45"/>'+nmSmkCtrInner(k)+'</g>';}
 function nmRmSmokeItems(n){
   var H=NM_RM_HEX,sm=S_LOS.smoke&&S_LOS.smoke[H.hid.id],cur=sm?nmSmkType(sm):null,it=[];
-  it.push({ic:'los',t:'← 戻る',sub:'煙幕の種類を選ぶ(LOS妨害は1ヘクス最大+3)',f:"btRmReopen("+n+")"});
+  it.push({ic:'back',t:'← 戻る',sub:'煙幕の種類を選ぶ(LOS妨害は1ヘクス最大+3)',f:"btRmReopen("+n+")"});
   it.push({sep:1});
   NM_SMK_T.forEach(function(t){it.push({ic:'smoke',img:nmSmkCtrHTML(t.k,34),t:t.nm+' +'+t.v,sub:t.sub,on:cur&&cur.k===t.k,f:"nmRmSmokeSet("+n+",'"+t.k+"')"});});
   it.push({sep:1});
@@ -33144,7 +33144,7 @@ function nmRmSmokeSet(n,k){
 }
 function nmRmVehItems(n,sd){
   sd=sd||'e';var L=NM_SIDE_LBL[sd],eh=nmUnitAt(NM_RM_HEX,sd),it=[],list=nmScenAfvs(),ids=scenarioAfvIdsByVehId();
-  it.push({ic:'los',t:'← 戻る',sub:L.nm+'の車両を選ぶ'+(ids?'(このシナリオに登場する車両)':'(シナリオ未選択: 全車両)'),f:"btRmReopen("+n+")"});
+  it.push({ic:'back',t:'← 戻る',sub:L.nm+'の車両を選ぶ'+(ids?'(このシナリオに登場する車両)':'(シナリオ未選択: 全車両)'),f:"btRmReopen("+n+")"});
   it.push({sep:1});
   it.push({ic:sd==='f'?'sel':'enemy',t:L.mk,sub:'車両を決めずに'+L.nm+'のヘクスだけ登録',on:!!eh&&!eh.veh,f:"nmRmSetVeh("+n+",null,'"+sd+"')"});
   var nats={};list.forEach(function(v){(nats[v.nat]=nats[v.nat]||[]).push(v);});
@@ -33181,7 +33181,7 @@ function nmVaslSrc(id){var k=VASL_CTR_MAP[id];return k&&VASL_CTR_IMG[k]||null;}
 function nmWreckCtrHTML0(id,px){var src=nmVaslSrc(id);if(!src)return '';return '<span style="position:relative;display:block;width:'+px+'px;height:'+px+'px;flex-shrink:0"><img src="'+src+'" style="width:'+px+'px;height:'+px+'px;display:block;filter:grayscale(1) brightness(.55)"><span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#ff5050;font-weight:bold;font-size:'+Math.round(px*0.62)+'px;text-shadow:0 0 3px #000,0 0 3px #000">✕</span></span>';}
 function nmRmWreckItems(n){
   var H=NM_RM_HEX,l=nmWreckList(H),it=[],list=nmScenAfvs();
-  it.push({ic:'los',t:'← 戻る',sub:'残骸(1ヘクス3個まで)。ここ: '+l.length+'個',f:"btRmReopen("+n+")"});
+  it.push({ic:'back',t:'← 戻る',sub:'残骸(1ヘクス3個まで)。ここ: '+l.length+'個',f:"btRmReopen("+n+")"});
   if(l.length){it.push({sep:1});l.forEach(function(id,i){var v=id&&nmAfv(id);it.push({ic:'wreck',img:id?nmWreckCtrHTML(id,34):'',t:(i+1)+'. '+(v?nmAfvName(v)+'の残骸':'残骸(車両未指定)'),sub:'タップでこの残骸を消す',f:"nmRmWreckDel("+n+","+i+")"});});}
   if(l.length<3){it.push({sep:1});
     it.push({ic:'wreck',t:'＋ 残骸マーカー',sub:'車両を決めずに残骸を1個置く',f:"nmRmWreckAdd("+n+",null)"});
@@ -33247,6 +33247,43 @@ function btRmDo(i){
 }
 /* v351(ダルマ指示「ここから見える・ここを撃てる・ここまでの各マークを変更」): A/Bのマークと同じ系統の色付きの丸(見える=青の双眼鏡、撃てる=マゼンタの照準、移動=水色の足あと) */
 var NM_MENU_MARK={eye:1,tgt:1,route:1};
+/* v352(ダルマ指示「メニューアイコンもわかりやすくセンスよく統一感のあるデザインに」): 全項目の絵を同じ線の太さ・同じ枠で統一。種類ごとに色(地図の操作=灰青、消す=赤、地点A/見える=青、撃てる/地点B=マゼンタ、移動=水色、自軍=青、敵=赤、残骸/煙幕/地形=灰・黄土)
+   NM_ICON_STYLE: 'circle'=色の丸 / 'tile'=角丸の四角 / 'line'=枠なしの色線 / null=従来 */
+var NM_ICON_STYLE='circle';
+var NM_IC={
+  full:['#5a6f8a','<path d="M5 10V5h5M14 5h5v5M19 14v5h-5M10 19H5v-5"/>'],
+  trash:['#c0392b','<path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12M10.5 10.5v5.5M13.5 10.5v5.5"/>'],
+  x:['#c0392b','<path d="M7.5 7.5l9 9M16.5 7.5l-9 9"/>'],
+  back:['#5a6f8a','<path d="M14 6l-6 6 6 6M8 12h10"/>'],
+  los:['#2a6fdb','<path d="M12 21s-6-6.2-6-10.5a6 6 0 0 1 12 0C18 14.8 12 21 12 21z"/><path d="M9.8 13.2l2.2-6 2.2 6M10.6 11.2h2.8" stroke-width="1.7"/>'],
+  losB:['#c026d3','<path d="M12 21s-6-6.2-6-10.5a6 6 0 0 1 12 0C18 14.8 12 21 12 21z"/><path d="M10.4 7.2v6h2.4a1.5 1.5 0 0 0 0-3H10.4h2.1a1.5 1.5 0 0 0 0-3z" stroke-width="1.6"/>'],
+  eye:['#2a6fdb','<circle cx="8" cy="14" r="3.6"/><circle cx="16" cy="14" r="3.6"/><path d="M10.8 12.5h2.4M5.2 11l2-4.5h2.6M18.8 11l-2-4.5h-2.6"/>'],
+  tgt:['#c026d3','<circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="1" fill="#fff"/><path d="M12 3.5v4M12 16.5v4M3.5 12h4M16.5 12h4"/>'],
+  fire:['#c026d3','<circle cx="12" cy="12" r="5.5"/><path d="M12 3.5v4M12 16.5v4M3.5 12h4M16.5 12h4"/>'],
+  fan:['#d08a2a','<path d="M12 19L5.5 8a12 12 0 0 1 13 0z"/>'],
+  route:['#0ea5b7','<circle cx="6.5" cy="17.5" r="2"/><path d="M8.5 16Q10 9 15 10T18 6" stroke-dasharray="2.6 2.2"/><path d="M15.5 4.5l4.5 1-2.3 4" />'],
+  move:['#0ea5b7','<path d="M4 12h2.5M8.5 12h2.5M13 12h5M15 8l4 4-4 4"/>'],
+  stop:['#0ea5b7','<rect x="7" y="7" width="10" height="10" rx="2"/>'],
+  sel:['#2563eb','<path d="M7 20V4.5M7 5.5h10l-2.5 3.5 2.5 3.5H7"/>'],
+  enemy:['#e11d48','<path d="M7 20V4.5M7 5.5h10l-2.5 3.5 2.5 3.5H7"/>'],
+  turret:['#7a8a3a','<path d="M4 16h16l-2 3H6zM6.5 16l1.5-4h7l1.5 4M11 12V9.5h3.5V12M14.5 10.5l5-2"/>'],
+  wreck:['#6b6b6b','<path d="M4 17h16l-2 2.5H6zM6.5 17l1.5-4h7l1.5 4"/><path d="M11 11c-1.5-1.8.3-3.2 1-4.5.4 1.3 1.6 1.5 1.6 3 0 .8-.4 1.3-1 1.5" />'],
+  smoke:['#8a96a6','<path d="M7.5 17.5a3.5 3.5 0 0 1-.4-7 4.8 4.8 0 0 1 9.3-1 3.9 3.9 0 0 1 .6 8z"/>'],
+  hex:['#8b7d4a','<path d="M12 3.5l7.4 4.25v8.5L12 20.5l-7.4-4.25v-8.5z"/><path d="M12 11v5M12 8.2v.3"/>'],
+  info:['#5a6f8a','<circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8.2v.3"/>'],
+  ctr:['#5a6f8a','<circle cx="12" cy="12" r="4.5"/><path d="M12 3.5v4M12 16.5v4M3.5 12h4M16.5 12h4"/>'],
+  zoom:['#5a6f8a','<circle cx="10.5" cy="10.5" r="5.5"/><path d="M14.6 14.6L19.5 19.5M8 10.5h5M10.5 8v5"/>'],
+  rot:['#5a6f8a','<path d="M18.5 12a6.5 6.5 0 1 1-2-4.7"/><path d="M18.5 4.5v4h-4"/>']
+};
+function nmIconSVG(k,st){
+  st=st||NM_ICON_STYLE;var d=NM_IC[k];if(!d||!st)return null;var c=d[0],g=d[1],sz=30;
+  var h='<svg viewBox="0 0 32 32" width="'+sz+'" height="'+sz+'" style="display:block;flex-shrink:0">';
+  if(st==='circle')h+='<circle cx="16" cy="16" r="14.5" fill="'+c+'" stroke="#ffffff33" stroke-width="1"/><g transform="translate(4 4)" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+g+'</g>';
+  else if(st==='tile')h+='<defs><linearGradient id="nmg_'+k+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient></defs><rect x="1.5" y="1.5" width="29" height="29" rx="8" fill="'+c+'"/><rect x="1.5" y="1.5" width="29" height="29" rx="8" fill="url(#nmg_'+k+')"/><g transform="translate(4 4)" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+g+'</g>';
+  else h+='<g transform="translate(4 4)" fill="none" stroke="'+nmIcLight(c)+'" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">'+g.replace(/fill="#fff"/g,'fill="'+nmIcLight(c)+'"')+'</g>';
+  return h+'</svg>';
+}
+function nmIcLight(c){var n=parseInt(c.slice(1),16),r=n>>16,g=(n>>8)&255,b=n&255;function f(v){return Math.round(v+(255-v)*0.35);}return 'rgb('+f(r)+','+f(g)+','+f(b)+')';}
 function nmMenuMark(k){
   var h='<svg viewBox="0 0 32 32" width="30" height="30" style="display:block;flex-shrink:0">';
   if(k==='eye')h+='<circle cx="16" cy="16" r="14" fill="#123a6a" stroke="#7fc0ff" stroke-width="2"/><circle cx="11" cy="17" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><circle cx="21" cy="17" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M14.5 15.5h3M8 13.5l2.5-4h3M24 13.5l-2.5-4h-3" stroke="#fff" stroke-width="2" fill="none" stroke-linejoin="round"/>';
@@ -33259,11 +33296,11 @@ function btRMenu(n,lp){ // lp=長押しで開いた(指を離した直後のク�
   BtRmClose();BT_RM_FN=[];var it=btActive()?btRMenuItems(n):nmRMenuItems(n);
   var h='<div class="rmBox">';
   it.forEach(function(x){if(x.sep){h+='<div class="rmSep"></div>';return;}
-    if(x.arr){h+='<div class="rmIt rmRow" style="flex-wrap:wrap" onclick="event.stopPropagation()"><span class="rmIc">'+btRmIcon(x.ic)+'</span><span class="rmTx">'+x.t+(x.sub?'<span class="rmSub">'+x.sub+'</span>':'')+'</span><span class="rmBtns" style="flex:1 0 100%;justify-content:flex-end;margin-top:4px">';
+    if(x.arr){h+='<div class="rmIt rmRow" style="flex-wrap:wrap" onclick="event.stopPropagation()"><span class="rmIc"'+((NM_ICON_STYLE&&NM_IC[x.ic])?' style="flex:0 0 36px;justify-content:center"':'')+'>'+(nmIconSVG(x.ic)||btRmIcon(x.ic))+'</span><span class="rmTx">'+x.t+(x.sub?'<span class="rmSub">'+x.sub+'</span>':'')+'</span><span class="rmBtns" style="flex:1 0 100%;justify-content:flex-end;margin-top:4px">';
       for(var ai=0;ai<6;ai++)h+='<button class="rmB" style="min-width:30px;padding:3px 4px;'+(x.cur===ai?'background:#ff9030;color:#000;border-color:#ffb060':'')+'" onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push(x.fn+'('+x.n+','+ai+')')-1)+')"><span style="display:inline-block;transform:rotate('+(ai*60+x.rot)+'deg)">&#8593;</span></button>';
       if(!x.noClr)h+='<button class="rmB" style="min-width:30px;padding:3px 6px"'+(x.cur==null?' disabled':'')+' onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push(x.fn+'('+x.n+',null)')-1)+')">×</button>';h+='</span></div>';return;}
-    if(x.row){h+='<div class="rmIt rmRow" onclick="event.stopPropagation()"><span class="rmIc"'+(x.img?' style="flex:0 0 36px;justify-content:center"':'')+'>'+(x.img||btRmIcon(x.ic))+'</span><span class="rmTx">'+x.t+'</span><span class="rmBtns">'+x.btns.map(function(b){return b[1]?'<button class="rmB"'+(b[2]?' disabled':'')+' onclick="event.stopPropagation();'+b[1]+'">'+b[0]+'</button>':'<span class="rmVal">'+b[0]+'</span>';}).join('')+'</span></div>';return;}
-    h+='<div class="rmIt"'+(x.f?' onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push(x.f)-1)+')"':' style="cursor:default"')+'><span class="rmIc"'+((x.img||NM_MENU_MARK[x.ic])?' style="flex:0 0 36px;justify-content:center"':'')+'>'+(x.img||(NM_MENU_MARK[x.ic]?nmMenuMark(x.ic):btRmIcon(x.ic)))+'</span><span class="rmTx">'+x.t+(x.sub?'<span class="rmSub">'+x.sub+'</span>':'')+'</span>'+(x.on?'<span style="margin-left:auto;color:#ff9030;font-size:13px">✓</span>':'')+'</div>';});
+    if(x.row){h+='<div class="rmIt rmRow" onclick="event.stopPropagation()"><span class="rmIc"'+((x.img||(NM_ICON_STYLE&&NM_IC[x.ic]))?' style="flex:0 0 36px;justify-content:center"':'')+'>'+(x.img||nmIconSVG(x.ic)||btRmIcon(x.ic))+'</span><span class="rmTx">'+x.t+'</span><span class="rmBtns">'+x.btns.map(function(b){return b[1]?'<button class="rmB"'+(b[2]?' disabled':'')+' onclick="event.stopPropagation();'+b[1]+'">'+b[0]+'</button>':'<span class="rmVal">'+b[0]+'</span>';}).join('')+'</span></div>';return;}
+    h+='<div class="rmIt"'+(x.f?' onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push(x.f)-1)+')"':' style="cursor:default"')+'><span class="rmIc"'+((x.img||NM_MENU_MARK[x.ic]||(NM_ICON_STYLE&&NM_IC[x.ic]))?' style="flex:0 0 36px;justify-content:center"':'')+'>'+(x.img||nmIconSVG(x.ic)||(NM_MENU_MARK[x.ic]?nmMenuMark(x.ic):btRmIcon(x.ic)))+'</span><span class="rmTx">'+x.t+(x.sub?'<span class="rmSub">'+x.sub+'</span>':'')+'</span>'+(x.on?'<span style="margin-left:auto;color:#ff9030;font-size:13px">✓</span>':'')+'</div>';});
   h+='</div>';
   var el=document.createElement('div');el.id='btRm';el.innerHTML=h;
   var held=!!lp,relT=0;
