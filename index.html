@@ -31884,7 +31884,7 @@ function btVehOverlaySVG(dispLayout){
         return ln(wid+3,'#000',bx,by)+ln(wid,c2,bx,by)
           +'<polygon points="'+p1.x+','+p1.y+' '+(bx-uy*W)+','+(by+ux*W)+' '+(bx+uy*W)+','+(by-ux*W)+'" fill="'+c2+'" stroke="#000" stroke-width="1.5" stroke-linejoin="round"/>';}
       h+=arrow(u.vca||0,38,4,col);
-      if(k==='afv'&&u.tca!=null&&u.tca!==u.vca)h+=arrow(u.tca,46,5,'#ffd040','badge'); // v311: 砲塔の向きを変更した場合は表示
+      if(k==='afv'&&u.tca!=null&&u.tca!==u.vca)h+=arrow(u.tca,38,5,'#ffd040','badge'); // v311: 砲塔の向きを変更した場合は表示
     });
   });
   return h;
