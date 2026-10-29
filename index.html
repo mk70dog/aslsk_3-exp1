@@ -32697,7 +32697,7 @@ function btLosRTap(n){
 var BT_RM_XY=null;
 function btRMenuItems(n){
   var it=[],L=BT.losAB,here=btStacksAtN(n),N=BTG.nodes[n];
-  it.push({ic:'full',t:btMapFullOn()?'全画面を終わる':'マップを全画面に',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに(指示パネルは上に表示)',f:"BtMapFull("+n+")"});it.push({sep:1}); /* v349(ダルマ指示「全画面表示切り替えをメニューの最上部に」) */
+  it.push({ic:'full',t:btMapFullOn()?'全画面表示オフ':'全画面表示オン',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに(指示パネルは上に表示)',f:"BtMapFull("+n+")"});it.push({sep:1}); /* v349(ダルマ指示「全画面表示切り替えをメニューの最上部に」) */
   // LOS
   if(L&&L.a!=null&&L.a!==n)it.push({ic:'losB',t:'ここまでのLOS(B)',sub:BTG.nodes[L.a].nm+' → '+N.nm,f:"btRmLos("+n+",'b')"});
   it.push({ic:'los',t:'ここからLOS(A)',sub:'次に右クリックした地点までを測る',f:"btRmLos("+n+",'a')"});
@@ -32956,7 +32956,7 @@ function nmRMenuItems(n){
   if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);}
   var nm=N?N.nm:btHexName(H.boardId,H.col,H.row),terr=N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')):'';
   var hasA=!!S_LOS.pxA;
-  it.push({ic:'full',t:btMapFullOn()?'全画面を終わる':'マップを全画面に',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに',f:"BtMapFull("+(n>=0?n:'null')+")"}); /* v349: 最上部 */
+  it.push({ic:'full',t:btMapFullOn()?'全画面表示オフ':'全画面表示オン',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに',f:"BtMapFull("+(n>=0?n:'null')+")"}); /* v349: 最上部 */
   it.push({ic:'trash',t:'全てクリア',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを全部消す(確認あり)',f:"nmRmSubOpen('clear',"+n+")"});it.push({sep:1}); /* v345(ダルマ指示「右クリックに全てクリアを追加」)・v349「2番目に」 */
   it.push({ic:'los',t:'ここを地点Aに',sub:nm+(terr?'　'+terr:''),f:"nmRmAB('a')"});
   if(hasA)it.push({ic:'losB',t:'ここを地点Bに(LOS判定)',sub:'A → '+nm,f:"nmRmAB('b')"});
