@@ -33913,13 +33913,27 @@ function btMapFullSync(){
     document.body.appendChild(tb);}
   if(!nmOn&&tb){tb.remove();tb=null;}
   if(nmOn&&tb)de.style.setProperty('--btfullt',tb.offsetHeight+'px');
-  de.classList.toggle('nm-sumfix',fixSum);de.style.setProperty('--nmsumh',(fixSum?sr.offsetHeight+8:0)+'px');
+  de.classList.toggle('nm-sumfix',fixSum);de.style.setProperty('--nmsumh',(fixSum?sr.offsetHeight:0)+'px'); /* v361: すき間なし(下のページが透けないように) */
   var x=document.getElementById('btFullX');
   if(NM_HIDE_FULLX){if(x)x.remove();return;} /* v349(ダルマ指示「マップ上の全画面を終わるを非表示」): 終わるのは右クリック/長押しメニューの最上部かEscキー。戻す時はNM_HIDE_FULLXをfalseに */
   if(on&&!x){x=document.createElement('button');x.id='btFullX';x.textContent='✕ 全画面を終わる';x.onclick=function(){BtMapFull();};document.body.appendChild(x);}
   if(!on&&x)x.remove();
 }
 var NM_FULL_PREV=null;
+/* v361(ダルマ指示「全画面表示時、デフォルトでは上下左右にブランクを表示しないように拡大縮小」): 地図の枠を縦・横とも盤で埋める倍率(はみ出す方はスクロール)にして、使用可能範囲の中央へ */
+function nmFullCoverFit(){
+  var el=document.getElementById('losScrollWrap');if(!el){losApplyFit('width');Draw();return;}
+  var gd=losGridDims(),rs=(S_LOS.viewRot===90||S_LOS.viewRot===270),W=rs?gd.totalH:gd.totalW,H=rs?gd.totalW:gd.totalH;
+  if(!W||!H){losApplyFit('width');Draw();return;}
+  var z=Math.max(el.clientWidth/W,el.clientHeight/H);z=Math.max(LOS_ZOOM_MIN,Math.min(LOS_ZOOM_MAX,Math.ceil(z*1000)/1000));
+  S_LOS.zoom=z;try{losSaveZoom();}catch(e){}
+  var bb=null;try{bb=losUsableBBoxCanvas();}catch(e){}
+  var cx=W/2,cy=H/2;
+  if(bb){var c=losCanonicalPtToDisplay((bb.left+bb.right)/2,(bb.top+bb.bottom)/2,gd.totalW,gd.totalH,S_LOS.viewRot);cx=c.x;cy=c.y;}
+  S_LOS.scrollLeft=Math.max(0,Math.round(cx*z-el.clientWidth/2));S_LOS.scrollTop=Math.max(0,Math.round(cy*z-el.clientHeight/2));
+  Draw();
+  setTimeout(function(){var e2=document.getElementById('losScrollWrap');if(!e2)return;e2.scrollLeft=S_LOS.scrollLeft;e2.scrollTop=S_LOS.scrollTop;try{losSaveMapScroll();}catch(e){}},30);
+}
 function BtMapFull(n){
   BtRmClose();
   var was=btMapFullOn();if(!was&&!btActive()){try{losSaveMapScroll();}catch(e){}NM_FULL_PREV={z:S_LOS.zoom,l:S_LOS.scrollLeft,t:S_LOS.scrollTop};}
@@ -33928,7 +33942,7 @@ function BtMapFull(n){
   Draw();setTimeout(function(){btMapFullSync();
     /* v337(ダルマ指示「全画面表示選択時マップ使用可能領域幅を全域表示」): 通常MAPは全画面で使用可能範囲の横幅に合わせる。終わる時は元の倍率・位置に戻す */
     if(!btActive()){
-      if(btMapFullOn()){losApplyFit('width');Draw();return;}
+      if(btMapFullOn()){nmFullCoverFit();return;}
       if(NM_FULL_PREV){S_LOS.zoom=NM_FULL_PREV.z;S_LOS.scrollLeft=NM_FULL_PREV.l;S_LOS.scrollTop=NM_FULL_PREV.t;NM_FULL_PREV=null;Draw();return;}
     }
     if(n!=null)BtRmCenter(n);},0);
