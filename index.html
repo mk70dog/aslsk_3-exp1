@@ -32900,7 +32900,8 @@ function nmRMenuItems(n){
   if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);}
   var nm=N?N.nm:btHexName(H.boardId,H.col,H.row),terr=N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')):'';
   var hasA=!!S_LOS.pxA;
-  it.push({ic:'full',t:btMapFullOn()?'全画面を終わる':'マップを全画面に',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに',f:"BtMapFull("+(n>=0?n:'null')+")"});it.push({sep:1}); /* v349: 最上部 */
+  it.push({ic:'full',t:btMapFullOn()?'全画面を終わる':'マップを全画面に',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに',f:"BtMapFull("+(n>=0?n:'null')+")"}); /* v349: 最上部 */
+  it.push({ic:'x',t:'全てクリア',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを全部消す(確認あり)',f:"nmRmSubOpen('clear',"+n+")"});it.push({sep:1}); /* v345(ダルマ指示「右クリックに全てクリアを追加」)・v349「2番目に」 */
   it.push({ic:'los',t:'ここを地点Aに',sub:nm+(terr?'　'+terr:''),f:"nmRmAB('a')"});
   if(hasA)it.push({ic:'los',t:'ここを地点Bに(LOS判定)',sub:'A → '+nm,f:"nmRmAB('b')"});
   if(hasA||S_LOS.pxB)it.push({ic:'x',t:'LOS測定をリセット',sub:'A・B・結果を消す',f:"BtRmClose();LosResetPoints()"});
@@ -32941,8 +32942,6 @@ function nmRMenuItems(n){
     it.push({row:1,ic:'zoom',t:'拡大・縮小',btns:[['－',"BtRmZoom("+n+",-1)",S_LOS.zoom<=LOS_ZOOM_MIN],[Math.round(S_LOS.zoom*100)+'%',null],['＋',"BtRmZoom("+n+",1)",S_LOS.zoom>=LOS_ZOOM_MAX]]});
     it.push({row:1,ic:'rot',t:'回転',btns:[['90°L',"BtRmRot("+n+",-90)"],['90°R',"BtRmRot("+n+",90)"]]});
   }
-  it.push({sep:1});
-  it.push({ic:'x',t:'全てクリア',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを全部消す(確認あり)',f:"nmRmSubOpen('clear',"+n+")"}); /* v345(ダルマ指示「右クリックに全てクリアを追加」) */
   return it;
 }
 function nmRmClearItems(n){return [{ic:'los',t:'← 戻る',sub:'消さずにメニューへ',f:"btRmReopen("+n+")"},{sep:1},{ic:'x',t:'<span style="color:#ff7070">全てクリアする</span>',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを消す(元に戻せません)',f:"nmRmClearAll()"}];}
