@@ -3393,7 +3393,7 @@ var SSR_REFLECT={
   S18:{1:'マップ(LOS・移動): 森・果樹園を石造瓦礫として扱う',2:'不意打ちカード: 「SSR：露エリート/1st Line -1」ボタンで反映'},
   S19:{1:'マップ(LOS): 穀物を浸水(進入不可・LOSに影響なし)とし、CC6の森は開豁地として扱う'},
   S27:{5:'マップ: 穀物地形を有効(季節内)にする(日付が5月でも麦畑のヒンドランス・1.5MFを適用)',6:'マップ(行軍ルート): AFV(装甲車・BU状態の履帯車を含む全AFV)は建物ヘクスへ進入できず、ルートに追加できない',1:'不意打ちカード: 「SSR：ニュージーランド軍 -1」ボタンで反映',2:'射撃タブ: 英連邦軍のエリート/1st LineのCowerを自動で免除',4:'射撃・砲撃/戦車・対戦車タブ: ターン1〜2に英連邦軍がドイツ軍を撃つ全ての射撃のDRMに+1を自動加算(FFMOは打ち消さず、残存火力は減らさない)。目標がドイツ山岳部隊でない場合(ラムケ戦闘団の降下猟兵)は、SSR直下のボタンでOFFにする'},
-  S28:{1:'マップ(行軍ルート): AFVが非丘陵の開豁地・湿地(SSR2)に進入する各ヘクスに「判定要」の印を付け、件数を表示(DR≧11で行動不能の判定自体は手動)',2:'マップ(LOS・移動): 穀物・藪を湿地として扱う(ヒンドランスは穀物扱い、進入は歩兵1.5MF・車両2MP。盤面画像は元のまま)',4:'射撃・砲撃/戦車(TH・車載機銃・IFE)・対戦車タブ: 全ての射撃DRMに+1を自動加算(FFMOは打ち消さない)'},
+  S28:{3:'装甲戦闘車両・砲撃・軽対戦車兵器タブ: 目標にIS-2を選ぶと「掘り込みしている/していない」のボタン(1台ずつ選ぶ)。しているならTH DR+1・車体命中はミス(移動・VCA変更の制限は手動)',1:'マップ(行軍ルート): AFVが非丘陵の開豁地・湿地(SSR2)に進入する各ヘクスに「判定要」の印を付け、件数を表示(DR≧11で行動不能の判定自体は手動)',2:'マップ(LOS・移動): 穀物・藪を湿地として扱う(ヒンドランスは穀物扱い、進入は歩兵1.5MF・車両2MP。盤面画像は元のまま)',4:'射撃・砲撃/戦車(TH・車載機銃・IFE)・対戦車タブ: 全ての射撃DRMに+1を自動加算(FFMOは打ち消さない)'},
   S33:{1:'マップ(LOS・移動): 穀物を耕地として扱う(LOSは開豁地＝ヒンドランスなし、進入1.5MF、季節に関係なく適用。盤面画像は元のまま)'},
   S35:{1:'マップ(LOS・移動): 林を石造瓦礫、果樹園を砲弾孔として扱う(盤面画像は元のまま)。瓦礫は歩兵3MF・TEM+3・ヘクスサイド沿いを含むLOS遮断・待ち伏せ可、車両は林と同じ扱い(総MPの半分または全MPを消費、ボグ判定+3/+0)。砲弾孔はLOSに影響せず歩兵TEM+1、進入2MF(移動中に1MFで進入すれば開豁地・TEM0)→行軍ルートは1MFで計算',2:'士気/損耗(MC)・回復タブ: ロシア軍6-2-8/3-2-8をピッカーで選ぶと「士気値下線あり(ELR置換免除)」を自動ONにし、混乱面の士気値を+1して反映。不意打ちカード: 「SSR：露エリート/1st Line -1」ボタンで反映。移動タブの煙幕手榴弾: 独8-3-8[E]を選ぶとSmoke指数を5にして反映',3:'砲撃/戦車・対戦車(LATW)タブ: 目標車両にT-34/76(41/42)を選ぶとTH DRに+1を自動加算し、車体(Hull)命中(色付きdr≧白dr)はミスにする。AFVタブ: T-34 M41の車載機銃は前面BMGをDisabled、車体(VCA)変更は選べない。マップ(行軍ルート): T-34 M41は移動できない。(設置制限・残骸なし・TEMなし・LOSに影響なしは表示のみ)',4:'士気/損耗(MC): ロシア軍8-0・6+1を選ぶと士気値を10・8にして反映(ELR非適用)。MC・回復タブの「SSR4：政治委員とスタック」ボタンで、ロシア軍歩兵の士気値+1(回復は混乱士気値+1・DM+4なし)を反映。回復に失敗した部隊の置換・損耗(政治委員の回復義務)は注記のみで手動'},
   S34:{1:'射撃・砲撃/戦車・対戦車タブ: 射程7ヘクス以上の砲・車載主砲のTo Hit判定と、IFTのみで解決する射撃(射撃タブ・車載機銃・IFE)に+1を自動加算(FFMOは打ち消さない)。砲の歩兵/地域目標種別攻撃のIFT・残存火力・阻止射撃には加算しない。射程は射撃タブでは先頭グループの射程'},
@@ -3459,11 +3459,20 @@ function scenSnowHind(range){
 var S35_DUGIN_AFV='afv_t3476_sov';
 function scenIsS35(){return !!(S.scen&&S.scen.sel==='S35');}
 // 目標車両が塹壕化したT-34 M41か(SSR3)。
-function ssrDugInTarget(vehId){return !!(scenIsS35()&&vehId&&vehId===S35_DUGIN_AFV);}
+/* v372(ダルマ指示「S28 SSR3 判定モードだけ対応。掘り込みは1台ずつ決めるので、IS-2が攻撃された時の判定に掘り込みしてる/してないのボタン。オンならTH+1・ハル無効」) */
+var S28_DUGIN_AFV='afv_is2_sov';
+function scenIsS28(){return !!(S.scen&&S.scen.sel==='S28');}
+function ssrDugInTarget(vehId,dig){return !!((scenIsS35()&&vehId&&vehId===S35_DUGIN_AFV)||(scenIsS28()&&dig&&vehId===S28_DUGIN_AFV));}
+function ssrS28DigBtnHTML(st,fn){if(!scenIsS28()||!st||st.tgtVehId!==S28_DUGIN_AFV)return '';
+  return '<div style="margin:5px 0 2px"><div style="font-size:12px;color:#c8a032;margin-bottom:3px">'+T('SSR3：目標のIS-2は掘り込みしている？')+'</div><div class="btns" style="margin:0">'
+    +'<button class="b sm'+(!st.s28Dig?' on':'')+'" style="flex:1;height:auto;min-height:30px" onclick="'+fn+'(false)">'+T('掘り込みしていない')+'</button>'
+    +'<button class="b sm'+(st.s28Dig?' on gld':'')+'" style="flex:1;height:auto;min-height:30px;white-space:normal;line-height:1.2" onclick="'+fn+'(true)">'+T('掘り込みしている（TH+1・車体命中はミス）')+'</button></div></div>';}
+function GsetS28Dig(v){S.gun.s28Dig=!!v;S.gun.th_result=null;Draw();}
+function LATWsetS28Dig(v){S.latw.s28Dig=!!v;S.latw.th_result=null;Draw();}
 // 射撃側の車両主砲が塹壕化したT-34 M41か(SSR3: VCA変更不可・前面BMGはDisabled)。
 function ssrDugInFiringGun(gd){return !!(scenIsS35()&&gd&&gd.id==='veh_ma_'+S35_DUGIN_AFV);}
 // 目標車両が塹壕化AFVで、THの色付きdr>=白dr(=車体命中)ならミス扱い(SSR3)。
-function ssrDugInHullMiss(vehId,rd,wd){return !!(ssrDugInTarget(vehId)&&rd!=null&&wd!=null&&rd>=wd);}
+function ssrDugInHullMiss(vehId,rd,wd,dig){return !!(ssrDugInTarget(vehId,dig)&&rd!=null&&wd!=null&&rd>=wd);}
 // SSR2: 二線級MMCの混乱面士気値+1(対象ラベルは火力-射程-士気で照合)。
 function ssrBrokenMoraleBonus(nat,label){var f=getScenarioSSRFlags();return (f&&f.brokenMoraleP1&&f.nat===nat&&ssrUnitBase(label)&&f.brokenMoraleP1.indexOf(ssrUnitBase(label))>=0)?1:0;}
 // SSR4: 政治委員(SMC)の士気値ボーナス(8-0→10、6+1→8)。
@@ -8729,7 +8738,7 @@ var I18N_EN={
   "SSR4：政治委員とスタック(ロシア軍歩兵の士気値+1)":"SSR4: stacked with a Commissar (Russian infantry morale +1)",
   "SSR4：政治委員とスタック(混乱士気値+1・DM+4なし)":"SSR4: stacked with a Commissar (broken morale +1, no +4 DM)",
   "SSR4：政治委員は同一ヘクスの混乱したロシア軍ユニットすべての回復を必ず試みる。回復できなかったユニットは1段階低い質のユニットに置き換え、下位が無ければ損耗(Casualty Reduction)":"SSR4: the Commissar must attempt to rally every broken Russian unit stacked with it; a unit that fails is replaced by the next lowest quality unit, or suffers Casualty Reduction if none exists",
-  "SSR3適用：塹壕化したT-34への車体(Hull)命中はミスとして扱います":"SSR3 applied: a Hull hit on the dug-in T-34 is treated as a miss",
+  "SSR3適用：塹壕化したT-34への車体(Hull)命中はミスとして扱います":"SSR3 applied: a Hull hit on the dug-in T-34 is treated as a miss","SSR3適用：掘り込みしたIS-2への車体(Hull)命中はミスとして扱います":"SSR3 applied: a Hull hit on the dug-in IS-2 is treated as a miss","SSR3：目標のIS-2は掘り込みしている？":"SSR3: is the target IS-2 dug in?","掘り込みしていない":"Not dug in","掘り込みしている（TH+1・車体命中はミス）":"Dug in (TH +1, Hull hits miss)",
   "SSR3適用：塹壕化したT-34はVCA(車体)を変更できません。砲塔(TCA)のみ変更できます":"SSR3 applied: the dug-in T-34 cannot change its VCA; only its turret (TCA) may change",
   "SSR3：塹壕化したT-34は設置ヘクスから移動できません":"SSR3: the dug-in T-34 may never move from its setup hex",
   "SSR2適用：Smoke指数5":"SSR2 applied: Smoke exponent 5",
@@ -19497,7 +19506,7 @@ function GsetAttVeh(on){
 }
 function GattSelVeh(id){
   var d=S.gun.drm;
-  if(S.gun.tgtVehId!==id){gunAcqReset();hdrLogoRand();}
+  if(S.gun.tgtVehId!==id){gunAcqReset();hdrLogoRand();S.gun.s28Dig=false;}
   S.gun.tgtVehId=id;
   var v=id?AFV_DATA.filter(function(x){return x.id===id;})[0]:null;
   if(v){d.vehTgt=true;d.vehSize=v.targetSize||"avg";d.vehOT=!!v.ot;d.vehAF=afvAFBand(v);}
@@ -19797,7 +19806,7 @@ function gunTotalDRM(){
   // (旧sndr_elev/tgt_elevの無条件TH DRM加算は廃止。高度優位性はgunEffectiveTEM()内で判定し、
   //  ITT/VTT時はここ(TH DRM)へ、ATT/IFE時はgunIFTdrm()側(IFT DRM)へ、それぞれ正しく振り分けられる)
   total+=scenShotDrm(S.gun.range,S.gun.phase); // 2026-09: シナリオSSR(S28+1/降雪/S27山岳部隊)
-  if(ssrDugInTarget(S.gun.tgtVehId)&&(S.gun.tgtType==='ve'||S.gun.drm.vehTgt))total+=1; // v11.340: S35 SSR3 塹壕化したT-34 M41に対するTH DR+1
+  if(ssrDugInTarget(S.gun.tgtVehId,S.gun.s28Dig)&&(S.gun.tgtType==='ve'||S.gun.drm.vehTgt))total+=1; // v11.340: S35 SSR3 塹壕化したT-34 M41に対するTH DR+1
   return total;
 }
 
@@ -20072,7 +20081,7 @@ function GsyncBoundingFireFromMap(){
 // 2026-09追加(マサヒコ設計案「ステップ5」): 車載機銃斉射の選択トグル。選択変更時は既存の斉射結果をクリア。
 function GsetFireGroupMg(key){S.gun.fireGroupWeapons[key]=!S.gun.fireGroupWeapons[key];S.gun.fireGroupResult=null;var _gdM=gunData();if(S.gun.drm.tgtCrewCE&&!(_gdM&&fgMgSelectedList(_gdM,S.gun).length))S.gun.drm.tgtCrewCE=false;Draw();} // 2026-09: 機銃をすべて外したら「機銃：目標は車両乗員(CE)」も自動でOFF
 function GselTgtVeh(id){
-  if(S.gun.tgtVehId!==id){gunAcqReset();hdrLogoRand();}
+  if(S.gun.tgtVehId!==id){gunAcqReset();hdrLogoRand();S.gun.s28Dig=false;}
   S.gun.tgtVehId=id;
   S.gun.tgtVehFacing="front";
   if(!id){
@@ -20469,7 +20478,7 @@ function GJUDGE_TH(){
   // ROF低下要因（各1、累積）：IFE使用／鹵獲使用／不正規使用／NT砲のCA変更直後の射撃（76-82mm迫撃砲・360°旋回砲は免除）
   // v11.340: S35 SSR3 塹壕化したT-34 M41への車体(Hull)命中はミスとして扱う(車体=色付きdr≧白dr)。CHも成立しない。
   var dugInMiss=false;
-  if(hit&&effTgt==="ve"&&ssrDugInHullMiss(S.gun.tgtVehId,S.gun.rd,S.gun.wd)){hit=false;dugInMiss=true;isCH=false;}
+  if(hit&&effTgt==="ve"&&ssrDugInHullMiss(S.gun.tgtVehId,S.gun.rd,S.gun.wd,S.gun.s28Dig)){hit=false;dugInMiss=true;isCH=false;}
   var rofBase=g.rof||0;
   var caChangedThisShot=(S.gun.drm.ca_hex>0)&&!g.mount360&&!(g.gsType==="MTR"&&g.cal>60)&&!gunIsTurretedMA(g); // v11.256: 砲塔付き車両主砲は除外
   var rofReduce=(S.gun.ife_mode?1:0)+(S.gun.drm.captured?1:0)+((S.gun.drm.non_qual&&!g.mtrNoManhandle)?1:0)+(caChangedThisShot?1:0);
@@ -22838,6 +22847,7 @@ function GUN_PAGE(){
     h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px;margin-bottom:6px">';
     h+='<div class="lbl" style="margin-bottom:4px">'+T('目標車両選択（標的サイズTH DRMに自動反映、7.3）')+'</div>';
     h+=tgtVehPickerHTML(S.gun,'GsetVehSel','GselTgtVeh','GselTgtVeh','選択解除（サイズ手動入力に戻す）');
+    h+=ssrS28DigBtnHTML(S.gun,'GsetS28Dig'); // v372: S28 SSR3
     var thSelVeh=S.gun.tgtVehId?AFV_DATA.filter(function(v){return v.id===S.gun.tgtVehId;})[0]:null;
     if(thSelVeh){
       if(!g.drm.vehTgt||g.drm.vehSize!==thSelVeh.targetSize||g.drm.vehOT!==thSelVeh.ot){
@@ -23723,7 +23733,7 @@ h+='<div class="sum sum-eq" style="display:flex;flex-wrap:nowrap;gap:5px;border:
     } else {
       if(r.dugInMiss){ // v11.340: S35 SSR3
         h+='<div style="font-size:18px;font-weight:bold;color:#8a4a4a">'+MISS_IMG_TAG()+T('外れ')+' ('+r.modDr+' ≤ TH# '+r.thNum+')</div>';
-        h+='<div style="font-size:12px;color:#3ca878;margin-top:3px">'+T('SSR3適用：塹壕化したT-34への車体(Hull)命中はミスとして扱います')+'</div>';
+        h+='<div style="font-size:12px;color:#3ca878;margin-top:3px">'+T(scenIsS28()?'SSR3適用：掘り込みしたIS-2への車体(Hull)命中はミスとして扱います':'SSR3適用：塹壕化したT-34への車体(Hull)命中はミスとして扱います')+'</div>';
       } else
       h+='<div style="font-size:18px;font-weight:bold;color:#8a4a4a">'+(r.dr===12?ZORO6_IMG_TAG():MISS_IMG_TAG())+T('外れ')+' ('+r.modDr+' > TH# '+r.thNum+')</div>';
       if(!r.malfunction){
@@ -24395,6 +24405,7 @@ function LATWsetTgtGunRef(id){ // 2026-09追加(ダルマ指示「Case 22:目標
 // 2026-08(SK#3/ASLSK3M-M1): 目標車両セレクター用(GUNタブと同様)。
 function LATWsetVehSel(k,v){S.latw[k]=v;Draw();}
 function LATWselTgtVeh(id){
+  if(S.latw.tgtVehId!==id)S.latw.s28Dig=false; /* v372 */
   S.latw.tgtVehId=id;
   S.latw.tgtVehFacing="front";
   Draw();
@@ -24471,6 +24482,7 @@ function latwSizeSelectorHTML(ld){
   // 目標車両ピッカーが無く、TH判定時のサイズは手動選択のみだった。ここにもシナリオ登場車両ピッカー(tgtVehPickerHTML、後段と状態tgtVehIdを共有)を
   // 表示し、車両を選ぶとAFV_DATAのtargetSizeを自動適用する(選択解除で手動選択に戻る)。
   if(isVeh)h+=tgtVehPickerHTML(ld,'LATWsetVehSel','LATWselTgtVeh','LATWselTgtVeh','選択解除（サイズ手動入力に戻す）');
+  if(isVeh)h+=ssrS28DigBtnHTML(ld,'LATWsetS28Dig'); // v372: S28 SSR3
   if(selVeh){
     var d=latwTgtSizeDrm(ld);
     h+='<div style="font-size:12px;color:#00aa55">'+T('選択中の車両の目標サイズを自動適用')+' <strong>'+(d>=0?'+':'')+d+'</strong></div>';
@@ -24524,7 +24536,7 @@ function latwPfMonthBlocked(w){
   var m=sc&&sc.dt?/^(\d{4})\/(\d{1,2})/.exec(sc.dt):null;
   return !!(m&&parseInt(m[1],10)===1943&&parseInt(m[2],10)<10);
 }
-function latwStatusDRM(){var d=S.latw.drm;return ((S.latw.tgtType==="vehicle"&&ssrDugInTarget(S.latw.tgtVehId))?1:0)+(d.cx?1:0)+(d.pinned?2:0)+(S.latw.tgtType==="vehicle"?0:(((d.ffmo&&latwHindTotal()<=0)?-1:0)+(d.ffnam?-1:0)+(d.hazardous?-2:0)))+(d.captured?2:0)+latwAfphDrm()+scenShotDrm(S.latw.range,S.latw.phase);} // 2026-09: 鹵獲使用(5.5)は+2 TH DR。シナリオSSR(S28+1/降雪)
+function latwStatusDRM(){var d=S.latw.drm;return ((S.latw.tgtType==="vehicle"&&ssrDugInTarget(S.latw.tgtVehId,S.latw.s28Dig))?1:0)+(d.cx?1:0)+(d.pinned?2:0)+(S.latw.tgtType==="vehicle"?0:(((d.ffmo&&latwHindTotal()<=0)?-1:0)+(d.ffnam?-1:0)+(d.hazardous?-2:0)))+(d.captured?2:0)+latwAfphDrm()+scenShotDrm(S.latw.range,S.latw.phase);} // 2026-09: 鹵獲使用(5.5)は+2 TH DR。シナリオSSR(S28+1/降雪)
 function LATWlosI(id){var d=S.latw.drm;if(!d.losT)d.losT={};d.losT[id]=(d.losT[id]||0)+1;S.latw.th_result=null;Draw();}
 function LATWlosD(id){var d=S.latw.drm;if(!d.losT)d.losT={};d.losT[id]=Math.max(0,(d.losT[id]||0)-1);S.latw.th_result=null;Draw();}
 // 2026-08修正(ユーザー指摘・実装承認済み): 自ヘクス煙幕トグルを種類ごとの
@@ -24605,7 +24617,7 @@ function LATW_JUDGE_TH(){
   var hit=(thNum>0)&&(modDr<=thNum)&&!pfSelfHit;
   // v11.340: S35 SSR3 塹壕化したT-34 M41への車体命中はミス(車体=色付きdr≧白dr)
   var latwDugInMiss=false;
-  if(hit&&ld.tgtType==="vehicle"&&ssrDugInHullMiss(ld.tgtVehId,ld.rd,ld.wd)){hit=false;latwDugInMiss=true;isCH=false;}
+  if(hit&&ld.tgtType==="vehicle"&&ssrDugInHullMiss(ld.tgtVehId,ld.rd,ld.wd,ld.s28Dig)){hit=false;latwDugInMiss=true;isCH=false;}
   var malf=null;
   var effMalfThreshold=w.malfThreshold?Math.max(2,w.malfThreshold-(ld.inexperienced?1:0)-(ld.drm.captured?2:0)):null; // 2026-09: 鹵獲使用はX#/B#-2(5.5)
   if(effMalfThreshold&&dr>=effMalfThreshold){
@@ -25356,7 +25368,7 @@ function LATW_PAGE(){
     if(r.pfSelfHit) h+='<div style="font-size:14px;font-weight:bold;color:#cc3333">'+PFSELFHIT_IMG_TAG()+T('ミス＋損耗（PF DR')+r.dr+T('） — 発射ユニットに損耗')+'</div>';
     else if(r.isCH) h+='<div style="font-size:14px;font-weight:bold;color:#ff6600">'+(r.malf?'':CH_IMG_TAG())+T('クリティカルヒット！（原DR=2）')+'</div>';
     else if(r.hit)  h+='<div style="font-size:15px;font-weight:bold;color:#4a8a4a">'+(r.malf?'':HIT_IMG_TAG())+T('命中！ STEP 2へ')+'</div>';
-    else            h+='<div style="font-size:14px;font-weight:bold;color:#8a4a4a">'+(r.malf?'':(r.dr===12?ZORO6_IMG_TAG():MISS_IMG_TAG()))+T('外れ')+'</div>'+(r.dugInMiss?'<div style="font-size:12px;color:#3ca878;margin-top:3px">'+T('SSR3適用：塹壕化したT-34への車体(Hull)命中はミスとして扱います')+'</div>':'');
+    else            h+='<div style="font-size:14px;font-weight:bold;color:#8a4a4a">'+(r.malf?'':(r.dr===12?ZORO6_IMG_TAG():MISS_IMG_TAG()))+T('外れ')+'</div>'+(r.dugInMiss?'<div style="font-size:12px;color:#3ca878;margin-top:3px">'+T(scenIsS28()?'SSR3適用：掘り込みしたIS-2への車体(Hull)命中はミスとして扱います':'SSR3適用：塹壕化したT-34への車体(Hull)命中はミスとして扱います')+'</div>':'');
     if(r.malf){
       var mTxt=r.malf.type==="destroy"?''+T('故障判定：原DR')+r.malf.dr+'≥'+r.malf.threshold+T(' → 武器は除去されました'):''+T('故障判定：原DR')+r.malf.dr+'≥'+r.malf.threshold+T(' → 武器は故障（修理可能）しました');
       h+='<div style="font-size:11px;font-weight:bold;color:#ff8800;margin-top:5px;border-top:1px solid #ff880033;padding-top:5px">'+MALF_IMG_TAG()+mTxt+'</div>';
