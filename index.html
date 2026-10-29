@@ -27319,9 +27319,12 @@ function nmHexOfNode(n){if(!BTG)return null;if(!NM_KEY_C||NM_KEY_C.g!==BTG){var 
 function nmHexOccupied(px){ /* 地点のヘクスに自軍・敵・残骸・煙幕・行軍のカウンターがあるか */
   if(!px||typeof btGraphReady!=='function'||!btGraphReady())return false;
   var n=nmNodeOfPx(px);if(n==null)return false;var H=nmHexOfNode(n);if(!H)return false;
+  if((S_LOS.wreckHexes||{})[H.boardId+':'+H.col+':'+H.row])return true;
+  return nmHexHasOther(H);
+}
+function nmHexHasOther(H){ /* 残骸以外のカウンター(自軍・敵・煙幕・行軍)があるか */
   function same(e){return e&&e.boardId===H.boardId&&e.col===H.col&&e.row===H.row;}
   if((S_LOS.friendHexes||[]).some(same)||(S_LOS.enemyHexes||[]).some(same))return true;
-  if((S_LOS.wreckHexes||{})[H.boardId+':'+H.col+':'+H.row])return true;
   if(Object.keys(S_LOS.smoke||{}).some(function(k){return same(S_LOS.smoke[k]);}))return true;
   if(S_LOS.route&&S_LOS.route.hexes&&S_LOS.route.hexes.some(same))return true;
   return false;
@@ -33153,10 +33156,28 @@ function nmRmSetVeh(n,id,sd){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);
   if(!eh){if(sd==='f'){eh={boardId:H.boardId,col:H.col,row:H.row};nmSideList('f').push(eh);}else{losToggleEnemyHexAt(H.boardId,H.col,H.row);eh=nmEnemyAt(H);}if(!eh)return;}eh.veh=id||null;if(!id||!nmAfvTurret(nmAfv(id)))eh.tca=null;try{saveState();}catch(e){}Draw();btRmReopen(n);}
 function nmRmSetFace(n,d){var H=NM_RM_HEX,eh=H&&nmEnemyAt(H);if(!eh)return;losSetEnemyHexFacing(eh.boardId,eh.col,eh.row,d==null?eh.facing:d);try{saveState();}catch(e){}Draw();btRmReopen(n);}
 /* v343(ダルマ指示「残骸もVASLカウンター」): 残骸の車両(S_LOS.wreckVeh[key]=[車両id|null,...] 件数はwreckHexesのまま) */
+function nmWreckMarkSVG(d,n,small){
+  var cx=d.x,cy=d.y,h='<g transform="rotate('+(-S_LOS.viewRot)+' '+cx+' '+cy+')">';
+  if(small){var x=cx+18,y=cy+18;
+    h+='<circle cx="'+x+'" cy="'+y+'" r="15" fill="#2b2b2b" stroke="#ff7a30" stroke-width="2.2"/>';
+    h+='<path d="M'+(x-8)+' '+(y+1)+'h16l-2 -4h-4l-1 -3h-4l-1 3h-3z" fill="#bbb"/><path d="M'+(x-1)+' '+(y-6)+'q-3 -4 1 -6q1 2 3 2q0 -3 2 -4q1 4 1 6z" fill="#ff7a30"/>';
+    h+='<text x="'+x+'" y="'+(y+11)+'" text-anchor="middle" font-size="9" font-weight="900" fill="#fff" font-family="Arial">+'+n+'</text>';
+    return h+'</g>';}
+  var S=44,x0=cx-S/2,y0=cy-S/2;
+  if(n>1)h+='<rect x="'+(x0+4)+'" y="'+(y0-4)+'" width="'+S+'" height="'+S+'" rx="4" fill="#4a4a4a" stroke="#000" stroke-width="1.5"/>';
+  h+='<rect x="'+x0+'" y="'+y0+'" width="'+S+'" height="'+S+'" rx="4" fill="#6b6b6b" stroke="#000" stroke-width="1.5"/><rect x="'+(x0+2)+'" y="'+(y0+2)+'" width="'+(S-4)+'" height="'+(S-4)+'" rx="3" fill="none" stroke="#9a9a9a" stroke-width="1"/>';
+  h+='<path d="M'+(x0+8)+' '+(y0+30)+'h28l-3 -6h-6l-2 -4h-8l-2 4h-5z" fill="#222"/><path d="M'+(x0+22)+' '+(y0+20)+'l9 -5" stroke="#222" stroke-width="2.5"/>';
+  [12,19,26,33].forEach(function(dx){h+='<circle cx="'+(x0+dx)+'" cy="'+(y0+31)+'" r="2.4" fill="#222"/>';});
+  h+='<path d="M'+(x0+18)+' '+(y0+17)+'q-4 -6 2 -9q1 4 4 3q-1 -5 3 -6q0 5 3 7q2 3 -2 5z" fill="#e05a1a" stroke="#7a1f00" stroke-width=".8"/>';
+  h+='<text x="'+(x0+S/2)+'" y="'+(y0+41)+'" text-anchor="middle" font-size="7.5" font-weight="900" fill="#fff" font-family="Arial">WRECK</text>';
+  h+='<rect x="'+(x0+S-17)+'" y="'+(y0+2)+'" width="15" height="13" rx="2" fill="#000"/><text x="'+(x0+S-9.5)+'" y="'+(y0+12)+'" text-anchor="middle" font-size="10.5" font-weight="900" fill="#ffd040" font-family="Arial">+'+n+'</text>';
+  return h+'</g>';
+}
+function nmWreckCtrHTML(id,px){return '<svg viewBox="-22 -22 44 44" width="'+px+'" height="'+px+'" style="display:block;flex-shrink:0">'+nmWreckMarkSVG({x:0,y:0},1,false).replace(/rotate\([^)]*\)/,'rotate(0 0 0)')+'</svg>';} /* v351: メニューも統一マーク */
 function nmWreckKey(H){return H.boardId+':'+H.col+':'+H.row;}
 function nmWreckList(H){var k=nmWreckKey(H),c=(S_LOS.wreckHexes||{})[k]||0,l=((S_LOS.wreckVeh||{})[k]||[]).slice(0,c);while(l.length<c)l.push(null);return l;}
 function nmVaslSrc(id){var k=VASL_CTR_MAP[id];return k&&VASL_CTR_IMG[k]||null;}
-function nmWreckCtrHTML(id,px){var src=nmVaslSrc(id);if(!src)return '';return '<span style="position:relative;display:block;width:'+px+'px;height:'+px+'px;flex-shrink:0"><img src="'+src+'" style="width:'+px+'px;height:'+px+'px;display:block;filter:grayscale(1) brightness(.55)"><span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#ff5050;font-weight:bold;font-size:'+Math.round(px*0.62)+'px;text-shadow:0 0 3px #000,0 0 3px #000">✕</span></span>';}
+function nmWreckCtrHTML0(id,px){var src=nmVaslSrc(id);if(!src)return '';return '<span style="position:relative;display:block;width:'+px+'px;height:'+px+'px;flex-shrink:0"><img src="'+src+'" style="width:'+px+'px;height:'+px+'px;display:block;filter:grayscale(1) brightness(.55)"><span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#ff5050;font-weight:bold;font-size:'+Math.round(px*0.62)+'px;text-shadow:0 0 3px #000,0 0 3px #000">✕</span></span>';}
 function nmRmWreckItems(n){
   var H=NM_RM_HEX,l=nmWreckList(H),it=[],list=nmScenAfvs();
   it.push({ic:'los',t:'← 戻る',sub:'残骸(1ヘクス3個まで)。ここ: '+l.length+'個',f:"btRmReopen("+n+")"});
@@ -34503,14 +34524,9 @@ function losWreckHexOverlaySVG(dispLayout){
     if(!g)return;
     var d=losCanonicalToDisplay(g.x,g.y,dispLayout);
     var wiw=48,wih=48;
-    var wvl=((S_LOS.wreckVeh||{})[key]||[]).slice(0,cnt),wtop=null;for(var wi=wvl.length-1;wi>=0;wi--){if(wvl[wi]&&nmVaslSrc(wvl[wi])){wtop=wvl[wi];break;}}
-    if(wtop){ /* v343: 車両を決めた残骸はVASLカウンター(対戦モードと同じ: 暗くして赤の✕)。2個以上は下に重ねて件数 */
-      var WS=46;h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
-      for(var wj=Math.min(cnt,3)-1;wj>=1;wj--)h+='<rect x="'+(d.x-WS/2+wj*4)+'" y="'+(d.y-WS/2-wj*4)+'" width="'+WS+'" height="'+WS+'" rx="3" fill="#555" stroke="#000" stroke-width="1"/>';
-      h+='<image href="'+nmVaslSrc(wtop)+'" x="'+(d.x-WS/2)+'" y="'+(d.y-WS/2)+'" width="'+WS+'" height="'+WS+'" /><rect x="'+(d.x-WS/2)+'" y="'+(d.y-WS/2)+'" width="'+WS+'" height="'+WS+'" rx="3" fill="#000" fill-opacity="0.5"/>';
-      h+='<text x="'+d.x+'" y="'+(d.y+11)+'" text-anchor="middle" font-size="32" font-weight="bold" fill="#ff5050" stroke="#000" stroke-width="3" paint-order="stroke">✕</text>';
-      if(cnt>1)h+='<rect x="'+(d.x+WS/2-14)+'" y="'+(d.y-WS/2-2)+'" width="14" height="14" rx="3" fill="#0f0f0f" stroke="#fff" stroke-width="1.2"/><text x="'+(d.x+WS/2-7)+'" y="'+(d.y-WS/2+9)+'" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">'+cnt+'</text>';
-      h+='</g>';return;}
+    /* v351(ダルマ指示「残骸は残骸+1 +2の統一マーク」「空ヘクスとカウンターがあるヘクス用の2種」): 残骸だけのヘクス=灰色の残骸カウンター「WRECK +N」、
+       自軍・敵・煙幕・行軍があるヘクス=右下に小さな丸札「+N」(カウンターを隠さない)。車両を選んだ残骸も同じマーク(どの車両かは右クリックの残骸の一覧に出る) */
+    h+=nmWreckMarkSVG(d,cnt,nmHexHasOther({boardId:boardId,col:col,row:row}));return;
     h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
     h+='<image href="data:image/png;base64,'+(S.lang==="en"?LOS_WRECK_MARKER_EN_IMG_B64:LOS_WRECK_MARKER_IMG_B64)+'" x="'+(d.x-wiw/2)+'" y="'+(d.y-wih/2)+'" width="'+wiw+'" height="'+wih+'" preserveAspectRatio="xMidYMid meet"/>'; // 2026-09追加(Kato指示「残骸マーカー英語対応」): バッジ内「残骸」の英語版(WRECK)へS.lang==="en"時に差し替え
     // 2026-08修正(ダルマ指示「残骸マーク数値白、枠ダークグレーにする」): 数字色を
