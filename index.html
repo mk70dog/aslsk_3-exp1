@@ -33052,6 +33052,9 @@ function nmUnitMenu(it,H,n,sd){
   var L=NM_SIDE_LBL[sd],eh=nmUnitAt(H,sd);
   if(!eh){it.push({ic:sd==='f'?'sel':'enemy',t:'ここに'+L.nm+'を置く',sub:'シナリオに登場する車両(カウンター)か'+L.mk+'を選ぶ',f:"nmRmVehOpen("+n+",'"+sd+"')"});return;}
   var ev=eh.veh?nmAfv(eh.veh):null,rot=losBoardRotById(eh.boardId)+(S_LOS.viewRot||0)+30;
+  if(sd==='f'&&eh.grp&&!ev){var gs=nmGrpSrcs(eh.grp); /* v358 */
+    it.push({ic:'sel',img:gs.length?'<img src="'+gs[0]+'" style="width:34px;height:34px;display:block">':'',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+T('編成')+eh.grp+'</span>',sub:(nmGrpText(eh.grp)||'(中身なし)')+'　タップで変える・ドラッグで動かせる',f:"nmRmVehOpen("+n+",'f')"});
+    it.push({ic:'x',t:'ここの'+L.nm+'を外す',f:"nmRmFriendDel()"});return;}
   it.push({ic:'turret',img:ev?vaslCtrHTML(ev.id,34,''):'',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+(ev?nmAfvName(ev):L.mk)+'</span>',sub:(ev?ev.nat+'　':'')+'タップで車両を変える・地図ではドラッグで動かせる',f:"nmRmVehOpen("+n+",'"+sd+"')"});
   it.push({ic:'rot',t:'向きを決める',sub:'車体'+(eh.facing==null?'未設定':'設定済み')+(ev&&nmAfvTurret(ev)?'・砲塔'+(eh.tca==null?'未設定':'設定済み'):'')+'　方向の画面を開く',f:"nmRmFaceOpen("+n+",'"+sd+"')"});
   if(ev&&!nmAfvTurret(ev))it.push({ic:'info',t:'砲塔なし(無砲塔)',sub:'主砲の向き=車体の向き'});
@@ -33070,7 +33073,7 @@ function nmDragPick(cx,cy){
 function nmDragGhost(x,y){
   var g=document.getElementById('nmDragG');
   if(!g){g=document.createElement('div');g.id='nmDragG';g.style.cssText='position:fixed;z-index:9400;pointer-events:none;width:50px;height:50px;margin:-25px 0 0 -25px;border-radius:3px;overflow:hidden;box-shadow:0 6px 18px #000c;opacity:.9';
-    var r=NM_DRAG.ref,src=r.veh?nmVaslSrc(r.veh):null,fc=NM_DRAG.sd==='f'?'#33aaff':'#ff00ff';
+    var r=NM_DRAG.ref,src=r.veh?nmVaslSrc(r.veh):(r.grp?nmGrpSrcs(r.grp)[0]||null:null),fc=NM_DRAG.sd==='f'?'#33aaff':'#ff00ff';
     g.innerHTML=src?'<img src="'+src+'" style="width:100%;height:100%;display:block">':'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#0d2a4a;color:#fff;font-weight:900;font-size:13px">'+(NM_DRAG.sd==='f'?'自軍':'敵軍')+'</div>';
     document.body.appendChild(g);}
   g.style.left=x+'px';g.style.top=y+'px';
@@ -33165,6 +33168,29 @@ function nmRmFaceItems(n,sd){
   return it;
 }
 function nmRmFaceOpen(n,sd){NM_FACE={sd:sd};btRmReopen(n);}
+/* v358(ダルマ指示「自軍マーカーに射撃タブの編成を選択可能にする」): 自軍に射撃タブの編成(A/B/C…)を割り当てる(eh.grp)。地図には編成のカウンター(指揮官→分隊の順、最大3枚重ね) */
+function nmGrpData(slot){
+  var g=null;try{g=losPrimaryFireGroup();}catch(e){}
+  if(g&&g.activeGroupSlot===slot&&g.pickerItems&&g.pickerItems.length)return {pickerNat:g.pickerNat,pickerItems:g.pickerItems,sw:g.sw||[]};
+  var scId=S.scen&&S.scen.sel,sv=(scId&&S.savedGroups&&S.savedGroups[scId]&&S.savedGroups[scId][slot])||null;return sv;
+}
+function nmGrpItems(slot){ /* 表示する順: 指揮官→分隊(火力の高い順)→SW */
+  var d=nmGrpData(slot);if(!d)return [];var it=(d.pickerItems||[]).slice(),D=UNITS[d.pickerNat]||{mmc:[],smc:[]};
+  function rk(x){if(x.kind==='smc'){var u=(D.smc||[]).filter(function(q){return q.lbl===x.label;})[0];return u?u.cmd:9;}var m=(D.mmc||[]).filter(function(q){return q.lbl===x.label;})[0];return 10-(m?(+m.fp||0):0)/10;}
+  it.sort(function(a,b){return (a.kind==='smc'?0:1)-(b.kind==='smc'?0:1)||rk(a)-rk(b);});
+  return it.map(function(x){return {nat:x.nat||d.pickerNat,label:x.label,kind:x.kind};});
+}
+function nmGrpSrcs(slot){return nmGrpItems(slot).map(function(x){return nmVaslSrc('u:'+x.nat+'|'+x.label);}).filter(Boolean);}
+function nmGrpText(slot){var it=nmGrpItems(slot),m={},o=[];it.forEach(function(x){var k=x.label.replace(/\[.*$/,'');if(!m[k]){m[k]=0;o.push(k);}m[k]++;});return o.map(function(k){return k+(m[k]>1?'×'+m[k]:'');}).join(' ');}
+function nmRmSetGrp(n,slot){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,'f');if(!eh){eh={boardId:H.boardId,col:H.col,row:H.row};nmSideList('f').push(eh);}eh.veh=null;eh.tca=null;eh.facing=null;eh.grp=slot;NM_FACE=null;try{saveState();}catch(e){}Draw();btRmReopen(n);}
+function nmGrpSVG(eh,d){
+  var srcs=nmGrpSrcs(eh.grp),S0=46,h='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">',k=Math.min(3,srcs.length);
+  if(!k)return nmPlainMarkSVG('f',d,eh);
+  for(var i=k-1;i>=0;i--){var o=i*5;h+='<rect x="'+(d.x-S0/2+o+1.5)+'" y="'+(d.y-S0/2-o+2)+'" width="'+S0+'" height="'+S0+'" rx="3" fill="#000" opacity=".35"/><image href="'+srcs[i]+'" x="'+(d.x-S0/2+o)+'" y="'+(d.y-S0/2-o)+'" width="'+S0+'" height="'+S0+'"/>';}
+  var tx=(S.lang==='en'?'Grp ':'編成')+eh.grp+(srcs.length>3?' +'+(srcs.length-3):'');
+  h+='<rect x="'+(d.x-21)+'" y="'+(d.y+S0/2+2)+'" width="42" height="13" rx="3" fill="#2a6fdb" stroke="#fff" stroke-width="1"/><text x="'+d.x+'" y="'+(d.y+S0/2+12)+'" text-anchor="middle" font-size="9.5" font-weight="900" fill="#fff" font-family="sans-serif">'+tx+'</text>';
+  return h+'</g>';
+}
 function nmRmFriendDel(){var H=NM_RM_HEX;if(!H)return;BtRmClose();var l=nmSideList('f');for(var i=l.length-1;i>=0;i--)if(l[i].boardId===H.boardId&&l[i].col===H.col&&l[i].row===H.row)l.splice(i,1);try{saveState();}catch(e){}Draw();}
 function nmRmSetFaceF(n,d){var eh=NM_RM_HEX&&nmUnitAt(NM_RM_HEX,'f');if(!eh||d==null)return;eh.facing=(eh.facing===d&&!NM_FACE)?null:d;try{saveState();}catch(e){}Draw();btRmReopen(n);}
 function nmRmSetTcaF(n,d){var eh=NM_RM_HEX&&nmUnitAt(NM_RM_HEX,'f');if(!eh)return;eh.tca=(d==null||(eh.tca===d&&!NM_FACE))?null:d;try{saveState();}catch(e){}Draw();btRmReopen(n);}
@@ -33235,14 +33261,18 @@ function nmRmVehItems(n,sd){
   sd=sd||'e';var L=NM_SIDE_LBL[sd],eh=nmUnitAt(NM_RM_HEX,sd),it=[],list=nmScenAfvs(),ids=scenarioAfvIdsByVehId();
   it.push({ic:'back',t:'← 戻る',sub:L.nm+'の車両を選ぶ'+(ids?'(このシナリオに登場する車両)':'(シナリオ未選択: 全車両)'),f:"btRmReopen("+n+")"});
   it.push({sep:1});
-  it.push({ic:sd==='f'?'sel':'enemy',t:L.mk,sub:'車両を決めずに'+L.nm+'のヘクスだけ登録',on:!!eh&&!eh.veh,f:"nmRmSetVeh("+n+",null,'"+sd+"')"});
+  it.push({ic:sd==='f'?'sel':'enemy',t:L.mk,sub:'車両を決めずに'+L.nm+'のヘクスだけ登録',on:!!eh&&!eh.veh&&!eh.grp,f:"nmRmSetVeh("+n+",null,'"+sd+"')"});
+  if(sd==='f'){var sl=[];try{sl=losAvailableGroupSlots();}catch(e){}var any=false;
+    sl.forEach(function(slot){var srcs=nmGrpSrcs(slot);if(!srcs.length)return;if(!any){it.push({sep:1});any=true;}
+      it.push({ic:'sel',img:'<img src="'+srcs[0]+'" style="width:34px;height:34px;display:block">',t:'<span><span style="color:#33aaff">'+T('編成')+slot+'</span>(射撃タブ)</span>',sub:nmGrpText(slot),on:!!eh&&eh.grp===slot&&!eh.veh,f:"nmRmSetGrp("+n+",'"+slot+"')"});});
+    if(!any){it.push({sep:1});it.push({ic:'info',t:'射撃タブの編成がありません',sub:'射撃タブで編成(A/B/C)にユニットを登録すると、ここで選べます'});}}
   var nats={};list.forEach(function(v){(nats[v.nat]=nats[v.nat]||[]).push(v);});
   Object.keys(nats).forEach(function(k){it.push({sep:1});nats[k].forEach(function(v){
     it.push({ic:'turret',img:vaslCtrHTML(v.id,34,''),t:'<span style="color:'+((UNITS[v.nat.split('/')[0]]&&UNITS[v.nat.split('/')[0]].col)||'#e8eef4')+'">'+nmAfvName(v)+'</span>',sub:v.nat+(nmAfvTurret(v)?'':'・無砲塔'),on:eh&&eh.veh===v.id,f:"nmRmSetVeh("+n+",'"+v.id+"','"+sd+"')"});});});
   if(!list.length)it.push({ic:'info',t:'このシナリオには車両が登場しません'});
   return it;
 }
-function nmRmSetVeh(n,id,sd){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);
+function nmRmSetVeh(n,id,sd){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(eh)eh.grp=null;
   if(!eh){if(sd==='f'){eh={boardId:H.boardId,col:H.col,row:H.row};nmSideList('f').push(eh);}else{losToggleEnemyHexAt(H.boardId,H.col,H.row);eh=nmEnemyAt(H);}if(!eh)return;}eh.veh=id||null;if(!id||!nmAfvTurret(nmAfv(id)))eh.tca=null;try{saveState();}catch(e){}Draw();NM_FACE={sd:sd||'e'};btRmReopen(n);} /* v356: 選んだら向きの画面 */
 function nmRmSetFace(n,d){var H=NM_RM_HEX,eh=H&&nmEnemyAt(H);if(!eh)return;if(NM_FACE&&eh.facing===d){btRmReopen(n);return;}losSetEnemyHexFacing(eh.boardId,eh.col,eh.row,d==null?eh.facing:d);try{saveState();}catch(e){}Draw();btRmReopen(n);}
 /* v343(ダルマ指示「残骸もVASLカウンター」): 残骸の車両(S_LOS.wreckVeh[key]=[車両id|null,...] 件数はwreckHexesのまま) */
@@ -34587,6 +34617,7 @@ function nmFriendOverlaySVG(dl){ /* v345: 自軍のカウンター(青の枠)。
   var h='';(S_LOS.friendHexes||[]).forEach(function(eh){var g=losColRowToGlobalCanon(eh.boardId,eh.col,eh.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);
     if(NM_DRAG&&NM_DRAG.moving&&NM_DRAG.ref===eh)return;
     if(nmUnitAt(eh,'e'))d={x:d.x-8,y:d.y-8}; /* 同じヘクスに敵もいる時は少しずらす */
+    if(eh.grp&&!eh.veh){h+=nmGrpSVG(eh,d);return;} /* v358 */
     h+=nmEnemyVehSVG(eh,d,eh.veh?nmVaslSrc(eh.veh):null,'#33aaff');});
   return h;
 }
