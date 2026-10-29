@@ -33274,8 +33274,22 @@ function btRMenu(n,lp){ // lp=長押しで開いた(指を離した直後のク�
   el.oncontextmenu=function(e){e.preventDefault();BtRmClose();return false;};
   document.body.appendChild(el);
   var box=el.firstChild,p=BT_RM_XY||{x:innerWidth/2,y:innerHeight/2};
-  var bw=box.offsetWidth,bh=box.offsetHeight;
-  var x=Math.min(Math.max(8,p.x+6),innerWidth-bw-8),y=Math.min(Math.max(8,p.y+6),innerHeight-bh-8);
+  /* v352(ダルマ指示「タップしたヘクスにメニューが重ならないように」): ヘクスの中心と大きさ(拡大率に合わせる)を求め、右→左→下→上の順に入る所へ置く。
+     どこにも入りきらない時は、左右のうち広い方に置いて高さを画面に合わせる(ヘクスには重ねない) */
+  var hc=null;try{hc=btActive()?btCamPt(n):nmClientOfNode(n);}catch(e){}if(!hc)hc=p;
+  var R=Math.max(20,(typeof LOS_GEO_HEX_W!=='undefined'?LOS_GEO_HEX_W:60)*S_LOS.zoom*0.62)+6,M=8,W=innerWidth,Hh=innerHeight;
+  var bw=box.offsetWidth,bh=box.offsetHeight,x,y,cands=[
+    {x:hc.x+R,y:hc.y-bh/2,ok:hc.x+R+bw<=W-M},
+    {x:hc.x-R-bw,y:hc.y-bh/2,ok:hc.x-R-bw>=M},
+    {x:hc.x-bw/2,y:hc.y+R,ok:hc.y+R+bh<=Hh-M},
+    {x:hc.x-bw/2,y:hc.y-R-bh,ok:hc.y-R-bh>=M}];
+  var c=cands.filter(function(q){return q.ok;})[0];
+  if(c){x=c.x;y=c.y;}
+  else{var rs=W-M-(hc.x+R),ls=hc.x-R-M;
+    if(Math.max(rs,ls)>=Math.min(bw,240)){x=rs>=ls?hc.x+R:Math.max(M,hc.x-R-bw);if(rs>=ls&&x+bw>W-M)box.style.maxWidth=(W-M-x)+'px';y=hc.y-bh/2;}
+    else{var ds=Hh-M-(hc.y+R),us=hc.y-R-M;x=hc.x-bw/2;if(ds>=us){y=hc.y+R;box.style.maxHeight=ds+'px';}else{box.style.maxHeight=us+'px';y=hc.y-R-Math.min(bh,us);}}}
+  bw=box.offsetWidth;bh=box.offsetHeight;
+  x=Math.min(Math.max(M,x),W-bw-M);y=Math.min(Math.max(M,y),Hh-bh-M);
   box.style.left=x+'px';box.style.top=y+'px';
   // 対象のヘクスを強調
   BT.rmHex=n;Draw();keepO();
