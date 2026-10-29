@@ -27325,8 +27325,8 @@ function nmHexOccupied(px){ /* 地点のヘクスに自軍・敵・残骸・煙�
   if(S_LOS.route&&S_LOS.route.hexes&&S_LOS.route.hexes.some(same))return true;
   return false;
 }
-function nmABMarkSVG(px,d,lbl){
-  var B=lbl==='B',occ=nmHexOccupied(px);
+function nmABMarkSVG(px,d,lbl,occ0){
+  var B=lbl==='B',occ=(occ0!=null)?occ0:nmHexOccupied(px);
   if(occ){ /* 案4: 角に小さく(カウンターを隠さない) */
     var x=d.x-24,y=d.y-26,c=B?'#c8102e':'#1f4e9e';
     return '<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><rect x="'+(x-13)+'" y="'+(y-13)+'" width="26" height="26" rx="3" fill="#f4f0e0" stroke="#000" stroke-width="1.5"/><rect x="'+(x-11)+'" y="'+(y-11)+'" width="22" height="22" rx="2" fill="'+c+'"/><text x="'+x+'" y="'+(y-2)+'" text-anchor="middle" font-size="7" font-weight="700" fill="#fff" font-family="Arial">LOS</text><text x="'+x+'" y="'+(y+9)+'" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="Arial">'+lbl+'</text></g>';
@@ -32643,11 +32643,12 @@ function btLosABSVG(dispLayout){
     var H=btVehHindNodes();
     r.vehHex.forEach(function(nm){var N=BTG.nodes.filter(function(x){return x.nm===nm;})[0];if(!N)return;var d=btDispPt(N.i,dispLayout);
       h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="24" fill="none" stroke="#ffd040" stroke-width="3" stroke-dasharray="5 4"/>';});
-    h+=btLosABPin(db,'B');
+    h+=nmABMarkSVG(null,db,'B',btLosABOcc(L.b)); /* v350: 通常MAPと同じA/Bマーク(スタックのあるヘクス=角に小さく、空き=中央に双眼鏡・照準) */
   }
-  h+=btLosABPin(da,'A');
+  h+=nmABMarkSVG(null,da,'A',btLosABOcc(L.a));
   return h;
 }
+function btLosABOcc(n){try{return btStacksAtN(n).some(function(s){return s.u&&s.u.length;})||!!(BT.smoke&&BT.smoke[n]);}catch(e){return false;}}
 function btLosABPin(d,t){
   return '<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><circle cx="'+d.x+'" cy="'+d.y+'" r="11" fill="#66ccff" stroke="#000" stroke-width="2"/><text x="'+d.x+'" y="'+(d.y+4)+'" text-anchor="middle" font-size="13" font-weight="bold" fill="#000" font-family="monospace">'+t+'</text></g>';
 }
