@@ -30594,6 +30594,7 @@ function btUnitLine(s,u,selIds,canSel){
 function btBandHTML(){
   if(!btAvail())return '';
   var on=btActive();
+  if(!on)return ''; /* v346: 通常のMAPタブでは対戦ONのボタンを見出し(nmLosToolsBarHTML)に出す */
   if(on&&btGraphReady()&&btCardHasBand())return '<div id="btBand" class="bt-band-on" style="display:none"></div>'; // v313: 指示カードの右側に表示中
   var h='<div id="btBand"'+(on?' class="bt-band-on"':'')+' style="margin:4px 0;border:1px solid '+(on?'#4a5262':'#404040')+';border-radius:4px;background:#080a10;padding:5px 6px">';
   h+='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">';
@@ -31040,6 +31041,18 @@ function BtOffMerge(sid,tid){
   BT.sel=t.id;BT.selU=null;btLog([BT_SIDE_NAME[t.side]+' 盤外の待機スタックをまとめた']);btSave();Draw();
 }
 // ---------- v290(ダルマ指示「対戦時は赤枠内(編成・季節・歩兵/車両・対象グループ)をデフォルトで折りたたむ」) ----------
+/* v346: 通常のMAPタブの見出し(折りたたみ)。[対戦 OFF] アプリと対戦(S26) | シナリオ S26 / 10月 果樹園● 麦畑○ | ▶/▼ */
+function NmLosToolsToggle(){var keep=nmScrollKeep();S_LOS.nmToolsOpen=!S_LOS.nmToolsOpen;Draw();keep();}
+function nmLosToolsBarHTML(){
+  var open=!!S_LOS.nmToolsOpen,sc=(S.scen&&S.scen.sel)?SCN.filter(function(x){return x.id===S.scen.sel;})[0]:null,mo=null;
+  try{var ss=losSeasonFromScenario();mo=ss&&ss.mo;}catch(e){}
+  var sea=T('果樹園')+(S.lang==="en"?'(Apr-Oct)':'(4-10月)')+(S_LOS.orchardSeason?'<span style="color:#3ca878"> ●</span>':'<span style="color:#556677"> ○</span>')+'　'+T('麦畑')+(S.lang==="en"?'(Jun-Sep)':'(6-9月)')+(S_LOS.grainSeason?'<span style="color:#3ca878"> ●</span>':'<span style="color:#556677"> ○</span>');
+  var bt='';
+  if(typeof btAvail==='function'&&btAvail())bt='<span onclick="event.stopPropagation()" style="display:inline-flex;align-items:center;gap:6px">'+btBtn(T('対戦')+' OFF','BtToggle()',{on:false})+'<span style="font-size:11px;color:#667788">'+T('アプリと対戦')+'('+btScId()+')</span></span><span style="color:#2f3540">|</span>';
+  return '<div id="nmLosFold" onclick="NmLosToolsToggle()" style="cursor:pointer;display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 6px;padding:5px 8px;border:1px solid #2f3540;border-radius:4px;background:#0a0c14;font-size:12px;color:#8899aa">'
+    +bt+'<span style="color:#ccddee">'+T('シナリオ')+' '+(sc?sc.id:'—')+' / '+(mo?mo+T('月'):'—')+'</span><span style="font-size:11px">'+sea+'</span>'
+    +'<span style="margin-left:auto;display:inline-flex;align-items:center;gap:6px"><span style="font-size:11px;color:#667788">'+(open?T('閉じる'):T('編成・歩兵/車両・対象グループ'))+'</span><span style="color:#c0a030">'+(open?'▼':'▶')+'</span></span></div>';
+}
 function btLosToolsFolded(){return btAvail()&&btActive()&&!BT.losToolsOpen;}
 function BtLosToolsToggle(){BT.losToolsOpen=!BT.losToolsOpen;btSave();Draw();}
 function btLosToolsBarHTML(){
@@ -38998,6 +39011,7 @@ function LOS_PAGE(){
   // 呼び出し元が無くなったため未使用のまま残置。将来の直接呼び出し用に関数自体は削除していない)。
   var btFold=(typeof btLosToolsFolded==='function'&&btLosToolsFolded()); // v290(ダルマ指示): 対戦中はデフォルトで折りたたむ
   if(typeof btLosToolsBarHTML==='function')h+=btLosToolsBarHTML();
+  if(!btActive()){h+=nmLosToolsBarHTML();if(!S_LOS.nmToolsOpen)btFold=true;} /* v346(ダルマ指示「折りたたみ式・デフォルト折りたたみ・見出しに対戦OFF/シナリオ/季節を横並び」) */
   if(!btFold)h+=losCompactSWPickerHTML();
 
   if(S_LOS.boards.length===0){
