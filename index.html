@@ -33278,15 +33278,16 @@ function btRMenu(n,lp){ // lp=長押しで開いた(指を離した直後のク�
      どこにも入りきらない時は、左右のうち広い方に置いて高さを画面に合わせる(ヘクスには重ねない) */
   var hc=null;try{hc=btActive()?btCamPt(n):nmClientOfNode(n);}catch(e){}if(!hc)hc=p;
   var R=Math.max(20,(typeof LOS_GEO_HEX_W!=='undefined'?LOS_GEO_HEX_W:60)*S_LOS.zoom*0.62)+6,M=8,W=innerWidth,Hh=innerHeight;
-  var bw=box.offsetWidth,bh=box.offsetHeight,x,y,cands=[
-    {x:hc.x+R,y:hc.y-bh/2,ok:hc.x+R+bw<=W-M},
-    {x:hc.x-R-bw,y:hc.y-bh/2,ok:hc.x-R-bw>=M},
+  var bw=box.offsetWidth,bh=box.offsetHeight,x,y,cR={x:hc.x+R,y:hc.y-bh/2,ok:hc.x+R+bw<=W-M},cL={x:hc.x-R-bw,y:hc.y-bh/2,ok:hc.x-R-bw>=M};
+  var mw=document.getElementById('losScrollWrap'),mr=mw?mw.getBoundingClientRect():{left:0,right:W},mid=(Math.max(0,mr.left)+Math.min(W,mr.right))/2;
+  var rightSide=hc.x>mid; /* v352(ダルマ指示「マップの右側をタップ時はメニューを左に表示」): 地図の右半分=左に、左半分=右に出す */
+  var cands=(rightSide?[cL,cR]:[cR,cL]).concat([
     {x:hc.x-bw/2,y:hc.y+R,ok:hc.y+R+bh<=Hh-M},
-    {x:hc.x-bw/2,y:hc.y-R-bh,ok:hc.y-R-bh>=M}];
+    {x:hc.x-bw/2,y:hc.y-R-bh,ok:hc.y-R-bh>=M}]);
   var c=cands.filter(function(q){return q.ok;})[0];
   if(c){x=c.x;y=c.y;}
   else{var rs=W-M-(hc.x+R),ls=hc.x-R-M;
-    if(Math.max(rs,ls)>=Math.min(bw,240)){x=rs>=ls?hc.x+R:Math.max(M,hc.x-R-bw);if(rs>=ls&&x+bw>W-M)box.style.maxWidth=(W-M-x)+'px';y=hc.y-bh/2;}
+    if(Math.max(rs,ls)>=Math.min(bw,240)){var goR=rightSide?(ls<Math.min(bw,240)):(rs>=ls||ls<Math.min(bw,240));x=goR?hc.x+R:Math.max(M,hc.x-R-bw);if(goR&&x+bw>W-M)box.style.maxWidth=(W-M-x)+'px';y=hc.y-bh/2;}
     else{var ds=Hh-M-(hc.y+R),us=hc.y-R-M;x=hc.x-bw/2;if(ds>=us){y=hc.y+R;box.style.maxHeight=ds+'px';}else{box.style.maxHeight=us+'px';y=hc.y-R-Math.min(bh,us);}}}
   bw=box.offsetWidth;bh=box.offsetHeight;
   x=Math.min(Math.max(M,x),W-bw-M);y=Math.min(Math.max(M,y),Hh-bh-M);
