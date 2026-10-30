@@ -33413,6 +33413,8 @@ function nmMfTgtList(){var M=NM_MF,od=M.sd==='f'?'e':'f',A=BTG.nodes[M.from],out
 function nmMfTgt(n,tn){var M=NM_MF;if(!M)return;M.tgt=tn;nmMfEnsureGrp();var A=BTG.nodes[M.from],B=BTG.nodes[tn];
   try{gunAcqReset();}catch(e){}S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB={x:B.x,y:B.y};var f=getFireState();if(f){f.res=null;f.rd=0;f.wd=0;}
   LosRunPixel();var k=0;(function w(){if(S_LOS.loading&&k++<60){setTimeout(w,50);return;}Draw();nmMfReopen(n);})();}
+function nmMfDie(n,k,v){var f=getFireState();if(!f)return;f[k]=v;f.res=null;Draw();nmMfReopen(n);}
+function nmMfJudge(n){var f=getFireState();if(!f||!f.rd||!f.wd)return;f.res=null;FJUDGE();Draw();if(document.querySelector('#main div[style*="position:fixed;inset:0"]')){BtRmClose();return;}nmMfReopen(n);}
 function nmMfRoll(n){var f=getFireState();if(!f)return;f.res=null;f.rd=1+Math.floor(Math.random()*6);f.wd=1+Math.floor(Math.random()*6);FJUDGE();Draw();if(document.querySelector('#main div[style*="position:fixed;inset:0"]')){BtRmClose();return;}nmMfReopen(n);}
 function nmMfTgtName(eh){var v=eh.veh?nmAfv(eh.veh):null,g=(!v&&eh.gun)?nmGun(eh.gun):null;return v?nmAfvName(v):g?nmGunName(g):eh.grp?T('編成')+eh.grp+' '+(nmGrpText(eh.grp)||''):(NM_SIDE_LBL[eh===nmEnemyAt(eh)?'e':'f']||{}).mk||'';}
 function nmMfTgtImg(eh){var src=eh.veh?nmVaslSrc(eh.veh):eh.gun?nmVaslSrc(eh.gun):eh.grp?(nmGrpSrcs(eh.grp,1)[0]||null):null;return src?'<img src="'+src+'" style="width:30px;height:30px;display:block">':'';}
@@ -33447,6 +33449,10 @@ function nmRmMFireItems(n){
     it.push({ic:'info',t:'敵マーカーには自動で反映しません',sub:'結果は射撃タブ・ログにも残ります'});}
   it.push({sep:1});
   it.push({ic:'fire',t:f&&f.res?'もう一度ダイスを振る':'ダイスを振る',sub:'赤白のダイスを振って判定(射撃タブのJUDGEと同じ)',f:"nmMfRoll("+n+")"});
+  /* v403(ダルマ指示「ダイスは入力することも可能にする」): 実物のダイスの目を入れて判定 */
+  [['rd','赤','#ff6060'],['wd','白','#e8eef4']].forEach(function(x){var cv=f?f[x[0]]:0;
+    it.push({row:1,cmp:1,ic:'fire',t:'<span style="color:'+x[2]+'">'+x[1]+'</span>',btns:[1,2,3,4,5,6].map(function(v){return [(cv===v?'✓':'')+v,"nmMfDie("+n+",'"+x[0]+"',"+v+")"];})});});
+  if(f&&f.rd&&f.wd&&!f.res)it.push({ic:'fire',t:'入れた目で判定する',sub:'赤'+f.rd+'・白'+f.wd+'　(射撃タブのJUDGEと同じ)',f:"nmMfJudge("+n+")"});
   it.push({ic:'tabs',t:'射撃タブで開く',sub:'細かい設定(射撃モード・FFMO・指揮官など)は射撃タブで',f:"BtRmClose();NAVTAB('fire')"});
   return it;
 }
@@ -33812,7 +33818,7 @@ function btRMenu(n,lp){ // lp=長押しで開いた(指を離した直後のク�
     if(x.arr){h+='<div class="rmIt rmRow" style="flex-wrap:wrap" onclick="event.stopPropagation()"><span class="rmIc"'+((NM_ICON_STYLE&&NM_IC[x.ic])?' style="flex:0 0 36px;justify-content:center"':'')+'>'+(nmIconSVG(x.ic)||btRmIcon(x.ic))+'</span><span class="rmTx">'+x.t+(x.sub?'<span class="rmSub">'+x.sub+'</span>':'')+'</span><span class="rmBtns" style="flex:1 0 100%;justify-content:flex-end;margin-top:4px">';
       for(var ai=0;ai<6;ai++)h+='<button class="rmB" style="min-width:30px;padding:3px 4px;'+(x.cur===ai?'background:#ff9030;color:#000;border-color:#ffb060':'')+'" onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push(x.fn+'('+x.n+','+ai+')')-1)+')"><span style="display:inline-block;transform:rotate('+(ai*60+x.rot)+'deg)">&#8593;</span></button>';
       if(!x.noClr)h+='<button class="rmB" style="min-width:30px;padding:3px 6px"'+(x.cur==null?' disabled':'')+' onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push(x.fn+'('+x.n+',null)')-1)+')">×</button>';h+='</span></div>';return;}
-    if(x.row){h+='<div class="rmIt rmRow" onclick="event.stopPropagation()"><span class="rmIc"'+((x.img||(NM_ICON_STYLE&&NM_IC[x.ic]))?' style="flex:0 0 36px;justify-content:center"':'')+'>'+(x.img||nmIconSVG(x.ic)||btRmIcon(x.ic))+'</span><span class="rmTx">'+x.t+'</span><span class="rmBtns">'+x.btns.map(function(b){return b[1]?'<button class="rmB"'+(b[2]?' disabled':'')+' onclick="event.stopPropagation();'+b[1]+'">'+b[0]+'</button>':'<span class="rmVal">'+b[0]+'</span>';}).join('')+'</span></div>';return;}
+    if(x.row){h+='<div class="rmIt rmRow" onclick="event.stopPropagation()"><span class="rmIc"'+((x.img||(NM_ICON_STYLE&&NM_IC[x.ic]))?' style="flex:0 0 36px;justify-content:center"':'')+'>'+(x.img||nmIconSVG(x.ic)||btRmIcon(x.ic))+'</span><span class="rmTx">'+x.t+'</span><span class="rmBtns"'+(x.cmp?' style="gap:3px"':'')+'>'+x.btns.map(function(b){return b[1]?'<button class="rmB"'+(b[2]?' disabled':'')+(x.cmp?' style="min-width:0;width:30px;padding:0"':'')+' onclick="event.stopPropagation();'+b[1]+'">'+b[0]+'</button>':'<span class="rmVal">'+b[0]+'</span>';}).join('')+'</span></div>';return;}
     h+='<div class="rmIt"'+(x.f?' onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push(x.f)-1)+')"':' style="cursor:default"')+'><span class="rmIc"'+((x.img||NM_MENU_MARK[x.ic]||(NM_ICON_STYLE&&NM_IC[x.ic]))?' style="flex:0 0 36px;justify-content:center"':'')+'>'+(x.img||nmIconSVG(x.ic)||(NM_MENU_MARK[x.ic]?nmMenuMark(x.ic):btRmIcon(x.ic)))+'</span><span class="rmTx">'+x.t+(x.sub?'<span class="rmSub">'+x.sub+'</span>':'')+'</span>'+(x.on?'<span style="margin-left:auto;color:#ff9030;font-size:13px">✓</span>':'')+'</div>';});
   h+='</div>';
   var el=document.createElement('div');el.id='btRm';el.innerHTML=h;
