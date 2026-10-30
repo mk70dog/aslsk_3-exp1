@@ -18713,7 +18713,7 @@ function SW_REPAIR_CARD(){
   });
   h+='</div>';
   }
-  h+='<div style="'+(!S.repair.selNat?'display:grid;grid-template-columns:repeat(3,1fr);gap:8px 6px':'display:flex;flex-direction:column;gap:8px')+';border:1px solid #404040;border-radius:3px;background:#000000;padding:6px">';
+  h+='<div style="display:flex;flex-wrap:wrap;gap:6px;border:1px solid #404040;border-radius:3px;background:#000000;padding:6px">'; // v397(ダルマ指示「ボタン横幅をカウンターに合わせる」): 3列等幅→内容幅で横に並べる
   SWT.filter(function(t){
     if(t.id==="ft241")return false;
     if(S.repair.selNat)return t.nat.indexOf(S.repair.selNat)>=0;
@@ -18726,7 +18726,7 @@ function SW_REPAIR_CARD(){
     var rpNc=(rpNatForColor&&UNITS[rpNatForColor])?UNITS[rpNatForColor].col:'#4499ee';
     var rpLp=t.lbl.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
     var rpMain=rpLp?rpLp[1]:t.lbl,rpSuf=rpLp?rpLp[2]:null;
-    h+='<div class="swrow" style="cursor:pointer'+(sel?';background:#4499ee1a;border-radius:3px':'')+'" onclick="RPselSW(\''+t.id+'\')"><span class="swlbl" style="display:inline-flex;align-items:center;gap:4px;opacity:1">';
+    h+='<div class="swrow" style="cursor:pointer;flex:0 0 auto;width:auto;padding:3px 6px;border:1px solid '+(sel?'#4499eecc':'#33445566')+';border-radius:3px'+(sel?';background:#4499ee1a':'')+'" onclick="RPselSW(\''+t.id+'\')"><span class="swlbl" style="display:inline-flex;align-items:center;gap:4px;opacity:1">';
     h+='<span class="mdot '+(sel?"on2":"off")+'" style="display:inline-block;vertical-align:middle"></span>';
     // 2026-08 ダルマ指示：名前/射程チップをユニットタブ(UNIT_PAGE)と同じ2段スタイルに統一
     var rpRM2=rpMain.match(/^([A-Za-z]+)\s*(\d+-\d+)/);
