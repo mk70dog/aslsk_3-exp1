@@ -22349,7 +22349,6 @@ function GUN_PAGE(){
   if(!gd){h+='</div>';return h;}
 
   // Gun stats display
-  h+='<div style="display:grid;grid-template-columns:repeat(8,1fr);gap:3px;margin:6px 0">';
   var statsA=[
     {l:"口径",v:gd.cal+"mm"},
     {l:"射表",v:gd.thType==="ve"?"対車両":gd.thType==="area"?"面制圧":"歩兵"},
@@ -22365,12 +22364,14 @@ function GUN_PAGE(){
   if(gd.isVehicleMA){
     var afvA=AFV_DATA.find(function(a){return a.id===gd.afvId;});
     var afTxt=function(o){return o?(o.hull+(o.turret!=null&&o.turret!==o.hull?'/'+o.turret:'')):'?';};
-    if(afvA&&afvA.afFront)statsA.push({l:"装甲",v:(S.lang==='en'?'F':'前')+afTxt(afvA.afFront)+'<br>'+(S.lang==='en'?'S':'側')+afTxt(afvA.afSide)});
+    if(afvA&&afvA.afFront)statsA.push({l:"装甲",v:(S.lang==='en'?'F':'前')+afTxt(afvA.afFront)+' '+(S.lang==='en'?'S':'側')+afTxt(afvA.afSide)});
   }
+  /* v394(ダルマ指示「横幅いっぱいにして薄くする」): 列数=項目数で横幅いっぱい、見出しと値を1行に並べて高さを詰める(狭い時だけ折り返す) */
+  h+='<div style="display:grid;grid-template-columns:'+(statsA[statsA.length-1].l==='装甲'?'repeat('+(statsA.length-1)+',minmax(0,1fr)) max-content':'repeat('+statsA.length+',minmax(0,1fr))')+';gap:3px;margin:6px 0">';
   statsA.forEach(function(s){
-    h+='<div style="background:#000000;border:1px solid #404040;border-radius:2px;padding:3px 4px;text-align:center">';
-    h+='<div style="font-size:12px;color:#445566">'+T(s.l)+'</div>';
-    h+='<div style="font-size:11px;font-weight:bold;color:#ccddee">'+T(s.v)+'</div></div>';
+    h+='<div style="background:#000000;border:1px solid #404040;border-radius:2px;padding:2px 4px;display:flex;flex-wrap:'+(s.l==='装甲'?'nowrap':'wrap')+';align-items:baseline;justify-content:center;column-gap:5px;line-height:1.2;min-width:0">';
+    h+='<span style="font-size:11px;color:#445566;white-space:nowrap">'+T(s.l)+'</span>';
+    h+='<span style="font-size:11px;font-weight:bold;color:#ccddee;white-space:nowrap">'+T(s.v)+'</span></div>';
   });
   h+='</div>';
 
@@ -22794,9 +22795,9 @@ function GUN_PAGE(){
   h+='<div style="display:flex;flex-wrap:nowrap;gap:6px;margin-bottom:6px">';
   h+='<div style="flex:1;min-width:0;background:#000000;border:1px solid #404040;border-radius:3px;padding:5px">';
   h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+T('射撃側車両の状態（BU/CE、7.7）')+'</div>';
-  h+='<div class="btns c24btns" style="margin:0;display:flex;gap:4px">';
-  h+='<button class="b sm'+(g.drm.firerBU?' on':'')+'" style="flex:1" onclick="GsetDRM(\'firerBU\',true)">'+T('ハッチを閉じている（+1 TH）')+'</button>';
-  h+='<button class="b sm grn'+(!g.drm.firerBU?' on':'')+'" style="flex:1" onclick="GsetDRM(\'firerBU\',false)">'+T('ハッチを開けている（修正なし）')+'</button>';
+  h+='<div class="btns c24btns" style="margin:0;display:flex;flex-direction:column;gap:4px">'; /* v394(ダルマ指示「2段で表示」): BU/CEボタンを縦2段に */
+  h+='<button class="b sm'+(g.drm.firerBU?' on':'')+'" style="flex:0 0 auto;min-height:32px" onclick="GsetDRM(\'firerBU\',true)">'+T('ハッチを閉じている（+1 TH）')+'</button>';
+  h+='<button class="b sm grn'+(!g.drm.firerBU?' on':'')+'" style="flex:0 0 auto;min-height:32px" onclick="GsetDRM(\'firerBU\',false)">'+T('ハッチを開けている（修正なし）')+'</button>';
   h+='</div>';
   if((gd.turretType==="RST"||gd.turretType==="1MT")){
     h+='<div style="font-size:12px;color:#cc8844;margin-top:3px">'+T('RST/1MTはCE状態では主砲/同軸機銃を発射できません（7.2項）。CE選択中は主砲射撃不可です。')+'</div>';
