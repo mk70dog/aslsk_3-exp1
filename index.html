@@ -32945,7 +32945,12 @@ function nmThreatBest(c){var b=null;(c&&c.lines||[]).forEach(function(L){if(L.er
 var NM_TH_CAM=null;
 function nmThreatPick(i){
   var o=btRmLive();if(!o||(o.k!=='nthreat'&&o.k!=='nfire')||!o.list[i])return;
-  o.sel=(o.sel===i)?null:i;Draw();
+  o.sel=(o.sel===i)?null:i;
+  /* v378(ダルマ指示「狙える・狙われるの候補選択を、射撃・砲撃・戦車タブへA/B地点のLOSと同様に反映」): 候補を選ぶと撃つ側=地点A・目標=地点BにしてLOS判定(結果は射撃・砲撃・戦車タブへ) */
+  if(o.sel!=null){var x=o.list[i],sA=(o.k==='nfire')?o.n:x.sn,sB=(o.k==='nfire')?x.sn:o.n,NA=BTG.nodes[sA],NB=BTG.nodes[sB];
+    if(NA&&NB){try{if(!S_LOS.pxB||S_LOS.pxB.x!==NB.x||S_LOS.pxB.y!==NB.y){gunAcqReset();hdrLogoRand();}}catch(e){}
+      S_LOS.pxA={x:NA.x,y:NA.y};S_LOS.pxB={x:NB.x,y:NB.y};Draw();try{LosRunPixel();}catch(e){console.log('nmThreatPick LOS',e);}}else Draw();}
+  else Draw();
   if(o.sel!=null)setTimeout(function(){nmCamPair(o.list[i].sn,o.n);},30);
 }
 function nmCamPair(a,b){ /* 2つのヘクスが地図の見えている所(下のポップアップを除く)に入るよう拡大・縮小して寄せる */
