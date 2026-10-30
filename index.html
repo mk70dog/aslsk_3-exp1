@@ -33056,7 +33056,7 @@ function nmRMenuItems(n){
   var H=NM_RM_HEX,it=[],N=(n>=0)?BTG.nodes[n]:null;
   if(NM_FACE)return nmRmFaceItems(n,NM_FACE.sd);
   if(NM_RM_VEH){var vsd=NM_RM_VEH===1?'e':NM_RM_VEH;NM_RM_VEH=0;return nmRmVehItems(n,vsd);}
-  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);if(sk==='tabs')return nmRmTabItems(n);if(sk==='grpedit')return nmRmGrpEditItems(n);}
+  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);if(sk==='tabs')return nmRmTabItems(n);if(sk==='grpedit')return nmRmGrpEditItems(n);if(sk==='mfire')return nmRmMFireItems(n);}
   var nm=N?N.nm:btHexName(H.boardId,H.col,H.row),terr=N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')):'';
   var hasA=!!S_LOS.pxA;
   it.push({ic:'full',t:btMapFullOn()?'全画面表示オフ':'全画面表示オン',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに',f:"BtMapFull("+(n>=0?n:'null')+")"}); /* v349: 最上部 */
@@ -33201,6 +33201,7 @@ function nmUnitMenu(it,H,n,sd){
   var ev=eh.veh?nmAfv(eh.veh):null,rot=losBoardRotById(eh.boardId)+(S_LOS.viewRot||0)+30;
   if(eh.grp&&!ev&&!eh.gun){var gs=nmGrpSrcs(eh.grp); /* v358 / v401: 敵軍も編成 */
     it.push({ic:'sel',img:gs.length?nmGrpImgHTML(gs[0],eh.grp):'',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+T('編成')+eh.grp+'</span>',sub:(nmGrpText(eh.grp)||'(中身なし)')+'　タップで変える・ドラッグで動かせる',f:"nmRmVehOpen("+n+",'"+sd+"')"});
+    it.push({ic:'fire',t:'ここから撃つ(射撃)',sub:'編成'+eh.grp+'で'+(sd==='f'?'敵':'自軍')+'のマーカーを撃つ。射撃タブと同じ計算でダイスまで',f:"nmMfOpen("+n+",'"+sd+"','"+eh.grp+"')"}); /* v403 */
     it.push({ic:'hex',t:'編成'+eh.grp+'を編集',sub:'ユニットを加える・外す(射撃タブの編成'+eh.grp+'も同じ内容になる)',f:"nmGeOpen("+n+",'"+sd+"','"+eh.grp+"')"});
     it.push({ic:'x',t:'このヘクスの'+L.nm+'を外す',f:sd==='f'?"nmRmFriendDel()":"nmRmEnemy()"});return;}
   var eg=(!ev&&eh.gun)?nmGun(eh.gun):null;
@@ -33394,6 +33395,62 @@ function nmGeSwDel(n,uid){var G=NM_GE;if(!G)return;var g=nmGeActive(G.slot);
   nmGeSync(G.slot);try{saveState();}catch(e){}Draw();NM_RM_SUB='grpedit';btRmReopen(n);}
 function nmGeSwList(nat){var ids=null;try{var a=scenarioSWIds();ids=a?(a[nat]||{}):null;}catch(e){}
   return SWT.filter(function(t){return ids?!!ids[t.id]:(t.nat||[]).indexOf(nat)>=0;});}
+/* v403(ダルマ指示「右クリックから射撃を実施できる？」→サンプル): 編成を置いたマーカーから、相手側のマーカーへ射撃(IFT)。
+   射撃タブそのものを使う: 射撃タブの最初のグループに編成を呼び出し(FgSelectGroupSlot)、撃つ側=地点A・目標=地点BのLOS判定で射程・TEM・妨害を射撃タブへ入れ、
+   ダイスは射撃タブの赤白(rd/wd)に入れてFJUDGE(射撃タブのJUDGEと同じ)。結果は射撃タブ・ログにも残る。マーカーへの効果の反映はしない */
+var NM_MF=null;
+var NM_MF_PH=[['pfph','準備'],['dff','臨機'],['dfph','防御'],['afph','前進']];
+function nmMfOpen(n,sd,slot){NM_MF={sd:sd,slot:slot,from:n,tgt:null};NM_RM_SUB='mfire';btRmReopen(n);}
+function nmMfBack(n){NM_MF=null;btRmReopen(n);}
+function nmMfReopen(n){NM_RM_SUB='mfire';btRmReopen(n);}
+function nmMfEnsureGrp(){var M=NM_MF;if(!M)return;if(S.fireSub==null)S.fireSub='pfph';var f=getFireState(),g=f&&f.grps&&f.grps[0];if(g&&g.activeGroupSlot!==M.slot)FgSelectGroupSlot(g.id,M.slot);}
+function nmMfPh(n,v){if(S.fireSub!==v)FIREsub(v);nmMfEnsureGrp();var f=getFireState();if(f)f.res=null;Draw();nmMfReopen(n);}
+function nmMfTgtList(){var M=NM_MF,od=M.sd==='f'?'e':'f',A=BTG.nodes[M.from],out=[];
+  nmSideList(od).forEach(function(eh,i){var tn=btNodeOf(eh.boardId,eh.col,eh.row);if(tn==null||tn<0)return;var B=BTG.nodes[tn],r=null;
+    try{r=losCheckLOSGlobal(A.x,A.y,B.x,B.y,S_LOS.orchardSeason,S_LOS.grainSeason);}catch(e){}
+    out.push({i:i,eh:eh,tn:tn,d:btDist(M.from,tn),blk:!!(r&&r.blocked),hd:(r&&r.hindranceDrm)||0});});
+  return out.sort(function(a,b){return (a.blk-b.blk)||(a.d-b.d);});}
+function nmMfTgt(n,tn){var M=NM_MF;if(!M)return;M.tgt=tn;nmMfEnsureGrp();var A=BTG.nodes[M.from],B=BTG.nodes[tn];
+  try{gunAcqReset();}catch(e){}S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB={x:B.x,y:B.y};var f=getFireState();if(f){f.res=null;f.rd=0;f.wd=0;}
+  LosRunPixel();var k=0;(function w(){if(S_LOS.loading&&k++<60){setTimeout(w,50);return;}Draw();nmMfReopen(n);})();}
+function nmMfRoll(n){var f=getFireState();if(!f)return;f.res=null;f.rd=1+Math.floor(Math.random()*6);f.wd=1+Math.floor(Math.random()*6);FJUDGE();Draw();if(document.querySelector('#main div[style*="position:fixed;inset:0"]')){BtRmClose();return;}nmMfReopen(n);}
+function nmMfTgtName(eh){var v=eh.veh?nmAfv(eh.veh):null,g=(!v&&eh.gun)?nmGun(eh.gun):null;return v?nmAfvName(v):g?nmGunName(g):eh.grp?T('編成')+eh.grp+' '+(nmGrpText(eh.grp)||''):(NM_SIDE_LBL[eh===nmEnemyAt(eh)?'e':'f']||{}).mk||'';}
+function nmMfTgtImg(eh){var src=eh.veh?nmVaslSrc(eh.veh):eh.gun?nmVaslSrc(eh.gun):eh.grp?(nmGrpSrcs(eh.grp,1)[0]||null):null;return src?'<img src="'+src+'" style="width:30px;height:30px;display:block">':'';}
+function nmRmMFireItems(n){
+  var M=NM_MF;if(!M)return nmRMenuItems(n);var L=NM_SIDE_LBL[M.sd],it=[],sg=function(v){return (v>=0?'+':'')+v;};
+  it.push({ic:'back',t:'← 戻る',sub:'メニューに戻る',f:"nmMfBack("+n+")"});
+  it.push({sep:1});
+  var srcs=nmGrpSrcs(M.slot,1);
+  it.push({ic:'fire',img:srcs.length?nmGrpImgHTML(srcs[0],M.slot):'',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+T('編成')+M.slot+' が撃つ</span>',sub:(nmGrpText(M.slot)||'(中身なし)')+'　@'+BTG.nodes[M.from].nm});
+  var cur=S.fireSub||'pfph';
+  it.push({row:1,ic:'route',t:'フェイズ',btns:NM_MF_PH.map(function(x){return [(cur===x[0]?'✓':'')+x[1],"nmMfPh("+n+",'"+x[0]+"')"];})});
+  it.push({sep:1});
+  if(M.tgt==null){
+    var tl=nmMfTgtList();
+    it.push({ic:'tgt',t:'目標を選ぶ',sub:tl.length?'LOSが通る相手のマーカー(近い順)':'相手のマーカーがありません(右クリック「このヘクスに'+(M.sd==='f'?'敵':'自軍')+'を置く」)'});
+    tl.forEach(function(x){var nm=BTG.nodes[x.tn].nm,ti=nmTemOfNode(x.tn);
+      it.push({ic:'tgt',img:nmMfTgtImg(x.eh),t:(x.blk?'<span style="color:#667">':'<span>')+nmMfTgtName(x.eh)+' @'+nm+'</span>',sub:'距離'+x.d+'　'+(x.blk?'LOS遮断':'LOS通る'+(x.hd?'・妨害+'+x.hd:''))+(ti?'　'+ti:''),f:x.blk?'':"nmMfTgt("+n+","+x.tn+")"});});
+    return it;
+  }
+  var tgtEh=null;nmSideList(M.sd==='f'?'e':'f').forEach(function(eh){if(btNodeOf(eh.boardId,eh.col,eh.row)===M.tgt)tgtEh=eh;});
+  it.push({ic:'tgt',img:tgtEh?nmMfTgtImg(tgtEh):'',t:'目標: '+(tgtEh?nmMfTgtName(tgtEh):'')+' @'+BTG.nodes[M.tgt].nm,sub:'距離'+btDist(M.from,M.tgt)+'　タップで目標を選び直す',f:"NM_MF.tgt=null;nmMfReopen("+n+")"});
+  var f=getFireState(),ph=f&&f.ph,fp=0,drm=0;try{fp=totalFP(f,ph);drm=fireDRM(f);}catch(e){}
+  var col=IFT_LBL[ci(fp)];
+  var parts=[];try{var pt=[['TEM',fireTemEff(f)],['指揮官',fireEffLdr(f)],['妨害',fireHindTotal(f)],['SSR',scenShotDrm(fireShotRange(f),fireShotPh())]];pt.forEach(function(x){if(x[1])parts.push(x[0]+sg(x[1]));});}catch(e){}
+  it.push({ic:'fire',t:'<span>FP <b>'+fp+'</b>　→　<b>'+col+'</b>列　DRM <b>'+sg(drm)+'</b></span>',sub:(parts.length?'DRM内訳: '+parts.join(' ')+'　':'')+'射撃タブ('+(ph||'-')+')と同じ計算'});
+  var dl=[];try{dl=fireDetailLines(f).filter(function(x){return /class="b sm on"/.test(x);});}catch(e){}
+  if(dl.length)it.push({html:'<div style="display:flex;flex-wrap:wrap;padding:0 4px 2px 40px">'+dl.join('')+'</div>'});
+  if(f&&f.res&&f.res.ift){var R=f.res,rr=rm(R.ift.r);
+    it.push({sep:1});
+    it.push({ic:'fire',t:'<span>'+diceEmojiStr(f.rd,f.wd)+'　'+R.raw+(R.drm?' '+sg(R.drm):'')+' = '+R.mod+'　<b style="color:'+rr.c+'">'+rr.t+'</b></span>',sub:'FP'+R.fp+'・'+(R.ift.col||'-')+'列'+(R.cow?'・畏縮(左へ'+R.cowerCols+'列)':'')});
+    (R.swr||[]).forEach(function(w){var rk=(w.ro==='維持成功');if(w.fail||w.xFail||rk)it.push({ic:'info',t:w.lbl+(w.xFail?' 除去(X#)':w.fail?' 故障(B#)':'')+(rk?'　ROF維持(もう一度撃てる)':''),sub:''});});
+    it.push({ic:'info',t:'敵マーカーには自動で反映しません',sub:'結果は射撃タブ・ログにも残ります'});}
+  it.push({sep:1});
+  it.push({ic:'fire',t:f&&f.res?'もう一度ダイスを振る':'ダイスを振る',sub:'赤白のダイスを振って判定(射撃タブのJUDGEと同じ)',f:"nmMfRoll("+n+")"});
+  it.push({ic:'tabs',t:'射撃タブで開く',sub:'細かい設定(射撃モード・FFMO・指揮官など)は射撃タブで',f:"BtRmClose();NAVTAB('fire')"});
+  return it;
+}
+function nmTemOfNode(tn){var N=BTG.nodes[tn];return N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')):'';}
 function nmRmGrpEditItems(n){
   var G=NM_GE;if(!G)return nmRMenuItems(n);var L=NM_SIDE_LBL[G.sd],d=nmGeList(G.slot),nat=d.nat,it=[],nc=(UNITS[nat]&&UNITS[nat].col)||'#ccddee';
   function q(x){return String(x).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
