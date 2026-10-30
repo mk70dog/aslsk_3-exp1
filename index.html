@@ -33443,7 +33443,7 @@ function nmGeSwList(nat){var ids=null;try{var a=scenarioSWIds();ids=a?(a[nat]||{
    ダイスは射撃タブの赤白(rd/wd)に入れてFJUDGE(射撃タブのJUDGEと同じ)。結果は射撃タブ・ログにも残る。マーカーへの効果の反映はしない */
 var NM_MF=null;
 var NM_MF_PH=[['pfph','準備'],['dff','臨機'],['dfph','防御'],['afph','前進']];
-function nmMfOpen(n,sd,slot){NM_MF={sd:sd,slot:slot,from:n,tgt:null};NM_RM_SUB='mfire';btRmReopen(n);}
+function nmMfOpen(n,sd,slot){var tph=S.turn&&NM_PH_FIRE[S.turn.phase];if(tph&&S.fireSub!==tph){try{FIREsub(tph);}catch(e){}}NM_MF={sd:sd,slot:slot,from:n,tgt:null};NM_RM_SUB='mfire';btRmReopen(n);}
 function nmMfBack(n){NM_MF=null;btRmReopen(n);}
 function nmMfReopen(n){NM_RM_SUB='mfire';btRmReopen(n);}
 function nmMfEnsureGrp(){var M=NM_MF;if(!M)return;if(S.fireSub==null)S.fireSub='pfph';var f=getFireState(),g=f&&f.grps&&f.grps[0];if(g&&g.activeGroupSlot!==M.slot)FgSelectGroupSlot(g.id,M.slot);}
@@ -33523,7 +33523,7 @@ function nmTemOfNode(tn){var N=BTG.nodes[tn];return N?(btTerrJP(N.terr)+(N.tem?'
    ダイスは振る・目を入れるの両方。結果は表示とログのみ(マーカーへは反映しない) */
 var NM_VF=null;
 var NM_VF_PH=[['PF','準備','PFPh'],['DFF','臨機','DFF'],['FF','防御','DFPh'],['AF','前進','AFPh']];
-function nmVfOpen(n,sd){var ph=({pfph:'PF',dff:'DFF',dfph:'FF',afph:'AF'})[S.fireSub]||'PF';NM_VF={sd:sd,from:n,tgt:null,ammo:null,ph:ph,ce:false,a:0,b:0,res:null,c1:0,c2:0,res2:null};NM_RM_SUB='vfire';btRmReopen(n);}
+function nmVfOpen(n,sd){var tph=S.turn&&NM_PH_FIRE[S.turn.phase];var ph=({pfph:'PF',dff:'DFF',dfph:'FF',afph:'AF'})[tph||S.fireSub]||'PF';NM_VF={sd:sd,from:n,tgt:null,ammo:null,ph:ph,ce:false,a:0,b:0,res:null,c1:0,c2:0,res2:null};NM_RM_SUB='vfire';btRmReopen(n);}
 function nmVfRe(n){NM_RM_SUB='vfire';btRmReopen(n);}
 function nmVfEh(){var V=NM_VF,H=nmHexOfNode(V.from);return H?nmUnitAt(H,V.sd):null;}
 function nmVfBuild(){ /* nmShotCalcと同じ撃つ側・目標の組み立て */
@@ -33894,6 +33894,32 @@ function nmPickOverlaySVG(dl){var P=NM_PICK;if(!P)return '';var h='';P.list.forE
   if(x.blk)h+='<g opacity=".8"><circle cx="'+d.x+'" cy="'+d.y+'" r="34" fill="none" stroke="#888" stroke-width="3" stroke-dasharray="6 5"/><path d="M'+(d.x-10)+' '+(d.y-10)+'l20 20m0-20l-20 20" stroke="#bbb" stroke-width="4"/></g>';
   else h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="36" fill="none" stroke="#000" stroke-width="9" opacity=".55"/><circle cx="'+d.x+'" cy="'+d.y+'" r="36" fill="#40ff9022" stroke="#40ff90" stroke-width="5"><animate attributeName="stroke-opacity" values="1;.35;1" dur="1.2s" repeatCount="indefinite"/></circle><g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><rect x="'+(d.x-17)+'" y="'+(d.y-50)+'" width="34" height="14" rx="3" fill="#3ca878"/><text x="'+d.x+'" y="'+(d.y-39.5)+'" text-anchor="middle" font-size="10" font-weight="900" fill="#fff" font-family="sans-serif">距離'+x.d+'</text></g>';});
   return h;}
+
+/* v414(ダルマ指示「マップを直感的に」お任せ): 地図の左上に手番とフェイズ(ターン表 S.turn と共通)。◀▶でフェイズを進めると、タブは移らずにマップの後片付け:
+   移動フェイズを終えたら残留火力を外す / 防御射撃を終えたら臨機・防御の射撃済みを外す / 新しいプレイヤーターン(回復)で射撃済みと車両の移動(Motion以外)を外す。
+   マップの撃つ画面の既定フェイズもこのフェイズに合わせる */
+var NM_PH_FIRE={pfph:'pfph',mph:'dff',dfph:'dfph',afph:'afph'};
+function nmPhaseSideNat(){var sc=curScen();if(!sc||!sc.atk||!sc.f)return null;var nats=Object.keys(sc.f),atk=sc.atk,atkAx=!!AXIS_NATS[atk],def=nats.filter(function(k){return !!AXIS_NATS[k]!==atkAx;})[0]||null;return (S.turn&&S.turn.half===1)?def:atk;}
+function nmPhaseBarHTML(){if(!S.turn||!(S.scen&&S.scen.sel))return '';var t=S.turn,ph=PHASE_SEQ.filter(function(x){return x.id===(t.phase||'rph');})[0]||PHASE_SEQ[0],nat=nmPhaseSideNat(),nc=(nat&&UNITS[nat]&&UNITS[nat].col)||'#ccddee';
+  var b='height:30px;min-width:34px;padding:0 8px;margin:0;font-size:14px';
+  return '<div style="position:sticky;left:0;top:0;width:0;height:0;flex:0 0 0;z-index:6;overflow:visible"><div id="nmPhaseBar" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" style="position:absolute;left:6px;top:6px;display:flex;align-items:center;gap:6px;background:#000c;border:1px solid #404040;border-radius:6px;padding:4px 6px;white-space:nowrap;box-shadow:0 4px 12px #0008">'
+   +'<span style="font-size:13px;font-weight:bold;color:#e8eef4">'+(t.ended?'END':'T'+(t.cur||1)+(t.half?'裏':'表'))+'</span>'
+   +(nat?'<span style="font-size:13px;font-weight:bold;color:'+nc+'">'+nmNatLbl(nat)+'</span>':'')
+   +'<button class="b sm" style="'+b+'" onclick="event.stopPropagation();nmPhaseStep(-1)">◀</button>'
+   +'<span style="font-size:15px;font-weight:bold;color:#ffd060;min-width:64px;text-align:center">'+T(ph.lbl)+'<span style="font-size:10px;color:#8899aa;margin-left:3px">'+ph.abbr+'</span></span>'
+   +'<button class="b sm" style="'+b+'" onclick="event.stopPropagation();nmPhaseStep(1)">▶</button></div></div>';}
+function nmPhaseStep(d){if(!S.turn)S.turn={cur:1,half:0,ended:false,phase:'rph'};var ids=PHASE_SEQ.map(function(x){return x.id;}),prev=S.turn.phase||'rph',i=ids.indexOf(prev);if(i<0)i=0;
+  var ni=i+d,turnCh=false;if(ni>=ids.length){if(S.turn.ended)return;TurnAdj(1);ni=0;turnCh=true;}else if(ni<0){TurnAdj(-1);ni=ids.length-1;turnCh=true;}
+  var id=ids[ni],msg=[];S.turn.phase=id;
+  if(id==='rph'&&d>0){if(!S.rally)S.rally=deepCopy(INIT_RALLY);try{resetPlayerTurnFlags();}catch(e){}}
+  if(d>0){
+    if(prev==='mph'&&S_LOS.resid&&Object.keys(S_LOS.resid).length){S_LOS.resid={};msg.push('残留火力を外しました');}
+    if(prev==='dfph'){var c=0;[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){if(eh.st&&(eh.st.fired==='臨機'||eh.st.fired==='防御')){delete eh.st.fired;c++;}});});if(c)msg.push('臨機・防御の射撃済みを外しました('+c+')');}
+    if(id==='rph'&&turnCh){var c2=0,c3=0;[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){if(!eh.st)return;if(eh.st.fired){delete eh.st.fired;c2++;}if(eh.st.mv&&eh.st.mv!=='mot'){eh.st.mv=0;c3++;}});});
+      if(c2)msg.push('射撃済みを外しました('+c2+')');if(c3)msg.push('車両の移動の印を外しました('+c3+')');}}
+  if(NM_PH_FIRE[id]&&S.fireSub!==NM_PH_FIRE[id]){try{FIREsub(NM_PH_FIRE[id]);}catch(e){S.fireSub=NM_PH_FIRE[id];}}
+  try{renderPhaseTracker();}catch(e){}try{saveState();}catch(e){}Draw();
+  var ph=PHASE_SEQ[ni];btToast((turnCh?(S.turn.ended?'END':'T'+S.turn.cur+(S.turn.half?'裏':'表'))+' ':'')+T(ph.lbl)+'フェイズ'+(msg.length?'　'+msg.join('・'):''));}
 function nmRmGrpEditItems(n){
   var G=NM_GE;if(!G)return nmRMenuItems(n);var L=NM_SIDE_LBL[G.sd],d=nmGeList(G.slot),nat=d.nat,it=[],nc=(UNITS[nat]&&UNITS[nat].col)||'#ccddee';
   function q(x){return String(x).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
@@ -40416,6 +40442,7 @@ function LOS_PAGE(){
   // 撤去前は症状が出ないことを確認・報告。実際の原因は盤面<img>側のMath.round丸め処理(v10.97、
   // 別途撤回済み)だったため、このプロパティ自体は無関係と判明。v10.94時点の記述に戻す。
   h+='<div id="losScrollWrap" style="width:100%;max-height:'+((losIsLandscapeFitTarget()?80:60)*losVMult())+'vh;overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid #404040;border-radius:3px;display:flex">';
+  try{if(!(typeof btActive==='function'&&btActive()))h+=nmPhaseBarHTML();}catch(e){} /* v414 */
   // 2026-08変更(Kato指示): 表示回転を180度限定から0/90/180/270度に一般化。外側(losMapWrap)は
   // クリック判定・スクロール枠として常に軸並行(非回転)の外接ボックスサイズを保ち、内側の
   // コンテナだけを中心基準でCSS回転させることで、90/270度時の縦横入れ替えにも対応する
