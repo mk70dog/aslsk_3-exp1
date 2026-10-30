@@ -33061,10 +33061,11 @@ function nmRMenuItems(n){
   var H=NM_RM_HEX,it=[],N=(n>=0)?BTG.nodes[n]:null;
   if(NM_FACE)return nmRmFaceItems(n,NM_FACE.sd);
   if(NM_RM_VEH){var vsd=NM_RM_VEH===1?'e':NM_RM_VEH;NM_RM_VEH=0;return nmRmVehItems(n,vsd);}
-  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);if(sk==='tabs')return nmRmTabItems(n);if(sk==='grpedit')return nmRmGrpEditItems(n);if(sk==='mfire')return nmRmMFireItems(n);if(sk==='vfire')return nmRmVFireItems(n);}
+  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);if(sk==='tabs')return nmRmTabItems(n);if(sk==='grpedit')return nmRmGrpEditItems(n);if(sk==='mfire')return nmRmMFireItems(n);if(sk==='vfire')return nmRmVFireItems(n);if(sk==='sync')return nmRmSyncItems(n);}
   var nm=N?N.nm:btHexName(H.boardId,H.col,H.row),terr=N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')):'';
   var hasA=!!S_LOS.pxA;
   it.push({ic:'full',t:btMapFullOn()?'全画面表示オフ':'全画面表示オン',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに',f:"BtMapFull("+(n>=0?n:'null')+")"}); /* v349: 最上部 */
+  var nsm=nmsMode();it.push({ic:'move',t:'マップ共有(別のiPadと同期)',sub:(nsm==='off'?'オフ':nsm==='auto'?'自動':'ボタン')+(NMS.status?'　'+NMS.status:'')+(NMS.last?'　'+nmsAgo(NMS.last):''),f:"nmRmSubOpen('sync',"+n+")"}); /* v407 */
   it.push({ic:'tabs',t:'タブ移動',sub:'ほかのタブへ移る(全画面はMAPに戻ると全画面のまま)',f:"nmRmSubOpen('tabs',"+n+")"}); /* v360 */
   if(nmStAnyFired())it.push({ic:'fire',t:'射撃済みの印を全部外す',sub:'次のフェイズ・プレイヤーターンへ進む時に',f:"BtRmClose();nmStClearFired()"}); /* v406 */
   it.push({ic:'trash',t:'全てクリア',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを全部消す(確認あり)',f:"nmRmSubOpen('clear',"+n+")"});it.push({sep:1}); /* v345(ダルマ指示「右クリックに全てクリアを追加」)・v349「2番目に」 */
@@ -33674,6 +33675,58 @@ function nmStFired(eh,ph){if(!eh)return;var st=nmStOf(eh);st.fired=ph||'済';try
 function nmStClearFired(){[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){if(eh.st)delete eh.st.fired;});});nmStSave();}
 function nmStAnyFired(){return [S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].some(function(L){return L.some(function(eh){return eh.st&&eh.st.fired;});});}
 function nmStFiredRow(it,n,sd,eh){var st=nmStOf(eh);it.push({row:1,ic:'fire',t:'射撃',btns:[[(st.fired?'✓射撃済み'+(st.fired!=='済'?'('+st.fired+')':''):'射撃済みにする'),"nmStTog("+n+",'"+sd+"','fired')"]]});}
+
+/* v407(ダルマ指示「マップタブの情報を別iPadで同期して共有」「切り替え式」): 対戦記録と同じGistに aslsk_map.json を置き、マップの状態と編成を共有。
+   モード: off / manual(送る・受け取るボタン) / auto(変更から約3秒で送る・約6秒ごとに受け取る)。後から送った方が勝ち。シナリオが違う相手の内容は反映しない。
+   共有: 自軍・敵軍マーカー(向き・編成・状態・射撃済み・移動)、残骸、煙幕、マーク、地点A・B、行軍、このシナリオの編成(S.savedGroups[シナリオ])。見た目(拡大・位置)は共有しない */
+var NMS_FILE='aslsk_map.json';
+setTimeout(function(){try{nmsStart();}catch(e){}},1500);
+var NMS={busy:false,last:0,lastHash:'',remoteAt:0,status:'',msg:'',timer:null,from:'',remoteScen:''};
+function nmsMode(){try{return localStorage.getItem('aslsk_mapsync')||'off';}catch(e){return 'off';}}
+function nmsSetMode(n,m){try{localStorage.setItem('aslsk_mapsync',m);}catch(e){}nmsStart();if(m==='auto')nmsTick();btRmReopen(n);}
+function nmsDev(){try{var d=localStorage.getItem('aslsk_dev_id');if(!d){d=Math.random().toString(36).slice(2,8);localStorage.setItem('aslsk_dev_id',d);}return d;}catch(e){return 'x';}}
+function nmsPayloadMap(){var sc=S.scen&&S.scen.sel;return {friendHexes:S_LOS.friendHexes||[],enemyHexes:S_LOS.enemyHexes||[],wreckHexes:S_LOS.wreckHexes||{},wreckVeh:S_LOS.wreckVeh||{},smoke:S_LOS.smoke||{},buildingMarks:S_LOS.buildingMarks||{},pxA:S_LOS.pxA||null,pxB:S_LOS.pxB||null,route:S_LOS.route||null,
+  groups:(sc&&S.savedGroups&&S.savedGroups[sc])||{}};}
+function nmsHash(){try{var g=null;try{g=losPrimaryFireGroup();}catch(e){}if(g&&g.activeGroupSlot)nmGeSync(g.activeGroupSlot);}catch(e){}return JSON.stringify(nmsPayloadMap());}
+function nmsHdr(){return {'Authorization':'token '+gistGetToken(),'Accept':'application/vnd.github+json','Content-Type':'application/json'};}
+function nmsPush(cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);return;}var sc=S.scen&&S.scen.sel;if(!sc){NMS.msg='シナリオが選ばれていません';if(cb)cb(false);return;}
+  var h=nmsHash(),at=Date.now(),body={files:{}};body.files[NMS_FILE]={content:JSON.stringify({v:1,scen:sc,at:at,dev:nmsDev(),map:JSON.parse(h)})};
+  NMS.busy=true;NMS.status='送信中';fetch('https://api.github.com/gists/'+gistGetId(),{method:'PATCH',headers:nmsHdr(),body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw new Error('PATCH '+r.status);
+    NMS.busy=false;NMS.lastHash=h;NMS.remoteAt=at;NMS.last=Date.now();NMS.status='送信済み';NMS.msg='';if(cb)cb(true);nmsRedraw();}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=String(e.message||e);if(cb)cb(false);nmsRedraw();});}
+function nmsPull(force,cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);return;}NMS.busy=true;NMS.status=NMS.status||'受信中';
+  fetch('https://api.github.com/gists/'+gistGetId()+'?t='+Date.now(),{headers:nmsHdr(),cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('GET '+r.status);return r.json();}).then(function(gist){
+    NMS.busy=false;var f=(gist.files||{})[NMS_FILE];if(!f||!f.content){NMS.status='まだ共有データがありません';if(cb)cb(false);nmsRedraw();return;}
+    var P=JSON.parse(f.content);NMS.remoteScen=P.scen;NMS.from=P.dev;
+    if(P.scen!==(S.scen&&S.scen.sel)){NMS.status='相手は別のシナリオ('+P.scen+')';if(cb)cb(false);nmsRedraw();return;}
+    if(!force&&(P.at<=NMS.remoteAt||P.dev===nmsDev())){NMS.status=NMS.status==='受信中'?'最新':NMS.status;NMS.last=Date.now();if(cb)cb(false);nmsRedraw();return;}
+    nmsApply(P);NMS.remoteAt=P.at;NMS.last=Date.now();NMS.status='受信して反映';NMS.msg='';if(cb)cb(true);}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=String(e.message||e);if(cb)cb(false);nmsRedraw();});}
+function nmsApply(P){var m=P.map||{},sc=P.scen;
+  S_LOS.friendHexes=m.friendHexes||[];S_LOS.enemyHexes=m.enemyHexes||[];S_LOS.wreckHexes=m.wreckHexes||{};S_LOS.wreckVeh=m.wreckVeh||{};S_LOS.smoke=m.smoke||{};S_LOS.buildingMarks=m.buildingMarks||{};S_LOS.route=m.route||null;
+  if(!S.savedGroups)S.savedGroups={};S.savedGroups[sc]=m.groups||{};
+  try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot&&S.savedGroups[sc][g.activeGroupSlot]){var keep=Draw;FgSelectGroupSlot(g.id,g.activeGroupSlot);}}catch(e){}
+  var abCh=JSON.stringify([S_LOS.pxA,S_LOS.pxB])!==JSON.stringify([m.pxA||null,m.pxB||null]);S_LOS.pxA=m.pxA||null;S_LOS.pxB=m.pxB||null;if(!S_LOS.pxA||!S_LOS.pxB)S_LOS.result=null;
+  NMS.lastHash=nmsHash();try{saveState();}catch(e){}
+  if(abCh&&S_LOS.pxA&&S_LOS.pxB){try{LosRunPixel();}catch(e){}}else nmsRedraw(true);
+  try{showToast(T('マップを受け取りました'),'grn');}catch(e){}}
+function nmsRedraw(full){if(full||S.tab==='los'){if(document.getElementById('btRm')&&!full)return;Draw();}}
+function nmsTick(){if(nmsMode()!=='auto'||!GIST_CONFIGURED()||NMS.busy)return;if(!(S.scen&&S.scen.sel))return;
+  if(document.getElementById('nmDragG'))return;var h=nmsHash();
+  if(NMS.lastHash&&h!==NMS.lastHash){if(!NMS.dirtyAt)NMS.dirtyAt=Date.now();if(Date.now()-NMS.dirtyAt>=2500){NMS.dirtyAt=0;nmsPush();}return;}
+  NMS.dirtyAt=0;if(!NMS.lastHash)NMS.lastHash=h;
+  if(Date.now()-(NMS.lastPoll||0)>=6000){NMS.lastPoll=Date.now();nmsPull(false);}}
+function nmsStart(){if(NMS.timer){clearInterval(NMS.timer);NMS.timer=null;}if(nmsMode()==='auto'){NMS.lastHash='';NMS.timer=setInterval(nmsTick,1000);}}
+function nmsAgo(t){if(!t)return '';var s0=Math.round((Date.now()-t)/1000);return s0<60?s0+'秒前':Math.round(s0/60)+'分前';}
+function nmRmSyncItems(n){var it=[],m=nmsMode();
+  it.push({ic:'back',t:'← 戻る',sub:'マップ共有',f:"btRmReopen("+n+")"});it.push({sep:1});
+  if(!GIST_CONFIGURED()){it.push({ic:'info',t:'GitHub Gistの設定がありません',sub:'シナリオタブ「BATTLE RECORD」の同期設定(トークンとGist ID)を、両方のiPadで同じにしてください'});return it;}
+  it.push({row:1,ic:'tabs',t:'共有のしかた',btns:[[(m==='off'?'✓':'')+'オフ',"nmsSetMode("+n+",'off')"],[(m==='manual'?'✓':'')+'ボタン',"nmsSetMode("+n+",'manual')"],[(m==='auto'?'✓':'')+'自動',"nmsSetMode("+n+",'auto')"]]});
+  it.push({ic:'info',t:'状態: '+(NMS.status||'—')+(NMS.last?'　'+nmsAgo(NMS.last):''),sub:(NMS.msg?NMS.msg+'　':'')+'この端末: '+nmsDev()+(NMS.from&&NMS.from!==nmsDev()?'　相手: '+NMS.from:'')+'　シナリオ: '+((S.scen&&S.scen.sel)||'-')});
+  if(m!=='off'){it.push({sep:1});
+    it.push({ic:'move',t:'マップを送る',sub:'この端末のマーカー・残骸・煙幕・マーク・地点A・B・行軍・編成を共有へ',f:"nmsPush(function(){btRmReopen("+n+");})"});
+    it.push({ic:'move',t:'マップを受け取る',sub:'共有の内容でこの端末のマップを置き換える(同じシナリオの時だけ)',f:"nmsPull(true,function(){btRmReopen("+n+");})"});}
+  if(m==='auto')it.push({ic:'info',t:'自動: 変更から約3秒で送り、約6秒ごとに受け取ります',sub:'2台で同時に変えた時は、後から送った方の内容になります'});
+  it.push({ic:'info',t:'共有しないもの',sub:'拡大・表示位置・回転、開いているメニュー、射撃タブで選択中の画面'});
+  return it;}
 function nmRmGrpEditItems(n){
   var G=NM_GE;if(!G)return nmRMenuItems(n);var L=NM_SIDE_LBL[G.sd],d=nmGeList(G.slot),nat=d.nat,it=[],nc=(UNITS[nat]&&UNITS[nat].col)||'#ccddee';
   function q(x){return String(x).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
@@ -42678,7 +42731,7 @@ function GIST_SYNC(silent){
     return res.json();
   }).then(function(gist){
     var files=gist.files||{};
-    fileKey=Object.keys(files)[0]||GIST_FILENAME; // 既存ファイル名を優先使用(GIST_FILENAMEとの不一致を防ぐ)
+    fileKey=files[GIST_FILENAME]?GIST_FILENAME:(Object.keys(files).filter(function(k){return k!==NMS_FILE;})[0]||GIST_FILENAME); // 既存ファイル名を優先使用(GIST_FILENAMEとの不一致を防ぐ)。v407: マップ共有用ファイル(NMS_FILE)は対象外
     var content=(files[fileKey]&&files[fileKey].content)||'[]';
     var remote;
     try{ remote=JSON.parse(content); if(!Array.isArray(remote))remote=[]; }catch(e){ remote=[]; }
