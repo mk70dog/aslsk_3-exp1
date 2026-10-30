@@ -41216,17 +41216,17 @@ function SCEN_PAGE(){
   // KIT切替ボタン（SK1/SK2/SK3は画像バッジ、EX1はテキストボタン）
   // 2026-09追加(ダルマ指示): SK1/SK2/SK3を横並び1列3ボタン、EXP#1をその下の別行に分離表示。
   function kitBtnHTML(kit){
-    var active=(curKitKey===kit);
+    var active=(curKitKey===kit)&&!s.viewRecords; // v395(ダルマ指示「BATTLE RECORDを選択時アクティブにする」): 対戦記録表示中はキットを非アクティブに
     var cnt=scnSorted.filter(function(sc){return scenKit(sc.id)===kit;}).length;
     var b='';
     if(SCEN_KIT_BADGE_IMG[kit]){
       b+='<button onclick="SKIT(\''+kit+'\')" title="'+KIT_LBL[kit]+'" style="position:relative;height:64px;padding:0;box-sizing:border-box;border-radius:4px;border:'+(active?'2px solid #c8a032':'1px solid #333')+';background:'+(active?'#1a1400':'#0a0c14')+';cursor:pointer;overflow:hidden;display:flex;align-items:stretch;opacity:'+(active?'1':'0.5')+';transition:all 0.15s;box-shadow:'+(active?'0 0 8px rgba(200,160,50,0.4)':'none')+'">';
       b+='<img src="'+SCEN_KIT_BADGE_IMG[kit]+'" style="height:100%;width:auto;flex-shrink:0;object-fit:cover;display:block">';
-      b+='<span style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center;padding:0 3px;color:'+(active?'#c8a032':'#aabbcc')+';font-size:13px;font-weight:bold;letter-spacing:0.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+KIT_LBL[kit]+' ('+cnt+')</span>';
+      b+='<span style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center;padding:0 3px;color:'+(active?'#c8a032':'#aabbcc')+';font-family:\'Courier New\',monospace;font-size:clamp(9px,1.6vw,13px);font-weight:bold;letter-spacing:0.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+KIT_LBL[kit]+' ('+cnt+')</span>';
       b+='</button>';
     }else{
       b+='<button onclick="SKIT(\''+kit+'\')" title="'+KIT_LBL[kit]+'" style="height:64px;padding:4px;box-sizing:border-box;font-family:\'DotGothic16\',monospace;border-radius:4px;border:'+(active?'2px solid #c8a032':'1px solid #333')+';background:'+(active?'#1a1400':'#0a0c14')+';color:'+(active?'#c8a032':'#8899aa')+';cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:all 0.15s;box-shadow:'+(active?'0 0 8px rgba(200,160,50,0.4)':'none')+'">';
-      b+='<span style="font-size:13px;font-weight:bold;letter-spacing:0.05em">'+KIT_LBL[kit]+'</span>';
+      b+='<span style="font-family:\'Courier New\',monospace;font-size:clamp(9px,1.6vw,13px);font-weight:bold;letter-spacing:0.05em">'+KIT_LBL[kit]+'</span>';
       b+='<span style="font-size:11px;color:'+(active?'#c8a03299':'#556677')+'">('+cnt+')</span>';
       b+='</button>';
     }
@@ -41238,9 +41238,9 @@ function SCEN_PAGE(){
   // 表示キット数+1が5の倍数になるまで、クリック不可で何も表示されない空白枠を挟む(従来のダミー枠と同じ方式)。
   KIT_VISIBLE.forEach(function(kit){h+=kitBtnHTML(kit);});
   for(var kpad=(5-((KIT_VISIBLE.length+1)%5))%5;kpad>0;kpad--)h+='<div style="visibility:hidden;height:64px" aria-hidden="true"></div>';
-  h+='<button class="battle-rec-btn" onclick="SREC_VIEW()" title="BATTLE RECORD" aria-label="BATTLE RECORD" style="position:relative;height:64px;padding:0;box-sizing:border-box;overflow:hidden;align-items:stretch;font-family:\'DotGothic16\',monospace;border-radius:4px;border:1px solid #404040;background:'+(recOn?'radial-gradient(ellipse at center,#0a1a2e 0%,#0a0c14 80%)':'#0a0c14')+';display:flex;align-items:center;justify-content:center;transition:all 0.15s;cursor:pointer;box-shadow:'+(recOn?'0 0 12px rgba(68,153,238,0.35),inset 0 0 8px rgba(68,153,238,0.15)':'none')+'">';
+  h+='<button class="battle-rec-btn" onclick="SREC_VIEW()" title="BATTLE RECORD" aria-label="BATTLE RECORD" style="position:relative;height:64px;padding:0;box-sizing:border-box;overflow:hidden;align-items:stretch;font-family:\'DotGothic16\',monospace;border-radius:4px;border:'+(recOn?'2px solid #c8a032':'1px solid #404040')+';background:'+(recOn?'#1a1400':'#0a0c14')+';display:flex;align-items:center;justify-content:center;transition:all 0.15s;cursor:pointer;box-shadow:'+(recOn?'0 0 10px #c8a03255':'none')+'">'; /* v395: 選択時はキットボタンと同じ金枠アクティブ表示 */
   h+='<img src="'+BATTLE_REC_IMG+'" alt="" draggable="false" style="height:100%;width:auto;flex-shrink:0;object-fit:cover;pointer-events:none;display:block">'; // 2026-10 ダルマ指示: BATTLE RECORDボタン内の左に画像(縦幅=ボタン)、文字を戻す
-  h+='<span style="font-family:\'Courier New\',monospace;font-weight:bold;font-size:clamp(9px,1.6vw,13px);letter-spacing:0.05em;color:#ffffff;flex:1;text-align:center;min-width:0;padding:0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">BATTLE<br>RECORD</span>';
+  h+='<span style="font-family:\'Courier New\',monospace;font-weight:bold;font-size:clamp(9px,1.6vw,13px);letter-spacing:0.05em;color:'+(recOn?'#c8a032':'#ffffff')+';flex:1;text-align:center;min-width:0;padding:0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">BATTLE<br>RECORD</span>';
   h+='</button>';
   h+='</div>';
   // 修正実施(2026-09、マサヒコ指摘「BATTLE RECORDタップ時、下のシナリオ一覧が表示され続けて
