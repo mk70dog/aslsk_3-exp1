@@ -34906,12 +34906,14 @@ function losEnemyHexOverlaySVG(dispLayout){
       if(!res||res.error||res.blocked)return; // 遮断・未読込・盤外は表示しない
       // 2026-09再修正(ダルマ報告「敵軍 LOSが表示しない」): 前方(VCA)外の対象へのLOSラインを非表示にしたため、矢印を設定すると
       // LOSラインが消えて見えていた。非表示はやめ、矢印の前方内は従来の濃い線、前方外は薄く細い線で表示して「矢印の反映」を区別する。
-      var inFront=losEnemyFacingCovers(eh,origin,target);
+      /* v380(ダルマ報告「行軍で敵軍マーカーからのLOSありが表示しない」→選択「範囲外は細い薄線」): 砲塔のある車両は砲塔の向き(TCA、未設定なら車体)で判定 */
+      var ehT=eh;try{var ehV=eh.veh?nmAfv(eh.veh):null;if(ehV&&nmAfvTurret(ehV)&&eh.tca!=null)ehT={boardId:eh.boardId,facing:eh.tca};}catch(e){}
+      var inFront=losEnemyFacingCovers(ehT,origin,target);
       // 2026-09再々修正(ダルマ指示「範囲外の線は非表示にする」): 矢印設定済みの敵は、Covered Arc(頂点方向±30度)の範囲外の対象への
       // LOSラインを表示しない(v10.32の非表示に戻す。当時は範囲を±60度と誤っていたが、現在はルールブック準拠の±30度)。
-      if(!inFront)return;
       var dO=losCanonicalToDisplay(origin.x,origin.y,dispLayout);
       var dT=losCanonicalToDisplay(target.x,target.y,dispLayout);
+      if(!inFront){h+='<line x1="'+dO.x+'" y1="'+dO.y+'" x2="'+dT.x+'" y2="'+dT.y+'" stroke="'+ENEMY_COLOR+'" stroke-width="1" stroke-dasharray="3,4" stroke-opacity="0.45"/>';return;} /* v380: 向き(CA)の範囲外は細い薄線 */
       h+='<line x1="'+dO.x+'" y1="'+dO.y+'" x2="'+dT.x+'" y2="'+dT.y+'" stroke="'+ENEMY_COLOR+'" stroke-width="2" stroke-dasharray="6,3" stroke-opacity="0.9"/>';
     });
   });
