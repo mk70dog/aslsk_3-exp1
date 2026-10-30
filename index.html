@@ -33650,12 +33650,21 @@ var NM_ST_LBL={brk:'混乱',pin:'PIN',imm:'走行不能',shock:'ショック',ma
 function nmStOf(eh){if(!eh.st)eh.st={};return eh.st;}
 function nmStList(eh){var o=[],st0=eh.st||{};if(st0.fired)o.push('射撃済');if(st0.mv)o.push(st0.mv==='mot'?'Motion':'移動');if(eh.grp&&!eh.veh&&!eh.gun){var d=nmGeList(eh.grp),nb=0,np=0;(d.items||[]).forEach(function(x){if(x.broken)nb++;else if(x.pinned)np++;});if(nb)o.push('混乱'+nb);if(np)o.push('PIN'+np);return o;}
   var st=eh.st||{};['brk','pin','imm','shock','mal'].forEach(function(k){if(st[k])o.push(NM_ST_LBL[k]);});return o;}
+/* v415(ダルマ指示「マップを直感的に」お任せ): 札を種類ごとに色分け(1つずつの札)。地図の左上(手番の下)に、今地図にある札だけの凡例 */
+var NM_ST_COL={'混乱':'#c0102a','PIN':'#d97a00','射撃済':'#4a5a78','移動':'#13817f','Motion':'#7a3fc0','走行不能':'#8a5a20','ショック':'#b0306a','故障':'#5a5a5a','残留':'#e86a10'};
+function nmStKind(t){var m=String(t).replace(/\d+$/,'');return NM_ST_COL[m]?m:'混乱';}
 function nmStatusOverlaySVG(dl){var h='';
   [['f',S_LOS.friendHexes||[]],['e',S_LOS.enemyHexes||[]]].forEach(function(P){P[1].forEach(function(eh){var l=nmStList(eh);if(!l.length)return;if(NM_DRAG&&NM_DRAG.moving&&NM_DRAG.ref===eh)return;
     var g=losColRowToGlobalCanon(eh.boardId,eh.col,eh.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);if(P[0]==='f'&&nmUnitAt(eh,'e'))d={x:d.x-8,y:d.y-8};
-    var tx=l.join(' '),w=Math.max(30,tx.length*9+8),y=d.y+10; /* カウンターの下部に重ねる(下のヘクスのカウンターと重ならない) */
-    h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><rect x="'+(d.x-w/2)+'" y="'+y+'" width="'+w+'" height="14" rx="3" fill="#c0102a" stroke="#000" stroke-width="1"/><text x="'+d.x+'" y="'+(y+10.5)+'" text-anchor="middle" font-size="10" font-weight="900" fill="#fff" font-family="sans-serif">'+tx+'</text></g>';});});
+    var ws=l.map(function(t){var w=0;String(t).split('').forEach(function(ch){w+=/[\x00-\x7f]/.test(ch)?6.4:10.4;});return Math.max(20,Math.round(w+6));}),tot=ws.reduce(function(a,b){return a+b;},0)+(ws.length-1)*2,x=d.x-tot/2,y=d.y+10;
+    h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
+    l.forEach(function(t,i){var c=NM_ST_COL[nmStKind(t)];h+='<rect x="'+x+'" y="'+y+'" width="'+ws[i]+'" height="14" rx="3" fill="'+c+'" stroke="#000" stroke-width="1"/><text x="'+(x+ws[i]/2)+'" y="'+(y+10.5)+'" text-anchor="middle" font-size="10" font-weight="900" fill="#fff" font-family="sans-serif">'+t+'</text>';x+=ws[i]+2;});
+    h+='</g>';});});
   return h;}
+function nmStLegendHTML(){var u={};[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){nmStList(eh).forEach(function(t){u[nmStKind(t)]=1;});});});
+  if(S_LOS.resid&&Object.keys(S_LOS.resid).length)u['残留']=1;var ks=Object.keys(NM_ST_COL).filter(function(k){return u[k];});if(!ks.length)return '';
+  var tip={'混乱':'混乱(MC失敗)','PIN':'PIN(PTC失敗)','射撃済':'このフェイズ・ターンに射撃済み','移動':'このターン移動した車両','Motion':'Motion状態の車両','走行不能':'走行不能','ショック':'ショック','故障':'主砲・砲の故障','残留':'残留火力'};
+  return '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;white-space:nowrap">'+ks.map(function(k){return '<span title="'+tip[k]+'" style="background:'+NM_ST_COL[k]+';color:#fff;font-size:11px;font-weight:bold;border:1px solid #000;border-radius:3px;padding:0 5px;line-height:16px">'+k+'</span>';}).join('')+'</div>';}
 function nmStSave(slot){if(slot)nmGeSync(slot);try{saveState();}catch(e){}Draw();}
 function nmStTog(n,sd,k){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(!eh)return;var st=nmStOf(eh);st[k]=st[k]?false:(k==='fired'?'済':true);if(k==='brk'&&st.brk)st.pin=false;nmStSave();btRmReopen(n);}
 function nmStUnitTog(n,slot,idx,k){var d=nmGeList(slot),x=d.items[idx];if(!x)return;if(k==='broken'){x.broken=!x.broken;if(x.broken)x.pinned=false;}else{x.pinned=!x.pinned;}nmStSave(slot);NM_RM_SUB='grpedit';btRmReopen(n);}
@@ -33908,7 +33917,7 @@ function nmPhaseBarHTML(){if(!S.turn||!(S.scen&&S.scen.sel))return '';var t=S.tu
    +(nat?'<span style="font-size:13px;font-weight:bold;color:'+nc+'">'+nmNatLbl(nat)+'</span>':'')
    +'<button class="b sm" style="'+b+'" onclick="event.stopPropagation();nmPhaseStep(-1)">◀</button>'
    +'<span style="font-size:15px;font-weight:bold;color:#ffd060;min-width:64px;text-align:center">'+T(ph.lbl)+'<span style="font-size:10px;color:#8899aa;margin-left:3px">'+ph.abbr+'</span></span>'
-   +'<button class="b sm" style="'+b+'" onclick="event.stopPropagation();nmPhaseStep(1)">▶</button></div></div>';}
+   +'<button class="b sm" style="'+b+'" onclick="event.stopPropagation();nmPhaseStep(1)">▶</button></div>'+(function(){var lg=nmStLegendHTML();return lg?'<div style="position:absolute;left:6px;top:50px;background:#000b;border:1px solid #404040;border-radius:5px;padding:0 5px 4px;width:max-content;max-width:min(90vw,520px);pointer-events:none">'+lg+'</div>':'';})()+'</div>';}
 function nmPhaseStep(d){if(!S.turn)S.turn={cur:1,half:0,ended:false,phase:'rph'};var ids=PHASE_SEQ.map(function(x){return x.id;}),prev=S.turn.phase||'rph',i=ids.indexOf(prev);if(i<0)i=0;
   var ni=i+d,turnCh=false;if(ni>=ids.length){if(S.turn.ended)return;TurnAdj(1);ni=0;turnCh=true;}else if(ni<0){TurnAdj(-1);ni=ids.length-1;turnCh=true;}
   var id=ids[ni],msg=[];S.turn.phase=id;
