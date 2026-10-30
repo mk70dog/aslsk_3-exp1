@@ -8570,6 +8570,7 @@ var I18N_EN={
   "S27 SSR6：AFVは建物ヘクスに進入できません（ルートに追加できません）":"S27 SSR6: AFVs cannot enter building hexes (they cannot be added to the route)",
   "S16 SSR1：昇り降り（高度変更）ごとに追加で+1MF（舗装道路上を除く）を反映中":"S16 SSR1: +1 MF for each elevation change (except on a paved road) is applied",
   "判定要":"Check",
+  "盤外から":"Entered",
   "S28 SSR1：AFVが非丘陵の開豁地・湿地に進入する各ヘクスでDR判定（DR≧11で行動不能）。ルート上の判定要ヘクス: ":"S28 SSR1: an AFV entering a non-hill open ground/swamp hex makes a DR (DR >= 11 immobilizes it). Hexes on the route needing a check: ",
   "か所":" place(s)",
   "SSR反映":"SSR applied",
@@ -28165,6 +28166,8 @@ function losMoveRouteOverlaySVG(dispLayout){
       mfRowY+=mfBoxH+mfGap;
     }
     /* v376(バグ修正 ダルマ報告「SSR1の反映済のマップ行軍で判定要が表示しない」): S28 SSR1 判定要ヘクス(ssrChk)の印。数は計算していたが地図に描いていなかった。ヘクスの右上に橙の「判定要」 */
+    if(cell.offEntry){var oeT=T('盤外から'),oeW=40,oeH=13,oeX=d.x-riw/2-4,oeY=d.y-rih/2-4; /* v377: マップ外から進入した起点 */
+      h+='<rect x="'+oeX+'" y="'+oeY+'" width="'+oeW+'" height="'+oeH+'" rx="3" fill="#33aaff" stroke="#000" stroke-width="1.2"/><text x="'+(oeX+oeW/2)+'" y="'+(oeY+oeH/2+0.5)+'" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9" font-weight="900" fill="#000">'+oeT+'</text>';}
     if(cell.ssrChk){var sjW=34,sjH=13,sjX=d.x+riw/2-sjW+4,sjY=d.y-rih/2-4;
       h+='<rect x="'+sjX+'" y="'+sjY+'" width="'+sjW+'" height="'+sjH+'" rx="3" fill="#ff8a20" stroke="#000" stroke-width="1.2"/><text x="'+(sjX+sjW/2)+'" y="'+(sjY+sjH/2+0.5)+'" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9" font-weight="900" fill="#000">'+T('判定要')+'</text>';}
     h+='</g>';
@@ -33099,7 +33102,7 @@ function nmRmMarch(k){
   var H=NM_RM_HEX;if(!H)return;BtRmClose();
   if(k==='end'){if(S_LOS.routeMode)LosToggleRouteMode();return;}
   if(!S_LOS.routeMode)LosToggleRouteMode();
-  if(k==='start'){S_LOS.route=null;S_LOS.routeError=null;S_LOS._routeLastTapKey=null;Draw();nmTapNode(H.n);return;}
+  if(k==='start'){if(S_LOS.nmOffEntry&&nmEdgeInward(H.n)!=null&&nmOffEntryApply(H))return;S_LOS.route=null;S_LOS.routeError=null;S_LOS._routeLastTapKey=null;Draw();nmTapNode(H.n);return;}
   var rh=S_LOS.route&&S_LOS.route.hexes;if(!rh||!rh.length){nmTapNode(H.n);return;}
   var last=rh[rh.length-1],s0=btNodeOf(last.boardId,last.col,last.row);if(s0==null)return;
   var dist={},prev={},q=[s0],done={};dist[s0]=0;
@@ -33350,9 +33353,24 @@ function nmRmTabGo(t){
 function nmRmSubOpen(k,n){NM_RM_SUB=k;btRmReopen(n);}
 function nmMarchVehList(){var ids=scenarioAfvIdsByVehId();return AFV_DATA.filter(function(v){return v.mp!=null&&v.lbl&&(!ids||ids[v.id]);});}
 function nmMarchVeh(){var l=nmMarchVehList();return l.filter(function(v){return v.id===S_LOS.mfVehicleId;})[0]||null;}
+/* v377(ダルマ指示「行軍でマップ外から侵入時の消費を追加」): 盤端のヘクスでは「マップ外から進入」を選べる。
+   ONで行軍を始めると、そのヘクスへ入るコストを起点に入れる(地図の内側のとなりから入る計算で求め、向きは内側向き。車両は始動1MPも含む) */
+function nmEdgeInward(n){var N=BTG.nodes[n];if(!N||!N.nb||N.nb.length>=6)return null;
+  var mx=0,my=0;N.nb.forEach(function(b){mx+=BTG.nodes[b].x-N.x;my+=BTG.nodes[b].y-N.y;});
+  var best=null,bd=-1e18;N.nb.forEach(function(b){var B=BTG.nodes[b],d=(B.x-N.x)*mx+(B.y-N.y)*my;if(d>bd){bd=d;best=b;}});return best;}
+function nmOffEntryTog(n){S_LOS.nmOffEntry=!S_LOS.nmOffEntry;NM_RM_SUB='march';btRmReopen(n);}
+function nmOffEntryApply(H){
+  var inN=nmEdgeInward(H.n);if(inN==null)return false;
+  S_LOS.route=null;S_LOS.routeError=null;S_LOS._routeLastTapKey=null;Draw();nmTapNode(inN);S_LOS._routeLastTapKey=null;nmTapNode(H.n);
+  var rt=S_LOS.route;if(!rt||!rt.hexes||rt.hexes.length<2){S_LOS.route=null;Draw();nmTapNode(H.n);btToast('マップ外からの進入コストを計算できませんでした');return false;}
+  var a=rt.hexes[0],hx=rt.hexes[1],isV=S_LOS.mfEntityType==='vehicle',stopAdd=isV?1:0,st=isV?1:0,entry=Math.max(0,(hx.moveCum||0)-(a.moveCum||0));
+  var c=Object.assign({},hx,{cost:st+entry,moveCum:st+entry,cum:st+entry+stopAdd,startStop:false,offEntry:true,entryCost:entry,vcaChange:false,vcaAutoChange:false,vcaTurnHexspines:0,vcaAuto:false});
+  if(isV&&hx.vca!=null)c.vca=(hx.vca+3)%6; /* 計算は内→外に動いたので、進入の向き(外→内)はその反対 */
+  rt.hexes=[c];rt.totalCost=c.cum;Draw();return true;}
 function nmRmMarchItems(n){
   var it=[],list=nmMarchVehList(),isV=S_LOS.mfEntityType==='vehicle',cur=isV?S_LOS.mfVehicleId:null;
   it.push({ic:'back',t:'← 戻る',sub:'行軍する部隊を選ぶ(選ぶとここから行軍を始める)',f:"btRmReopen("+n+")"});
+  if(nmEdgeInward(n)!=null)it.push({ic:'move',t:'マップ外から進入',sub:S_LOS.nmOffEntry?'ON: このヘクスへ入るコストを起点に入れる(盤外=開豁地、道路は盤外へ続く)':'OFF: このヘクスにいる所から始める',on:!!S_LOS.nmOffEntry,f:"nmOffEntryTog("+n+")"});
   it.push({sep:1});
   var g=null;try{g=losPrimaryFireGroup();}catch(e){}
   it.push({ic:'move',t:'歩兵',sub:'射撃判定タブの編成'+(g&&g.activeGroupSlot?' '+g.activeGroupSlot:'')+'の MF・携行PP で計算',on:!isV,f:"nmRmMarchPick(null)"});
