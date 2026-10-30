@@ -33440,8 +33440,7 @@ function nmRmMFireItems(n){
   var col=IFT_LBL[ci(fp)];
   var parts=[];try{var pt=[['TEM',fireTemEff(f)],['指揮官',fireEffLdr(f)],['妨害',fireHindTotal(f)],['SSR',scenShotDrm(fireShotRange(f),fireShotPh())]];pt.forEach(function(x){if(x[1])parts.push(x[0]+sg(x[1]));});}catch(e){}
   it.push({ic:'fire',t:'<span>FP <b>'+fp+'</b>　→　<b>'+col+'</b>列　DRM <b>'+sg(drm)+'</b></span>',sub:(parts.length?'DRM内訳: '+parts.join(' ')+'　':'')+'射撃タブ('+(ph||'-')+')と同じ計算'});
-  var dl=[];try{dl=fireDetailLines(f).filter(function(x){return /class="b sm on"/.test(x);});}catch(e){}
-  if(dl.length)it.push({html:'<div style="display:flex;flex-wrap:wrap;padding:0 4px 2px 40px">'+dl.join('')+'</div>'});
+  /* v403(ダルマ指示「消す」): 条件の札(fireDetailLines)は内訳と重複・ボタンに見えるため出さない */
   if(f&&f.res&&f.res.ift){var R=f.res,rr=rm(R.ift.r);
     it.push({sep:1});
     it.push({ic:'fire',t:'<span>'+diceEmojiStr(f.rd,f.wd)+'　'+R.raw+(R.drm?' '+sg(R.drm):'')+' = '+R.mod+'　<b style="color:'+rr.c+'">'+rr.t+'</b></span>',sub:'FP'+R.fp+'・'+(R.ift.col||'-')+'列'+(R.cow?'・畏縮(左へ'+R.cowerCols+'列)':'')});
