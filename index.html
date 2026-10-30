@@ -18730,7 +18730,10 @@ function SW_REPAIR_CARD(){
     h+='<span class="mdot '+(sel?"on2":"off")+'" style="display:inline-block;vertical-align:middle"></span>';
     // 2026-08 ダルマ指示：名前/射程チップをユニットタブ(UNIT_PAGE)と同じ2段スタイルに統一
     var rpRM2=rpMain.match(/^([A-Za-z]+)\s*(\d+-\d+)/);
-    if(rpRM2){
+    var rpV=vaslCtrHTML('u:SW|'+t.id,45); // v397(ダルマ指示「VASLカウンターに変更する」): VASLカウンター画像があれば文字チップの代わりに表示
+    if(rpV){
+      h+=rpV;
+    } else if(rpRM2){
       h+='<span style="display:inline-flex;flex-direction:column;align-items:center;background:#000000;border:1px solid '+rpNc+'66;border-radius:3px;padding:3px 5px;min-width:58px">';
       h+='<span style="font-size:10px;color:'+rpNc+';font-weight:bold;white-space:nowrap;letter-spacing:0.02em">'+rpRM2[1]+'</span>';
       h+='<span style="font-size:10px;font-weight:bold;color:'+rpNc+';border:1px solid '+rpNc+'88;border-radius:2px;padding:0 5px;margin-top:2px;line-height:1.4">'+rpRM2[2]+'</span>';
@@ -18738,8 +18741,8 @@ function SW_REPAIR_CARD(){
     } else {
       h+='<span style="font-size:10px;font-weight:bold;color:'+rpNc+';letter-spacing:0.05em;border:1px solid '+rpNc+'66;border-radius:2px;padding:3px 4px 4px 4px;background:'+rpNc+'0f">'+rpMain+'</span>';
     }
-    if(rpSuf)h+='<span style="font-size:12px;font-weight:bold;color:'+rpNc+';border:1px solid '+rpNc+'88;border-radius:2px;padding:0 3px;line-height:1.5">'+swSufDisp(rpSuf)+'</span>';
-    h+='<span style="font-size:12px;color:#8899aa;border:1px solid #33445588;border-radius:2px;padding:0 3px;line-height:1.5">'+bstr+'</span></span>';
+    if(rpSuf&&!rpV)h+='<span style="font-size:12px;font-weight:bold;color:'+rpNc+';border:1px solid '+rpNc+'88;border-radius:2px;padding:0 3px;line-height:1.5">'+swSufDisp(rpSuf)+'</span>';
+    h+='<span style="font-size:12px;color:#8899aa;border:1px solid #33445588;border-radius:2px;padding:0 3px;line-height:1.5;white-space:nowrap">'+bstr+'</span></span>';
     h+='</div>';
   });
   if(!S.repair.selNat&&rpScenIds&&Object.keys(rpScenIds).length===0){
