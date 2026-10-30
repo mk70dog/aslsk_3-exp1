@@ -39781,6 +39781,8 @@ function LosMapClick(ev){
   // (ほぼ)同じ場所を再度タップしたらクリア」という単発タップ判定を廃止し、ROOTモードの
   // ダブルタップ仕様(タイミング+位置)と統一する。同じ場所(40px以内)を400ms以内に
   // 連続タップ(ダブルタップ)した場合のみ、そこを新しいA地点として測定を仕切り直す。
+  /* v411(ダルマ指示「マップタブ上で直感的に操作」お任せ): 地点Aを決めていない時、自軍・敵のマーカーを1回タップするとそのヘクスのメニューを開く(右クリック・長押しと同じ)。地点Aがある時は従来どおりB地点 */
+  if(!S_LOS.abMode&&!S_LOS.pxA&&ev.clientX!=null){var tpH=losHexAtClient(ev.clientX,ev.clientY);if(tpH&&(nmUnitAt(tpH,'f')||nmUnitAt(tpH,'e'))){nmRClick({clientX:ev.clientX,clientY:ev.clientY});return;}}
   if(!S_LOS.abMode&&!S_LOS.pxA)return; /* v343(ダルマ指示「A地点を設定後はマップをタップでB地点に設定・別ヘクスをタップでB地点変更・ダブルクリックでA地点変更」): 地点Aがあれば、A▶︎Bを選んでいなくてもタップ=地点B、ダブルタップ=地点Aを置き直す */ /* v340(バグ修正 ダルマ報告「A▶︎Bボタン非選択時にも画面タップでA地点が表示してしまう」): A▶︎Bが選ばれている時だけタップで地点A/Bを置く(右クリックメニューの「ここを地点Aに/Bに」は従来どおり) */
   if(S_LOS.pxA&&Math.abs(gx-S_LOS.pxA.x)<6&&Math.abs(gy-S_LOS.pxA.y)<6){ /* v357(ダルマ指示「A地点をタップでA地点削除」): 地点Aのヘクスをタップすると地点A(とB・判定結果)を消す */
     var abWinY0=window.pageYOffset||0;S_LOS.pxA=null;S_LOS.pxB=null;S_LOS.result=null;S_LOS._abLastTapPos=null;Draw();window.scrollTo(0,abWinY0);return;}
