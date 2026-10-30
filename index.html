@@ -857,7 +857,7 @@ html.is-tabl #hdrLogoR img{position:absolute;left:0;top:0;width:100%;height:100%
 /* v236: 編成スロットは常に1列5ボタン固定(チップ画像入りでauto-fill 64pxに崩れるのを防ぐ) */
 #main div.fgSlotGrid[style*="display:grid"][style*="grid-template-columns:repeat("]:has(> button.b img),#main div.fgSlotGrid{grid-template-columns:repeat(5,minmax(0,1fr)) !important;justify-content:stretch !important}
 /* v394: B2カード(CA変更/捕捉・目標の移動/自車ハッチ/乗員)はスマホ幅では1列 */
-@media (max-width:700px){#main .gB2row{grid-template-columns:1fr !important}#main .gB2mv4{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
+@media (max-width:700px){#main .dcTemGrid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}#main .gB2row{grid-template-columns:1fr !important}#main .gB2mv4{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
 /* v237サンプル: iPad横は 目標車両の移動 / 射撃側車両の状態 / 乗員の状態 を1列に */
 html.is-tabl .c24row{display:flex;flex-wrap:nowrap;gap:6px;align-items:stretch;margin-bottom:6px}
 html.is-tabl .c24row>.c24card{flex:0 0 calc(50% - 3px);min-width:0;margin-bottom:0 !important} /* v283(ダルマ指示「戦車タブ 目標車両の移動カードの横幅を全体の幅の半分にする」): 3:4→全体の半分 */
@@ -15359,7 +15359,7 @@ function DC_ACTIVATE_CARD(){
     h+='</div></div>';
     h+='</div>';
     h+='<div style="background:#000000;border:1px solid #404040;border-radius:3px;padding:5px;margin-top:6px">';
-    h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px"><span class="pdot'+(dc.temId?" off":"")+'"></span><span class="plbl'+(dc.temId?" off":"")+'">Target Terrain TEM (Hedge N/A to DC)</span></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">';
+    h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px"><span class="pdot'+(dc.temId?" off":"")+'"></span><span class="plbl'+(dc.temId?" off":"")+'">Target Terrain TEM (Hedge N/A to DC)</span></div><div class="dcTemGrid" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px">'; // v399(ダルマ指示「4x2で表示」)
     TEM_LIST.forEach(function(t){
       var tc=TEM_COLOR[t.id]||'#8899aa';
       h+='<button class="b sm'+(dc.temId===t.id?" on":"")+'" style="border:1px solid '+tc+'66;background:'+tc+'0f" onclick="DCactTem(\''+t.id+'\','+t.v+')"><span style="color:'+tc+'">'+T(t.lbl)+'</span>'+hexNum(t.v>0?"+"+t.v:"±0",false,false,tc)+'</button>';
