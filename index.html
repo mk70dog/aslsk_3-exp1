@@ -33061,13 +33061,15 @@ function nmCost(o){
   if(r.c!=null){var p=o.n;while(p!=null){r.path.unshift(p);p=prev[p];}}
   o.res=[r];o.from=(o.src==='a'?'地点A ':'')+BTG.nodes[s0].nm;return true;
 }
-function nmRMenuItems(n){
+function nmRMenuItems(n,part){
   var H=NM_RM_HEX,it=[],N=(n>=0)?BTG.nodes[n]:null;
+  var G=[],A=[],U=[],X=[],V=[]; /* v410(ダルマ指示「マップタブ上で直感的に操作・使いやすさをブラッシュアップ」お任せ): メニューを マーカー→ヘクス(LOS・行軍)→ヘクスの物(残骸・煙幕・マーク) の順に整理し、全画面・共有・元に戻す・クリア・拡大などは「その他」へ */
   if(NM_FACE)return nmRmFaceItems(n,NM_FACE.sd);
   if(NM_RM_VEH){var vsd=NM_RM_VEH===1?'e':NM_RM_VEH;NM_RM_VEH=0;return nmRmVehItems(n,vsd);}
-  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);if(sk==='tabs')return nmRmTabItems(n);if(sk==='grpedit')return nmRmGrpEditItems(n);if(sk==='mfire')return nmRmMFireItems(n);if(sk==='vfire')return nmRmVFireItems(n);if(sk==='sync')return nmRmSyncItems(n);if(sk==='backup')return nmRmBackupItems(n);if(sk==='cc')return nmRmCCItems(n);}
+  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);if(sk==='tabs')return nmRmTabItems(n);if(sk==='grpedit')return nmRmGrpEditItems(n);if(sk==='mfire')return nmRmMFireItems(n);if(sk==='vfire')return nmRmVFireItems(n);if(sk==='sync')return nmRmSyncItems(n);if(sk==='backup')return nmRmBackupItems(n);if(sk==='cc')return nmRmCCItems(n);if(sk==='more')part='more';}
   var nm=N?N.nm:btHexName(H.boardId,H.col,H.row),terr=N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')):'';
   var hasA=!!S_LOS.pxA;
+  it=G;
   it.push({ic:'full',t:btMapFullOn()?'全画面表示オフ':'全画面表示オン',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに',f:"BtMapFull("+(n>=0?n:'null')+")"}); /* v349: 最上部 */
   var nsm=nmsMode(); /* v407(ダルマ指示「同期オン／オフ切り替え」): メニューで直接オン/オフ。オンは前回のしかた(自動/ボタン、初めては自動) */
   it.push({row:1,ic:'move',t:'マップ共有',btns:[[(nsm==='off'?'✓':'')+'オフ',"nmsOnOff("+n+",false)"],[(nsm!=='off'?'✓':'')+'オン',"nmsOnOff("+n+",true)"]]});
@@ -33077,7 +33079,7 @@ function nmRMenuItems(n){
   if(S_LOS.resid&&Object.keys(S_LOS.resid).length)it.push({ic:'x',t:'残留火力を全部外す',sub:'移動フェイズが終わったら',f:"BtRmClose();nmResClear()"});
   if(nmStAnyFired())it.push({ic:'fire',t:'射撃済みの印を全部外す',sub:'次のフェイズ・プレイヤーターンへ進む時に',f:"BtRmClose();nmStClearFired()"}); /* v406 */
   it.push({ic:'rot',t:'マップを元に戻す',sub:'消した・置き換わったマップをバックアップから戻す',f:"nmRmSubOpen('backup',"+n+")"}); /* v407 */
-  it.push({ic:'trash',t:'全てクリア',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを全部消す(確認あり)',f:"nmRmSubOpen('clear',"+n+")"});it.push({sep:1}); /* v345(ダルマ指示「右クリックに全てクリアを追加」)・v349「2番目に」 */
+  it.push({ic:'trash',t:'全てクリア',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを全部消す(確認あり)',f:"nmRmSubOpen('clear',"+n+")"});it=A; /* v345(ダルマ指示「右クリックに全てクリアを追加」)・v349「2番目に」 */
   it.push({ic:'los',t:'このヘクスを地点Aに',sub:nm+(terr?'　'+terr:''),f:"nmRmAB('a')"});
   if(hasA)it.push({ic:'losB',t:'このヘクスを地点Bに(LOS判定)',sub:'A → '+nm,f:"nmRmAB('b')"});
   if(hasA||S_LOS.pxB)it.push({ic:'x',t:'LOS測定をリセット',sub:'A・B・結果を消す',f:"BtRmClose();LosResetPoints()"});
@@ -33107,25 +33109,33 @@ function nmRMenuItems(n){
       it.push({ic:'stop',t:'行軍を終わる',sub:'行軍(ルート)を消す',f:"nmRmMarch('end')"});}
     else it.push({ic:'move',t:'このヘクスから行軍',sub:'歩兵か車両を選んで、ここを起点に'+(hasA?'。地点A・Bは消えます':''),f:"nmRmSubOpen('march',"+n+")"});
   }
-  it.push({sep:1});
+  it=U;
   var eOn=(S_LOS.enemyHexes||[]).some(function(e){return e.boardId===H.boardId&&e.col===H.col&&e.row===H.row;});
   var wc=(S_LOS.wreckHexes||{})[H.boardId+':'+H.col+':'+H.row]||0,wn=(wc+1)%4;
   var sm=S_LOS.smoke&&S_LOS.smoke[H.hid.id],sl=sm?sm.level:0,sn=sl<3?sl+1:0;
   /* v343(ダルマ指示「敵軍マーカーをシナリオ登場車両選択に変更」「対戦モードと同じVASLカウンターで矢印を設定」) / v345(ダルマ指示「右クリックで自軍カウンターを配置・設定は敵軍と同じ」) */
   nmUnitMenu(it,H,n,'f');nmUnitMenu(it,H,n,'e');
   if(nmCCSides(H).ok)it.push({ic:'fire',t:'白兵戦(このヘクス)',sub:'自軍と敵の編成が同じヘクス。両方が同時に攻撃',f:"nmCCOpen("+n+")"}); /* v408 */
+  it=X;
   /* v351(ダルマ指示「(残骸の)設定時車両の選択をしない」): メニューの行で −/＋(1ヘクス3個まで) */
   it.push({row:1,ic:'wreck',img:wc?nmWreckCtrHTML(null,30,wc):'',t:'残骸',btns:[['－',"nmRmWreckStep("+n+",-1)",wc<=0],[wc?'+'+wc:'なし',null],['＋',"nmRmWreckStep("+n+",1)",wc>=3]]});
   var smT=sm?nmSmkType(sm):null;
   it.push({ic:'smoke',img:smT?nmSmkCtrHTML(smT.k,34):'',t:'煙幕の配置',sub:'ここ: '+(smT?smT.nm+' +'+smT.v:'なし')+'　タップで種類を選ぶ',f:"nmRmSubOpen('smoke',"+n+")"});
   var mkOn=!!(S_LOS.buildingMarks||{})[nmMarkKey(H)];it.push({ic:'hex',t:mkOn?'このヘクスのマークを外す':'このヘクスをマークする',sub:mkOn?'青いマークを消す':'青い枠で印を付ける(勝利条件ヘクスの確認など)',f:"nmRmMark()"}); /* v392 */
   it.push({sep:1});
-  if(n>=0){it.push({ic:'hex',t:'このヘクスの情報・地形のルール',sub:nm+' '+terr,f:"nmRmInfo("+n+")"});
+  if(n>=0){it.push({ic:'hex',t:'このヘクスの情報・地形のルール',sub:nm+' '+terr,f:"nmRmInfo("+n+")"});it=V;
     it.push({row:1,ic:'zoom',t:'拡大・縮小',btns:[['－',"BtRmZoom("+n+",-1)",S_LOS.zoom<=LOS_ZOOM_MIN],[Math.round(S_LOS.zoom*100)+'%',null],['＋',"BtRmZoom("+n+",1)",S_LOS.zoom>=LOS_ZOOM_MAX]]});it.push({row:1,ic:'fitw',t:'合わせる',btns:[['↔ 横幅',"BtRmFit("+n+",'width')"],['↕ 縦幅',"BtRmFit("+n+",'height')"]]}); /* v361(ダルマ指示「メニューに↔↕を追加」) */
     it.push({row:1,ic:'rot',t:'回転',btns:[['90°L',"BtRmRot("+n+",-90)"],['90°R',"BtRmRot("+n+",90)"]]});
   }
-  return it;
+  return nmRmCompose(n,part,G,A,U,X,V);
 }
+function nmRmCompose(n,part,G,A,U,X,V){ /* v410 */
+  function strip(L){var o=[];L.forEach(function(x){if(x.sep&&(!o.length||o[o.length-1].sep))return;o.push(x);});while(o.length&&o[o.length-1].sep)o.pop();return o;}
+  if(part==='more')return strip([{ic:'back',t:'← 戻る',sub:'その他',f:"btRmReopen("+n+")"},{sep:1}].concat(G,[{sep:1}],V));
+  var H=NM_RM_HEX,has=!!(nmUnitAt(H,'f')||nmUnitAt(H,'e')),info=X.filter(function(x){return x.ic==='hex'&&/情報/.test(x.t||'');}),X2=X.filter(function(x){return info.indexOf(x)<0;});
+  var more={ic:'tabs',t:'その他',sub:'全画面・マップ共有・タブ移動・射撃済み/残留火力を外す・元に戻す・全てクリア・拡大・回転',f:"nmRmSubOpen('more',"+n+")"};
+  var L=[].concat(U,[{sep:1}],A,[{sep:1}],X2);
+  return strip(L.concat([{sep:1}],info,[more]));}
 /* v358(ダルマ指示「全てクリアの確認に、配置中の全敵軍マーカー・全自軍マーカー・全残骸などを表示」): 種類ごとの数と、その種類だけ消すボタン */
 function nmClearCats(){
   var sm=Object.keys(S_LOS.smoke||{}).length,wk=0;Object.keys(S_LOS.wreckHexes||{}).forEach(function(k){wk+=S_LOS.wreckHexes[k]||0;});
