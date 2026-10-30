@@ -28167,6 +28167,8 @@ function losMoveRouteOverlaySVG(dispLayout){
       mfRowY+=mfBoxH+mfGap;
     }
     /* v376(バグ修正 ダルマ報告「SSR1の反映済のマップ行軍で判定要が表示しない」): S28 SSR1 判定要ヘクス(ssrChk)の印。数は計算していたが地図に描いていなかった。ヘクスの右上に橙の「判定要」 */
+    if(cell.ceChange){var ceW=30,ceH=13,ceX=d.x+riw/2-ceW+4,ceY=d.y+rih/2-ceH+2; /* v379: CE/BUを変えたヘクス */
+      h+='<rect x="'+ceX+'" y="'+ceY+'" width="'+ceW+'" height="'+ceH+'" rx="3" fill="'+(cell.ceChange==='CE'?'#ffd040':'#9ab0c8')+'" stroke="#000" stroke-width="1.2"/><text x="'+(ceX+ceW/2)+'" y="'+(ceY+ceH/2+0.5)+'" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9" font-weight="900" fill="#000">→'+cell.ceChange+'</text>';}
     if(cell.offEntry){var oeT=T('盤外から'),oeW=40,oeH=13,oeX=d.x-riw/2-4,oeY=d.y-rih/2-4; /* v377: マップ外から進入した起点 */
       h+='<rect x="'+oeX+'" y="'+oeY+'" width="'+oeW+'" height="'+oeH+'" rx="3" fill="#33aaff" stroke="#000" stroke-width="1.2"/><text x="'+(oeX+oeW/2)+'" y="'+(oeY+oeH/2+0.5)+'" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9" font-weight="900" fill="#000">'+oeT+'</text>';}
     if(cell.ssrChk){var sjW=34,sjH=13,sjX=d.x+riw/2-sjW+4,sjY=d.y-rih/2-4;
@@ -33026,6 +33028,9 @@ function nmRMenuItems(n){
     if(rh){var rl=rh[rh.length-1],rln=btNodeOf(rl.boardId,rl.col,rl.row);
       if(rln!==n)it.push({ic:'move',img:mv?vaslCtrHTML(mv.id,34,''):'',t:'このヘクスまで行軍',sub:btHexName(rl.boardId,rl.col,rl.row)+' から いちばん安い経路で延ばす('+ent+')',f:"nmRmMarch('ext')"});
       if(mv)it.push({arr:1,ic:'rot',t:'車両の向き',sub:(rh.length===1?'起点の向き(MPなし)':'終点 '+btHexName(rl.boardId,rl.col,rl.row)+' で向きを変える(MPを使う)'),cur:rl.vca,rot:losBoardRotById(rl.boardId)+(S_LOS.viewRot||0)+30,fn:'nmRmRouteVca',n:n,noClr:1});
+      if(mv){var ceDone=rh.some(function(x){return x.ceChange!=null;}),ceNow=!!S_LOS.mfVehicleCE; /* v379(ダルマ指示「車両 CE BU 変更 移動コスト反映」) */
+        it.push({row:1,ic:'turret',t:'CE/BU'+(rh.length>1&&ceDone?'(変更済み)':''),sub:rh.length===1?'起点の状態(MPなし)':(ceDone?'この移動フェイズは変更済み(1回まで)':'終点 '+btHexName(rl.boardId,rl.col,rl.row)+' で変える(MPなし・この先の道路は CE ½MP / BU 1MP)'),
+          btns:[[(ceNow?'':'✓')+'BU',"nmRmCE(false,"+n+")"],[(ceNow?'✓':'')+'CE',"nmRmCE(true,"+n+")"]]});}
       it.push({ic:'move',t:'このヘクスから行軍しなおす',sub:'歩兵か車両を選んで、ここを起点に',f:"nmRmSubOpen('march',"+n+")"});
       it.push({ic:'stop',t:'行軍を終わる',sub:'行軍(ルート)を消す',f:"nmRmMarch('end')"});}
     else it.push({ic:'move',t:'このヘクスから行軍',sub:'歩兵か車両を選んで、ここを起点に'+(hasA?'。地点A・Bは消えます':''),f:"nmRmSubOpen('march',"+n+")"});
@@ -33359,6 +33364,11 @@ function nmMarchVeh(){var l=nmMarchVehList();return l.filter(function(v){return 
 function nmEdgeInward(n){var N=BTG.nodes[n];if(!N||!N.nb||N.nb.length>=6)return null;
   var mx=0,my=0;N.nb.forEach(function(b){mx+=BTG.nodes[b].x-N.x;my+=BTG.nodes[b].y-N.y;});
   var best=null,bd=-1e18;N.nb.forEach(function(b){var B=BTG.nodes[b],d=(B.x-N.x)*mx+(B.y-N.y)*my;if(d>bd){bd=d;best=b;}});return best;}
+function nmRmCE(ce,n){var rh=S_LOS.route&&S_LOS.route.hexes;ce=!!ce;
+  if(!rh||!rh.length||!!S_LOS.mfVehicleCE===ce){btRmReopen(n);return;}
+  if(rh.length>1){if(rh.some(function(x){return x.ceChange!=null;})){btToast('CE/BUの変更は移動フェイズ中に1回までです(行軍を1つ戻すと取り消せます)');btRmReopen(n);return;}
+    var rl=rh[rh.length-1];rl.ceChange=ce?'CE':'BU';rl.cePrev=!!S_LOS.mfVehicleCE;}
+  S_LOS.mfVehicleCE=ce;try{saveState();}catch(e){}Draw();btRmReopen(n);}
 function nmOffEntryTog(n){S_LOS.nmOffEntry=!S_LOS.nmOffEntry;NM_RM_SUB='march';btRmReopen(n);}
 function nmOffEntryApply(H){
   var inN=nmEdgeInward(H.n);if(inN==null)return false;
@@ -37534,7 +37544,7 @@ function LosToggleRouteVcaMode(){
 }
 function LosRouteUndo(){
   if(S_LOS.route&&S_LOS.route.hexes.length){
-    S_LOS.route.hexes.pop();
+    var _popHx=S_LOS.route.hexes.pop();if(_popHx&&_popHx.ceChange!=null)S_LOS.mfVehicleCE=!!_popHx.cePrev; /* v379: CE/BUを変えたヘクスを戻したら状態も戻す */
     if(!S_LOS.route.hexes.length){
       S_LOS.route=null;
     }else{
