@@ -11057,7 +11057,7 @@ function saveState(){
       friendHexes:S_LOS.friendHexes||[], /* v345 */
       wreckHexes:S_LOS.wreckHexes,
       wreckVeh:S_LOS.wreckVeh||{}, /* v343: 残骸の車両 */
-      buildingMarks:S_LOS.buildingMarks||{},route:S_LOS.route||null /* v407(ダルマ指示「消えないようにする」): マークと行軍も開き直しで残す */
+      buildingMarks:S_LOS.buildingMarks||{},route:S_LOS.route||null,resid:S_LOS.resid||{} /* v407(ダルマ指示「消えないようにする」): マークと行軍も開き直しで残す */
     }});
     localStorage.setItem('aslsk_state_v1', JSON.stringify(toSave));
   }catch(e){}
@@ -33072,6 +33072,8 @@ function nmRMenuItems(n){
   it.push({row:1,ic:'move',t:'マップ共有',btns:[[(nsm==='off'?'✓':'')+'オフ',"nmsOnOff("+n+",false)"],[(nsm!=='off'?'✓':'')+'オン',"nmsOnOff("+n+",true)"]]});
   if(nsm!=='off'||NMS.status)it.push({ic:'move',t:'共有の状態・送る/受け取る',sub:(nsm==='off'?'オフ':nsm==='auto'?'自動':'ボタン')+(NMS.status?'　'+NMS.status:'')+(NMS.last?'　'+nmsAgo(NMS.last):''),f:"nmRmSubOpen('sync',"+n+")"});
   it.push({ic:'tabs',t:'タブ移動',sub:'ほかのタブへ移る(全画面はMAPに戻ると全画面のまま)',f:"nmRmSubOpen('tabs',"+n+")"}); /* v360 */
+  var rsK=nmResKey(H),rsV=(S_LOS.resid||{})[rsK];if(rsV)it.push({ic:'x',t:'このヘクスの残留火力('+rsV+'FP)を外す',f:"BtRmClose();nmResClear('"+rsK+"')"}); /* v409 */
+  if(S_LOS.resid&&Object.keys(S_LOS.resid).length)it.push({ic:'x',t:'残留火力を全部外す',sub:'移動フェイズが終わったら',f:"BtRmClose();nmResClear()"});
   if(nmStAnyFired())it.push({ic:'fire',t:'射撃済みの印を全部外す',sub:'次のフェイズ・プレイヤーターンへ進む時に',f:"BtRmClose();nmStClearFired()"}); /* v406 */
   it.push({ic:'rot',t:'マップを元に戻す',sub:'消した・置き換わったマップをバックアップから戻す',f:"nmRmSubOpen('backup',"+n+")"}); /* v407 */
   it.push({ic:'trash',t:'全てクリア',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを全部消す(確認あり)',f:"nmRmSubOpen('clear',"+n+")"});it.push({sep:1}); /* v345(ダルマ指示「右クリックに全てクリアを追加」)・v349「2番目に」 */
@@ -33455,6 +33457,11 @@ function nmRmMFireItems(n){
   var cur=S.fireSub||'pfph';
   var shEh=nmUnitAt(nmHexOfNode(M.from),M.sd);if(shEh&&shEh.st&&shEh.st.fired&&!(f0res()))it.push({ic:'info',t:'<span style="color:#ffb040">このマーカーは射撃済み('+shEh.st.fired+')</span>',sub:'もう一度撃てるか確かめてください(印は右クリック「射撃」で外せます)'});
   it.push({row:1,ic:'route',t:'フェイズ',btns:NM_MF_PH.map(function(x){return [(cur===x[0]?'✓':'')+x[1],"nmMfPh("+n+",'"+x[0]+"')"];})});
+  if(cur==='dff'){var f9=getFireState()||{},fm=f9.fireMode||null; /* v409: 臨機射撃の設定(射撃タブと共通) */
+    it.push({row:1,ic:'move',t:'目標の移動',btns:[[(!f9.ffmo&&!f9.ffnam&&!f9.hazardous?'✓':'')+'なし',"nmMfMove("+n+",'none')"],[(f9.hazardous?'✓':'')+'危険移動−2',"nmMfMove("+n+",'hazardous')"]]});
+    it.push({row:1,ic:'',t:'',btns:[[(f9.ffmo?'✓':'')+'FFMO−1',"nmMfMove("+n+",'ffmo')"],[(f9.ffnam?'✓':'')+'FFNAM−1',"nmMfMove("+n+",'ffnam')"]]});
+    it.push({row:1,ic:'fire',t:'射撃モード',btns:[[(!fm?'✓':'')+'通常',"nmMfMode("+n+",null)"],[(fm==='SFF'?'✓':'')+'SFF',"nmMfMode("+n+",'SFF')"],[(fm==='FPF'?'✓':'')+'FPF',"nmMfMode("+n+",'FPF')"]]});
+    if(fm)it.push({ic:'info',t:'<span style="font-size:12px;color:#c8a032">'+(fm==='SFF'?'連続臨機射撃(SFF): 隣接か同じヘクスの目標だけ・FPは半分・B#−2':'緊急防御射撃(FPF): 隣接か同じヘクス・FPは半分・撃った側はNMC(士気チェック)・B#−2')+'</span>',sub:'細かい条件は射撃タブで'});}
   it.push({sep:1});
   if(M.tgt==null){
     var tl=nmMfTgtList();
@@ -33467,13 +33474,15 @@ function nmRmMFireItems(n){
   it.push({ic:'tgt',img:tgtEh?nmMfTgtImg(tgtEh):'',t:'目標: '+(tgtEh?nmMfTgtName(tgtEh):'')+' @'+BTG.nodes[M.tgt].nm,sub:'距離'+btDist(M.from,M.tgt)+'　タップで目標を選び直す',f:"NM_MF.tgt=null;nmMfReopen("+n+")"});
   var f=getFireState(),ph=f&&f.ph,fp=0,drm=0;try{fp=totalFP(f,ph);drm=fireDRM(f);}catch(e){}
   var col=IFT_LBL[ci(fp)];
-  var parts=[];try{var pt=[['TEM',fireTemEff(f)],['指揮官',fireEffLdr(f)],['妨害',fireHindTotal(f)],['SSR',scenShotDrm(fireShotRange(f),fireShotPh())]];pt.forEach(function(x){if(x[1])parts.push(x[0]+sg(x[1]));});}catch(e){}
+  var parts=[];try{var pt=[['TEM',fireTemEff(f)],['指揮官',fireEffLdr(f)],['妨害',fireHindTotal(f)],['CX',f.cx?1:0],['FFMO',(f.ffmo&&!f.tgtCrewCE&&!fireHeightAdvActive(f)&&fireHindTotal(f)<=0)?-1:0],['FFNAM',f.ffnam?-1:0],['危険移動',f.hazardous?-2:0],['SSR',scenShotDrm(fireShotRange(f),fireShotPh())]];pt.forEach(function(x){if(x[1])parts.push(x[0]+sg(x[1]));});}catch(e){}
   it.push({ic:'fire',t:'<span>FP <b>'+fp+'</b>　→　<b>'+col+'</b>列　DRM <b>'+sg(drm)+'</b></span>',sub:(parts.length?'DRM内訳: '+parts.join(' ')+'　':'')+'射撃タブ('+(ph||'-')+')と同じ計算'});
   /* v403(ダルマ指示「消す」): 条件の札(fireDetailLines)は内訳と重複・ボタンに見えるため出さない */
   if(f&&f.res&&f.res.ift){var R=f.res,rr=rm(R.ift.r);
     it.push({sep:1});
     it.push({ic:'fire',t:'<span>'+diceEmojiStr(f.rd,f.wd)+'　'+R.raw+(R.drm?' '+sg(R.drm):'')+' = '+R.mod+'　<b style="color:'+rr.c+'">'+rr.t+'</b></span>',sub:'FP'+R.fp+'・'+(R.ift.col||'-')+'列'+(R.cow?'・畏縮(左へ'+R.cowerCols+'列)':'')});
     (R.swr||[]).forEach(function(w){var rk=(w.ro==='維持成功');if(w.fail||w.xFail||rk)it.push({ic:'info',t:w.lbl+(w.xFail?' 除去(X#)':w.fail?' 故障(B#)':'')+(rk?'　ROF維持(もう一度撃てる)':''),sub:''});});
+    if(S.fireSub==='dff'){var rfp=nmMfResFp(),rk=nmResKey(nmHexOfNode(M.tgt)),rcur=(S_LOS.resid||{})[rk]||0;
+      it.push({ic:'fire',t:rfp?((rcur>=rfp?'✓ ':'')+'残留火力 '+rfp+'FPを'+BTG.nodes[M.tgt].nm+'に置く'):'残留火力なし',sub:rfp?('移動フェイズの臨機射撃の残留火力(3.3.5)'+(rcur?'　今: '+rcur+'FP(大きい方を残す)':'')):'この射撃の列と正のDRMでは残らない',f:rfp&&rcur<rfp?"nmResSet("+M.tgt+","+rfp+");nmMfReopen("+n+")":''});} /* v409 */
     nmMcSection(it,n,tgtEh,R.ift.r,'mf:'+M.tgt+':'+f.rd+':'+f.wd+':'+R.mod,'nmMfReopen');}
   it.push({sep:1});
   it.push({ic:'fire',t:f&&f.res?'もう一度ダイスを振る':'ダイスを振る',sub:'赤白のダイスを振って判定(射撃タブのJUDGEと同じ)',f:"nmMfRoll("+n+")"});
@@ -33586,6 +33595,7 @@ function nmRmVFireItems(n){
         if(V.ntc){it.push({ic:'tgt',t:'<span>NTC DR'+V.ntc+'　<b style="color:'+(V.ntc>8?'#ffb040':'#3ca878')+'">'+(V.ntc>8?'8を超えた → ショック':'8以下 → 効果なし')+'</b></span>'});}
         else{it.push({ic:'fire',t:'NTC(2D6)を振る',sub:'8を超えたらショック',f:"nmVfNtc("+n+",0)"});
           [[2,3,4,5,6,7],[8,9,10,11,12]].forEach(function(vs,j){it.push({row:1,cmp:1,ic:j?'':'fire',t:'<span style="font-size:12px;color:#8899aa">'+(j?'':'NTC DR')+'</span>',btns:vs.map(function(v){return [v,"nmVfNtc("+n+","+v+")"];})});});}}
+      if(B.mode==='ITT'&&V.ph==='DFF'&&V.ammo==='HE'){var vr=Math.min(12,Math.floor(R.fp/2)),vk=nmResKey(nmHexOfNode(V.tgt)),vc=(S_LOS.resid||{})[vk]||0;if(vr>0)it.push({ic:'fire',t:(vc>=vr?'✓ ':'')+'残留火力 '+vr+'FPを'+BTG.nodes[V.tgt].nm+'に置く',sub:'臨機射撃のHE(対戦モードと同じFPの半分)',f:vc<vr?"nmResSet("+V.tgt+","+vr+");nmVfRe("+n+")":''});} /* v409 */
       if(B.mode==='ITT'){var rr0=IFT[Math.max(0,Math.min(15,O.c+R.idrm))][ci(R.fp)];nmMcSection(it,n,B.te,rr0,'vf:'+V.tgt+':'+V.a+V.b+':'+O.c,'nmVfRe');}
       else if(B.te){var tsd=V.sd==='f'?'e':'f',tH=nmHexOfNode(V.tgt),ts=nmStOf(B.te);
         if(/^撃破/.test(O.t))it.push({ic:'wreck',t:'目標を撃破(残骸にする)',sub:'目標のマーカーを外して残骸を置く',f:"nmVfApplyWreck("+n+")"});
@@ -33694,7 +33704,7 @@ function nmsMode(){try{return localStorage.getItem('aslsk_mapsync')||'off';}catc
 function nmsOnOff(n,on){var m=nmsMode();if(on){if(m!=='off'){btRmReopen(n);return;}var last='auto';try{last=localStorage.getItem('aslsk_mapsync_last')||'auto';}catch(e){}if(!GIST_CONFIGURED()){NM_RM_SUB='sync';btRmReopen(n);return;}nmsSetMode(n,last);}else nmsSetMode(n,'off');}
 function nmsSetMode(n,m){try{localStorage.setItem('aslsk_mapsync',m);if(m!=='off')localStorage.setItem('aslsk_mapsync_last',m);}catch(e){}nmsStart();if(m==='auto')nmsTick();btRmReopen(n);}
 function nmsDev(){try{var d=localStorage.getItem('aslsk_dev_id');if(!d){d=Math.random().toString(36).slice(2,8);localStorage.setItem('aslsk_dev_id',d);}return d;}catch(e){return 'x';}}
-function nmsPayloadMap(){var sc=S.scen&&S.scen.sel;return {friendHexes:S_LOS.friendHexes||[],enemyHexes:S_LOS.enemyHexes||[],wreckHexes:S_LOS.wreckHexes||{},wreckVeh:S_LOS.wreckVeh||{},smoke:S_LOS.smoke||{},buildingMarks:S_LOS.buildingMarks||{},pxA:S_LOS.pxA||null,pxB:S_LOS.pxB||null,route:S_LOS.route||null,
+function nmsPayloadMap(){var sc=S.scen&&S.scen.sel;return {friendHexes:S_LOS.friendHexes||[],enemyHexes:S_LOS.enemyHexes||[],wreckHexes:S_LOS.wreckHexes||{},wreckVeh:S_LOS.wreckVeh||{},smoke:S_LOS.smoke||{},buildingMarks:S_LOS.buildingMarks||{},pxA:S_LOS.pxA||null,pxB:S_LOS.pxB||null,route:S_LOS.route||null,resid:S_LOS.resid||{},
   groups:(sc&&S.savedGroups&&S.savedGroups[sc])||{}};}
 function nmsHash(){try{var g=null;try{g=losPrimaryFireGroup();}catch(e){}if(g&&g.activeGroupSlot)nmGeSync(g.activeGroupSlot);}catch(e){}return JSON.stringify(nmsPayloadMap());}
 function nmsHdr(){return {'Authorization':'token '+gistGetToken(),'Accept':'application/vnd.github+json','Content-Type':'application/json'};}
@@ -33710,7 +33720,7 @@ function nmsPull(force,cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);retu
     if(!force&&(P.at<=NMS.remoteAt||P.dev===nmsDev())){NMS.status=NMS.status==='受信中'?'最新':NMS.status;NMS.last=Date.now();if(cb)cb(false);nmsRedraw();return;}
     nmsApply(P);NMS.remoteAt=P.at;NMS.last=Date.now();NMS.status='受信して反映';NMS.msg='';if(cb)cb(true);}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=String(e.message||e);if(cb)cb(false);nmsRedraw();});}
 function nmsApply(P){var m=P.map||{},sc=P.scen;nmBkSnap('受信前(共有で置き換え)');
-  S_LOS.friendHexes=m.friendHexes||[];S_LOS.enemyHexes=m.enemyHexes||[];S_LOS.wreckHexes=m.wreckHexes||{};S_LOS.wreckVeh=m.wreckVeh||{};S_LOS.smoke=m.smoke||{};S_LOS.buildingMarks=m.buildingMarks||{};S_LOS.route=m.route||null;
+  S_LOS.friendHexes=m.friendHexes||[];S_LOS.enemyHexes=m.enemyHexes||[];S_LOS.wreckHexes=m.wreckHexes||{};S_LOS.wreckVeh=m.wreckVeh||{};S_LOS.smoke=m.smoke||{};S_LOS.buildingMarks=m.buildingMarks||{};S_LOS.route=m.route||null;S_LOS.resid=m.resid||{};
   if(!S.savedGroups)S.savedGroups={};S.savedGroups[sc]=m.groups||{};
   try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot&&S.savedGroups[sc][g.activeGroupSlot]){var keep=Draw;FgSelectGroupSlot(g.id,g.activeGroupSlot);}}catch(e){}
   var abCh=JSON.stringify([S_LOS.pxA,S_LOS.pxB])!==JSON.stringify([m.pxA||null,m.pxB||null]);S_LOS.pxA=m.pxA||null;S_LOS.pxB=m.pxB||null;if(!S_LOS.pxA||!S_LOS.pxB)S_LOS.result=null;
@@ -33751,7 +33761,7 @@ function nmBkSnap(reason,scen,m0){try{var sc=scen||(S.scen&&S.scen.sel);if(!sc)r
 function nmBkDesc(m){var a=[];var f=(m.friendHexes||[]).length,e=(m.enemyHexes||[]).length,w=Object.keys(m.wreckHexes||{}).length,sm=Object.keys(m.smoke||{}).length,mk=Object.keys(m.buildingMarks||{}).length;
   if(f)a.push('自軍'+f);if(e)a.push('敵'+e);if(w)a.push('残骸'+w);if(sm)a.push('煙幕'+sm);if(mk)a.push('マーク'+mk);if(m.route&&m.route.hexes)a.push('行軍');if(m.pxA)a.push('地点A'+(m.pxB?'・B':''));return a.join(' ');}
 function nmBkRestore(n,i){var L=nmBkLoad(NM_BK_KEY)||[],b=L[i];if(!b)return;if(b.scen!==(S.scen&&S.scen.sel)){showToast(T('別のシナリオのバックアップです')+'('+b.scen+')','red');return;}
-  nmBkSnap('元に戻す前');var m=b.map;S_LOS.friendHexes=m.friendHexes||[];S_LOS.enemyHexes=m.enemyHexes||[];S_LOS.wreckHexes=m.wreckHexes||{};S_LOS.wreckVeh=m.wreckVeh||{};S_LOS.smoke=m.smoke||{};S_LOS.buildingMarks=m.buildingMarks||{};S_LOS.route=m.route||null;
+  nmBkSnap('元に戻す前');var m=b.map;S_LOS.friendHexes=m.friendHexes||[];S_LOS.enemyHexes=m.enemyHexes||[];S_LOS.wreckHexes=m.wreckHexes||{};S_LOS.wreckVeh=m.wreckVeh||{};S_LOS.smoke=m.smoke||{};S_LOS.buildingMarks=m.buildingMarks||{};S_LOS.route=m.route||null;S_LOS.resid=m.resid||{};
   if(/^受信前/.test(b.reason)&&m.groups){if(!S.savedGroups)S.savedGroups={};S.savedGroups[b.scen]=m.groups;try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot&&m.groups[g.activeGroupSlot])FgSelectGroupSlot(g.id,g.activeGroupSlot);}catch(e){}}
   S_LOS.pxA=m.pxA||null;S_LOS.pxB=m.pxB||null;S_LOS.result=null;try{saveState();}catch(e){}BtRmClose();
   if(S_LOS.pxA&&S_LOS.pxB){try{LosRunPixel();}catch(e){}}else Draw();showToast(T('マップを元に戻しました'),'grn');}
@@ -33818,6 +33828,20 @@ function nmRmCCItems(n){var C=NM_CC;if(!C)return nmRMenuItems(n);var H=nmHexOfNo
   var cf=nmCCCalc(S0.f,S0.e,'f'),ce=nmCCCalc(S0.e,S0.f,'e'),ready=(!cf||C.f)&&(!ce||C.e);
   it.push({ic:'sel',t:ready?'結果を反映する(同時)':'両方のDRを決めると反映できます',sub:'除去・損耗を編成とマーカーに反映(射撃タブの編成にも)。損耗のユニットを選ばない時はランダム',f:ready?"nmCCApply("+n+")":''});
   return it;}
+
+/* v409(ダルマ指示「臨機射撃の詳細設定は？」→サンプル): マップの撃つ画面で臨機を選んだ時、目標の移動(FFMO/FFNAM/危険移動、射撃タブと共通)・射撃モード(通常/SFF/FPF)を設定。
+   撃った後に残留火力をそのヘクスへ置く(射撃タブ3.3.5と同じ: IFT列の低下表、目標ヘクス外の正のDRM1につき1列低下。車両・砲のHEは対戦モードと同じFPの半分(最大12))。
+   地図に「残留nFP」の札。右クリック・共有・バックアップに含める */
+function nmResKey(H){return H.boardId+':'+H.col+':'+H.row;}
+function nmResSet(tn,fp){if(!S_LOS.resid)S_LOS.resid={};var H=nmHexOfNode(tn),k=nmResKey(H);if(fp>0&&fp>(S_LOS.resid[k]||0))S_LOS.resid[k]=fp;nmStSave();}
+function nmResClear(k){if(!S_LOS.resid)return;if(k)delete S_LOS.resid[k];else S_LOS.resid={};nmStSave();}
+function nmResOverlaySVG(dl){var h='',R=S_LOS.resid||{};Object.keys(R).forEach(function(k){var a=k.split(':'),bid=a[0],col=+a[1],row=+a[2],v=R[k];if(!v)return;
+  var g=losColRowToGlobalCanon(bid,col,row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);d={x:d.x+20,y:d.y+4};var y=d.y-36,w=54;
+  h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><rect x="'+(d.x-w/2)+'" y="'+y+'" width="'+w+'" height="15" rx="3" fill="#e86a10" stroke="#000" stroke-width="1"/><text x="'+d.x+'" y="'+(y+11)+'" text-anchor="middle" font-size="10.5" font-weight="900" fill="#fff" font-family="sans-serif">残留'+v+'FP</text></g>';});return h;}
+function nmMfResFp(){var f=getFireState();if(!f||!f.res||!f.res.ift)return 0;var col=f.res.ift.ci;if(col==null||col<0)return 0;var p=0;
+  try{p=Math.max(0,fireHindTotal(f))+(f.cx?1:0)+Math.max(0,fireEffLdr(f));}catch(e){}return resTblFp(RES_TBL[col],p);}
+function nmMfMove(n,k){var f=getFireState();if(!f)return;if(k==='none'){f.ffmo=false;f.ffnam=false;f.hazardous=false;}else{var on=!f[k];Ftog(k);}f.res=null;Draw();nmMfReopen(n);}
+function nmMfMode(n,v){FsetMode(v);nmMfReopen(n);}
 function nmRmGrpEditItems(n){
   var G=NM_GE;if(!G)return nmRMenuItems(n);var L=NM_SIDE_LBL[G.sd],d=nmGeList(G.slot),nat=d.nat,it=[],nc=(UNITS[nat]&&UNITS[nat].col)||'#ccddee';
   function q(x){return String(x).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
@@ -39094,7 +39118,7 @@ function LosResetPoints(){if(S_LOS.smoke&&Object.keys(S_LOS.smoke).length)nmBkSn
 // ワンタップで実行できるようにする(A/B地点・煙幕・行軍ルート・敵ヘクス・残骸ヘクス・
 // マーク・各種操作モードフラグをすべて初期化)。盤面選択(S_LOS.boards)自体は変更しない。
 function LosClearMapAll(){
-  nmBkSnap('全てクリア');
+  nmBkSnap('全てクリア');S_LOS.resid={};
   losSaveMapScroll();
   S_LOS.pxA=null;S_LOS.pxB=null;S_LOS.result=null;
   S_LOS.smoke={};
@@ -40451,6 +40475,7 @@ function LOS_PAGE(){
   h+=losEnemyHexOverlaySVG(dispLayout);
   h+=nmFriendOverlaySVG(dispLayout); /* v345 */
   h+=nmStatusOverlaySVG(dispLayout); /* v405: マーカーの状態(混乱・ピン・走行不能など) */
+  h+=nmResOverlaySVG(dispLayout); /* v409: 残留火力 */
   h+=btBldgOverlaySVG(dispLayout); // v11.474: 建物の支配の旗
   h+=btOverlaySVG(dispLayout); // v11.473: 対戦モードの部隊スタック
   h+=losWreckHexOverlaySVG(dispLayout);
