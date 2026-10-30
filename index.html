@@ -33351,7 +33351,7 @@ function nmNatLbl(k){if(S.lang==='en')return k;var m={USA:'米軍',GER:'独軍',
 function nmScenNats(){var sc=(typeof SCN!=='undefined'&&S.scen&&S.scen.sel)?SCN.filter(function(x){return x.id===S.scen.sel;})[0]:null;return sc&&sc.f?Object.keys(sc.f).filter(function(k){return UNITS[k];}):[];}
 function nmGeActive(slot){var g=null;try{g=losPrimaryFireGroup();}catch(e){}return (g&&g.activeGroupSlot===slot)?g:null;}
 function nmGeSaved(slot,mkNat){var sc=S.scen&&S.scen.sel;if(!sc)return null;if(!S.savedGroups)S.savedGroups={};if(!S.savedGroups[sc])S.savedGroups[sc]={};var sv=S.savedGroups[sc][slot];if(!sv&&mkNat)sv=S.savedGroups[sc][slot]={pickerNat:mkNat,pickerItems:[],sw:[],swOwner:{},latw:[]};return sv||null;}
-function nmGeList(slot){var g=nmGeActive(slot);if(g)return {nat:g.pickerNat,items:g.pickerItems||[]};var sv=nmGeSaved(slot);return sv?{nat:sv.pickerNat,items:sv.pickerItems||[]}:{nat:null,items:[]};}
+function nmGeList(slot){var g=nmGeActive(slot);if(g)return {nat:g.pickerNat,items:g.pickerItems||[],sw:g.sw||[],own:g.swOwner||{}};var sv=nmGeSaved(slot);return sv?{nat:sv.pickerNat,items:sv.pickerItems||[],sw:sv.sw||[],own:sv.swOwner||{}}:{nat:null,items:[],sw:[],own:{}};}
 function nmGeSync(slot){var g=nmGeActive(slot),sc=S.scen&&S.scen.sel;if(!g||!sc)return;if(!S.savedGroups)S.savedGroups={};if(!S.savedGroups[sc])S.savedGroups[sc]={};
   S.savedGroups[sc][slot]={pickerNat:g.pickerNat,pickerItems:deepCopy(g.pickerItems||[]),sw:deepCopy(g.sw||[]),swOwner:deepCopy(g.swOwner||{}),latw:deepCopy(g.latw||[])};}
 function nmGeFreeSlot(){var sc=S.scen&&S.scen.sel,sv=(sc&&S.savedGroups&&S.savedGroups[sc])||{},g=null;try{g=losPrimaryFireGroup();}catch(e){}
@@ -33373,6 +33373,26 @@ function nmGeDel(n,idx){var G=NM_GE;if(!G)return;var g=nmGeActive(G.slot);
     if(rm&&sv.latw)sv.latw=sv.latw.filter(function(e){return latwNormEntry(e).pid!==rm.pid;});
     if(!sv.pickerItems.length){sv.sw=[];sv.swOwner={};sv.latw=[];}}}
   nmGeSync(G.slot);try{saveState();}catch(e){}Draw();NM_RM_SUB='grpedit';btRmReopen(n);}
+/* v402(ダルマ指示「支援火器はマップから加えられるようにできる？」→サンプル): 編成の編集で支援火器(SW)も加える・外す。
+   SWの個体はuid=種類id_番号(射撃タブと同じ)。番号は射撃タブ・他の編成で使っていない最小の番号。射撃タブで選択中の編成はFtogSWで直接、保有数(f.swc)も合わせて増やす。
+   運搬ユニット(swOwner)は、SWをまだ持っていない分隊→半分隊→指揮官の順に自動で割り当て(射撃タブで変更可) */
+function nmGeSwBase(uid){var m=/^(.+)_(\d+)$/.exec(uid);return m?{id:m[1],i:+m[2]}:{id:uid,i:0};}
+function nmGeSwUsed(){var u={},f=getFireState(),sc=S.scen&&S.scen.sel,sv=(sc&&S.savedGroups&&S.savedGroups[sc])||{};
+  (f.grps||[]).forEach(function(g){(g.sw||[]).forEach(function(x){u[x]=1;});});Object.keys(sv).forEach(function(k){((sv[k]&&sv[k].sw)||[]).forEach(function(x){u[x]=1;});});return u;}
+function nmGeSwOwnerPick(items,own){var cnt={};Object.keys(own||{}).forEach(function(k){cnt[own[k]]=(cnt[own[k]]||0)+1;});
+  function rk(x){if(x.kind==='smc')return 2;var d=UNITS[x.nat],u=d&&d.mmc&&d.mmc.filter(function(q){return q.lbl===x.label;})[0];return (u&&u.hs)?1:0;}
+  var c=(items||[]).slice().sort(function(a,b){return (cnt[a.pid]||0)-(cnt[b.pid]||0)||rk(a)-rk(b);});return c.length?c[0].pid:null;}
+function nmGeSwAdd(n,id){var G=NM_GE;if(!G)return;var used=nmGeSwUsed(),i=0;while(used[id+'_'+i])i++;var uid=id+'_'+i,g=nmGeActive(G.slot);
+  if(g){var f=getFireState();if(!f.swc)f.swc={};if((f.swc[id]||0)<i+1)f.swc[id]=i+1;var had=(g.sw||[]).indexOf(uid)>=0;if(!had)FtogSW(g.id,uid);
+    if((g.sw||[]).indexOf(uid)>=0){if(!g.swOwner)g.swOwner={};if(g.swOwner[uid]==null){var pid=nmGeSwOwnerPick(g.pickerItems,g.swOwner);if(pid!=null)g.swOwner[uid]=pid;}}}
+  else{var sv=nmGeSaved(G.slot,nmGeList(G.slot).nat);if(!sv)return;if(!sv.sw)sv.sw=[];if(!sv.swOwner)sv.swOwner={};sv.sw.push(uid);var pid2=nmGeSwOwnerPick(sv.pickerItems,sv.swOwner);if(pid2!=null)sv.swOwner[uid]=pid2;}
+  nmGeSync(G.slot);try{saveState();}catch(e){}Draw();NM_RM_SUB='grpedit';btRmReopen(n);}
+function nmGeSwDel(n,uid){var G=NM_GE;if(!G)return;var g=nmGeActive(G.slot);
+  if(g){if((g.sw||[]).indexOf(uid)>=0)FtogSW(g.id,uid);}
+  else{var sv=nmGeSaved(G.slot);if(sv){sv.sw=(sv.sw||[]).filter(function(x){return x!==uid;});if(sv.swOwner)delete sv.swOwner[uid];}}
+  nmGeSync(G.slot);try{saveState();}catch(e){}Draw();NM_RM_SUB='grpedit';btRmReopen(n);}
+function nmGeSwList(nat){var ids=null;try{var a=scenarioSWIds();ids=a?(a[nat]||{}):null;}catch(e){}
+  return SWT.filter(function(t){return ids?!!ids[t.id]:(t.nat||[]).indexOf(nat)>=0;});}
 function nmRmGrpEditItems(n){
   var G=NM_GE;if(!G)return nmRMenuItems(n);var L=NM_SIDE_LBL[G.sd],d=nmGeList(G.slot),nat=d.nat,it=[],nc=(UNITS[nat]&&UNITS[nat].col)||'#ccddee';
   function q(x){return String(x).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
@@ -33381,6 +33401,8 @@ function nmRmGrpEditItems(n){
   it.push({ic:'hex',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+T('編成')+G.slot+(nat?' <span style="color:'+nc+'">'+nmNatLbl(nat)+'</span>':'')+'</span>',sub:'射撃タブの編成'+G.slot+'と同じ内容。✕で外す・下のユニットをタップで加える'});
   if(!d.items.length)it.push({ic:'info',t:'(中身なし)',sub:'下からユニットを加えてください'});
   d.items.forEach(function(x,i){var un=x.nat||nat;it.push({row:1,ic:'sel',img:vaslCtrHTML('u:'+un+'|'+x.label,30)||'',t:x.label+(x.kind==='smc'?' <span style="color:#8899aa;font-size:11px">指揮官</span>':''),btns:[['✕',"nmGeDel("+n+","+i+")"]]});});
+  (d.sw||[]).forEach(function(uid){var b=nmGeSwBase(uid),t=SWT.filter(function(w){return w.id===b.id;})[0],ow=(d.items||[]).filter(function(x){return x.pid===d.own[uid];})[0];
+    it.push({row:1,ic:'fire',img:vaslCtrHTML('u:SW|'+b.id,30)||'',t:(t?swLblT(t.lbl):b.id)+(b.i?' #'+(b.i+1):'')+' <span style="color:#8899aa;font-size:11px">支援火器'+(ow?'・'+ow.label+'が運ぶ':'')+'</span>',btns:[['✕',"nmGeSwDel("+n+",'"+q(uid)+"')"]]});});
   if(!nat){it.push({sep:1});it.push({ic:'info',t:'国籍が決まっていません',sub:'射撃タブで国籍を選んでください'});return it;}
   it.push({sep:1});
   it.push({ic:'info',t:'加える',sub:'このシナリオの'+nmNatLbl(nat)+'のユニット(タップで1個ずつ)'});
@@ -33388,6 +33410,8 @@ function nmRmGrpEditItems(n){
   (D.smc||[]).filter(function(u){return !fl||fl.smc[u.lbl];}).forEach(function(u){it.push({ic:'sel',img:vaslCtrHTML('u:'+nat+'|'+u.lbl,30)||'',t:'＋ '+u.lbl,sub:'指揮官',f:"nmGeAdd("+n+",'"+nat+"','smc','"+q(u.lbl)+"')"});});
   var mm=[];try{mm=scenarioMmcListForNat(nat)||[];}catch(e){mm=D.mmc||[];}
   mm.forEach(function(u){it.push({ic:'sel',img:vaslCtrHTML('u:'+nat+'|'+u.lbl,30)||'',t:'＋ '+u.lbl,sub:u.hs?'半分隊':'分隊',f:"nmGeAdd("+n+",'"+nat+"','mmc','"+q(u.lbl)+"')"});});
+  var swl=nmGeSwList(nat);if(swl.length){it.push({sep:1});it.push({ic:'info',t:'支援火器を加える',sub:(d.items.length?'まだ支援火器を持っていないユニットに自動で持たせる(射撃タブで変更可)':'先に分隊か指揮官を加えてください')});
+    swl.forEach(function(t){it.push({ic:'fire',img:vaslCtrHTML('u:SW|'+t.id,30)||'',t:'＋ '+swLblT(t.lbl),sub:'B#'+(t.b<99?t.b:'—')+(t.fp?'　FP'+t.fp:''),f:d.items.length?"nmGeSwAdd("+n+",'"+q(t.id)+"')":''});});}
   return it;
 }
 /* v358(ダルマ指示「自軍マーカーに射撃タブの編成を選択可能にする」): 自軍に射撃タブの編成(A/B/C…)を割り当てる(eh.grp)。地図には編成のカウンター(指揮官→分隊の順、最大3枚重ね) */
@@ -33402,8 +33426,10 @@ function nmGrpItems(slot){ /* 表示する順: 指揮官→分隊(火力の高�
   it.sort(function(a,b){return (a.kind==='smc'?0:1)-(b.kind==='smc'?0:1)||rk(a)-rk(b);});
   return it.map(function(x){return {nat:x.nat||d.pickerNat,label:x.label,kind:x.kind};});
 }
-function nmGrpSrcs(slot){return nmGrpItems(slot).map(function(x){return nmVaslSrc('u:'+x.nat+'|'+x.label);}).filter(Boolean);}
-function nmGrpText(slot){var it=nmGrpItems(slot),m={},o=[];it.forEach(function(x){var k=x.label.replace(/\[.*$/,'');if(!m[k]){m[k]=0;o.push(k);}m[k]++;});return o.map(function(k){return k+(m[k]>1?'×'+m[k]:'');}).join(' ');}
+var NM_GRP_SW_STACK=true; /* v402: 地図の編成カウンターの重なりに支援火器も含める(true)/含めない(false) */
+function nmGrpSrcs(slot,noSw){var a=nmGrpItems(slot).map(function(x){return nmVaslSrc('u:'+x.nat+'|'+x.label);}).filter(Boolean);
+  if(NM_GRP_SW_STACK&&!noSw){var d=nmGrpData(slot);((d&&d.sw)||[]).forEach(function(uid){var src=nmVaslSrc('u:SW|'+nmGeSwBase(uid).id);if(src)a.push(src);});}return a;}
+function nmGrpText(slot){var it=nmGrpItems(slot),m={},o=[];it.forEach(function(x){var k=x.label.replace(/\[.*$/,'');if(!m[k]){m[k]=0;o.push(k);}m[k]++;});var d=nmGrpData(slot);((d&&d.sw)||[]).forEach(function(uid){var b=nmGeSwBase(uid),t=SWT.filter(function(w){return w.id===b.id;})[0],k=t?swLblT(t.lbl).replace(/\s*\(.*$/,''):b.id;if(!m[k]){m[k]=0;o.push(k);}m[k]++;});return o.map(function(k){return k+(m[k]>1?'×'+m[k]:'');}).join(' ');}
 function nmRmSetGrp(n,slot,sd){sd=sd||'f';var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(!eh){if(sd==='f'){eh={boardId:H.boardId,col:H.col,row:H.row};nmSideList('f').push(eh);}else{losToggleEnemyHexAt(H.boardId,H.col,H.row);eh=nmEnemyAt(H);}if(!eh)return;}eh.veh=null;eh.gun=null;eh.tca=null;eh.facing=null;eh.grp=slot;NM_FACE=null;try{saveState();}catch(e){}Draw();btRmReopen(n);}
 /* v358(ダルマ指示「編成A もう少しかっこよく」「何種類か」): NM_GRP_BADGE
    'shield'=部隊章の帯(濃紺+金縁+盾) / 'tab'=カウンターの上にタブ(大きなA) / 'coin'=右上に丸いメダル / 'plate'=VASL風の白い札 */
