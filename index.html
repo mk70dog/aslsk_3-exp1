@@ -41280,16 +41280,17 @@ function SCEN_PAGE(){
     // (未対戦と0-0を視覚的に区別するため)。natP1=sc.atk(攻撃側)固定、natP2=それ以外の最初の陣営(computeNatStats()と同一ロジック)。
     // 従来はright:6px指定の別要素として右下に絶対配置していたが、日付バッジ幅に応じた可変オフセット計算が煩雑なため、
     // 日付バッジと共通のflexラッパー(position:absolute;right:6px;top:6px)に統合し、内部でgap:4pxの横並びにした。
-    var wl=scenWinLossCounts(sc.id);
+    var wl=scenWinLossCounts(sc.id),wlH=''; /* v393(ダルマ指示「勝敗を日付の左に変える」) */
     // 2026-09修正(Kato指示「勝敗を右下に移動」): 従来は日付/ターン数バッジと共通の
     // 右上(top:6px)フレックスラッパーに同居させていたが、勝敗バッジだけを独立させ
     // 右下(bottom:6px)に配置する。日付バッジ自体の位置(右上)は変更なし。
     if(wl.total>0){
       var wlNatP1=sc.atk,wlNatP2=natsList.filter(function(n){return n!==wlNatP1;})[0];
       var wlC1=NAT_COL[wlNatP1]||'#8899aa',wlC2=NAT_COL[wlNatP2]||'#8899aa';
-      h+='<span onclick="event.stopPropagation();SREC_VIEW_FOR(\''+sc.id+'\')" style="position:absolute;right:'+((window.ASL_SK3_EX_CARD_HAS&&ASL_SK3_EX_CARD_HAS(sc.id))?'80px':'6px')+';bottom:6px;display:inline-flex;align-items:center;gap:2px;padding:1px 5px;border:1px solid #33445599;border-radius:2px;background:#0a0c14;font-size:12px;font-weight:bold;cursor:pointer" title="'+T('攻撃側勝利-防御側勝利(タップで対戦記録へ)')+'"><span style="color:'+wlC1+'">'+wl.atkW+'</span><span style="color:#556677">-</span><span style="color:'+wlC2+'">'+wl.defW+'</span></span>';
+      wlH='<span onclick="event.stopPropagation();SREC_VIEW_FOR(\''+sc.id+'\')" style="display:inline-flex;align-items:center;gap:2px;padding:1px 5px;border:1px solid #33445599;border-radius:2px;background:#0a0c14;font-size:12px;font-weight:bold;cursor:pointer" title="'+T('攻撃側勝利-防御側勝利(タップで対戦記録へ)')+'"><span style="color:'+wlC1+'">'+wl.atkW+'</span><span style="color:#556677">-</span><span style="color:'+wlC2+'">'+wl.defW+'</span></span>';
     }
     h+='<div style="position:absolute;right:6px;top:6px;display:flex;align-items:center;gap:4px">';
+    h+=wlH;
     h+='<span style="display:inline-flex;align-items:center;padding:1px 5px;border:1px solid '+(on?'#4499ee99':'#33445599')+';border-radius:2px;font-size:12px;color:'+(on?'#aabbcc':'#6a7a8a')+'">'+sc.dt+' '+sc.trn+'T</span>';
     h+='</div>';
     if(window.ASL_SK3_EX_CARD_HAS&&ASL_SK3_EX_CARD_HAS(sc.id))h+=ASL_SK3_EX_CARD_BTN(sc.id,true); /* v11.347: 右下に CARD(SK3 S20〜S30) */
