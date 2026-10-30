@@ -6611,7 +6611,7 @@ var I18N_EN={
   "CA変更DRM":"CA Change DRM",
   "CA変更ヘクススパイン数（":"CA change hexspines (",
   "CA変更数（":"CA change count (",
-  "射撃せずCA変更のみ確定（フェイズ終了時）":"Change CA only, without firing (end of phase)","原DR2で追加dr":"Orig. DR 2: extra dr","下の撃破・走行不能の数値は、DRM(機動状態・CE・指揮官など)を反映した、振る2個のダイスの目(原DR)です":"The Elim/Immobilize numbers below are original DR values with the DRM (Motion, CE, leader, etc.) already applied","臨機射撃済（First Fireマーカーあり）":"Already First Fired (First Fire marker)","臨機射撃済のLATWは防御射撃フェイズに撃てません(隣接でも不可)。撃ち直せるのはユニット本体の火力と機関銃・IFEだけです(3.4)":"A LATW that already First Fired cannot fire in the DFPh (not even at adjacent units). Only inherent FP and MG/IFE may fire again (3.4)","臨機射撃済のLATWは防御射撃フェイズに撃てません":"A LATW that already First Fired cannot fire in the DFPh","（前進フェイズの前進もできません）":" (it may not advance in the APh either)",
+  "射撃せずCA変更のみ確定（フェイズ終了時）":"Change CA only, without firing (end of phase)","除去＝DR以下":"Elim = DR ≤","損耗＝DR同値":"Casualty = DR","除去・損耗の数値は、DRM(指揮官・CX・混乱・不意打ちなど)を反映した、振る2個のダイスの目(原DR)です":"Elim/Casualty numbers are original DR values with the DRM (leader, CX, broken, ambush, etc.) applied","原DR2で追加dr":"Orig. DR 2: extra dr","下の撃破・走行不能の数値は、DRM(機動状態・CE・指揮官など)を反映した、振る2個のダイスの目(原DR)です":"The Elim/Immobilize numbers below are original DR values with the DRM (Motion, CE, leader, etc.) already applied","臨機射撃済（First Fireマーカーあり）":"Already First Fired (First Fire marker)","臨機射撃済のLATWは防御射撃フェイズに撃てません(隣接でも不可)。撃ち直せるのはユニット本体の火力と機関銃・IFEだけです(3.4)":"A LATW that already First Fired cannot fire in the DFPh (not even at adjacent units). Only inherent FP and MG/IFE may fire again (3.4)","臨機射撃済のLATWは防御射撃フェイズに撃てません":"A LATW that already First Fired cannot fire in the DFPh","（前進フェイズの前進もできません）":" (it may not advance in the APh either)",
   "条件：集中射撃を使わずに射撃可能な状態、かつ操作部隊が固有火力を射撃していない場合のみ":"Condition: only while able to fire without Intensive Fire, and only if the operating unit has not fired its inherent FP",
   "射撃せずCA変更を確定しました。この砲と操作部隊はこのプレイヤーターン移動できません。":"CA change without firing has been locked in. This Gun and its operating unit cannot move for the rest of this Player Turn.",
   "射撃せずCA変更のみ確定済みです。このプレイヤー・ターン中は射撃できません。":"CA change without firing has already been locked in. This Gun cannot fire for the rest of this Player Turn.",
@@ -17406,11 +17406,7 @@ function CC_CARD(){
   // 不意打ちDRM計算（攻撃側・防御側で非対称）
   var ambAtkDRM=c.cc_ambush==="success"?-1:c.cc_ambush==="victim"?1:0;
   var calcDRM=(c.cc_ldrPresent?c.cc_ldr:0)+(c.cc_cx?1:0)+(c.cc_def_cx?-1:0)+(c.cc_broken?-2:0)+ambAtkDRM;
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px">';
-  h+='<div class="sumcard"><div class="lbl">'+T('攻撃DRM合計')+'</div>'+seg7drm(calcDRM)+'</div>';
-  h+='<div class="sumcard"><div class="lbl">'+T('戦闘比')+'</div>'+(ri>=0?seg7(CCT_R[ri],'blu'):seg7('--','blu'))+'</div>'; // v11.283: FP未入力(ri=-1)で「undefined」を7セグ表示していた
-  h+='<div class="sumcard"><div class="lbl">'+T('除去ナンバー')+'</div>'+(elim!==null?seg7(String(elim),'gld'):seg7('--','gld'))+(elim!==null?'<div style="font-size:12px;color:#556677;margin-top:3px">'+T('Modified DR＜')+elim+T('で除去')+'</div>':'')+'</div>';
-  h+='</div>';
+  h+=ccRawPanelsHTML(ri,elim,calcDRM); /* v390 */
   h+='</div>';
 
   // ダイス
@@ -17597,6 +17593,17 @@ function CJUDGE_COMMON(c){
   var raw=r+w,mod=raw+atkDRM;
   var st=mod<elim?"elim":mod===elim?"cas":"miss";
   return {raw:raw,mod:mod,st:st,pro:(raw===2&&c.ccHasMmc),atkDRM:atkDRM,elim:elim};
+}
+/* v390(ダルマ指示「白兵戦の他2判定も原DR表示」): 除去・損耗の数値を、修正(DRM)を反映した振る2個のダイスの目(原DR)で表示。除去=除去ナンバー−1−DRM以下、損耗=除去ナンバー−DRMちょうど(2〜12の範囲外は「--」) */
+function ccRawPanelsHTML(ri,elim,drm){
+  var h='<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:10px">';
+  h+='<div class="sumcard"><div class="lbl">'+T('戦闘比')+'</div>'+(ri!=null&&ri>=0?seg7(CCT_R[ri],'blu'):seg7('--','blu'))+'</div>';
+  var k=(elim!=null)?elim-1-drm:null,c=(elim!=null)?elim-drm:null;
+  h+='<div class="sumcard"><div class="lbl">'+T('除去＝DR以下')+'</div>'+((k!=null&&k>=2)?seg7(String(Math.min(12,k)),'red'):seg7('--','red'))+'</div>';
+  h+='<div class="sumcard"><div class="lbl">'+T('損耗＝DR同値')+'</div>'+((c!=null&&c>=2&&c<=12)?seg7(String(c),'gld'):seg7('--','gld'))+'</div>';
+  h+='<div class="sumcard"><div class="lbl">'+T('攻撃DRM合計')+'</div>'+seg7drm(drm)+'</div>';
+  h+='</div><div style="font-size:11px;color:#c8a032;margin-top:3px">'+T('除去・損耗の数値は、DRM(指揮官・CX・混乱・不意打ちなど)を反映した、振る2個のダイスの目(原DR)です')+(elim!=null?'（'+T('除去ナンバー')+elim+'）':'')+'</div>';
+  return h;
 }
 function CJUDGE(){
   var c=S.cc,r=c.rd,w=c.wd;if(!r||!w){showToast(''+T('サイコロ(赤/白)を入力してください'));return;}
@@ -18001,11 +18008,7 @@ function VEHATK_CARD(){
     };
     var vaRi=vaFp>0&&c.df>0?ratio2(vaFp,c.df):-1,vaElim=vaRi>=0?CCT_N[vaRi]:null;
     var vaAmbDRM=c.cc_ambush==="success"?-1:c.cc_ambush==="victim"?1:0;
-    h+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px">';
-    h+='<div class="sumcard"><div class="lbl">'+T('攻撃DRM合計')+'</div>'+seg7drm(vaAmbDRM)+'</div>';
-    h+='<div class="sumcard"><div class="lbl">'+T('戦闘比')+'</div>'+(vaRi!==null&&vaRi>=0?seg7(CCT_R[vaRi],'blu'):seg7('--','blu'))+'</div>';
-    h+='<div class="sumcard"><div class="lbl">'+T('除去ナンバー')+'</div>'+(vaElim!==null?seg7(String(vaElim),'gld'):seg7('--','gld'))+'</div>';
-    h+='</div>';
+    h+=ccRawPanelsHTML(vaRi,vaElim,vaAmbDRM); /* v390 */
 
     // ダイス
     h+='<div class="card" style="margin-top:8px"><div class="sh">CC DR Input<button class="judg3d grn" style="margin-left:auto;flex-shrink:0;width:80px;height:28px;font-size:12px" onclick="autoRollPair(function(){return S.cc;},\'rd\',\'wd\',\'res\')">ROLL DICE</button></div>';
