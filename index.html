@@ -11054,7 +11054,8 @@ function saveState(){
       enemyHexes:S_LOS.enemyHexes,
       friendHexes:S_LOS.friendHexes||[], /* v345 */
       wreckHexes:S_LOS.wreckHexes,
-      wreckVeh:S_LOS.wreckVeh||{} /* v343: 残骸の車両 */
+      wreckVeh:S_LOS.wreckVeh||{}, /* v343: 残骸の車両 */
+      buildingMarks:S_LOS.buildingMarks||{},route:S_LOS.route||null /* v407(ダルマ指示「消えないようにする」): マークと行軍も開き直しで残す */
     }});
     localStorage.setItem('aslsk_state_v1', JSON.stringify(toSave));
   }catch(e){}
@@ -33061,13 +33062,16 @@ function nmRMenuItems(n){
   var H=NM_RM_HEX,it=[],N=(n>=0)?BTG.nodes[n]:null;
   if(NM_FACE)return nmRmFaceItems(n,NM_FACE.sd);
   if(NM_RM_VEH){var vsd=NM_RM_VEH===1?'e':NM_RM_VEH;NM_RM_VEH=0;return nmRmVehItems(n,vsd);}
-  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);if(sk==='tabs')return nmRmTabItems(n);if(sk==='grpedit')return nmRmGrpEditItems(n);if(sk==='mfire')return nmRmMFireItems(n);if(sk==='vfire')return nmRmVFireItems(n);if(sk==='sync')return nmRmSyncItems(n);}
+  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);if(sk==='tabs')return nmRmTabItems(n);if(sk==='grpedit')return nmRmGrpEditItems(n);if(sk==='mfire')return nmRmMFireItems(n);if(sk==='vfire')return nmRmVFireItems(n);if(sk==='sync')return nmRmSyncItems(n);if(sk==='backup')return nmRmBackupItems(n);}
   var nm=N?N.nm:btHexName(H.boardId,H.col,H.row),terr=N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')):'';
   var hasA=!!S_LOS.pxA;
   it.push({ic:'full',t:btMapFullOn()?'全画面表示オフ':'全画面表示オン',sub:btMapFullOn()?'元の表示に戻す':'地図を画面いっぱいに',f:"BtMapFull("+(n>=0?n:'null')+")"}); /* v349: 最上部 */
-  var nsm=nmsMode();it.push({ic:'move',t:'マップ共有(別のiPadと同期)',sub:(nsm==='off'?'オフ':nsm==='auto'?'自動':'ボタン')+(NMS.status?'　'+NMS.status:'')+(NMS.last?'　'+nmsAgo(NMS.last):''),f:"nmRmSubOpen('sync',"+n+")"}); /* v407 */
+  var nsm=nmsMode(); /* v407(ダルマ指示「同期オン／オフ切り替え」): メニューで直接オン/オフ。オンは前回のしかた(自動/ボタン、初めては自動) */
+  it.push({row:1,ic:'move',t:'マップ共有',btns:[[(nsm==='off'?'✓':'')+'オフ',"nmsOnOff("+n+",false)"],[(nsm!=='off'?'✓':'')+'オン',"nmsOnOff("+n+",true)"]]});
+  if(nsm!=='off'||NMS.status)it.push({ic:'move',t:'共有の状態・送る/受け取る',sub:(nsm==='off'?'オフ':nsm==='auto'?'自動':'ボタン')+(NMS.status?'　'+NMS.status:'')+(NMS.last?'　'+nmsAgo(NMS.last):''),f:"nmRmSubOpen('sync',"+n+")"});
   it.push({ic:'tabs',t:'タブ移動',sub:'ほかのタブへ移る(全画面はMAPに戻ると全画面のまま)',f:"nmRmSubOpen('tabs',"+n+")"}); /* v360 */
   if(nmStAnyFired())it.push({ic:'fire',t:'射撃済みの印を全部外す',sub:'次のフェイズ・プレイヤーターンへ進む時に',f:"BtRmClose();nmStClearFired()"}); /* v406 */
+  it.push({ic:'rot',t:'マップを元に戻す',sub:'消した・置き換わったマップをバックアップから戻す',f:"nmRmSubOpen('backup',"+n+")"}); /* v407 */
   it.push({ic:'trash',t:'全てクリア',sub:'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを全部消す(確認あり)',f:"nmRmSubOpen('clear',"+n+")"});it.push({sep:1}); /* v345(ダルマ指示「右クリックに全てクリアを追加」)・v349「2番目に」 */
   it.push({ic:'los',t:'このヘクスを地点Aに',sub:nm+(terr?'　'+terr:''),f:"nmRmAB('a')"});
   if(hasA)it.push({ic:'losB',t:'このヘクスを地点Bに(LOS判定)',sub:'A → '+nm,f:"nmRmAB('b')"});
@@ -33133,10 +33137,11 @@ function nmRmClearItems(n){
   cs.forEach(function(c){tot+=c.n;if(!c.n)return;it.push({ic:c.ic,t:'全'+c.t+'をクリア',sub:'配置中: '+c.n+c.u,f:"nmRmClearCat("+n+",'"+c.k+"')"});});
   if(!tot)it.push({ic:'info',t:'地図に配置中のものはありません'});
   it.push({sep:1});
-  it.push({ic:'trash',t:'<span style="color:#ff7070">全てクリアする</span>',sub:tot?'上の全部を消す(元に戻せません)':'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを消す',f:"nmRmClearAll()"});
+  it.push({ic:'trash',t:'<span style="color:#ff7070">全てクリアする</span>',sub:tot?'上の全部を消す(「マップを元に戻す」で戻せます)':'地点A・B、行軍、自軍・敵、残骸、煙幕、マークを消す',f:"nmRmClearAll()"});
   return it;
 }
 function nmRmClearCat(n,k){
+  nmBkSnap('消す: '+((nmClearCats().filter(function(c){return c.k===k;})[0]||{}).t||k));
   if(k==='ab'){S_LOS.pxA=null;S_LOS.pxB=null;S_LOS.result=null;}
   else if(k==='route'){S_LOS.route=null;S_LOS.routeError=null;}
   else if(k==='friend')S_LOS.friendHexes=[];
@@ -33683,7 +33688,8 @@ var NMS_FILE='aslsk_map.json';
 setTimeout(function(){try{nmsStart();}catch(e){}},1500);
 var NMS={busy:false,last:0,lastHash:'',remoteAt:0,status:'',msg:'',timer:null,from:'',remoteScen:''};
 function nmsMode(){try{return localStorage.getItem('aslsk_mapsync')||'off';}catch(e){return 'off';}}
-function nmsSetMode(n,m){try{localStorage.setItem('aslsk_mapsync',m);}catch(e){}nmsStart();if(m==='auto')nmsTick();btRmReopen(n);}
+function nmsOnOff(n,on){var m=nmsMode();if(on){if(m!=='off'){btRmReopen(n);return;}var last='auto';try{last=localStorage.getItem('aslsk_mapsync_last')||'auto';}catch(e){}if(!GIST_CONFIGURED()){NM_RM_SUB='sync';btRmReopen(n);return;}nmsSetMode(n,last);}else nmsSetMode(n,'off');}
+function nmsSetMode(n,m){try{localStorage.setItem('aslsk_mapsync',m);if(m!=='off')localStorage.setItem('aslsk_mapsync_last',m);}catch(e){}nmsStart();if(m==='auto')nmsTick();btRmReopen(n);}
 function nmsDev(){try{var d=localStorage.getItem('aslsk_dev_id');if(!d){d=Math.random().toString(36).slice(2,8);localStorage.setItem('aslsk_dev_id',d);}return d;}catch(e){return 'x';}}
 function nmsPayloadMap(){var sc=S.scen&&S.scen.sel;return {friendHexes:S_LOS.friendHexes||[],enemyHexes:S_LOS.enemyHexes||[],wreckHexes:S_LOS.wreckHexes||{},wreckVeh:S_LOS.wreckVeh||{},smoke:S_LOS.smoke||{},buildingMarks:S_LOS.buildingMarks||{},pxA:S_LOS.pxA||null,pxB:S_LOS.pxB||null,route:S_LOS.route||null,
   groups:(sc&&S.savedGroups&&S.savedGroups[sc])||{}};}
@@ -33700,7 +33706,7 @@ function nmsPull(force,cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);retu
     if(P.scen!==(S.scen&&S.scen.sel)){NMS.status='相手は別のシナリオ('+P.scen+')';if(cb)cb(false);nmsRedraw();return;}
     if(!force&&(P.at<=NMS.remoteAt||P.dev===nmsDev())){NMS.status=NMS.status==='受信中'?'最新':NMS.status;NMS.last=Date.now();if(cb)cb(false);nmsRedraw();return;}
     nmsApply(P);NMS.remoteAt=P.at;NMS.last=Date.now();NMS.status='受信して反映';NMS.msg='';if(cb)cb(true);}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=String(e.message||e);if(cb)cb(false);nmsRedraw();});}
-function nmsApply(P){var m=P.map||{},sc=P.scen;
+function nmsApply(P){var m=P.map||{},sc=P.scen;nmBkSnap('受信前(共有で置き換え)');
   S_LOS.friendHexes=m.friendHexes||[];S_LOS.enemyHexes=m.enemyHexes||[];S_LOS.wreckHexes=m.wreckHexes||{};S_LOS.wreckVeh=m.wreckVeh||{};S_LOS.smoke=m.smoke||{};S_LOS.buildingMarks=m.buildingMarks||{};S_LOS.route=m.route||null;
   if(!S.savedGroups)S.savedGroups={};S.savedGroups[sc]=m.groups||{};
   try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot&&S.savedGroups[sc][g.activeGroupSlot]){var keep=Draw;FgSelectGroupSlot(g.id,g.activeGroupSlot);}}catch(e){}
@@ -33727,6 +33733,40 @@ function nmRmSyncItems(n){var it=[],m=nmsMode();
   if(m==='auto')it.push({ic:'info',t:'自動: 変更から約3秒で送り、約6秒ごとに受け取ります',sub:'2台で同時に変えた時は、後から送った方の内容になります'});
   it.push({ic:'info',t:'共有しないもの',sub:'拡大・表示位置・回転、開いているメニュー、射撃タブで選択中の画面'});
   return it;}
+
+/* v407(ダルマ指示「消えないようにする、消えてしまった時の対策」):
+   ①バックアップ: 全てクリア・種類ごとに消す・LOS測定リセット(煙幕)・盤面切替・敵軍/残骸ボタンオフ・シナリオ切替・共有の受信の前に、
+     その時のマップ(マーカー・残骸・煙幕・マーク・地点A・B・行軍・編成)をこの端末に最大15件保存。右クリック「マップを元に戻す」から復元。
+   ②シナリオごとの保存: シナリオを切り替えると前のシナリオのマップを取っておき、そのシナリオに戻ったら自動で復元 */
+var NM_BK_KEY='aslsk_map_backup',NM_SC_KEY='aslsk_map_by_scen';
+function nmBkLoad(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}
+function nmBkSaveLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){return false;}}
+function nmBkCount(m){var c=(m.friendHexes||[]).length+(m.enemyHexes||[]).length+Object.keys(m.wreckHexes||{}).length+Object.keys(m.smoke||{}).length+Object.keys(m.buildingMarks||{}).length+(m.route&&m.route.hexes?1:0)+(m.pxA?1:0);return c;}
+function nmBkSnap(reason,scen,m0){try{var sc=scen||(S.scen&&S.scen.sel);if(!sc)return;var m=m0||nmsPayloadMap();if(!nmBkCount(m))return;var j=JSON.stringify(m);
+  var L=nmBkLoad(NM_BK_KEY)||[];if(L.length&&L[0].scen===sc&&JSON.stringify(L[0].map)===j)return;
+  L.unshift({at:Date.now(),scen:sc,reason:reason,map:m});if(L.length>15)L.length=15;while(L.length&&!nmBkSaveLS(NM_BK_KEY,L))L.pop();}catch(e){}}
+function nmBkDesc(m){var a=[];var f=(m.friendHexes||[]).length,e=(m.enemyHexes||[]).length,w=Object.keys(m.wreckHexes||{}).length,sm=Object.keys(m.smoke||{}).length,mk=Object.keys(m.buildingMarks||{}).length;
+  if(f)a.push('自軍'+f);if(e)a.push('敵'+e);if(w)a.push('残骸'+w);if(sm)a.push('煙幕'+sm);if(mk)a.push('マーク'+mk);if(m.route&&m.route.hexes)a.push('行軍');if(m.pxA)a.push('地点A'+(m.pxB?'・B':''));return a.join(' ');}
+function nmBkRestore(n,i){var L=nmBkLoad(NM_BK_KEY)||[],b=L[i];if(!b)return;if(b.scen!==(S.scen&&S.scen.sel)){showToast(T('別のシナリオのバックアップです')+'('+b.scen+')','red');return;}
+  nmBkSnap('元に戻す前');var m=b.map;S_LOS.friendHexes=m.friendHexes||[];S_LOS.enemyHexes=m.enemyHexes||[];S_LOS.wreckHexes=m.wreckHexes||{};S_LOS.wreckVeh=m.wreckVeh||{};S_LOS.smoke=m.smoke||{};S_LOS.buildingMarks=m.buildingMarks||{};S_LOS.route=m.route||null;
+  if(/^受信前/.test(b.reason)&&m.groups){if(!S.savedGroups)S.savedGroups={};S.savedGroups[b.scen]=m.groups;try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot&&m.groups[g.activeGroupSlot])FgSelectGroupSlot(g.id,g.activeGroupSlot);}catch(e){}}
+  S_LOS.pxA=m.pxA||null;S_LOS.pxB=m.pxB||null;S_LOS.result=null;try{saveState();}catch(e){}BtRmClose();
+  if(S_LOS.pxA&&S_LOS.pxB){try{LosRunPixel();}catch(e){}}else Draw();showToast(T('マップを元に戻しました'),'grn');}
+function nmRmBackupItems(n){var L=nmBkLoad(NM_BK_KEY)||[],sc=S.scen&&S.scen.sel,it=[];
+  it.push({ic:'back',t:'← 戻る',sub:'マップを元に戻す(この端末のバックアップ、最大15件)',f:"btRmReopen("+n+")"});it.push({sep:1});
+  var any=false;L.forEach(function(b,i){if(b.scen!==sc)return;any=true;var d=new Date(b.at),hm=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+    it.push({ic:'rot',t:hm+'　'+b.reason,sub:nmBkDesc(b.map)+(/^受信前/.test(b.reason)?'　(編成も戻す)':'')+'　'+nmsAgo(b.at),f:"nmBkRestore("+n+","+i+")"});});
+  if(!any)it.push({ic:'info',t:'このシナリオのバックアップはまだありません',sub:'消す操作・シナリオ切替・共有の受信の前に自動で保存されます'});
+  it.push({sep:1});it.push({ic:'info',t:'戻すと、今のマップも「元に戻す前」として保存します',sub:'自動共有中は、戻した内容が相手にも送られます'});
+  return it;}
+function nmKeepScenSwap(oldSig,newScen){var oldScen=oldSig?String(oldSig).split('|')[0]:null;var St=nmBkLoad(NM_SC_KEY)||{};
+  if(oldScen&&oldScen!==newScen){var m=nmKeepPrev||null;if(m&&nmBkCount(m)){St[oldScen]={at:Date.now(),map:m};nmBkSnap('シナリオ切替('+oldScen+'→'+newScen+')',oldScen,m);}}
+  nmKeepPrev=null;var r=St[newScen];
+  if(r&&r.map&&oldScen!==newScen){var m2=r.map;S_LOS.friendHexes=m2.friendHexes||[];S_LOS.enemyHexes=m2.enemyHexes||[];S_LOS.wreckHexes=m2.wreckHexes||{};S_LOS.wreckVeh=m2.wreckVeh||{};S_LOS.smoke=m2.smoke||{};S_LOS.buildingMarks=m2.buildingMarks||{};S_LOS.route=m2.route||null;
+    setTimeout(function(){try{showToast(T('このシナリオの前回のマップを戻しました')+'('+newScen+')','grn');}catch(e){}},300);}
+  var ks=Object.keys(St).sort(function(a,b){return (St[b].at||0)-(St[a].at||0);});ks.slice(12).forEach(function(k){delete St[k];});
+  while(!nmBkSaveLS(NM_SC_KEY,St)&&Object.keys(St).length){var kk=Object.keys(St).sort(function(a,b){return (St[a].at||0)-(St[b].at||0);})[0];delete St[kk];}}
+var nmKeepPrev=null;
 function nmRmGrpEditItems(n){
   var G=NM_GE;if(!G)return nmRMenuItems(n);var L=NM_SIDE_LBL[G.sd],d=nmGeList(G.slot),nat=d.nat,it=[],nc=(UNITS[nat]&&UNITS[nat].col)||'#ccddee';
   function q(x){return String(x).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
@@ -37195,6 +37235,7 @@ function losRestoreMapScroll(){
 // 盤面ボタン: タップで選択/解除の2状態トグル。選択順=タップ順(左から追加)。
 // シナリオ選択時は自動的にシナリオのmaps順で設定される(手動タップ後は上書きされない)。
 function LosToggleBoardButton(letter){
+  nmBkSnap('盤面の切り替え');
   var idx=S_LOS.boards.findIndex(function(b){return b.id===letter;});
   if(idx<0){
     if(S_LOS.boards.length>=LOS_MAX_BOARDS)return; // 上限(LOS_MAX_BOARDS枚)選択済みなら何もしない
@@ -37369,6 +37410,7 @@ function LosClearMarks(){
 // (煙幕/残骸ボタンと同じ挙動。個別の✕全消去ボタンは廃止)。ALL表示・LOSライン全表示は
 // 新設の「全射」ボタン(LosToggleEnemyAllLos)側で独立して制御する。
 function LosToggleEnemyHexMode(){
+  if(S_LOS.enemyHexMode)nmBkSnap('敵軍ボタンをオフ');
   losSaveMapScroll();
   var wasOn=S_LOS.enemyHexMode;
   S_LOS.enemyHexMode=!S_LOS.enemyHexMode;
@@ -37396,6 +37438,7 @@ function LosClearEnemyHexes(){
 // 2026-08追加(ダルマ指示「未対応部の反映」): 残骸/他車両ヘクス登録モードのトグル・操作
 // 関数。SMOKEカウンターと同じ「タップで0→1→2→3→0循環」方式。
 function LosToggleWreckHexMode(){
+  if(S_LOS.wreckHexMode)nmBkSnap('残骸ボタンをオフ');
   losSaveMapScroll();
   // 2026-08修正(ダルマ指示「残骸ボタンはxボタン廃止、もう一度選択で配置済をクリア」):
   // 従来はOFFにしても登録済みの残骸ヘクスは保持されていたが(別途✕ボタンで消去)、
@@ -38994,12 +39037,13 @@ function LosTogSeasonSSR(){S_LOS.seasonSsrOpen=!S_LOS.seasonSsrOpen;Draw();}
 // 2026-08変更(Kato指示): LOSタブ内RESETで地点A/Bだけでなく煙幕配置(S_LOS.smoke)も
 // 併せて全消去する(従来はSMOKE横の✕ボタンでのみ消去可能だった。✕ボタン自体は地点は
 // 保持したまま煙幕だけ消したい場合のため残す)。
-function LosResetPoints(){losSaveMapScroll();S_LOS.pxA=null;S_LOS.pxB=null;S_LOS.result=null;S_LOS.smoke={};Draw();}
+function LosResetPoints(){if(S_LOS.smoke&&Object.keys(S_LOS.smoke).length)nmBkSnap('LOS測定をリセット');losSaveMapScroll();S_LOS.pxA=null;S_LOS.pxB=null;S_LOS.result=null;S_LOS.smoke={};Draw();}
 // 2026-08追加(ダルマ指示「CLボタン追加　map上をクリアする」): ツールバーの「CL」ボタン用。
 // シナリオ切替時のオールクリア処理(21299行台)と同じ範囲を、シナリオを切り替えずに
 // ワンタップで実行できるようにする(A/B地点・煙幕・行軍ルート・敵ヘクス・残骸ヘクス・
 // マーク・各種操作モードフラグをすべて初期化)。盤面選択(S_LOS.boards)自体は変更しない。
 function LosClearMapAll(){
+  nmBkSnap('全てクリア');
   losSaveMapScroll();
   S_LOS.pxA=null;S_LOS.pxB=null;S_LOS.result=null;
   S_LOS.smoke={};
@@ -39966,6 +40010,8 @@ function LOS_PAGE(){
   // 従来通りmapSyncedScenId(前のID)!==curScenId(新ID)で正しく検出・同期される。
   var curMapSig=sc?(sc.id+'|'+(sc.northLos||sc.north||'')+'|'+JSON.stringify(sc.maps||[])):null;
   if(sc&&S_LOS.mapSyncedScenId!==curMapSig){
+    var nmOldSig=S_LOS.mapSyncedScenId; /* v407 */
+    try{if(nmOldSig){var oldSc0=String(nmOldSig).split('|')[0];if(oldSc0!==sc.id){var mp0=nmsPayloadMap();mp0.groups=(S.savedGroups&&S.savedGroups[oldSc0])||{};nmKeepPrev=mp0;}}}catch(e){}
     S_LOS.mapSyncedScenId=curMapSig;
     if(sc&&sc.maps&&sc.maps.length){
       S_LOS.boards=sc.maps.slice(0,LOS_MAX_BOARDS).map(function(m,i){
@@ -40004,6 +40050,7 @@ function LOS_PAGE(){
       // 2026-08修正(ダルマ報告バグ「残骸/他車両ヘクスの登録がページ再読込で消える」対応の
       // 一環): 敵ヘクス登録と同様、マップ変更時にもクリアする。
       S_LOS.wreckHexes={};S_LOS.wreckVeh={};
+      try{nmKeepScenSwap(nmOldSig,sc.id);}catch(e){} /* v407(ダルマ指示「消えないようにする」): シナリオごとにマップを取っておき、戻ったら復元 */
       // 2026-08変更(Kato指示): プレイ範囲(usableOnly)機能はクロップ表示の当たり判定に
       // 不具合が見つかったため一時保留。ボタンを非表示にした上で、シナリオ変更時の
       // 自動ONも無効化し、常時グレーアウト表示(usableOnly=false)に統一する。
