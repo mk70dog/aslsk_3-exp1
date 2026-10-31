@@ -33938,14 +33938,21 @@ function nmPickOverlaySVG(dl){var P=NM_PICK;if(!P)return '';var h='';P.list.forE
    マップの撃つ画面の既定フェイズもこのフェイズに合わせる */
 var NM_PH_FIRE={pfph:'pfph',mph:'dff',dfph:'dfph',afph:'afph'};
 function nmPhaseSideNat(){var sc=curScen();if(!sc||!sc.atk||!sc.f)return null;var nats=Object.keys(sc.f),atk=sc.atk,atkAx=!!AXIS_NATS[atk],def=nats.filter(function(k){return !!AXIS_NATS[k]!==atkAx;})[0]||null;return (S.turn&&S.turn.half===1)?def:atk;}
-function nmPhaseBarHTML(){if(!S.turn||!(S.scen&&S.scen.sel))return '';var t=S.turn,ph=PHASE_SEQ.filter(function(x){return x.id===(t.phase||'rph');})[0]||PHASE_SEQ[0],nat=nmPhaseSideNat(),nc=(nat&&UNITS[nat]&&UNITS[nat].col)||'#ccddee';
-  var b='height:30px;min-width:34px;padding:0 8px;margin:0;font-size:14px';
-  return '<div style="position:sticky;left:0;top:0;width:0;height:0;flex:0 0 0;z-index:6;overflow:visible"><div id="nmPhaseBar" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" style="position:absolute;left:6px;top:6px;display:flex;align-items:center;gap:6px;background:#000c;border:1px solid #404040;border-radius:6px;padding:4px 6px;white-space:nowrap;box-shadow:0 4px 12px #0008">'
-   +'<span style="font-size:13px;font-weight:bold;color:#e8eef4">'+(t.ended?'END':'T'+(t.cur||1)+(t.half?'裏':'表'))+'</span>'
+function nmPhaseInnerHTML(ft){var t=S.turn,ph=PHASE_SEQ.filter(function(x){return x.id===(t.phase||'rph');})[0]||PHASE_SEQ[0],nat=nmPhaseSideNat(),nc=(nat&&UNITS[nat]&&UNITS[nat].col)||'#ccddee';
+  var b=ft?'height:26px;min-width:30px;padding:0 6px;margin:0;font-size:13px':'height:30px;min-width:34px;padding:0 8px;margin:0;font-size:14px';
+  return '<span style="font-size:13px;font-weight:bold;color:#e8eef4">'+(t.ended?'END':'T'+(t.cur||1)+(t.half?'裏':'表'))+'</span>'
    +(nat?'<span style="font-size:13px;font-weight:bold;color:'+nc+'">'+nmNatLbl(nat)+'</span>':'')
    +'<button class="b sm" style="'+b+'" onclick="event.stopPropagation();nmPhaseStep(-1)">◀</button>'
-   +'<span style="font-size:15px;font-weight:bold;color:#ffd060;min-width:64px;text-align:center">'+T(ph.lbl)+'<span style="font-size:10px;color:#8899aa;margin-left:3px">'+ph.abbr+'</span></span>'
-   +'<button class="b sm" style="'+b+'" onclick="event.stopPropagation();nmPhaseStep(1)">▶</button></div>'+(function(){var lg=nmStLegendHTML();return lg?'<div style="position:absolute;left:6px;top:50px;background:#000b;border:1px solid #404040;border-radius:5px;padding:0 5px 4px;width:max-content;max-width:min(90vw,520px);pointer-events:none">'+lg+'</div>':'';})()+'</div>';}
+   +'<span style="font-size:15px;font-weight:bold;color:#ffd060;min-width:'+(ft?56:64)+'px;text-align:center">'+T(ph.lbl)+'<span style="font-size:10px;color:#8899aa;margin-left:3px">'+ph.abbr+'</span></span>'
+   +'<button class="b sm" style="'+b+'" onclick="event.stopPropagation();nmPhaseStep(1)">▶</button>';}
+/* v424: 全画面の時はフェイズを上部タブバーの左端に統合(マップ上には凡例だけ) */
+function nmFtPhFill(){var el=document.getElementById('nmFtPh');if(!el)return;var on=!!(S.turn&&S.scen&&S.scen.sel);el.style.display=on?'':'none';if(on)el.innerHTML=nmPhaseInnerHTML(true);}
+function nmPhaseBarHTML(){if(!S.turn||!(S.scen&&S.scen.sel))return '';
+  var lgf=function(top){var lg=nmStLegendHTML();return lg?'<div style="position:absolute;left:6px;top:'+top+'px;background:#000b;border:1px solid #404040;border-radius:5px;padding:0 5px 4px;width:max-content;max-width:min(90vw,520px);pointer-events:none">'+lg+'</div>':'';};
+  var wrap='<div style="position:sticky;left:0;top:0;width:0;height:0;flex:0 0 0;z-index:6;overflow:visible">';
+  if(btMapFullOn()&&document.getElementById('nmFullTabs')){setTimeout(nmFtPhFill,0);return wrap+lgf(6)+'</div>';}
+  return wrap+'<div id="nmPhaseBar" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" style="position:absolute;left:6px;top:6px;display:flex;align-items:center;gap:6px;background:#000c;border:1px solid #404040;border-radius:6px;padding:4px 6px;white-space:nowrap;box-shadow:0 4px 12px #0008">'
+   +nmPhaseInnerHTML(false)+'</div>'+lgf(50)+'</div>';}
 function nmPhaseStep(d){if(!S.turn)S.turn={cur:1,half:0,ended:false,phase:'rph'};var ids=PHASE_SEQ.map(function(x){return x.id;}),prev=S.turn.phase||'rph',i=ids.indexOf(prev);if(i<0)i=0;
   var ni=i+d,turnCh=false;if(ni>=ids.length){if(S.turn.ended)return;TurnAdj(1);ni=0;turnCh=true;}else if(ni<0){TurnAdj(-1);ni=ids.length-1;turnCh=true;}
   var id=ids[ni],msg=[];S.turn.phase=id;
@@ -34542,7 +34549,7 @@ function btRmLos(n,ab){
    +'html.bt-mapfull #losScrollWrap{position:fixed !important;left:0;right:0;bottom:0;top:var(--btfullt,0px);width:auto !important;max-height:none !important;z-index:8900;background:#0a0c14;border:0 !important;border-radius:0 !important;margin:0 !important}'
    +'html.bt-mapfull #main .bt-cmd{position:fixed !important;top:0 !important;left:0;right:0;margin:0 !important;z-index:8910;max-height:40vh;overflow-y:auto}'
    +'html.bt-mapfull .los-compass{display:none !important}'
-   +'html.main-modal #main{z-index:10001 !important}#nmFullTabs{position:fixed;left:0;right:0;top:0;z-index:8912;display:flex;gap:3px;padding:calc(2px + min(env(safe-area-inset-top,0px),24px)) 4px 3px 4px;background:#0a0c14;box-shadow:0 4px 14px #000a}#nmFullTabs .nb{flex:1 1 0;min-width:0;height:30px;padding:0 2px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#nmFullTabs .nmFullOff{flex:0 0 auto;padding:0 10px;display:flex;align-items:center;gap:4px}html.nm-sumfix #losSumRow button.sumcard{display:none !important}'
+   +'html.main-modal #main{z-index:10001 !important}#nmFullTabs{position:fixed;left:0;right:0;top:0;z-index:8912;display:flex;gap:3px;padding:calc(2px + min(env(safe-area-inset-top,0px),24px)) 4px 3px 4px;background:#0a0c14;box-shadow:0 4px 14px #000a}#nmFullTabs{align-items:center}#nmFullTabs .nb{flex:1 1 0;min-width:0;height:30px;padding:0 2px;margin:0;font-size:12px;font-weight:bold;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:linear-gradient(#232a36,#161b24);border:1px solid #39414f;border-radius:4px;color:#c9d3df;box-shadow:inset 0 1px 0 #ffffff12}#nmFullTabs .nb:active{background:#2c3646}#nmFullTabs .nmFullOff{flex:0 0 auto;padding:0 9px;display:flex;align-items:center;justify-content:center}#nmFtPh{flex:0 0 auto;display:flex;align-items:center;gap:5px;height:30px;padding:0 6px;margin-right:3px;border:1px solid #6b5a2a;border-radius:5px;background:linear-gradient(#2a2416,#17140c);white-space:nowrap}html.nm-sumfix #losSumRow button.sumcard{display:none !important}'
    +'html.nm-sumfix #losScrollWrap{bottom:var(--nmsumh,0px) !important}html.nm-sumfix #losSumRow{position:fixed !important;left:0;right:0;bottom:0;z-index:8912;background:#0a0c14;padding:3px 4px;margin:0 !important;box-shadow:0 -4px 14px #000a;gap:3px !important}'
    /* v362(ダルマ指示「下のデジタルパネルは元のサイズに戻す」): 1段にする縮小はやめた。下端はiPadのホームバーの分を空ける */
    +'html.nm-sumfix #losSumRow{padding-bottom:3px !important;display:grid !important;grid-template-columns:repeat(8,minmax(0,1fr));width:100vw;box-sizing:border-box}html.nm-sumfix #losSumRow>.sumcard{min-width:0}' /* v365(ダルマ指示): 下のデジタルパネルは横幅いっぱい・上下の余分な余白なし(上は時計の分24pxまで) */
@@ -34881,10 +34888,10 @@ function btMapFullSync(){
   /* v361(ダルマ指示「全画面表示時に上部に(射撃〜シナリオの7タブを)横並び1列で常時表示」) */
   var tb=document.getElementById('nmFullTabs'),nmOn=on&&!(typeof btActive==='function'&&btActive());
   if(nmOn&&!tb){tb=document.createElement('div');tb.id='nmFullTabs';
-    tb.innerHTML=NM_FULL_TABS.map(function(k){var t=NM_TABS.filter(function(x){return x[0]===k;})[0];return '<button class="nb" onclick="nmRmTabGo(\''+k+'\')">'+T(t?t[1]:k)+'</button>';}).join('')
-      +'<button class="nb nmFullOff" onclick="BtMapFull(null)" title="'+T('全画面表示オフ')+'"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M20 15h-5v5M4 15h5v5"/></svg>'+T('全画面オフ')+'</button>'; /* v361(ダルマ指示「全画面表示ボタンを上のタブ右端に移動」) */
-    document.body.appendChild(tb);}
-  if(!nmOn&&tb){tb.remove();tb=null;}
+    tb.innerHTML='<div id="nmFtPh"></div>'+NM_FULL_TABS.map(function(k){var t=NM_TABS.filter(function(x){return x[0]===k;})[0];return '<button class="nb" onclick="nmRmTabGo(\''+k+'\')">'+T(t?t[1]:k)+'</button>';}).join('')
+      +'<button class="nb nmFullOff" onclick="BtMapFull(null)" title="'+T('全画面表示オフ')+'"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M20 15h-5v5M4 15h5v5"/></svg></button>'; /* v361(ダルマ指示「全画面表示ボタンを上のタブ右端に移動」) */
+    document.body.appendChild(tb);nmFtPhFill();try{Draw();}catch(e){}}
+  if(!nmOn&&tb){tb.remove();tb=null;try{Draw();}catch(e){}}
   if(nmOn&&tb)fullT=tb.offsetHeight;
   setV('--btfullt',fullT+'px');
   if(fixSum&&(sr.style.transform||sr.style.width||sr.style.zoom)){sr.style.transform='';sr.style.width='';sr.style.zoom='';} /* v366: iPadの自動縮小を外す */
