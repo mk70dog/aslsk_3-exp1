@@ -32940,7 +32940,7 @@ function losHexAtClient(cx,cy){ /* LosMapClickと同じ手順で、画面上の�
   return {b:b,boardId:b.id,col:cr.col,row:cr.row,gx:gx,gy:gy,hid:{id:S_LOS.boards.indexOf(b)+':'+b.id+':'+cr.col+':'+cr.row,col:cr.col,row:cr.row,boardId:b.id}};
 }
 function nmRClick(e,lp){
-  var hx=losHexAtClient(e.clientX,e.clientY);if(!hx)return;NM_FACE=null;
+  var hx=losHexAtClient(e.clientX,e.clientY);if(!hx)return;NM_FACE=null;NM_SEL_EH=null;
   NM_RM_HEX=hx;BT_RM_XY={x:e.clientX,y:e.clientY};
   if(!btGraphReady())btToast('マップを準備しています…');
   btEnsureGraph().then(function(){var n=btNodeOf(hx.boardId,hx.col,hx.row);NM_RM_HEX.n=(n==null?-1:n);btRMenu(NM_RM_HEX.n,lp);}).catch(function(){btToast('マップを準備できませんでした');});
@@ -32957,7 +32957,7 @@ function gB2Btn(l,on,dis,fn,ttl,red){return '<button class="b sm'+(on?(red?' on 
 function gB2Note(t){return '<div style="font-size:11px;color:#556677;margin-top:4px;line-height:1.35">'+t+'</div>';}
 function nmMarkKey(H){var bi=-1;(S_LOS.boards||[]).forEach(function(b,i){if(bi<0&&b.id===H.boardId)bi=i;});return bi+':'+H.boardId+':'+H.col+':'+H.row;}
 function nmRmMark(){var H=NM_RM_HEX;if(!H)return;BtRmClose();if(!S_LOS.buildingMarks)S_LOS.buildingMarks={};var k=nmMarkKey(H);if(S_LOS.buildingMarks[k])delete S_LOS.buildingMarks[k];else S_LOS.buildingMarks[k]={name:losHexNameFromColRow(H.col,H.row),boardId:H.boardId,col:H.col,row:H.row};try{saveState();}catch(e){}Draw();}
-function nmRmEnemy(){var H=NM_RM_HEX;if(!H)return;BtRmClose();losToggleEnemyHexAt(H.boardId,H.col,H.row);Draw();}
+function nmRmEnemy(){var H=NM_RM_HEX;if(!H)return;BtRmClose();var e=nmEnemyAt(H);if(e&&nmAllAt(H,'e').length>1){var L=S_LOS.enemyHexes;L.splice(L.indexOf(e),1);NM_SEL_EH=null;try{saveState();}catch(x){}}else losToggleEnemyHexAt(H.boardId,H.col,H.row);Draw();}
 function nmRmWreck(){var H=NM_RM_HEX;if(!H)return;BtRmClose();losCycleWreckHexAt(H.boardId,H.col,H.row);Draw();}
 function nmRmSmoke(){var H=NM_RM_HEX;if(!H)return;BtRmClose();losCycleSmokeAt(H.hid);if(S_LOS.pxA&&S_LOS.pxB){LosRunPixel();return;}Draw();}
 function nmRmInfo(n){BtRmClose();var sv=BT.stacks;BT.stacks=[];try{btStackPopup(n,true,true);}finally{BT.stacks=sv;}}
@@ -33075,7 +33075,7 @@ function nmRMenuItems(n,part){
   var G=[],A=[],U=[],X=[],V=[]; /* v410(ダルマ指示「マップタブ上で直感的に操作・使いやすさをブラッシュアップ」お任せ): メニューを マーカー→ヘクス(LOS・行軍)→ヘクスの物(残骸・煙幕・マーク) の順に整理し、全画面・共有・元に戻す・クリア・拡大などは「その他」へ */
   if(NM_FACE)return nmRmFaceItems(n,NM_FACE.sd);
   if(NM_RM_VEH){var vsd=NM_RM_VEH===1?'e':NM_RM_VEH;NM_RM_VEH=0;return nmRmVehItems(n,vsd);}
-  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);if(sk==='tabs')return nmRmTabItems(n);if(sk==='grpedit')return nmRmGrpEditItems(n);if(sk==='mfire')return nmRmMFireItems(n);if(sk==='vfire')return nmRmVFireItems(n);if(sk==='sync')return nmRmSyncItems(n);if(sk==='backup')return nmRmBackupItems(n);if(sk==='cc')return nmRmCCItems(n);if(sk==='rally')return nmRmRallyItems(n);if(sk==='lw')return nmRmLwItems(n);if(sk==='sg')return nmRmSgItems(n);if(sk==='more')part='more';}
+  if(NM_RM_SUB){var sk=NM_RM_SUB;NM_RM_SUB=null;if(sk==='march')return nmRmMarchItems(n);if(sk==='smoke')return nmRmSmokeItems(n);if(sk==='wreck')return nmRmWreckItems(n);if(sk==='clear')return nmRmClearItems(n);if(sk==='tabs')return nmRmTabItems(n);if(sk==='grpedit')return nmRmGrpEditItems(n);if(sk==='mfire')return nmRmMFireItems(n);if(sk==='vfire')return nmRmVFireItems(n);if(sk==='sync')return nmRmSyncItems(n);if(sk==='backup')return nmRmBackupItems(n);if(sk==='cc')return nmRmCCItems(n);if(sk==='rally')return nmRmRallyItems(n);if(sk==='lw')return nmRmLwItems(n);if(sk==='sg')return nmRmSgItems(n);if(sk==='unit1'){var u1=[{ic:'back',t:'← 戻る',sub:'このヘクスのメニュー',f:"NM_SEL_EH=null;btRmReopen("+n+")"},{sep:1}];nmUnitMenu(u1,NM_RM_HEX,n,NM_UNIT1);return u1;}if(sk==='more')part='more';}
   var nm=N?N.nm:btHexName(H.boardId,H.col,H.row),terr=N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')):'';
   var hasA=!!S_LOS.pxA;
   it=G;
@@ -33123,7 +33123,12 @@ function nmRMenuItems(n,part){
   var wc=(S_LOS.wreckHexes||{})[H.boardId+':'+H.col+':'+H.row]||0,wn=(wc+1)%4;
   var sm=S_LOS.smoke&&S_LOS.smoke[H.hid.id],sl=sm?sm.level:0,sn=sl<3?sl+1:0;
   /* v343(ダルマ指示「敵軍マーカーをシナリオ登場車両選択に変更」「対戦モードと同じVASLカウンターで矢印を設定」) / v345(ダルマ指示「右クリックで自軍カウンターを配置・設定は敵軍と同じ」) */
-  nmUnitMenu(it,H,n,'f');nmUnitMenu(it,H,n,'e');
+  ['f','e'].forEach(function(sd){var at=nmAllAt(H,sd),L0=NM_SIDE_LBL[sd]; /* v419: 同じ側が2つ以上なら1行ずつ。タップでそのマーカーのメニュー */
+    if(at.length<=1){nmUnitMenu(it,H,n,sd);if(at.length===1)it.push({ic:sd==='f'?'sel':'enemy',t:'このヘクスにもう1つ'+L0.nm+'を置く',sub:'同じヘクスに別の編成・車両・砲(スタック)',f:"nmAddMore("+n+",'"+sd+"')"});return;}
+    at.forEach(function(eh,k){var v=eh.veh?nmAfv(eh.veh):null,g=(!v&&eh.gun)?nmGun(eh.gun):null,nm=v?nmAfvName(v):g?nmGunName(g):eh.grp?T('編成')+eh.grp+' '+(nmGrpText(eh.grp)||''):L0.mk,st=nmStList(eh);
+      var src=v?nmVaslSrc(v.id):g?nmVaslSrc(g.id):eh.grp?(nmGrpSrcs(eh.grp,1)[0]||null):null;
+      it.push({ic:sd==='f'?'sel':'enemy',img:src?'<img src="'+src+'" style="width:30px;height:30px;display:block">':'',t:'<span><span style="color:'+L0.col+'">'+L0.nm+(k+1)+'/'+at.length+'</span>: '+nm+'</span>',sub:(st.length?st.join(' ')+'　':'')+'タップでこのマーカーの操作',f:"nmSelK('"+sd+"',"+k+");NM_RM_SUB='unit1';NM_UNIT1='"+sd+"';btRmReopen("+n+")"});});
+    it.push({ic:sd==='f'?'sel':'enemy',t:'このヘクスにもう1つ'+L0.nm+'を置く',f:"nmAddMore("+n+",'"+sd+"')"});});
   if(nmCCSides(H).ok)it.push({ic:'fire',t:'白兵戦(このヘクス)',sub:'自軍と敵の編成が同じヘクス。両方が同時に攻撃',f:"nmCCOpen("+n+")"}); /* v408 */
   it=X;
   /* v351(ダルマ指示「(残骸の)設定時車両の選択をしない」): メニューの行で −/＋(1ヘクス3個まで) */
@@ -33213,13 +33218,18 @@ function nmRmMarch(k){
   for(var i=0;i<path.length;i++){var len=S_LOS.route?S_LOS.route.hexes.length:0;S_LOS._routeLastTapKey=null;nmTapNode(path[i]);
     if(!S_LOS.route||S_LOS.route.hexes.length<=len){if(S_LOS.routeError)btToast('行軍はここで止まりました: '+S_LOS.routeError);break;}}
 }
-function nmEnemyAt(H){return (S_LOS.enemyHexes||[]).filter(function(e){return e.boardId===H.boardId&&e.col===H.col&&e.row===H.row;})[0]||null;}
+/* v419(ダルマ指示「1ヘクスに複数の編成を置けるようにする」): 同じヘクスに自軍・敵それぞれ複数のマーカー。NM_SEL_EH=メニューで選んでいるマーカー(同じヘクスの時はこれを返す) */
+var NM_SEL_EH=null,NM_TGT_EH=null,NM_UNIT1='f';
+function nmAllAt(H,sd){var L=sd==='f'?(S_LOS.friendHexes||[]):(S_LOS.enemyHexes||[]);return L.filter(function(e){return e.boardId===H.boardId&&e.col===H.col&&e.row===H.row;});}
+function nmPickAt(at){if(!at.length)return null;if(NM_SEL_EH&&at.indexOf(NM_SEL_EH)>=0)return NM_SEL_EH;return at[0];}
+function nmEnemyAt(H){return nmPickAt(nmAllAt(H,'e'));}
 function nmAfv(id){return AFV_DATA.filter(function(v){return v.id===id;})[0]||null;}
 function nmAfvName(v){return (typeof LOS_VEH_SHORT_LBL!=='undefined'&&LOS_VEH_SHORT_LBL[v.id])||v.lbl||v.id;}
 function nmAfvTurret(v){return !!(v&&v.turretType&&v.turretType!=='NT'&&v.afFront&&v.afFront.turret!=null);}
 function nmTurRel(eh){var d=((eh.tca-eh.facing)%6+6)%6;return d<=3?'右へ'+d:'左へ'+(6-d);}
 function nmScenAfvs(){var ids=scenarioAfvIdsByVehId();return AFV_DATA.filter(function(v){return v.lbl&&(!ids||ids[v.id]);});}
 function nmRmVehOpen(n,sd){NM_RM_VEH=sd||'e';btRmReopen(n);}
+function nmAddMore(n,sd){var H=NM_RM_HEX;if(!H)return;var eh={boardId:H.boardId,col:H.col,row:H.row};nmSideList(sd).push(eh);NM_SEL_EH=eh;try{saveState();}catch(e){}Draw();nmRmVehOpen(n,sd);} /* v419 */
 /* v374(ダルマ指示「自軍敵軍マーカーに砲を追加」): 自軍・敵軍のカウンターにシナリオに登場する砲(eh.gun)。向き=CA(eh.facing、地図は国籍色の矢印) */
 function nmGun(id){return (typeof GUN_DATA!=='undefined'&&GUN_DATA.filter(function(g){return g.id===id;})[0])||null;}
 function nmGunName(g){return (typeof ORD_OFFICIAL_NAME!=='undefined'&&ORD_OFFICIAL_NAME[g.id])||T(g.lbl);}
@@ -33231,7 +33241,10 @@ function nmRmSetGun(n,id,sd){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);
 /* v345: 自軍('f')・敵軍('e')のカウンター(S_LOS.friendHexes / S_LOS.enemyHexes、どちらも {boardId,col,row,veh,facing,tca}) */
 var NM_SIDE_LBL={e:{nm:'敵',mk:'敵軍マーカー',col:'#ff00ff'},f:{nm:'自軍',mk:'自軍マーカー',col:'#33aaff'}};
 function nmSideList(sd){if(sd==='f'){if(!S_LOS.friendHexes)S_LOS.friendHexes=[];return S_LOS.friendHexes;}return S_LOS.enemyHexes||(S_LOS.enemyHexes=[]);}
-function nmUnitAt(H,sd){if(sd!=='f')return nmEnemyAt(H);return nmSideList('f').filter(function(e){return e.boardId===H.boardId&&e.col===H.col&&e.row===H.row;})[0]||null;}
+function nmUnitAt(H,sd){if(sd!=='f')return nmEnemyAt(H);return nmPickAt(nmAllAt(H,'f'));}
+function nmTgtAt(L,tn){var at=L.filter(function(x){return btNodeOf(x.boardId,x.col,x.row)===tn;});if(NM_TGT_EH&&at.indexOf(NM_TGT_EH)>=0)return NM_TGT_EH;return at[0]||null;}
+function nmSelK(sd,k){var H=NM_RM_HEX;if(!H)return;NM_SEL_EH=nmAllAt(H,sd)[k]||null;}
+function nmStackOff(eh,sd){var at=nmAllAt(eh,sd),i=at.indexOf(eh);return {i:i,n:at.length,dx:i*16,dy:-i*16};}
 function nmUnitMenu(it,H,n,sd){
   var L=NM_SIDE_LBL[sd],eh=nmUnitAt(H,sd);
   if(!eh){it.push({ic:sd==='f'?'sel':'enemy',t:'このヘクスに'+L.nm+'を置く',sub:'シナリオに登場する車両・砲(カウンター)か'+L.mk+'を選ぶ',f:"nmRmVehOpen("+n+",'"+sd+"')"});return;}
@@ -33273,7 +33286,7 @@ function nmDragPick(cx,cy){
   if(typeof btActive!=='function'||btActive()||S_LOS.panMode||S_LOS.routeMode&&false)return null;
   var hx=losHexAtClient(cx,cy);if(!hx)return null;
   var f=nmUnitAt(hx,'f'),e=nmUnitAt(hx,'e');
-  if(f)return {sd:'f',ref:f};if(e)return {sd:'e',ref:e};return null;
+  var fa=nmAllAt(hx,'f'),ea=nmAllAt(hx,'e');if(fa.length)return {sd:'f',ref:fa[fa.length-1]};if(ea.length)return {sd:'e',ref:ea[ea.length-1]};return null; /* v419: いちばん上(最後)のマーカー */
 }
 function nmDragGhost(x,y){
   var g=document.getElementById('nmDragG');
@@ -33282,7 +33295,7 @@ function nmDragGhost(x,y){
     g.innerHTML=src?'<img src="'+src+'" style="width:100%;height:100%;display:block">':'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#0d2a4a;color:#fff;font-weight:900;font-size:13px">'+(NM_DRAG.sd==='f'?'自軍':'敵軍')+'</div>';
     document.body.appendChild(g);}
   g.style.left=x+'px';g.style.top=y+'px';
-  var hx=losHexAtClient(x,y),ok=hx&&!(nmUnitAt(hx,NM_DRAG.sd)&&nmUnitAt(hx,NM_DRAG.sd)!==NM_DRAG.ref);
+  var hx=losHexAtClient(x,y),ok=!!hx; /* v419: 同じ側のマーカーがいるヘクスにも重ねて置ける */
   g.style.outline=(ok||NM_DROP_STYLE)?'':'3px solid #ff4040';
   NM_DRAG.hx=hx;NM_DRAG.ok=!!ok;NM_DRAG.tn=hx?btNodeOf(hx.boardId,hx.col,hx.row):null;
   if(NM_DROP_STYLE==='snap')g.style.opacity=(NM_DRAG.tn!=null)?'0.35':'0.9';
@@ -33496,10 +33509,10 @@ function nmRmMFireItems(n){
     it.push({ic:'tgt',t:'目標を選ぶ',sub:tl.length?'LOSが通る相手のマーカー(近い順)':'相手のマーカーがありません(右クリック「このヘクスに'+(M.sd==='f'?'敵':'自軍')+'を置く」)'});
     if(tl.length)it.push({ic:'tgt',t:'<span style="color:#3ca878">地図で目標をタップして選ぶ</span>',sub:'撃てるマーカーに緑の輪が出ます',f:"nmPickStart('mf',"+n+")"}); /* v412 */
     tl.forEach(function(x){var nm=BTG.nodes[x.tn].nm,ti=nmTemOfNode(x.tn);
-      it.push({ic:'tgt',img:nmMfTgtImg(x.eh),t:(x.blk?'<span style="color:#667">':'<span>')+nmMfTgtName(x.eh)+' @'+nm+'</span>',sub:'距離'+x.d+'　'+(x.blk?'LOS遮断':'LOS通る'+(x.hd?'・妨害+'+x.hd:''))+(ti?'　'+ti:''),f:x.blk?'':"nmMfTgt("+n+","+x.tn+")"});});
+      it.push({ic:'tgt',img:nmMfTgtImg(x.eh),t:(x.blk?'<span style="color:#667">':'<span>')+nmMfTgtName(x.eh)+' @'+nm+'</span>',sub:'距離'+x.d+'　'+(x.blk?'LOS遮断':'LOS通る'+(x.hd?'・妨害+'+x.hd:''))+(ti?'　'+ti:''),f:x.blk?'':"NM_TGT_EH=nmSideList('"+(M.sd==='f'?'e':'f')+"')["+x.i+"];nmMfTgt("+n+","+x.tn+")"});});
     return it;
   }
-  var tgtEh=null;nmSideList(M.sd==='f'?'e':'f').forEach(function(eh){if(btNodeOf(eh.boardId,eh.col,eh.row)===M.tgt)tgtEh=eh;});
+  var tgtEh=nmTgtAt(nmSideList(M.sd==='f'?'e':'f'),M.tgt); /* v419 */
   it.push({ic:'tgt',img:tgtEh?nmMfTgtImg(tgtEh):'',t:'目標: '+(tgtEh?nmMfTgtName(tgtEh):'')+' @'+BTG.nodes[M.tgt].nm,sub:'距離'+btDist(M.from,M.tgt)+'　タップで目標を選び直す',f:"NM_MF.tgt=null;nmMfReopen("+n+")"});
   var f=getFireState(),ph=f&&f.ph,fp=0,drm=0;try{fp=totalFP(f,ph);drm=fireDRM(f);}catch(e){}
   var col=IFT_LBL[ci(fp)];
@@ -33546,7 +33559,7 @@ function nmVfBuild(){ /* nmShotCalcと同じ撃つ側・目標の組み立て */
   var r={eh:eh,v:v,g:g,gd:gd,w:w,tu:null,te:null,mode:'ITT',ammos:['HE'],note:''};
   if(eh.facing==null)r.note=(g?'砲の向き(CA)':'向き')+'が未設定のため、目標の方を向いているとして計算';
   if(n==null)return r;
-  var te=null;nmSideList(V.sd==='f'?'e':'f').forEach(function(x){if(btNodeOf(x.boardId,x.col,x.row)===n)te=x;});r.te=te;
+  var te=nmTgtAt(nmSideList(V.sd==='f'?'e':'f'),n);r.te=te; /* v419 */
   var fv=te&&te.veh?nmAfv(te.veh):null;
   if(fv){var tv=btFaceToward(btAng(n,sn));r.tu={id:'nmF',nm:fv.lbl,vca:te.facing!=null?nmToBtFace(te.facing,te.boardId):tv,tca:te.tca!=null?nmToBtFace(te.tca,te.boardId):(te.facing!=null?nmToBtFace(te.facing,te.boardId):tv),mot:false,mvd:false};nmMvToU(r.tu,te); /* v406 */
     r.mode='VTT';r.ammos=btAPCRAvail(w)?['AP','HE','APCR']:['AP','HE'];if(te.facing==null)r.note=(r.note?r.note+'。':'')+'目標の向きが未設定のため、撃つ側の方を向いているとして計算';}
@@ -33606,7 +33619,7 @@ function nmRmVFireItems(n){
   if(V.tgt==null){var M0=NM_MF;NM_MF={sd:V.sd,from:V.from};var tl=nmMfTgtList();NM_MF=M0;
     it.push({ic:'tgt',t:'目標を選ぶ',sub:tl.length?'LOSが通る相手のマーカー(近い順)':'相手のマーカーがありません'});
     if(tl.length)it.push({ic:'tgt',t:'<span style="color:#3ca878">地図で目標をタップして選ぶ</span>',sub:'撃てるマーカーに緑の輪が出ます',f:"nmPickStart('vf',"+n+")"}); /* v412 */
-    tl.forEach(function(x){it.push({ic:'tgt',img:nmMfTgtImg(x.eh),t:(x.blk?'<span style="color:#667">':'<span>')+nmMfTgtName(x.eh)+' @'+BTG.nodes[x.tn].nm+'</span>',sub:'距離'+x.d+'　'+(x.blk?'LOS遮断':'LOS通る'+(x.hd?'・妨害+'+x.hd:''))+'　'+(x.eh.veh?'対車両(VTT)':'対歩兵(ITT)'),f:x.blk?'':"nmVfSet("+n+",'tgt',"+x.tn+")"});});
+    tl.forEach(function(x){it.push({ic:'tgt',img:nmMfTgtImg(x.eh),t:(x.blk?'<span style="color:#667">':'<span>')+nmMfTgtName(x.eh)+' @'+BTG.nodes[x.tn].nm+'</span>',sub:'距離'+x.d+'　'+(x.blk?'LOS遮断':'LOS通る'+(x.hd?'・妨害+'+x.hd:''))+'　'+(x.eh.veh?'対車両(VTT)':'対歩兵(ITT)'),f:x.blk?'':"NM_TGT_EH=nmSideList('"+(V.sd==='f'?'e':'f')+"')["+x.i+"];nmVfSet("+n+",'tgt',"+x.tn+")"});});
     return it;}
   it.push({ic:'tgt',img:B.te?nmMfTgtImg(B.te):'',t:'目標: '+(B.te?nmMfTgtName(B.te):'')+' @'+BTG.nodes[V.tgt].nm,sub:'距離'+btDist(V.from,V.tgt)+'　'+(B.mode==='VTT'?'対車両(VTT)':'対歩兵(ITT)')+'　タップで選び直す',f:"nmVfSet("+n+",'tgt',null)"});
   if(B.note&&!vdone)it.push({ic:'info',t:'<span style="font-size:12px;color:#c8a032">'+B.note+'</span>'});
@@ -33662,8 +33675,9 @@ function nmStList(eh){var o=[],st0=eh.st||{};if(st0.fired)o.push('射撃済');if
 var NM_ST_COL={'混乱':'#8b1e1e','PIN':'#b07a1c','射撃済':'#3d4a3a','移動':'#4b5d2c','Motion':'#5a4a6b','走行不能':'#6b4a2b','ショック':'#7a3b3b','故障':'#4a4a44','残留':'#a3561d'}; /* ミリタリー寄り: 暗い赤・黄土・オリーブドラブ・カーキ */
 function nmStKind(t){var m=String(t).replace(/\d+$/,'');return NM_ST_COL[m]?m:'混乱';}
 function nmStatusOverlaySVG(dl){var h='';
-  [['f',S_LOS.friendHexes||[]],['e',S_LOS.enemyHexes||[]]].forEach(function(P){P[1].forEach(function(eh){var l=nmStList(eh);if(!l.length)return;if(NM_DRAG&&NM_DRAG.moving&&NM_DRAG.ref===eh)return;
-    var g=losColRowToGlobalCanon(eh.boardId,eh.col,eh.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);if(P[0]==='f'&&nmUnitAt(eh,'e'))d={x:d.x-8,y:d.y-8};
+  [['f',S_LOS.friendHexes||[]],['e',S_LOS.enemyHexes||[]]].forEach(function(P){P[1].forEach(function(eh){var l=nmStList(eh);if(!l.length&&nmAllAt(eh,P[0]).length<2)return;if(NM_DRAG&&NM_DRAG.moving&&NM_DRAG.ref===eh)return;
+    var g=losColRowToGlobalCanon(eh.boardId,eh.col,eh.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);if(P[0]==='f'&&nmUnitAt(eh,'e'))d={x:d.x-8,y:d.y-8};if(P[0]==='e'&&nmUnitAt(eh,'f'))d={x:d.x+8,y:d.y+8};var so=nmStackOff(eh,P[0]);if(so.n>1){if(so.i>0)return;l=[];nmAllAt(eh,P[0]).forEach(function(x){l=l.concat(nmStList(x));});var top={x:d.x+(so.n-1)*16,y:d.y-(so.n-1)*16};
+      h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+top.x+' '+top.y+')"><circle cx="'+(top.x-26)+'" cy="'+(top.y-24)+'" r="9" fill="#000" stroke="#d8cfae" stroke-width="1.2"/><text x="'+(top.x-26)+'" y="'+(top.y-20.5)+'" text-anchor="middle" font-size="10" font-weight="900" fill="#f2ead0" font-family="sans-serif">×'+so.n+'</text></g>';if(!l.length)return;}
     var ws=l.map(function(t){var w=0;String(t).split('').forEach(function(ch){w+=/[\x00-\x7f]/.test(ch)?6.4:10.4;});return Math.max(20,Math.round(w+6));}),tot=ws.reduce(function(a,b){return a+b;},0)+(ws.length-1)*2,x=d.x-tot/2,y=d.y+10;
     h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
     l.forEach(function(t,i){var c=NM_ST_COL[nmStKind(t)];h+='<rect x="'+x+'" y="'+y+'" width="'+ws[i]+'" height="14" rx="3" fill="'+c+'" stroke="#d8cfae" stroke-width="1"/><text x="'+(x+ws[i]/2)+'" y="'+(y+10.5)+'" text-anchor="middle" font-size="10" font-weight="900" fill="#f2ead0" font-family="sans-serif">'+t+'</text>';x+=ws[i]+2;});
@@ -33907,7 +33921,7 @@ function nmPickEnd(tn){var P=NM_PICK;if(!P)return;NM_PICK=null;nmPickBanner(fals
 function nmPickTap(cx,cy){var P=NM_PICK;if(!P)return false;var H=losHexAtClient(cx,cy),tn=H?btNodeOf(H.boardId,H.col,H.row):null,hit=null;
   if(tn!=null)P.list.forEach(function(x){if(x.tn===tn)hit=x;});
   if(hit&&hit.blk){btToast('そのマーカーへはLOSが通りません');return true;}
-  nmPickEnd(hit?hit.tn:null);return true;}
+  if(hit)NM_TGT_EH=hit.eh;nmPickEnd(hit?hit.tn:null);return true;}
 function nmPickOverlaySVG(dl){var P=NM_PICK;if(!P)return '';var h='';P.list.forEach(function(x){var H=nmHexOfNode(x.tn);var g=losColRowToGlobalCanon(H.boardId,H.col,H.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);
   if(x.blk)h+='<g opacity=".8"><circle cx="'+d.x+'" cy="'+d.y+'" r="34" fill="none" stroke="#888" stroke-width="3" stroke-dasharray="6 5"/><path d="M'+(d.x-10)+' '+(d.y-10)+'l20 20m0-20l-20 20" stroke="#bbb" stroke-width="4"/></g>';
   else h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="36" fill="none" stroke="#000" stroke-width="9" opacity=".55"/><circle cx="'+d.x+'" cy="'+d.y+'" r="36" fill="#40ff9022" stroke="#40ff90" stroke-width="5"><animate attributeName="stroke-opacity" values="1;.35;1" dur="1.2s" repeatCount="indefinite"/></circle><g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><rect x="'+(d.x-17)+'" y="'+(d.y-50)+'" width="34" height="14" rx="3" fill="#3ca878"/><text x="'+d.x+'" y="'+(d.y-39.5)+'" text-anchor="middle" font-size="10" font-weight="900" fill="#fff" font-family="sans-serif">距離'+x.d+'</text></g>';});
@@ -33994,7 +34008,7 @@ function nmLwRe(n){NM_RM_SUB='lw';btRmReopen(n);}
 function nmLwSet(n,k,v){var W=NM_LW;W[k]=v;if(k!=='c1'&&k!=='c2'){if(k!=='a'&&k!=='b'){W.a=0;W.b=0;}W.res=null;}W.c1=k==='c1'||k==='c2'?W.c1:0;if(k!=='c1'&&k!=='c2')W.c2=0;W.res2=null;
   if(k==='tgt'&&v!=null){var A=BTG.nodes[W.n],T0=BTG.nodes[v];S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB={x:T0.x,y:T0.y};try{LosRunPixel();}catch(e){}}nmLwRe(n);}
 function nmLwCalc(){var W=NM_LW,w=LATW_DATA.filter(function(x){return x.id===W.wid;})[0];if(!w||W.tgt==null)return null;var A=W.n,T=W.tgt,AN=BTG.nodes[A],TN=BTG.nodes[T],rng=btDist(A,T);
-  var te=null;nmSideList(W.sd==='f'?'e':'f').forEach(function(x){if(btNodeOf(x.boardId,x.col,x.row)===T)te=x;});var fv=te&&te.veh?nmAfv(te.veh):null,tgtType=fv?'vehicle':(te&&te.gun?'gun':'infantry');
+  var te=nmTgtAt(nmSideList(W.sd==='f'?'e':'f'),T); /* v419 */var fv=te&&te.veh?nmAfv(te.veh):null,tgtType=fv?'vehicle':(te&&te.gun?'gun':'infantry');
   var r={w:w,rng:rng,te:te,fv:fv,tgtType:tgtType,err:null,drm:0,dl:[]};function add(v,l){if(!v)return;r.drm+=v;r.dl.push(l+(v>0?'+':'')+v);}
   if(rng>(w.rng||0)){r.err='射程外(最大'+w.rng+')';return r;}
   var los=null;try{los=losCheckLOSGlobal(AN.x,AN.y,TN.x,TN.y,S_LOS.orchardSeason,S_LOS.grainSeason);}catch(e){}if(los&&los.blocked){r.err='LOSが通りません';return r;}
@@ -34029,7 +34043,7 @@ function nmRmLwItems(n){var W=NM_LW;if(!W)return nmRMenuItems(n);var it=[],L=NM_
   it.push({sep:1});
   if(W.tgt==null){var M0=NM_MF;NM_MF={sd:W.sd,from:W.n};var tl=nmMfTgtList();NM_MF=M0;
     it.push({ic:'tgt',t:'目標を選ぶ',sub:'射程'+(w?w.rng:'?')+'まで。車両、または建物内の歩兵(SCW)'});
-    tl.forEach(function(x){var ok=!x.blk&&w&&x.d<=w.rng;it.push({ic:'tgt',img:nmMfTgtImg(x.eh),t:(ok?'<span>':'<span style="color:#667">')+nmMfTgtName(x.eh)+' @'+BTG.nodes[x.tn].nm+'</span>',sub:'距離'+x.d+(x.blk?'　LOS遮断':(w&&x.d>w.rng?'　射程外':'')),f:ok?"nmLwSet("+n+",'tgt',"+x.tn+")":''});});
+    tl.forEach(function(x){var ok=!x.blk&&w&&x.d<=w.rng;it.push({ic:'tgt',img:nmMfTgtImg(x.eh),t:(ok?'<span>':'<span style="color:#667">')+nmMfTgtName(x.eh)+' @'+BTG.nodes[x.tn].nm+'</span>',sub:'距離'+x.d+(x.blk?'　LOS遮断':(w&&x.d>w.rng?'　射程外':'')),f:ok?"NM_TGT_EH=nmSideList('"+(W.sd==='f'?'e':'f')+"')["+x.i+"];nmLwSet("+n+",'tgt',"+x.tn+")":''});});
     return it;}
   var C=nmLwCalc();it.push({ic:'tgt',img:C.te?nmMfTgtImg(C.te):'',t:'目標: '+(C.te?nmMfTgtName(C.te):'')+' @'+BTG.nodes[W.tgt].nm,sub:'距離'+C.rng+'　タップで選び直す',f:"nmLwSet("+n+",'tgt',null)"});
   if(C.err){it.push({ic:'x',t:'撃てません: '+C.err});return it;}
@@ -34177,7 +34191,7 @@ function nmGrpSVG(eh,d,sd){
   h+=nmGrpBadge(d,S0,eh.grp,srcs.length>3?srcs.length-3:0);
   return h+'</g>';
 }
-function nmRmFriendDel(){var H=NM_RM_HEX;if(!H)return;BtRmClose();var l=nmSideList('f');for(var i=l.length-1;i>=0;i--)if(l[i].boardId===H.boardId&&l[i].col===H.col&&l[i].row===H.row)l.splice(i,1);try{saveState();}catch(e){}Draw();}
+function nmRmFriendDel(){var H=NM_RM_HEX;if(!H)return;BtRmClose();var l=nmSideList('f'),cur=nmUnitAt(H,'f');if(cur)l.splice(l.indexOf(cur),1);NM_SEL_EH=null;try{saveState();}catch(e){}Draw();}
 function nmRmSetFaceF(n,d){var eh=NM_RM_HEX&&nmUnitAt(NM_RM_HEX,'f');if(!eh||d==null)return;eh.facing=(eh.facing===d&&!NM_FACE)?null:d;try{saveState();}catch(e){}Draw();btRmReopen(n);}
 function nmRmSetTcaF(n,d){var eh=NM_RM_HEX&&nmUnitAt(NM_RM_HEX,'f');if(!eh)return;eh.tca=(d==null||(eh.tca===d&&!NM_FACE))?null:d;try{saveState();}catch(e){}Draw();btRmReopen(n);}
 /* v338(ダルマ指示「行軍もシナリオ登場車両を選択式にして車両の能力を反映(カウンター)」「煙幕もカウンター・種類選択」) */
@@ -35698,6 +35712,7 @@ function nmFriendOverlaySVG(dl){ /* v345: 自軍のカウンター(青の枠)。
   var h='';(S_LOS.friendHexes||[]).forEach(function(eh){var g=losColRowToGlobalCanon(eh.boardId,eh.col,eh.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);
     if(NM_DRAG&&NM_DRAG.moving&&NM_DRAG.ref===eh)return;
     if(nmUnitAt(eh,'e'))d={x:d.x-8,y:d.y-8}; /* 同じヘクスに敵もいる時は少しずらす */
+    var so=nmStackOff(eh,'f');d={x:d.x+so.dx,y:d.y+so.dy}; /* v419 */
     if(eh.grp&&!eh.veh){h+=nmGrpSVG(eh,d);return;} /* v358 */
     h+=nmEnemyVehSVG(eh,d,eh.veh?nmVaslSrc(eh.veh):(eh.gun?nmVaslSrc(eh.gun):null),'#33aaff');});
   return h;
@@ -35795,6 +35810,7 @@ function losEnemyHexOverlaySVG(dispLayout){
     // 外側(=マップの+viewRot回転をそのまま受ける)で描画するよう分離した。
     if(NM_DRAG&&NM_DRAG.moving&&NM_DRAG.ref===eh)return; /* v345: ドラッグ中は元の位置に描かない */
     if(nmUnitAt(eh,'f'))d={x:d.x+8,y:d.y+8}; /* v345: 同じヘクスに自軍もいる時は少しずらす */
+    var so=nmStackOff(eh,'e');d={x:d.x+so.dx,y:d.y+so.dy}; /* v419: 同じヘクスの2つ目以降は右上へずらす */
     if(eh.grp&&!eh.veh&&!eh.gun){h+=nmGrpSVG(eh,d,'e');return;} /* v401: 敵軍の編成(射撃タブの編成のカウンターを重ねて表示) */
     var evSrc=eh.veh?nmVaslSrc(eh.veh):(eh.gun?nmVaslSrc(eh.gun):null); /* v374: 砲 */
     if(evSrc){h+=nmEnemyVehSVG(eh,d,evSrc);return;} /* v343: 車両を選んだ敵はVASLカウンター+対戦モードと同じ矢印 */
