@@ -36485,8 +36485,10 @@ var NM_FT_SHORT={fire:'射撃',gun:'砲撃',afv:'装甲',latw:'対戦車',scen:'
 function nmFtZoomBtns(){var ic=function(p){return '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';};
   return '<button class="nb nmFullOff" title="'+T('縮小')+'" onclick="nmFtZoom(-1)">'+ic('<path d="M5 12h14"/>')+'</button>'
    +'<button class="nb nmFullOff" title="'+T('拡大')+'" onclick="nmFtZoom(1)">'+ic('<path d="M5 12h14M12 5v14"/>')+'</button>'
+   +'<button class="nb nmFullOff" title="'+T('画面を90°回転')+'" onclick="nmFtRot()">'+ic('<path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/>')+'</button>' /* v487(ダルマ指示「＋−横に回転の記号 画面回転」) */
    +'<button class="nb nmFullOff" title="'+T('横幅に合わせる')+'" onclick="nmFtFit(\'width\')">'+ic('<path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/>')+'</button>'
    +'<button class="nb nmFullOff" title="'+T('縦幅に合わせる')+'" onclick="nmFtFit(\'height\')">'+ic('<path d="M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4"/>')+'</button>';}
+function nmFtRot(){losSaveMapScroll();try{LosRotateViewBy(90);}catch(e){}btToast(T('地図の向き')+' '+(S_LOS.viewRot||0)+'°');}
 function nmFtZoom(d){try{LosZoom(d);}catch(e){}}
 function nmFtFit(ax){losSaveMapScroll();losApplyFit(ax);try{losSaveZoom();}catch(e){}S_LOS.vStep=0;Draw();}
 function btMapFullOn(){return document.documentElement.classList.contains('bt-mapfull');}
