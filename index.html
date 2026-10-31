@@ -30856,7 +30856,7 @@ function btBandHTML(){
   h+=btBtn(T('簡易表示'),'BtVaslToggle()',{on:BT.vasl===false}); // v284: VASLカウンター⇔文字の簡易表示
   h+=btBtn(T('演出設定')+(BT.fxOpen?' ▲':' ▼'),'BtFxOpen()',{on:BT.fxOpen||btFxMode()==='off'}); /* v329 */
   h+=btBtn(T('クローズアップ')+(BT.cam===false?':OFF':':ON'),'BtCam()',{on:BT.cam!==false}); // v320 // v305: 射撃の演出
-  if(typeof BtRecExport==='function')h+=btBtn(T('記録を書き出す'),'BtRecExport()',{dim:!BT.started}); // v300: 対戦記録(JSON)
+  if(typeof BtRecExport==='function')h+=btBtn(T('セーブ・ロード'),'BtSvOpen()')+' '+btBtn(T('記録を書き出す'),'BtRecExport()',{dim:!BT.started}); // v300: 対戦記録(JSON)
   h+=btBtn(T('新しい対戦'),'BtReset()',{warn:true}); // v300(ダルマ指示): 「全消去」→「新しい対戦」
   h+='</div>';
   if(BT.fxOpen&&typeof btFxPanelHTML==='function')h+=btFxPanelHTML(); /* v329 */
@@ -30889,6 +30889,47 @@ function btBandHTML(){
   return h;
 }
 function BtBal(v){if(BT.started)return;BT.bal=v;btSave();Draw();}
+/* v464(ダルマ指示「対戦モードのセーブ・ロード」): 対戦の途中経過を名前を付けて複数保存。ロード・ファイルへの書き出し・読み込み(別のiPadやバックアップ)。
+   ロードする前の対戦は「ロード前の自動セーブ」に残す */
+var BT_SV_KEY='aslsk_bt_saves_v1',BT_SV_DEL=null;
+function btSvList(){try{var L=JSON.parse(localStorage.getItem(BT_SV_KEY)||'[]');return Array.isArray(L)?L:[];}catch(e){return [];}}
+function btSvPut(L){try{localStorage.setItem(BT_SV_KEY,JSON.stringify(L));return true;}catch(e){btToast('保存できませんでした(端末の容量不足)');return false;}}
+function btSvDesc(d){if(!d||!d.started)return T('準備(初期配置)');if(d.finished)return T('ゲーム終了');var p=BT_PHASES[d.ph];return 'T'+d.turn+(d.half?'裏':'表')+' '+(p?T(p[1]):'');}
+function btSvRec(nm){return {name:nm,at:Date.now(),sc:BT.sc,desc:btSvDesc(BT),app:BT.app||null,data:JSON.parse(JSON.stringify(BT))};}
+function BtSvOpen(){BT_SV_DEL=null;btSvDraw();}
+function BtSvClose(){var e=document.getElementById('btSv');if(e)e.remove();}
+function btSvDraw(){var el=document.getElementById('btSv');if(!el){el=document.createElement('div');el.id='btSv';el.onclick=function(e){if(e.target===el)BtSvClose();};document.body.appendChild(el);}
+  el.style.cssText='position:fixed;inset:0;z-index:9700;background:#000a;display:flex;align-items:center;justify-content:center;font-family:sans-serif';
+  var L=btSvList(),sc=btScId(),d=function(t){var x=new Date(t);return (x.getMonth()+1)+'/'+x.getDate()+' '+x.getHours()+':'+('0'+x.getMinutes()).slice(-2);};
+  var mb='display:inline-flex;align-items:center;height:28px;padding:0 10px;border-radius:6px;background:#1c222b;border:1px solid #39414f;color:#c9d3df;font-size:12px;font-weight:bold;cursor:pointer;white-space:nowrap';
+  var h='<div style="width:min(560px,94vw);max-height:84vh;overflow:auto;background:#12151c;border:1.5px solid #c8a032;border-radius:12px;padding:12px 14px;color:#e8eef4;box-shadow:0 10px 30px #000c">'
+   +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><b style="font-size:16px;color:#ffd060">'+T('対戦のセーブ・ロード')+'</b><span style="font-size:12px;color:#8899aa">'+sc+'　'+T('いま')+': '+btSvDesc(BT)+'</span><span style="margin-left:auto;'+mb+'" onclick="BtSvClose()">✕</span></div>'
+   +'<div style="display:flex;gap:6px;margin:6px 0"><input id="btSvName" placeholder="'+T('名前(例: T3表 前進前)')+'" style="flex:1;min-width:0;background:#0d1016;border:1px solid #39414f;border-radius:6px;color:#e8eef4;padding:7px 9px;font-size:14px;-webkit-user-select:text;user-select:text"><span style="'+mb+';height:34px;background:#3a2e08;border-color:#c8a032;color:#ffd060;font-size:14px" onclick="BtSvSave()">'+T('セーブ')+'</span></div>'
+   +'<div style="display:flex;gap:6px;justify-content:flex-end;margin:0 0 6px"><span style="'+mb+'" onclick="BtSvExport(-1)">'+T('全部を書き出す')+'</span><label style="'+mb+'">'+T('読み込む')+'<input type="file" accept=".json,application/json" style="display:none" onchange="BtSvImport(this)"></label></div>';
+  if(!L.length)h+='<div style="font-size:13px;color:#8899aa;padding:8px 0">'+T('まだセーブがありません。同じ名前でセーブすると上書きします')+'</div>';
+  L.forEach(function(r,i){var other=r.sc!==sc;
+    h+='<div style="display:flex;align-items:center;gap:6px;padding:6px 0;border-top:1px solid #20242c;'+(other?'opacity:.5':'')+'"><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+String(r.name).replace(/</g,'&lt;')+'</div>'
+     +'<div style="font-size:11px;color:#8899aa">'+d(r.at)+'　'+r.sc+'　'+(r.desc||'')+(r.app?'　'+T('アプリ')+'='+(BT_SIDE_NAME[r.app]||r.app):'')+'</div></div>'
+     +'<span style="'+mb+'" onclick="BtSvExport('+i+')">'+T('書き出す')+'</span>'
+     +(other?'':'<span style="'+mb+';border-color:#c8a032;color:#ffd060" onclick="BtSvLoad('+i+')">'+T('ロード')+'</span>')
+     +'<span style="'+mb+';color:#ff9090" onclick="BtSvDel('+i+')">'+(BT_SV_DEL===i?T('もう一度で削除'):T('削除'))+'</span></div>';});
+  el.innerHTML=h+'</div>';}
+function BtSvSave(){var el=document.getElementById('btSvName'),nm=(el&&el.value||'').trim(),L=btSvList();if(!nm)nm=btSvDesc(BT);
+  var ex=L.filter(function(x){return x.name===nm&&x.sc===BT.sc;})[0],rec=btSvRec(nm);if(ex)L[L.indexOf(ex)]=rec;else L.unshift(rec);
+  if(btSvPut(L))btToast('「'+nm+'」をセーブしました');BT_SV_DEL=null;btSvDraw();}
+function BtSvLoad(i){var L=btSvList(),r=L[i];if(!r||!r.data)return;if(r.sc!==btScId()){btToast('シナリオ'+r.sc+'のセーブです');return;}
+  if(BT.started){var bk=btSvRec(T('ロード前の自動セーブ')),j=L.findIndex(function(x){return x.name===bk.name&&x.sc===bk.sc;});if(j>=0)L.splice(j,1);if(L.indexOf(r)<0)return;L.splice(L.indexOf(r)+1,0,bk);btSvPut(L);}
+  var D=btNewState();for(var k in D)BT[k]=(k in r.data)?JSON.parse(JSON.stringify(r.data[k])):D[k];
+  BT.on=true;BT.sc=r.sc;BT.placing=null;BT.pend=null;try{BT_VHIST=[];}catch(e){}try{NM_RB.prev=null;NM_RB.items=[];}catch(e){}
+  btSave();BtSvClose();Draw();if(BT.started&&BT.app&&!BT.finished)btKick(700);btToast('「'+r.name+'」をロードしました');}
+function BtSvDel(i){var L=btSvList();if(!L[i])return;if(BT_SV_DEL!==i){BT_SV_DEL=i;btSvDraw();return;}BT_SV_DEL=null;L.splice(i,1);btSvPut(L);btSvDraw();}
+function BtSvExport(i){var L=btSvList(),list=i<0?L:(L[i]?[L[i]]:[]);if(!list.length){btToast('書き出すセーブがありません');return;}
+  var data={type:'aslsk-battle-saves',v:1,at:Date.now(),saves:list},blob=new Blob([JSON.stringify(data)],{type:'application/json'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='対戦_'+(i<0?'全部':(list[0].sc+'_'+String(list[0].name).replace(/[\\/:*?"<>|\s]+/g,'_')))+'.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500);btToast('書き出しました('+list.length+'件)');}
+function BtSvImport(inp){var f=inp.files&&inp.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){var d=null;try{d=JSON.parse(rd.result);}catch(e){}inp.value='';
+    if(!d||d.type!=='aslsk-battle-saves'||!d.saves){btToast('対戦のセーブファイルではありません');return;}
+    var L=btSvList(),n=0;d.saves.forEach(function(r){if(!r||!r.data||!r.sc)return;var nm=r.name||'読み込み',k=2,base=nm;while(L.some(function(x){return x.name===nm&&x.sc===r.sc;}))nm=base+'('+(k++)+')';L.unshift(Object.assign({},r,{name:nm}));n++;});
+    if(btSvPut(L))btToast(n+'件を読み込みました');btSvDraw();};rd.readAsText(f);}
 function btSetupHTML(){
   var h='<div style="margin-top:6px;font-size:12px;color:#ccddee;border-top:1px solid #20242c;padding-top:5px">';
   if(!BT.app)h+='<div style="color:#8899aa">'+T('アプリの軍を選ぶと、アプリがその軍を担当します(なしの場合は両軍とも手動)')+'</div>';
@@ -31133,7 +31174,7 @@ function btBandMiniHTML(){
   h+=btBtn(T('簡易表示'),'BtVaslToggle()',{on:BT.vasl===false,st:S});
   h+=btBtn(T('演出設定')+(BT.fxOpen?' ▲':' ▼'),'BtFxOpen()',{on:BT.fxOpen||btFxMode()==='off',st:S}); /* v329 */
   h+=btBtn(T('クローズアップ')+(BT.cam===false?':OFF':':ON'),'BtCam()',{on:BT.cam!==false,st:S}); // v320
-  if(typeof BtRecExport==='function')h+=btBtn(T('記録を書き出す'),'BtRecExport()',{st:S});
+  if(typeof BtRecExport==='function')h+=btBtn(T('セーブ・ロード'),'BtSvOpen()',{st:S})+btBtn(T('記録を書き出す'),'BtRecExport()',{st:S});
   h+=btBtn(T('新しい対戦'),'BtReset()',{warn:true,st:S});
   h+='</div>';
   if(BT.fxOpen&&typeof btFxPanelHTML==='function')h+=btFxPanelHTML(); /* v329 */
