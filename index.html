@@ -35811,6 +35811,7 @@ function BtRmRot(n,d){LosRotateViewBy(d);BT.rmHex=n;Draw();btRmKeep(n);setTimeou
 // マップの全画面: 地図の枠を画面いっぱいに固定(指示パネルがあれば上に固定して、その下から地図)
 var NM_HIDE_FULLX=true;
 /* v447(ダルマ指示「上シナリオボタン右に拡大縮小の＋−と←→↕のボタンを追加、全画面表示解除と同じサイズ」) */
+var NM_FT_SHORT={fire:'射撃',gun:'砲撃',afv:'装甲',latw:'対戦車',scen:'シナリオ'}; /* v447: 全画面の上タブは短い名前 */
 function nmFtZoomBtns(){var ic=function(p){return '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';};
   return '<button class="nb nmFullOff" title="'+T('縮小')+'" onclick="nmFtZoom(-1)">'+ic('<path d="M5 12h14"/>')+'</button>'
    +'<button class="nb nmFullOff" title="'+T('拡大')+'" onclick="nmFtZoom(1)">'+ic('<path d="M5 12h14M12 5v14"/>')+'</button>'
@@ -35829,7 +35830,7 @@ function btMapFullSync(){
   /* v361(ダルマ指示「全画面表示時に上部に(射撃〜シナリオの7タブを)横並び1列で常時表示」) */
   var tb=document.getElementById('nmFullTabs'),nmOn=on&&!(typeof btActive==='function'&&btActive());
   if(nmOn&&!tb){tb=document.createElement('div');tb.id='nmFullTabs';
-    tb.innerHTML='<div id="nmFtPh"></div><button class="nb" style="flex:0 0 auto;padding:0 12px;border-color:#6b5a2a;color:#ffd060" onclick="nmSuOpen()">'+T('編成')+'</button>'+NM_FULL_TABS.map(function(k){var t=NM_TABS.filter(function(x){return x[0]===k;})[0];return '<button class="nb" onclick="nmRmTabGo(\''+k+'\')">'+T(t?t[1]:k)+'</button>';}).join('')
+    tb.innerHTML='<div id="nmFtPh"></div><button class="nb" style="flex:0 0 auto;padding:0 12px;border-color:#6b5a2a;color:#ffd060" onclick="nmSuOpen()">'+T('編成')+'</button>'+NM_FULL_TABS.map(function(k){var t=NM_TABS.filter(function(x){return x[0]===k;})[0];return '<button class="nb" onclick="nmRmTabGo(\''+k+'\')" title="'+T(t?t[1]:k)+'">'+T(NM_FT_SHORT[k]||(t?t[1]:k))+'</button>';}).join('')
       +nmFtZoomBtns() /* v447 */
       +'<button class="nb nmFullOff" onclick="BtMapFull(null)" title="'+T('全画面表示オフ')+'"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M20 15h-5v5M4 15h5v5"/></svg></button>'; /* v361(ダルマ指示「全画面表示ボタンを上のタブ右端に移動」) */
     document.body.appendChild(tb);nmFtPhFill();try{Draw();}catch(e){}}
