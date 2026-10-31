@@ -29755,7 +29755,10 @@ function btReinforce(){
     items.forEach(function(o){var left=o.total-btPlacedCount(o.key);for(var i=0;i<left;i++){var u=btMkUnit(o.key,o.name,att);if(btInfo(att,o.name).kind==='afv'){u.mot=1;afv.u.push(u);}else inf.u.push(u);}});
     // 歩兵の盤外スタックは、指揮官1人+分隊2〜3個+SWの小グループに分ける(移動の単位)
     // v291(ダルマ指示「初めの仮のスタックはやめてプレイヤーが編成を組む」): 人間の軍は全員を1つの「未編成」スタックにして、編成を変える画面を開く(SWの持ち主は既定の割り当て。変更可)
+    var nmMade=[];if(att!==BT.app&&!window.BT_SELFPLAY&&inf.u.length&&att==='GER'){try{nmMade=btPoolFromNm(inf,d.grp==='g1'?0:1);}catch(e){console.log('btPoolFromNm',e);}}
+    if(nmMade.length)log.push(BT_SIDE_NAME[att]+' マップタブの編成'+nmMade.join('・')+'のとおりに盤外のスタックを組みました');
     if(att!==BT.app&&!window.BT_SELFPLAY&&inf.u.length){inf.pool=true;BT.stacks.push(inf);BT.sel=inf.id;BT.selU=null;BT.regroup={sid:inf.id,pick:null};}
+    else if(att!==BT.app&&!window.BT_SELFPLAY&&nmMade.length){}
     else btSplitEntry(inf).forEach(function(s){BT.stacks.push(s);});
     afv.u.forEach(function(u){BT.stacks.push({id:'s'+(++BT.seq),side:att,n:-1,off:d.off,due:BT.turn,u:[u],mel:false,afv:true});});
     log.push(BT_SIDE_NAME[att]+' 増援: '+({g1:'group1(東端)',g2:'group2(西端)',sovT1:'第71重戦車連隊(北端)'}[d.grp])+' が盤外に待機'+(inf.pool?'(未編成。スタックを組んでください)':''));
@@ -30939,6 +30942,30 @@ function BtSvImport(inp){var f=inp.files&&inp.files[0];if(!f)return;var rd=new F
 /* v465(ダルマ指示「マップタブの編成を対戦の初期配置に」): マップタブで地図に置いたソ連の編成(A〜Z: 分隊・指揮官・SW・DC)と車両・砲のマーカーを、
    対戦モードのOBと名前で照らし合わせて同じヘクスに置く。配置範囲(btInSovZone)の外と、OBの残りがない物は置かない。SWの持ち主は開始時に自動で決まる */
 function btNmNorm(t){return String(t).replace(/\([^)]*\)/g,'').replace(/\s+/g,'').toUpperCase();}
+/* v470: 編成(A〜Z)の中身を、OBと照らし合わせる形の一覧にする {lbl, m(OB項目に合うか), kind, pid(持ち主), own} */
+function btNmSlotItems(k){var d=nmGeList(k),nat=d.nat,sc=S.scen&&S.scen.sel,o=[],swL={};try{nmSuOb(nat).forEach(function(x){if(x.kind==='sw')swL[x.id]=x.label;});}catch(e){}
+  (d.items||[]).forEach(function(x){o.push({lbl:x.label,kind:'u',pid:x.pid,m:function(ob){return ob.name===x.label;}});});
+  (d.sw||[]).forEach(function(uid){var b=nmGeSwBase(uid),lb=swL[b.id]||b.id;o.push({lbl:lb,kind:'sw',own:d.own[uid],m:function(ob){return btNmNorm(ob.name)===btNmNorm(lb);}});});
+  var sv=sc&&S.savedGroups&&S.savedGroups[sc]&&S.savedGroups[sc][k];((sv&&sv.dc)||[]).forEach(function(e){o.push({lbl:'DC',kind:'sw',own:e.own,m:function(ob){return /^DC/.test(ob.name);}});});
+  var lwL={};try{nmSuOb(nat).forEach(function(x){if(x.kind==='lw')lwL[x.id]=x.label;});}catch(e){}
+  nmSuLwList(k).forEach(function(e){var lb=lwL[e.id]||e.id;o.push({lbl:lb,kind:'sw',own:e.pid,m:function(ob){var a=btNmNorm(ob.name),b=btNmNorm(lb);return a===b||a.indexOf(b)===0||b.indexOf(a)===0;}});});
+  return o;}
+/* v470(ダルマ指示「準備画面を対戦モードにも」): 対戦の準備中に編成の準備画面で「地図に置く」→ヘクスをタップすると、その編成を対戦の初期配置として置く(ソ連軍・配置範囲の中・OBの残りまで) */
+function btSuPlaceAt(k,n){var d=nmGeList(k),side=d.nat;if(BT.started){btToast('ゲーム開始後は置けません');return;}
+  if(side!=='SOV'){btToast((BT_SIDE_NAME[side]||side)+'は盤外から進入します。この編成は進入のときに盤外のスタックになります');return;}
+  if(BT.app==='SOV'){btToast('ソ連軍はアプリが配置します');return;}
+  var obs=btObItems().filter(function(o){return o.side===side&&btGroupOf(o)==='setup';}),ok=0,ng=[],pmap={},owns=[];
+  btNmSlotItems(k).forEach(function(x){var c=obs.filter(function(o){return x.m(o)&&o.total-btPlacedCount(o.key)>0;}),z=c.filter(function(o){return btInSovZone(o,n);})[0];
+    if(!z){ng.push(x.lbl);return;}var r=btPlace(z,n);ok++;if(x.kind==='u')pmap[x.pid]=r.u.id;else if(x.own!=null)owns.push([r.u,x.own]);});
+  owns.forEach(function(a){if(pmap[a[1]])a[0].own=pmap[a[1]];}); /* SWの持ち主も編成どおり */
+  btSave();Draw();btToast('編成'+k+': '+ok+'個を'+BTG.nodes[n].nm+'に置きました'+(ng.length?'。置けなかった: '+ng.slice(0,4).join('、')+'(配置範囲の外かOBの残りなし)':''));}
+/* v470: 人間のドイツ軍の進入時、マップタブの編成(同じグループ)があれば、その編成どおりに盤外のスタックを組む(残りは未編成のまま) */
+function btPoolFromNm(pool,gi){var made=[],nat=pool.side;var G=nmSuObG(nat);
+  nmSuSlots(nat).forEach(function(k){if(nmSuSlotGrp(k,nat,G)!==gi)return;var st={id:'s'+(++BT.seq),side:pool.side,n:-1,off:pool.off,due:pool.due,u:[],mel:false},pmap={},owns=[];
+    btNmSlotItems(k).forEach(function(x){var u=pool.u.filter(function(v){return x.m({name:v.nm});})[0];if(!u)return;pool.u.splice(pool.u.indexOf(u),1);st.u.push(u);if(x.kind==='u')pmap[x.pid]=u.id;else if(x.own!=null)owns.push([u,x.own]);});
+    owns.forEach(function(a){a[0].own=pmap[a[1]]||null;});st.u.forEach(function(u){if(u.own&&!st.u.some(function(v){return v.id===u.own;}))u.own=null;});
+    if(st.u.length){made.push(k);BT.stacks.push(st);}});
+  return made;}
 function BtLoadNmGroups(){
   if(!btActive()||BT.started){btToast('ゲーム開始前の配置でだけ使えます');return;}
   var side='SOV',obs=btObItems().filter(function(o){return o.side===side&&btGroupOf(o)==='setup';});
@@ -30950,9 +30977,7 @@ function BtLoadNmGroups(){
     if(e.veh){var v=null;try{v=nmAfv(e.veh);}catch(x){}if(!v)return;var vn=btNmNorm(nmAfvName(v));if(!obs.some(function(o){return btNmNorm(o.name)===vn;}))return;put(nmAfvName(v),n,function(o){return btNmNorm(o.name)===vn;});return;}
     if(e.gun){var g=null;try{g=nmGun(e.gun);}catch(x){}if(!g)return;var gn=btNmNorm(nmGunName(g));if(!obs.some(function(o){var on=btNmNorm(o.name);return on.indexOf(gn)>=0||gn.indexOf(on)>=0;}))return;put(nmGunName(g),n,function(o){var on=btNmNorm(o.name);return on.indexOf(gn)>=0||gn.indexOf(on)>=0;});return;}
     if(!e.grp)return;var d=nmGeList(e.grp);if(d.nat!==side)return;
-    (d.items||[]).forEach(function(x){put(x.label,n,function(o){return o.name===x.label;});});
-    (d.sw||[]).forEach(function(uid){var b=nmGeSwBase(uid),lb=swL[b.id]||b.id;put(lb,n,function(o){return btNmNorm(o.name)===btNmNorm(lb);});});
-    var sv=sc&&S.savedGroups&&S.savedGroups[sc]&&S.savedGroups[sc][e.grp];((sv&&sv.dc)||[]).forEach(function(){put('DC',n,function(o){return /^DC/.test(o.name);});});});});
+    btNmSlotItems(e.grp).forEach(function(x){put(x.lbl,n,x.m);});});});
   if(!seen){btToast('マップタブの地図にソ連の編成・車両・砲が置かれていません');return;}
   btSave();Draw();
   var msg=ok+'個を配置しました';if(out.length)msg+='。配置範囲の外で置かなかった: '+out.slice(0,4).join('、')+(out.length>4?' ほか'+(out.length-4)+'個':'');if(none.length)msg+='。OBの残りがなく置かなかった: '+none.slice(0,4).join('、')+(none.length>4?' ほか'+(none.length-4)+'個':'');
@@ -30971,6 +30996,7 @@ function btSetupHTML(){
     h+=btBtn('T1=group2(西端) / T2=group1(東端)',"BtGerPlan('g2')",{on:BT.gerPlan&&BT.gerPlan.t1==='g2'});
     h+='</div>';
   }
+  h+='<div style="margin-top:6px">'+btBtn(T('編成の準備を開く'),'nmSuOpen()',{on:true})+' <span style="color:#8899aa;font-size:11px">'+T('編成を作って「地図に置く」→ヘクスをタップで、ソ連軍はその場に配置。ドイツ軍の編成は進入のときに盤外のスタックになります')+'</span></div>'; /* v470 */
   if(BT.app!=='SOV')h+='<div style="margin-top:6px">'+btBtn(T('マップタブの編成でソ連軍を配置'),'BtLoadNmGroups()')+' <span style="color:#8899aa;font-size:11px">'+T('マップタブで地図に置いた編成・車両・砲を、そのヘクスに置く(配置範囲の中だけ・OBの残りの数まで)')+'</span></div>'; /* v465 */
   if(BT.app!=='SOV')h+='<div style="margin-top:4px;color:#8899aa">'+T('ソ連軍の配置: 下のOB部隊リストから部隊を選び、地図のヘクスをタップ(33狙撃軍団はYヘクス列以南、親衛はuZ5から2ヘクス以内)')+'</div>';
   h+='<div style="margin-top:6px">'+btBtn(T('配置完了・ゲーム開始'),'BtStart()',{on:true})+'</div>';
@@ -34661,7 +34687,8 @@ function nmSuPlace(k){var sd=nmSuSide(NM_SU.nat);NM_SUPL={slot:k,sd:sd,nat:NM_SU
   var b=document.getElementById('nmPickBn');if(!b){b=document.createElement('div');b.id='nmPickBn';b.style.cssText='position:fixed;left:50%;top:70px;transform:translateX(-50%);z-index:9500;background:#0d2a4a;border:2px solid #3ca878;border-radius:8px;padding:8px 14px;color:#e8f4ff;font-size:14px;font-weight:bold;box-shadow:0 6px 18px #000c;display:flex;gap:10px;align-items:center';document.body.appendChild(b);}
   b.innerHTML='<span>編成'+k+'('+NM_SIDE_LBL[sd].nm+')を置くヘクスをタップ</span><button class="b sm" style="margin:0" onclick="event.stopPropagation();nmSuPlaceEnd()">やめる</button>';}
 function nmSuPlaceEnd(){NM_SUPL=null;var b=document.getElementById('nmPickBn');if(b)b.remove();var el=document.getElementById('nmSu');if(el)el.style.display='';nmSuDraw();}
-function nmSuPlaceTap(cx,cy){var P=NM_SUPL;if(!P)return false;var H=losHexAtClient(cx,cy);if(!H)return true;nmBkSnap('編成を置く');
+function nmSuPlaceTap(cx,cy){var P=NM_SUPL;if(!P)return false;var H=losHexAtClient(cx,cy);if(!H)return true;
+  if(typeof btActive==='function'&&btActive()){var bn=btNodeOf(H.boardId,H.col,H.row);if(bn!=null&&bn>=0)btSuPlaceAt(P.slot,bn);nmSuPlaceEnd();return true;}nmBkSnap('編成を置く');
   var L=nmSideList(P.sd),ex=null;[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(LL){LL.forEach(function(e){if(e.grp===P.slot)ex=e;});});
   if(ex){ex.boardId=H.boardId;ex.col=H.col;ex.row=H.row;}else L.push({boardId:H.boardId,col:H.col,row:H.row,veh:null,gun:null,tca:null,facing:null,grp:P.slot});
   try{saveState();}catch(e){}Draw();nmSuPlaceEnd();return true;}
