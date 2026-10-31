@@ -33930,7 +33930,7 @@ function nmStKind(t){var m=String(t).replace(/\d+$/,'');return NM_ST_COL[m]?m:'�
 var NM_CTR_DEF={'混乱':['BRO-','KEN','#b8261e','#fff'],'PIN':['PIN','','#f0ead6','#111'],'Motion':['MO-','TION','#f0ead6','#111'],'移動':['MOV-','ED','#f0ead6','#111'],
   '走行不能':['IMMO-','BILE','#e8d84a','#111'],'ショック':['SHO-','CK','#b8261e','#fff'],'UK':['UK','','#b8261e','#fff'],'スタン':['STUN','','#b8261e','#fff'],'リコール':['RE-','CALL','#e8d84a','#111'],
   'ボグ':['BOG','','#e8d84a','#111'],'Mired':['MIR-','ED','#e8d84a','#111'],'故障':['MA','MALF','#2a2a2a','#fff'],'主砲破壊':['MA','DIS','#2a2a2a','#ff5a4a'],'砲破壊':['GUN','DIS','#2a2a2a','#ff5a4a'],
-  '準備':['PREP','FIRE','#f0ead6','#111'],'臨機':['FIRST','FIRE','#f0ead6','#b8261e'],'防御':['FINAL','FIRE','#b8261e','#fff'],'射撃済':['FIR-','ED','#f0ead6','#111'],'CE':['CE','','#f0ead6','#111'],'ACQ':['ACQ','','#1c5aa8','#fff'],'BF':['BF','','#f0ead6','#111']};
+  '準備':['PREP','FIRE','#f0ead6','#111'],'臨機':['FIRST','FIRE','#f0ead6','#b8261e'],'防御':['FINAL','FIRE','#b8261e','#fff'],'射撃済':['FIR-','ED','#f0ead6','#111'],'CE':['CE','','#f0ead6','#111'],'ACQ':['ACQ','','#1c5aa8','#fff'],'BF':['BF','','#f0ead6','#111'],'CX':['CX','','#f0ead6','#111'],'DM':['DM','','#e8d84a','#111'],'負傷':['WOU-','ND','#b8261e','#fff']};
 function nmStTxt(l){var J={'準備':'準備射撃済','臨機':'臨機射撃済','防御':'防御射撃済','ACQ':'目標獲得'};return l.map(function(t){return J[t]||t;});}
 function nmCtrOf(l){return l.map(function(t){var m=/^(.+?)(\d+)$/.exec(t),k=m&&NM_CTR_DEF[m[1]]?m[1]:t,n=m&&NM_CTR_DEF[m[1]]?+m[2]:0,D=NM_CTR_DEF[k]||[String(t).slice(0,5),'','#f0ead6','#111'];return {a:D[0],b:D[1],bg:D[2],fg:D[3],n:n};});}
 function nmCtrSVG(c,x,y,Z){var o='<rect x="'+(x+1.5)+'" y="'+(y+1.5)+'" width="'+Z+'" height="'+Z+'" rx="2.5" fill="#000" opacity=".45"/>'
@@ -33958,7 +33958,8 @@ function nmRbHex(e){return e.boardId+losHexNameFromColRow(e.col,e.row);}
 function nmRbName(e){try{if(e.veh)return nmAfvName(nmAfv(e.veh));if(e.gun)return nmGunName(nmGun(e.gun));if(e.grp){var d=nmGeList(e.grp),u=(d.items||[]).map(function(x){return x.label;});return T('編成')+e.grp+(u.length?' ('+u.slice(0,3).join(' ')+(u.length>3?'…':'')+')':'');}}catch(x){}return 'マーカー';}
 function nmRbCnt(l){var o={};l.forEach(function(t){if(t==='移動')return; /* 実物に「移動した」カウンターは無い */var m=/^(.+?)(\d+)$/.exec(t),k=m&&NM_CTR_DEF[m[1]]?m[1]:t;o[k]=(o[k]||0)+(m&&NM_CTR_DEF[m[1]]?+m[2]:1);});return o;}
 function nmRbSnap(){var o=[];[['f',S_LOS.friendHexes||[]],['e',S_LOS.enemyHexes||[]]].forEach(function(P){P[1].forEach(function(e){o.push({eh:e,sd:P[0],hex:nmRbHex(e),c:nmRbCnt(nmStList(e)),dc:e.dcPlaced?e.dcPlaced.n:null});});});return o;}
-function nmRbTick(){if(S.tab!=='los'||typeof btActive==='function'&&btActive()){nmRbRender();return;}
+function nmRbTick(){if(S.tab==='los'&&typeof btActive==='function'&&btActive()){try{btRbTick();}catch(e){console.log('btRbTick',e);}nmRbRender();return;}
+  if(S.tab!=='los'){nmRbRender();return;}
   if((NM_MOVE&&NM_MOVE.live)||(NM_DRAG&&NM_DRAG.moving)){nmRbRender();return;}
   var sc=S.scen&&S.scen.sel,cur=nmRbSnap(),P=NM_RB.prev;NM_RB.prev=cur;
   if(!P||NM_RB.scen!==sc){NM_RB.scen=sc;NM_RB.items=[];nmRbRender();return;}
@@ -33975,23 +33976,57 @@ function nmRbTick(){if(S.tab!=='los'||typeof btActive==='function'&&btActive()){
   P.forEach(function(p){if(!cm.has(p.eh))add(p,'地図から取り除く');});
   if(NM_RB.items.length>40)NM_RB.items=NM_RB.items.slice(-40);
   nmRbRender();}
+/* v463(ダルマ指示「リアル盤へパネルを対戦モードにも」): 対戦の状態(BT.stacks)の前後の差分から、リアル盤でする操作を積む。
+   アプリ側の移動・射撃の結果も同じく出る。移動は同じユニットの続きの1歩をまとめて「A → C へ動かす」にする。開始前の配置は積まない */
+var BT_RB_OFF=false;
+function btRbKeys(s,u){var o={},I=btI(u,s.side),k=I.kind;
+  if(u.s==='br')o['混乱']=1;if(u.s==='pn')o['PIN']=1;
+  var F={P:'準備',F1:'臨機',F2:'防御',A:'射撃済',B:'射撃済',I:'射撃済'}[u.fire||''];if(F)o[F]=1;
+  if(u.cx)o['CX']=1;if(u.dm)o['DM']=1;if(u.wd)o['負傷']=1;
+  if(k==='afv'){if(u.mot)o['Motion']=1;if(u.ce)o['CE']=1;if(u.shock)o[u.shock==='UK'?'UK':'ショック']=1;if(u.stun)o['スタン']=1;if(u.imm)o['走行不能']=1;if(u.bog)o['ボグ']=1;if(u.maS==='br')o['故障']=1;}
+  return o;}
+function btRbSnap(){var m={};(BT.stacks||[]).forEach(function(s){var on=s.n!=null&&s.n>=0&&BTG&&BTG.nodes[s.n];(s.u||[]).forEach(function(u){m[u.id]={id:u.id,nm:String(u.nm),side:s.side,hex:on?BTG.nodes[s.n].nm:null,c:on?btRbKeys(s,u):{},wr:btIsWreck(u)};});});return m;}
+function btRbTick(){
+  if(!btGraphReady()||!BT.started||(NM_DRAG&&NM_DRAG.moving)){if(!BT.started){NM_RB.prev=null;NM_RB.items=[];}return;}
+  var key='BT:'+BT.sc,cur=btRbSnap(),P=NM_RB.prev;
+  if(NM_RB.scen!==key||!P||Array.isArray(P)){NM_RB.scen=key;NM_RB.prev=cur;NM_RB.items=[];return;}
+  NM_RB.prev=cur;
+  var p0=BT_PHASES[BT.ph],ph='T'+BT.turn+(BT.half?'裏':'表')+' '+T(p0?p0[1]:'')+' '+(p0?p0[0]:'');
+  var col=function(sd){return BT_SIDE_COL[sd]||'#ccc';},lbl=function(sd){return typeof nmNatLbl==='function'?nmNatLbl(sd):sd;};
+  var add=function(o){o.id=++NM_RB.seq;o.ph=ph;NM_RB.items.push(o);return o;};
+  var mv={}; // 移動: 前のヘクス→今のヘクス ごとにまとめる
+  Object.keys(cur).forEach(function(id){var c=cur[id],p=P[id];
+    if(!p){if(c.hex)add({sd:'f',col:col(c.side),hex:c.hex,nm:lbl(c.side)+' '+c.nm,t:c.wr?'残骸を置く':'このヘクスに置く',uids:[id]});return;}
+    if(c.hex&&p.hex!==c.hex){var k=c.side+'|'+(p.hex||'盤外')+'|'+c.hex;(mv[k]=mv[k]||{side:c.side,from:p.hex,to:c.hex,ids:[],nms:[]});mv[k].ids.push(id);mv[k].nms.push(c.nm);}
+    if(!c.hex&&p.hex){add({sd:'f',col:col(c.side),hex:p.hex,nm:lbl(c.side)+' '+c.nm,t:'地図から取り除く',uids:[id]});return;}
+    if(c.wr&&!p.wr){add({sd:'f',col:col(c.side),hex:c.hex,nm:lbl(c.side)+' '+p.nm,t:'残骸に替える',uids:[id]});}
+    Object.keys(c.c).forEach(function(k){if(!p.c[k])add({sd:'f',col:col(c.side),hex:c.hex,nm:lbl(c.side)+' '+c.nm,t:nmRbVerb(k,1,1),k:k,uids:[id]});});
+    Object.keys(p.c).forEach(function(k){if(!c.c[k]&&c.hex)add({sd:'f',col:col(c.side),hex:c.hex,nm:lbl(c.side)+' '+c.nm,t:nmRbVerb(k,1,0),k:k,uids:[id]});});});
+  Object.keys(P).forEach(function(id){if(!cur[id]&&P[id].hex)add({sd:'f',col:col(P[id].side),hex:P[id].hex,nm:lbl(P[id].side)+' '+P[id].nm,t:'地図から取り除く(除去)',uids:[id]});});
+  Object.keys(mv).forEach(function(k){var M=mv[k],ids=M.ids.slice().sort().join(',');
+    var L=null;for(var i=NM_RB.items.length-1;i>=0;i--){var x=NM_RB.items[i];if(x.mv&&x.mv.ids===ids&&x.mv.to===M.from){L=x;break;}}
+    if(L){L.mv.to=M.to;L.hex=M.to;L.t=(L.mv.from||'盤外')+' → '+M.to+' へ動かす';L.ph=ph;NM_RB.items.splice(NM_RB.items.indexOf(L),1);NM_RB.items.push(L);return;}
+    var nm=M.nms.length>3?M.nms.slice(0,3).join(' ')+'…':M.nms.join(' ');
+    add({sd:'f',col:col(M.side),hex:M.to,nm:lbl(M.side)+' '+nm,t:(M.from||'盤外')+' → '+M.to+' へ動かす',mv:{ids:ids,from:M.from,to:M.to}});});
+  if(NM_RB.items.length>60)NM_RB.items=NM_RB.items.slice(-60);
+}
 function nmRbVerb(k,n,on){var D=NM_CTR_DEF[k],nm=D?(D[0].replace(/-$/,'')+(D[1]&&/-$/.test(D[0])?'':' ')+D[1]).trim():k;var x=n>1?' ×'+n:'';
   if(k==='混乱')return on?'裏返す(BROKEN)'+x:'表に戻す(回復)'+x;return on?nm+' を置く'+x:nm+' を外す'+x;}
 function nmRbDone(id){NM_RB.items=NM_RB.items.filter(function(x){return x.id!==id;});nmRbRender();}
 function nmRbAll(){NM_RB.items=[];nmRbRender();}
 function nmRbTog(){NM_RB.open=!NM_RB.open;nmRbRender();}
 function nmRbRender(){var el=document.getElementById('nmRl'),L=NM_RB.items;
-  if(S.tab!=='los'||!L.length||S.nmRealOff||(typeof btActive==='function'&&btActive())){if(el)el.remove();return;}
+  var btM=typeof btActive==='function'&&btActive();if(S.tab!=='los'||!L.length||S.nmRealOff||(btM&&BT_RB_OFF)){if(el)el.remove();return;}
   if(!el){el=document.createElement('div');el.id='nmRl';el.onclick=function(e){e.stopPropagation();};el.onmousedown=function(e){e.stopPropagation();};el.ontouchstart=function(e){e.stopPropagation();};document.body.appendChild(el);}
   var mw=document.getElementById('losMapWrap'),r=mw&&mw.getBoundingClientRect();
-  el.style.cssText='position:fixed;z-index:9300;right:'+(r?Math.max(8,window.innerWidth-r.right+8):12)+'px;bottom:'+Math.max(r?Math.max(8,window.innerHeight-r.bottom+8):90,(document.getElementById('nmFtBot')?document.getElementById('nmFtBot').offsetHeight+8:0))+'px;width:min(340px,88vw);background:#12161ce8;border:1.5px solid #c8a032;border-radius:10px;box-shadow:0 6px 20px #000c;color:#e8eef4;font-family:sans-serif';
+  el.style.cssText='position:fixed;z-index:9300;right:'+(r?Math.max(8,window.innerWidth-r.right+8):12)+'px;bottom:'+Math.max(r?Math.max(8,window.innerHeight-r.bottom+8):90,(document.getElementById('nmFtBot')?document.getElementById('nmFtBot').offsetHeight+8:0),(document.getElementById('btFullBot')?document.getElementById('btFullBot').offsetHeight+8:0))+'px;width:min(340px,88vw);background:#12161ce8;border:1.5px solid #c8a032;border-radius:10px;box-shadow:0 6px 20px #000c;color:#e8eef4;font-family:sans-serif';
   var h='<div style="display:flex;align-items:center;gap:6px;padding:6px 8px;border-bottom:'+(NM_RB.open?'1px solid #3a3320':'0')+'"><span style="font-weight:900;color:#ffd060;font-size:14px" onclick="nmRbTog()">▣ リアル盤へ</span><span style="background:#c8a032;color:#111;border-radius:9px;padding:0 7px;font-size:12px;font-weight:900">'+L.length+'</span>'
     +'<span style="margin-left:auto;display:flex;gap:6px"><button class="b sm" style="height:28px;padding:0 10px;margin:0;font-size:13px" onclick="nmRbAll()">全部済み</button><button class="b sm" style="height:28px;width:30px;padding:0;margin:0;font-size:13px" onclick="nmRbTog()">'+(NM_RB.open?'▾':'▴')+'</button></span></div>';
   if(NM_RB.open){h+='<div class="rbL" style="max-height:min(260px,40vh);overflow:auto;padding:4px 6px 6px">';var lp=null;
     L.forEach(function(x){if(x.ph!==lp){h+='<div style="font-size:11px;color:#8899aa;margin:4px 2px 2px">'+T(x.ph||'')+'</div>';lp=x.ph;}
       var c=x.k&&NM_CTR_DEF[x.k]?'<svg width="24" height="24" viewBox="0 0 28 28" style="flex:0 0 24px">'+nmCtrSVG(nmCtrOf([x.k])[0],0,0,26)+'</svg>':'<span style="flex:0 0 24px;text-align:center;font-size:16px;color:#c8a032">'+(/動かす/.test(x.t)?'➜':/取り除く/.test(x.t)?'✕':'●')+'</span>';
       h+='<div onclick="nmRbDone('+x.id+')" style="display:flex;align-items:center;gap:7px;padding:5px 4px;border-radius:6px;cursor:pointer;background:#1c222b;margin-top:3px">'+c
-        +'<div style="flex:1;min-width:0;line-height:1.25"><div style="font-size:13px"><b style="color:#ffd060">'+x.hex+'</b> <span style="color:'+NM_SIDE_LBL[x.sd].col+'">'+x.nm+'</span></div><div style="font-size:13px;font-weight:bold">'+x.t+'</div></div><span style="font-size:18px;color:#3ca878">✓</span></div>';});
+        +'<div style="flex:1;min-width:0;line-height:1.25"><div style="font-size:13px"><b style="color:#ffd060">'+x.hex+'</b> <span style="color:'+(x.col||NM_SIDE_LBL[x.sd].col)+'">'+x.nm+'</span></div><div style="font-size:13px;font-weight:bold">'+x.t+'</div></div><span style="font-size:18px;color:#3ca878">✓</span></div>';});
     h+='</div>';}
   el.innerHTML=h;var sl=el.querySelector('.rbL');if(sl)sl.scrollTop=sl.scrollHeight;}
 function nmStLegendHTML(){var u={},ord=[];[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){nmStList(eh).forEach(function(t){var k=String(t).replace(/\d+$/,'');if(!NM_CTR_DEF[k])k=t;if(!u[k]){u[k]=1;ord.push(k);}});});});
