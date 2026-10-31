@@ -34377,6 +34377,7 @@ function nmSuDraw(){var U=NM_SU;if(!U)return;var nat=U.nat,ob=nmSuOb(nat),used=n
   var h=css+'<div class="bx" onclick="event.stopPropagation()"><h2>'+(sc?sc.id+' ':'')+'編成の準備</h2><div class="sub">シナリオのOBから編成を作り、支援火器を運ぶユニットを決めます(射撃タブの編成と共有)。地図へは「地図に置く」→ヘクスをタップ</div>';
   h+='<div class="tabs">'+nmSuNats().map(function(k){var c=(UNITS[k]&&UNITS[k].col)||'#ccc';return '<div class="tb'+(k===nat?' on':'')+'" onclick="nmSuTab(\''+k+'\')"><span style="color:'+c+'">'+nmNatLbl(k)+'</span>'+(sc&&sc.atk===k?'(攻撃)':'')+'</div>';}).join('')
     +'<span style="margin-left:auto;font-size:12px;color:#8899aa">地図では</span><div class="tb'+(sd==='f'?' on':'')+'" onclick="nmSuSetSide(\''+nat+'\',\'f\')">自軍</div><div class="tb'+(sd==='e'?' on':'')+'" onclick="nmSuSetSide(\''+nat+'\',\'e\')">敵</div></div>';
+  h+=nmSvHTML(); /* v446 */
   h+='<div class="step"><span><b>①</b> 編成を選ぶ</span><span><b>②</b> OBのユニットをタップで加える</span><span><b>③</b> 支援火器→運ぶユニットの順にタップ</span><span><b>④</b> 地図に置く</span></div>';
   var pu='',ps='';ob.forEach(function(x){var r=x.n-(used[x.kind+'|'+x.id]||0),i=U.pool.length;U.pool.push(x);var img=(x.kind==='mmc'||x.kind==='smc')?nmSuCtr('u:'+nat+'|'+x.label,40):nmSuSwImg(x.kind,x.id,40),sel=U.sel&&U.sel.kind===x.kind&&U.sel.id===x.id;
     var c='<div class="chip'+(sel?' sel':'')+(r<=0?' zero':'')+'"'+(r>0?' data-dk="p:'+i+'"':'')+' onclick="'+(r>0?'nmSuAddU('+i+')':'')+'">'+img+'<div>'+x.label.replace(/\[.*$/,'')+'</div>'+(r>0?'<span class="n">×'+r+(x.q?'?':'')+'</span>':'')+'</div>';if(x.kind==='mmc'||x.kind==='smc')pu+=c;else ps+=c;});
@@ -34399,6 +34400,26 @@ function nmSuDraw(){var U=NM_SU;if(!U)return;var nat=U.nat,ob=nmSuOb(nat),used=n
   var el=document.getElementById('nmSu');if(!el){el=document.createElement('div');el.id='nmSu';el.onclick=function(){if(NM_SUDD&&NM_SUDD.eat){NM_SUDD.eat=0;return;}nmSuClose();};document.body.appendChild(el);nmSuDnDInit(el);}el.innerHTML=h;}
 /* v444(ダルマ指示「編成作成画面 リセット・支援火器だけ外す・ドラッグドロップ・並び替え・プレイ中も使う・PSKのカウンターが小さい」) */
 var NM_SUDD=null;
+/* v446(ダルマ指示「シナリオで組んだ編成をセーブ ロードできる？」): 名前を付けて編成をセーブ(シナリオごと、いくつでも)。ロードは「編成だけ」か「地図の配置も」。S.nmGrpSaves[シナリオ]=[{name,at,groups,markers}] */
+function nmSvList(){var sc=S.scen&&S.scen.sel;if(!S.nmGrpSaves)S.nmGrpSaves={};return S.nmGrpSaves[sc]||(S.nmGrpSaves[sc]=[]);}
+function nmSvMarkers(){var o=[];[['f',S_LOS.friendHexes||[]],['e',S_LOS.enemyHexes||[]]].forEach(function(P){P[1].forEach(function(e){if(e.grp&&!e.veh&&!e.gun)o.push({sd:P[0],boardId:e.boardId,col:e.col,row:e.row,grp:e.grp,facing:e.facing==null?null:e.facing});});});return o;}
+function nmSvSave(){var el=document.getElementById('nmSvName'),nm=(el&&el.value||'').trim();var sc=S.scen&&S.scen.sel;try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot)nmGeSync(g.activeGroupSlot);}catch(e){}
+  var L=nmSvList();if(!nm)nm='編成'+(L.length+1);var ex=L.filter(function(x){return x.name===nm;})[0],rec={name:nm,at:Date.now(),groups:deepCopy((S.savedGroups&&S.savedGroups[sc])||{}),markers:nmSvMarkers()};
+  if(ex)L[L.indexOf(ex)]=rec;else L.unshift(rec);try{saveState();}catch(e){}btToast('「'+nm+'」をセーブしました');NM_SU.svOpen=1;nmSuDraw();}
+function nmSvLoad(i,withMap){var L=nmSvList(),r=L[i];if(!r)return;var sc=S.scen&&S.scen.sel;nmBkSnap('編成のロード前');if(!S.savedGroups)S.savedGroups={};S.savedGroups[sc]=deepCopy(r.groups||{});
+  try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot&&S.savedGroups[sc][g.activeGroupSlot])FgSelectGroupSlot(g.id,g.activeGroupSlot);}catch(e){}
+  if(withMap){['f','e'].forEach(function(sd){var LL=nmSideList(sd);for(var j=LL.length-1;j>=0;j--)if(LL[j].grp&&!LL[j].veh&&!LL[j].gun)LL.splice(j,1);});(r.markers||[]).forEach(function(m){nmSideList(m.sd).push({boardId:m.boardId,col:m.col,row:m.row,veh:null,gun:null,tca:null,facing:m.facing,grp:m.grp});});}
+  try{saveState();}catch(e){}Draw();var ns=nmSuSlots(NM_SU.nat);NM_SU.slot=ns[0]||null;nmSuDraw();btToast('「'+r.name+'」をロードしました'+(withMap?'(地図の配置も)':'(編成だけ)'));}
+function nmSvDel(i){var L=nmSvList();if(!L[i])return;if(NM_SU.svDel!==i){NM_SU.svDel=i;nmSuDraw();return;}NM_SU.svDel=null;L.splice(i,1);try{saveState();}catch(e){}nmSuDraw();}
+function nmSvHTML(){var U=NM_SU,L=nmSvList(),d=function(t){var x=new Date(t);return (x.getMonth()+1)+'/'+x.getDate()+' '+x.getHours()+':'+('0'+x.getMinutes()).slice(-2);};
+  var h='<div style="background:#12151c;border:1px solid #2c3242;border-radius:10px;padding:6px 10px;margin-bottom:8px"><div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="NM_SU.svOpen=!NM_SU.svOpen;nmSuDraw()"><b style="font-size:13px">セーブ・ロード</b><span style="font-size:11px;color:#8899aa">このシナリオの編成を名前を付けて保存(セーブ'+L.length+'件)</span><span style="margin-left:auto;color:#8899aa">'+(U.svOpen?'▲':'▼')+'</span></div>';
+  if(!U.svOpen)return h+'</div>';
+  h+='<div style="display:flex;gap:6px;margin:6px 0"><input id="nmSvName" placeholder="名前(例: 防御案A)" style="flex:1;min-width:0;background:#0d1016;border:1px solid #39414f;border-radius:6px;color:#e8eef4;padding:6px 8px;font-size:13px;-webkit-user-select:text;user-select:text" onclick="event.stopPropagation()"><div class="btn pri" onclick="nmSvSave()">セーブ</div></div>';
+  if(!L.length)h+='<div class="pt">まだセーブがありません。同じ名前でセーブすると上書きします</div>';
+  L.forEach(function(r,i){var ng=Object.keys(r.groups||{}).filter(function(k){var g=r.groups[k];return g&&g.pickerItems&&g.pickerItems.length;}).length;
+    h+='<div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-top:1px solid #20242c"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:bold">'+r.name.replace(/</g,'&lt;')+'</div><div style="font-size:11px;color:#8899aa">'+d(r.at)+'　編成'+ng+'・地図の配置'+(r.markers||[]).length+'</div></div>'
+     +'<span class="mini" onclick="nmSvLoad('+i+',0)">ロード(編成だけ)</span><span class="mini" onclick="nmSvLoad('+i+',1)">ロード(配置も)</span><span class="mini" style="color:#ff9090" onclick="nmSvDel('+i+')">'+(U.svDel===i?'もう一度で削除':'削除')+'</span></div>';});
+  return h+'</div>';}
 function nmSuDnDInit(root){
   function tgt(x,y){var e=document.elementFromPoint(x,y);return e&&e.closest?e.closest('[data-drop]'):null;}
   function clr(){Array.prototype.forEach.call(root.querySelectorAll('.dd-on'),function(e){e.classList.remove('dd-on');});}
