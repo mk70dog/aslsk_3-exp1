@@ -35284,6 +35284,22 @@ function nmFtDo(i){var A=NM_FT_ACT[S.turn&&S.turn.phase]||[],a=A[i];if(!a)return
 /* v474(ダルマ指示「≡に全てのメインタブ・1番下にアプリ更新」「上バー空き部分に現在のバージョン表示 かっこよく」「更新後の起動画面をマップ全画面表示」) */
 function appVerNum(){var m=/v11\.(\d+)/.exec(typeof APP_VERSION!=='undefined'?APP_VERSION:'');return m?(+m[1]-200):null;}
 /* v479: 上のバーが狭くてバージョン表示が入りきらない時は出さない(切れ端が残らないように) */
+/* v487(ダルマ指示「上部バー バージョン長押し アプリ更新表示」): バージョン表示(V487)を長押し(0.6秒)すると、すぐ下にアプリ更新の小さな窓 */
+function appVerPop(sp){var o=document.getElementById('appVerPop');if(o)o.remove();var r=sp.getBoundingClientRect(),m=document.createElement('div');m.id='appVerPop';
+  m.style.cssText='position:fixed;z-index:9600;top:'+(r.bottom+6)+'px;left:'+Math.max(6,Math.min(window.innerWidth-236,r.left+r.width/2-115))+'px;width:230px;background:#101a2a;border:1px solid #33aaff;border-radius:10px;box-shadow:0 8px 24px #000c;padding:10px;display:flex;flex-direction:column;gap:8px;font-family:sans-serif;color:#cfe6ff';
+  m.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:12px;color:#8899aa">'+T('いまのバージョン')+'</span><span>'+seg14('V'+appVerNum(),'blu',0.5)+'</span></div>'
+   +'<button class="b sm" style="margin:0;height:40px;font-size:15px;font-weight:900;color:#1a1408;background:linear-gradient(#e0b848,#b88a20);border-color:#ffd060" onclick="event.stopPropagation();var mm=document.getElementById(\'appVerPop\');if(mm)mm.remove();appForceUpdate()">⟳ '+T('アプリ更新')+'</button>'
+   +'<div style="font-size:11px;color:#8899aa;line-height:1.4">'+T('最新版を読み込み直します(数十秒)')+'</div>'
+   +'<button class="b sm" style="margin:0;height:32px;font-size:13px" onclick="event.stopPropagation();var mm=document.getElementById(\'appVerPop\');if(mm)mm.remove();">✕ '+T('閉じる')+'</button>';
+  m.onclick=function(e){e.stopPropagation();};document.body.appendChild(m);
+  setTimeout(function(){var f=function(e){var mm=document.getElementById('appVerPop');if(mm&&!mm.contains(e.target)){mm.remove();document.removeEventListener('pointerdown',f,true);}};document.addEventListener('pointerdown',f,true);},0);}
+(function(){if(typeof document==='undefined'||window.__appVerLP)return;window.__appVerLP=1;var t=null,x0=0,y0=0,sp=null,fired=false;
+  function clr(){if(t){clearTimeout(t);t=null;}}
+  document.addEventListener('pointerdown',function(e){var s0=e.target&&e.target.closest&&e.target.closest('.appVerSp');if(!s0||!s0.querySelector('.appVer'))return;sp=s0;x0=e.clientX;y0=e.clientY;fired=false;clr();t=setTimeout(function(){t=null;fired=true;try{if(navigator.vibrate)navigator.vibrate(15);}catch(x){}appVerPop(sp);},600);},true);
+  document.addEventListener('pointermove',function(e){if(t&&(Math.abs(e.clientX-x0)>10||Math.abs(e.clientY-y0)>10))clr();},true);
+  document.addEventListener('pointerup',clr,true);document.addEventListener('pointercancel',clr,true);
+  document.addEventListener('contextmenu',function(e){if(e.target&&e.target.closest&&e.target.closest('.appVerSp'))e.preventDefault();},true);
+  var st=document.createElement('style');st.textContent='.appVerSp{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}';document.head.appendChild(st);})();
 function appVerFit(){try{document.querySelectorAll('.appVerSp').forEach(function(sp){var b=sp.querySelector('.appVer');if(!b)return;b.style.display='';sp.style.minWidth='0';if(b.offsetWidth>sp.clientWidth+1)b.style.display='none';});}catch(e){}}
 (function(){if(typeof window!=='undefined'&&!window.__appVerFitR){window.__appVerFitR=1;window.addEventListener('resize',function(){setTimeout(appVerFit,50);});}})();
 function appVerBadgeHTML(){var n=appVerNum();if(n==null)return '';
