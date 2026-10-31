@@ -33455,12 +33455,31 @@ function btDragMove(x,y){
   D.lx=x;D.ly=y;
   var mv=BT.mv,hx=losHexAtClient(x,y),n=hx?btNodeOf(hx.boardId,hx.col,hx.row):null;
   if(mv&&n!=null&&n>=0&&n!==D.last){var ms=btStackById(mv.sid);
-    if(ms&&ms.n!=null&&ms.n!==n&&btDist(ms.n,n)===1){D.last=n;if(mv.veh)btVMoveTap(n);else btMoveTap(n);try{btMapFullSync();}catch(e){}}}
+    if(ms&&ms.n!=null&&ms.n!==n&&btDist(ms.n,n)===1){D.last=n;D.hist=D.hist||[];var H=D.hist[D.hist.length-1];
+      if(H&&H.from===n){btDragBack(D);} /* v468: 来たヘクスへ戻したら最後の1歩を取り消す(サイコロを振った後は戻せない) */
+      else{D.hist.push({o:JSON.stringify({stacks:BT.stacks,seq:BT.seq,resid:BT.resid,mv:BT.mv,smoke:BT.smoke,log:(BT.log||[]).length,vh:BT_VHIST.length}),die:BT.dieN||0,from:ms.n});
+        var p0=ms.n;if(mv.veh)btVMoveTap(n);else btMoveTap(n);var ms2=BT.mv&&btStackById(BT.mv.sid);if(!ms2||ms2.n===p0)D.hist.pop();}
+      try{btMapFullSync();}catch(e){}}}
   btDragBubble(x,y);return true;
 }
+function btDragBack(D){var H=D.hist[D.hist.length-1];if(!H)return;
+  if((BT.dieN||0)!==H.die){btToast('サイコロを振った後は戻せません(射撃・残留火力を受けた)');return;}
+  var o=JSON.parse(H.o);BT.stacks=o.stacks;BT.seq=o.seq;BT.resid=o.resid;BT.mv=o.mv;if(o.smoke)BT.smoke=o.smoke;btLogTrim(o.log);try{while(BT_VHIST.length>o.vh)BT_VHIST.pop();}catch(e){}
+  D.hist.pop();if(BT.mv)BT.sel=BT.mv.sid;btUpdateCtl();btSave();Draw();}
+/* v468: 指を離したら、移動の続きのメニュー(歩兵: 移動終了・取消・続ける / 車両: 停止して終了・Motionのまま終了・CE/BU・旋回・続ける) */
+function btDragMenu(x,y){var mv=BT.mv;var m=document.getElementById('btDragMn');if(m)m.remove();if(!mv)return;
+  m=document.createElement('div');m.id='btDragMn';var W=210;m.style.cssText='position:fixed;z-index:9500;left:'+Math.max(6,Math.min(x+30,window.innerWidth-W-6))+'px;top:'+Math.max(6,Math.min(y-20,window.innerHeight-330))+'px;width:'+W+'px;background:#1c1f27;border:1px solid #4a5566;border-radius:10px;padding:6px;box-shadow:0 8px 24px #000c;display:flex;flex-direction:column;gap:4px;font-family:sans-serif';
+  var it=[],vu=null;if(mv.veh){var vs=btStackById(mv.sid);vu=vs&&vs.u.filter(function(u){return u.id===mv.uid;})[0];}
+  var hd='<div style="font-size:12px;color:#8899aa;padding:2px 4px">'+(mv.veh?(vu?vu.nm+' ':'')+mv.mfUsed+' / '+mv.mfMax+' MP':mv.mfUsed+' / '+mv.mfMax+' MF')+'</div>';
+  if(mv.veh){it.push(['■ '+T('停止して終了'),'BtVStopEnd()']);it.push(['» '+T('Motionのまま終了'),'BtVEnd()']);if(vu)it.push([(vu.ce?'BU':'CE')+' '+T('にする'),"BtVCE('"+mv.sid+"','"+mv.uid+"')"]);it.push(['↺ '+T('左へ旋回'),'BtVPivot(-1)']);it.push(['↻ '+T('右へ旋回'),'BtVPivot(1)']);}
+  else{it.push(['■ '+T('移動終了'),'BtMoveEnd()']);it.push(['✕ '+T('移動を取り消す'),'BtMoveCancel()']);}
+  it.push(['➜ '+T('続ける(閉じる)'),'']);
+  m.innerHTML=hd+it.map(function(a){return '<button class="b sm" style="margin:0;height:34px;text-align:left;padding:0 12px;font-size:14px" onclick="event.stopPropagation();var mm=document.getElementById(\'btDragMn\');if(mm)mm.remove();'+a[1].replace(/"/g,'&quot;')+'">'+a[0]+'</button>';}).join('');
+  m.onclick=function(e){e.stopPropagation();};m.onmousedown=function(e){e.stopPropagation();};m.ontouchstart=function(e){e.stopPropagation();};document.body.appendChild(m);
+  setTimeout(function(){document.addEventListener('pointerdown',function f(e){var mm=document.getElementById('btDragMn');if(mm&&!mm.contains(e.target))mm.remove();document.removeEventListener('pointerdown',f,true);},true);},0);}
 function btDragBubble(x,y){var b=document.getElementById('nmDragMvB');if(!b){b=document.createElement('div');b.id='nmDragMvB';b.style.cssText='position:fixed;z-index:9400;pointer-events:none;background:#101418e6;border:2px solid #3ca878;color:#e8f4ec;border-radius:10px;padding:3px 9px;font:bold 15px sans-serif;white-space:nowrap;box-shadow:0 4px 12px #000a';document.body.appendChild(b);}
   var mv=BT.mv;b.innerHTML=mv?(mv.mfUsed+' / '+mv.mfMax+(mv.veh?' MP':' MF')):T('移動終了');b.style.left=(x+28)+'px';b.style.top=(y-56)+'px';}
-function btDragEnd(){var D=NM_DRAG;NM_DRAG=null;var b=document.getElementById('nmDragMvB');if(b)b.remove();if(!D||!D.moving)return false;BT_DRAG_EAT=Date.now();btSave();Draw();return true;}
+function btDragEnd(){var D=NM_DRAG;NM_DRAG=null;var b=document.getElementById('nmDragMvB');if(b)b.remove();if(!D||!D.moving)return false;BT_DRAG_EAT=Date.now();btSave();Draw();try{btDragMenu(D.lx||D.x0,D.ly||D.y0);}catch(e){}return true;}
 function nmDragPick(cx,cy){
   if(typeof btActive==='function'&&btActive()){var bp=btDragPick(cx,cy);return bp?{bt:bp}:null;} /* v462: 対戦モードのドラッグ移動 */
   if(typeof btActive!=='function'||S_LOS.panMode||S_LOS.routeMode&&false)return null;
