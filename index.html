@@ -36264,6 +36264,29 @@ var NM_FULL_PREV=null;
 /* v459(ダルマ指示「判定支援モードの全画面A案を対戦モードにも」お任せ): 対戦モードの全画面は
    上=フェイズの段表示・次へ・拡大縮小・全画面オフ、その下に今までの指示カード(btCmd)、下=選択中のスタック・最後の記録。戻り値は上の帯の高さ */
 var BT_FB_H={t:'',b:''};
+/* v467(ダルマ指示「判定支援モードの全画面A案の残りを対戦モードにも」): 上の帯にフェイズ別の操作ボタン・↶↷・🎲DR・▣件数・≡、下の帯にLOS(地点A・B)。
+   操作ボタンは選んでいるスタックに対して、指示カードのボタンと同じ処理を呼ぶ */
+function btFtActHTML(){var ph=btPhId(),mv=BT.mv,hu=!BT.app||btSideNow()!==BT.app,h='',b=function(lbl,ic,fn,dim){return '<button class="nb'+(dim?' dim':'')+'" onclick="'+fn+'">'+ic+' '+T(lbl)+'</button>';};
+  if(mv&&(!BT.app||mv.side!==BT.app))return b('移動終了','■',mv.veh?'BtVStopEnd()':'BtMoveEnd()')+(mv.veh?'':b('取消','✕','BtMoveCancel()'));
+  if(BT.fire)return b('取消','✕','BtFireCancel()');
+  if(ph==='PFPh'||ph==='AFPh')return hu?b('射撃','◎','btFtDo(\'fire\')'):'';
+  if(ph==='DFPh')return !hu||!BT.app?b('射撃','◎','btFtDo(\'fire\')'):'';
+  if(ph==='MPh')return hu?b('移動','➜','btFtDo(\'move\')')+b('駆け足','»','btFtDo(\'dt\')'):'';
+  if(ph==='APh')return hu?b('前進','➜','btFtDo(\'adv\')'):'';
+  return h;}
+function btFtDo(k){var s=BT.sel&&btStackById(BT.sel);if(!s||s.n==null){btToast('スタックをタップして選んでから押してください');return;}
+  if(k==='fire'){BtFireStart();return;}
+  if(k==='adv'){BtAdvStart();return;}
+  var sel=btSelUnits(s),inf=sel.some(function(u){return btIsInfK(btI(u,s.side).kind);});
+  if(k==='dt'){if(!inf){btToast('駆け足は歩兵だけです');return;}BtMoveStart({dt:true});return;}
+  if(inf){BtMoveStart();return;}var v=btAFVs(s).filter(function(u){return sel.indexOf(u)>=0;})[0]||btAFVs(s)[0];if(v)BtVMove(s.id,v.id);else btToast('移動できるユニットがいません');}
+function btFtUndo(){var mv=BT.mv;if(!mv){btToast('戻せる操作がありません(移動中だけ戻せます)');return;}if(mv.veh){BtVUndo();return;}BtMoveCancel();}
+function btFtDice(){var a=1+Math.floor(Math.random()*6),b=1+Math.floor(Math.random()*6);btLog(['🎲 '+T('手動のDR')+' '+(a+b)+' ('+a+'+'+b+')']);btSave();btToast('🎲 DR '+(a+b)+'　('+a+' + '+b+')');Draw();}
+function btFtMenu(btn){var m=document.getElementById('nmFtMn');if(m){m.remove();return;}m=document.createElement('div');m.id='nmFtMn';
+  var r=btn.getBoundingClientRect();m.style.cssText='position:fixed;z-index:9500;top:'+(r.bottom+4)+'px;left:'+Math.max(6,Math.min(r.left,window.innerWidth-220))+'px;background:#1c1f27;border:1px solid #4a5566;border-radius:10px;padding:6px;box-shadow:0 8px 24px #000c;display:flex;flex-direction:column;gap:4px;min-width:200px';
+  var it=[[T('セーブ・ロード'),'BtSvOpen()'],[T('LOS測定(地点A・B)'),'BtLosAB()'],[T('記録を書き出す'),'BtRecExport()'],['—'],[(BT.vasl===false?'':'✓ ')+T('VASLカウンター表示'),'BtVaslToggle()'],[(BT.cam===false?'':'✓ ')+T('クローズアップ'),'BtCam()'],[T('演出設定'),'BtFxOpen()'],[(S.nmRealOff?'':'✓ ')+T('リアル盤へを表示'),"S.nmRealOff=!S.nmRealOff;try{saveState();}catch(e){}nmRbRender();Draw()"],['—'],[T('全画面を終える'),'BtMapFull(null)']];
+  m.innerHTML=it.map(function(x){return x[0]==='—'?'<div style="height:1px;background:#39414f;margin:2px 0"></div>':'<button class="b sm" style="margin:0;height:34px;text-align:left;padding:0 12px;font-size:14px" onclick="event.stopPropagation();var mm=document.getElementById(\'nmFtMn\');if(mm)mm.remove();'+x[1].replace(/"/g,'&quot;')+'">'+x[0]+'</button>';}).join('');
+  m.onclick=function(e){e.stopPropagation();};document.body.appendChild(m);setTimeout(function(){document.addEventListener('pointerdown',function f(e){var mm=document.getElementById('nmFtMn');if(mm&&!mm.contains(e.target)&&e.target!==btn)mm.remove();document.removeEventListener('pointerdown',f,true);},true);},0);}
 function btFullBars(on){
   var de=document.documentElement,t=document.getElementById('btFullTop'),b=document.getElementById('btFullBot');
   function setV(k,v){if(de.style.getPropertyValue(k)!==v)de.style.setProperty(k,v);}
@@ -36284,7 +36307,12 @@ function btFullBars(on){
   if(!BT.started)th+='<span style="font-size:14px;font-weight:900;color:#ffd060;padding:0 6px">'+T('準備(初期配置)')+'</span><button class="nb go" onclick="BtMapFull(null)" title="'+T('全画面を終えて、OB一覧・配置完了・ゲーム開始のある画面へ')+'">'+T('配置の画面へ')+' ▸</button>'; /* v466: 全画面ではOB一覧が出ないため */
   else if(BT.finished)th+='<span style="font-size:14px;font-weight:900;color:#ffd060;padding:0 6px">'+T('ゲーム終了')+'</span>';
   else{var canNext=!(BT.mv&&BT.app&&BT.mv.side===BT.app);th+=btPhStepSpans()+'<button class="nb go'+(canNext?'':' dim')+'" onclick="BtNext()">'+T('次へ')+' ▶</button>';
-    if(BT.app&&btSideNow()===BT.app)th+='<span style="font-size:12px;color:#c8a032;padding:0 4px">'+T('アプリの番')+'</span>';}
+    if(BT.app&&btSideNow()===BT.app)th+='<span style="font-size:12px;color:#c8a032;padding:0 4px">'+T('アプリの番')+'</span>';
+    th+='<span style="width:6px"></span>'+btFtActHTML();}
+  if(BT.started){var mv=BT.mv,un=mv&&(mv.veh?btVCanUndo():true),rd=mv&&mv.veh&&btVCanRedo(),nr=(NM_RB.items||[]).length;
+    th+='<span style="width:6px"></span><button class="nb'+(un?'':' dim')+'" title="'+T(mv&&!mv.veh?'移動を取り消す':'一つ戻る(車両の移動)')+'" onclick="btFtUndo()">↶</button><button class="nb'+(rd?'':' dim')+'" title="'+T('やり直す(車両の移動)')+'" onclick="if(btVCanRedo())BtVRedo()">↷</button>'
+      +'<button class="nb" onclick="btFtDice()">🎲 DR</button><button class="nb'+(nr?'':' dim')+'" title="'+T('リアル盤へ')+'" onclick="nmFtRb()">▣'+(nr?' <span style="background:#c8a032;color:#111;border-radius:8px;padding:0 5px;font-size:11px;margin-left:3px">'+nr+'</span>':'')+'</button>';}
+  th+='<button class="nb" title="'+T('メニュー')+'" onclick="btFtMenu(this)">≡</button>';
   th+='<span class="sp"></span>'+nmFtZoomBtns()
     +'<button class="nb" onclick="BtMapFull(null)" title="'+T('全画面表示オフ')+'">✕</button>';
   if(th!==BT_FB_H.t){t.innerHTML=th;BT_FB_H.t=th;}
@@ -36297,7 +36325,10 @@ function btFullBars(on){
   var L=(BT.log||[]),last=L.length?L[L.length-1]:null,c2;
   if(last){var ls=[].concat(last).map(function(x){return String(x).replace(/<[^>]*>/g,'');});c2='<div class="t2" style="color:#8899aa">'+T('最後の記録')+'</div><div class="t1" style="font-size:13px;font-weight:bold">'+ls.slice(-2).join(' ／ ').replace(/[<>&]/g,'')+'</div>';}
   else c2='<div class="t2">'+T('記録はまだありません')+'</div>';
-  var bh='<div class="cd" style="flex:0 1 38%">'+c1+'</div><div class="cd" style="flex:1 1 0">'+c2+'</div>';
+  var LA=BT.losAB,c3;
+  if(LA&&LA.a!=null&&LA.b!=null){var lr=btLosABEval(LA.a,LA.b);c3='<div class="t1"><span style="color:'+(lr.ok?'#60e060':'#ff5050')+'">'+BTG.nodes[LA.a].nm+'→'+BTG.nodes[LA.b].nm+' '+(lr.ok?'LOS OK':'LOSなし')+'</span> · '+T('距離')+' '+lr.dist+'</div><div class="t2">'+(lr.ok?T('妨害')+' +'+lr.hind+' · '+T('地形')+' +'+lr.terr:(lr.why||''))+'</div>';}
+  else c3='<div class="t2" style="cursor:pointer" onclick="BtLosAB()">'+(LA?T('地図をタップ: 1回目=地点A、2回目=地点B'):T('タップでLOS測定(地点A・B)'))+'</div>';
+  var bh='<div class="cd" style="flex:0 1 32%">'+c1+'</div><div class="cd" style="flex:0 1 30%">'+c3+'</div><div class="cd" style="flex:1 1 0">'+c2+'</div>';
   if(bh!==BT_FB_H.b){b.innerHTML=bh;BT_FB_H.b=bh;}
   setV('--btftop',t.offsetHeight+'px');setV('--btfbot',b.offsetHeight+'px');
   return t.offsetHeight;
