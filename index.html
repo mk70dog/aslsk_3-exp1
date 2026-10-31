@@ -28378,7 +28378,8 @@ function btMaxTurn(){var sc=btScObj();return (sc&&sc.trn)||7;}
 function btPhId(){return BT_PHASES[BT.ph][0];}
 function btHexName(boardId,col,row){var n=row+((col%2===0)?1:0);return boardId+(LOS_COL_LIST[col]||'?')+n;}
 function btELR(side){var sc=btScObj();return (sc&&sc.f&&sc.f[side]&&sc.f[side].elr!=null)?sc.f[side].elr:3;}
-function btDie(){if(typeof BT_RD!=='undefined'&&BT_RD&&BT_RD.length)return BT_RD.shift();if(typeof BT!=='undefined'&&BT)BT.dieN=(BT.dieN||0)+1;var v=1+Math.floor(Math.random()*6);if(typeof BT_FX_REC!=='undefined'&&BT_FX_REC)BT_FX_REC.dice.push(v);return v;} // v288: 振った回数(車両の移動の「一つ戻る」判定)
+function btDie(){if(typeof BT_RD!=='undefined'&&BT_RD&&BT_RD.length)return BT_RD.shift();if(typeof BT!=='undefined'&&BT)BT.dieN=(BT.dieN||0)+1;var v=1+Math.floor(Math.random()*6);if(typeof BT_FX_REC!=='undefined'&&BT_FX_REC)BT_FX_REC.dice.push(v);else if(typeof BT_DICE_LOG!=='undefined')BT_DICE_LOG.push(v);return v;}
+var BT_DICE_LOG=[]; /* v472: 射撃以外で振ったダイス(次の記録の行に付ける) */ // v288: 振った回数(車両の移動の「一つ戻る」判定)
 function btLog(lines){if(!lines||!lines.length)return;BT.log=(BT.log||[]).concat([lines]).slice(-600);}
 
 // ---------- [A2] 盤のヘクスグラフ ----------
@@ -35219,21 +35220,21 @@ function nmFtRb(){if(!NM_RB.items.length){btToast('リアル盤でやること�
 function diceSVG(v,red,sz){var P={1:[[50,50]],2:[[28,28],[72,72]],3:[[26,26],[50,50],[74,74]],4:[[28,28],[72,28],[28,72],[72,72]],5:[[26,26],[74,26],[50,50],[26,74],[74,74]],6:[[28,24],[72,24],[28,50],[72,50],[28,76],[72,76]]}[v]||[];
   var bg=red?'#c8282a':'#f4f0e4',pc=red?'#fff':'#1a1a1a';return '<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 100 100"><rect x="4" y="4" width="92" height="92" rx="18" fill="'+bg+'" stroke="#000" stroke-width="3"/><rect x="9" y="9" width="82" height="82" rx="14" fill="none" stroke="'+(red?'#ff8080':'#fff')+'" stroke-opacity=".5" stroke-width="2"/>'+P.map(function(q){return '<circle cx="'+q[0]+'" cy="'+q[1]+'" r="9" fill="'+pc+'"/>';}).join('')+'</svg>';}
 var DICE_ANIM=null;
-function diceRollAnim(a,b,label,done){var old=document.getElementById('diceAnim');if(old)old.remove();if(DICE_ANIM){cancelAnimationFrame(DICE_ANIM.raf);clearTimeout(DICE_ANIM.t);}
+function diceRollAnim(a,b,label,done,opt){opt=opt||{};var two=b!=null;var old=document.getElementById('diceAnim');if(old)old.remove();if(DICE_ANIM){cancelAnimationFrame(DICE_ANIM.raf);clearTimeout(DICE_ANIM.t);if(DICE_ANIM.done&&!DICE_ANIM.fired){DICE_ANIM.fired=1;try{DICE_ANIM.done();}catch(e){}}}
   var el=document.createElement('div');el.id='diceAnim';el.style.cssText='position:fixed;left:50%;top:42%;transform:translate(-50%,-50%);z-index:9800;pointer-events:none;width:300px;box-sizing:border-box;padding:10px 14px 8px;background:#12161ce8;border:2px solid #c8a032;border-radius:14px;box-shadow:0 10px 30px #000c;display:flex;flex-direction:column;align-items:center;gap:4px;font-family:sans-serif;overflow:hidden';
   el.innerHTML=(label?'<div style="font-size:12px;font-weight:bold;color:#c9d3df;align-self:flex-start">'+label+'</div>':'')+'<div style="position:relative;width:100%;height:112px;border-radius:9px;background:radial-gradient(ellipse at 50% 60%,#2a5a3a,#123222);box-shadow:inset 0 2px 10px #000c;display:flex;gap:22px;align-items:center;justify-content:center;overflow:hidden"><div class="d1" style="filter:drop-shadow(0 6px 5px #000c)"></div><div class="d2" style="filter:drop-shadow(0 6px 5px #000c)"></div></div><div class="dr" style="height:40px;line-height:40px;font-size:30px;font-weight:900;color:#ffd060;text-shadow:0 2px 0 #000;opacity:0;transition:opacity .2s;white-space:nowrap"></div>';
   document.body.appendChild(el);var d1=el.querySelector('.d1'),d2=el.querySelector('.d2'),dr=el.querySelector('.dr'),T0=performance.now(),D=2000,STOP=1700,nf=0,f1=1,f2=1,last=-1,sz=70;
-  var A={raf:0,t:0};DICE_ANIM=A;
+  var A={raf:0,t:0,done:done,fired:0};DICE_ANIM=A;
   function frame(now){var t=now-T0,p=Math.min(1,t/STOP);
-    var iv=45+260*p*p;if(t<STOP&&(last<0||t-last>=iv)){last=t;f1=1+Math.floor(Math.random()*6);f2=1+Math.floor(Math.random()*6);d1.innerHTML=diceSVG(f1,false,sz);d2.innerHTML=diceSVG(f2,true,sz);}
-    if(t>=STOP&&nf===0){nf=1;d1.innerHTML=diceSVG(a,false,sz);d2.innerHTML=diceSVG(b,true,sz);}
+    var iv=45+260*p*p;if(t<STOP&&(last<0||t-last>=iv)){last=t;f1=1+Math.floor(Math.random()*6);f2=1+Math.floor(Math.random()*6);d1.innerHTML=diceSVG(f1,false,sz);d2.innerHTML=two?diceSVG(f2,true,sz):'';}
+    if(t>=STOP&&nf===0){nf=1;d1.innerHTML=diceSVG(a,false,sz);d2.innerHTML=two?diceSVG(b,true,sz):'';}
     var k=1-p,bo=Math.abs(Math.sin(t/110))*18*k*k,r1=(t<STOP?540*k*Math.sin(t/200):0),r2=(t<STOP?-520*k*Math.sin(t/180+1):0);
     d1.style.transform='translate('+(-34*k*Math.sin(t/230))+'px,'+(-bo)+'px) rotate('+r1+'deg)';d2.style.transform='translate('+(34*k*Math.sin(t/250))+'px,'+(-bo*0.9)+'px) rotate('+r2+'deg)';
     if(t>=STOP){var q=Math.min(1,(t-STOP)/250),sc=1+0.18*Math.sin(q*Math.PI);d1.style.transform='scale('+sc+')';d2.style.transform='scale('+sc+')';}
     if(t<D){A.raf=requestAnimationFrame(frame);return;}
-    dr.innerHTML='DR '+(a+b)+' <span style="font-size:18px;color:#e8e0c8">('+a+' + '+b+')</span>';dr.style.opacity='1';
-    try{if(done)done();}catch(e){}
-    A.t=setTimeout(function(){el.style.transition='opacity .4s';el.style.opacity='0';setTimeout(function(){el.remove();},420);DICE_ANIM=null;},1500);}
+    dr.innerHTML=two?'DR '+(a+b)+' <span style="font-size:18px;color:#e8e0c8">('+a+' + '+b+')</span>':'dr '+a;dr.style.opacity='1';
+    if(!A.fired){A.fired=1;try{if(done)done();}catch(e){}}
+    A.t=setTimeout(function(){el.style.transition='opacity .3s';el.style.opacity='0';setTimeout(function(){el.remove();},320);DICE_ANIM=null;},opt.hold!=null?opt.hold:1500);}
   A.raf=requestAnimationFrame(frame);}
 function nmFtDice(){var a=1+Math.floor(Math.random()*6),b=1+Math.floor(Math.random()*6);diceRollAnim(a,b,'',function(){nmFtDiceDone(a,b);});}
 function nmFtDiceDone(a,b){try{logResult(function(){return {tabLbl:'MAP ダイス',text:'DR '+(a+b)+' ('+a+'+'+b+')',color:'#c8a032',detail:null};});}catch(e){}nmFtBotFill();}
@@ -36797,6 +36798,8 @@ var BT_FX_SPD_DEF={ok:'btn',ng:'norm',kill:'btn'};
 var BT_FX_SPD_MS={fast:1000,norm:2000,slow:4000};
 function btFxSpd(kind){var m=(typeof BT!=='undefined'&&BT&&BT.fxSpd)||{};return m[kind]||BT_FX_SPD_DEF[kind]||'norm';}
 function BtFxSpd(kind,v){if(!BT.fxSpd)BT.fxSpd={};BT.fxSpd[kind]=v;btSave();Draw();}
+function btDiceAnimOn(){return BT.diceAnim!==false;}
+function BtDiceAnim(){BT.diceAnim=!btDiceAnimOn();btSave();Draw();}
 function BtFxOpen(){BT.fxOpen=!BT.fxOpen;btSave();Draw();}
 function BtFxOff(){BT.fxMode=(btFxMode()==='off')?'std':'off';if(BT.fxMode==='off')btFxClear();btSave();Draw();}
 function btFxPanelHTML(){
@@ -36804,6 +36807,7 @@ function btFxPanelHTML(){
   var h='<div style="margin-top:6px;padding:6px 8px;border:1px solid #3a5a7a;border-radius:6px;background:#0a1420"><div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#ffcf40;font-weight:bold">演出の切り替え速度'+btBtn(btFxMode()==='off'?'演出なし:ON':'演出なし:OFF','BtFxOff()',{on:btFxMode()==='off'})+'</div>';
   rows.forEach(function(r){h+='<div style="display:flex;gap:4px;align-items:center;margin-top:4px;flex-wrap:wrap"><b style="width:40px;font-size:12px;color:'+r[2]+'">'+r[1]+'</b>';
     opts.forEach(function(o){h+=btBtn(o[1],"BtFxSpd('"+r[0]+"','"+o[0]+"')",{on:btFxSpd(r[0])===o[0]});});h+='</div>';});
+  h+='<div style="display:flex;gap:6px;align-items:center;margin-top:6px"><b style="font-size:12px;color:#ffcf40">'+T('ダイスのアニメーション(2秒)')+'</b>'+btBtn(btDiceAnimOn()?'ON':'OFF','BtDiceAnim()',{on:btDiceAnimOn()})+'</div>';
   return h+'<div style="font-size:10.5px;color:#8899aa;margin-top:5px;line-height:1.4">成功=命中・効果あり・成功した判定 / 失敗=外れ・効果なし・失敗した判定 / 撃破=撃破・KIA。早い約1秒・普通約2秒・遅い約4秒。次へボタンは押すまで進みません。</div></div>';
 }
 function btFxKindOf(resLbl,killed){return (killed||/撃破|KIA|^K$/.test(resLbl))?'kill':(/効果なし|外れ|^-?$/.test(resLbl)?'ng':'ok');}
@@ -36868,6 +36872,11 @@ function btFxOutcome(b,after){
 function btFxNext(){
   if(BT_FX_CUR||!BT_FX_Q.length)return;
   var e=BT_FX_Q.shift();BT_FX_CUR=e;
+  /* v472(ダルマ指示「対戦モードでアプリやルールが自動で振るダイスにも付ける」): カードの前に、枠の中で2秒のダイスのアニメーション */
+  if(!e.__da&&btDiceAnimOn()){var dd=e.dice||[],one=e.kind==='res'?(e.items.length===1&&dd.length>=1):dd.length>=2;
+    if(one){e.__da=1;var lb=e.kind==='res'?(e.items[0].t||e.head):String(e.log[0]).split(' → ').slice(0,2).join(' → ').replace(/\s+\[期待.*$/,'');
+      var A=e.kind==='res'?dd[0]:dd[1],B=e.kind==='res'?(dd.length>=2?dd[1]:null):dd[0];
+      diceRollAnim(A,B,lb,function(){BT_FX_CUR=null;BT_FX_Q.unshift(e);btFxNext();},{hold:350});return;}}
   if(e.kind==='res'){btFxResShow(e);return;} // v312: 煙幕・回復などの成功/失敗
   var cam=(typeof btCamOn==='function'&&btCamOn());if(cam){try{btCamShot((e.from||[]).concat([e.tgtN]));}catch(x){}} // v320: 撃つヘクスと目標へ地図を寄せる
   var mode=btFxMode(),hurry=BT_FX_Q.length>=2,short=false;
@@ -36960,8 +36969,8 @@ function btFxResScan(lines){
 }
 function btFxResHook(){
   var f=window.btLog;if(typeof f!=='function'||f.__res)return;
-  var w=function(lines){var r=f.apply(this,arguments);
-    try{if(!BT_FX_REC&&btFxOn()&&lines&&lines.length){var it=btFxResScan(lines);if(it.length)btFxPush({kind:'res',items:it,head:String(lines[0]).trim()});}}catch(e){}
+  var w=function(lines){var r=f.apply(this,arguments);var dz=BT_FX_REC?[]:BT_DICE_LOG.splice(0);
+    try{if(!BT_FX_REC&&btFxOn()&&lines&&lines.length){var it=btFxResScan(lines);if(it.length)btFxPush({kind:'res',items:it,head:String(lines[0]).trim(),dice:dz});}}catch(e){}
     return r;};
   w.__res=1;window.btLog=w;
 }
