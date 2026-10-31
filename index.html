@@ -33611,7 +33611,7 @@ function nmGeActive(slot){var g=null;try{g=losPrimaryFireGroup();}catch(e){}retu
 function nmGeSaved(slot,mkNat){var sc=S.scen&&S.scen.sel;if(!sc)return null;if(!S.savedGroups)S.savedGroups={};if(!S.savedGroups[sc])S.savedGroups[sc]={};var sv=S.savedGroups[sc][slot];if(!sv&&mkNat)sv=S.savedGroups[sc][slot]={pickerNat:mkNat,pickerItems:[],sw:[],swOwner:{},latw:[]};return sv||null;}
 function nmGeList(slot){var g=nmGeActive(slot);if(g)return {nat:g.pickerNat,items:g.pickerItems||[],sw:g.sw||[],own:g.swOwner||{}};var sv=nmGeSaved(slot);return sv?{nat:sv.pickerNat,items:sv.pickerItems||[],sw:sv.sw||[],own:sv.swOwner||{}}:{nat:null,items:[],sw:[],own:{}};}
 function nmGeSync(slot){var g=nmGeActive(slot),sc=S.scen&&S.scen.sel;if(!g||!sc)return;if(!S.savedGroups)S.savedGroups={};if(!S.savedGroups[sc])S.savedGroups[sc]={};
-  var old=S.savedGroups[sc][slot];S.savedGroups[sc][slot]={pickerNat:g.pickerNat,pickerItems:deepCopy(g.pickerItems||[]),sw:deepCopy(g.sw||[]),swOwner:deepCopy(g.swOwner||{}),latw:deepCopy(g.latw||[]),dc:(old&&old.dc)||[]};}
+  var old=S.savedGroups[sc][slot];S.savedGroups[sc][slot]={pickerNat:g.pickerNat,pickerItems:deepCopy(g.pickerItems||[]),sw:deepCopy(g.sw||[]),swOwner:deepCopy(g.swOwner||{}),latw:deepCopy(g.latw||[]),dc:(old&&old.dc)||[],obg:old?old.obg:undefined};}
 function nmGeFreeSlot(){var sc=S.scen&&S.scen.sel,sv=(sc&&S.savedGroups&&S.savedGroups[sc])||{},g=null;try{g=losPrimaryFireGroup();}catch(e){}
   for(var i=0;i<GROUP_SLOTS.length;i++){var s0=GROUP_SLOTS[i],x=sv[s0];if(g&&g.activeGroupSlot===s0&&g.pickerItems&&g.pickerItems.length)continue;if(x&&x.pickerItems&&x.pickerItems.length)continue;if(x&&x.sw&&x.sw.length)continue;return s0;}return null;}
 function nmGeOpen(n,sd,slot){NM_GE={sd:sd,slot:slot};NM_RM_SUB='grpedit';btRmReopen(n);}
@@ -34575,8 +34575,23 @@ function nmSuObParse(nat){var c=curScen();if(!c||!c.f||!c.f[nat])return {all:[],
   G=G.filter(function(g){return g.items.length;});G.forEach(function(g){delete g.m;});
   return {all:o,groups:G};}
 /* グループごとの残り: 使った数(種類ごと)を前のグループから順に割り当てる */
+/* 編成のグループ: 自分で決めた(obg)か、中のユニットから決める。null=未定、-1=混在 */
+function nmSuSlotGrp(k,nat,G){G=G||nmSuObG(nat);var sc=S.scen&&S.scen.sel,sv=sc&&S.savedGroups&&S.savedGroups[sc]&&S.savedGroups[sc][k],items=nmGeList(k).items||[];
+  var cand=null;items.forEach(function(x){var gs=G.filter(function(g){return g.items.some(function(y){return (y.kind==='smc'?'smc':'mmc')===(x.kind==='smc'?'smc':'mmc')&&y.label===x.label;});}).map(function(g){return g.i;});
+    if(!gs.length)return;cand=cand==null?gs:cand.filter(function(i){return gs.indexOf(i)>=0;});});
+  if(cand&&!cand.length)return -1;
+  if(sv&&typeof sv.obg==='number'&&G.some(function(g){return g.i===sv.obg;})&&(!cand||cand.indexOf(sv.obg)>=0))return sv.obg;
+  return cand&&cand.length?cand[0]:null;}
+function nmSuSetGrp(k,g){var sv=nmGeSaved(k,NM_SU&&NM_SU.nat);if(sv)sv.obg=g;}
+function nmSuNewG(gi){nmSuNew();if(NM_SU.slot&&gi!=null)nmSuSetGrp(NM_SU.slot,gi);try{saveState();}catch(e){}nmSuDraw();}
 function nmSuObGRem(nat){var G=nmSuObG(nat),u=nmSuUsed(nat),left={};Object.keys(u).forEach(function(k){left[k]=u[k];});
-  G.forEach(function(g){g.items.forEach(function(x){var k=x.kind+'|'+x.id,t=Math.min(x.n,left[k]||0);left[k]=(left[k]||0)-t;x.r=x.n-t;});});return G;}
+  G.forEach(function(g){g.items.forEach(function(x){x.r=x.n;});});
+  /* グループが決まっている編成の分は、そのグループから引く */
+  nmSuSlots(nat).forEach(function(k){var g=nmSuSlotGrp(k,nat,G);if(g==null||g<0)return;var gr=G.filter(function(z){return z.i===g;})[0];if(!gr)return;var c={};function inc(key){c[key]=(c[key]||0)+1;}
+    (nmGeList(k).items||[]).forEach(function(x){inc((x.kind==='smc'?'smc':'mmc')+'|'+x.label);});(nmGeList(k).sw||[]).forEach(function(uid){inc('sw|'+nmGeSwBase(uid).id);});nmSuLwList(k).forEach(function(e){inc('lw|'+e.id);});nmSuDcList(k).forEach(function(){inc('dc|dc');});
+    Object.keys(c).forEach(function(key){var x=gr.items.filter(function(y){return y.kind+'|'+y.id===key;})[0];if(!x)return;var t=Math.min(x.r,c[key],left[key]||0);x.r-=t;left[key]=(left[key]||0)-t;});});
+  /* 残り(グループ未定・混在の編成、地図で外したSWなど)は前のグループから順に */
+  G.forEach(function(g){g.items.forEach(function(x){var k=x.kind+'|'+x.id,t=Math.min(x.r,left[k]||0);left[k]=(left[k]||0)-t;x.r-=t;});});return G;}
 function nmSuGNat(d){return d.nat||((d.items||[])[0]&&d.items[0].nat)||null;}
 function nmSuSlots(nat){var sc=nmSuScen(),sv=(sc&&S.savedGroups&&S.savedGroups[sc])||{},o=[];GROUP_SLOTS.forEach(function(k){var d=nmGeList(k);d.nat=nmSuGNat(d);var has=(d.items&&d.items.length)||(d.sw&&d.sw.length)||nmSuDcList(k).length||nmSuLwList(k).length;if((d.nat===nat&&has)||(NM_SU&&NM_SU.slot===k&&NM_SU.nat===nat))o.push(k);});return o;}
 function nmSuUsed(nat){var u={};function inc(k){u[k]=(u[k]||0)+1;}
@@ -34591,7 +34606,11 @@ function nmSuClose(){var el=document.getElementById('nmSu');if(el)el.remove();NM
 function nmSuTab(nat){NM_SU.nat=nat;NM_SU.sel=null;var sl=nmSuSlots(nat);NM_SU.slot=sl[0]||null;nmSuDraw();}
 function nmSuNew(){var k=nmGeFreeSlot();if(!k){btToast('空いている編成(A〜Z)がありません');return;}var sv=nmGeSaved(k,NM_SU.nat);if(sv){sv.pickerNat=NM_SU.nat;}NM_SU.slot=k;nmSuDraw();}
 function nmSuSelG(k){NM_SU.slot=k;nmSuDraw();}
-function nmSuAddU(i){var it=nmSuPoolItem(i);if(!it)return;if(it.kind==='mmc'||it.kind==='smc'){if(!NM_SU.slot)nmSuNew();if(!NM_SU.slot)return;nmGeAddCore(NM_SU.slot,NM_SU.nat,it.kind,it.label);NM_SU.sel=null;}else{NM_SU.sel=(NM_SU.sel&&NM_SU.sel.kind===it.kind&&NM_SU.sel.id===it.id)?null:{kind:it.kind,id:it.id,label:it.label};}
+function nmSuAddU(i){var it=nmSuPoolItem(i);if(!it)return;if(it.kind==='mmc'||it.kind==='smc'){if(!NM_SU.slot)nmSuNew();if(!NM_SU.slot)return;
+    if(it.g!=null){var cg=nmSuSlotGrp(NM_SU.slot,NM_SU.nat),hasU=(nmGeList(NM_SU.slot).items||[]).length; /* v465: 別のグループの編成には入れず、そのグループの空いた編成か新しい編成へ */
+      if(hasU&&cg!=null&&cg>=0&&cg!==it.g){var old=NM_SU.slot,tg=nmSuSlots(NM_SU.nat).filter(function(k){return k!==old&&nmSuSlotGrp(k,NM_SU.nat)===it.g&&!(nmGeList(k).items||[]).length;})[0];if(tg)NM_SU.slot=tg;else nmSuNew();if(NM_SU.slot===old)return;btToast('別のグループなので編成'+NM_SU.slot+'に入れました');}
+      if(!(nmGeList(NM_SU.slot).items||[]).length)nmSuSetGrp(NM_SU.slot,it.g);}
+    nmGeAddCore(NM_SU.slot,NM_SU.nat,it.kind,it.label);NM_SU.sel=null;}else{NM_SU.sel=(NM_SU.sel&&NM_SU.sel.kind===it.kind&&NM_SU.sel.id===it.id)?null:{kind:it.kind,id:it.id,label:it.label};}
   try{saveState();}catch(e){}nmSuDraw();}
 function nmSuPoolItem(i){return (NM_SU&&NM_SU.pool||[])[i]||null;}
 function nmSuGiveCore(slot,pid,sel){if(sel.kind==='sw'){var used=nmGeSwUsed(),j=0;while(used[sel.id+'_'+j])j++;nmSwGrpIn(slot,sel.id+'_'+j,pid);}else if(sel.kind==='lw')nmSuLwAdd(slot,sel.id,pid);else if(sel.kind==='dc')nmSuDcAdd(slot,pid);}
@@ -34603,7 +34622,7 @@ function nmSuDelSw(k,t,i){if(t==='sw'){var uid=(nmGeList(k).sw||[])[i];if(uid)nm
 function nmSuAuto(){var nat=NM_SU.nat,G=nmSuObGRem(nat),all=[],full=false; /* v465: グループ(登場ターン・配置場所)ごとに振り分け、別のグループのユニットを同じ編成に入れない */
   G.forEach(function(gr){if(full)return;var L=[],M=[];gr.items.forEach(function(x){for(var i=0;i<x.r;i++){if(x.kind==='smc')L.push(x.label);else if(x.kind==='mmc')M.push(x.label);}});
     var ng=Math.max(L.length,Math.ceil(M.length/3)),slots=[];
-    for(var g=0;g<ng;g++){var k=nmGeFreeSlot();if(!k){full=true;break;}var sv=nmGeSaved(k,nat);if(sv)sv.pickerNat=nat;slots.push(k);if(L[g])nmGeAddCore(k,nat,'smc',L[g]);else nmGeAddCore(k,nat,'mmc',M.shift());}
+    for(var g=0;g<ng;g++){var k=nmGeFreeSlot();if(!k){full=true;break;}var sv=nmGeSaved(k,nat);if(sv)sv.pickerNat=nat;slots.push(k);if(sv)sv.obg=gr.i;if(L[g])nmGeAddCore(k,nat,'smc',L[g]);else nmGeAddCore(k,nat,'mmc',M.shift());}
     if(!slots.length)return;var gi=0;M.forEach(function(lbl){nmGeAddCore(slots[gi%slots.length],nat,'mmc',lbl);gi++;});
     var carriers=[],cl=slots.map(function(k){return (nmGeList(k).items||[]).filter(function(x){return x.kind!=='smc';}).map(function(x){return {k:k,pid:x.pid};});}); /* 支援火器は編成をまたいで順に(1つの編成に偏らない) */
     for(var ri=0;cl.some(function(l){return l.length>ri;});ri++)cl.forEach(function(l){if(l[ri])carriers.push(l[ri]);});
@@ -34644,8 +34663,8 @@ function nmSuDraw(){var U=NM_SU;if(!U)return;var nat=U.nat,ob=nmSuOb(nat),used=n
       +'<div class="chips">'+(pu||'')+(ps?'<span style="flex-basis:100%;height:0"></span>'+ps:'')+'</div>';});
   h+='<div class="cols"><div class="pool" data-drop="pool"><div class="pt">OBの残り(グループごと。タップで選んだ編成へ・ドラッグで好きな編成/ユニットへ。支援火器はタップ → 運ぶユニットをタップ)</div>'+(pool||'<span class="pt">ユニットがありません</span>')
     +(U.sel?'<div style="margin-top:12px;font-size:12px;color:#3ca878">✓ '+U.sel.label+' を選択中 → 右の編成のユニットをタップして持たせる</div>':'')+'</div>';
-  var sl=nmSuSlots(nat);h+='<div class="grps">';
-  sl.forEach(function(k){var d=nmGeList(k),car=nmSuCarry(k),om=nmSuOnMap(k);
+  var sl=nmSuSlots(nat),GRS=nmSuObG(nat);h+='<div style="min-width:0">';
+  var cardH=function(k){var h='';var d=nmGeList(k),car=nmSuCarry(k),om=nmSuOnMap(k);
     var gfp=nmGrpFP(k),nsw=0;Object.keys(car).forEach(function(p0){nsw+=car[p0].length;});h+='<div class="g'+(U.slot===k?' on':'')+'" data-drop="g:'+k+'" onclick="nmSuSelG(\''+k+'\')"><div class="gh"><span style="font-size:15px;font-weight:bold;color:#e8eef4">編成'+k+(gfp?' <span style="display:inline-block;margin-left:6px;padding:1px 8px;border-radius:9px;background:#8b1e1e;border:1px solid #f2ead0;color:#fff;font-size:12px;font-weight:900">FP '+gfp+'</span>':'')+'</span><span>'+(nsw?'<span class="mini" style="margin-right:6px" onclick="event.stopPropagation();nmSuSwClr(\''+k+'\')">支援火器を外す</span>':'')+(om?'地図: '+om:(U.slot===k?'選択中':'未配置'))+'</span></div>';
     (d.items||[]).forEach(function(x,i){var cs=car[x.pid]||[],pp=0;cs.forEach(function(c){pp+=nmSuPP(c.kind,c.id);});var ipc=nmSuIPC(x,nat);
       h+='<div class="u'+(U.sel&&!x.broken?' drop':'')+'" data-dk="u:'+k+':'+x.pid+'" data-drop="u:'+k+':'+x.pid+'" onclick="event.stopPropagation();'+(U.sel&&!x.broken?'nmSuGive(\''+k+'\','+x.pid+')':'nmSuSelG(\''+k+'\')')+'">'+nmSuCtr('u:'+(x.nat||nat)+'|'+x.label,30)+'<span>'+x.label+(x.broken?' <span style="color:#ff6060">混乱</span>':'')+(pp>ipc?'<br><span class="warn">'+pp+'PP>持てる'+ipc+'PP</span>':'')+'</span><span class="sw">'
@@ -34654,8 +34673,16 @@ function nmSuDraw(){var U=NM_SU;if(!U)return;var nat=U.nat,ob=nmSuOb(nat),used=n
     nmSuDcList(k).forEach(function(e,i){if(!pids[e.own])un.push('<span title="タップで外す" onclick="event.stopPropagation();nmSuDelSw(\''+k+'\',\'dc\','+i+')">'+nmSuSwImg('dc','dc',26)+'</span>');});
     nmSuLwList(k).forEach(function(e,i){if(e.pid==null||!pids[e.pid])un.push('<span title="タップで外す" onclick="event.stopPropagation();nmSuDelSw(\''+k+'\',\'lw\','+i+')">'+nmSuSwImg('lw',e.id,26)+'</span>');});if(un.length)h+='<div class="pt">持ち主なし: '+un.join('')+'</div>';
     if(!(d.items||[]).length)h+='<div class="pt">左のOBからユニットをタップ</div>';
-    h+='<div style="display:flex;justify-content:flex-end;margin-top:4px"><span class="mini" onclick="event.stopPropagation();nmSuPlace(\''+k+'\')">'+(om?'地図で動かす':'地図に置く')+'</span></div></div>';});
-  h+='<div class="add" data-drop="new" onclick="nmSuNew()">＋ 新しい編成<br><span style="font-size:11px">(ここへドラッグでも作れる)</span></div></div></div>';
+    h+='<div style="display:flex;justify-content:flex-end;margin-top:4px"><span class="mini" onclick="event.stopPropagation();nmSuPlace(\''+k+'\')">'+(om?'地図で動かす':'地図に置く')+'</span></div></div>';return h;};
+  /* v465(ダルマ指示「手動振り分けでもグループを分けて表示」): 編成をシナリオのグループごとの見出しの下に並べる。グループが決まらない編成・混ざった編成は最後に */
+  var BK={},hd=function(t,c,sub){return '<div style="margin:2px 0 6px;padding:4px 8px;border-left:3px solid '+c+';background:#1a1d24;border-radius:3px;font-size:13px;font-weight:bold;color:'+c+'">'+t+(sub?'<span style="color:#8899aa;font-weight:normal;margin-left:6px;font-size:11px">'+sub+'</span>':'')+'</div>';};
+  sl.forEach(function(k){var g=nmSuSlotGrp(k,nat,GRS),key=g==null?'u':g<0?'x':String(g);(BK[key]=BK[key]||[]).push(k);});
+  var addC=function(gi){return '<div class="add" data-drop="new" onclick="nmSuNewG('+gi+')" style="min-height:80px;flex-direction:column;text-align:center">＋ '+(GRS.length>1&&gi!=null?T('このグループの新しい編成'):T('新しい編成'))+'<br><span style="font-size:11px">(ここへドラッグでも作れる)</span></div>';};
+  GRS.forEach(function(gr){var ks=BK[String(gr.i)]||[];h+=hd(gr.gl?gr.gl.replace(/</g,'&lt;'):T('グループ')+(gr.i+1),'#ffd060',T('編成')+ks.length)+'<div class="grps" style="margin-bottom:12px">'+ks.map(cardH).join('')+addC(gr.i)+'</div>';});
+  if(BK.x)h+=hd(T('グループが混ざっている編成'),'#ff9a3d',T('登場ターン・配置場所が違うユニットが入っています'))+'<div class="grps" style="margin-bottom:12px">'+BK.x.map(cardH).join('')+'</div>';
+  if(BK.u)h+=hd(T('グループ未定'),'#8899aa',T('ユニットを入れるとグループが決まります'))+'<div class="grps" style="margin-bottom:12px">'+BK.u.map(cardH).join('')+'</div>';
+  if(!GRS.length)h+='<div class="grps">'+addC(null)+'</div>';
+  h+='</div></div>';
   h+='<div class="foot"><div class="btn" style="margin-right:auto;border-color:#8b1e1e;color:#ffb0a0" onclick="nmSuReset()">'+(U.rst?'もう一度押すとリセット':'リセット')+'</div><div class="btn" onclick="nmSuSwClrAll()">支援火器を全部外す</div><div class="btn" onclick="nmSuAuto()">残りを自動で振り分け</div><div class="btn" onclick="nmSuClose()">閉じる</div>'+(U.slot&&(nmGeList(U.slot).items||[]).length?'<div class="btn pri" onclick="nmSuPlace(\''+U.slot+'\')">編成'+U.slot+'を地図に置く</div>':'')+'</div></div>';
   var el=document.getElementById('nmSu');if(!el){el=document.createElement('div');el.id='nmSu';el.onclick=function(){if(NM_SUDD&&NM_SUDD.eat){NM_SUDD.eat=0;return;}nmSuClose();};document.body.appendChild(el);nmSuDnDInit(el);}
   var keep=[];el.querySelectorAll('*').forEach(function(x){if(x.scrollTop||x.scrollLeft)keep.push([x.className,Array.prototype.indexOf.call(el.getElementsByClassName(x.className.split(' ')[0]||'_'),x),x.scrollTop,x.scrollLeft]);});
