@@ -35380,6 +35380,9 @@ function nmIjArrow(f,bid,col){var rot=(losBoardRotById(bid)||0)+(S_LOS.viewRot||
 function nmIjFaceHTML(B){var J=NM_IJ,A=nmIjAtk(),te=nmIjTgtEh(),h='';if(!A&&!(te&&te.veh))return '';
   var HA=nmHexOfNode(J.a),HB=nmHexOfNode(J.b),tw=nmIjToward(),ang=btAng(J.a,J.b);
   h+='<div class="ijS">④ '+T('向き')+'</div>';
+  if(A&&A.eh&&A.eh.facing!=null){var v0=A.kind==='veh'?nmAfv(A.id):null,tur0=v0&&nmAfvTurret(v0),ca0=tur0&&A.eh.tca!=null?A.eh.tca:A.eh.facing,sp0=btSpinesTo(nmToBtFace(ca0,HA.boardId),ang);
+    h+='<div class="ijFr"><span class="ijFl">'+T(A.kind==='gun'?'攻撃側の砲(CA)':'攻撃側の車体')+'</span><span class="ijTa" style="color:#ffd040">'+nmIjArrow(A.eh.facing,HA.boardId,'#ffd040')+' '+T('地図の向き')+'</span>'+(tur0?'<span class="ijFl" style="min-width:0;margin-left:12px">'+T('砲塔')+'</span><span class="ijTa" style="color:#ffd040">'+nmIjArrow(ca0,HA.boardId,'#ffd040')+' '+(A.eh.tca!=null?T('地図の向き'):T('車体と同じ'))+'</span>':'')+'</div>';
+    h+='<div class="ijNote">'+(sp0?'<span style="color:#ffb040">目標は'+(tur0?'砲塔':'')+'CAの外 — 向きを '+sp0+' スパイン変える修正が入ります</span>':'目標は'+(tur0?'砲塔の':'')+'CAの中')+' · 地図に置いてあるカウンターの向きを使います(変える時は地図で)</div>';A=null;}
   if(A){var v=A.kind==='veh'?nmAfv(A.id):null,tur=v&&nmAfvTurret(v),fa=J.fa==='T'?tw:J.fa;
     var row=function(lbl,cur,key,first){var o='<div class="ijFr"><span class="ijFl">'+lbl+'</span>'+first;for(var f=0;f<6;f++)o+='<button class="ijF'+(cur===f?' on':'')+'" onclick="nmIjSet(\''+key+'\','+f+')" title="'+f+'">'+nmIjArrow(f,HA.boardId,cur===f?'#ffd040':'#9fb2c6')+(f===tw?'<i></i>':'')+'</button>';return o+'</div>';};
     h+=row(T(A.kind==='gun'?'攻撃側の砲(CA)':'攻撃側の車体'),J.fa==='T'?null:J.fa,'fa','<button class="ijB'+(J.fa==='T'?' on':'')+'" onclick="nmIjSet(\'fa\',\'T\')"><b>'+T('目標の方')+'</b></button>');
@@ -35387,9 +35390,10 @@ function nmIjFaceHTML(B){var J=NM_IJ,A=nmIjAtk(),te=nmIjTgtEh(),h='';if(!A&&!(te
     var ca=tur&&J.ft!=null?J.ft:fa,sp=btSpinesTo(nmToBtFace(ca,HA.boardId),ang);
     h+='<div class="ijNote">'+(sp?'<span style="color:#ffb040">目標は'+(tur?'砲塔':'')+'CAの外 — 向きを '+sp+' スパイン変える修正が入ります</span>':'目標は'+(tur?'砲塔の':'')+'CAの中')+' · <i class="ijDot"></i>=目標の方</div>';}
   if(te&&te.veh){var fv=nmAfv(te.veh),cur=J.ta==='map'?te.facing:nmIjAspFace(J.ta),hf=btHitFacing(nmToBtFace(cur,HB.boardId),J.b,J.a),HL={front:'前面',side:'側面',rear:'背面'};
-    h+='<div class="ijFr"><span class="ijFl">'+T('目標')+' '+nmAfvName(fv)+'</span>'+(te.facing!=null?'<button class="ijB'+(J.ta==='map'?' on':'')+'" onclick="nmIjSet(\'ta\',\'map\')"><b>'+T('地図の向き')+'</b><small>'+HL[btHitFacing(nmToBtFace(te.facing,HB.boardId),J.b,J.a)]+'に当たる</small></button>':'')+
+    if(te.facing!=null){h+='<div class="ijFr"><span class="ijFl">'+T('目標')+' '+nmAfvName(fv)+'</span><span class="ijTa">'+nmIjArrow(te.facing,HB.boardId,'#ff9a6a')+' '+T('地図の向き')+' — '+HL[hf]+'に当たる</span></div><div class="ijNote">地図に置いてあるカウンターの向きを使います(変える時は地図で)</div>';}
+    else{h+='<div class="ijFr"><span class="ijFl">'+T('目標')+' '+nmAfvName(fv)+'</span>'+(te.facing!=null?'<button class="ijB'+(J.ta==='map'?' on':'')+'" onclick="nmIjSet(\'ta\',\'map\')"><b>'+T('地図の向き')+'</b><small>'+HL[btHitFacing(nmToBtFace(te.facing,HB.boardId),J.b,J.a)]+'に当たる</small></button>':'')+
       ['front','side','rear'].map(function(k){return '<button class="ijB'+(J.ta===k?' on':'')+'" onclick="nmIjSet(\'ta\',\''+k+'\')"><b>'+HL[k]+'</b></button>';}).join('')+'<span class="ijTa">'+nmIjArrow(cur,HB.boardId,'#ff9a6a')+' '+HL[hf]+'に当たる</span></div>';
-    if(J.ta!=='map')h+='<div class="ijNote">判定すると、地図の目標マーカーの向きもこの向きにします(砲塔は車体と同じ向き)</div>';}
+    h+='<div class="ijNote">向きが未設定のカウンターです。判定すると、地図の目標マーカーもこの向きにします(砲塔は車体と同じ向き)</div>';}}
   return h;}
 function nmIjFaceApply(o){var J=NM_IJ0;if(!J)return;var eh=o&&o.eh;
   if(eh&&(eh.veh||eh.gun)){eh.facing=J.fa==='T'?J.tw:J.fa;if(eh.veh&&nmAfvTurret(nmAfv(eh.veh)))eh.tca=J.ft;}
