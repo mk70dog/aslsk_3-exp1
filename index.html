@@ -34414,14 +34414,24 @@ function nmSvLoad(i,withMap){var L=nmSvList(),r=L[i];if(!r)return;var sc=S.scen&
   if(withMap){['f','e'].forEach(function(sd){var LL=nmSideList(sd);for(var j=LL.length-1;j>=0;j--)if(LL[j].grp&&!LL[j].veh&&!LL[j].gun)LL.splice(j,1);});(r.markers||[]).forEach(function(m){nmSideList(m.sd).push({boardId:m.boardId,col:m.col,row:m.row,veh:null,gun:null,tca:null,facing:m.facing,grp:m.grp});});}
   try{saveState();}catch(e){}Draw();var ns=nmSuSlots(NM_SU.nat);NM_SU.slot=ns[0]||null;nmSuDraw();btToast('「'+r.name+'」をロードしました'+(withMap?'(地図の配置も)':'(編成だけ)'));}
 function nmSvDel(i){var L=nmSvList();if(!L[i])return;if(NM_SU.svDel!==i){NM_SU.svDel=i;nmSuDraw();return;}NM_SU.svDel=null;L.splice(i,1);try{saveState();}catch(e){}nmSuDraw();}
+/* v449(ダルマ指示「編成セーブデータのインポートエクスポート」): セーブを.jsonファイルに書き出す(1件/全部)・読み込む。別のiPadやバックアップに */
+function nmSvExport(i){var sc=S.scen&&S.scen.sel,L=nmSvList(),list=i<0?L:(L[i]?[L[i]]:[]);if(!list.length){btToast('書き出すセーブがありません');return;}
+  var data={type:'aslsk-group-saves',v:1,scen:sc,at:Date.now(),saves:list},blob=new Blob([JSON.stringify(data)],{type:'application/json'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='編成_'+sc+'_'+(i<0?'全部':list[0].name.replace(/[\\/:*?"<>|\s]+/g,'_'))+'.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500);btToast('書き出しました('+list.length+'件)');}
+function nmSvImport(inp){var f=inp.files&&inp.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){var d=null;try{d=JSON.parse(rd.result);}catch(e){}inp.value='';
+    if(!d||d.type!=='aslsk-group-saves'||!d.saves){btToast('編成のセーブファイルではありません');return;}
+    var sc=d.scen,cur=S.scen&&S.scen.sel;if(!S.nmGrpSaves)S.nmGrpSaves={};var L=S.nmGrpSaves[sc]||(S.nmGrpSaves[sc]=[]),n=0;
+    d.saves.forEach(function(r){if(!r||!r.groups)return;var nm=r.name||'読み込み',k=2,base=nm;while(L.some(function(x){return x.name===nm;}))nm=base+'('+(k++)+')';L.unshift(Object.assign({},r,{name:nm}));n++;});
+    try{saveState();}catch(e){}btToast(n+'件を読み込みました'+(sc!==cur?'(シナリオ'+sc+'のセーブ。'+sc+'を開くと一覧に出ます)':''));if(NM_SU){NM_SU.svOpen=1;nmSuDraw();}};rd.readAsText(f);}
 function nmSvHTML(){var U=NM_SU,L=nmSvList(),d=function(t){var x=new Date(t);return (x.getMonth()+1)+'/'+x.getDate()+' '+x.getHours()+':'+('0'+x.getMinutes()).slice(-2);};
   var h='<div style="background:#12151c;border:1px solid #2c3242;border-radius:10px;padding:6px 10px;margin-bottom:8px"><div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="NM_SU.svOpen=!NM_SU.svOpen;nmSuDraw()"><b style="font-size:13px">セーブ・ロード</b><span style="font-size:11px;color:#8899aa">このシナリオの編成を名前を付けて保存(セーブ'+L.length+'件)</span><span style="margin-left:auto;color:#8899aa">'+(U.svOpen?'▲':'▼')+'</span></div>';
   if(!U.svOpen)return h+'</div>';
   h+='<div style="display:flex;gap:6px;margin:6px 0"><input id="nmSvName" placeholder="名前(例: 防御案A)" style="flex:1;min-width:0;background:#0d1016;border:1px solid #39414f;border-radius:6px;color:#e8eef4;padding:6px 8px;font-size:13px;-webkit-user-select:text;user-select:text" onclick="event.stopPropagation()"><div class="btn pri" onclick="nmSvSave()">セーブ</div></div>';
+  h+='<div style="display:flex;gap:6px;justify-content:flex-end;margin:-2px 0 4px"><span class="mini" onclick="nmSvExport(-1)">全部を書き出す</span><label class="mini" style="cursor:pointer">読み込む<input type="file" accept=".json,application/json" style="display:none" onchange="nmSvImport(this)"></label></div>'; /* v449 */
   if(!L.length)h+='<div class="pt">まだセーブがありません。同じ名前でセーブすると上書きします</div>';
   L.forEach(function(r,i){var ng=Object.keys(r.groups||{}).filter(function(k){var g=r.groups[k];return g&&g.pickerItems&&g.pickerItems.length;}).length;
     h+='<div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-top:1px solid #20242c"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:bold">'+r.name.replace(/</g,'&lt;')+'</div><div style="font-size:11px;color:#8899aa">'+d(r.at)+'　編成'+ng+'・地図の配置'+(r.markers||[]).length+'</div></div>'
-     +'<span class="mini" onclick="nmSvLoad('+i+',0)">ロード(編成だけ)</span><span class="mini" onclick="nmSvLoad('+i+',1)">ロード(配置も)</span><span class="mini" style="color:#ff9090" onclick="nmSvDel('+i+')">'+(U.svDel===i?'もう一度で削除':'削除')+'</span></div>';});
+     +'<span class="mini" onclick="nmSvExport('+i+')">書き出す</span><span class="mini" onclick="nmSvLoad('+i+',0)">ロード(編成だけ)</span><span class="mini" onclick="nmSvLoad('+i+',1)">ロード(配置も)</span><span class="mini" style="color:#ff9090" onclick="nmSvDel('+i+')">'+(U.svDel===i?'もう一度で削除':'削除')+'</span></div>';});
   return h+'</div>';}
 function nmSuDnDInit(root){
   function tgt(x,y){var e=document.elementFromPoint(x,y);return e&&e.closest?e.closest('[data-drop]'):null;}
