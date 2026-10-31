@@ -34326,7 +34326,7 @@ function nmSuDraw(){var U=NM_SU;if(!U)return;var nat=U.nat,ob=nmSuOb(nat),used=n
     +(U.sel?'<div style="margin-top:12px;font-size:12px;color:#3ca878">✓ '+U.sel.label+' を選択中 → 右の編成のユニットをタップして持たせる</div>':'')+'</div>';
   var sl=nmSuSlots(nat);h+='<div class="grps">';
   sl.forEach(function(k){var d=nmGeList(k),car=nmSuCarry(k),om=nmSuOnMap(k);
-    h+='<div class="g'+(U.slot===k?' on':'')+'" onclick="nmSuSelG(\''+k+'\')"><div class="gh">編成'+k+'<span>'+(om?'地図: '+om:(U.slot===k?'選択中':'未配置'))+'</span></div>';
+    var gfp=nmGrpFP(k);h+='<div class="g'+(U.slot===k?' on':'')+'" onclick="nmSuSelG(\''+k+'\')"><div class="gh"><span style="font-size:15px;font-weight:bold;color:#e8eef4">編成'+k+(gfp?' <span style="display:inline-block;margin-left:6px;padding:1px 8px;border-radius:9px;background:#8b1e1e;border:1px solid #f2ead0;color:#fff;font-size:12px;font-weight:900">FP '+gfp+'</span>':'')+'</span><span>'+(om?'地図: '+om:(U.slot===k?'選択中':'未配置'))+'</span></div>';
     (d.items||[]).forEach(function(x,i){var cs=car[x.pid]||[],pp=0;cs.forEach(function(c){pp+=nmSuPP(c.kind,c.id);});var ipc=nmSuIPC(x,nat);
       h+='<div class="u'+(U.sel&&!x.broken?' drop':'')+'" onclick="event.stopPropagation();'+(U.sel&&!x.broken?'nmSuGive(\''+k+'\','+x.pid+')':'nmSuSelG(\''+k+'\')')+'">'+nmSuCtr('u:'+(x.nat||nat)+'|'+x.label,30)+'<span>'+x.label+(x.broken?' <span style="color:#ff6060">混乱</span>':'')+(pp>ipc?'<br><span class="warn">'+pp+'PP>持てる'+ipc+'PP</span>':'')+'</span><span class="sw">'
         +cs.map(function(c){return '<span title="タップで外す" onclick="event.stopPropagation();nmSuDelSw(\''+k+'\',\''+c.t+'\','+c.i+')">'+nmSuSwImg(c.kind,c.id,26)+'</span>';}).join('')+'<span class="x" onclick="event.stopPropagation();nmSuDelU(\''+k+'\','+i+')">✕</span></span></div>';});
@@ -34870,11 +34870,16 @@ function nmGrpBadge(d,S0,g,more){
   return h;
 }
 function nmGrpImgHTML(src,slot){return '<span style="position:relative;display:block;width:34px;height:34px"><img src="'+src+'" style="width:34px;height:34px;display:block"><span class="op-numbadge" style="left:auto;right:-4px;top:-4px;font-size:9px;padding:0;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center">'+slot+'</span></span>';}
+/* v436: 編成のトータルFP(分隊・半分隊のFP＋支援火器のFP。混乱しているユニットとその支援火器は除く) */
+function nmGrpFP(slot){var d=nmGeList(slot),its=d.items||[],fp=0,ok={};its.forEach(function(x){if(x.broken)return;ok[x.pid]=1;if(x.kind!=='smc')fp+=nmCCFp(x)||0;});
+  (d.sw||[]).forEach(function(uid){var o=d.own[uid];if(o!=null&&!ok[o])return;var t=SWT.filter(function(w){return w.id===nmGeSwBase(uid).id;})[0];if(t)fp+=(+t.fp||0);});return fp;}
+function nmGrpFpBadge(d,S0,slot){var fp=nmGrpFP(slot);if(!fp)return '';var t=String(fp),w=14+t.length*7,x=d.x-S0/2-6,y=d.y-S0/2-9;
+  return '<rect x="'+(x+1)+'" y="'+(y+2)+'" width="'+w+'" height="16" rx="8" fill="#000" opacity=".45"/><rect x="'+x+'" y="'+y+'" width="'+w+'" height="16" rx="8" fill="#8b1e1e" stroke="#f2ead0" stroke-width="1.3"/><text x="'+(x+w/2)+'" y="'+(y+12)+'" text-anchor="middle" font-size="11" font-weight="900" fill="#fff" font-family="Arial">'+t+'</text>';}
 function nmGrpSVG(eh,d,sd){
   var srcs=nmGrpSrcs(eh.grp),S0=46,h='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">',k=Math.min(3,srcs.length);
   if(!k)return nmPlainMarkSVG(sd||'f',d,eh);
   for(var i=k-1;i>=0;i--){var o=i*5;h+='<rect x="'+(d.x-S0/2+o+1.5)+'" y="'+(d.y-S0/2-o+2)+'" width="'+S0+'" height="'+S0+'" rx="3" fill="#000" opacity=".35"/><image href="'+srcs[i]+'" x="'+(d.x-S0/2+o)+'" y="'+(d.y-S0/2-o)+'" width="'+S0+'" height="'+S0+'"/>';}
-  h+=nmGrpBadge(d,S0,eh.grp,srcs.length>3?srcs.length-3:0);
+  h+=nmGrpBadge(d,S0,eh.grp,srcs.length>3?srcs.length-3:0);h+=nmGrpFpBadge(d,S0,eh.grp); /* v436 */
   return h+'</g>';
 }
 function nmRmFriendDel(){var H=NM_RM_HEX;if(!H)return;BtRmClose();var l=nmSideList('f'),cur=nmUnitAt(H,'f');if(cur)l.splice(l.indexOf(cur),1);NM_SEL_EH=null;try{saveState();}catch(e){}Draw();}
