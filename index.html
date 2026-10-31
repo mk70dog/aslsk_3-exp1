@@ -11000,6 +11000,7 @@ try{if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function()
 function Draw(){
   try{if(typeof NM_MOVE!=="undefined"&&NM_MOVE)nmMvSync();}catch(e){} /* v453: マーカーを経路の終点へ先に動かしてから描く */
   document.getElementById("main").innerHTML=PAGE();
+  try{nmRbTick();}catch(e){} /* v455: リアル盤リンク */
   /* v387(バグ修正 ダルマ報告「画面重なってる」): 確認ダイアログなど全画面の重ね表示は#main(z-index:10)の中に描かれるため、上の固定タブ(z-index:200)の下に潜っていた。重ね表示がある間は#mainを最前面に上げる */
   try{var _mo=!!document.querySelector('#main div[style*="position:fixed;inset:0"]');document.documentElement.classList.toggle('main-modal',_mo);}catch(e){}
   try{fitSumRows();}catch(e){}
@@ -33893,6 +33894,50 @@ function nmStatusOverlaySVG(dl){try{nmMvSync();}catch(e){}var h='';
     C.forEach(function(c){h+=nmCtrSVG(c,x,y,Z);x+=Z+gp;});
     h+='</g>';});});
   return h;}
+/* v455(ダルマ指示「プレイ時はなるべく手間なく、アプリマップとリアルマップをリンクして進める」③): アプリの地図で印・マーカーが変わったら、
+   リアル盤で同じことをする指示(○○にPINを置く・裏返す・外す・動かす)を右下の「リアル盤へ」に積む。フェイズを進めて外れた印(射撃済みなど)も同じく片付けとして出る。
+   タップで1つ済み、「全部済み」で消す。差分で作るので、どの操作(射撃・士気・移動・メニュー)でも同じように出る */
+var NM_RB={prev:null,items:[],scen:null,open:true,seq:0};
+function nmRbHex(e){return e.boardId+losHexNameFromColRow(e.col,e.row);}
+function nmRbName(e){try{if(e.veh)return nmAfvName(nmAfv(e.veh));if(e.gun)return nmGunName(nmGun(e.gun));if(e.grp){var d=nmGeList(e.grp),u=(d.items||[]).map(function(x){return x.label;});return T('編成')+e.grp+(u.length?' ('+u.slice(0,3).join(' ')+(u.length>3?'…':'')+')':'');}}catch(x){}return 'マーカー';}
+function nmRbCnt(l){var o={};l.forEach(function(t){if(t==='移動')return; /* 実物に「移動した」カウンターは無い */var m=/^(.+?)(\d+)$/.exec(t),k=m&&NM_CTR_DEF[m[1]]?m[1]:t;o[k]=(o[k]||0)+(m&&NM_CTR_DEF[m[1]]?+m[2]:1);});return o;}
+function nmRbSnap(){var o=[];[['f',S_LOS.friendHexes||[]],['e',S_LOS.enemyHexes||[]]].forEach(function(P){P[1].forEach(function(e){o.push({eh:e,sd:P[0],hex:nmRbHex(e),c:nmRbCnt(nmStList(e)),dc:e.dcPlaced?e.dcPlaced.n:null});});});return o;}
+function nmRbTick(){if(S.tab!=='los'||typeof btActive==='function'&&btActive()){nmRbRender();return;}
+  if((NM_MOVE&&NM_MOVE.live)||(NM_DRAG&&NM_DRAG.moving)){nmRbRender();return;}
+  var sc=S.scen&&S.scen.sel,cur=nmRbSnap(),P=NM_RB.prev;NM_RB.prev=cur;
+  if(!P||NM_RB.scen!==sc){NM_RB.scen=sc;NM_RB.items=[];nmRbRender();return;}
+  var pm=new Map();P.forEach(function(p){pm.set(p.eh,p);});
+  if(cur.length&&P.length&&!cur.some(function(c){return pm.has(c.eh);})){nmRbRender();return;} /* 読み込み・元に戻す: 全部入れ替わった時は積まない */
+  var ph0=PHASE_SEQ.filter(function(x){return x.id===(S.turn&&S.turn.phase);})[0],ph=ph0?(S.turn.cur?'T'+S.turn.cur+(S.turn.half?'裏':'表')+' ':'')+T(ph0.lbl)+' '+ph0.abbr:'',add=function(c,t,k){NM_RB.items.push({id:++NM_RB.seq,sd:c.sd,hex:c.hex,nm:nmRbName(c.eh),t:t,k:k||null,ph:ph});};
+  var cm=new Map();cur.forEach(function(c){cm.set(c.eh,c);});
+  cur.forEach(function(c){var p=pm.get(c.eh);
+    if(!p){add(c,'このヘクスに置く');Object.keys(c.c).forEach(function(k){add(c,nmRbVerb(k,c.c[k],1),k);});return;}
+    if(p.hex!==c.hex)add(c,p.hex+' → '+c.hex+' へ動かす');
+    Object.keys(c.c).forEach(function(k){var d=c.c[k]-(p.c[k]||0);if(d>0)add(c,nmRbVerb(k,d,1),k);});
+    Object.keys(p.c).forEach(function(k){var d=(p.c[k]||0)-(c.c[k]||0);if(d>0)add(c,nmRbVerb(k,d,0),k);});
+    if(c.dc!=null&&c.dc!==p.dc){var H=nmHexOfNode(c.dc);add(c,'DC を '+(H?nmRbHex(H):'')+' に置く');}if(p.dc!=null&&c.dc==null)add(c,'DC を取り除く');});
+  P.forEach(function(p){if(!cm.has(p.eh))add(p,'地図から取り除く');});
+  if(NM_RB.items.length>40)NM_RB.items=NM_RB.items.slice(-40);
+  nmRbRender();}
+function nmRbVerb(k,n,on){var D=NM_CTR_DEF[k],nm=D?(D[0].replace(/-$/,'')+(D[1]&&/-$/.test(D[0])?'':' ')+D[1]).trim():k;var x=n>1?' ×'+n:'';
+  if(k==='混乱')return on?'裏返す(BROKEN)'+x:'表に戻す(回復)'+x;return on?nm+' を置く'+x:nm+' を外す'+x;}
+function nmRbDone(id){NM_RB.items=NM_RB.items.filter(function(x){return x.id!==id;});nmRbRender();}
+function nmRbAll(){NM_RB.items=[];nmRbRender();}
+function nmRbTog(){NM_RB.open=!NM_RB.open;nmRbRender();}
+function nmRbRender(){var el=document.getElementById('nmRl'),L=NM_RB.items;
+  if(S.tab!=='los'||!L.length||S.nmRealOff||(typeof btActive==='function'&&btActive())){if(el)el.remove();return;}
+  if(!el){el=document.createElement('div');el.id='nmRl';el.onclick=function(e){e.stopPropagation();};el.onmousedown=function(e){e.stopPropagation();};el.ontouchstart=function(e){e.stopPropagation();};document.body.appendChild(el);}
+  var mw=document.getElementById('losMapWrap'),r=mw&&mw.getBoundingClientRect();
+  el.style.cssText='position:fixed;z-index:9300;right:'+(r?Math.max(8,window.innerWidth-r.right+8):12)+'px;bottom:'+(r?Math.max(8,window.innerHeight-r.bottom+8):90)+'px;width:min(340px,88vw);background:#12161ce8;border:1.5px solid #c8a032;border-radius:10px;box-shadow:0 6px 20px #000c;color:#e8eef4;font-family:sans-serif';
+  var h='<div style="display:flex;align-items:center;gap:6px;padding:6px 8px;border-bottom:'+(NM_RB.open?'1px solid #3a3320':'0')+'"><span style="font-weight:900;color:#ffd060;font-size:14px" onclick="nmRbTog()">▣ リアル盤へ</span><span style="background:#c8a032;color:#111;border-radius:9px;padding:0 7px;font-size:12px;font-weight:900">'+L.length+'</span>'
+    +'<span style="margin-left:auto;display:flex;gap:6px"><button class="b sm" style="height:28px;padding:0 10px;margin:0;font-size:13px" onclick="nmRbAll()">全部済み</button><button class="b sm" style="height:28px;width:30px;padding:0;margin:0;font-size:13px" onclick="nmRbTog()">'+(NM_RB.open?'▾':'▴')+'</button></span></div>';
+  if(NM_RB.open){h+='<div class="rbL" style="max-height:min(260px,40vh);overflow:auto;padding:4px 6px 6px">';var lp=null;
+    L.forEach(function(x){if(x.ph!==lp){h+='<div style="font-size:11px;color:#8899aa;margin:4px 2px 2px">'+T(x.ph||'')+'</div>';lp=x.ph;}
+      var c=x.k&&NM_CTR_DEF[x.k]?'<svg width="24" height="24" viewBox="0 0 28 28" style="flex:0 0 24px">'+nmCtrSVG(nmCtrOf([x.k])[0],0,0,26)+'</svg>':'<span style="flex:0 0 24px;text-align:center;font-size:16px;color:#c8a032">'+(/動かす/.test(x.t)?'➜':/取り除く/.test(x.t)?'✕':'●')+'</span>';
+      h+='<div onclick="nmRbDone('+x.id+')" style="display:flex;align-items:center;gap:7px;padding:5px 4px;border-radius:6px;cursor:pointer;background:#1c222b;margin-top:3px">'+c
+        +'<div style="flex:1;min-width:0;line-height:1.25"><div style="font-size:13px"><b style="color:#ffd060">'+x.hex+'</b> <span style="color:'+NM_SIDE_LBL[x.sd].col+'">'+x.nm+'</span></div><div style="font-size:13px;font-weight:bold">'+x.t+'</div></div><span style="font-size:18px;color:#3ca878">✓</span></div>';});
+    h+='</div>';}
+  el.innerHTML=h;var sl=el.querySelector('.rbL');if(sl)sl.scrollTop=sl.scrollHeight;}
 function nmStLegendHTML(){var u={},ord=[];[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){nmStList(eh).forEach(function(t){var k=String(t).replace(/\d+$/,'');if(!NM_CTR_DEF[k])k=t;if(!u[k]){u[k]=1;ord.push(k);}});});});
   var tip={'混乱':'混乱','PIN':'ピン','射撃済':'射撃済み','準備':'準備射撃済み','臨機':'臨機射撃済み','防御':'防御射撃済み','移動':'移動した','Motion':'Motion','CE':'CE(ハッチ開)','ACQ':'目標獲得','走行不能':'走行不能','ショック':'ショック','UK':'UK','スタン':'スタン','リコール':'リコール','ボグ':'ボグ','Mired':'Mired','故障':'主砲故障','主砲破壊':'主砲破壊','砲破壊':'砲破壊'};
   var ks=Object.keys(NM_CTR_DEF).filter(function(k){return u[k];});if(S_LOS.resid&&Object.keys(S_LOS.resid).length)ks.push('残留');if(!ks.length)return '';
