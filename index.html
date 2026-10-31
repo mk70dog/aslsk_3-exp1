@@ -33847,24 +33847,39 @@ function nmRmVFireItems(n){
    射撃の結果(IFT)から士気チェック(PTC/MC)を振る(指揮官が先、合格した指揮官の修正を分隊に)、撃破・走行不能・ショックをマーカーへ反映 */
 var NM_ST_LBL={brk:'混乱',pin:'PIN',imm:'走行不能',shock:'ショック',mal:'故障',stun:'スタン',recall:'リコール',uk:'UK',bog:'ボグ',mired:'Mired'};
 function nmStOf(eh){if(!eh.st)eh.st={};return eh.st;}
-function nmStList(eh){var o=[],st0=eh.st||{};if(st0.fired)o.push('射撃済');if(st0.mv)o.push(st0.mv==='mot'?'Motion':'移動');if(eh.grp&&!eh.veh&&!eh.gun){var d=nmGeList(eh.grp),nb=0,np=0;(d.items||[]).forEach(function(x){if(x.broken)nb++;else if(x.pinned)np++;});if(nb)o.push('混乱'+nb);if(np)o.push('PIN'+np);return o;}
+function nmStList(eh){var o=[],st0=eh.st||{};if(st0.fired)o.push(NM_CTR_DEF&&NM_CTR_DEF[st0.fired]?st0.fired:'射撃済');if(st0.mv)o.push(st0.mv==='mot'?'Motion':'移動');if(eh.veh&&eh.ce)o.push('CE');if(eh.acq)o.push('ACQ');if(eh.grp&&!eh.veh&&!eh.gun){var d=nmGeList(eh.grp),nb=0,np=0;(d.items||[]).forEach(function(x){if(x.broken)nb++;else if(x.pinned)np++;});if(nb)o.push('混乱'+nb);if(np)o.push('PIN'+np);return o;}
   var st=eh.st||{};['brk','pin','imm','shock','uk','bog','mired','stun','recall','mal'].forEach(function(k){if(st[k])o.push(k==='mal'&&st[k]==='X'?(eh.gun&&!eh.veh?'砲破壊':'主砲破壊'):NM_ST_LBL[k]);});return o;}
 /* v415(ダルマ指示「マップを直感的に」お任せ): 札を種類ごとに色分け(1つずつの札)。地図の左上(手番の下)に、今地図にある札だけの凡例 */
 var NM_ST_COL={'混乱':'#8b1e1e','PIN':'#b07a1c','射撃済':'#3d4a3a','移動':'#4b5d2c','Motion':'#5a4a6b','走行不能':'#6b4a2b','ショック':'#7a3b3b','故障':'#4a4a44','スタン':'#6b3b5a','UK':'#5a1e1e','ボグ':'#6b5a2b','Mired':'#6b5a2b','リコール':'#3b4a6b','主砲破壊':'#2e2e2a','砲破壊':'#2e2e2a','残留':'#a3561d'}; /* ミリタリー寄り: 暗い赤・黄土・オリーブドラブ・カーキ */
 function nmStKind(t){var m=String(t).replace(/\d+$/,'');return NM_ST_COL[m]?m:'混乱';}
+/* v451(ダルマ指示「アプリマップとリアルマップの操作感・カウンターの状態・システムカウンターを統一」①): 状態の印を実物のシステムカウンター風(正方形・2段の英字)で描く */
+var NM_CTR_DEF={'混乱':['BRO-','KEN','#b8261e','#fff'],'PIN':['PIN','','#f0ead6','#111'],'Motion':['MO-','TION','#f0ead6','#111'],'移動':['MOV-','ED','#f0ead6','#111'],
+  '走行不能':['IMMO-','BILE','#e8d84a','#111'],'ショック':['SHO-','CK','#b8261e','#fff'],'UK':['UK','','#b8261e','#fff'],'スタン':['STUN','','#b8261e','#fff'],'リコール':['RE-','CALL','#e8d84a','#111'],
+  'ボグ':['BOG','','#e8d84a','#111'],'Mired':['MIR-','ED','#e8d84a','#111'],'故障':['MA','MALF','#2a2a2a','#fff'],'主砲破壊':['MA','DIS','#2a2a2a','#ff5a4a'],'砲破壊':['GUN','DIS','#2a2a2a','#ff5a4a'],
+  '準備':['PREP','FIRE','#f0ead6','#111'],'臨機':['FIRST','FIRE','#f0ead6','#b8261e'],'防御':['FINAL','FIRE','#b8261e','#fff'],'射撃済':['FIR-','ED','#f0ead6','#111'],'CE':['CE','','#f0ead6','#111'],'ACQ':['ACQ','','#1c5aa8','#fff']};
+function nmCtrOf(l){return l.map(function(t){var m=/^(.+?)(\d+)$/.exec(t),k=m&&NM_CTR_DEF[m[1]]?m[1]:t,n=m&&NM_CTR_DEF[m[1]]?+m[2]:0,D=NM_CTR_DEF[k]||[String(t).slice(0,5),'','#f0ead6','#111'];return {a:D[0],b:D[1],bg:D[2],fg:D[3],n:n};});}
+function nmCtrSVG(c,x,y,Z){var o='<rect x="'+(x+1.5)+'" y="'+(y+1.5)+'" width="'+Z+'" height="'+Z+'" rx="2.5" fill="#000" opacity=".45"/>'
+  +'<rect x="'+x+'" y="'+y+'" width="'+Z+'" height="'+Z+'" rx="2.5" fill="'+c.bg+'" stroke="#000" stroke-width=".8"/>'
+  +'<rect x="'+(x+1.5)+'" y="'+(y+1.5)+'" width="'+(Z-3)+'" height="'+(Z-3)+'" rx="1.5" fill="none" stroke="'+(c.fg==='#fff'?'rgba(255,255,255,.35)':'rgba(0,0,0,.25)')+'" stroke-width=".7"/>';
+  var fs=function(t){return t.length>=5?6.6:t.length>=4?7.6:9;},cx=x+Z/2,f='font-family="Arial Narrow,Arial,sans-serif" font-weight="900" text-anchor="middle" fill="'+c.fg+'"';
+  if(c.b){o+='<text x="'+cx+'" y="'+(y+11)+'" font-size="'+fs(c.a)+'" '+f+'>'+c.a+'</text><text x="'+cx+'" y="'+(y+20)+'" font-size="'+fs(c.b)+'" '+f+'>'+c.b+'</text>';}
+  else o+='<text x="'+cx+'" y="'+(y+Z/2+3.4)+'" font-size="'+(fs(c.a)+1.5)+'" '+f+'>'+c.a+'</text>';
+  if(c.n>1)o+='<circle cx="'+(x+Z-1)+'" cy="'+(y+1)+'" r="5.5" fill="#000" stroke="#fff" stroke-width=".8"/><text x="'+(x+Z-1)+'" y="'+(y+3.8)+'" font-size="8" font-weight="900" text-anchor="middle" fill="#fff" font-family="sans-serif">'+c.n+'</text>';
+  return o;}
 function nmStatusOverlaySVG(dl){try{nmMvSync();}catch(e){}var h='';
   [['f',S_LOS.friendHexes||[]],['e',S_LOS.enemyHexes||[]]].forEach(function(P){P[1].forEach(function(eh){var l=nmStList(eh);if(!l.length&&nmAllAt(eh,P[0]).length<2)return;if(NM_DRAG&&NM_DRAG.moving&&NM_DRAG.ref===eh)return;
     var g=losColRowToGlobalCanon(eh.boardId,eh.col,eh.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);if(P[0]==='f'&&nmUnitAt(eh,'e'))d={x:d.x-8,y:d.y-8};if(P[0]==='e'&&nmUnitAt(eh,'f'))d={x:d.x+8,y:d.y+8};var so=nmStackOff(eh,P[0]);if(so.n>1){if(so.i>0)return;l=[];nmAllAt(eh,P[0]).forEach(function(x){l=l.concat(nmStList(x));});var top={x:d.x+(so.n-1)*16,y:d.y-(so.n-1)*16};
       h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+top.x+' '+top.y+')"><circle cx="'+(top.x-26)+'" cy="'+(top.y-24)+'" r="9" fill="#000" stroke="#d8cfae" stroke-width="1.2"/><text x="'+(top.x-26)+'" y="'+(top.y-20.5)+'" text-anchor="middle" font-size="10" font-weight="900" fill="#f2ead0" font-family="sans-serif">×'+so.n+'</text></g>';if(!l.length)return;}
-    var ws=l.map(function(t){var w=0;String(t).split('').forEach(function(ch){w+=/[\x00-\x7f]/.test(ch)?6.4:10.4;});return Math.max(20,Math.round(w+6));}),tot=ws.reduce(function(a,b){return a+b;},0)+(ws.length-1)*2,x=d.x-tot/2,y=d.y+10;
+    var C=nmCtrOf(l),Z=26,gp=2,tot=C.length*Z+(C.length-1)*gp,x=d.x-tot/2,y=d.y+6;
     h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
-    l.forEach(function(t,i){var c=NM_ST_COL[nmStKind(t)];h+='<rect x="'+x+'" y="'+y+'" width="'+ws[i]+'" height="14" rx="3" fill="'+c+'" stroke="#d8cfae" stroke-width="1"/><text x="'+(x+ws[i]/2)+'" y="'+(y+10.5)+'" text-anchor="middle" font-size="10" font-weight="900" fill="#f2ead0" font-family="sans-serif">'+t+'</text>';x+=ws[i]+2;});
+    C.forEach(function(c){h+=nmCtrSVG(c,x,y,Z);x+=Z+gp;});
     h+='</g>';});});
   return h;}
-function nmStLegendHTML(){var u={};[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){nmStList(eh).forEach(function(t){u[nmStKind(t)]=1;});});});
-  if(S_LOS.resid&&Object.keys(S_LOS.resid).length)u['残留']=1;var ks=Object.keys(NM_ST_COL).filter(function(k){return u[k];});if(!ks.length)return '';
-  var tip={'混乱':'混乱(MC失敗)','PIN':'PIN(PTC失敗)','射撃済':'このフェイズ・ターンに射撃済み','移動':'このターン移動した車両','Motion':'Motion状態の車両','走行不能':'走行不能','ショック':'ショック','故障':'主砲・砲の故障','残留':'残留火力'};
-  return '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;white-space:nowrap">'+ks.map(function(k){return '<span title="'+tip[k]+'" style="background:'+NM_ST_COL[k]+';color:#f2ead0;font-size:11px;font-weight:bold;border:1px solid #d8cfae;border-radius:3px;padding:0 5px;line-height:16px">'+k+'</span>';}).join('')+'</div>';}
+function nmStLegendHTML(){var u={},ord=[];[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){nmStList(eh).forEach(function(t){var k=String(t).replace(/\d+$/,'');if(!NM_CTR_DEF[k])k=t;if(!u[k]){u[k]=1;ord.push(k);}});});});
+  var tip={'混乱':'混乱','PIN':'ピン','射撃済':'射撃済み','準備':'準備射撃済み','臨機':'臨機射撃済み','防御':'防御射撃済み','移動':'移動した','Motion':'Motion','CE':'CE(ハッチ開)','ACQ':'目標獲得','走行不能':'走行不能','ショック':'ショック','UK':'UK','スタン':'スタン','リコール':'リコール','ボグ':'ボグ','Mired':'Mired','故障':'主砲故障','主砲破壊':'主砲破壊','砲破壊':'砲破壊'};
+  var ks=Object.keys(NM_CTR_DEF).filter(function(k){return u[k];});if(S_LOS.resid&&Object.keys(S_LOS.resid).length)ks.push('残留');if(!ks.length)return '';
+  return '<div style="display:flex;gap:6px 8px;flex-wrap:wrap;margin-top:4px;white-space:nowrap">'+ks.map(function(k){if(k==='残留')return '<span style="background:#a3561d;color:#f2ead0;font-size:11px;font-weight:bold;border-radius:3px;padding:0 5px;line-height:18px">残留火力</span>';
+    var c=nmCtrOf([k])[0];return '<span style="display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:bold;color:#e8e0c8"><svg width="20" height="20" viewBox="0 0 28 28">'+nmCtrSVG(c,0,0,26)+'</svg>'+tip[k]+'</span>';}).join('')+'</div>';}
 function nmStSave(slot){if(slot)nmGeSync(slot);try{saveState();}catch(e){}Draw();}
 function nmStTog(n,sd,k){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(!eh)return;var st=nmStOf(eh);st[k]=st[k]?false:(k==='fired'?'済':true);if(k==='brk'&&st.brk)st.pin=false;nmStSave();btRmReopen(n);}
 function nmStUnitTog(n,slot,idx,k){var d=nmGeList(slot),x=d.items[idx];if(!x)return;if(k==='broken'){x.broken=!x.broken;if(x.broken)x.pinned=false;}else{x.pinned=!x.pinned;}nmStSave(slot);NM_RM_SUB='grpedit';btRmReopen(n);}
