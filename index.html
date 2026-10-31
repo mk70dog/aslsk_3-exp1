@@ -30931,6 +30931,27 @@ function BtSvImport(inp){var f=inp.files&&inp.files[0];if(!f)return;var rd=new F
     if(!d||d.type!=='aslsk-battle-saves'||!d.saves){btToast('対戦のセーブファイルではありません');return;}
     var L=btSvList(),n=0;d.saves.forEach(function(r){if(!r||!r.data||!r.sc)return;var nm=r.name||'読み込み',k=2,base=nm;while(L.some(function(x){return x.name===nm&&x.sc===r.sc;}))nm=base+'('+(k++)+')';L.unshift(Object.assign({},r,{name:nm}));n++;});
     if(btSvPut(L))btToast(n+'件を読み込みました');btSvDraw();};rd.readAsText(f);}
+/* v465(ダルマ指示「マップタブの編成を対戦の初期配置に」): マップタブで地図に置いたソ連の編成(A〜Z: 分隊・指揮官・SW・DC)と車両・砲のマーカーを、
+   対戦モードのOBと名前で照らし合わせて同じヘクスに置く。配置範囲(btInSovZone)の外と、OBの残りがない物は置かない。SWの持ち主は開始時に自動で決まる */
+function btNmNorm(t){return String(t).replace(/\([^)]*\)/g,'').replace(/\s+/g,'').toUpperCase();}
+function BtLoadNmGroups(){
+  if(!btActive()||BT.started){btToast('ゲーム開始前の配置でだけ使えます');return;}
+  var side='SOV',obs=btObItems().filter(function(o){return o.side===side&&btGroupOf(o)==='setup';});
+  var swL={};try{nmSuOb(side).forEach(function(x){if(x.kind==='sw')swL[x.id]=x.label;});}catch(e){}
+  var sc=S.scen&&S.scen.sel,ok=0,out=[],none=[],seen=0;
+  function put(lbl,n,match){seen++;var c=obs.filter(function(o){return match(o)&&o.total-btPlacedCount(o.key)>0;});
+    if(!c.length){none.push(lbl);return;}var z=c.filter(function(o){return btInSovZone(o,n);})[0];if(!z){out.push(lbl+'@'+BTG.nodes[n].nm);return;}btPlace(z,n);ok++;}
+  [S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(e){var n=btNodeOf(e.boardId,e.col,e.row);if(n==null||n<0)return;
+    if(e.veh){var v=null;try{v=nmAfv(e.veh);}catch(x){}if(!v)return;var vn=btNmNorm(nmAfvName(v));if(!obs.some(function(o){return btNmNorm(o.name)===vn;}))return;put(nmAfvName(v),n,function(o){return btNmNorm(o.name)===vn;});return;}
+    if(e.gun){var g=null;try{g=nmGun(e.gun);}catch(x){}if(!g)return;var gn=btNmNorm(nmGunName(g));if(!obs.some(function(o){var on=btNmNorm(o.name);return on.indexOf(gn)>=0||gn.indexOf(on)>=0;}))return;put(nmGunName(g),n,function(o){var on=btNmNorm(o.name);return on.indexOf(gn)>=0||gn.indexOf(on)>=0;});return;}
+    if(!e.grp)return;var d=nmGeList(e.grp);if(d.nat!==side)return;
+    (d.items||[]).forEach(function(x){put(x.label,n,function(o){return o.name===x.label;});});
+    (d.sw||[]).forEach(function(uid){var b=nmGeSwBase(uid),lb=swL[b.id]||b.id;put(lb,n,function(o){return btNmNorm(o.name)===btNmNorm(lb);});});
+    var sv=sc&&S.savedGroups&&S.savedGroups[sc]&&S.savedGroups[sc][e.grp];((sv&&sv.dc)||[]).forEach(function(){put('DC',n,function(o){return /^DC/.test(o.name);});});});});
+  if(!seen){btToast('マップタブの地図にソ連の編成・車両・砲が置かれていません');return;}
+  btSave();Draw();
+  var msg=ok+'個を配置しました';if(out.length)msg+='。配置範囲の外で置かなかった: '+out.slice(0,4).join('、')+(out.length>4?' ほか'+(out.length-4)+'個':'');if(none.length)msg+='。OBの残りがなく置かなかった: '+none.slice(0,4).join('、')+(none.length>4?' ほか'+(none.length-4)+'個':'');
+  btToast(msg);try{btLog(['マップタブの編成から配置: '+msg]);}catch(e){}}
 function btSetupHTML(){
   var h='<div style="margin-top:6px;font-size:12px;color:#ccddee;border-top:1px solid #20242c;padding-top:5px">';
   if(!BT.app)h+='<div style="color:#8899aa">'+T('アプリの軍を選ぶと、アプリがその軍を担当します(なしの場合は両軍とも手動)')+'</div>';
@@ -30945,6 +30966,7 @@ function btSetupHTML(){
     h+=btBtn('T1=group2(西端) / T2=group1(東端)',"BtGerPlan('g2')",{on:BT.gerPlan&&BT.gerPlan.t1==='g2'});
     h+='</div>';
   }
+  if(BT.app!=='SOV')h+='<div style="margin-top:6px">'+btBtn(T('マップタブの編成でソ連軍を配置'),'BtLoadNmGroups()')+' <span style="color:#8899aa;font-size:11px">'+T('マップタブで地図に置いた編成・車両・砲を、そのヘクスに置く(配置範囲の中だけ・OBの残りの数まで)')+'</span></div>'; /* v465 */
   if(BT.app!=='SOV')h+='<div style="margin-top:4px;color:#8899aa">'+T('ソ連軍の配置: 下のOB部隊リストから部隊を選び、地図のヘクスをタップ(33狙撃軍団はYヘクス列以南、親衛はuZ5から2ヘクス以内)')+'</div>';
   h+='<div style="margin-top:6px">'+btBtn(T('配置完了・ゲーム開始'),'BtStart()',{on:true})+'</div>';
   h+='<div style="margin-top:4px;color:#8899aa;font-size:11px">'+T('この版の範囲: 歩兵・指揮官・SW・戦車・対戦車砲・PSK・DC・煙幕の全フェイズとアプリの判断')+'</div>'; // v284: 古い注記(車両は動かず撃たない)を現状に合わせて修正
