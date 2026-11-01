@@ -28350,7 +28350,8 @@ function losMoveRouteOverlaySVG(dispLayout){
       // を廃止し、兵士版と完全に同一デザイン(Noto Sans CJK JP Black焼き込み)に統一する。
       var startImg=(S_LOS.mfEntityType==='vehicle')?losVehicleRouteMarkerImg(true):(S.lang==="en"?LOS_ROUTE_START_MARKER_EN_IMG_B64:LOS_ROUTE_START_MARKER_IMG_B64); // 2026-09追加(Kato指示「起点マーカー英語対応: 方針1」): 歩兵用起点マーカーもS.lang==="en"時はバッジ部分を「START」に差し替え済みのEN版を使用
       var nmSrcS=nmRouteCtrSrc();
-      if(nmSrcS)h+=(NM_MOVE&&NM_MOVE.live?'<g opacity=".35">':'<g>')+nmRouteCtrSVG(nmSrcS,d,{start:true})+'</g>'; /* v453: マーカーで移動中は出発ヘクスを薄く(実物は駒が離れる) */ /* v343(ダルマ指示「マップ上のカウンターもVASLカウンターで表示」) */
+      if(S_LOS.nmRtStart)h+=nmRtStartSVG(S_LOS.nmRtStart,d,nmSrcS); /* v527: 起点の表示 */
+      else if(nmSrcS)h+=(NM_MOVE&&NM_MOVE.live?'<g opacity=".35">':'<g>')+nmRouteCtrSVG(nmSrcS,d,{start:true})+'</g>'; /* v453: マーカーで移動中は出発ヘクスを薄く(実物は駒が離れる) */ /* v343(ダルマ指示「マップ上のカウンターもVASLカウンターで表示」) */
       else{
       h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
       h+='<image href="data:image/png;base64,'+startImg+'" x="'+(d.x-siw/2)+'" y="'+(d.y-sih/2)+'" width="'+siw+'" height="'+sih+'" preserveAspectRatio="xMidYMid meet"/>';
@@ -35623,6 +35624,12 @@ function nmImAuto(P){if(!P||P.ph!=='DFF')return null;var te=nmImTgt(P),im=nmImOf
 /* v527(ダルマ指示「途中のカウンターを変更する 何種類か」): 移動の途中のヘクスの表示。''=カウンター(従来) dot=点+MF step=番号 mini=小さいカウンター arrow=進む向きの矢印 mf=MFだけ */
 function nmRtPill(x,y,t,col,anchor){var fs=10,w=Math.round(t.length*fs*0.6)+8,h=14,x0=anchor==='l'?x:x-w/2;
   return '<rect x="'+x0+'" y="'+(y-h/2)+'" width="'+w+'" height="'+h+'" rx="7" fill="'+(col||'#0f141c')+'" stroke="#fff" stroke-width="1.2"/><text x="'+(x0+w/2)+'" y="'+(y+0.5)+'" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="'+fs+'" font-weight="900" fill="#fff">'+t+'</text>';}
+function nmRtStartSVG(sty,d,src){var lb=S.lang==='en'?'START':'起点',h='<g>'+'<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
+  if(sty==='flag'){h+='<circle cx="'+d.x+'" cy="'+(d.y-4)+'" r="13" fill="#1f9d55" stroke="#fff" stroke-width="2"/><path d="M'+(d.x-4)+' '+(d.y+3)+' V'+(d.y-12)+' L'+(d.x+6)+' '+(d.y-8)+' L'+(d.x-4)+' '+(d.y-4)+'" fill="#fff" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/>'+nmRtPill(d.x,d.y+16,lb,'#1f9d55');}
+  else if(sty==='zero'){h+='<circle cx="'+d.x+'" cy="'+(d.y-4)+'" r="12" fill="#0f141c" stroke="#fff" stroke-width="2"/><text x="'+d.x+'" y="'+(d.y-3.5)+'" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="13" font-weight="900" fill="#fff">0</text>'+nmRtPill(d.x,d.y+16,lb);}
+  else if(sty==='ring'){h+='<circle cx="'+d.x+'" cy="'+(d.y-4)+'" r="14" fill="none" stroke="#2f7fd8" stroke-width="3"/><circle cx="'+d.x+'" cy="'+(d.y-4)+'" r="7" fill="#2f7fd8" stroke="#fff" stroke-width="1.5"/>'+nmRtPill(d.x,d.y+16,lb,'#2f7fd8');}
+  else if(sty==='mini'){var Z=26,sr=src||('data:image/png;base64,'+LOS_ROUTE_NORMAL_MARKER_IMG_B64);h+='<rect x="'+(d.x-Z/2-1.5)+'" y="'+(d.y-Z/2-6.5)+'" width="'+(Z+3)+'" height="'+(Z+3)+'" rx="3" fill="#000" stroke="#1f9d55" stroke-width="2.5"/><image href="'+sr+'" x="'+(d.x-Z/2)+'" y="'+(d.y-Z/2-5)+'" width="'+Z+'" height="'+Z+'"/>'+nmRtPill(d.x,d.y+16,lb,'#1f9d55');}
+  return h+'</g></g>';}
 function nmRtStySVG(sty,d,cell,idx,rt,lay,cx,u){var mf=(Math.round(cell.cum*10)/10)+u,col=cx?'#e07020':'#2f7fd8',h='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
   if(sty==='dot'){h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="7" fill="'+col+'" stroke="#fff" stroke-width="2"/>'+nmRtPill(d.x+11,d.y,(cx?'CX ':'')+mf,null,'l');}
   else if(sty==='step'){h+='<circle cx="'+d.x+'" cy="'+(d.y-4)+'" r="12" fill="'+col+'" stroke="#fff" stroke-width="2"/><text x="'+d.x+'" y="'+(d.y-3.5)+'" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="13" font-weight="900" fill="#fff">'+idx+'</text>'+nmRtPill(d.x,d.y+16,(cx?'CX ':'')+mf);}
