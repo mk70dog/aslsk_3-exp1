@@ -35381,12 +35381,12 @@ var NM_TOOL_DEF={
   move:['このヘクスから移動','<svg viewBox="-1.5 0 34.5 24" width="29" height="20" fill="currentColor" style="display:block"><g transform="translate(0 1)"><circle cx="5.6" cy="3.6" r="2.2"/><path d="M3.3 7.2l3.3-.6 2.3 3.4 2.6 1-.6 1.6-3.2-1.1-1.2-1.6-.9 3.9 2.6 2.6.9 5.4h-1.9l-.8-4.4-2.9-2.5-1.1 3.4-2.8 3-1.3-1.3 2.4-2.7 1.6-6.2-1.9.9-1 3.1-1.7-.5 1.3-4z"/></g><path d="M16 8h6l1 2h4v1h-3.8l.3.7H26l1.6 1.8v1H11.5v-1l1.6-1.8h2.2z"/><rect x="12" y="15" width="15" height="4" rx="2"/><g fill="#161b24"><circle cx="14.6" cy="17" r=".9"/><circle cx="17.7" cy="17" r=".9"/><circle cx="20.8" cy="17" r=".9"/><circle cx="23.9" cy="17" r=".9"/></g><path d="M25 4.5h7M29 1.5l3 3-3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>','移動を始めるヘクスをタップ']};
 function nmToolArm(k){NM_TOOL=NM_TOOL===k?null:k;NM_AB_ARM=false;nmFtActFill();if(NM_TOOL)btToast(T(NM_TOOL_DEF[k][2]));}
 /* v499(ダルマ指示「上部タブ 各マークにポインターを重ねるとボタンの意味を表示」): マウス/トラックパッドのポインターを上バー・下バーのボタンに重ねると、すぐ下に説明 */
-var NM_TIP_RULES=[[/nmPhaseStep\(-1\)/,'前のフェイズへ戻る'],[/nmPhaseStep\(1\)/,'次のフェイズへ進む'],[/nmPhaseJump\((\d)\)/,function(m){var P=['回復フェイズ(RPh)','準備射撃フェイズ(PFPh)','移動フェイズ(MPh)','防御射撃フェイズ(DFPh)','前進射撃フェイズ(AFPh)','潰走フェイズ(RtPh)','前進フェイズ(APh)','白兵戦フェイズ(CCPh)'];return P[+m[1]]+'へ移る';}],
-  [/nmFtDo\(/,function(m,e){return (e.textContent||'').trim()+':このフェイズの操作(選んでいるマーカーで)';}],[/nmLastUndo/,'直前の操作を中止(元に戻す)'],[/nmLastRedo/,'中止した操作をやり直す'],[/nmFtDice/,'ダイスを振る(DR)'],[/nmFtRb/,'リアル盤へ:実物の盤でやることの一覧'],
-  [/nmAbArm/,'A→B:次にタップしたヘクスを地点Aにする(その次のタップで地点B・LOS判定)'],[/nmToolArm\('fire'\)/,'ここから撃つ:次にタップしたヘクスのマーカーで射撃'],[/nmToolArm\('view'\)/,'このヘクスから見える:次にタップしたヘクスから見える範囲を色分け'],[/nmToolArm\('move'\)/,'このヘクスから移動:次にタップしたヘクスのマーカーを移動(無ければ歩兵・車両を選ぶ)'],
-  [/nmFtMenu/,'メニュー:編成・シナリオ・他のタブ・スキン・アプリ更新'],[/nmFtZoom\(-1\)/,'地図を縮小'],[/nmFtZoom\(1\)/,'地図を拡大'],[/nmFtRot/,'地図を90°回転'],[/nmFtFit\('width'\)/,'地図を横幅に合わせる'],[/nmFtFit\('height'\)/,'地図を縦幅に合わせる'],[/BtMapFull/,'全画面表示をやめる'],[/nmIjOpen/,'インスタント判定:地点A→Bの射撃判定を開く']];
+var NM_TIP_RULES=[[/nmPhaseStep\(-1\)/,'前のフェイズ'],[/nmPhaseStep\(1\)/,'次のフェイズ'],[/nmPhaseJump\((\d)\)/,function(m){return ['回復','準備射撃','移動','防御射撃','前進射撃','潰走','前進','白兵戦'][+m[1]]+'フェイズへ';}],
+  [/nmFtDo\(/,function(m,e){return (e.textContent||'').replace(/^[^\s]+\s/,'').trim();}],[/nmLastUndo/,'元に戻す'],[/nmLastRedo/,'やり直す'],[/nmFtDice/,'ダイスを振る'],[/nmFtRb/,'リアル盤へ'],
+  [/nmAbArm/,'LOS(地点A→B)'],[/nmToolArm\('fire'\)/,'ここから撃つ'],[/nmToolArm\('view'\)/,'見える範囲'],[/nmToolArm\('move'\)/,'移動'],
+  [/nmFtMenu/,'メニュー'],[/nmFtZoom\(-1\)/,'縮小'],[/nmFtZoom\(1\)/,'拡大'],[/nmFtRot/,'回転'],[/nmFtFit\('width'\)/,'横幅に合わせる'],[/nmFtFit\('height'\)/,'縦幅に合わせる'],[/BtMapFull/,'全画面をやめる'],[/nmIjOpen/,'射撃判定']];
 function nmTipText(e){var oc=e.getAttribute('onclick')||'';for(var i=0;i<NM_TIP_RULES.length;i++){var r=NM_TIP_RULES[i],m=oc.match(r[0]);if(m)return typeof r[1]==='function'?r[1](m,e):r[1];}
-  if(e.classList&&e.classList.contains('appVerSp'))return 'いまのバージョン(長押しでアプリ更新)';return e.getAttribute('data-tip')||'';}
+  if(e.classList&&e.classList.contains('appVerSp'))return 'バージョン(長押しで更新)';return e.getAttribute('data-tip')||'';}
 (function(){if(typeof document==='undefined'||window.__nmTip)return;window.__nmTip=1;var cur=null;
   function hide(){var t=document.getElementById('nmTip');if(t)t.remove();cur=null;}
   document.addEventListener('pointerover',function(ev){if(ev.pointerType==='touch')return;var e=ev.target&&ev.target.closest&&ev.target.closest('#nmFullTabs [onclick],#nmFullTabs .appVerSp,#nmFtBot [onclick]');if(!e){if(cur)hide();return;}if(e===cur)return;
@@ -35395,7 +35395,7 @@ function nmTipText(e){var oc=e.getAttribute('onclick')||'';for(var i=0;i<NM_TIP_
     var r=e.getBoundingClientRect(),inBot=!!e.closest('#nmFtBot');t.style.left='0px';t.style.top='0px';var w=t.offsetWidth,h=t.offsetHeight;
     t.style.left=Math.max(6,Math.min(innerWidth-w-6,r.left+r.width/2-w/2))+'px';t.style.top=(inBot?r.top-h-6:r.bottom+6)+'px';},true);
   document.addEventListener('pointerdown',hide,true);document.addEventListener('scroll',hide,true);
-  var st=document.createElement('style');st.textContent='#nmTip{position:fixed;z-index:9700;max-width:320px;background:#0d1422;border:1px solid #33aaff;color:#dfefff;font:600 12px/1.45 sans-serif;padding:5px 9px;border-radius:7px;box-shadow:0 6px 18px #000b;pointer-events:none;white-space:normal}';document.head.appendChild(st);})();
+  var st=document.createElement('style');st.textContent='#nmTip{position:fixed;z-index:9700;background:#0d1422e8;border:1px solid #33aaff99;color:#dfefff;font:600 10.5px/1.3 sans-serif;padding:2px 6px;border-radius:5px;box-shadow:0 3px 10px #000a;pointer-events:none;white-space:nowrap}';document.head.appendChild(st);})();
 /* v499(ダルマ指示「移動ボタン ヘクスにカウンター(敵味方)があればそのスタックを移動 複数なら選択」) */
 function nmToolMovePick(n){var H=nmHexOfNode(n),L=[];['f','e'].forEach(function(sd){nmAllAt(H,sd).forEach(function(eh){var v=eh.veh?nmAfv(eh.veh):null;if(eh.gun&&!eh.veh)return;L.push({sd:sd,eh:eh});});});return L;}
 function nmToolMoveGo(n,i){var o=document.getElementById('nmMvPk');if(o)o.remove();var L=nmToolMovePick(n);if(i<0){nmIjMenuAt(n);nmRmSubOpen('march',n);return;}var x=L[i];if(!x)return;NM_SEL_EH=x.eh;NM_FT_SEL=x.eh;nmMvStart(n,x.sd);}
