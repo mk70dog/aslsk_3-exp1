@@ -28378,7 +28378,9 @@ function losMoveRouteOverlaySVG(dispLayout){
     // 2026-08修正(ダルマ提供画像「車両root用マーク」): 対象種別が車両の場合は、通常/CXの
     // 区別なく専用の車両マーカー画像を使う(車両用のCX/通常の区別画像は未提供のため)。
     var riw=48,rih=48;
-    if(!beyond){
+    var nmSty=(!cell.vcaChange&&idx<rt.hexes.length-1&&S_LOS.nmRtSty)?S_LOS.nmRtSty:''; /* v527: 途中のヘクスの表示の種類 */
+    if(!beyond&&nmSty){h+=nmRtStySVG(nmSty,d,cell,idx,rt,dispLayout,inCX,(S_LOS.mfEntityType==='vehicle')?'MP':'MF');}
+    else if(!beyond){
       var routeImg=(S_LOS.mfEntityType==='vehicle')?losVehicleRouteMarkerImg():(inCX?LOS_ROUTE_CX_MARKER_IMG_B64:LOS_ROUTE_NORMAL_MARKER_IMG_B64);
       // 2026-09追加(ダルマ指示「移動時の車両方向変更にも使用」): 向き変更ステップ(vcaChange)は
       // 直前のヘクスと同座標のため、マーカー画像は重ねて描かない(MPバッジと矢印のみ更新する)。
@@ -28424,7 +28426,7 @@ function losMoveRouteOverlaySVG(dispLayout){
     var valueLbl=(Math.round(cell.cum*10)/10)+unitLbl+climbMark+bogMark;
     // 直後に同座標の向き変更ステップがある場合、MPバッジは最新のステップ側だけに表示する。
     var nextTurn=!!(rt.hexes[idx+1]&&rt.hexes[idx+1].vcaChange);
-    var mfLines=nextTurn?[]:(inCX?['CX',valueLbl]:[valueLbl]);
+    var mfLines=(nextTurn||(nmSty&&!beyond))?[]:(inCX?['CX',valueLbl]:[valueLbl]);
     var mfFontSize=9;
     var mfPadX=2,mfPadY=1;
     var mfGap=1;
@@ -35618,6 +35620,18 @@ function nmImAuto(P){if(!P||P.ph!=='DFF')return null;var te=nmImTgt(P),im=nmImOf
 (function(){var oO=nmVfO;nmVfO=function(B){var o=oO.apply(this,arguments);try{var V=NM_VF;if(V&&B&&B.mode==='ITT'&&B.te&&!B.te.veh&&V.tgt!=null){var AN=BTG.nodes[V.from],TN=BTG.nodes[V.tgt],lh=0;
   try{lh=losCheckLOSGlobal(AN.x,AN.y,TN.x,TN.y,S_LOS.orchardSeason,S_LOS.grainSeason).hindranceDrm||0;}catch(e){}
   var dl=[];nmInfMvDrm(V,TN.tem,lh,dl);o.xdrms=dl.map(function(t){var m=t.match(/^(.*?)(-\d+)$/);return m?{v:+m[2],l:m[1]}:null;}).filter(Boolean);}}catch(e){console.log('vfO v526',e);}return o;};})();
+/* v527(ダルマ指示「途中のカウンターを変更する 何種類か」): 移動の途中のヘクスの表示。''=カウンター(従来) dot=点+MF step=番号 mini=小さいカウンター arrow=進む向きの矢印 mf=MFだけ */
+function nmRtPill(x,y,t,col,anchor){var fs=10,w=Math.round(t.length*fs*0.6)+8,h=14,x0=anchor==='l'?x:x-w/2;
+  return '<rect x="'+x0+'" y="'+(y-h/2)+'" width="'+w+'" height="'+h+'" rx="7" fill="'+(col||'#0f141c')+'" stroke="#fff" stroke-width="1.2"/><text x="'+(x0+w/2)+'" y="'+(y+0.5)+'" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="'+fs+'" font-weight="900" fill="#fff">'+t+'</text>';}
+function nmRtStySVG(sty,d,cell,idx,rt,lay,cx,u){var mf=(Math.round(cell.cum*10)/10)+u,col=cx?'#e07020':'#2f7fd8',h='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
+  if(sty==='dot'){h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="7" fill="'+col+'" stroke="#fff" stroke-width="2"/>'+nmRtPill(d.x+11,d.y,(cx?'CX ':'')+mf,null,'l');}
+  else if(sty==='step'){h+='<circle cx="'+d.x+'" cy="'+(d.y-4)+'" r="12" fill="'+col+'" stroke="#fff" stroke-width="2"/><text x="'+d.x+'" y="'+(d.y-3.5)+'" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="13" font-weight="900" fill="#fff">'+idx+'</text>'+nmRtPill(d.x,d.y+16,(cx?'CX ':'')+mf);}
+  else if(sty==='mini'){var src=nmRouteCtrSrc()||('data:image/png;base64,'+(cx?LOS_ROUTE_CX_MARKER_IMG_B64:LOS_ROUTE_NORMAL_MARKER_IMG_B64)),Z=26;
+    h+='<rect x="'+(d.x-Z/2-1.5)+'" y="'+(d.y-Z/2-6.5)+'" width="'+(Z+3)+'" height="'+(Z+3)+'" rx="3" fill="#000" stroke="'+col+'" stroke-width="2" opacity=".85"/><image href="'+src+'" x="'+(d.x-Z/2)+'" y="'+(d.y-Z/2-5)+'" width="'+Z+'" height="'+Z+'" opacity=".85"/>'+nmRtPill(d.x,d.y+16,(cx?'CX ':'')+mf);}
+  else if(sty==='arrow'){var nx=rt.hexes[idx+1],ang=0;try{var g=losColRowToGlobalCanon(nx.boardId,nx.col,nx.row),e=losCanonicalToDisplay(g.x,g.y,lay);ang=Math.atan2(e.y-d.y,e.x-d.x)*180/Math.PI+S_LOS.viewRot;}catch(_){}
+    h+='<g transform="rotate('+ang+' '+d.x+' '+(d.y-4)+')"><path d="M'+(d.x-9)+' '+(d.y-14)+' L'+(d.x+7)+' '+(d.y-4)+' L'+(d.x-9)+' '+(d.y+6)+' L'+(d.x-4)+' '+(d.y-4)+' Z" fill="'+col+'" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></g>'+nmRtPill(d.x,d.y+16,(cx?'CX ':'')+mf);}
+  else if(sty==='mf'){h+=nmRtPill(d.x,d.y,(cx?'CX ':'')+mf,col);}
+  return h+'</g>';}
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
