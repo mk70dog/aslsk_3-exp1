@@ -986,6 +986,7 @@ html[data-uith="7"] #nmIj .ijGo{background:#7aa2ff!important;color:#050a18!impor
 html[data-uith="7"] #nmIj .ijS,html[data-uith="7"] #nmIj .ijHd span:first-child{color:#7aa2ff!important}
 html[data-uith="7"] #nmIj{background:rgba(0,0,0,.45)!important}
 </style>
+<style id="hdrHideCss">/* v494 sample(ダルマ指示「各タブ メインタブから上を非表示」) */html.hdr-hide #stickytop,html.hdr-hide #hdrChart{display:none!important}html.hdr-hide #nav{top:0!important;padding-top:env(safe-area-inset-top,0px)}</style>
 </head>
 <body>
 <div id="ldOv" style="position:fixed;inset:0;z-index:99999;background:#0a0c14;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#9fd8ff;font-family:monospace"><div style="font-size:26px;letter-spacing:6px;font-weight:bold">LOADING</div><div style="width:280px;max-width:80vw;height:8px;border:1px solid #2a6a9a;border-radius:4px;margin-top:16px;overflow:hidden"><div id="ldBar" style="height:100%;width:2%;background:#33aaff;transition:width .3s"></div></div><div id="ldTx" style="margin-top:12px;font-size:13px;color:#8899aa">読み込み中… (更新直後は数十秒かかります)</div></div><script>/* v484(ダルマ報告「更新してリロードすると(タブの中身が空の)表示になる」): 70MBの読み込み中は起動処理(DOMContentLoaded)がまだ動かないため、読み込みの進み具合を出す。起動処理が終わったら消す */function LDP(p){try{document.getElementById('ldBar').style.width=p+'%';}catch(e){}}document.addEventListener('DOMContentLoaded',function(){LDP(100);setTimeout(function(){var o=document.getElementById('ldOv');if(o)o.remove();},80);});</script>
@@ -35419,6 +35420,7 @@ function uiThemePop(){var o=document.getElementById('uiThPop');if(o){o.remove();
   m.onclick=function(e){e.stopPropagation();};document.body.appendChild(m);
   setTimeout(function(){var f=function(e){var mm=document.getElementById('uiThPop');if(mm&&!mm.contains(e.target)){mm.remove();document.removeEventListener('pointerdown',f,true);}};document.addEventListener('pointerdown',f,true);},0);}
 uiThemeApply(uiThemeGet());
+function hdrHideGet(){try{return localStorage.getItem('aslsk_hdrhide')!=='0';}catch(e){return true;}}function hdrHideApply(){document.documentElement.classList.toggle('hdr-hide',hdrHideGet());}function hdrHideToggle(){try{localStorage.setItem('aslsk_hdrhide',hdrHideGet()?'0':'1');}catch(e){}hdrHideApply();}hdrHideApply();
 function appVerFit(){try{document.querySelectorAll('.appVerSp').forEach(function(sp){var b=sp.querySelector('.appVer');if(!b)return;b.style.display='';sp.style.minWidth='0';if(b.offsetWidth>sp.clientWidth+1)b.style.display='none';});}catch(e){}}
 (function(){if(typeof window!=='undefined'&&!window.__appVerFitR){window.__appVerFitR=1;window.addEventListener('resize',function(){setTimeout(appVerFit,50);});}})();
 function appVerBadgeHTML(){var n=appVerNum();if(n==null)return '';
