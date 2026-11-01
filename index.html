@@ -999,6 +999,7 @@ html[data-hdrtimer="1"] #hdrHotTimer::after,html[data-hdrrange="1"] #hdrHotRange
 html[data-full="1"] #hdrHotFull{box-shadow:0 0 8px 3px rgba(60,255,120,.7)}
 #hdrOutSeg{left:79.75%!important;top:24.3%!important;width:12.25%!important;height:70%!important}
 </style>
+<style id="hdrHideCss">/* v494 sample(ダルマ指示「上部画像なしでターン表部から表示」) */html.hdr-noplate #stickytop{display:none!important}html.hdr-noplate #hdrChart{padding-top:calc(4px + env(safe-area-inset-top,0px))!important}</style>
 </head>
 <body>
 <div id="ldOv" style="position:fixed;inset:0;z-index:99999;background:#0a0c14;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#9fd8ff;font-family:monospace"><div style="font-size:26px;letter-spacing:6px;font-weight:bold">LOADING</div><div style="width:280px;max-width:80vw;height:8px;border:1px solid #2a6a9a;border-radius:4px;margin-top:16px;overflow:hidden"><div id="ldBar" style="height:100%;width:2%;background:#33aaff;transition:width .3s"></div></div><div id="ldTx" style="margin-top:12px;font-size:13px;color:#8899aa">読み込み中… (更新直後は数十秒かかります)</div></div><script>/* v484(ダルマ報告「更新してリロードすると(タブの中身が空の)表示になる」): 70MBの読み込み中は起動処理(DOMContentLoaded)がまだ動かないため、読み込みの進み具合を出す。起動処理が終わったら消す */function LDP(p){try{document.getElementById('ldBar').style.width=p+'%';}catch(e){}}document.addEventListener('DOMContentLoaded',function(){LDP(100);setTimeout(function(){var o=document.getElementById('ldOv');if(o)o.remove();},80);});</script>
@@ -9930,6 +9931,7 @@ function hdrSwApply(){var de=document.documentElement;de.setAttribute('data-hdrt
 function hdrSwTimer(){try{localStorage.setItem('aslsk_hdr_timer',hdrSwGet('timer',true)?'0':'1');}catch(e){}hdrSwApply();}
 function hdrSwRange(){try{localStorage.setItem('aslsk_hdr_range',hdrSwGet('range',false)?'0':'1');}catch(e){}hdrSwApply();}
 setTimeout(hdrSwApply,0);
+function hdrPlateGet(){try{return localStorage.getItem('aslsk_hdrplate')==='1';}catch(e){return false;}}function hdrPlateApply(){document.documentElement.classList.toggle('hdr-noplate',!hdrPlateGet());}function hdrPlateToggle(){try{localStorage.setItem('aslsk_hdrplate',hdrPlateGet()?'0':'1');}catch(e){}hdrPlateApply();}hdrPlateApply();
 function hdrSetLang(l){if(S.lang!==l)ToggleLang();}
 function ToggleLang(){S.lang=(S.lang==="ja"?"en":"ja");updateNavLabels();renderPhaseTracker();renderHeaderChart();relangLog();Draw();}
 function cowerMsg(cols,noEffect){
