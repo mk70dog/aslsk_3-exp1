@@ -35747,6 +35747,12 @@ var NM_MI=(function(){var L=function(p,w){return '<svg class="miIc" viewBox="0 0
 var NM_IC_MONO=true;
 (function(){var o=nmIcLight;nmIcLight=function(c){return NM_IC_MONO?'#cfd6df':o(c);};})();
 NM_FT_ACT.rph[0][1]=NM_MI.rally;NM_FT_ACT.rtph[0][1]=NM_MI.rout;NM_FT_ACT.aph[0][1]=NM_MI.adv;NM_FT_ACT.ccph[0][1]=NM_MI.cc;
+/* v538(ダルマ指示「SWの関連付けをできるようにする」): 編成の画面で、支援火器ごとに運ぶユニットを選ぶ。IPCを超える時は⚠(超えても選べる。超えた分はMFが減る 4.0) */
+function nmGeSwOwn(n,slot,uid,pid){nmBkSnap('支援火器を運ぶユニット');var g=nmGeActive(slot);if(g){if(!g.swOwner)g.swOwner={};g.swOwner[uid]=pid;}var sv=nmGeSaved(slot);if(sv){if(!sv.swOwner)sv.swOwner={};sv.swOwner[uid]=pid;}
+  nmGeSync(slot);try{nmStSave();}catch(e){}try{saveState();}catch(e){}NM_RM_SUB='grpedit';btRmReopen(n);}
+function nmGeLwOwn(n,slot,k,pid){var L=nmSuLwList(slot)||[],e=L[k];if(!e)return;nmBkSnap('対戦車兵器を運ぶユニット');nmSuLwDel(slot,k);nmSuLwAdd(slot,e.id,pid);nmGeSync(slot);try{nmStSave();}catch(x){}try{saveState();}catch(x){}NM_RM_SUB='grpedit';btRmReopen(n);}
+function nmGeDcOwn(n,slot,k,pid){var sv=nmGeSaved(slot);if(!(sv&&sv.dc&&sv.dc[k]))return;nmBkSnap('爆薬を運ぶユニット');sv.dc[k].own=pid;nmGeSync(slot);try{nmStSave();}catch(x){}try{saveState();}catch(x){}NM_RM_SUB='grpedit';btRmReopen(n);}
+function nmGeCandLbl(items,x){var b=x.label.replace(/\[.*$/,''),same=(items||[]).filter(function(y){return y.label.replace(/\[.*$/,'')===b;});if(same.length<2)return b;return b+'('+(same.indexOf(x)+1)+')';} /* v538: 同じ名前のユニットが2つ以上ある時は(1)(2)で区別 */
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
@@ -36310,7 +36316,17 @@ function nmRmGrpEditItems(n){
   if(!d.items.length)it.push({ic:'info',t:'(中身なし)',sub:'下からユニットを加えてください'});
   d.items.forEach(function(x,i){var un=x.nat||nat;it.push({row:1,ic:'sel',img:vaslCtrHTML('u:'+un+'|'+x.label,30)||'',t:x.label+(x.kind==='smc'?' <span style="color:#8899aa;font-size:11px">指揮官</span>':''),btns:[[(x.broken?'✓':'')+'混乱',"nmStUnitTog("+n+",'"+G.slot+"',"+i+",'broken')"],[(x.pinned?'✓':'')+'PIN',"nmStUnitTog("+n+",'"+G.slot+"',"+i+",'pinned')"],['✕',"nmGeDel("+n+","+i+")"]]});}); /* v405: 混乱・PIN(射撃タブと共有) */
   (d.sw||[]).forEach(function(uid){var b=nmGeSwBase(uid),t=SWT.filter(function(w){return w.id===b.id;})[0],ow=(d.items||[]).filter(function(x){return x.pid===d.own[uid];})[0];
-    it.push({row:1,ic:'fire',img:vaslCtrHTML('u:SW|'+b.id,30)||'',t:(t?swLblT(t.lbl):b.id)+(b.i?' #'+(b.i+1):'')+' <span style="color:#8899aa;font-size:11px">支援火器'+(ow?'・'+ow.label+'が運ぶ':'')+'</span>',btns:[['✕',"nmGeSwDel("+n+",'"+q(uid)+"')"]]});});
+    it.push({row:1,ic:'fire',img:vaslCtrHTML('u:SW|'+b.id,30)||'',t:(t?swLblT(t.lbl):b.id)+(b.i?' #'+(b.i+1):'')+' <span style="color:#8899aa;font-size:11px">支援火器'+(ow?'・'+ow.label+'が運ぶ':'・持ち主なし')+'</span>',btns:[['✕',"nmGeSwDel("+n+",'"+q(uid)+"')"]]});
+      try{var car={};Object.keys(d.own||{}).forEach(function(u2){var p2=d.own[u2];if(p2!=null)car[p2]=(car[p2]||0)+nmSuPP('sw',nmGeSwBase(u2).id);});
+        var cand=(d.items||[]).filter(function(x){return !x.broken;});
+        if(cand.length)it.push({row:1,ic:'',t:'<span style="font-size:12px;color:#8899aa">運ぶ</span>',btns:cand.map(function(x){var cur=x.pid===d.own[uid],over=!cur&&(car[x.pid]||0)+nmSuPP('sw',b.id)>nmSuIPC(x,d.nat);return [(cur?'✓':'')+nmGeCandLbl(d.items,x)+(over?'⚠':''),"nmGeSwOwn("+n+",'"+G.slot+"','"+q(uid)+"',"+x.pid+")"];})});}catch(e){console.log('swOwn',e);} /* v538(ダルマ指示「SWの関連付け」) */
+    });
+  try{var LW=nmSuLwList(G.slot)||[],DC=nmSuDcList(G.slot)||[],cand2=(d.items||[]).filter(function(x){return !x.broken;});
+    LW.forEach(function(e,k){var ow=(d.items||[]).filter(function(x){return x.pid===e.pid;})[0];it.push({row:1,ic:'fire',img:nmSuSwImg('lw',e.id,30),t:nmSxName('lw',e.id)+' <span style="color:#8899aa;font-size:11px">対戦車兵器'+(ow?'・'+ow.label+'が運ぶ':'・持ち主なし')+'</span>',btns:[]});
+      if(cand2.length)it.push({row:1,ic:'',t:'<span style="font-size:12px;color:#8899aa">運ぶ</span>',btns:cand2.map(function(x){return [(x.pid===e.pid?'✓':'')+nmGeCandLbl(d.items,x),"nmGeLwOwn("+n+",'"+G.slot+"',"+k+","+x.pid+")"];})});});
+    DC.forEach(function(e,k){var ow=(d.items||[]).filter(function(x){return x.pid===e.own;})[0];it.push({row:1,ic:'fire',img:nmSuSwImg('dc','dc',30),t:'DC 30-1 <span style="color:#8899aa;font-size:11px">爆薬'+(ow?'・'+ow.label+'が運ぶ':'・持ち主なし')+'</span>',btns:[]});
+      if(cand2.length)it.push({row:1,ic:'',t:'<span style="font-size:12px;color:#8899aa">運ぶ</span>',btns:cand2.map(function(x){return [(x.pid===e.own?'✓':'')+nmGeCandLbl(d.items,x),"nmGeDcOwn("+n+",'"+G.slot+"',"+k+","+x.pid+")"];})});});
+    if((d.sw||[]).length||LW.length||DC.length)it.push({ic:'hex',t:'支援火器を他の編成へ渡す・置く・拾う',sub:'同じヘクスの別の編成に渡す、このヘクスに置く・捨てる・拾う',f:"nmSxOpen("+n+",'"+(G.sd||'f')+"')"});}catch(e){console.log('lwOwn',e);} /* v538 */
   if(!nat){it.push({sep:1});it.push({row:1,ic:'info',t:'国籍を選ぶ',btns:nmSuNats().map(function(k){return [nmNatLbl(k),"nmGeSetNat("+n+",'"+k+"')"];})});return it;} /* v441 */
   it.push({sep:1});
   it.push({ic:'info',t:'加える',sub:'このシナリオの'+nmNatLbl(nat)+'のユニット(タップで1個ずつ)'});
