@@ -36330,6 +36330,24 @@ function nmTbPosPop(){var o=document.getElementById('nmTbPop');if(o){o.remove();
   var oR=nmRbRender;nmRbRender=function(){var r=oR.apply(this,arguments);try{var w=nmTbW(),el=document.getElementById('nmRl');if(w&&el&&nmTbPos()==='R'){var rr=el.getBoundingClientRect();if(rr.right>innerWidth-w-6)el.style.right=(w+8)+'px';}}catch(e){}return r;};
   var oM=nmFtMenu;nmFtMenu=function(btn){var r=oM.apply(this,arguments);try{nmTbSide(document.getElementById('nmFtMn'),btn);}catch(e){}return r;};
   var go=function(){nmTbApply();};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(go,0);});else setTimeout(go,0);})();
+/* v580(ダルマ指示「自動で判別できる？」「ダイス手入力は？」): ボグ判定の自動判別(装甲車=全装軌でない+1・林は全MP、移動で丘を登った=高度を上げる+1)と、赤白ダイスの手入力 */
+(function(){var oO=nmVsBogOpen;nmVsBogOpen=function(n,sd){var r=oO.apply(this,arguments);try{var B=NM_BG;if(B){var eh=nmVsEh(n,sd),wh=false;try{wh=!!(eh&&losIsWheeledVehicle(eh.veh));}catch(e){}B.nt=wh;if(wh&&/woods/.test(B.terr))B.terr='woodsFull';
+    var M=NM_MOVE,rh=S_LOS.route&&S_LOS.route.hexes,L=rh&&rh[rh.length-1];if(M&&M.eh===eh&&L&&btNodeOf(L.boardId,L.col,L.row)===n)B.elev=!!L.climbing;B.auto=1;B.da=0;B.db=0;NM_RM_SUB='bog';btRmReopen(n);}}catch(e){console.log('bog auto',e);}return r;};})();
+function nmVsBogDie(n,k,v){var B=NM_BG;if(!B)return;B[k]=v;if(B.da&&B.db){var eh=nmVsEh(n,B.sd),vv=eh&&nmAfv(eh.veh),gp=(vv&&vv.gp)||'normal',R=BOG_CHECK_RULES;var drm=(R.groundPressureDrm[gp]||0)+(R.terrainDrm[B.terr]||0)+(B.nt?R.notFullyTrackedDrm:0)+(B.elev?R.gainingElevationDrm:0);
+  var a=B.da,b=B.db,q=[a,b],mr=Math.random;Math.random=function(){var x=q.shift();return x?(x-1)/6+0.01:mr();};try{B.da=0;B.db=0;nmVsBog(n,drm);}finally{Math.random=mr;}return;}NM_RM_SUB='bog';btRmReopen(n);}
+(function(){var oI=nmRmBogItems;nmRmBogItems=function(n){var it=oI.apply(this,arguments);try{var B=NM_BG;if(!B)return it;
+  for(var i=0;i<it.length;i++){var x=it[i];if(x&&x.row&&x.btns&&x.btns.some(function(b){return /全装軌でない/.test(b[0]);})){
+      x.t='<span style="font-size:12px">'+T('修正')+'</span>';x.btns=[[(B.nt?'✓':'')+T('全装軌でない+1'),"NM_BG.nt=!NM_BG.nt;NM_RM_SUB='bog';btRmReopen("+n+")"],[(B.elev?'✓':'')+T('高度を上げる+1'),"NM_BG.elev=!NM_BG.elev;NM_RM_SUB='bog';btRmReopen("+n+")"]];
+      it.splice(i+1,0,{ic:'info',t:'<span style="font-size:12px;color:#9aa6b4">'+T('全装軌でない=装甲車・ハーフトラックなど(装甲車は自動)　高度を上げる=丘の稜線を越えて登って入った(移動のルートから自動)')+'</span>'});break;}}
+  for(var j=0;j<it.length;j++){if(it[j]&&it[j].t==='DRを振る'){it.splice(j+1,0,{row:1,cmp:1,ic:'',t:'<span style="color:#ff6060">'+T('赤')+'</span>',btns:[1,2,3,4,5,6].map(function(v){return [(B.da===v?'✓':'')+v,"nmVsBogDie("+n+",'da',"+v+")"];})},{row:1,cmp:1,ic:'',t:T('白'),btns:[1,2,3,4,5,6].map(function(v){return [(B.db===v?'✓':'')+v,"nmVsBogDie("+n+",'db',"+v+")"];})});break;}}}catch(e){console.log('bog items',e);}return it;};})();
+/* v580(ダルマ報告「敵軍車両のヘクスへ移動できてしまう」): 歩兵は移動フェイズに敵のいるヘクスへ入れない(入れるのは前進フェイズ。AFVのヘクスへはPAATC 3.7)。
+   入ろうとしたら1ヘクス戻して知らせる。前進フェイズは入れる(AFVがいればPAATCを知らせる)。車両は敵のヘクスに入れるが、敵AFVのヘクスで止まる時は注意を出す(3.3.2) */
+(function(){var oY=nmMvSync;nmMvSync=function(){var M=NM_MOVE;var r=oY.apply(this,arguments);try{if(M&&NM_MOVE===M&&M.eh){var rh=(S_LOS.route&&S_LOS.route.hexes)||[],L=rh[rh.length-1],P=rh[rh.length-2];
+  if(L&&P&&(P.boardId!==L.boardId||P.col!==L.col||P.row!==L.row)){var H={boardId:L.boardId,col:L.col,row:L.row},od=M.sd==='f'?'e':'f',E=nmAllAt(H,od);
+    if(E.length){var afv=E.some(function(e){return e.veh&&!(e.st&&e.st.wreck);}),ph=S.turn&&S.turn.phase;
+      if(!M.eh.veh){if(ph==='aph'){if(afv)btToast(T('敵AFVのヘクスへ前進: 先にPAATC(士気以下で前進、失敗で釘付け)'));}
+        else{setTimeout(function(){try{if(NM_MOVE!==M)return;nmMvUndo1();btToast(T('移動フェイズに敵のいるヘクスへは入れません(前進フェイズで前進)'));}catch(e){}},0);}}
+      else if(afv)btToast(T('敵AFVのヘクス: ここで止まる・Motionで終わるのは、入った時に原TK/IFT DR5で撃破かショックできる場合だけ'));}}}}catch(e){console.log('enemy hex',e);}return r;};})();
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
