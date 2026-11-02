@@ -35890,6 +35890,23 @@ function nmRmGunManItems(n){var G=NM_GM;if(!G)return nmRMenuItems(n);var eh=G.eh
     if(NM_GM_AFTER&&!NM_FACE&&!NM_RM_SUB){var e=NM_GM_AFTER;NM_GM_AFTER=null;var sd=nmSideList('f').indexOf(e)>=0?'f':'e';if(e.gun&&!e.man&&nmSideList(sd).indexOf(e)>=0){NM_GM={n:n,sd:sd,eh:e};NM_RM_CUR='gunman';return nmRmGunManItems(n);}}
     return o.apply(this,arguments);};
   var oS=nmRmSetGun;nmRmSetGun=function(n,id,sd){var r=oS.apply(this,arguments);try{var e=nmUnitAt(NM_RM_HEX,sd);if(e&&e.gun)NM_GM_AFTER=e;}catch(x){}return r;};})();
+/* v545 sample(ダルマ指示「スチールスキン 細かいドットを追加」): スチールパネルの地に細かいドット(パンチングメタル風)。html[data-stdot] a/b/c */
+(function(){var P='html[data-uith="5"]',bars=['#nmFullTabs','#nmFtBot'],pans=['#nmFtBot .cd','#btRm .rmBox','#nmIj .ijBox','#nmFtMn','#appVerPop','#uiThPop'],btns=['#nmFullTabs .nb','#nmFtAct .fa.g','#nmFtMn .b','#btRm .rmCls','#nmIj .ijB:not(.on)','#nmIj .ijX'];
+  var sel=function(v,L){return L.map(function(x){return P+'[data-stdot="'+v+'"] '+x;}).join(',');};
+  var dot=function(col,sz,r){return 'radial-gradient(circle,'+col+' '+r+'px,transparent '+(r+0.3)+'px) 0 0/'+sz+'px '+sz+'px';};
+  var css=[
+   /* a: 細かい明るいドット(地・パネル) */
+   sel('a',bars)+'{background:'+dot('#ffffff10',4,0.7)+',linear-gradient(#3b4047,#1c1f23)!important}',
+   sel('a',pans)+'{background:'+dot('#ffffff0e',4,0.7)+',linear-gradient(#41464e,#24272c)!important}',
+   /* b: 細かいドットをボタンにも */
+   sel('b',bars)+'{background:'+dot('#ffffff12',3,0.6)+',linear-gradient(#3b4047,#1c1f23)!important}',
+   sel('b',pans)+'{background:'+dot('#ffffff10',3,0.6)+',linear-gradient(#41464e,#24272c)!important}',
+   sel('b',btns)+'{background:'+dot('#ffffff16',3,0.6)+',linear-gradient(#4b5159,#2a2e34)!important}',
+   /* c: パンチングメタル(暗い穴+下側の光) */
+   sel('c',bars)+'{background:'+dot('#00000066',5,1.1)+','+'radial-gradient(circle at 50% 70%,#ffffff12 1.1px,transparent 1.5px) 0 0/5px 5px,linear-gradient(#3b4047,#1c1f23)!important}',
+   sel('c',pans)+'{background:'+dot('#00000055',5,1.1)+','+'radial-gradient(circle at 50% 70%,#ffffff10 1.1px,transparent 1.5px) 0 0/5px 5px,linear-gradient(#41464e,#24272c)!important}',
+   sel('c',btns)+'{background:'+dot('#00000044',4,0.8)+',linear-gradient(#4b5159,#2a2e34)!important}'
+  ].join('');var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);})();
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
