@@ -35919,6 +35919,26 @@ function nmRmGunManItems(n){var G=NM_GM;if(!G)return nmRMenuItems(n);var eh=G.eh
    sel('f',pans)+'{background:'+dot('#000000bb',4,1.1)+','+'radial-gradient(circle at 50% 70%,#ffffff1e 1.1px,transparent 1.5px) 0 0/4px 4px,linear-gradient(#2a2d32,#121417)!important}',
    sel('f',btns)+'{background:'+dot('#000000a0',4,1)+',linear-gradient(#33373d,#191b1f)!important}'
   ].join('');var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);try{document.documentElement.setAttribute('data-stdot','f');}catch(e){} /* v545(ダルマ「C」)→v546(ダルマ「3」): さらに濃く・細かいパンチングメタル */})();
+/* v548 sample(ダルマ指示「下のバーの縦幅を上バーと同じにする」): 下バーの高さ=上バーの高さ。中のカードは1段・小さめに(2行目は横に並べる) */
+function nmBotHSync(){try{var de=document.documentElement,tb=document.getElementById('nmFullTabs'),bb=document.getElementById('nmFtBot');if(!tb||!bb||!de.classList.contains('nm-sumfix')){de.classList.remove('nm-botslim');return;}
+  var h=Math.round(tb.getBoundingClientRect().height);if(!h)return;de.classList.add('nm-botslim');de.style.setProperty('--nmsumh',h+'px');de.style.setProperty('--nmboth',h+'px');}catch(e){}}
+(function(){var o=nmFtBotFill;nmFtBotFill=function(){var r=o.apply(this,arguments);nmBotHSync();return r;};var oS=btMapFullSync;btMapFullSync=function(){var r=oS.apply(this,arguments);nmBotHSync();return r;};
+  window.addEventListener('resize',function(){setTimeout(nmBotHSync,50);});
+  var st=document.createElement('style');st.textContent=[
+   'html.nm-botslim #nmFtBot{height:var(--nmboth)!important;padding:2px 6px!important;gap:6px!important}',
+   'html.nm-botslim #losSumRow{visibility:hidden!important}',
+   'html.nm-botslim #nmFtBot .cd{padding:0 8px!important;gap:6px!important;flex-direction:row!important;align-items:center!important}',
+   'html.nm-botslim #nmFtBot .cd img{width:calc(var(--nmboth) - 8px)!important;height:calc(var(--nmboth) - 8px)!important;flex-basis:calc(var(--nmboth) - 8px)!important}',
+   'html.nm-botslim #nmFtBot .cd>div{display:flex;align-items:baseline;gap:8px;min-width:0}',
+   'html.nm-botslim #nmFtBot .t1{font-size:13px!important}',
+   'html.nm-botslim #nmFtBot .t2{font-size:11px!important}',
+   'html.nm-botslim #nmFtBot .cd>div>div{line-height:1.1}',
+   'html.nm-botslim #nmFtBot .losGo{padding:3px 8px!important;font-size:12px!important}',
+   'html.nm-botslim #nmFtBot svg{max-height:calc(var(--nmboth) - 10px)}',
+   'html.nm-botslim #nmFtBot .phB .ph{font-size:15px!important}',
+   'html.nm-botslim #nmFtBot .phB .ar{height:calc(var(--nmboth) - 6px)!important}',
+   'html.nm-botslim #nmFtBot .phB .acS,html.nm-botslim #nmFtBot .phB .ac,html.nm-botslim #nmFtBot .phAct{height:calc(var(--nmboth) - 8px)!important;font-size:13px!important;padding:0 10px!important}'
+  ].join('');document.head.appendChild(st);})();
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
