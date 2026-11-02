@@ -36315,7 +36315,12 @@ function nmTbPosPop(){var o=document.getElementById('nmTbPop');if(o){o.remove();
    'html.nm-tbL #nmFtAct .fa,html.nm-tbR #nmFtAct .fa,html.nm-tbL #nmFullTabs>.nb,html.nm-tbR #nmFullTabs>.nb{width:48px!important;min-width:48px!important;max-width:48px!important;height:36px!important;padding:0 2px!important;justify-content:center!important;font-size:12px!important;overflow:hidden!important;white-space:nowrap!important;box-sizing:border-box!important}',
    'html.nm-tbL #nmFtPh,html.nm-tbR #nmFtPh{display:none!important}',
    'html.nm-tbL #nmVerR,html.nm-tbR #nmVerR{transform:scale(.62);transform-origin:center;margin:-6px 0 0!important}',
-   'html.nm-tbL.bt-mapfull #losScrollWrap{top:0!important;left:var(--nmtbw)!important}html.nm-tbR.bt-mapfull #losScrollWrap{top:0!important;right:var(--nmtbw)!important}',
+   /* v581 sample(ダルマ指示「左右にバーを設定時 上部時計の分ブランクを追加」): 地図の上にiPadの時計の帯の分だけすき間(--nmsat)。A=画面幅いっぱいの帯 B=地図の上だけ(縦のバーは上まで) */
+   ':root{--nmsat:min(env(safe-area-inset-top,0px),24px)}',
+   'html.nm-tbL.bt-mapfull #losScrollWrap{top:var(--nmsat)!important;left:var(--nmtbw)!important}html.nm-tbR.bt-mapfull #losScrollWrap{top:var(--nmsat)!important;right:var(--nmtbw)!important}',
+   'html.nm-tbL.bt-mapfull::before,html.nm-tbR.bt-mapfull::before{content:"";position:fixed;left:0;right:0;top:0;height:var(--nmsat);z-index:8914;background:#0a0c14;box-shadow:0 2px 8px #0008;pointer-events:none}',
+   'html.nm-satB.nm-tbL.bt-mapfull::before{left:var(--nmtbw)}html.nm-satB.nm-tbR.bt-mapfull::before{right:var(--nmtbw)}',
+   'html.nm-tbL:not(.nm-satB) #nmFullTabs,html.nm-tbR:not(.nm-satB) #nmFullTabs{top:var(--nmsat)!important;padding-top:4px!important}',
    'html.nm-tbL #nmFtBot,html.nm-tbR #nmFtBot{z-index:8913}'
   ].join('');document.head.appendChild(st);
   /* 縦の時: 地図の上のすき間なし。バーの「下端」は上の時計の帯までとして扱う(メニューの位置・下バーの高さの計算用) */
