@@ -33617,8 +33617,7 @@ function nmUnitMenu(it,H,n,sd){
     it.push({ic:'fire',t:'ここから撃つ(砲撃)',sub:nmGunName(eg)+'で'+(sd==='f'?'敵':'自軍')+'のマーカーを撃つ。命中→効果までダイスで',f:"nmVfOpen("+n+",'"+sd+"')"}); /* v404 */
     nmStFiredRow(it,n,sd,eh); /* v406 */
     nmGunManSync(eh);var gst=nmStOf(eh);it.push({row:1,ic:'sel',t:'状態',btns:[[(gst.mal?'✓':'')+'故障',"nmStTog("+n+",'"+sd+"','mal')"],[(gst.brk?'✓':'')+'操作班混乱',eh.man?null:"nmStTog("+n+",'"+sd+"','brk')"]]}); /* v405 / v542: 操作するユニットを決めた時は混乱を自動 */
-    try{var GP=nmGunPen(eh),GC=nmGunManCands(eh);it.push({ic:'sel',t:'<span>操作　<span style="font-size:12px;color:'+(GP.none||GP.brk?'#ff8060':(GP.nq||GP.cap)?'#ffb060':'#8899aa')+'">'+(eh.man?GP.txt:'決めていない(乗員が付いているものとして計算)')+'</span></span>',sub:GC.length?'同じヘクスの編成から、この砲を操作するユニットを選ぶ':'同じヘクスに編成がありません(編成を置くと選べる)'});
-      if(GC.length)it.push({row:1,ic:'',t:'',btns:[[(eh.man?'':'✓')+'決めない',"nmGunManSet("+n+",'"+sd+"',null,0)"]].concat(GC.map(function(o){var on=eh.man&&eh.man.slot===o.slot&&eh.man.pid===o.x.pid;return [(on?'✓':'')+(GC.some(function(p){return p.slot!==o.slot;})?o.slot+':':'')+nmGeCandLbl(o.items,o.x)+(nmIsCrew(o.x)?'':'*')+(o.x.broken?'(混乱)':''),"nmGunManSet("+n+",'"+sd+"','"+o.slot+"',"+o.x.pid+")"];}))});}catch(e){console.log('gunManRow',e);}
+    try{var GP=nmGunPen(eh);it.push({ic:'sel',t:'<span>操作するユニット: <b style="color:'+(!eh.man?'#ffb060':(GP.none||GP.brk)?'#ff8060':(GP.nq||GP.cap)?'#ffb060':'#7fd0a0')+'">'+(eh.man?(function(){var M=nmGunMan(eh);return (M&&!M.missing?M.x.label+' ':'')+'— '+GP.txt;})():'⚠ 決まっていません')+'</b></span>',sub:'タップで選ぶ(このヘクスの歩兵・OBの乗員を置く)',f:"nmGmOpen("+n+",'"+sd+"')"});}catch(e){console.log('gunManRow',e);} /* v544 */
     nmMaRepRow(it,n,sd,eh,'砲'); /* v425 */
     if(!eg.mtrNoManhandle||true)it.push({ic:'move',t:'人力移動',sub:'隣接ヘクスへ(M#'+(eg.m!=null?eg.m:'?')+'・DR<M#で成功)',f:"nmMhOpen("+n+",'"+sd+"')"}); /* v438 */
     it.push({ic:'rot',t:'砲の向き(CA)を決める',sub:'CA'+(eh.facing==null?'未設定':'設定済み')+'　方向の画面を開く',f:"nmRmFaceOpen("+n+",'"+sd+"')"});
@@ -35858,6 +35857,38 @@ function nmGunManSync(eh){try{var M=nmGunMan(eh);if(!M||M.missing)return;var st=
 /* v543(ダルマ「実施」): 砲を操作するユニットが自分の火力(歩兵の射撃)で撃ったら、その砲の目標獲得は外れる(ASLSK 6.10) */
 (function(){var o=nmMfMarkFired;nmMfMarkFired=function(){var r=o.apply(this,arguments);try{var M=NM_MF;if(M&&M.slot&&M.from!=null){var H=nmHexOfNode(M.from);
   nmAllAt(H,M.sd).forEach(function(g){if(!g.gun||!g.acq||!g.man||g.man.slot!==M.slot)return;var mu=nmGunMan(g);if(mu&&!mu.missing&&!mu.x.broken){delete g.acq;try{btToast('目標獲得を外しました(操作班が自分の火力で撃った)');}catch(e){}}});nmStSave();}}catch(e){console.log('crewFire',e);}return r;};})();
+/* v544 sample(ダルマ指示「操作班の関連付けがわかりにくい」「砲の配置時に操作員/非正規操作員の同ヘクス配置を確認」):
+   砲を置いたら(向きを決めた後)「この砲を操作するユニット」の画面を出す。同じヘクスのユニットから選ぶ・OBの乗員を置いて操作させる・あとで決める。
+   砲のメニューは「操作: …」の1行にまとめ、タップで同じ画面を開く */
+var NM_GM=null,NM_GM_AFTER=null;
+function nmGmOpen(n,sd){var eh=nmUnitAt(NM_RM_HEX,sd);if(!eh||!eh.gun)return;NM_GM={n:n,sd:sd,eh:eh};NM_RM_SUB='gunman';btRmReopen(n);}
+function nmGmBack(n){var G=NM_GM;NM_GM=null;if(G&&nmAllAt(NM_RM_HEX,G.sd).length>1){NM_SEL_EH=G.eh;NM_UNIT1=G.sd;NM_RM_SUB='unit1';}btRmReopen(n);}
+function nmGmPick(n,slot,pid){var G=NM_GM;if(!G)return;nmBkSnap('砲を操作するユニット');if(slot==null)delete G.eh.man;else G.eh.man={slot:slot,pid:pid};nmGunManSync(G.eh);try{nmStSave();}catch(e){}
+  var P=nmGunPen(G.eh);btToast(slot==null?'操作するユニット: 決めない':('操作するユニット: '+P.txt));nmGmBack(n);}
+function nmGmCrewList(G){var g=nmGun(G.eh.gun),gn=((g&&g.nat)||'').split('/'),nats=nmScenNats().filter(function(k){try{return nmSuSide(k)===G.sd;}catch(e){return false;}});
+  var nat=nats.filter(function(k){return gn.indexOf(k)>=0;})[0]||nats[0];if(!nat)return {nat:null,list:[]};
+  var ob=[];try{ob=nmSuOb(nat)||[];}catch(e){}var seen={},L=[];ob.forEach(function(x){if(x.kind==='mmc'&&/乗員|crew/i.test(x.label||x.id||'')&&!seen[x.label]){seen[x.label]=1;L.push(x.label);}});
+  if(!L.length){var U=UNITS[nat];((U&&U.mmc)||[]).forEach(function(u){if(/乗員/.test(u.lbl)&&!seen[u.lbl]){seen[u.lbl]=1;L.push(u.lbl);}});}
+  return {nat:nat,list:L};}
+function nmGmNewCrew(n,label){var G=NM_GM;if(!G)return;var C=nmGmCrewList(G),slot=nmGeFreeSlot();if(!slot){btToast('空いている編成がありません');return;}nmBkSnap('乗員を置く');
+  var H=NM_RM_HEX,e={boardId:H.boardId,col:H.col,row:H.row,grp:slot,st:{}};nmSideList(G.sd).push(e);var sv=nmGeSaved(slot,C.nat);if(sv)sv.pickerNat=C.nat;nmGeAddCore(slot,C.nat,'mmc',label);
+  var it=(nmGeList(slot).items||[]).slice(-1)[0];if(it)G.eh.man={slot:slot,pid:it.pid};nmGunManSync(G.eh);try{saveState();}catch(x){}Draw();btToast('編成'+slot+'に'+label+'を置き、この砲を操作させました');nmGmBack(n);}
+function nmRmGunManItems(n){var G=NM_GM;if(!G)return nmRMenuItems(n);var eh=G.eh,g=nmGun(eh.gun),it=[],P=nmGunPen(eh),C=nmGunManCands(eh);
+  it.push({ic:'back',t:'← 砲のメニューへ',sub:'あとで決める時もここ',f:"nmGmBack("+n+")"});it.push({sep:1});
+  it.push({ic:'turret',img:g?vaslCtrHTML(g.id,34,''):'',t:(g?nmGunName(g):'砲')+' を操作するユニット',sub:'乗員=正規 / 分隊・半個分隊など=非正規操作(命中+2・B#−2)。国の違う砲は鹵獲(ROF−1・B#−2)'});
+  it.push({ic:'info',t:'<span>いま: <b style="color:'+(!eh.man?'#ffb060':(P.none||P.brk)?'#ff8060':(P.nq||P.cap)?'#ffb060':'#7fd0a0')+'">'+(eh.man?P.txt:'決めていない')+'</b></span>'});
+  it.push({sep:1});it.push({ic:'sel',t:'<span style="font-size:13px;color:#aab4c0">このヘクスのユニットから選ぶ</span>'});
+  if(!C.length)it.push({ic:'info',t:'<span style="font-size:13px;color:#8899aa">このヘクスに歩兵の編成がありません</span>'});
+  C.forEach(function(o){var on=eh.man&&eh.man.slot===o.slot&&eh.man.pid===o.x.pid,crew=nmIsCrew(o.x),gn=((g&&g.nat)||'').split('/'),cap=o.nat&&gn.indexOf(o.nat)<0;
+    it.push({ic:'sel',img:vaslCtrHTML('u:'+(o.x.nat||o.nat)+'|'+o.x.label,30)||'',t:'<span>'+(on?'✓ ':'')+nmGeCandLbl(o.items,o.x)+' <span style="font-size:11px;color:#8899aa">編成'+o.slot+'</span> <span style="font-size:11px;padding:1px 6px;border-radius:8px;background:'+(crew?'#1f4d33':'#4d3a12')+';color:'+(crew?'#8fe0b0':'#ffcf80')+'">'+(crew?'正規':'非正規 +2/B#−2')+'</span>'+(cap?' <span style="font-size:11px;color:#ff9a9a">鹵獲</span>':'')+(o.x.broken?' <span style="font-size:11px;color:#ff8060">混乱</span>':'')+'</span>',f:"nmGmPick("+n+",'"+o.slot+"',"+o.x.pid+")"});});
+  var CL=nmGmCrewList(G);if(CL.list.length){it.push({sep:1});it.push({ic:'sel',t:'<span style="font-size:13px;color:#aab4c0">乗員を新しく置いて操作させる(OBから)</span>'});
+    CL.list.forEach(function(lb){it.push({ic:'sel',img:vaslCtrHTML('u:'+CL.nat+'|'+lb,30)||'',t:'＋ '+lb+' <span style="font-size:11px;color:#8899aa">'+nmNatLbl(CL.nat)+'・新しい編成</span>',f:"nmGmNewCrew("+n+",'"+lb.replace(/'/g,"\\'")+"')"});});}
+  it.push({sep:1});it.push({ic:'x',t:'決めない',sub:'乗員が付いているものとして計算(操作班混乱は手で)',f:"nmGmPick("+n+",null,0)"});
+  return it;}
+(function(){var o=nmRMenuItems;nmRMenuItems=function(n){if(NM_RM_SUB==='gunman'){NM_RM_SUB=null;NM_RM_CUR='gunman';return nmRmGunManItems(n);}
+    if(NM_GM_AFTER&&!NM_FACE&&!NM_RM_SUB){var e=NM_GM_AFTER;NM_GM_AFTER=null;var sd=nmSideList('f').indexOf(e)>=0?'f':'e';if(e.gun&&!e.man&&nmSideList(sd).indexOf(e)>=0){NM_GM={n:n,sd:sd,eh:e};NM_RM_CUR='gunman';return nmRmGunManItems(n);}}
+    return o.apply(this,arguments);};
+  var oS=nmRmSetGun;nmRmSetGun=function(n,id,sd){var r=oS.apply(this,arguments);try{var e=nmUnitAt(NM_RM_HEX,sd);if(e&&e.gun)NM_GM_AFTER=e;}catch(x){}return r;};})();
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
