@@ -35480,7 +35480,7 @@ function nmScenView(){var sid=S.scen&&S.scen.sel;if(!sid){btToast('シナリオ�
   v.setAttribute('style','position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.9);display:flex;flex-direction:column');
   v.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:calc(6px + env(safe-area-inset-top,0px)) 10px 6px;background:#0d0d14;border-bottom:1px solid #404040;flex-shrink:0">'
     +'<div style="flex:1;min-width:0;color:#c8a032;font-size:14px;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">📜 '+T('シナリオカード')+' · '+sid+(sc?' '+(S.lang==='en'?sc.en:sc.jp):'')+'</div>'
-    +(window.ASL_SK3_EX_CARD_HAS&&ASL_SK3_EX_CARD_HAS(sid)?'<button class="b sm" style="height:40px;margin:0;padding:0 12px;font-size:13px;color:#c8a032" onclick="ASL_SK3_EX_CARD_OPEN(\''+sid+'\')">🗂 '+T('オリジナル')+'</button>':'')
+    
     +'<button class="b sm" style="height:40px;min-width:64px;margin:0;padding:0 14px;font-size:14px" onclick="nmScenViewClose()">✕ '+T('閉じる')+'</button></div>'
     +'<div id="nmScVBody" style="flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:8px 10px 24px;background:#07080c"><div style="max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:8px"></div></div>';
   var box=v.querySelector('#nmScVBody>div');kids.forEach(function(k){box.appendChild(k);});document.body.appendChild(v);}
@@ -46229,7 +46229,7 @@ Object.assign(window.ASL_SK3_EX_CARD_IMG,{"S41":"data:image/webp;base64,UklGRgJz
   window.ASL_SK3_EX_CARD_HAS=function(id){ return !pub()&&!!(window.ASL_SK3_EX_CARD_IMG&&window.ASL_SK3_EX_CARD_IMG[id]); };
   window.ASL_SK3_EX_CARD_BTN=function(id,tile){
     var pos=tile?'position:absolute;right:6px;bottom:6px;':'flex-shrink:0;';
-    return '<button class="tb-reset aslfullCardBtn" data-id="'+id+'" onclick="event.stopPropagation();ASL_SK3_EX_CARD_OPEN(\''+id+'\')" title="'+((typeof T==='function')?T('実際のシナリオカードを見る'):'')+'" style="'+pos+'width:'+(tile?68:88)+'px;height:28px;box-sizing:border-box;font-family:\'Courier New\',monospace;font-weight:bold;letter-spacing:0.02em;background:linear-gradient(180deg,#1a1c22,#0e1018);border:1px solid #050506;border-top:1px solid #333;border-radius:2px;box-shadow:inset 0 1px 2px rgba(0,0,0,0.85);color:#c8a032;font-size:'+(tile?10:12)+'px;padding:0;white-space:nowrap;z-index:6">CARD</button>';
+    return '<button class="tb-reset aslfullCardBtn" data-id="'+id+'" onclick="event.stopPropagation();ASL_SK3_EX_CARD_OPEN(\''+id+'\')" title="'+((typeof T==='function')?T('実際のシナリオカードを見る'):'')+'" style="'+pos+'width:'+(tile?68:88)+'px;height:28px;box-sizing:border-box;font-family:\'Courier New\',monospace;font-weight:bold;letter-spacing:0.02em;background:linear-gradient(180deg,#1a1c22,#0e1018);border:1px solid #050506;border-top:1px solid #333;border-radius:2px;box-shadow:inset 0 1px 2px rgba(0,0,0,0.85);color:#c8a032;font-size:'+(tile?10:12)+'px;padding:0;white-space:nowrap;z-index:6">ORIG</button>';
   };
   var zoom=100, cur=null;
   function render(){
