@@ -35723,6 +35723,16 @@ function nmHqBtnSync(){var b=document.getElementById('nb-los');if(!b)return;var 
 function nmVfAcqSet(n,v){var V=NM_VF;if(!V||V.tgt==null)return;var B=null;try{B=nmVfBuild();}catch(e){}var eh=(B&&B.eh)||nmVfEh();if(!eh)return;
   if(!v)delete eh.acq;else eh.acq={n:V.tgt,uid:B&&B.tu?B.tu.id:null,lvl:v,from:V.from,f:eh.facing==null?null:eh.facing,t:eh.tca==null?null:eh.tca,mv:(eh.st&&eh.st.mv)||0};
   try{nmStSave();}catch(e){}V.a=0;V.b=0;V.res=null;nmVfRe(n);}
+/* v536(ダルマ指示「アイコンをバーのアイコンと統一」): 配置メニューの絵文字を上バーと同じ単色のアイコンに */
+var NM_PL_IC=(function(){var sv=function(vb,w,h,p,fill){return '<svg class="plIc" viewBox="'+vb+'" width="'+w+'" height="'+h+'" '+(fill?'fill="currentColor"':'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"')+'>'+p+'</svg>';};
+  var sold='<circle cx="5.6" cy="3.6" r="2.2"/><path d="M3.3 7.2l3.3-.6 2.3 3.4 2.6 1-.6 1.6-3.2-1.1-1.2-1.6-.9 3.9 2.6 2.6.9 5.4h-1.9l-.8-4.4-2.9-2.5-1.1 3.4-2.8 3-1.3-1.3 2.4-2.7 1.6-6.2-1.9.9-1 3.1-1.7-.5 1.3-4z"/>';
+  return {
+   grp:sv('0 0 22 24',19,20,'<g>'+sold+'</g><g transform="translate(9 0)" opacity=".75">'+sold+'</g>',1),
+   veh:sv('11 7 17 13',24,18,'<path d="M16 8h6l1 2h4v1h-3.8l.3.7H26l1.6 1.8v1H11.5v-1l1.6-1.8h2.2z"/><rect x="12" y="15" width="15" height="4" rx="2"/><g fill="#161b24"><circle cx="14.6" cy="17" r=".9"/><circle cx="17.7" cy="17" r=".9"/><circle cx="20.8" cy="17" r=".9"/><circle cx="23.9" cy="17" r=".9"/></g>',1),
+   gun:sv('0 0 26 20',24,18,'<path d="M3 11.2L21.5 4.3l.7 1.9L3.7 13z"/><path d="M8 8.6h5.2v6.2H8z"/><circle cx="10.6" cy="15.6" r="3.2"/><circle cx="10.6" cy="15.6" r="1.1" fill="#161b24"/><path d="M12 14.2l9.5 4.3-.7 1.4-9.6-4.2z"/>',1),
+   flag:sv('0 0 24 24',17,17,'<path d="M6 21V4M6 4h11l-2.5 4L17 12H6"/>'),
+   setup:sv('0 0 24 24',17,17,'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><path d="M16.5 13.5v6M13.5 16.5h6"/>')};})();
+(function(){var st=document.createElement('style');st.textContent='#btRm .plBig b{display:inline-flex;align-items:center;gap:6px}#btRm .plIc{display:inline-block;vertical-align:middle;flex:0 0 auto}#btRm .plBig .plIc{color:#cfd6df}#btRm .plBig.on .plIc{color:#7cc4ff}#btRm .plFoot button{display:flex;align-items:center;gap:8px}#btRm .plFoot .plIc{color:#aab4c0}';document.head.appendChild(st);})();
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
@@ -36495,7 +36505,7 @@ function nmRmVehItems(n,sd){
   var big=function(k,ic,lb,sub){return '<button class="plBig'+(K===k?' on':'')+'" onclick="event.stopPropagation();nmPlSet(\'kind\',\''+k+'\','+n+')"><b>'+ic+' '+lb+'</b><small>'+sub+'</small></button>';};
   var h='<div class="plWrap">';
   if(ns.length>1)h+='<div class="plTabs">'+ns.map(tab).join('')+'</div>';
-  h+='<div class="plBigs">'+big('grp','👥',T('編成'),grps.length+'個 作成済み')+big('veh','🚜',T('車両'),vehs.length+'種類')+big('gun','🎯',T('砲'),guns.length+'種類')+'</div>';
+  h+='<div class="plBigs">'+big('grp',NM_PL_IC.grp,T('編成'),grps.length+'個 作成済み')+big('veh',NM_PL_IC.veh,T('車両'),vehs.length+'種類')+big('gun',NM_PL_IC.gun,T('砲'),guns.length+'種類')+'</div>';
   h+='<div class="plSec">'+({grp:T('編成'),veh:T('車両'),gun:T('砲')})[K]+' — '+T('タップでこのヘクスに配置')+'</div><div class="plGrid">';
   if(K==='grp'){
     grps.forEach(function(slot){var d=nmGeList(slot),s0=nmGrpSrcs(slot,1)||[],src=s0.filter(function(x,i){return s0.indexOf(x)===i;}).slice(0,3).reverse(),on=!!eh&&eh.grp===slot&&!eh.veh&&!eh.gun;
@@ -36512,7 +36522,7 @@ function nmRmVehItems(n,sd){
     guns.forEach(function(g){var tot=nmPlGunN(g,nat),u=nmPlUsed('gun',g.id),on=!!eh&&eh.gun===g.id;
       h+='<button class="plTile'+(on?' on':'')+(tot&&u>=tot&&!on?' dim':'')+'" onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push("nmRmSetGun("+n+",'"+g.id+"','"+sd+"')")-1)+')"><span class="plC">'+u+'/'+(tot||'?')+'</span><span class="plImg">'+vaslCtrHTML(g.id,52,'')+'</span><span class="plNm">'+nmGunName(g)+'</span><small>'+(g.gunCategory||'')+(g.qsu===false?'・移動不可':'')+'</small></button>';});
     if(!guns.length)h+='<div class="plNone">'+T('このシナリオの')+nmNatLbl(nat)+T('に砲はありません')+'</div>';}
-  h+='</div><div class="plFoot"><button onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push("nmRmSetVeh("+n+",null,'"+sd+"')")-1)+')">🏳 '+T('マーカーだけ置く(車両・編成を決めない)')+'</button><button onclick="event.stopPropagation();BtRmClose();nmSuOpen('+(nat?"'"+nat+"'":'')+')">👥 '+T('編成・配置の画面を開く')+'</button></div></div>';
+  h+='</div><div class="plFoot"><button onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push("nmRmSetVeh("+n+",null,'"+sd+"')")-1)+')">'+NM_PL_IC.flag+' '+T('マーカーだけ置く(車両・編成を決めない)')+'</button><button onclick="event.stopPropagation();BtRmClose();nmSuOpen('+(nat?"'"+nat+"'":'')+')">'+NM_PL_IC.setup+' '+T('編成・配置の画面を開く')+'</button></div></div>';
   it.push({html:h});
   return it;
 }
