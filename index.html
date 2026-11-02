@@ -35966,6 +35966,14 @@ function nmBotHSync(){try{var de=document.documentElement,tb=document.getElement
    'html.nm-botslim #nmFtBot .phB .ar{height:calc(var(--nmboth) - 6px)!important}',
    'html.nm-botslim #nmFtBot .phB .acS,html.nm-botslim #nmFtBot .phB .ac,html.nm-botslim #nmFtBot .phAct{height:calc(var(--nmboth) - 8px)!important;font-size:13px!important;padding:0 10px!important}'
   ].join('');document.head.appendChild(st);})();
+/* v551 sample(ダルマ指示「オレンジを暗い別の色に」): スチールパネルでメニューの行に指を置いた時の色(オレンジ)。ボタンや表を含む行(押せない行)は色を付けない。html[data-sthov] a/b/c */
+(function(){var P='html[data-uith="5"]',R=' #btRm .rmIt:hover,',A=' #btRm .rmIt:active';var css=[
+  P+' #btRm .rmIt.rmRow:hover,'+P+' #btRm .rmIt.rmRow:active{background:transparent!important}',
+  P+'[data-sthov="a"]'+R+P+'[data-sthov="a"]'+A+'{background:linear-gradient(#4a525c,#2c3238)!important;box-shadow:inset 3px 0 0 #ff9f1a!important}',
+  P+'[data-sthov="b"]'+R+P+'[data-sthov="b"]'+A+'{background:linear-gradient(#5a4526,#33240f)!important;box-shadow:inset 3px 0 0 #c98a2c!important}',
+  P+'[data-sthov="c"]'+R+P+'[data-sthov="c"]'+A+'{background:linear-gradient(#24414a,#13262c)!important;box-shadow:inset 3px 0 0 #4fb3c8!important}',
+  P+'[data-sthov="d"]'+R+P+'[data-sthov="d"]'+A+'{background:linear-gradient(#3a2a2a,#1f1515)!important;box-shadow:inset 3px 0 0 #b0453a!important}'
+ ].join('');var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);try{document.documentElement.setAttribute('data-sthov','a');}catch(e){}})();
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
