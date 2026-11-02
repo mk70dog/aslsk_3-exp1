@@ -35788,11 +35788,8 @@ function nmGeCandLbl(items,x){var b=x.label.replace(/\[.*$/,''),same=(items||[])
   /* ヘクスの獲得(ATT・LOSの外へ出た目標)は、そのヘクスの誰を撃つ時にも使う */
   var oB=nmVfBuild;nmVfBuild=function(){var r=oB.apply(this,arguments);try{var a=r&&r.eh&&r.eh.acq;if(a&&a.area&&r.w&&r.w.u&&r.w.u.acq&&NM_VF&&a.n===NM_VF.tgt)r.w.u.acq.uid=r.tu?r.tu.id:undefined;}catch(e){}return r;};
 })();
-/* v541(ダルマ指示「LOSバーの表示・インスタント判定のポップアップのデザイン変更 シンプル・シック 数種類」): html[data-ljs]で切替 */
-function nmLjStyle(){return S.nmLjs==null?'':S.nmLjs;}
-function nmLjApply(){try{var v=nmLjStyle();if(v)document.documentElement.setAttribute('data-ljs',v);else document.documentElement.removeAttribute('data-ljs');}catch(e){}}
-setTimeout(nmLjApply,0);
-(function(){var st=document.createElement('style');var A='html[data-ljs="a"] ',B='html[data-ljs="b"] ',C='html[data-ljs="c"] ',D='html[data-ljs="d"] ';st.textContent=[
+/* v541(ダルマ指示「LOSバーの表示・インスタント判定のポップアップのデザイン変更」→案2「スキンに反映」): LOSバーとインスタント判定の見た目をスキンごとに */
+(function(){var st=document.createElement('style');var A='html[data-uith="3"] ',B='html[data-uith="5"] ',C='html:not([data-uith]) ',D='html[data-uith="7"] '; /* 案2(ダルマ選択): スキンごとに割り当て。標準→C国の色・ミニマル→A・スチール→Bシック・ダーク→Dモノクロ・ネオンは今のまま */st.textContent=[
  /* 共通: 判定ボタン */
  '#nmFtLos .losGo{display:inline-flex;align-items:center;gap:5px}',
  /* A ミニマル: 枠と色を最小に、細字 */
@@ -35801,8 +35798,8 @@ setTimeout(nmLjApply,0);
  A+'#nmIj .ijBox{background:#121519!important;border:1px solid #2a2f38!important;border-radius:16px!important;padding:16px 18px!important}',
  A+'#nmIj .ijHd{font-weight:500!important}',A+'#nmIj .ijHd>span:first-child{color:#e8eef4!important}',A+'#nmIj .ijLos{background:transparent!important;border:none!important;border-bottom:1px solid #262b33!important;border-radius:0!important;padding:4px 0 10px!important}',
  A+'#nmIj .ijS{color:#7d8794!important;font-weight:500!important;letter-spacing:.06em}',
- A+'#nmIj .ijB{background:transparent!important;border:1px solid #2e343d!important;border-radius:10px!important;font-weight:400}',A+'#nmIj .ijB b{font-weight:500}',
- A+'#nmIj .ijB.on{background:#1c2129!important;border-color:#e8eef4!important;box-shadow:none!important}',
+ A+'#nmIj .ijB{background:transparent!important;border:1px solid #2e343d!important;border-radius:10px!important;font-weight:400}',A+'#nmIj .ijB b{font-weight:500}',A+'#nmIj .ijBox .ijB.on small,'+A+'#nmIj .ijBox .ijB.on b{color:#e8eef4!important}',A+'#nmIj .ijBox .ijB.on small{color:#aab4c0!important}',
+ A+'#nmIj .ijB.on{background:#1c2129!important;border-color:#e8eef4!important;box-shadow:none!important;color:#e8eef4!important}',
  A+'#nmIj .ijGo{background:#e8eef4!important;color:#111!important;font-weight:600!important;border-radius:22px!important}',
  /* B シック: 濃紺×金の細線、字間 */
  B+'#nmFtLos{background:linear-gradient(#141821,#0e1117)!important;border:1px solid #3b3424!important;box-shadow:inset 0 1px 0 #c8a03233}',B+'#nmFtLos .t1{font-weight:500!important;letter-spacing:.06em}',B+'#nmFtLos .t2{color:#9c927c!important}',
@@ -35811,8 +35808,8 @@ setTimeout(nmLjApply,0);
  B+'#nmIj .ijHd{font-weight:500!important;letter-spacing:.08em}',B+'#nmIj .ijHd>span:first-child{color:#e8c768!important}',
  B+'#nmIj .ijLos{background:transparent!important;border:none!important;border-top:1px solid #3b3424!important;border-bottom:1px solid #3b3424!important;border-radius:0!important}',
  B+'#nmIj .ijS{color:#b39a5e!important;font-weight:500!important;letter-spacing:.12em;font-size:11px!important}',
- B+'#nmIj .ijB{background:#12161d!important;border:1px solid #2b2f37!important;border-left:2px solid var(--c)!important;border-radius:3px!important}',B+'#nmIj .ijB b{font-weight:500}',
- B+'#nmIj .ijB.on{background:#1d1a12!important;border-color:#c8a032!important;border-left-color:var(--c)!important;box-shadow:none!important}',
+ B+'#nmIj .ijB{background:#12161d!important;border:1px solid #2b2f37!important;border-left:2px solid var(--c)!important;border-radius:3px!important}',B+'#nmIj .ijB b{font-weight:500}',B+'#nmIj .ijBox .ijB.on small,'+B+'#nmIj .ijBox .ijB.on b{color:#e8eef4!important}',B+'#nmIj .ijBox .ijB.on small{color:#aab4c0!important}',
+ B+'#nmIj .ijB.on{background:#1d1a12!important;border-color:#c8a032!important;border-left-color:var(--c)!important;box-shadow:none!important;color:#e8eef4!important}',
  B+'#nmIj .ijGo{background:transparent!important;color:#e8c768!important;border:1px solid #c8a032!important;border-radius:4px!important;font-weight:500!important;letter-spacing:.14em}',
  /* C 国の色: 撃つ側の国の色をアクセントに */
  C+'#nmFtLos{border-color:var(--ljc,#5a9bd8)!important;background:#10141b!important}',C+'#nmFtLos .t1{font-weight:500!important}',
@@ -35820,8 +35817,8 @@ setTimeout(nmLjApply,0);
  C+'#nmIj .ijBox{background:#10141b!important;border:1px solid #273040!important;border-top:3px solid var(--ljc,#5a9bd8)!important;border-radius:12px!important;padding:14px 18px!important}',
  C+'#nmIj .ijHd{font-weight:500!important}',C+'#nmIj .ijHd>span:first-child{color:var(--ljc,#5a9bd8)!important}',C+'#nmIj .ijLos{background:#151b24!important;border:none!important}',
  C+'#nmIj .ijS{color:#8fa0b4!important;font-weight:500!important}',
- C+'#nmIj .ijB{background:#151b24!important;border:1px solid #232c39!important;border-left:3px solid var(--c)!important;border-radius:10px!important}',C+'#nmIj .ijB b{font-weight:500}',
- C+'#nmIj .ijB.on{background:color-mix(in srgb,var(--c) 18%,#151b24)!important;border-color:var(--c)!important;box-shadow:none!important}',
+ C+'#nmIj .ijB{background:#151b24!important;border:1px solid #232c39!important;border-left:3px solid var(--c)!important;border-radius:10px!important}',C+'#nmIj .ijB b{font-weight:500}',C+'#nmIj .ijBox .ijB.on small,'+C+'#nmIj .ijBox .ijB.on b{color:#e8eef4!important}',C+'#nmIj .ijBox .ijB.on small{color:#aab4c0!important}',
+ C+'#nmIj .ijB.on{background:color-mix(in srgb,var(--c) 18%,#151b24)!important;border-color:var(--c)!important;box-shadow:none!important;color:#e8eef4!important}',
  C+'#nmIj .ijGo{background:var(--ljc,#5a9bd8)!important;color:#08101a!important;font-weight:600!important;border-radius:22px!important}',
  /* D モノクロ: 白と灰だけ */
  D+'#nmFtLos{border-color:#3a3f47!important;background:#0d0f12!important}',D+'#nmFtLos .t1{font-weight:500!important;color:#f2f2f2}',D+'#nmFtLos .t1 span{color:#f2f2f2!important}',D+'#nmFtLos .t2{color:#8a8f96!important}',
