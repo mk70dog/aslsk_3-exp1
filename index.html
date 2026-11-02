@@ -35906,7 +35906,17 @@ function nmRmGunManItems(n){var G=NM_GM;if(!G)return nmRMenuItems(n);var eh=G.eh
    /* c: パンチングメタル(暗い穴+下側の光) */
    sel('c',bars)+'{background:'+dot('#00000066',5,1.1)+','+'radial-gradient(circle at 50% 70%,#ffffff12 1.1px,transparent 1.5px) 0 0/5px 5px,linear-gradient(#3b4047,#1c1f23)!important}',
    sel('c',pans)+'{background:'+dot('#00000055',5,1.1)+','+'radial-gradient(circle at 50% 70%,#ffffff10 1.1px,transparent 1.5px) 0 0/5px 5px,linear-gradient(#41464e,#24272c)!important}',
-   sel('c',btns)+'{background:'+dot('#00000044',4,0.8)+',linear-gradient(#4b5159,#2a2e34)!important}'
+   sel('c',btns)+'{background:'+dot('#00000044',4,0.8)+',linear-gradient(#4b5159,#2a2e34)!important}',
+   /* v546 sample: 濃く */
+   sel('d',bars)+'{background:'+dot('#000000aa',5,1.2)+','+'radial-gradient(circle at 50% 70%,#ffffff20 1.2px,transparent 1.6px) 0 0/5px 5px,linear-gradient(#3b4047,#1c1f23)!important}',
+   sel('d',pans)+'{background:'+dot('#00000099',5,1.2)+','+'radial-gradient(circle at 50% 70%,#ffffff1c 1.2px,transparent 1.6px) 0 0/5px 5px,linear-gradient(#41464e,#24272c)!important}',
+   sel('d',btns)+'{background:'+dot('#00000080',4,0.9)+',linear-gradient(#4b5159,#2a2e34)!important}',
+   sel('e',bars)+'{background:'+dot('#000000aa',5,1.2)+','+'radial-gradient(circle at 50% 70%,#ffffff1a 1.2px,transparent 1.6px) 0 0/5px 5px,linear-gradient(#2b2f35,#121417)!important}',
+   sel('e',pans)+'{background:'+dot('#00000099',5,1.2)+','+'radial-gradient(circle at 50% 70%,#ffffff18 1.2px,transparent 1.6px) 0 0/5px 5px,linear-gradient(#30343a,#17191d)!important}',
+   sel('e',btns)+'{background:'+dot('#00000080',4,0.9)+',linear-gradient(#3a3f46,#1e2125)!important}',
+   sel('f',bars)+'{background:'+dot('#000000cc',4,1.1)+','+'radial-gradient(circle at 50% 70%,#ffffff22 1.1px,transparent 1.5px) 0 0/4px 4px,linear-gradient(#25282d,#0e1012)!important}',
+   sel('f',pans)+'{background:'+dot('#000000bb',4,1.1)+','+'radial-gradient(circle at 50% 70%,#ffffff1e 1.1px,transparent 1.5px) 0 0/4px 4px,linear-gradient(#2a2d32,#121417)!important}',
+   sel('f',btns)+'{background:'+dot('#000000a0',4,1)+',linear-gradient(#33373d,#191b1f)!important}'
   ].join('');var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);try{document.documentElement.setAttribute('data-stdot','c');}catch(e){} /* v545(ダルマ「C」): パンチングメタルを使う */})();
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
