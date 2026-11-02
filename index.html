@@ -36355,6 +36355,13 @@ function nmVsBogDie(n,k,v){var B=NM_BG;if(!B)return;B[k]=v;if(B.da&&B.db){var eh
         else{setTimeout(function(){try{if(NM_MOVE!==M)return;nmMvUndo1();btToast(T('移動フェイズに敵のいるヘクスへは入れません(前進フェイズで前進)'));}catch(e){}},0);}}
       else if(afv)btToast(T('敵AFVのヘクス: ここで止まる・Motionで終わるのは、入った時に原TK/IFT DR5で撃破かショックできる場合だけ'));}}}}catch(e){console.log('enemy hex',e);}return r;};})();
 /* v582 sample(ダルマ指示「メニュー シナリオ選択の下に自軍敵軍設定」「未設定でマーカーを置いたら国籍で自動設定」「下バー T1裏ソ連〈自軍〉 〈自軍〉長押しで設定」) */
+/* v582 sample2(ダルマ指示「設定画面の自軍敵軍のボタンカラーを落ち着いたカラーに」) */
+var NM_SD_PAL={
+ a:{f:'background:#2f5a46;color:#e6f2ea;border-color:#4f8a6c',e:'background:#6a3434;color:#f3e6e6;border-color:#9a5555'},
+ b:{f:'background:#2c4058;color:#e2ecf6;border-color:#4d6a8c',e:'background:#5a4630;color:#f2eadf;border-color:#8a7050'},
+ c:{f:'background:#3a3f47;color:#e8eef4;border-color:#5b6470;box-shadow:inset 4px 0 0 #6fae8a',e:'background:#3a3f47;color:#e8eef4;border-color:#5b6470;box-shadow:inset 4px 0 0 #c07070'},
+ d:{f:'background:transparent;color:#9fd3b4;border-color:#6fae8a;border-width:2px',e:'background:transparent;color:#e0a0a0;border-color:#c07070;border-width:2px'}};
+var NM_SD_STY='a';
 function nmSdSet(){var sc=nmSuScen();return !!(sc&&S.nmNatSide&&S.nmNatSide[sc]&&Object.keys(S.nmNatSide[sc]).length);}
 function nmSdAssign(nat,sd,quiet){var sc=nmSuScen();if(!sc||!nat)return;if(!S.nmNatSide)S.nmNatSide={};var m=S.nmNatSide[sc]={},ax=!!AXIS_NATS[nat];
   nmSuNats().forEach(function(k){m[k]=(!!AXIS_NATS[k]===ax)?sd:(sd==='f'?'e':'f');});m[nat]=sd;try{saveState();}catch(e){}
@@ -36366,7 +36373,7 @@ function nmSdPop(){var o=document.getElementById('nmSdPop');if(o){o.remove();ret
   var sc=curScen(),set=nmSdSet();
   m.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between"><b style="font-size:14px">⚑ '+T('自軍・敵軍の設定')+'</b><button class="b sm" style="margin:0;height:30px;padding:0 10px;font-size:13px" onclick="event.stopPropagation();var mm=document.getElementById(\'nmSdPop\');if(mm)mm.remove();">✕ '+T('閉じる')+'</button></div>'
    +'<div style="font-size:11.5px;color:#9aa6b4;line-height:1.45">'+(set?T('地図のマーカーの「自軍」「敵軍」をどの国にするか'):T('まだ決めていません(いまは攻撃側=自軍)。マーカーを置くと、その国籍で自動で決まります'))+'</div>'
-   +nats.map(function(k){var sd=nmSuSide(k),c=(UNITS[k]&&UNITS[k].col)||'#ccc';var B=function(v,l,col){var on=set&&sd===v;return '<button class="b sm" style="margin:0;height:34px;min-width:70px;font-size:13px;font-weight:800;'+(on?'background:'+col+';color:#000;border-color:'+col:'')+'" onclick="event.stopPropagation();nmSdAssign(\''+k+'\',\''+v+'\');document.getElementById(\'nmSdPop\').remove();nmSdPop();">'+l+'</button>';};
+   +nats.map(function(k){var sd=nmSuSide(k),c=(UNITS[k]&&UNITS[k].col)||'#ccc';var B=function(v,l,col){var on=set&&sd===v,P=NM_SD_PAL[NM_SD_STY][v];return '<button class="b sm" style="margin:0;height:34px;min-width:70px;font-size:13px;font-weight:800;'+(on?P:'')+'" onclick="event.stopPropagation();nmSdAssign(\''+k+'\',\''+v+'\');document.getElementById(\'nmSdPop\').remove();nmSdPop();">'+l+'</button>';};
      return '<div style="display:flex;align-items:center;gap:8px"><span style="flex:1;font-weight:800;color:'+c+'">'+nmNatLbl(k)+(sc&&sc.atk===k?' <small style="color:#9aa6b4;font-weight:400">('+T('攻撃')+')</small>':'')+'</span>'+B('f',T('自軍'),'#7fd0a0')+B('e',T('敵軍'),'#ff8a80')+'</div>';}).join('');
   m.onclick=function(e){e.stopPropagation();};document.body.appendChild(m);
   setTimeout(function(){var f=function(e){var mm=document.getElementById('nmSdPop');if(mm&&!mm.contains(e.target)){mm.remove();document.removeEventListener('pointerdown',f,true);}};document.addEventListener('pointerdown',f,true);},0);}
