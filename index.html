@@ -33959,7 +33959,7 @@ function nmRmMFireItems(n){
     if(tgtEh&&tgtEh.veh){M._crewTe=tgtEh;M._crewR=R.ift.r;nmCrewSection(it,n,'mf',tgtEh,R.ift.r,'CE乗員');}else nmMcSection(it,n,tgtEh,R.ift.r,'mf:'+M.tgt+':'+f.rd+':'+f.wd+':'+R.mod,'nmMfReopen');} /* v518 */
   it.push({sep:1});
   if(done&&!M.reDice){ /* v413: 次の操作を1行に */
-    it.push({row:1,ic:'fire',t:'次',btns:[['振り直す',"nmMfRoll("+n+")"],['目を入れる',"NM_MF.reDice=1;nmMfReopen("+n+")"],['別の目標',"NM_MF.tgt=null;NM_MF.reDice=0;var ff=getFireState();if(ff)ff.res=null;nmMfReopen("+n+")"]]});
+    it.push({row:1,ic:'fire',t:'次',btns:[['振り直す',"nmMfRoll("+n+")"],['ダイス入力',"NM_MF.reDice=1;nmMfReopen("+n+")"],['別の目標',"NM_MF.tgt=null;NM_MF.reDice=0;var ff=getFireState();if(ff)ff.res=null;nmMfReopen("+n+")"]]});
     it.push({ic:'x',t:'閉じる',sub:'結果はログ・射撃タブに残っています',f:"BtRmClose()"});
     return it;}
   it.push({ic:'fire',t:f&&f.res?'もう一度ダイスを振る':'ダイスを振る',sub:'赤白のダイスを振って判定(射撃タブのJUDGEと同じ)',f:"NM_MF.reDice=0;nmMfRoll("+n+")"});
@@ -34168,7 +34168,8 @@ function nmRmVFireItems(n){
   if(B.te&&B.te.veh&&!(V.res&&!V.edit))try{nmTgtMvRow(it,n,B.te,'nmVfRe');}catch(e){} /* v515 */
   if(B.te&&!(V.res&&!V.edit)){try{if(B.te.veh)nmTgtCeRow(it,n,'vf',B.te);else nmInfMvRow(it,n,'vf');var au=nmOvAuto('vf');nmOvRow(it,n,'vf',au.tem,au.hind);}catch(e){console.log(e);}} /* v518 */
   if(B.note&&!vdone)it.push({ic:'info',t:'<span style="font-size:12px;color:#c8a032">'+B.note+'</span>'});
-  if(!vdone){var acq=B.eh.acq&&B.eh.acq.n===V.tgt?B.eh.acq.lvl:0;it.push({row:1,ic:'fire',t:'<span style="font-size:13px">集中射撃・目標獲得'+(acq?' '+acq:'')+'</span>',btns:[[(V.int?'✓':'')+'集中射撃+2',V.ph==='AF'?null:"NM_VF.int=!NM_VF.int;nmVfRe("+n+")"]].concat(B.eh.acq?[['獲得を外す',"delete nmVfEh().acq;nmStSave();nmVfRe("+n+")"]]:[]).concat(B.att?[[(V.att?'✓':'')+'ATT(地域)',"NM_VF.att=!NM_VF.att;nmVfRe("+n+")"]]:[])}); /* v439 */
+  if(!vdone){var acq=B.eh.acq&&B.eh.acq.n===V.tgt?B.eh.acq.lvl:0;it.push({row:1,ic:'fire',t:'<span style="font-size:13px">集中射撃</span>',btns:[[(V.int?'✓':'')+'集中射撃+2',V.ph==='AF'?null:"NM_VF.int=!NM_VF.int;nmVfRe("+n+")"]].concat(B.att?[[(V.att?'✓':'')+'ATT(地域)',"NM_VF.att=!NM_VF.att;nmVfRe("+n+")"]]:[])}); /* v439 */
+    {var aq=(B.eh.acq&&B.eh.acq.n===V.tgt)?B.eh.acq.lvl:0;it.push({row:1,ic:'tgt',t:'<span style="font-size:13px">目標獲得</span>',btns:[[0,'なし'],[-1,'−1'],[-2,'−2']].map(function(x){return [(aq===x[0]?'✓':'')+x[1],"nmVfAcqSet("+n+","+x[0]+")"];})});} /* v534(ダルマ指示「目標の獲得を手入力」) */
     if(V.int)it.push({ic:'info',t:'<span style="font-size:12px;color:#c8a032">集中射撃: TH+2・B#−2・このターン1回(防御射撃は隣接のみ)</span>'});
     if(V.ph==='BFF'&&B.v){var mv1=B.eh.st&&B.eh.st.mv,bm=V.bmp!=null?V.bmp:(typeof mv1==='number'?mv1:4);it.push({row:1,ic:'move',t:'<span style="font-size:13px">使ったMP</span>',btns:[[1,'≤1'],[2,'2'],[3,'3'],[4,'4以上']].map(function(x){return [(bm===x[0]?'✓':'')+x[1],"NM_VF.bmp="+x[0]+";nmVfRe("+n+")"];}).concat([[(V.bstop?'✓':'')+'停止中',"NM_VF.bstop=!NM_VF.bstop;nmVfRe("+n+")"]])});
       it.push({ic:'info',t:'<span style="font-size:12px;color:#c8a032">移動射撃(Case14): 使ったMPでDRM、停止していなければCase16(低い方のダイス×2)</span>'});}
@@ -34215,7 +34216,7 @@ function nmRmVFireItems(n){
     [['c1','赤','#ff6060'],['c2','白','#e8eef4']].forEach(function(x){var cv=V[x[0]];it.push({row:1,cmp:1,ic:'fire',t:'<span style="color:'+x[2]+'">'+x[1]+'</span>',btns:[1,2,3,4,5,6].map(function(v){return [(cv===v?'✓':'')+v,"nmVfSet("+n+",'"+x[0]+"',"+v+")"];})});});
     if(V.c1&&V.c2&&!O)it.push({ic:'fire',t:'入れた目で'+(B.mode==='VTT'?'撃破判定':'効果判定'),sub:'赤'+V.c1+'・白'+V.c2,f:"nmVfEff("+n+")"});}}
   it.push({sep:1});
-  if(R.hit&&V.res2&&!V.reDice)it.push({row:1,ic:'fire',t:'次',btns:[[(B.mode==='VTT'?'撃破':'効果')+'を振り直す',"nmVfRoll("+n+",'eff')"],['目を入れる',"NM_VF.reDice=1;nmVfRe("+n+")"]]});
+  if(R.hit&&V.res2&&!V.reDice)it.push({row:1,ic:'fire',t:'次',btns:[[(B.mode==='VTT'?'撃破':'効果')+'を振り直す',"nmVfRoll("+n+",'eff')"],['ダイス入力',"NM_VF.reDice=1;nmVfRe("+n+")"]]});
   it.push({row:1,ic:'fire',t:R.hit&&V.res2?'':'次',btns:[['命中からやり直す',"nmVfSet("+n+",'a',0)"],['別の目標',"nmVfSet("+n+",'tgt',null)"],['閉じる',"BtRmClose()"]]});
 
   return it;
@@ -35716,6 +35717,10 @@ function nmPhBotHTML2(sty){var t=S.turn,nat=nmPhaseSideNat(),nc=(nat&&UNITS[nat]
 /* v532(ダルマ指示「HQ時メインタブのHQを全画面表示に変更」): HQタブを開いている時(全画面でない時)は、メインタブの「HQ」を「全画面表示」にし、押すと全画面のHQへ */
 function nmHqBtnSync(){var b=document.getElementById('nb-los');if(!b)return;var on=S.tab==='los'&&!btMapFullOn(),lb=on?T('全画面表示'):'HQ';if(b.textContent!==lb)b.textContent=lb;b.setAttribute('onclick',on?"BtMapFull(null)":"NAVTAB('los')");b.title=on?T('HQを全画面で表示'):'';}
 (function(){var oD=Draw;Draw=function(){var r=oD.apply(this,arguments);try{nmHqBtnSync();}catch(e){}return r;};})();
+/* v534(ダルマ指示「目標の獲得を手入力追加」): 主砲・砲の目標獲得(ASLSK 6.10、Case 20)を なし/−1/−2 で手で設定。撃つ側のマーカーに記録(撃った時の自動と同じ扱いで、動いた・向きを変えた等で自動で外れる) */
+function nmVfAcqSet(n,v){var V=NM_VF;if(!V||V.tgt==null)return;var B=null;try{B=nmVfBuild();}catch(e){}var eh=(B&&B.eh)||nmVfEh();if(!eh)return;
+  if(!v)delete eh.acq;else eh.acq={n:V.tgt,uid:B&&B.tu?B.tu.id:null,lvl:v,from:V.from,f:eh.facing==null?null:eh.facing,t:eh.tca==null?null:eh.tca,mv:(eh.st&&eh.st.mv)||0};
+  try{nmStSave();}catch(e){}V.a=0;V.b=0;V.res=null;nmVfRe(n);}
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
