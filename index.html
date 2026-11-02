@@ -36126,7 +36126,7 @@ var NM_ATK_IC='a';
 NM_TOOL_DEF.atk=['選択したスタックを攻撃',NM_TOOL_IC(NM_ATK_ICS.a).replace('width="17" height="17"','width="20" height="20"'),'攻撃されるスタックをタップ'];
 NM_TIP_RULES.unshift([/nmToolArm\('atk'\)/,'選択したスタックを攻撃']);
 (function(){var _f=nmFtActFill;nmFtActFill=function(){_f.apply(this,arguments);try{var el=document.getElementById('nmFtAct');if(!el||el.querySelector('.ftTool[data-k="atk"]'))return;var fb=[].slice.call(el.querySelectorAll('.ftTool')).filter(function(b){return /nmToolArm\('fire'\)/.test(b.getAttribute('onclick')||'');})[0];if(!fb)return;
-  var t=NM_TOOL_DEF.atk,b=document.createElement('button');b.className='fa g ftTool'+(NM_TOOL==='atk'?' on':'');b.setAttribute('data-k','atk');b.setAttribute('title',T(t[0]));b.setAttribute('onclick',"event.stopPropagation();nmToolArm('atk')");b.innerHTML=t[1];fb.parentNode.insertBefore(b,fb.nextSibling);}catch(e){console.log('atk btn',e);}};})();
+  var t=NM_TOOL_DEF.atk,b=document.createElement('button');b.className='fa g ftTool'+(NM_TOOL==='atk'?' on':'');b.setAttribute('data-k','atk');b.setAttribute('title',T(t[0]));b.setAttribute('onclick',"event.stopPropagation();nmToolArm('atk')");b.innerHTML=t[1];fb.parentNode.insertBefore(b,fb.nextSibling);try{nmFtActFit();}catch(e){}}catch(e){console.log('atk btn',e);}};})();
 /* 撃てるもの(武器)の名前。無ければnull */
 function nmAtkWhat(eh){var v=eh.veh?nmAfv(eh.veh):null;if(eh.grp&&!eh.veh&&!eh.gun)return {k:'mf',t:'射撃'};if(eh.gun&&!eh.veh)return {k:'vf',t:'砲撃'};if(v&&v.ma)return {k:'vf',t:'主砲'};if(v&&nmVmKeys(v).length)return {k:'vm',t:'機関銃'};return null;}
 function nmAtkList(tn,tsd){var od=tsd==='f'?'e':'f',B=BTG.nodes[tn],out=[];
