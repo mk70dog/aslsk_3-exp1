@@ -35661,7 +35661,7 @@ function nmMvBarHTML(){var M=NM_MOVE;if(!M||!S_LOS.routeMode||btActive())return 
 /* v529(ダルマ指示「赤枠部分(ターン・フェイズ・フェイズの操作)を右下バーに移動」): 下バーの右端にターン・国・フェイズの切替と、そのフェイズの操作ボタン(回復・潰走・前進・白兵)。上バーからは消す。
    電子パネル表示(下バーが無い時)は従来どおり上バー */
 function nmPhBotMode(){return S.nmPhBot==null?'c':S.nmPhBot;}
-function nmPhBotHTML(){if(!(S.turn&&S.scen&&S.scen.sel))return '';var ph=S.turn.phase,A=NM_FT_ACT[ph]||[],m=nmPhBotMode();
+function nmPhBotHTML(){var sty=S.nmPhBotSty||'';if(sty&&S.turn&&S.scen&&S.scen.sel)return nmPhBotHTML2(sty);if(!(S.turn&&S.scen&&S.scen.sel))return '';var ph=S.turn.phase,A=NM_FT_ACT[ph]||[],m=nmPhBotMode();
   var acts=A.map(function(a,i){return '<button class="fa phAct" onclick="event.stopPropagation();nmFtDo('+i+')">'+a[1]+' '+T(a[0])+'</button>';}).join('');
   return '<div class="cd phB'+(m==='c'?' phc':'')+'" style="flex:0 0 auto;margin-left:auto;gap:6px;padding:3px 8px">'+nmPhaseStepperHTML()+acts+'</div>';}
 (function(){var o=nmFtBotFill;nmFtBotFill=function(){var r=o.apply(this,arguments);try{var el=document.getElementById('nmFtBot'),m=nmPhBotMode(),on=!!(el&&m);
@@ -35670,6 +35670,43 @@ function nmPhBotHTML(){if(!(S.turn&&S.scen&&S.scen.sel))return '';var ph=S.turn.
  +'#nmFtBot .phB{white-space:nowrap}#nmFtBot .phB.phc .nmPs:not(.on){display:none!important}#nmFtBot .phB .nmPs.on{height:30px!important;font-size:15px!important;padding:0 10px!important}'
  +'#nmFtBot .phB .b.sm{height:32px!important;min-width:36px!important;font-size:15px!important}'
  +'#nmFtBot .phAct{height:36px;padding:0 12px;border-radius:10px;border:1px solid #c89a30;background:#2a2410;color:#ffd060;font:inherit;font-weight:900;font-size:15px;cursor:pointer;white-space:nowrap}';document.head.appendChild(st);})();
+/* v531(ダルマ指示「赤枠部分(下バー右のターン・フェイズ)のデザイン変更 何種類か」) */
+function nmPhBotHTML2(sty){var t=S.turn,nat=nmPhaseSideNat(),nc=(nat&&UNITS[nat]&&UNITS[nat].col)||'#8fb4d8',ix=PHASE_SEQ.map(function(x){return x.id;}).indexOf(t.phase||'rph');if(ix<0)ix=0;
+  var P=PHASE_SEQ[ix],pl=T(NM_PH_SHORT[P.id]||P.lbl),tl=t.ended?'END':'T'+(t.cur||1),hf=t.ended?'':(t.half?'裏':'表'),nl=nat?nmNatLbl(nat):'',A=NM_FT_ACT[t.phase]||[];
+  var st='onclick="event.stopPropagation();',prev=st+'nmPhaseStep(-1)"',next=st+'nmPhaseStep(1)"';
+  var act=function(cls){return A.map(function(a,i){return '<button class="'+cls+'" '+st+'nmFtDo('+i+')">'+a[1]+' '+T(a[0])+'</button>';}).join('');};
+  var dots='<div class="pbDots">'+PHASE_SEQ.map(function(x,i){return '<i class="'+(i===ix?'on':i<ix?'past':'')+'" '+st+'nmPhaseJump('+i+')" title="'+T(NM_PH_SHORT[x.id]||x.lbl)+'"></i>';}).join('')+'</div>';
+  var h='';
+  if(sty==='a')h='<div class="cd phB pbA"><div class="seg"><span class="tn">'+tl+'<small>'+hf+'</small></span>'+(nl?'<span class="nt" style="color:'+nc+';border-color:'+nc+'">'+nl+'</span>':'')+'</div><div class="seg nav"><button '+prev+'>‹</button><span class="ph">'+pl+'</span><button '+next+'>›</button></div>'+act('ac')+'</div>';
+  else if(sty==='b')h='<div class="cd phB pbB"><div class="meta"><span>'+tl+' '+hf+'</span><span style="color:'+nc+'">● '+nl+'</span></div><button class="ar" '+prev+'>◀</button><div class="ph">'+pl+'<span>'+(ix+1)+'/'+PHASE_SEQ.length+'</span></div><button class="ar" '+next+'>▶</button>'+act('ac')+'</div>';
+  else if(sty==='c')h='<div class="cd phB pbC" style="background:linear-gradient(90deg,'+nc+'33,#141a22 70%)!important;border-color:'+nc+'99!important"><div class="badge" style="background:'+nc+'"><b>'+(t.ended?'E':(t.cur||1))+'</b><small>'+hf+'</small></div><div class="nm" style="color:'+nc+'">'+nl+'</div><button class="ar" '+prev+'>◀</button><span class="ph">'+pl+'</span><button class="ar" '+next+'>▶</button>'+act('ac')+'</div>';
+  else if(sty==='d')h='<div class="cd phB pbD"><button class="ar" '+prev+'>◀</button><div class="mid"><div class="top"><span>'+tl+hf+'</span><span style="color:'+nc+'">'+nl+'</span><b>'+pl+'</b></div>'+dots+'</div><button class="ar" '+next+'>▶</button>'+act('ac')+'</div>';
+  return h;}
+(function(){var st=document.createElement('style');st.textContent=[
+ '#nmFtBot .phB{flex:0 0 auto;margin-left:auto;gap:8px;padding:4px 8px!important;white-space:nowrap}',
+ '#nmFtBot .phB button{font:inherit;cursor:pointer}',
+ '#nmFtBot .phB .ac{height:40px;padding:0 14px;border-radius:12px;border:none;background:linear-gradient(#ffcf4a,#e8a315);color:#1a1200;font-weight:900;font-size:15px;box-shadow:0 2px 0 #8a5f00}',
+ /* A */
+ '#nmFtBot .pbA .seg{display:flex;align-items:center;gap:6px;background:#0b0f15;border:1px solid #2c3644;border-radius:12px;height:40px;padding:0 8px}',
+ '#nmFtBot .pbA .tn{font-weight:900;font-size:18px;color:#fff}#nmFtBot .pbA .tn small{font-size:12px;color:#aab4c0;margin-left:2px}',
+ '#nmFtBot .pbA .nt{font-weight:900;font-size:13px;border:1.5px solid;border-radius:8px;padding:1px 7px}',
+ '#nmFtBot .pbA .nav{padding:0 2px}#nmFtBot .pbA .nav button{width:34px;height:34px;border:none;border-radius:9px;background:#1e2733;color:#e8eef4;font-size:22px;font-weight:900;line-height:1}',
+ '#nmFtBot .pbA .ph{min-width:64px;text-align:center;font-weight:900;font-size:17px;color:#ffd060}',
+ /* B */
+ '#nmFtBot .pbB .meta{display:flex;flex-direction:column;font-size:12px;font-weight:800;color:#cfd7e2;line-height:1.35;margin-right:2px}',
+ '#nmFtBot .pbB .ar{width:38px;height:40px;border-radius:10px;border:1px solid #3a4658;background:#1b2330;color:#fff;font-size:15px}',
+ '#nmFtBot .pbB .ph{display:flex;flex-direction:column;align-items:center;min-width:76px;font-size:19px;font-weight:900;color:#fff;line-height:1.1}#nmFtBot .pbB .ph span{font-size:10px;color:#8899aa;font-weight:700}',
+ /* C */
+ '#nmFtBot .pbC .badge{width:40px;height:40px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#000;line-height:1}#nmFtBot .pbC .badge b{font-size:17px}#nmFtBot .pbC .badge small{font-size:10px;font-weight:900}',
+ '#nmFtBot .pbC .nm{font-weight:900;font-size:15px;margin-right:4px}',
+ '#nmFtBot .pbC .ar{width:34px;height:38px;border:none;border-radius:10px;background:#00000055;color:#fff;font-size:14px}',
+ '#nmFtBot .pbC .ph{min-width:64px;text-align:center;font-size:19px;font-weight:900;color:#fff}',
+ /* D */
+ '#nmFtBot .pbD .ar{width:36px;height:44px;border-radius:12px;border:1px solid #3a4658;background:#1b2330;color:#fff;font-size:15px}',
+ '#nmFtBot .pbD .mid{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:150px}',
+ '#nmFtBot .pbD .top{display:flex;align-items:baseline;gap:8px;font-size:12px;font-weight:800;color:#cfd7e2}#nmFtBot .pbD .top b{font-size:18px;color:#ffd060}',
+ '#nmFtBot .pbDots{display:flex;gap:5px}#nmFtBot .pbDots i{width:12px;height:6px;border-radius:3px;background:#2c3644;cursor:pointer}#nmFtBot .pbDots i.past{background:#5a6a80}#nmFtBot .pbDots i.on{background:#ffd060;width:22px}'
+ ].join('');document.head.appendChild(st);})();
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
