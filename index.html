@@ -36387,6 +36387,34 @@ function nmSdPop(){var o=document.getElementById('nmSdPop');if(o){o.remove();ret
   (S_LOS.friendHexes||[]).some(function(e){var n=nmIjEhNat(e);if(n&&nats.indexOf(n)>=0){pick=[n,'f'];return true;}});
   if(!pick)(S_LOS.enemyHexes||[]).some(function(e){var n=nmIjEhNat(e);if(n&&nats.indexOf(n)>=0){pick=[n,'e'];return true;}});
   if(pick){nmSdAssign(pick[0],pick[1],true);btToast(T('自軍・敵軍を自動で設定')+': '+nmNatLbl(pick[0])+'='+(pick[1]==='f'?T('自軍'):T('敵軍'))+'　'+T('(下バーの自軍・敵軍を長押しで変更)'));}}}catch(e){}return r;};})();
+/* v583 sample(ダルマ指示「マップ拡大時 マップスクロール時に全体のどの辺かわかるようにする」): 左下に全体図(盤の枠・盤名・マーカーの点)と、いま見えている範囲の枠。
+   全体図をタップ/ドラッグするとその場所へ移動。NM_MM_STY: 'a'=拡大して地図が画面より大きい時は常に表示 'b'=スクロール・拡大の操作中だけ表示(2秒で消える) */
+var NM_MM_STY='a',NM_MM_T=null;
+function nmMmOn(){var w=document.getElementById('losScrollWrap');return !!(w&&btMapFullOn()&&S.tab==='los'&&(w.scrollWidth>w.clientWidth+20||w.scrollHeight>w.clientHeight+20));}
+function nmMmDraw(show){try{var w=document.getElementById('losScrollWrap'),m=document.getElementById('losMapWrap');var c=document.getElementById('nmMm');
+  if(!nmMmOn()||!m){if(c)c.style.display='none';return;}
+  if(!c){c=document.createElement('canvas');c.id='nmMm';c.style.cssText='position:fixed;z-index:8920;border-radius:8px;border:1px solid #4a5566;background:#0a0c14d8;box-shadow:0 4px 14px #000a;transition:opacity .35s;touch-action:none;cursor:pointer';document.body.appendChild(c);
+    var go=function(e){var r=c.getBoundingClientRect(),k=c.__k||1,x=(e.clientX-r.left)/k,y=(e.clientY-r.top)/k;var ww=document.getElementById('losScrollWrap');if(!ww)return;ww.scrollLeft=x-ww.clientWidth/2;ww.scrollTop=y-ww.clientHeight/2;try{S_LOS.scrollLeft=ww.scrollLeft;S_LOS.scrollTop=ww.scrollTop;}catch(x2){}nmMmDraw(true);};
+    var dn=false;c.addEventListener('pointerdown',function(e){dn=true;c.setPointerCapture&&c.setPointerCapture(e.pointerId);go(e);e.preventDefault();e.stopPropagation();});c.addEventListener('pointermove',function(e){if(dn){go(e);e.preventDefault();}});c.addEventListener('pointerup',function(){dn=false;});c.addEventListener('pointercancel',function(){dn=false;});c.addEventListener('click',function(e){e.stopPropagation();});}
+  var SW=w.scrollWidth,SH=w.scrollHeight,MW=170,MH=130,k=Math.min(MW/SW,MH/SH),cw=Math.round(SW*k),ch=Math.round(SH*k),dpr=window.devicePixelRatio||1;c.__k=k;
+  c.width=cw*dpr;c.height=ch*dpr;c.style.width=cw+'px';c.style.height=ch+'px';
+  var wr=w.getBoundingClientRect(),bb=document.getElementById('nmFtBot'),bt=bb?bb.getBoundingClientRect().top:innerHeight;c.style.left=(wr.left+10)+'px';c.style.top=(bt-ch-10)+'px';
+  var g=c.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,cw,ch);
+  var toC=function(R){return [(R.left-wr.left+w.scrollLeft)*k,(R.top-wr.top+w.scrollTop)*k,R.width*k,R.height*k];};
+  m.querySelectorAll('img').forEach(function(im){var R=im.getBoundingClientRect();if(R.width<20)return;var q=toC(R);
+    var ang=0;try{for(var e=im;e&&e!==m;e=e.parentElement){var tf=getComputedStyle(e).transform;if(tf&&tf!=='none'){var M=new DOMMatrix(tf);ang+=Math.atan2(M.b,M.a);}}}catch(x){}
+    var r90=Math.abs(Math.round(Math.sin(ang)))===1,ow=im.offsetWidth||im.naturalWidth,oh=im.offsetHeight||im.naturalHeight,sc=r90?q[2]/oh:q[2]/ow;
+    try{g.save();g.globalAlpha=.9;g.translate(q[0]+q[2]/2,q[1]+q[3]/2);g.rotate(Math.round(ang/(Math.PI/2))*(Math.PI/2));g.drawImage(im,-ow*sc/2,-oh*sc/2,ow*sc,oh*sc);g.restore();}catch(x){g.restore();g.fillStyle='#4d5a32';g.fillRect(q[0],q[1],q[2],q[3]);}g.strokeStyle='#00000099';g.lineWidth=1;g.strokeRect(q[0]+.5,q[1]+.5,q[2]-1,q[3]-1);});
+  /* マーカー(自軍=青・敵軍=赤) */
+  [['f','#4aa3ff'],['e','#ff5a5a']].forEach(function(x){nmSideList(x[0]).forEach(function(eh){var n=nmNodeOfEh(eh);if(n==null)return;var q=nmClientOfNode(n);if(!q)return;var px=(q.x-wr.left+w.scrollLeft)*k,py=(q.y-wr.top+w.scrollTop)*k;g.fillStyle=x[1];g.strokeStyle='#000';g.lineWidth=1;g.beginPath();g.arc(px,py,3,0,7);g.fill();g.stroke();});});
+  /* 見えている範囲 */
+  var vx=w.scrollLeft*k,vy=w.scrollTop*k,vw=w.clientWidth*k,vh=w.clientHeight*k;g.fillStyle='#ffd06022';g.fillRect(vx,vy,vw,vh);g.strokeStyle='#ffd060';g.lineWidth=2;g.strokeRect(vx+1,vy+1,Math.max(2,vw-2),Math.max(2,vh-2));
+  c.style.display='block';
+  if(NM_MM_STY==='b'){c.style.opacity=show?'1':'0';c.style.pointerEvents=show?'auto':'none';clearTimeout(NM_MM_T);if(show)NM_MM_T=setTimeout(function(){c.style.opacity='0';c.style.pointerEvents='none';},2000);}else{c.style.opacity='1';c.style.pointerEvents='auto';}}catch(e){console.log('minimap',e);}}
+(function(){if(typeof document==='undefined'||window.__nmMm)return;window.__nmMm=1;var raf=0;
+  document.addEventListener('scroll',function(e){if(e.target&&e.target.id==='losScrollWrap'){if(raf)return;raf=requestAnimationFrame(function(){raf=0;nmMmDraw(true);});}},true);
+  var oD=Draw;Draw=function(){var r=oD.apply(this,arguments);setTimeout(function(){nmMmDraw(NM_MM_STY!=='b');},0);return r;};
+  window.addEventListener('resize',function(){setTimeout(function(){nmMmDraw(false);},100);});})();
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
