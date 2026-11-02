@@ -36288,6 +36288,66 @@ function nmPzSet(z,cx,cy){var w=document.getElementById('losScrollWrap');if(!w||
   document.addEventListener('wheel',function(e){if(!e.ctrlKey)return;if(!inMap(e))return;e.preventDefault();nmPzSet(S_LOS.zoom*Math.exp(-e.deltaY*0.01),e.clientX,e.clientY);},{passive:false,capture:true});
   /* ピンチの指を離した直後のタップ/クリックで地図の操作が起きないように */
   document.addEventListener('click',function(e){if(window.__nmPzT&&Date.now()-window.__nmPzT<350){e.stopPropagation();e.preventDefault();}},true);})();
+/* v580(ダルマ指示「上バーを左右縦に表示できるようにする メニューで設定」): ≡メニュー「上バーの位置」で 上(従来)/左(縦)/右(縦)。
+   縦のときはバーを画面の左端(右端)に縦に並べ、地図はその横から。下バーはそのまま */
+var NM_TB_POS=[['T','上'],['L','左(縦)'],['R','右(縦)']];
+function nmTbPos(){var v='T';try{v=localStorage.getItem('aslsk_tbpos')||'T';}catch(e){}return /^[TLR]$/.test(v)?v:'T';}
+function nmTbPosName(){var p=nmTbPos();return (NM_TB_POS.filter(function(x){return x[0]===p;})[0]||NM_TB_POS[0])[1];}
+var NM_TB_W=56;function nmTbW(){var de=document.documentElement;return (de.classList.contains('nm-tbL')||de.classList.contains('nm-tbR'))&&document.getElementById('nmFullTabs')?NM_TB_W:0;}
+function nmTbApply(){var de=document.documentElement,p=nmTbPos();de.classList.toggle('nm-tbL',p==='L');de.classList.toggle('nm-tbR',p==='R');de.style.setProperty('--nmtbw',NM_TB_W+'px');
+  try{btMapFullSync();}catch(e){}try{nmFtActFill();}catch(e){}try{Draw();}catch(e){}}
+function nmTbPosSet(k){try{localStorage.setItem('aslsk_tbpos',k);}catch(e){}var o=document.getElementById('nmTbPop');if(o)o.remove();var mm=document.getElementById('nmFtMn');if(mm)mm.remove();nmTbApply();btToast(T('上バーの位置')+': '+T(nmTbPosName()));}
+function nmTbPosPop(){var o=document.getElementById('nmTbPop');if(o){o.remove();return;}var m=document.createElement('div');m.id='nmTbPop';var cur=nmTbPos();
+  m.style.cssText='position:fixed;z-index:9600;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;max-width:92vw;background:#14181f;border:1px solid #4a5566;border-radius:12px;box-shadow:0 12px 40px #000c;padding:10px;display:flex;flex-direction:column;gap:6px;font-family:sans-serif;color:#e8eef4';
+  var ic={T:'<svg viewBox="0 0 26 18" width="26" height="18"><rect x="1" y="1" width="24" height="16" rx="2" fill="none" stroke="currentColor"/><rect x="1" y="1" width="24" height="4" fill="currentColor"/></svg>',L:'<svg viewBox="0 0 26 18" width="26" height="18"><rect x="1" y="1" width="24" height="16" rx="2" fill="none" stroke="currentColor"/><rect x="1" y="1" width="5" height="16" fill="currentColor"/></svg>',R:'<svg viewBox="0 0 26 18" width="26" height="18"><rect x="1" y="1" width="24" height="16" rx="2" fill="none" stroke="currentColor"/><rect x="20" y="1" width="5" height="16" fill="currentColor"/></svg>'};
+  m.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px"><b style="font-size:14px">▥ '+T('上バーの位置')+'</b><button class="b sm" style="margin:0;height:30px;padding:0 10px;font-size:13px" onclick="event.stopPropagation();var mm=document.getElementById(\'nmTbPop\');if(mm)mm.remove();">✕ '+T('閉じる')+'</button></div>'
+   +NM_TB_POS.map(function(t){var on=t[0]===cur;return '<button class="b sm" style="margin:0;height:40px;display:flex;align-items:center;gap:10px;text-align:left;padding:0 10px;font-size:14px;'+(on?'border-color:#ffd060;box-shadow:0 0 0 1px #ffd060 inset':'')+'" onclick="event.stopPropagation();nmTbPosSet(\''+t[0]+'\')">'+ic[t[0]]+'<span style="flex:1">'+T(t[1])+'</span>'+(on?'<span style="color:#ffd060">✓</span>':'')+'</button>';}).join('');
+  m.onclick=function(e){e.stopPropagation();};document.body.appendChild(m);
+  setTimeout(function(){var f=function(e){var mm=document.getElementById('nmTbPop');if(mm&&!mm.contains(e.target)){mm.remove();document.removeEventListener('pointerdown',f,true);}};document.addEventListener('pointerdown',f,true);},0);}
+(function(){if(typeof document==='undefined'||window.__nmTb)return;window.__nmTb=1;
+  var st=document.createElement('style');st.textContent=[
+   'html.nm-tbL #nmFullTabs,html.nm-tbR #nmFullTabs{top:0!important;bottom:var(--nmsumh,0px)!important;width:var(--nmtbw)!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;padding:calc(4px + env(safe-area-inset-top,0px)) 3px 4px!important;gap:4px!important;overflow-y:auto!important;overflow-x:hidden!important;box-sizing:border-box!important;-webkit-overflow-scrolling:touch}',
+   'html.nm-tbL #nmFullTabs{left:0!important;right:auto!important;box-shadow:4px 0 14px #000a!important}html.nm-tbR #nmFullTabs{right:0!important;left:auto!important;box-shadow:-4px 0 14px #000a!important}',
+   'html.nm-tbL #nmFullTabs>*,html.nm-tbR #nmFullTabs>*{flex:0 0 auto!important;margin:0!important}',
+   'html.nm-tbL #nmFtAct,html.nm-tbR #nmFtAct{flex-direction:column!important;flex:0 0 auto!important;overflow:visible!important;width:100%!important;align-items:center!important;gap:4px!important}',
+   'html.nm-tbL #nmFtAct .fsp,html.nm-tbR #nmFtAct .fsp,html.nm-tbL #nmFtAct .fs,html.nm-tbR #nmFtAct .fs{display:none!important}',
+   'html.nm-tbL #nmFtAct .fa,html.nm-tbR #nmFtAct .fa,html.nm-tbL #nmFullTabs>.nb,html.nm-tbR #nmFullTabs>.nb{width:48px!important;min-width:48px!important;max-width:48px!important;height:36px!important;padding:0 2px!important;justify-content:center!important;font-size:12px!important;overflow:hidden!important;white-space:nowrap!important;box-sizing:border-box!important}',
+   'html.nm-tbL #nmFtPh,html.nm-tbR #nmFtPh{display:none!important}',
+   'html.nm-tbL #nmVerR,html.nm-tbR #nmVerR{transform:scale(.62);transform-origin:center;margin:-6px 0 0!important}',
+   'html.nm-tbL.bt-mapfull #losScrollWrap{top:0!important;left:var(--nmtbw)!important}html.nm-tbR.bt-mapfull #losScrollWrap{top:0!important;right:var(--nmtbw)!important}',
+   'html.nm-tbL #nmFtBot,html.nm-tbR #nmFtBot{z-index:8913}'
+  ].join('');document.head.appendChild(st);
+  /* 縦の時: 地図の上のすき間なし。バーの「下端」は上の時計の帯までとして扱う(メニューの位置・下バーの高さの計算用) */
+  var oS=btMapFullSync;btMapFullSync=function(){var r=oS.apply(this,arguments);try{if(nmTbW())document.documentElement.style.setProperty('--btfullt','0px');}catch(e){}return r;};
+  var gb=Element.prototype.getBoundingClientRect;Element.prototype.getBoundingClientRect=function(){var r=gb.call(this);try{if(this.id==='nmFullTabs'&&nmTbW()&&!window.__nmTbRaw){var pt=parseFloat(getComputedStyle(this).paddingTop)||0;var sat=Math.max(0,pt-4);return {left:r.left,right:r.right,width:r.width,x:r.x,y:0,top:0,bottom:sat,height:sat+46,toJSON:function(){return this;}};}}catch(e){}return r;};
+  var oF=nmFtActFit;nmFtActFit=function(){if(nmTbW()){var el=document.getElementById('nmFtAct');if(el)el.classList.remove('cmp1','cmp2','cmp3');var tb=document.getElementById('nmFullTabs');if(tb)tb.classList.remove('phc');return;}return oF.apply(this,arguments);};
+  var oB=nmMvBarHTML;nmMvBarHTML=function(){var h=oB.apply(this,arguments);try{var w=nmTbW();if(h&&w){var p=nmTbPos();if(p==='R')h=h.replace('position:fixed;right:12px;','position:fixed;right:'+(w+12)+'px;');else h=h.replace('position:fixed;left:12px;','position:fixed;left:'+(w+12)+'px;');}}catch(e){}return h;};
+  /* 縦の時: バーのボタンから開く窓(≡メニューなど)はバーの横に出す */
+  window.nmTbSide=function(m,btn){try{var w=nmTbW();if(!w||!m)return;var r=btn&&btn.getBoundingClientRect?btn.getBoundingClientRect():{top:60};var bb=document.getElementById('nmFtBot'),bt=bb?bb.getBoundingClientRect().top:innerHeight;
+    m.style.right='auto';m.style.left='auto';m.style.bottom='auto';m.style.transform='none';if(nmTbPos()==='L')m.style.left=(w+6)+'px';else m.style.right=(w+6)+'px';
+    var mh=m.offsetHeight,top=Math.max(8,Math.min(r.top,bt-8-Math.min(mh,bt-16)));m.style.top=top+'px';m.style.maxHeight=(bt-8-top)+'px';m.style.overflowY='auto';}catch(e){}};
+  var oV=appVerPop;appVerPop=function(sp){var r=oV.apply(this,arguments);try{nmTbSide(document.getElementById('appVerPop'),sp);}catch(e){}return r;};
+  var oR=nmRbRender;nmRbRender=function(){var r=oR.apply(this,arguments);try{var w=nmTbW(),el=document.getElementById('nmRl');if(w&&el&&nmTbPos()==='R'){var rr=el.getBoundingClientRect();if(rr.right>innerWidth-w-6)el.style.right=(w+8)+'px';}}catch(e){}return r;};
+  var oM=nmFtMenu;nmFtMenu=function(btn){var r=oM.apply(this,arguments);try{nmTbSide(document.getElementById('nmFtMn'),btn);}catch(e){}return r;};
+  var go=function(){nmTbApply();};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(go,0);});else setTimeout(go,0);})();
+/* v580(ダルマ指示「自動で判別できる？」「ダイス手入力は？」): ボグ判定の自動判別(装甲車=全装軌でない+1・林は全MP、移動で丘を登った=高度を上げる+1)と、赤白ダイスの手入力 */
+(function(){var oO=nmVsBogOpen;nmVsBogOpen=function(n,sd){var r=oO.apply(this,arguments);try{var B=NM_BG;if(B){var eh=nmVsEh(n,sd),wh=false;try{wh=!!(eh&&losIsWheeledVehicle(eh.veh));}catch(e){}B.nt=wh;if(wh&&/woods/.test(B.terr))B.terr='woodsFull';
+    var M=NM_MOVE,rh=S_LOS.route&&S_LOS.route.hexes,L=rh&&rh[rh.length-1];if(M&&M.eh===eh&&L&&btNodeOf(L.boardId,L.col,L.row)===n)B.elev=!!L.climbing;B.auto=1;B.da=0;B.db=0;NM_RM_SUB='bog';btRmReopen(n);}}catch(e){console.log('bog auto',e);}return r;};})();
+function nmVsBogDie(n,k,v){var B=NM_BG;if(!B)return;B[k]=v;if(B.da&&B.db){var eh=nmVsEh(n,B.sd),vv=eh&&nmAfv(eh.veh),gp=(vv&&vv.gp)||'normal',R=BOG_CHECK_RULES;var drm=(R.groundPressureDrm[gp]||0)+(R.terrainDrm[B.terr]||0)+(B.nt?R.notFullyTrackedDrm:0)+(B.elev?R.gainingElevationDrm:0);
+  var a=B.da,b=B.db,q=[a,b],mr=Math.random;Math.random=function(){var x=q.shift();return x?(x-1)/6+0.01:mr();};try{B.da=0;B.db=0;nmVsBog(n,drm);}finally{Math.random=mr;}return;}NM_RM_SUB='bog';btRmReopen(n);}
+(function(){var oI=nmRmBogItems;nmRmBogItems=function(n){var it=oI.apply(this,arguments);try{var B=NM_BG;if(!B)return it;
+  for(var i=0;i<it.length;i++){var x=it[i];if(x&&x.row&&x.btns&&x.btns.some(function(b){return /全装軌でない/.test(b[0]);})){
+      x.t='<span style="font-size:12px">'+T('修正')+'</span>';x.btns=[[(B.nt?'✓':'')+T('全装軌でない+1'),"NM_BG.nt=!NM_BG.nt;NM_RM_SUB='bog';btRmReopen("+n+")"],[(B.elev?'✓':'')+T('高度を上げる+1'),"NM_BG.elev=!NM_BG.elev;NM_RM_SUB='bog';btRmReopen("+n+")"]];
+      it.splice(i+1,0,{ic:'info',t:'<span style="font-size:12px;color:#9aa6b4">'+T('全装軌でない=装甲車・ハーフトラックなど(装甲車は自動)　高度を上げる=丘の稜線を越えて登って入った(移動のルートから自動)')+'</span>'});break;}}
+  for(var j=0;j<it.length;j++){if(it[j]&&it[j].t==='DRを振る'){it.splice(j+1,0,{row:1,cmp:1,ic:'',t:'<span style="color:#ff6060">'+T('赤')+'</span>',btns:[1,2,3,4,5,6].map(function(v){return [(B.da===v?'✓':'')+v,"nmVsBogDie("+n+",'da',"+v+")"];})},{row:1,cmp:1,ic:'',t:T('白'),btns:[1,2,3,4,5,6].map(function(v){return [(B.db===v?'✓':'')+v,"nmVsBogDie("+n+",'db',"+v+")"];})});break;}}}catch(e){console.log('bog items',e);}return it;};})();
+/* v580(ダルマ報告「敵軍車両のヘクスへ移動できてしまう」): 歩兵は移動フェイズに敵のいるヘクスへ入れない(入れるのは前進フェイズ。AFVのヘクスへはPAATC 3.7)。
+   入ろうとしたら1ヘクス戻して知らせる。前進フェイズは入れる(AFVがいればPAATCを知らせる)。車両は敵のヘクスに入れるが、敵AFVのヘクスで止まる時は注意を出す(3.3.2) */
+(function(){var oY=nmMvSync;nmMvSync=function(){var M=NM_MOVE;var r=oY.apply(this,arguments);try{if(M&&NM_MOVE===M&&M.eh){var rh=(S_LOS.route&&S_LOS.route.hexes)||[],L=rh[rh.length-1],P=rh[rh.length-2];
+  if(L&&P&&(P.boardId!==L.boardId||P.col!==L.col||P.row!==L.row)){var H={boardId:L.boardId,col:L.col,row:L.row},od=M.sd==='f'?'e':'f',E=nmAllAt(H,od);
+    if(E.length){var afv=E.some(function(e){return e.veh&&!(e.st&&e.st.wreck);}),ph=S.turn&&S.turn.phase;
+      if(!M.eh.veh){if(ph==='aph'){if(afv)btToast(T('敵AFVのヘクスへ前進: 先にPAATC(士気以下で前進、失敗で釘付け)'));}
+        else{setTimeout(function(){try{if(NM_MOVE!==M)return;nmMvUndo1();btToast(T('移動フェイズに敵のいるヘクスへは入れません(前進フェイズで前進)'));}catch(e){}},0);}}
+      else if(afv)btToast(T('敵AFVのヘクス: ここで止まる・Motionで終わるのは、入った時に原TK/IFT DR5で撃破かショックできる場合だけ'));}}}}catch(e){console.log('enemy hex',e);}return r;};})();
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
@@ -36425,7 +36485,7 @@ function appMenuHTML(id,first,extra){var b=function(x){return x[0]==='—'?'<div
   return cls+(first||[]).map(b).join('')+tabs+(extra||[]).map(b).join('')+b(['—'])+'<button class="b sm" style="margin:0;height:36px;text-align:left;padding:0 12px;font-size:14px;color:#ffd060;border-color:#c8a032" onclick="event.stopPropagation();var mm=document.getElementById(\''+id+'\');if(mm)mm.remove();appForceUpdate()">'+NM_MI.upd+' '+T('アプリ更新')+' <span style="font-size:11px;color:#8899aa">(v'+appVerNum()+')</span></button>';}
 function nmFtMenu(btn){var m=document.getElementById('nmFtMn');if(m){m.remove();return;}m=document.createElement('div');m.id='nmFtMn';
   var r=btn.getBoundingClientRect();m.style.cssText='position:fixed;z-index:9500;top:'+(r.bottom+4)+'px;right:'+Math.max(6,window.innerWidth-r.right)+'px;background:#1c1f27;border:1px solid #4a5566;border-radius:10px;padding:6px;box-shadow:0 8px 24px #000c;display:flex;flex-direction:column;gap:4px;width:'+APP_MN_W+'px;max-width:94vw;max-height:'+Math.max(160,Math.min(window.innerHeight,(window.visualViewport&&window.visualViewport.height)||1e9)-r.bottom-14)+'px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y'; /* v537(バグ修正 ダルマ報告「メニューがスクロールしない」): iPadでは100vhが見えている高さより大きく、メニューの下が画面の外に出てスクロールできなかった。実際に見えている高さで決める */
-  m.innerHTML=appMenuHTML('nmFtMn',[[NM_MI.grp+' '+T('編成'),"nmSuOpen()"],[NM_MI.card+' '+T('シナリオカード'),"nmScenView()"],[NM_MI.list+' '+T('シナリオ選択'),"nmRmTabGo('scen')"]],[['—'],[(S.nmFtLcd?'✓ ':'')+T('下を電子パネルにする'),"S.nmFtLcd=!S.nmFtLcd;try{saveState();}catch(e){}nmFtBotFill()"],[(S.nmRealOn?'✓ ':'')+T('リアル盤へを表示'),"S.nmRealOn=!S.nmRealOn;try{saveState();}catch(e){}nmRbRender();nmFtActFill()"],[NM_MI.skin+' '+T('スキン')+': '+uiThemeName(),"uiThemePop()"]]);
+  m.innerHTML=appMenuHTML('nmFtMn',[[NM_MI.grp+' '+T('編成'),"nmSuOpen()"],[NM_MI.card+' '+T('シナリオカード'),"nmScenView()"],[NM_MI.list+' '+T('シナリオ選択'),"nmRmTabGo('scen')"]],[['—'],[(S.nmFtLcd?'✓ ':'')+T('下を電子パネルにする'),"S.nmFtLcd=!S.nmFtLcd;try{saveState();}catch(e){}nmFtBotFill()"],[(S.nmRealOn?'✓ ':'')+T('リアル盤へを表示'),"S.nmRealOn=!S.nmRealOn;try{saveState();}catch(e){}nmRbRender();nmFtActFill()"],[NM_MI.skin+' '+T('スキン')+': '+uiThemeName(),"uiThemePop()"],['▥ '+T('上バーの位置')+': '+T(nmTbPosName()),"nmTbPosPop()"]]);
   m.onclick=function(e){e.stopPropagation();};document.body.appendChild(m);setTimeout(function(){document.addEventListener('pointerdown',function f(e){var mm=document.getElementById('nmFtMn');if(mm&&!mm.contains(e.target)&&e.target!==btn)mm.remove();document.removeEventListener('pointerdown',f,true);},true);},0);}
 function nmFtBotFill(){var el=document.getElementById('nmFtBot'),on=document.documentElement.classList.contains('nm-sumfix')&&!!document.getElementById('nmFullTabs')&&!S.nmFtLcd;
   if(!on){if(el)el.remove();return;}if(!el){el=document.createElement('div');el.id='nmFtBot';el.onclick=function(e){e.stopPropagation();};document.body.appendChild(el);}
@@ -37298,6 +37358,7 @@ function btRMenu(n,lp){ // lp=長押しで開いた(指を離した直後のク�
   if(box.offsetHeight>Hh-MT-MB)box.style.maxHeight=(Hh-MT-MB)+'px';
   bw=box.offsetWidth;bh=box.offsetHeight;
   x=Math.min(Math.max(M,x),W-bw-M);y=Math.min(Math.max(MT,y),Hh-bh-MB);
+  try{var tbw=nmTbW();if(tbw){var tp=nmTbPos();if(tp==='L')x=Math.max(x,tbw+M);else x=Math.min(x,W-tbw-bw-M);}}catch(e){} /* v580: 縦のバーに重ねない */
   box.style.left=x+'px';box.style.top=y+'px';
   // 対象のヘクスを強調
   BT.rmHex=n;Draw();keepO();
