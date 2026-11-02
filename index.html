@@ -35919,6 +35919,25 @@ function nmRmGunManItems(n){var G=NM_GM;if(!G)return nmRMenuItems(n);var eh=G.eh
    sel('f',pans)+'{background:'+dot('#000000bb',4,1.1)+','+'radial-gradient(circle at 50% 70%,#ffffff1e 1.1px,transparent 1.5px) 0 0/4px 4px,linear-gradient(#2a2d32,#121417)!important}',
    sel('f',btns)+'{background:'+dot('#000000a0',4,1)+',linear-gradient(#33373d,#191b1f)!important}'
   ].join('');var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);try{document.documentElement.setAttribute('data-stdot','f');}catch(e){} /* v545(ダルマ「C」)→v546(ダルマ「3」): さらに濃く・細かいパンチングメタル */})();
+/* v547 sample(ダルマ指示「他のスキンにも細かいパンチを追加」): 標準・ミニマル・ネオン・ダークの上下バー・パネル・ボタンに細かいパンチ(穴)。地の色はそのまま(background-imageだけ重ねる) */
+(function(){var bars=['#nmFullTabs','#nmFtBot'],pans=['#nmFtBot .cd','#btRm .rmBox','#nmIj .ijBox','#nmFtMn','#appVerPop','#uiThPop'],btns=['#nmFullTabs .nb','#nmFtAct .fa.g','#nmFtMn .b','#btRm .rmB','#btRm .rmCls','#nmIj .ijB:not(.on)','#nmIj .ijX'];
+  var sel=function(P,L){return L.map(function(x){return P+' '+x;}).join(',');};
+  var punch=function(hole,hi,sz,r){var f=function(x){return (+x).toFixed(2);};return 'radial-gradient(circle,'+hole+' '+f(r)+'px,transparent '+f(r+0.35)+'px) 0 0/'+sz+'px '+sz+'px,radial-gradient(circle at 50% 70%,'+hi+' '+f(r)+'px,transparent '+f(r+0.4)+'px) 0 0/'+sz+'px '+sz+'px';};
+  var pimg=function(hole,hi,sz,r){var f=function(x){return (+x).toFixed(2);};return 'radial-gradient(circle,'+hole+' '+f(r)+'px,transparent '+f(r+0.35)+'px),radial-gradient(circle at 50% 70%,'+hi+' '+f(r)+'px,transparent '+f(r+0.4)+'px)!important;background-size:'+sz+'px '+sz+'px,'+sz+'px '+sz+'px!important;background-repeat:repeat!important;background-position:0 0,0 0!important';};
+  var css=[];
+  /* 標準: ボタンは元のグラデーションの上に */
+  var S0='html[data-pun="1"]:not([data-uith])';
+  css.push(sel(S0,bars.concat(pans))+'{background-image:'+pimg('#000000aa','#ffffff14',4,1)+'}');
+  css.push(sel(S0,['#nmFullTabs .nb','#nmFtAct .fa.g'])+'{background:'+punch('#00000088','#ffffff12',4,0.9)+',linear-gradient(#232a36,#161b24)!important}');
+  css.push(sel(S0,['#nmFtMn .b'])+'{background:'+punch('#000000aa','#ffffff10',4,0.9)+',linear-gradient(#131313 0%,#0d0d0d 50%,#080808 100%)!important}');
+  css.push(sel(S0,['#btRm .rmB','#btRm .rmCls','#nmIj .ijB:not(.on)','#nmIj .ijX'])+'{background-image:'+pimg('#00000088','#ffffff10',4,0.9)+'}');
+  /* ミニマル(3): 明るめの細かい点 */
+  var S3='html[data-pun="1"][data-uith="3"]';css.push(sel(S3,bars.concat(pans))+'{background-image:'+pimg('#0000008c','#ffffff10',4,0.9)+'}');css.push(sel(S3,btns)+'{background-image:'+pimg('#00000070','#ffffff0e',4,0.8)+'}');
+  /* ネオン(4): 黒い穴+シアンの光 */
+  var S4='html[data-pun="1"][data-uith="4"]';css.push(sel(S4,bars.concat(pans))+'{background-image:'+pimg('#000000cc','#00e5ff26',4,1)+'}');css.push(sel(S4,btns)+'{background-image:'+pimg('#000000aa','#00e5ff1c',4,0.9)+'}');
+  /* ダーク(7): 黒地に灰色の穴の縁 */
+  var S7='html[data-pun="1"][data-uith="7"]';css.push(sel(S7,bars.concat(pans))+'{background-image:'+pimg('#000000','#ffffff16',4,1)+'}');css.push(sel(S7,btns)+'{background-image:'+pimg('#000000','#ffffff12',4,0.9)+'}');
+  var st=document.createElement('style');st.textContent=css.join('');document.head.appendChild(st);try{document.documentElement.setAttribute('data-pun','1');}catch(e){}})();
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
