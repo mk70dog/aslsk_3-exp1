@@ -36190,6 +36190,27 @@ function nmMvStkMF(M){var sc=S.scen&&S.scen.sel,SG=sc&&S.savedGroups&&S.savedGro
     if(!cr.length&&all.length)cr=[all[0]];mov=cr.slice();if((M.xs||0)+(M.xh||0)>0)all.forEach(function(e){if(mov.indexOf(e)<0&&mov.length<1+(M.xs||0)+(M.xh||0))mov.push(e);});}}catch(e){}
   var r=oH.apply(this,arguments);
   try{if(ref&&H0&&(ref.boardId!==H0.boardId||ref.col!==H0.col||ref.row!==H0.row)&&mov.length){mov.forEach(function(e){e.boardId=ref.boardId;e.col=ref.col;e.row=ref.row;var st=nmStOf(e);st.mv=1;st.mh=1;});var gs=nmStOf(ref);gs.mh=1;try{saveState();}catch(e){}Draw();btToast(T('砲と一緒に移動')+': '+mov.map(function(e){return T('編成')+e.grp;}).join('・'));}}catch(e){console.log('mh stk',e);}return r;};})();
+/* v566 sample(ダルマ指示「LOS妨害の詳細は確認できる？」→サンプル): 妨害の内訳(どのヘクスの何が何点か)を
+   (1)下バーの「妨害 +N」をタップで一覧 (2)インスタント判定のLOS行の下に1行 (3)マップの妨害ヘクスに大きい×と+数字 */
+function nmHdHx(t){return String(t||'').replace(/^([A-Za-z]+)盤\s*/,function(m,b){return b.toLowerCase();});}
+function nmHdVal(hh){var m=String(hh[1]||'').match(/[+＋](\d+)/);return m?+m[1]:1;}
+function nmHdWhat(hh){var t=String(hh[1]||'');if(hh[3])return t.replace(/[+＋]\d+/,'').replace(/^\s+|\s+$/g,'')||T('煙幕');if(/残骸/.test(t))return T('残骸');return T((typeof LOS_TERRAIN_NAME_JP!=='undefined'&&LOS_TERRAIN_NAME_JP[t])||t);}
+function nmHdList(){var r=S_LOS.result;if(!r||!r.dataReady)return [];var L=(r.hindranceHexes||[]).map(function(hh){return {hex:String(hh[0]||'').replace(/^([A-Za-z]+)盤\s*/,function(m,b){return b.toLowerCase();}),what:nmHdWhat(hh),v:nmHdVal(hh),own:/自ヘクス/.test(hh[1]||'')};});
+  var sn=0;try{sn=scenSnowHind(r.range);}catch(x){}if(sn)L.push({hex:'—',what:T('降雪(シナリオ)'),v:sn});return L;}
+function nmHdSpan(tot){var L=nmHdList();if(!L.length)return T('妨害')+' +'+tot;return '<span class="nmHdTap" onclick="event.stopPropagation();nmHdOpen(this)" style="cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px">'+T('妨害')+' +'+tot+'</span>';}
+function nmHdLine(){var L=nmHdList();if(!L.length)return '';return '<div class="ijHd" style="font-size:12px;opacity:.85;margin:-2px 0 6px;line-height:1.5">'+T('妨害の内訳')+': '+L.map(function(x){return x.hex+' '+x.what+' <b>+'+x.v+'</b>';}).join('　')+'</div>';}
+function nmHdOpen(el){var o=document.getElementById('nmHdPop');if(o){o.remove();return;}var L=nmHdList(),r=S_LOS.result||{};if(!L.length)return;var tot=L.reduce(function(a,x){return a+x.v;},0);
+  var m=document.createElement('div');m.id='nmHdPop';var rc=el&&el.getBoundingClientRect?el.getBoundingClientRect():{left:innerWidth/2,top:innerHeight-60};
+  m.style.cssText='position:fixed;z-index:9650;left:'+Math.max(8,Math.min(innerWidth-288,rc.left-20))+'px;bottom:'+(innerHeight-rc.top+10)+'px;width:280px;background:#14181f;border:1px solid #4a5566;border-radius:12px;box-shadow:0 12px 40px #000c;padding:10px;font-family:sans-serif;color:#e8eef4';
+  m.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><b style="font-size:13px">'+T('LOS妨害の内訳')+'　'+nmHdHx(r.hexA)+'→'+nmHdHx(r.hexB)+'</b><button class="b sm" style="margin:0;height:26px;padding:0 8px;font-size:12px" onclick="event.stopPropagation();var mm=document.getElementById(\'nmHdPop\');if(mm)mm.remove();">✕</button></div>'
+   +'<table style="width:100%;border-collapse:collapse;font-size:13px">'+L.map(function(x){return '<tr style="border-top:1px solid #2a313d"><td style="padding:5px 4px;white-space:nowrap;color:#aab4c0">'+x.hex+'</td><td style="padding:5px 4px">'+x.what+'</td><td style="padding:5px 4px;text-align:right;font-weight:800;color:#ffd070">+'+x.v+'</td></tr>';}).join('')
+   +'<tr style="border-top:2px solid #4a5566"><td colspan="2" style="padding:6px 4px;font-weight:800">'+T('合計')+(tot>=6?' <span style="color:#ff7070">('+T('6以上でLOS遮断')+')</span>':'')+'</td><td style="padding:6px 4px;text-align:right;font-weight:900;color:#ffd070">+'+tot+'</td></tr></table>'
+   +'<div style="font-size:11px;color:#8a96a6;margin-top:6px;line-height:1.4">'+T('射撃側から等距離の妨害ヘクスは1つだけ数えます。マップの×が妨害ヘクスです')+'</div>';
+  m.onclick=function(e){e.stopPropagation();};document.body.appendChild(m);
+  setTimeout(function(){var f=function(e){var mm=document.getElementById('nmHdPop');if(mm&&!mm.contains(e.target)){mm.remove();document.removeEventListener('pointerdown',f,true);}};document.addEventListener('pointerdown',f,true);},0);}
+function nmHdMarkSVG(cx,cy,v){var R=10,c='#ff2bd6';var ln=function(x1,y1,x2,y2,w,col,op){return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+col+'" stroke-width="'+w+'" stroke-linecap="round"'+(op?' opacity="'+op+'"':'')+'/>';};
+  var h='';[[cx-R,cy-R,cx+R,cy+R],[cx-R,cy+R,cx+R,cy-R]].forEach(function(s){h+=ln(s[0],s[1],s[2],s[3],6,'#000',0.55);});[[cx-R,cy-R,cx+R,cy+R],[cx-R,cy+R,cx+R,cy-R]].forEach(function(s){h+=ln(s[0],s[1],s[2],s[3],3,c);});
+  var bx=cx+R+4,by=cy-R-4;h+='<circle cx="'+bx+'" cy="'+by+'" r="9" fill="#14181f" stroke="'+c+'" stroke-width="1.6"/><text x="'+bx+'" y="'+(by+4)+'" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="800" fill="#fff">+'+v+'</text>';return h;}
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
    (1)目標の移動(機関銃・対戦車兵器にも) (2)目標の車両のBU/CE(CEなら付随攻撃・CE乗員への射撃) (3)地形のTEMと妨害の手動上書き ===== */
 function nmPanelSt(k){return k==='vf'?NM_VF:k==='vm'?NM_VM:k==='lw'?NM_LW:k==='mf'?NM_MF:null;}
@@ -36340,7 +36361,7 @@ function nmFtBotFill(){var el=document.getElementById('nmFtBot'),on=document.doc
   else h+='<div class="cd" style="flex:0 1 auto;color:#8899aa;font-size:13px">マーカーをタップすると、ここに表示</div>';
   var r=S_LOS.result;
   if(r&&r.dataReady){var sn=0;try{sn=scenSnowHind(r.range);}catch(x){}var fail=r.blocked||(r.hindranceDrm+sn>=6),ed=r.elevB-r.elevA;
-    h+='<div class="cd" id="nmFtLos" onclick="nmIjOpen()" style="flex:1 1 auto;cursor:pointer;border-color:#c8a032"><div style="min-width:0;flex:1 1 auto"><div class="t1">A→B <span style="color:'+(fail?'#ff6060':'#3ca878')+'">LOS '+(fail?'NG':'OK')+'</span> · '+T('レンジ')+' '+r.range+'</div><div class="t2">'+T('妨害')+' +'+(r.hindranceDrm+sn)+' · '+T('地形')+' '+(r.temB==null?'—':r.temB)+' · '+T('高低差')+' '+(ed>0?'+':'')+ed+'</div></div><span class="losGo" style="flex:0 0 auto;background:#c8a032;color:#1a1408;font-weight:900;font-size:13px;border-radius:6px;padding:6px 9px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px">'+NM_MI.judge+' '+T('判定')+'</span></div>';}
+    h+='<div class="cd" id="nmFtLos" onclick="nmIjOpen()" style="flex:1 1 auto;cursor:pointer;border-color:#c8a032"><div style="min-width:0;flex:1 1 auto"><div class="t1">A→B <span style="color:'+(fail?'#ff6060':'#3ca878')+'">LOS '+(fail?'NG':'OK')+'</span> · '+T('レンジ')+' '+r.range+'</div><div class="t2">'+nmHdSpan(r.hindranceDrm+sn)+' · '+T('地形')+' '+(r.temB==null?'—':r.temB)+' · '+T('高低差')+' '+(ed>0?'+':'')+ed+'</div></div><span class="losGo" style="flex:0 0 auto;background:#c8a032;color:#1a1408;font-weight:900;font-size:13px;border-radius:6px;padding:6px 9px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px">'+NM_MI.judge+' '+T('判定')+'</span></div>';}
   else h+='<div class="cd" style="flex:1 1 auto;color:#8899aa;font-size:13px">地点A・Bを選ぶとLOSを表示</div>';
   var L=S.log&&S.log[0];if(L){var tx=String(L.x||'').replace(/<[^>]*>/g,'');h+='<div class="cd" style="flex:0 1 auto;max-width:36%;background:#1f1710;border-color:#6b4a1e;flex-direction:column;align-items:flex-start;justify-content:center;gap:0"><div style="font-size:11px;color:#c8a032;white-space:nowrap">'+T('最後の判定')+' · '+String(L.t||'').replace(/<[^>]*>/g,'')+'</div><div class="t1" style="color:'+(L.c||'#e8eef4')+';max-width:100%">'+tx+'</div></div>';}
   el.innerHTML=h;try{nmRbRender();}catch(e){}}
@@ -36392,7 +36413,7 @@ function nmIjDraw(){var J=NM_IJ;if(!J)return;var el=document.getElementById('nmI
   var hn=function(H){return H?H.boardId+losHexNameFromColRow(H.col,H.row):'?';};if(!r.dataReady)fail=true;
   var B=function(on,oc,tx,sub,col){return '<button onclick="'+oc+'" class="ijB'+(on?' on':'')+'"'+(col?' style="--c:'+col+'"':'')+'><b>'+tx+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</button>';};
   var h='<div class="ijBox"><div class="ijHd"><span style="color:#c8a032;display:inline-flex;align-items:center;gap:6px">'+NM_MI.judge+' '+T('インスタント判定')+'</span><span class="ijAB">A '+hn(HA)+' → B '+hn(HB)+'</span><button class="ijX" onclick="nmIjClose()">✕</button></div>';
-  h+='<div class="ijLos"><span style="color:'+(fail?'#ff6060':'#3ca878')+';font-weight:900">LOS '+(fail?'NG':'OK')+'</span> · '+T('レンジ')+' '+(r.range==null?'—':r.range)+' · '+T('妨害')+' +'+((r.hindranceDrm||0)+sn)+' · '+T('地形')+' '+(r.temB==null?'—':r.temB)+(fail?'<span style="color:#ff9a9a"> — 見えないので撃てません</span>':'')+'</div>';
+  h+='<div class="ijLos"><span style="color:'+(fail?'#ff6060':'#3ca878')+';font-weight:900">LOS '+(fail?'NG':'OK')+'</span> · '+T('レンジ')+' '+(r.range==null?'—':r.range)+' · '+nmHdSpan((r.hindranceDrm||0)+sn)+' · '+T('地形')+' '+(r.temB==null?'—':r.temB)+(fail?'<span style="color:#ff9a9a"> — 見えないので撃てません</span>':'')+'</div>';h+=nmHdLine();
   h+='<div class="ijS">① '+T('射撃フェイズ')+'</div><div class="ijRow">'+NM_IJ_PH.map(function(p){return B(J.ph===p[0],"nmIjSet('ph','"+p[0]+"')",p[1]);}).join('')+'</div>';
   var sh=nmIjShooters(J.a);h+='<div class="ijS">② '+T('攻撃側')+'(A '+hn(HA)+')</div><div class="ijRow">';
   if(sh.length)h+=sh.map(function(o,i){return B(J.pick===i,'nmIjSet(\'pick\','+i+')',nmIjSdLbl(o.sd,o.eh)+' '+o.nm,o.w,NM_SIDE_LBL[o.sd].col);}).join('');
@@ -43628,7 +43649,7 @@ function LOS_PAGE(){
     S_LOS.result.hindranceHexes.forEach(function(hh){
       if(!hh[2])return;
       var hxy=losCanonicalToDisplay(hh[2][0],hh[2][1],dispLayout);
-      h+=losHindranceMarkerSVG(hxy.x,hxy.y,'#ff00ff');
+      h+=nmHdMarkSVG(hxy.x,hxy.y,nmHdVal(hh)); /* v566 sample: 大きい×と+数字 */
     });
   }
   if(dispA&&dispB){
