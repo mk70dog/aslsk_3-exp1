@@ -37991,7 +37991,7 @@ function btFullBars(on){
   if(s){var col=BT_SIDE_COL[s.side]||'#ccc',hx=(s.n!=null&&s.n>=0&&BTG&&BTG.nodes[s.n])?BTG.nodes[s.n]:null;
     c1='<div class="t1"><span style="color:'+col+'">'+(typeof nmNatLbl==='function'?nmNatLbl(s.side):s.side)+'</span> '+(hx?hx.nm:T('盤外'))+'</div>'
       +'<div class="t2">'+(hx&&hx.terr?hx.terr+' ・ ':'')+s.u.map(function(u){return String(u.nm).replace(/[<>&]/g,'');}).join(' / ')+'</div>';}
-  else c1='<div class="t2">'+T('スタックを選択')+'</div>';
+  else c1='<div class="t2">'+T('スタックをタップで選ぶ')+'</div>';
   var L=(BT.log||[]),last=L.length?L[L.length-1]:null,c2;
   if(last){var ls=[].concat(last).map(function(x){return String(x).replace(/<[^>]*>/g,'');});c2='<div class="t2" style="color:#8899aa">'+T('最後の記録')+'</div><div class="t1" style="font-size:13px;font-weight:bold">'+ls.slice(-2).join(' ／ ').replace(/[<>&]/g,'')+'</div>';}
   else c2='<div class="t2">'+T('記録はまだありません')+'</div>';
