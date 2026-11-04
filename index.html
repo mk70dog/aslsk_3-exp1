@@ -36863,6 +36863,9 @@ var NM_TB_POS=[['T','上'],['L','左(縦)'],['R','右(縦)']];
 function nmTbPos(){var v='T';try{v=localStorage.getItem('aslsk_tbpos')||'T';}catch(e){}return /^[TLR]$/.test(v)?v:'T';}
 function nmTbPosName(){var p=nmTbPos();return (NM_TB_POS.filter(function(x){return x[0]===p;})[0]||NM_TB_POS[0])[1];}
 var NM_TB_W=56;function nmTbW(){var de=document.documentElement;return (de.classList.contains('nm-tbL')||de.classList.contains('nm-tbR'))&&document.getElementById('nmFullTabs')?NM_TB_W:0;}
+(function(){if(document.getElementById('nmTbOrdCss'))return;var st=document.createElement('style');st.id='nmTbOrdCss';
+  st.textContent='#nmFullTabs>#nmVerR{order:-1}#nmFullTabs>#nmFtMenuB{order:99}html.nm-tbL #nmFullTabs>#nmFtMenuB,html.nm-tbR #nmFullTabs>#nmFtMenuB{order:-2}html.nm-tbL #nmFullTabs>#nmVerR,html.nm-tbR #nmFullTabs>#nmVerR{order:100}';
+  document.head.appendChild(st);})(); /* v704(ダルマ指示「サイド設定時メニューだけ1番上・バー上時はメニューを1番右 バージョンを1番左」) */
 function nmTbApply(){var de=document.documentElement,p=nmTbPos();de.classList.toggle('nm-tbL',p==='L');de.classList.toggle('nm-tbR',p==='R');de.style.setProperty('--nmtbw',NM_TB_W+'px');
   try{btMapFullSync();}catch(e){}try{nmFtActFill();}catch(e){}try{Draw();}catch(e){}}
 function nmTbPosSet(k){try{localStorage.setItem('aslsk_tbpos',k);}catch(e){}var o=document.getElementById('nmTbPop');if(o)o.remove();var mm=document.getElementById('nmFtMn');if(mm)mm.remove();nmTbApply();btToast(T('上バーの位置')+': '+T(nmTbPosName()));}
@@ -36875,10 +36878,10 @@ function nmTbPosPop(){var o=document.getElementById('nmTbPop');if(o){o.remove();
   setTimeout(function(){var f=function(e){var mm=document.getElementById('nmTbPop');if(mm&&!mm.contains(e.target)){mm.remove();document.removeEventListener('pointerdown',f,true);}};document.addEventListener('pointerdown',f,true);},0);}
 (function(){if(typeof document==='undefined'||window.__nmTb)return;window.__nmTb=1;
   var st=document.createElement('style');st.textContent=[
-   'html.nm-tbL #nmFullTabs,html.nm-tbR #nmFullTabs{top:0!important;bottom:var(--nmsumh,0px)!important;width:var(--nmtbw)!important;flex-direction:column-reverse!important;align-items:center!important;justify-content:flex-end!important;padding:calc(4px + env(safe-area-inset-top,0px)) 3px 4px!important;gap:4px!important;overflow-y:auto!important;overflow-x:hidden!important;box-sizing:border-box!important;-webkit-overflow-scrolling:touch}',
+   'html.nm-tbL #nmFullTabs,html.nm-tbR #nmFullTabs{top:0!important;bottom:var(--nmsumh,0px)!important;width:var(--nmtbw)!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;padding:calc(4px + env(safe-area-inset-top,0px)) 3px 4px!important;gap:4px!important;overflow-y:auto!important;overflow-x:hidden!important;box-sizing:border-box!important;-webkit-overflow-scrolling:touch}',
    'html.nm-tbL #nmFullTabs{left:0!important;right:auto!important;box-shadow:4px 0 14px #000a!important}html.nm-tbR #nmFullTabs{right:0!important;left:auto!important;box-shadow:-4px 0 14px #000a!important}',
    'html.nm-tbL #nmFullTabs>*,html.nm-tbR #nmFullTabs>*{flex:0 0 auto!important;margin:0!important}',
-   'html.nm-tbL #nmFtAct,html.nm-tbR #nmFtAct{flex-direction:column-reverse!important;flex:0 0 auto!important;overflow:visible!important;width:100%!important;align-items:center!important;gap:4px!important}',
+   'html.nm-tbL #nmFtAct,html.nm-tbR #nmFtAct{flex-direction:column!important;flex:0 0 auto!important;overflow:visible!important;width:100%!important;align-items:center!important;gap:4px!important}',
    'html.nm-tbL #nmFtAct .fsp,html.nm-tbR #nmFtAct .fsp,html.nm-tbL #nmFtAct .fs,html.nm-tbR #nmFtAct .fs{display:none!important}',
    'html.nm-tbL #nmFtAct .fa,html.nm-tbR #nmFtAct .fa,html.nm-tbL #nmFullTabs>.nb,html.nm-tbR #nmFullTabs>.nb{width:48px!important;min-width:48px!important;max-width:48px!important;height:36px!important;padding:0 2px!important;justify-content:center!important;font-size:12px!important;overflow:hidden!important;white-space:nowrap!important;box-sizing:border-box!important}',
    'html.nm-tbL #nmFtPh,html.nm-tbR #nmFtPh{display:none!important}',
