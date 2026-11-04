@@ -37070,6 +37070,7 @@ function uiThemePop(){var o=document.getElementById('uiThPop');if(o){o.remove();
    +UI_THEMES.map(function(t){var on=t[0]===cur;return '<button class="b sm" style="margin:0;height:40px;display:flex;align-items:center;gap:10px;text-align:left;padding:0 10px;font-size:14px;'+(on?'border-color:#ffd060;box-shadow:0 0 0 1px #ffd060 inset':'')+'" onclick="event.stopPropagation();uiThemeSet(\''+t[0]+'\')"><span style="width:26px;height:18px;border-radius:5px;background:'+t[3]+';border:2px solid '+t[2]+';flex:0 0 auto"></span><span style="flex:1">'+T(t[1])+'</span>'+(on?'<span style="color:#ffd060">✓</span>':'')+'</button>';}).join('');
   m.onclick=function(e){e.stopPropagation();};document.body.appendChild(m);
   setTimeout(function(){var f=function(e){var mm=document.getElementById('uiThPop');if(mm&&!mm.contains(e.target)){mm.remove();document.removeEventListener('pointerdown',f,true);}};document.addEventListener('pointerdown',f,true);},0);}
+try{if(!localStorage.getItem('aslsk_uith_std703')){localStorage.setItem('aslsk_uith_std703','1');localStorage.setItem('aslsk_uith','0');}}catch(e){} /* v703(ダルマ指示「アプリ全体を標準テーマに」): 一度だけ標準テーマに戻す(テーマの選択はそのまま使える) */
 uiThemeApply(uiThemeGet());
 function appVerFit(){try{document.querySelectorAll('.appVerSp').forEach(function(sp){var b=sp.querySelector('.appVer');if(!b)return;b.style.display='';sp.style.minWidth='0';var w=b.querySelector('.seg14-wrap');[.66,.55,.46,.4].some(function(z){if(w)w.style.zoom=z;return b.offsetWidth<=sp.clientWidth+1;})||(b.style.display='none');});}catch(e){}} /* v500: 入らない時は小さくしてから(それでも入らなければ隠す) */
 (function(){if(typeof window!=='undefined'&&!window.__appVerFitR){window.__appVerFitR=1;window.addEventListener('resize',function(){setTimeout(appVerFit,50);});}})();
@@ -38659,14 +38660,24 @@ function BtRmFit(n,ax){ /* v361: ツールバーの↔(横幅に合わせる)・
 }
 /* v699(ダルマ指示「他もインスタント判定のように画面をいっぱいに使用する」): メニューから開いた判定・射撃などのパネル(最初のメニュー以外)は画面いっぱい・2列 */
 function btRmFullApply(){try{var el=document.getElementById('btRm');if(!el||el.closest('#nmIj'))return;var on=!!(typeof NM_RM_CUR!=='undefined'&&NM_RM_CUR);el.classList.toggle('rmFull',on);if(!on||innerWidth<760)return;
-  var bx=el.querySelector('.rmBox');if(!bx||bx.querySelector('.rmCols'))return;var its=[].slice.call(bx.children).filter(function(c){return c.classList.contains('rmIt')||c.classList.contains('rmSep')||c.tagName==='HR'||c.tagName==='DIV';});if(its.length<4)return;
+  var bx=el.querySelector('.rmBox');if(!bx||bx.querySelector('.rmCols'))return;
+  try{bx.querySelectorAll('.rmIt div').forEach(function(c){var bs=[].slice.call(c.children).filter(function(e){return e.tagName==='BUTTON'&&e.classList.contains('rmB');});if(bs.length<2)return;var g=document.createElement('span');g.className='rmBtns';bs[0].parentNode.insertBefore(g,bs[0]);bs.forEach(function(b){var on=/ff9030/.test(b.getAttribute('style')||'');b.removeAttribute('style');if(on)b.classList.add('on');g.appendChild(b);});c.style.justifyContent='space-between';});}catch(e){} /* 従来パネルのボタン列も連結バーに */
+  try{[].slice.call(bx.querySelectorAll('.rmIt')).forEach(function(it){var t=(it.querySelector('.rmTx')||{}).textContent||'';if(/^(ATT )?命中TH#|^FP\s*\d/.test(t.trim()))it.classList.add('rmSum');else if(/ダイスを振る$|判定する$|入れた目で/.test(((it.querySelector('.rmTx')||{}).firstChild||{}).textContent||t.split('\n')[0]))it.classList.add('rmAct');});}catch(e){}var its=[].slice.call(bx.children).filter(function(c){return c.classList.contains('rmIt')||c.classList.contains('rmSep')||c.tagName==='HR'||c.tagName==='DIV';});if(its.length<4)return;
   var head=its.shift(),tot=0,hs=its.map(function(c){var h=c.offsetHeight;tot+=h;return h;}),half=tot/2,acc=0,cut=its.length;for(var i=0;i<its.length;i++){if(acc+hs[i]/2>half){cut=i;break;}acc+=hs[i];}
   while(cut>0&&cut<its.length&&!its[cut].classList.contains('rmIt'))cut++; /* 区切り線は左の列の終わりに */
   var cols=document.createElement('div');cols.className='rmCols';var L=document.createElement('div'),R=document.createElement('div');L.className=R.className='rmCol';cols.appendChild(L);cols.appendChild(R);
   its.forEach(function(c,i){(i<cut?L:R).appendChild(c);});bx.appendChild(cols);if(head)bx.insertBefore(head,cols);}catch(e){console.log('rmFull',e);}}
 (function(){if(document.getElementById('rmFullCss'))return;var st=document.createElement('style');st.id='rmFullCss';
   st.textContent='#btRm.rmFull .rmBox{left:50%!important;top:calc((100vh - var(--nmsumh,64px)) / 2)!important;transform:translate(-50%,-50%);width:min(960px,calc(100vw - 16px))!important;max-width:none!important;min-width:0!important;max-height:min(calc(100vh - var(--nmsumh,64px) - 24px),780px)!important;padding:10px 12px!important;animation:none!important}'
-   +'#btRm.rmFull .rmCols{display:flex;gap:18px;align-items:flex-start}#btRm.rmFull .rmCol{flex:1 1 0;min-width:0}';
+   +'#btRm.rmFull .rmCols{display:flex;gap:18px;align-items:flex-start}#btRm.rmFull .rmCol{flex:1 1 0;min-width:0}'
+   /* v703(ダルマ指示「他の判定画面もインスタント判定と同じ見た目に」): 連結バーのボタン・金の選択色・要約カード */
+   +'html:root #btRm.rmFull .rmBox.rmBox{background:linear-gradient(#141821,#0c0f14)!important;border:1px solid #2f3a48!important;border-top:2px solid #6fb8e0!important;border-radius:14px!important}'
+   +'#btRm.rmFull .rmIt{border-radius:8px}#btRm.rmFull .rmRow .rmTx{color:#9fb2c8;font-size:14px}'
+   +'#btRm.rmFull .rmBtns{display:inline-flex!important;flex:0 1 auto!important;flex-wrap:nowrap!important;gap:0!important;row-gap:0!important;border:1px solid #3a4250;border-radius:9px;overflow:hidden;background:#1a2029;margin-left:auto}'
+   +'#btRm.rmFull .rmBtns .rmB{border:0!important;border-right:1px solid #3a4250!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#dde6ee!important;font-weight:700;padding:8px 12px!important;min-height:36px;margin:0!important;white-space:nowrap}'
+   +'#btRm.rmFull .rmBtns .rmB:last-child{border-right:0!important}#btRm.rmFull .rmBtns .rmB.on,#btRm.rmFull .rmB[style*="ff9030"]{background:#c8a032!important;color:#1a1408!important;border-color:#3a4250!important}'
+   +'#btRm.rmFull .rmIt.rmSum{border:1px solid #c8a032;border-radius:12px;background:#0e1218;margin:6px 4px;padding:10px 12px}#btRm.rmFull .rmIt.rmSum .rmTx{font-size:16px}'
+   +'#btRm.rmFull .rmIt.rmAct{background:#d8b04a;color:#1a1408;border-radius:999px;margin:6px 4px;justify-content:center}#btRm.rmFull .rmIt.rmAct .rmTx,#btRm.rmFull .rmIt.rmAct .rmSub{color:#1a1408!important}#btRm.rmFull .rmIt.rmAct .rmIc{display:none}';
   document.head.appendChild(st);})();
 setTimeout(function(){var m=window.btRMenu;if(typeof m!=='function'||m.__full)return;var w=function(){var r=m.apply(this,arguments);btRmFullApply();return r;};w.__full=1;window.btRMenu=w;},0);
 function btRmReopen(n){var keep=BT_RM_XY,ob=document.querySelector('#btRm .rmBox'),st=ob?ob.scrollTop:0,pos=ob?{l:ob.style.left,t:ob.style.top,h:ob.offsetHeight}:null;if(BT_RM_SAVE){pos=BT_RM_SAVE;BT_RM_SAVE=null;}btRMenu(n);BT_RM_XY=keep;
