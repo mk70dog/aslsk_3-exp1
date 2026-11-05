@@ -34289,7 +34289,7 @@ function nmMfIjFix(f){try{if(document.getElementById('nmIj')){if(f.afphPfphFired
   var full=false;try{full=nmModeNow()==='online';}catch(e){}if(!full){f.afphPfphFired=false;f.afphMgMoved=false;f.exFire=false;return;} /* v804(プレイ前確認): ライト版は射撃済・移動の状態をリアルの盤面で管理するので、地図の印では止めない(撃てる・未移動として判定) */
   f.afphPfphFired=st.fired==='準備';f.afphMgMoved=!!(hasMg&&st.mv);f.exFire=st.fired==='臨機';}}catch(e){}}
 function nmMfFirerEh(){var M=NM_MF;if(!M)return null;var L=nmSideList(M.sd).filter(function(x){return btNodeOf(x.boardId,x.col,x.row)===M.from;});return L.filter(function(x){return x.grp===M.slot;})[0]||L[0]||null;} /* v787: インスタント判定には前進射撃の資格確認の欄がないので、未実施・未移動として判定する */
-function nmMfJudge(n){var f=getFireState();if(!f||!f.rd||!f.wd)return;nmMfIjFix(f);if(NM_MF){NM_MF.reDice=0;NM_MF.edit=0;}f.res=null;FJUDGE();if(nmMfMissing()){nmMfReopen(n);return;}nmMfMarkFired();Draw();if(nmMfFixedDiv()){BtRmClose();return;}nmMfReopen(n);}
+function nmMfJudge(n){var f=getFireState();if(!f||!f.rd||!f.wd)return;nmMfIjFix(f);if(NM_MF){NM_MF.reDice=0;NM_MF.edit=0;NM_MF.fpfDone=0;}f.res=null;FJUDGE();if(nmMfMissing()){nmMfReopen(n);return;}nmMfMarkFired();Draw();if(nmMfFixedDiv()){BtRmClose();return;}nmMfReopen(n);}
 function nmMfRoll(n){var f=getFireState();if(!f)return;nmMfIjFix(f);if(NM_MF){NM_MF.reDice=0;NM_MF.edit=0;}f.res=null;f.rd=1+Math.floor(Math.random()*6);f.wd=1+Math.floor(Math.random()*6);FJUDGE();if(nmMfMissing()){nmMfReopen(n);return;}nmMfMarkFired();Draw();if(nmMfFixedDiv()){BtRmClose();return;}nmMfReopen(n);}
 function nmMfTgtName(eh){var v=eh.veh?nmAfv(eh.veh):null,g=(!v&&eh.gun)?nmGun(eh.gun):null;return v?nmAfvName(v):g?nmGunName(g):eh.grp?T('編成')+eh.grp+' '+(nmGrpText(eh.grp)||''):(NM_SIDE_LBL[eh===nmEnemyAt(eh)?'e':'f']||{}).mk||'';}
 function nmMfTgtImg(eh){var src=eh.veh?nmVaslSrc(eh.veh):eh.gun?nmVaslSrc(eh.gun):eh.grp?(nmGrpSrcs(eh.grp,1)[0]||null):null;return src?'<img src="'+src+'" style="width:30px;height:30px;display:block">':'';}
@@ -34342,6 +34342,7 @@ function nmRmMFireItems(n){
     if(S.fireSub==='dff'){var rfp=nmMfResFp(),rk=nmResKey(nmHexOfNode(M.tgt)),rcur=(S_LOS.resid||{})[rk]||0;
       it.push({ic:'fire',t:rfp?((rcur>=rfp?'✓ ':'')+'残留火力 '+rfp+'FPを'+BTG.nodes[M.tgt].nm+'に置く'):'残留火力なし',sub:rfp?('移動フェイズの臨機射撃の残留火力(3.3.5)'+(rcur?'　今: '+rcur+'FP(大きい方を残す)':'')):'この射撃の列と正のDRMでは残らない',f:rfp&&rcur<rfp?"nmResSet("+M.tgt+","+rfp+");nmMfReopen("+n+")":''});} /* v409 */
     if(tgtEh&&tgtEh.veh){M._crewTe=tgtEh;M._crewR=R.ift.r;nmCrewSection(it,n,'mf',tgtEh,R.ift.r,'CE乗員');}else nmMcSection(it,n,tgtEh,R.ift.r,'mf:'+M.tgt+':'+f.rd+':'+f.wd+':'+R.mod,'nmMfReopen');
+    try{if(f.fireMode==='FPF')nmMfFpfSection(it,n,f,R);}catch(e){console.log('fpf',e);}
     /* v796(ダルマ指示「ROF発動時 ROF射撃実施のボタンをMC結果後の場所に表示する」): ROF射撃のボタンは士気チェック(MC)の結果の後に置く */
     if((R.swr||[]).some(function(w){return w.ro==='維持成功';})&&(S.fireSub||'')!=='afph'){it.push({sep:1});it.push({ic:'fire',t:'<span style="color:#3ca878">ROFで機関銃だけもう一度撃つ</span>',sub:'ROFを維持した機関銃だけで、同じフェイズにもう一度(射撃タブの「ROF射撃」と同じ・1.2.4.1)',f:"nmMfRofAgain("+n+")"});} /* v692 */} /* v518 */
   it.push({sep:1});
@@ -34364,6 +34365,14 @@ function nmMfSwInfo(it,ph){var f=getFireState();if(!f||!f.grps)return;var used={
   L.forEach(function(s){var gr=0;try{gr=isGreenEffectiveForSw(own[s.uid],s.uid,f.ldrPresent)?1:0;}catch(e){}var eb=s.b<99?s.b-bRed-gr:99,k=s.id+'|'+eb+'|'+s.rof+'|'+s.x;if(!G[k]){G[k]={s:s,n:0,eb:eb,gr:gr};ord.push(k);}G[k].n++;});
   ord.forEach(function(k){var g=G[k],s=g.s,nm=String(s.lbl).replace(/\s*#\d+/,''),rf=s.rof>0?(ph==='afph'?'ROF'+s.rof+'(前進射撃では維持できない)':'ROF'+s.rof+' 赤'+s.rof+'以下でもう一度'):'ROFなし',bk=g.eb<99?'故障 B'+g.eb+' 原DR'+g.eb+'以上'+(bRed||g.gr?'(B#'+s.b+(bRed?' SFF/FPF−2':'')+(g.gr?' 未熟兵−1':'')+')':''):'故障なし',xx=s.x<99?' · 除去 X'+s.x:'';
     it.push({ic:'info',t:'<span>'+nm+(g.n>1?' ×'+g.n:'')+'　<b style="color:#3ca878">'+rf+'</b></span>',sub:'<span style="color:#ff9a6a">'+bk+'</span>'+xx});});}
+/* v802(ダルマ「修正実施」): 緊急防御射撃(FPF)は撃った側の各ユニットが同じ原DR+指揮官修正でNMC(3.3.3)。旧射撃タブと同じ判定(<士気=成功・=士気=PIN・>士気=混乱・原DR12=損耗)を出し、編成に反映できる */
+function nmMfFpfRes(f,R){var M=NM_MF;if(!M)return [];var its=nmGeList(M.slot).items||[],ld=0;try{ld=fireEffLdr(f)||0;}catch(e){}var out=[];
+  its.forEach(function(x,i){if(x.broken)return;var mm=nmMcUnitMor(x);if(mm.mor==null)return;var d=R.raw+(x.kind==='smc'?0:ld),st=R.raw===12?'auto':(d<mm.mor?'ok':(d===mm.mor?'pin':'brk'));out.push({i:i,x:x,mor:mm.mor,d:d,st:st});});return out;}
+function nmMfFpfSection(it,n,f,R){var M=NM_MF,L=nmMfFpfRes(f,R);if(!L.length)return;var ld=0;try{ld=fireEffLdr(f)||0;}catch(e){}var TX={ok:['成功','#3ca878'],pin:['上限成功→PIN','#ffb040'],brk:['失敗→混乱','#ff6060'],auto:['原DR12: 損耗(混乱)','#ff4040']};
+  it.push({sep:1});it.push({ic:'sel',t:'<span>撃った側のNMC(FPF)　原DR'+R.raw+(ld?' 指揮官'+(ld>0?'+':'')+ld:'')+'</span>',sub:'緊急防御射撃をしたユニットは、この射撃の原DRで士気チェック(3.3.3)'});
+  L.forEach(function(o){var t=TX[o.st];it.push({ic:o.st==='ok'?'ok':'x',img:vaslCtrHTML('u:'+(o.x.nat||nmGeList(M.slot).nat)+'|'+o.x.label,26)||'',t:'<span>'+o.x.label+'　士気'+o.mor+'　DR'+o.d+'　<b style="color:'+t[1]+'">'+t[0]+'</b></span>'});});
+  var need=L.some(function(o){return o.st!=='ok';});if(need)it.push({ic:'fire',t:M.fpfDone?'<span style="color:#3ca878">✓ 編成に反映しました</span>':'結果を編成に反映する',sub:M.fpfDone?'':'PIN・混乱を編成のユニットに付ける(損耗は手で)',f:M.fpfDone?'':"nmMfFpfApply("+n+")"});}
+function nmMfFpfApply(n){var M=NM_MF,f=getFireState(),R=f&&f.res;if(!M||!R)return;var its=nmGeList(M.slot).items||[];try{nmBkSnap('FPFのNMC');}catch(e){}nmMfFpfRes(f,R).forEach(function(o){var x=its[o.i];if(!x)return;if(o.st==='pin')x.pinned=true;else if(o.st==='brk'||o.st==='auto'){x.broken=true;x.pinned=false;}});M.fpfDone=1;try{nmStSave(M.slot);}catch(e){}try{saveState();}catch(e){}nmMfReopen(n);}
 function nmMfRofAgain(n){var f=getFireState(),R=f&&f.res;if(!R)return;var ok={};(R.swr||[]).forEach(function(w){if(w.ro==='維持成功'&&w.uid)ok[w.uid]=1;});if(!Object.keys(ok).length)return;
   f.grps=f.grps.filter(function(g){return (g.sw||[]).some(function(u){return ok[u];});}).map(function(g){g.sw=g.sw.filter(function(u){return ok[u];});g.rofMode=true;return g;});
   f.res=null;f.rd=0;f.wd=0;if(NM_MF){NM_MF.reDice=0;NM_MF.edit=0;}try{Draw();}catch(e){}nmMfReopen(n);btToast('ROF射撃: ダイスを入れるか「判定する」');}
