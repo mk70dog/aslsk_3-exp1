@@ -37635,6 +37635,14 @@ var NM_HQ_IC={fire:['#e0a040','<path d="M3 15l7-2.4 3-.3 1.6-1.7H21v2h-8.4l-1.1 
 function nmHqIc(k,sz){var d=NM_HQ_IC[k]||NM_HQ_IC.ref;return '<span style="flex:0 0 '+(sz+10)+'px;height:'+(sz+10)+'px;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;border:1px solid #4a5566;background:#1b222c;color:#e6ecf2"><svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+d[1]+'</svg></span>';}
 /* v647(ダルマ指示「ツールバーに←→を追加」): AとBを入れ替える */
 function nmAbSwap(){if(!(S_LOS.pxA&&S_LOS.pxB)){btToast('起点(A)と目標(B)を選んでから押してください');return;}var t=S_LOS.pxA;S_LOS.pxA=S_LOS.pxB;S_LOS.pxB=t;S_LOS.result=null;try{LosRunPixel();}catch(e){}try{Draw();}catch(e){}btToast('AとBを入れ替えました');}
+
+var NM_HQ_ALL=false;
+function nmHqLite(){try{return nmModeNow()==='judge';}catch(e){return false;}}
+/* v828: 判定ボード上部の大きな「スポット判定」。A・Bを選んであればLOSも表示し、押すとスポット判定を開く。未選択ならA→Bを選ぶ */
+function nmHqSpotHTML(r){var ok=r&&r.dataReady,info='';
+  if(ok){var sn=0;try{sn=scenSnowHind(r.range);}catch(x){}var fail=r.blocked||(r.hindranceDrm+sn>=6);info='A→B <b style="color:'+(fail?'#b02020':'#0a6a3a')+' !important">LOS '+(fail?'NG':'OK')+'</b>・'+T('距離')+' '+r.range+'・'+T('妨害')+' +'+(r.hindranceDrm+sn);}
+  else info=T('A→Bを選んで、射撃・砲撃・車両・軽対戦車・MCをまとめて判定');
+  return '<div onclick="event.stopPropagation();nmHqClose();'+(ok?'nmIjOpen()':'nmAbArm()')+'" style="cursor:pointer;margin:0 0 10px;width:100%;min-height:64px;border-radius:12px;background:#7ec8e3;color:#0d2233;display:flex;align-items:center;gap:12px;padding:8px 16px;box-sizing:border-box"><span style="font-size:26px;color:#0d2233">⚡</span><span style="display:flex;flex-direction:column;line-height:1.25"><b style="font-size:18px;color:#0d2233 !important">'+T('スポット判定')+(ok?'':'　<small style="font-size:12px;font-weight:700">(まずA→Bを選ぶ)</small>')+'</b><small style="font-size:12.5px;color:#0d2233 !important;opacity:.85">'+info+'</small></span></div>';}
 function nmHqClose(){var e=document.getElementById('nmHq');if(e)e.remove();}
 /* v686(ダルマ指示「全項目をHQ内で作り直す」第1段): HQの爆薬・潰走・回復は、タブへ移動せず地点Aの編成から地図のパネルで開く */
 var NM_HQ_LBL={rally:'回復・修理',rout:'潰走・阻止',dc:'爆薬',mc:'士気・損耗',nmMcpOpen:'士気・損耗',nmHqMvOpen:'移動',nmHqCcOpen:'近接戦闘',nmRlOpen:'回復・修理',nmLwOpen:'軽対戦車兵器',nmHqGunOpen:'砲撃',nmHqAfvOpen:'装甲戦闘車両',nmRtOpen:'潰走・阻止',nmDcOpen:'爆薬',cc:'近接戦闘',move:'移動'};
@@ -37754,10 +37762,19 @@ function nmHqOpen(gi){var o=document.getElementById('nmHq');if(o)o.remove();var 
     var grid=function(ks,c){return '<div style="display:grid;grid-template-columns:repeat('+c+',1fr);gap:6px">'+ks.map(tile).join('')+'</div>';};
     var sec=function(t,h){return '<div style="display:flex;align-items:baseline;gap:8px;margin:10px 0 4px"><b style="font-size:13px;color:#9fb2c8">'+T(t)+'</b>'+(h?'<span style="font-size:11px;color:#6d7c8e">'+T(h)+'</span>':'')+'</div>';};
     var seq='<div style="display:flex;gap:4px">'+PHASE_SEQ.map(function(x,pi){var on=x.id===ph;return '<span onclick="event.stopPropagation();nmPhaseJump('+pi+')" style="cursor:pointer;flex:1;text-align:center;padding:8px 0;font-size:12px;border:1px solid '+(on?'#ffd060':'#3a4250')+';border-radius:8px;background:'+(on?'#c8a032':'#1a2029')+';color:'+(on?'#000':'#9fb2c8')+';font-weight:'+(on?900:400)+'">'+T(x.lbl)+'</span>';}).join('')+'</div>';
-    body='<div style="font-size:11px;color:#6d7c8e;margin:0 0 3px">'+T('いまのフェイズ ― 金枠＝このフェイズでよく使う')+'</div>'+seq
-      +sec('射撃')+grid(['fire','qk','gun','afv','latw','ftab','dc'],4)
+    var allB=sec('射撃')+grid(['fire','qk','gun','afv','latw','ftab','dc'],4)
       +sec('移動・士気・近接')+grid(['move','rally','rout','mc','cc'],5)
-      +sec('調べる')+grid(['ref','unit','scen'],5);}
+      +sec('調べる')+grid(['ref','unit','scen'],5);
+    if(nmHqLite()){ /* v828(ダルマ指示「判定ボードのトップ画面の見直し」→hqv4 案1+2): 上にスポット判定、今のフェイズでよく使うもの(スポット判定にないもの)、残りは「すべての判定」に折りたたみ */
+      var LREC={rph:['rally','mc'],pfph:['mc','rally'],mph:['move','ftab','mc'],dfph:['mc','ftab'],afph:['dc','mc'],rtph:['rout','mc'],aph:['move','cc'],ccph:['cc','mc']}[ph]||['mc'];
+      var phL=(PHASE_SEQ.filter(function(x){return x.id===ph;})[0]||{}).lbl||'';var phNm={rph:'回復',pfph:'準備射撃',mph:'移動',dfph:'防御射撃',afph:'前進射撃',rtph:'潰走',aph:'前進',ccph:'白兵戦'}[ph]||phL;
+      var seqS=seq.replace(/padding:8px 0/g,'padding:5px 0');
+      var HOT='border:2px solid #f2c14e !important;background:#3a2f10 !important;box-shadow:0 0 10px rgba(242,193,78,.3) !important;color:#ffe7a8 !important';var tileH=function(k){return tile(k).replace('height:54px','height:60px').replace(/border:2px solid #c8a032;background:#2a2412/,'');};
+      var recB='<div style="display:grid;grid-template-columns:repeat('+Math.max(2,Math.min(4,LREC.length))+',1fr);gap:6px">'+LREC.map(function(k){return tileH(k).replace(/(style="margin:0;height:60px;[^"]*?)"/,'$1;'+HOT+'"');}).join('')+'</div>';
+      body='<div style="font-size:11px;color:#6d7c8e;margin:0 0 3px">'+T('いまのフェイズ')+'</div>'+seqS+sec(phNm+'フェイズでよく使う')+recB
+        +'<div onclick="event.stopPropagation();NM_HQ_ALL=!NM_HQ_ALL;nmHqOpen()" style="cursor:pointer;margin-top:10px;padding:10px;border:1px solid #39414f;border-radius:10px;background:#0c1118;color:#9fb2c8;font-size:13px">'+(NM_HQ_ALL?'▾ ':'▸ ')+T('すべての判定')+(NM_HQ_ALL?'':'<span style="font-size:11.5px;color:#6d7c8e">（射撃 A→B・簡易射撃・砲撃・車両・軽対戦車・残留火力・爆薬・移動・回復・潰走・士気・近接戦闘・調べる）</span>')+'</div>'+(NM_HQ_ALL?allB:'');
+      ab=nmHqSpotHTML(r);}
+    else body='<div style="font-size:11px;color:#6d7c8e;margin:0 0 3px">'+T('いまのフェイズ ― 金枠＝このフェイズでよく使う')+'</div>'+seq+allB;}
   m.innerHTML=hd+ab+body;m.onclick=function(e){e.stopPropagation();};m.setAttribute('data-ph',(S.turn&&S.turn.phase)||'');m.setAttribute('data-gi',gi==null?'':String(gi));document.body.appendChild(m);}
 /* v738(ダルマ指摘「HQ判定の今のフェイズが連動しない」): ステータスバーでフェイズを進めたら、開いているHQ判定も作り直す */
 function nmHqSync(){var m=document.getElementById('nmHq');if(!m)return;var ph=(S.turn&&S.turn.phase)||'';if(m.getAttribute('data-ph')===ph)return;var gi=m.getAttribute('data-gi');if(gi){m.setAttribute('data-ph',ph);return;}var sc=m.scrollTop;nmHqOpen();var m2=document.getElementById('nmHq');if(m2)m2.scrollTop=sc;}
