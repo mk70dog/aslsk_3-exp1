@@ -34358,7 +34358,7 @@ function nmRmMFireItems(n){
   it.push({ic:'tgt',img:tgtEh?nmMfTgtImg(tgtEh):'',t:'目標: '+(tgtEh?nmMfTgtName(tgtEh):'')+' @'+BTG.nodes[M.tgt].nm,sub:'距離'+btDist(M.from,M.tgt)+'　タップで目標を選び直す',f:"NM_MF.tgt=null;nmMfReopen("+n+")"});
   if(!done){try{if(tgtEh&&tgtEh.veh)nmTgtCeRow(it,n,'mf',tgtEh);var fA=getFireState(),au={tem:null,hind:null};if(fA){var ovS=M.ov;M.ov=null;au={tem:fireTemEff(fA),hind:fireHindTotal(fA)};M.ov=ovS;}nmOvRow(it,n,'mf',au.tem,au.hind);}catch(e){console.log(e);}} /* v518 */
   if(tgtEh&&tgtEh.veh&&!tgtEh.ce){it.push({ic:'x',t:'目標の車両はBU: 歩兵の射撃では影響がありません',sub:'CEなら乗員を撃てます(上の「目標のハッチ」)'});return it;}
-  var f=getFireState(),ph=f&&f.ph,fp=0,drm=0;try{if(f){f.tgtCrewCE=!!(tgtEh&&tgtEh.veh&&tgtEh.ce);if(f.tgtCrewCE)f.crewVehId=tgtEh.veh;}fp=totalFP(f,ph);drm=fireDRM(f);}catch(e){}
+  var f=getFireState(),ph=f&&f.ph,fp=0,drm=0;try{if(f&&f.ftTargetCarrier==null&&!f.tgtIsGun){var ftA=nmTgtFtCount(tgtEh);if(ftA!=null)f.ftTargetCarrier=Math.min(2,ftA);}}catch(e){}try{if(f){f.tgtCrewCE=!!(tgtEh&&tgtEh.veh&&tgtEh.ce);if(f.tgtCrewCE)f.crewVehId=tgtEh.veh;}fp=totalFP(f,ph);drm=fireDRM(f);}catch(e){}
   var col=IFT_LBL[ci(fp)];
   var parts=[];try{var pt=[['TEM',fireTemEff(f)],['指揮官',fireEffLdr(f)],['妨害',fireHindTotal(f)],['CX',f.cx?1:0],['FFMO',(f.ffmo&&!f.tgtCrewCE&&!fireHeightAdvActive(f)&&fireHindTotal(f)<=0)?-1:0],['FFNAM',f.ffnam?-1:0],['危険移動',f.hazardous?-2:0],['SSR',scenShotDrm(fireShotRange(f),fireShotPh())]];pt.forEach(function(x){if(x[1])parts.push(x[0]+sg(x[1]));});}catch(e){}
   if(done){it.pop();it.push({ic:'tgt',img:tgtEh?nmMfTgtImg(tgtEh):'',t:'<span>'+(tgtEh?nmMfTgtName(tgtEh):'')+' @'+BTG.nodes[M.tgt].nm+'　FP'+fp+'・'+col+'列・DRM'+sg(drm)+'</span>',sub:'距離'+btDist(M.from,M.tgt)+(parts.length?'　'+parts.join(' '):'')});}
@@ -34386,7 +34386,8 @@ function nmRmMFireItems(n){
   [['rd','赤','#ff6060'],['wd','白','#e8eef4']].forEach(function(x){var cv=f?f[x[0]]:0;
     it.push({row:1,cmp:1,ic:'fire',t:'<span style="color:'+x[2]+'">'+x[1]+'</span>',btns:[1,2,3,4,5,6].map(function(v){return [(cv===v?'✓':'')+v,"nmMfDie("+n+",'"+x[0]+"',"+v+")"];})});});
   if(f&&f.rd&&f.wd&&(!f.res||M.reDice))it.push({ic:'fire',t:'入れた目で判定する',sub:'赤'+f.rd+'・白'+f.wd+'　(射撃タブのJUDGEと同じ)',f:"nmMfJudge("+n+")"});
-  if(f){it.push({row:1,ic:'sel',t:'<span style="font-size:13px">攻撃する側・目標</span>',btns:[[(f.cx?'✓':'')+'攻撃する側CX+1',"nmMfFlag("+n+",'cx')"],[(f.ftTargetCarrier?'✓':'')+'目標FT保有−1',"nmMfFlag("+n+",'ftc')"],[(f.tgtIsGun?'✓':'')+'目標は砲',"nmMfFlag("+n+",'gun')"]]});} /* v441 */
+  if(f){it.push({row:1,ic:'sel',t:'<span style="font-size:13px">攻撃する側・目標</span>',btns:[[(f.cx?'✓':'')+'攻撃する側CX+1',"nmMfFlag("+n+",'cx')"],[(f.tgtIsGun?'✓':'')+'目標は砲',"nmMfFlag("+n+",'gun')"]]});
+    if(!f.tgtIsGun){var ftN=nmTgtFtCount(tgtEh),fc=f.ftTargetCarrier;it.push({row:1,ic:'sel',t:'<span style="font-size:13px">目標のFT保有<br><small style="color:'+(ftN?'#ff9a6a':'#8fa6bd')+'">'+(ftN==null?'編成なし(確認して選ぶ)':ftN?'編成にFT '+ftN+'つ':'編成にFTなし')+'</small></span>',btns:[[(fc===0?'✓':'')+'保有なし',"nmMfFtc("+n+",0)"],[(fc===1?'✓':'')+'1保有 −1',"nmMfFtc("+n+",1)"],[(fc===2?'✓':'')+'2保有 −2',"nmMfFtc("+n+",2)"]]});}} /* v441 / v817: FT保有は 保有なし/1/2 で選ぶ。目標の編成のFT数を表示 */
   it.push({ic:'tabs',t:'射撃タブで開く',sub:'同じ射撃を射撃タブの画面で見る',f:"BtRmClose();NAVTAB('fire')"});
   return it;
 }
@@ -36111,6 +36112,10 @@ function nmExitDo(n,sd){var eh=nmUnitAt(nmHexOfNode(n),sd);if(!eh)return;var r=n
   S.nmExitVP[sc].vp+=r.vp;S.nmExitVP[sc].list.push(r.lg.join('・')+' = '+r.vp+'VP');var L=nmSideList(sd);L.splice(L.indexOf(eh),1);
   try{logResult(function(){return {tabLbl:'MAP 退出',text:r.lg.join('・')+' = '+r.vp+'VP(計'+S.nmExitVP[sc].vp+')',color:'#c8a032',detail:null};});}catch(e){}try{saveState();}catch(e){}BtRmClose();Draw();btToast('退出: '+r.vp+'VP(計'+S.nmExitVP[sc].vp+'VP)');}
 /* v441(ダルマ指示「マップタブで全て完結できる状態にする」): 射撃の細かい設定(攻撃する側CX・目標FT保有・目標は砲)、白兵戦の原DR2の指揮官誕生、回復のSSR(政治委員・混乱士気+1)、編成の国籍をマップで選ぶ */
+
+/* v817(ダルマ指示「目標FT保有数を確認表示 保有なしの選択がない」): 目標の編成が持つFT(火炎放射器)の数。編成でない目標はnull */
+function nmTgtFtCount(te){try{if(!te||!te.grp)return null;var d=nmGeList(te.grp),c=0;(d.sw||[]).forEach(function(uid){var t=SWT.filter(function(w){return w.id===nmGeSwBase(uid).id;})[0];if(t&&/^FT/.test(t.lbl||''))c++;});return c;}catch(e){return null;}}
+function nmMfFtc(n,v){var f=getFireState();if(!f)return;f.ftTargetCarrier=v;f.res=null;Draw();nmMfReopen(n);}
 function nmMfFlag(n,k){var f=getFireState();if(!f)return;if(k==='cx')f.cx=!f.cx;else if(k==='ftc')f.ftTargetCarrier=f.ftTargetCarrier?0:1;else if(k==='gun'){f.tgtIsGun=!f.tgtIsGun;if(!f.tgtIsGun)f.tgtGunId=null;}f.res=null;Draw();nmMfReopen(n);}
 function nmGeSetNat(n,nat){var G=NM_GE;if(!G)return;var g=nmGeActive(G.slot);if(g)g.pickerNat=nat;var sv=nmGeSaved(G.slot,nat);if(sv)sv.pickerNat=nat;nmGeSync(G.slot);try{saveState();}catch(e){}NM_RM_SUB='grpedit';btRmReopen(n);}
 /* v450(ダルマ指示「マーカーを移動で動かしてそのまま停止、停止時にMotion・BU/CE、移動中の砲塔の方向変更」): マーカーと移動(ルート)をつなぐ。
