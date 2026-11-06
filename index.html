@@ -36313,7 +36313,7 @@ function nmFtActFill(){var el=document.getElementById('nmFtAct');if(!el)return;v
   var tb=document.getElementById('nmFullTabs'),vr=document.getElementById('nmVerR');if(tb){if(!vr){vr=document.createElement('span');vr.id='nmVerR';vr.className='appVerSp';vr.style.cssText='flex:0 0 auto;width:84px;margin-left:4px';}vr.innerHTML=appVerBadgeHTML();tb.appendChild(vr);
     /* v624(ダルマ指示「≡メニューを右はじにする B案」): ≡はバージョン表示の左(ズーム・全画面ボタンの右)へ */
     var old=document.getElementById('nmFtMenuB');if(old)old.remove();var mb=[].slice.call(el.querySelectorAll('button')).filter(function(x){return /^≡/.test((x.textContent||'').trim());})[0];if(mb){mb.id='nmFtMenuB';mb.className='nb nmFullOff';mb.style.flex='0 0 auto';mb.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';tb.insertBefore(mb,vr);}}
-  nmFtActFit();appVerFit();}
+  try{nmTbOrdApply();}catch(e){console.log('tbApply',e);}nmFtActFit();appVerFit();}
 /* v519(バグ修正 ダルマ報告「ツールバーのボタンが重なっている」): 入りきらない時は、操作ボタンを記号だけ→全体を詰める。≡は重ねずに並べる */
 function nmFtActFit(){var el=document.getElementById('nmFtAct');if(!el)return;var tb=document.getElementById('nmFullTabs');el.classList.remove('cmp1','cmp2','cmp3');if(tb)tb.classList.remove('phc');var over=function(){return el.scrollWidth>el.clientWidth+1;};if(!over())return;if(tb)tb.classList.add('phc');if(!over())return;el.classList.add('cmp1');if(!over())return;el.classList.add('cmp2');if(!over())return;el.classList.add('cmp3');}
 (function(){if(typeof window!=='undefined'&&!window.__nmFtActFitR){window.__nmFtActFitR=1;window.addEventListener('resize',function(){setTimeout(nmFtActFit,60);});}})();
@@ -36394,6 +36394,45 @@ function nmAbBoard(){var el=document.getElementById('nmAbBd'),r=S_LOS.result,mk=
     el.innerHTML='<div style="white-space:nowrap"><b style="color:'+(fail?'#ff6060':'#3ca878')+'">LOS '+(fail?'NG':'OK')+'</b> '+T('距離')+r.range+'<br><span style="color:#aab4c0">'+T('妨害')+'+'+(r.hindranceDrm+sn)+'・'+T('地形')+(r.temB==null?'—':r.temB)+'・'+T('高低差')+(ed>0?'+':'')+ed+'</span></div>'+bt('⚡判定','nmIjOpen()','#7ec8e3')+bt('⇄','nmAbSwap()');}
   var W=el.offsetWidth||160,H=el.offsetHeight||40,x=q.right+6,y=q.top+q.height/2-H/2;if(x+W>innerWidth-70)x=q.left-W-6;y=Math.max(50,Math.min(innerHeight-H-60,y));el.style.left=Math.round(x)+'px';el.style.top=Math.round(y)+'px';}
 
+
+/* v833(ダルマ指示「表示の設定にツールバーにボタン表示している項目は削除」「ツールバーの設定を追加 並び順 追加削除を設定」) */
+var NM_TB_ITEMS=[
+ {id:'hq',g:1,lb:'判定ボード',m:function(o){return /nmHqOpen\(/.test(o);}},
+ {id:'ab',g:1,lb:'A→B',m:function(o){return /nmAbArm\(|nmLosOff\(/.test(o);}},
+ {id:'view',g:1,lb:'見える範囲',m:function(o){return o.indexOf("nmToolArm('view')")>=0;}},
+ {id:'gs',g:1,lb:'同期(2台)',m:function(o){return /nmGsSync/.test(o);}},
+ {id:'fire',g:1,lb:'選択したスタックで攻撃',m:function(o){return o.indexOf("nmToolArm('fire')")>=0;}},
+ {id:'atk',g:1,lb:'選択したスタックを攻撃',m:function(o){return o.indexOf("nmToolArm('atk')")>=0;}},
+ {id:'move',g:1,lb:'移動',m:function(o){return o.indexOf("nmToolArm('move')")>=0;}},
+ {id:'ref',g:1,lb:'早見表',m:function(o){return o.indexOf("nmRmTabGo('ref')")>=0;}},
+ {id:'old',g:1,lb:'旧タブ',m:function(o){return /nmOldTabPop/.test(o);}},
+ {id:'zout',g:2,lb:'縮小 −',m:function(o){return /nmFtZoom\(-1\)/.test(o);}},
+ {id:'zin',g:2,lb:'拡大 ＋',m:function(o){return /nmFtZoom\(1\)/.test(o);}},
+ {id:'fit',g:2,lb:'横幅に合わせる ↔',m:function(o){return o.indexOf("nmFtFit('width')")>=0;}},
+ {id:'rot',g:2,lb:'地図を90°回転 ⟳',m:function(o){return /nmFtRot\(\)/.test(o);}}];
+function nmTbCfg(){var c=S.nmTbCfg;if(!c||!c.order){c={order:NM_TB_ITEMS.map(function(x){return x.id;}),off:{}};}NM_TB_ITEMS.forEach(function(x){if(c.order.indexOf(x.id)<0)c.order.push(x.id);});c.off=c.off||{};return c;}
+function nmTbShown(id){var c=nmTbCfg(),it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0];if(!it||c.off[id])return false;if(it.g===2)return true;var el=document.getElementById('nmFtAct');if(!el)return false;return [].slice.call(el.querySelectorAll('button')).some(function(b){return it.m(b.getAttribute('onclick')||'')&&b.style.display!=='none';});}
+function nmTbOrdApply(){var c=nmTbCfg();[['nmFtAct',1],['nmFullTabs',2]].forEach(function(P){var el=document.getElementById(P[0]);if(!el)return;var bs=[].slice.call(el.querySelectorAll(':scope > button'));var got=[];
+  c.order.forEach(function(id){var it=NM_TB_ITEMS.filter(function(x){return x.id===id&&x.g===P[1];})[0];if(!it)return;bs.forEach(function(b){if(got.indexOf(b)<0&&it.m(b.getAttribute('onclick')||'')){got.push(b);b.style.display=c.off[id]?'none':'';}});});
+  if(got.length<2)return;var anchor=got.reduce(function(a,b){return (a.compareDocumentPosition(b)&Node.DOCUMENT_POSITION_PRECEDING)?b:a;});var ph=document.createComment('tb');el.insertBefore(ph,anchor);got.forEach(function(b){el.insertBefore(b,ph);});ph.remove();});}
+function nmTbCfgOpen(){var id='nmTbCfgP',o=document.getElementById(id);if(o)o.remove();var el=document.createElement('div');el.id=id;el.style.cssText='position:fixed;inset:0;z-index:9400;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center';el.onclick=function(e){if(e.target===el)el.remove();};document.body.appendChild(el);nmTbCfgDraw();}
+function nmTbCfgDraw(){var el=document.getElementById('nmTbCfgP');if(!el)return;var c=nmTbCfg();
+  var row=function(id,i,arr){var it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0];var on=!c.off[id];
+    var B=function(t,f,dis,st){return '<button onclick="event.stopPropagation();'+(dis?'':f)+'" style="font:inherit;font-weight:800;min-width:36px;height:34px;border-radius:8px;border:1px solid #4a5262;background:#2a313d;color:'+(dis?'#4a5262':'#e8eef4')+';'+(st||'')+'">'+t+'</button>';};
+    return '<div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #263040"><span style="flex:1;font-size:14px;font-weight:700;color:'+(on?'#e8eef4':'#6d7c8e')+'">'+T(it.lb)+'</span>'
+      +'<button onclick="event.stopPropagation();nmTbCfgSet(\''+id+'\',\'tog\')" style="font:inherit;font-weight:900;width:64px;height:34px;border-radius:8px;border:0;background:'+(on?'#ffb020':'#2a313d')+';color:'+(on?'#111':'#9fb2c8')+'">'+(on?T('表示'):T('非表示'))+'</button>'
+      +B('↑',"nmTbCfgSet('"+id+"','up')",i===0)+B('↓',"nmTbCfgSet('"+id+"','dn')",i===arr.length-1)+'</div>';};
+  var g1=c.order.filter(function(id){var it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0];return it&&it.g===1;}),g2=c.order.filter(function(id){var it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0];return it&&it.g===2;});
+  var h='<div onclick="event.stopPropagation()" style="background:#1b2028;border:2px solid #7ec8e3;border-radius:14px;padding:12px 14px;width:min(420px,94vw);max-height:88vh;overflow:auto;color:#e8eef4"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:16px;color:#7ec8e3">🧰 '+T('ツールバーの設定')+'</b><button class="b sm" style="margin:0;height:30px;padding:0 10px" onclick="event.stopPropagation();document.getElementById(\'nmTbCfgP\').remove()">✕ '+T('閉じる')+'</button></div>'
+    +'<div style="font-size:12px;color:#8fa6bd;margin:4px 0 6px">'+T('↑↓で並び順、表示/非表示で出す・出さないを決めます。≡(メインメニュー)はいつも一番上です')+'</div>'
+    +'<div style="font-size:12px;font-weight:700;color:#e0b850;margin-top:6px">'+T('操作のボタン')+'</div>'+g1.map(row).join('')
+    +'<div style="font-size:12px;font-weight:700;color:#e0b850;margin-top:10px">'+T('地図の表示のボタン')+'</div>'+g2.map(row).join('')
+    +'<div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="b sm" style="margin:0;height:32px;padding:0 12px" onclick="event.stopPropagation();nmTbCfgSet(null,\'reset\')">'+T('はじめの並びに戻す')+'</button></div></div>';
+  el.innerHTML=h;}
+function nmTbCfgSet(id,op){var c=nmTbCfg();if(op==='reset'){c={order:NM_TB_ITEMS.map(function(x){return x.id;}),off:{}};}
+  else if(op==='tog'){c.off[id]=!c.off[id];}
+  else{var it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0],grp=c.order.filter(function(k){var t=NM_TB_ITEMS.filter(function(x){return x.id===k;})[0];return t&&t.g===it.g;}),i=grp.indexOf(id),j=op==='up'?i-1:i+1;if(j<0||j>=grp.length)return;var a=c.order.indexOf(grp[i]),b=c.order.indexOf(grp[j]);c.order[a]=grp[j];c.order[b]=grp[i];}
+  S.nmTbCfg=c;try{saveState();}catch(e){}try{nmFtActFill();}catch(e){}nmTbCfgDraw();}
 function nmOldTabPop(btn){var id='nmOtPop',old=document.getElementById(id);if(old){old.remove();return;}var el=document.createElement('div');el.id=id;
   var r=btn.getBoundingClientRect();el.style.cssText='position:fixed;z-index:9300;background:#141922f4;border:1.5px solid #4a5566;border-radius:12px;padding:8px;box-shadow:0 8px 24px #000c;display:grid;grid-template-columns:1fr 1fr;gap:6px;width:300px';
   el.innerHTML='<div style="grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#8899aa;font-weight:700;padding:0 2px">'+T('旧タブ')+'<button class="b sm" style="margin:0;height:28px;padding:0 9px" onclick="event.stopPropagation();document.getElementById(\''+id+'\').remove()">✕</button></div>'
@@ -37085,6 +37124,7 @@ var NM_ATK_IC='a';
 NM_TOOL_DEF.atk=['選択したスタックを攻撃',NM_TOOL_IC(NM_ATK_ICS.a).replace('width="17" height="17"','width="20" height="20"'),'攻撃されるスタックをタップ'];
 NM_TIP_RULES.unshift([/nmToolArm\('atk'\)/,'選択したスタックを攻撃']);
 (function(){var _f=nmFtActFill;nmFtActFill=function(){_f.apply(this,arguments);try{var el=document.getElementById('nmFtAct');if(!el||el.querySelector('.ftTool[data-k="atk"]')||(NM_TOOL!=='atk'&&!nmBarLite()))return;var fb=el.querySelector('.fsp')||el.querySelector('.fs');if(!fb)return;
+(function(){var _g=nmFtActFill;nmFtActFill=function(){var r=_g.apply(this,arguments);try{nmTbOrdApply();nmFtActFit();}catch(e){}return r;};})(); /* v833: ツールバーの並び順・表示は最後に当てる */
   var t=NM_TOOL_DEF.atk,b=document.createElement('button');b.className='fa g ftTool'+(NM_TOOL==='atk'?' on':'');b.setAttribute('data-k','atk');b.setAttribute('title',T(t[0]));b.setAttribute('onclick',"event.stopPropagation();nmToolArm('atk')");b.innerHTML=t[1];var fr=el.querySelector('.ftTool[onclick*="\'fire\'"]');if(fr&&nmBarLite())fr.parentNode.insertBefore(b,fr.nextSibling);else fb.parentNode.insertBefore(b,fb);try{nmFtActFit();}catch(e){}}catch(e){console.log('atk btn',e);}};})();
 /* v653: ツールバーのボタン幅を48pxに(高さは変えない) */
 (function(){var st=document.createElement('style');st.textContent='#nmFtAct .fa.g,#nmFtAct .fa.ftTool,#nmFullTabs>.nb,#nmFullTabs>button.nb{min-width:48px!important;justify-content:center}#nmFullTabs>.nb{flex:0 0 48px!important}';document.head.appendChild(st);})();
@@ -37885,7 +37925,8 @@ function nmFtMenuHTML(){var id='nmFtMn',cl=function(fn){return 'event.stopPropag
   var sum='list-style:none;cursor:pointer;padding:8px 10px;border:1px solid #39414f;border-radius:7px;background:#14181f;font-size:14px;color:#e8eef4;';
   var tabs=NM_TABS.filter(function(t){return t[0]!=='scen';}).map(function(t){return bt([T(t[1]),"nmRmTabGo('"+t[0]+"')"],'height:34px');}).join('');
   var tl=[['A→B '+T('起点Aと目標Bを選んでLOS'),"nmAbArm()"],['🔫 '+T('選択したスタックで攻撃'),"nmToolArm('fire')"],['🎯 '+T('選択したスタックを攻撃'),"nmToolArm('atk')"],['👁 '+T('このヘクスから見える範囲'),"nmToolArm('view')"],['🚶 '+T('このヘクスから移動(MPを数える)'),"nmToolArm('move')"]];
-  var vw=[['⟳ '+T('画面を90°回転'),"nmFtRot()"],['↔ '+T('横幅に合わせる'),"nmFtFit('width')"],['↕ '+T('縦幅に合わせる'),"nmFtFit('height')"]];
+  var vw=[['⟳ '+T('画面を90°回転'),"nmFtRot()",'rot'],['↔ '+T('横幅に合わせる'),"nmFtFit('width')",'fit'],['↕ '+T('縦幅に合わせる'),"nmFtFit('height')"]].filter(function(x){return !(x[2]&&nmTbShown(x[2]));}).map(function(x){return [x[0],x[1]];}); /* v833: ツールバーに出ているものは除く */
+  vw.unshift(['🧰 '+T('ツールバーの設定')+'（'+T('並び順・表示')+'）',"nmTbCfgOpen()"]);
   var set=[[(S.nmFtLcd?'✓ ':'')+T('下を電子パネルにする'),"S.nmFtLcd=!S.nmFtLcd;try{saveState();}catch(e){}nmFtBotFill()"],[(S.nmRealOn?'✓ ':'')+T('リアル盤へを表示'),"S.nmRealOn=!S.nmRealOn;try{saveState();}catch(e){}nmRbRender();nmFtActFill()"],[NM_MI.skin+' '+T('スキン')+': '+uiThemeName(),"uiThemePop()"],['▥ '+T('ツールバーの位置')+': '+T(nmTbPosName()),"nmTbPosPop()"],['🎲 '+T('オートダイス')+': '+(nmAdOn()?'ON':'OFF'),"nmAdToggle()"],['🔆 '+T('画面を消さない')+': '+(nmWlOn()?'ON':'OFF'),"nmWlToggle()"],['📝 '+T('動作ログ')+'('+NM_DBG.buf.length+')',"nmDbgOpen()"]];
   var by={};main.forEach(function(x){by[x[0]]=x;});var dbg=set.pop(); /* v784(ダルマ指示「メインメニュー わかりやすく整理」): セクション分け・閉じるは最下部 */
   var sc=function(t){return '<div style="display:flex;align-items:center;gap:8px;margin:8px 2px 3px;font-size:12px;font-weight:700;color:#e0b850"><span>'+T(t)+'</span><span style="flex:1;height:1px;background:#39414f"></span></div>';};
