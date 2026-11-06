@@ -37874,7 +37874,7 @@ function nmIjPlaceNow(){if(NM_IJ)NM_IJ.ea=0;nmIjAutoPlace(1);nmIjTgtDefSafe();nm
 function nmIjSet(k,v){var J=NM_IJ;if(!J)return;J[k]=v;if((k==='pick'||k==='place')&&v!=null)J.ea=0;if(k==='bnat')J.bcs={};if(k==='ph')J.phAuto=0;if(k==='pick'||k==='nat'){J.place=null;J.cs={};J.cv=null;}if(k==='place'){J.pick=null;J.cp=0;nmIjAutoPlace();}if(k==='cp'&&v){J.place=null;}
   if(k==='pick'||k==='nat'||k==='place')J.tgt=nmIjTgtDef();if(k==='pick'||k==='nat'||k==='place'||k==='tgt'||k==='cp')nmIjFaceDef();nmIjDraw();}
 /* カウンターを選ぶ: 歩兵・SWは数を足し引き(複数可)、車両・砲は1つだけ(歩兵とは一緒に置けない) */
-function nmIjCnt(key,d){var J=NM_IJ;if(!J)return;var it=nmSuOb(J.nat).filter(function(x){return x.kind+'|'+x.id===key;})[0];if(!it)return;var n=(J.cs[key]||0)+d;n=Math.max(0,Math.min(n,it.n||1));if(n)J.cs[key]=n;else delete J.cs[key];if(n)J.cv=null;J.place=null;nmIjFaceDef();nmIjDraw();}
+function nmIjCnt(key,d){var J=NM_IJ;if(!J)return;var it=nmSuOb(J.nat).filter(function(x){return x.kind+'|'+x.id===key;})[0];if(!it&&/^red\|/.test(key)&&nmIjRedList(J.nat).some(function(x){return x.key===key;}))it={n:9};if(!it)return;var n=(J.cs[key]||0)+d;n=Math.max(0,Math.min(n,it.n||1));if(n)J.cs[key]=n;else delete J.cs[key];if(n)J.cv=null;J.place=null;nmIjFaceDef();nmIjDraw();}
 function nmIjVeh(kind,id){var J=NM_IJ;if(!J)return;J.cv=(J.cv&&J.cv.id===id)?null:{kind:kind,id:id};if(J.cv)J.cs={};J.place=null;if(J.cv)nmIjAutoPlace();nmIjTgtDefSafe();nmIjFaceDef();nmIjDraw();}
 /* v485(バグ修正 ダルマ報告「Aをドイツ軍に変更するとBのシャーマンがなくなる」): Aに置いて攻撃する時は、Bのカウンターは自軍・敵軍どちらのマーカーでも目標にできる。
    置く側(自軍/敵軍のマーカー)は目標の反対側にする(国籍の既定の側より、地図に置いたマーカーの側を優先) */
@@ -37904,8 +37904,9 @@ function nmIjDraw(){var J=NM_IJ;if(!J)return;J.prepped=0;J.nv=0;if(J.emb){J.emb=
     else{var ob=nmSuOb(J.nat),vs=nmIjVehs(J.nat);
       h+='<div class="ijCpH"><small>'+T('歩兵・SWは数を足して複数、車両・砲は1つ')+'</small><button class="ijMini" onclick="nmIjSet(\'cp\',0)">'+T('編成から選ぶ')+'</button></div>';
       h+='<div class="ijGrid">'+ob.map(function(x){var key=x.kind+'|'+x.id,n=J.cs[key]||0;return '<div class="ijC'+(n?' on':'')+'"><span class="nm">'+x.label+'</span><small>×'+x.n+'</small><button onclick="nmIjCnt(\''+key+'\',-1)">−</button><b>'+n+'</b><button onclick="nmIjCnt(\''+key+'\',1)">＋</button></div>';}).join('')+'</div>';
+      try{var redL=nmIjRedList(J.nat);if(redL.length)h+='<div class="ijCpH" style="margin-top:8px"><small style="color:#c8b070">'+T('質の低下・損耗（OBにないユニット）')+'</small></div><div class="ijGrid">'+redL.map(function(x){var key=x.key,n=J.cs[key]||0;return '<div class="ijC'+(n?' on':'')+'" title="'+x.from+'の'+x.how+'"><span class="nm">'+x.label.replace(/\(HS\)$/,'')+'</span><small style="font-size:10.5px">'+x.how.replace(/損耗/g,'HS').replace(/クラス低下/g,'低下')+'</small><button onclick="nmIjCnt(\''+key+'\',-1)">−</button><b>'+n+'</b><button onclick="nmIjCnt(\''+key+'\',1)">＋</button></div>';}).join('')+'</div>';}catch(e){console.log('redL',e);} /* v827 */
       if(vs.length)h+='<div class="ijRow" style="margin-top:6px">'+vs.map(function(o){return B(J.cv&&J.cv.id===o.id,"nmIjVeh('"+o.kind+"','"+o.id+"')",o.nm,o.w,sc);}).join('')+'</div>';
-      var sum=Object.keys(J.cs).map(function(k){var x=ob.filter(function(y){return y.kind+'|'+y.id===k;})[0];return (x?x.label:k)+(J.cs[k]>1?'×'+J.cs[k]:'');});
+      var sum=Object.keys(J.cs).map(function(k){if(/^red\|mmc\|/.test(k))return k.slice(8)+(J.cs[k]>1?'×'+J.cs[k]:'');var x=ob.filter(function(y){return y.kind+'|'+y.id===k;})[0];return (x?x.label:k)+(J.cs[k]>1?'×'+J.cs[k]:'');});
       h+='<div class="ijNote">選択中: '+(J.cv?(nmIjVehs(J.nat).filter(function(o){return o.id===J.cv.id;})[0]||{}).nm:(sum.length?sum.join(' · '):'なし'))+'</div>'+((!J.cv&&sum.length)?'<button class="ijB on" style="margin-top:6px;width:100%" onclick="nmIjPlaceNow()"><b>'+T('これで決定')+'</b></button>':'');}
     h+='</div>';}
   if(!aOpen&&curA&&curA.eh&&curA.eh.grp&&!curA.eh.veh&&!curA.eh.gun)h+=nmIjStHTML('a',curA.eh.grp); /* v822 */
@@ -38022,6 +38023,7 @@ function nmIjPlace(a){var J=NM_IJ,sd=nmIjSd(),it=null;NM_RM_HEX=nmHexOfN(a);
   if(J.place!=null){it=nmIjPlaceList(J.nat)[J.place];}else if(J.cv){it=J.cv;}
   else{var slot=nmGeFreeSlot();if(!slot){btToast('空いている編成がありません');return null;}var ob=nmSuOb(J.nat),pid=null;
     ob.filter(function(x){return (x.kind==='mmc'||x.kind==='smc')&&J.cs[x.kind+'|'+x.id];}).forEach(function(x){for(var i=0;i<J.cs[x.kind+'|'+x.id];i++){nmGeAddCore(slot,J.nat,x.kind,x.label);var its=nmGeList(slot).items;pid=its.length?its[its.length-1].pid:pid;}});
+    Object.keys(J.cs).filter(function(k){return /^red\|mmc\|/.test(k);}).forEach(function(k){for(var i=0;i<J.cs[k];i++){nmGeAddCore(slot,J.nat,'mmc',k.slice(8));var its=nmGeList(slot).items;pid=its.length?its[its.length-1].pid:pid;}}); /* v827 */
     if(pid==null){var sv=nmGeSaved(slot,J.nat);}
     ob.filter(function(x){return x.kind!=='mmc'&&x.kind!=='smc'&&J.cs[x.kind+'|'+x.id];}).forEach(function(x){for(var i=0;i<J.cs[x.kind+'|'+x.id];i++){try{nmSuGiveCore0(slot,pid,{kind:x.kind,id:x.id});}catch(e){}}});
     it={kind:'grp',id:slot};}
@@ -38235,6 +38237,12 @@ function nmGrpWpnTxt(eh){try{if(!eh||!eh.grp||eh.veh||eh.gun)return '';var d=nmG
   (d.sw||[]).forEach(function(u){var t=SWT.filter(function(w){return w.id===nmGeSwBase(u).id;})[0];if(t)o.push(String(t.lbl||t.id).replace(/\s+\d+-\d+$/,''));});
   var L=[];try{L=nmLwList(eh);}catch(e){}L.forEach(function(x){if(x.own)o.push(x.w.lbl||x.w.id);else if(x.pf)o.push('PF(判定)');});
   return o.join('・');}catch(e){return '';}}
+
+/* v827(ダルマ報告「質の低下ユニット 損耗ユニットの選択ができない」): シナリオOBのMMCから、クラス低下(ELR)・損耗(HS)で生まれるユニット(OBにないもの)の一覧 */
+function nmIjRedList(nat){var ob=nmSuOb(nat)||[],have={},o=[],seen={};ob.forEach(function(x){if(x.kind==='mmc')have[x.label]=1;});
+  var E=ELR_MAP[nat]||{},C=CASUAL_MAP[nat]||{};var q=ob.filter(function(x){return x.kind==='mmc';}).map(function(x){return {lbl:x.label,how:''};});
+  while(q.length){var c=q.shift();[[E[c.lbl],'クラス低下'],[C[c.lbl],'損耗']].forEach(function(p){var to=p[0];if(!to||have[to]||seen[to])return;seen[to]=1;var how=(c.how?c.how+'→':'')+p[1];o.push({key:'red|mmc|'+to,label:to,from:c.lbl,how:how});q.push({lbl:to,how:how});});}
+  return o;}
 var NM_IJ_PREP=0;
 /* v692: 地図のLOSの再計算(非同期)が終わると射撃タブの結果を消す(losAutoApplyToAllTabs)ので、終わってから振る */
 function nmIjAfterLos(fn){if(!(typeof S_LOS!=='undefined'&&S_LOS.loading)){fn();return;}var t=0,log0=S.log&&S.log[0],eh0=NM_SEL_EH||NM_FT_SEL;(function w(){if(S_LOS.loading&&t++<120){setTimeout(w,50);return;}setTimeout(function(){try{fn();}catch(e){console.log('ijAfterLos',e);}try{if(window.__nmShowRes)window.__nmShowRes(log0,eh0);}catch(e){}},30);})();}
