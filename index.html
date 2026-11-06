@@ -37901,6 +37901,7 @@ function nmIjDraw(){var J=NM_IJ;if(!J)return;J.prepped=0;J.nv=0;if(J.emb){J.emb=
       var sum=Object.keys(J.cs).map(function(k){var x=ob.filter(function(y){return y.kind+'|'+y.id===k;})[0];return (x?x.label:k)+(J.cs[k]>1?'×'+J.cs[k]:'');});
       h+='<div class="ijNote">選択中: '+(J.cv?(nmIjVehs(J.nat).filter(function(o){return o.id===J.cv.id;})[0]||{}).nm:(sum.length?sum.join(' · '):'なし'))+'</div>'+((!J.cv&&sum.length)?'<button class="ijB on" style="margin-top:6px;width:100%" onclick="nmIjPlaceNow()"><b>'+T('これで決定')+'</b></button>':'');}
     h+='</div>';}
+  if(!aOpen&&curA&&curA.eh&&curA.eh.grp&&!curA.eh.veh&&!curA.eh.gun)h+=nmIjStHTML('a',curA.eh.grp); /* v822 */
   h+='<div id="ijA2"></div>';
   var tg=nmIjTgts(),curB=(typeof J.tgt==='number'&&tg[J.tgt])?tg[J.tgt]:null,bUn=!curB&&!J.bt,bOpen=!!J.eb||bUn; /* v791(ダルマ指示「Aと同じ未設定で選択しを表示する」): 目標がまだ無い時は「地形のみ」にせず、Aと同じ「未選択」+選択肢を出す。「地形のみ(目標なし)」は選択肢から選ぶ */
   h+='<div class="ijS">③ '+T('目標')+'(B '+hn(HB)+')</div>';
@@ -37916,7 +37917,7 @@ function nmIjDraw(){var J=NM_IJ;if(!J)return;J.prepped=0;J.nv=0;if(J.emb){J.emb=
     else{var bob=nmSuOb(J.bnat);J.bcs=J.bcs||{};
       h+='<div class="ijCpH"><small>'+T('歩兵・SWは数を足して複数')+'</small><button class="ijMini" onclick="nmIjSet(\'bcp\',0)">'+T('編成から選ぶ')+'</button></div><div class="ijGrid">'+bob.filter(function(x){return x.kind==='mmc'||x.kind==='smc';}).map(function(x){var key=x.kind+'|'+x.id,n=J.bcs[key]||0;return '<div class="ijC'+(n?' on':'')+'"><span class="nm">'+x.label+'</span><small>×'+x.n+'</small><button onclick="nmIjBCnt(\''+key+'\',-1)">−</button><b>'+n+'</b><button onclick="nmIjBCnt(\''+key+'\',1)">＋</button></div>';}).join('')+'</div>'
         +(Object.keys(J.bcs).length?'<button class="ijB on" style="margin-top:6px;width:100%" onclick="nmIjBPutCs()"><b>'+T('これをBに置く')+'</b></button>':'');}
-    h+='</div>';} try{h+=nmIjFaceHTML();}catch(e){}var ok=!fail&&nmIjReady()&&!bUn; /* v791: Bを選ぶまで判定できない */
+    h+='</div>';} try{var cbE=nmIjTgtEh();if(cbE&&cbE.grp&&!cbE.veh&&!cbE.gun&&!J.eb)h+=nmIjStHTML('b',cbE.grp);}catch(e){} /* v822 */try{h+=nmIjFaceHTML();}catch(e){}var ok=!fail&&nmIjReady()&&!bUn; /* v791: Bを選ぶまで判定できない */
   h+='</div><div class="ijR"><div id="ijRes"></div><div class="ijFt"><button class="ijGo"'+(ok?'':' disabled')+' onclick="nmIjGo()" style="display:inline-flex;align-items:center;justify-content:center;gap:8px">'+NM_MI.dice+' '+T('判定する')+'</button></div></div></div></div>';
   el.innerHTML=h;try{nmIjPhColor(el);}catch(e){}var nb=el.querySelector('.ijBox');if(nb)nb.scrollTop=st;Object.keys(sts).forEach(function(q){var e=el.querySelector(q);if(e&&sts[q])e.scrollTop=sts[q];});
   if(ok&&J.pick!=null&&!NM_IJ_PREP){NM_IJ_PREP=1;try{nmIjGo(true);}catch(e){console.log('ijPrep',e);}NM_IJ_PREP=0;}} /* v680(ダルマ報告「判定するを選択しないと下の項目が表示しない」): 攻撃側が決まっていれば、判定する前から設定・ダイス入力の欄を出す */
@@ -38196,6 +38197,31 @@ function nmAdIjNeed(){var J=NM_IJ;if(!J)return '';var m=J.pmode;
 /* v816(ダルマ指示「スポット判定 選択したボタンを判定すると同じ色にする」→「フェイズのみ」): ①射撃フェイズの選択中だけ「判定する」と同じ色(スキンに合わせて.ijGoの色をコピー) */
 function nmIjPhColor(el){var g=el.querySelector('.ijGo');if(!g)return;var cs=getComputedStyle(g),C=cs.backgroundColor,T=cs.color;if(!C||/rgba\(0, 0, 0, 0\)|transparent/.test(C))return;el.style.setProperty('--ijGoBg',C);el.style.setProperty('--ijGoFg',T);el.style.setProperty('--ijGoSh',C.replace(/^rgb\(/,'rgba(').replace(/\)$/,',.35)'));
   if(!document.getElementById('nmIjPhCss')){var st=document.createElement('style');st.id='nmIjPhCss';st.textContent='html:root body #nmIj .ijPhRow .ijB.on{background:var(--ijGoBg)!important;border-color:var(--ijGoBg)!important;box-shadow:0 0 10px var(--ijGoSh)!important;color:var(--ijGoFg)!important}html:root body #nmIj .ijPhRow .ijB.on b,html:root body #nmIj .ijPhRow .ijB.on small{color:var(--ijGoFg)!important;background:none!important}html:root body #nmIj .ijPhRow .ijB.on small{opacity:.75}';document.head.appendChild(st);}}
+
+/* v822(ダルマ指示「スポット判定 編成 混乱 PIN クラス低下 損耗の反映」→「手動で変更したい」): 攻撃側・目標の編成のユニットごとに、混乱・PIN・クラス低下・損耗・負傷・除去を手で変える */
+var NM_IJ_UST={a:0,b:0};
+function nmIjStHTML(w,slot){var open=NM_IJ_UST[w],d=nmGeList(slot),its=d.items||[];if(!its.length)return '';
+  var nb=its.filter(function(x){return x.broken;}).length,np=its.filter(function(x){return x.pinned;}).length;
+  var h='<div class="ijRow" style="margin-top:4px"><button class="ijMini" style="border-color:'+(open?'#7ec8e3':'#4a5566')+'" onclick="nmIjStTog(\''+w+'\')">'+(open?'▾ ':'▸ ')+T('ユニットの状態を変更')+(nb||np?'　<span style="color:#ff8080">'+(nb?'混乱'+nb:'')+(nb&&np?'・':'')+(np?'PIN'+np:'')+'</span>':'')+'</button></div>';
+  if(!open)return h;
+  var b=function(on,f,t,red){return '<button class="ijMini" style="min-width:0;padding:4px 8px;'+(on?'background:'+(red?'#7a2020':'#c8a032')+';color:#fff;border-color:'+(red?'#ff6060':'#f2c14e'):'')+'" onclick="'+f+'">'+t+'</button>';};
+  h+='<div class="ijCp" style="padding:6px 8px">';
+  its.forEach(function(x,i){var a="nmIjStOp('"+slot+"',"+i+",";var smc=x.kind==='smc';var elr=!smc&&!!((ELR_MAP[x.nat||d.nat]||{})[x.label]);
+    h+='<div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:4px 0;border-bottom:1px solid #263040"><span style="min-width:96px;font-weight:800;'+(x.broken?'color:#ff8080':'')+'">'+x.label+(x.wounded?' <small style="color:#ffb060">負傷</small>':'')+'</span>'
+      +b(!!x.broken,a+"'brk')",T('混乱'),1)+b(!!x.pinned,a+"'pin')",'PIN',1)
+      +(smc?b(!!x.wounded,a+"'wnd')",T('負傷'),1):(elr?b(false,a+"'elr')",T('クラス低下')):'')+b(false,a+"'cas')",T('損耗')))
+      +b(false,a+"'del')",'✕ '+T('除去'))+'</div>';});
+  return h+'<div class="ijNote" style="margin-top:4px">'+T('ここで変えた状態は判定(FP・士気など)に使われます')+'</div></div>';}
+function nmIjStTog(w){NM_IJ_UST[w]=NM_IJ_UST[w]?0:1;nmIjDraw();}
+function nmIjStOp(slot,i,op){var d=nmGeList(slot),x=(d.items||[])[i];if(!x)return;var lg=[],msg='';
+  if(op==='brk'){x.broken=!x.broken;if(x.broken)x.pinned=false;msg=x.label+(x.broken?' 混乱':' 混乱を解除');}
+  else if(op==='pin'){x.pinned=!x.pinned;msg=x.label+(x.pinned?' PIN':' PINを解除');}
+  else if(op==='wnd'){x.wounded=!x.wounded;msg=x.label+(x.wounded?' 負傷':' 負傷を解除');}
+  else if(op==='elr'){var to=(ELR_MAP[x.nat||d.nat]||{})[x.label];if(!to){btToast('これ以上クラスは下がりません');return;}msg='クラス低下 '+x.label+'→'+to;x.label=to;}
+  else if(op==='cas'){try{nmCasRed(slot,x,lg);}catch(e){console.log(e);}msg='損耗 '+(lg.join('・')||x.label);}
+  else if(op==='del'){msg=x.label+' 除去';nmGeDelCore(slot,i);}
+  var gA=nmGeActive(slot);if(gA){try{fgRecomputeFromPicker(gA);}catch(e){}}
+  try{nmDbg('スポット判定 状態変更: '+nmGrpLbl(slot)+' '+msg);}catch(e){}try{saveState();}catch(e){}try{Draw();}catch(e){}if(NM_IJ){NM_IJ.prepped=0;}nmIjDraw();btToast(msg);}
 var NM_IJ_PREP=0;
 /* v692: 地図のLOSの再計算(非同期)が終わると射撃タブの結果を消す(losAutoApplyToAllTabs)ので、終わってから振る */
 function nmIjAfterLos(fn){if(!(typeof S_LOS!=='undefined'&&S_LOS.loading)){fn();return;}var t=0,log0=S.log&&S.log[0],eh0=NM_SEL_EH||NM_FT_SEL;(function w(){if(S_LOS.loading&&t++<120){setTimeout(w,50);return;}setTimeout(function(){try{fn();}catch(e){console.log('ijAfterLos',e);}try{if(window.__nmShowRes)window.__nmShowRes(log0,eh0);}catch(e){}},30);})();}
