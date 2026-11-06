@@ -12861,10 +12861,11 @@ function swLblT(lbl){
 }
 function exSW(){
   var l=[];var f=getFireState();var cap=f.swCaptured||{};
+  var natOf={};try{(f.grps||[]).forEach(function(g){var gn=g.pickerNat;if(!gn)return;(g.sw||[]).forEach(function(u){natOf[u]=gn;});});}catch(e){} /* v826: 編成の国籍と違う国のSWは鹵獲(5.5) */
   SWT.forEach(function(t){
     var n=(f.swc[t.id]||0);
     for(var i=0;i<n;i++){
-      var isCap=!!cap[t.id];
+      var gn0=natOf[t.id+'_'+i];var isCap=!!cap[t.id]||!!(gn0&&t.nat&&t.nat.length&&t.nat.indexOf(gn0)<0);
       var b=t.b<99?Math.max(2,t.b-(isCap?2:0)):t.b;
       var x=t.x<99?Math.max(2,t.x-(isCap?2:0)):t.x; // ルール5.5：鹵獲装備はB#/X#とも2低下
       var rof=t.rof>0?Math.max(0,t.rof-(isCap?1:0)):t.rof;
@@ -37874,7 +37875,7 @@ function nmIjPlaceNow(){if(NM_IJ)NM_IJ.ea=0;nmIjAutoPlace(1);nmIjTgtDefSafe();nm
 function nmIjSet(k,v){var J=NM_IJ;if(!J)return;J[k]=v;if((k==='pick'||k==='place')&&v!=null)J.ea=0;if(k==='bnat')J.bcs={};if(k==='ph')J.phAuto=0;if(k==='pick'||k==='nat'){J.place=null;J.cs={};J.cv=null;}if(k==='place'){J.pick=null;J.cp=0;nmIjAutoPlace();}if(k==='cp'&&v){J.place=null;}
   if(k==='pick'||k==='nat'||k==='place')J.tgt=nmIjTgtDef();if(k==='pick'||k==='nat'||k==='place'||k==='tgt'||k==='cp')nmIjFaceDef();nmIjDraw();}
 /* カウンターを選ぶ: 歩兵・SWは数を足し引き(複数可)、車両・砲は1つだけ(歩兵とは一緒に置けない) */
-function nmIjCnt(key,d){var J=NM_IJ;if(!J)return;var it=nmSuOb(J.nat).filter(function(x){return x.kind+'|'+x.id===key;})[0];if(!it)return;var n=(J.cs[key]||0)+d;n=Math.max(0,Math.min(n,it.n||1));if(n)J.cs[key]=n;else delete J.cs[key];if(n)J.cv=null;J.place=null;nmIjFaceDef();nmIjDraw();}
+function nmIjCnt(key,d){var J=NM_IJ;if(!J)return;var it=nmSuOb(J.nat).filter(function(x){return x.kind+'|'+x.id===key;})[0];if(!it&&/^cap\|/.test(key)){var c0=nmIjCapList(J.nat).filter(function(x){return x.key===key;})[0];if(c0)it={n:3};}if(!it)return;var n=(J.cs[key]||0)+d;n=Math.max(0,Math.min(n,it.n||1));if(n)J.cs[key]=n;else delete J.cs[key];if(n)J.cv=null;J.place=null;nmIjFaceDef();nmIjDraw();}
 function nmIjVeh(kind,id){var J=NM_IJ;if(!J)return;J.cv=(J.cv&&J.cv.id===id)?null:{kind:kind,id:id};if(J.cv)J.cs={};J.place=null;if(J.cv)nmIjAutoPlace();nmIjTgtDefSafe();nmIjFaceDef();nmIjDraw();}
 /* v485(バグ修正 ダルマ報告「Aをドイツ軍に変更するとBのシャーマンがなくなる」): Aに置いて攻撃する時は、Bのカウンターは自軍・敵軍どちらのマーカーでも目標にできる。
    置く側(自軍/敵軍のマーカー)は目標の反対側にする(国籍の既定の側より、地図に置いたマーカーの側を優先) */
@@ -37904,8 +37905,9 @@ function nmIjDraw(){var J=NM_IJ;if(!J)return;J.prepped=0;J.nv=0;if(J.emb){J.emb=
     else{var ob=nmSuOb(J.nat),vs=nmIjVehs(J.nat);
       h+='<div class="ijCpH"><small>'+T('歩兵・SWは数を足して複数、車両・砲は1つ')+'</small><button class="ijMini" onclick="nmIjSet(\'cp\',0)">'+T('編成から選ぶ')+'</button></div>';
       h+='<div class="ijGrid">'+ob.map(function(x){var key=x.kind+'|'+x.id,n=J.cs[key]||0;return '<div class="ijC'+(n?' on':'')+'"><span class="nm">'+x.label+'</span><small>×'+x.n+'</small><button onclick="nmIjCnt(\''+key+'\',-1)">−</button><b>'+n+'</b><button onclick="nmIjCnt(\''+key+'\',1)">＋</button></div>';}).join('')+'</div>';
+      try{var capL=nmIjCapList(J.nat);if(capL.length)h+='<div class="ijCpH" style="margin-top:8px"><small style="color:#ff9a6a">'+T('鹵獲（相手の国の支援火器）')+' ROF−1・B#/X#−2・砲兵器は命中+2</small></div><div class="ijGrid">'+capL.map(function(x){var key=x.key,n=J.cs[key]||0;return '<div class="ijC'+(n?' on':'')+'"><span class="nm">'+x.label+'<small style="color:#ff9a6a"> 鹵獲</small></span><small>'+x.natJ+'</small><button onclick="nmIjCnt(\''+key+'\',-1)">−</button><b>'+n+'</b><button onclick="nmIjCnt(\''+key+'\',1)">＋</button></div>';}).join('')+'</div>';}catch(e){console.log('capL',e);} /* v826 */
       if(vs.length)h+='<div class="ijRow" style="margin-top:6px">'+vs.map(function(o){return B(J.cv&&J.cv.id===o.id,"nmIjVeh('"+o.kind+"','"+o.id+"')",o.nm,o.w,sc);}).join('')+'</div>';
-      var sum=Object.keys(J.cs).map(function(k){var x=ob.filter(function(y){return y.kind+'|'+y.id===k;})[0];return (x?x.label:k)+(J.cs[k]>1?'×'+J.cs[k]:'');});
+      var sum=Object.keys(J.cs).map(function(k){var x=ob.filter(function(y){return y.kind+'|'+y.id===k;})[0];if(!x&&/^cap\|/.test(k)){var c=nmIjCapList(J.nat).filter(function(y){return y.key===k;})[0];if(c)return c.label+'(鹵獲)'+(J.cs[k]>1?'×'+J.cs[k]:'');}return (x?x.label:k)+(J.cs[k]>1?'×'+J.cs[k]:'');});
       h+='<div class="ijNote">選択中: '+(J.cv?(nmIjVehs(J.nat).filter(function(o){return o.id===J.cv.id;})[0]||{}).nm:(sum.length?sum.join(' · '):'なし'))+'</div>'+((!J.cv&&sum.length)?'<button class="ijB on" style="margin-top:6px;width:100%" onclick="nmIjPlaceNow()"><b>'+T('これで決定')+'</b></button>':'');}
     h+='</div>';}
   if(!aOpen&&curA&&curA.eh&&curA.eh.grp&&!curA.eh.veh&&!curA.eh.gun)h+=nmIjStHTML('a',curA.eh.grp); /* v822 */
@@ -38024,6 +38026,7 @@ function nmIjPlace(a){var J=NM_IJ,sd=nmIjSd(),it=null;NM_RM_HEX=nmHexOfN(a);
     ob.filter(function(x){return (x.kind==='mmc'||x.kind==='smc')&&J.cs[x.kind+'|'+x.id];}).forEach(function(x){for(var i=0;i<J.cs[x.kind+'|'+x.id];i++){nmGeAddCore(slot,J.nat,x.kind,x.label);var its=nmGeList(slot).items;pid=its.length?its[its.length-1].pid:pid;}});
     if(pid==null){var sv=nmGeSaved(slot,J.nat);}
     ob.filter(function(x){return x.kind!=='mmc'&&x.kind!=='smc'&&J.cs[x.kind+'|'+x.id];}).forEach(function(x){for(var i=0;i<J.cs[x.kind+'|'+x.id];i++){try{nmSuGiveCore0(slot,pid,{kind:x.kind,id:x.id});}catch(e){}}});
+    try{nmIjCapList(J.nat).forEach(function(x){for(var i=0;i<(J.cs[x.key]||0);i++){try{nmSuGiveCore0(slot,pid,{kind:x.kind,id:x.id});}catch(e){}}});}catch(e){} /* v826: 鹵獲SW */
     it={kind:'grp',id:slot};}
   if(!it)return null;if(it.kind==='grp')nmRmSetGrp(a,it.id,sd);else if(it.kind==='gun')nmRmSetGun(a,it.id,sd);else nmRmSetVeh(a,it.id,sd);NM_FACE=null;
   var eh=nmUnitAt(nmHexOfNode(a),sd),o=nmIjShooters(a).filter(function(x){return x.eh===eh;})[0];try{saveState();}catch(e){}return o||null;}
@@ -38232,9 +38235,13 @@ function nmIjStOp(slot,i,op){var d=nmGeList(slot),x=(d.items||[])[i];if(!x)retur
 
 /* v825(ダルマ指示「編成が軽対戦車兵器を持っているかはスポット判定で確認できる？」→実施): 編成が持つ兵器(SW・軽対戦車兵器・PF)の短い一覧 */
 function nmGrpWpnTxt(eh){try{if(!eh||!eh.grp||eh.veh||eh.gun)return '';var d=nmGeList(eh.grp),o=[];
-  (d.sw||[]).forEach(function(u){var t=SWT.filter(function(w){return w.id===nmGeSwBase(u).id;})[0];if(t)o.push(String(t.lbl||t.id).replace(/\s+\d+-\d+$/,''));});
-  var L=[];try{L=nmLwList(eh);}catch(e){}L.forEach(function(x){if(x.own)o.push(x.w.lbl||x.w.id);else if(x.pf)o.push('PF(判定)');});
+  (d.sw||[]).forEach(function(u){var t=SWT.filter(function(w){return w.id===nmGeSwBase(u).id;})[0];if(t)o.push(String(t.lbl||t.id).replace(/\s+\d+-\d+$/,'')+(d.nat&&t.nat&&t.nat.length&&t.nat.indexOf(d.nat)<0?'(鹵獲)':''));});
+  var L=[];try{L=nmLwList(eh);}catch(e){}L.forEach(function(x){if(x.own)o.push((x.w.lbl||x.w.id)+(x.cap?'(鹵獲)':''));else if(x.pf)o.push('PF(判定)');});
   return o.join('・');}catch(e){return '';}}
+
+/* v826(ダルマ指示「カウンターを選択に相手の国の支援火器を鹵獲として選べる欄」「軽対戦車兵器の鹵獲使用」): 相手の国(シナリオの敵国)のSW・軽対戦車兵器の一覧 */
+function nmIjCapList(nat){var o=[],seen={};try{(nmSuNats()||[]).forEach(function(fn){if(!nmFoeNat(nat,fn)||fn===nat)return;(nmSuOb(fn)||[]).forEach(function(x){if(x.kind!=='sw'&&x.kind!=='lw')return;if(x.kind==='lw'){var w=LATW_DATA.filter(function(q){return q.id===x.id;})[0];if(!w||w.oneShot)return;}var key='cap|'+x.kind+'|'+x.id;if(seen[key])return;seen[key]=1;o.push({key:key,kind:x.kind,id:x.id,label:x.label,nat:fn,natJ:(LOS_VEH_NAT_LABELS[fn]||fn)});});});}catch(e){}return o;}
+function nmLwIsCap(w,slot){try{var gn=nmGeList(slot).nat;return !!(gn&&w&&w.nat&&(w.nat||'').split('/').indexOf(gn)<0);}catch(e){return false;}}
 var NM_IJ_PREP=0;
 /* v692: 地図のLOSの再計算(非同期)が終わると射撃タブの結果を消す(losAutoApplyToAllTabs)ので、終わってから振る */
 function nmIjAfterLos(fn){if(!(typeof S_LOS!=='undefined'&&S_LOS.loading)){fn();return;}var t=0,log0=S.log&&S.log[0],eh0=NM_SEL_EH||NM_FT_SEL;(function w(){if(S_LOS.loading&&t++<120){setTimeout(w,50);return;}setTimeout(function(){try{fn();}catch(e){console.log('ijAfterLos',e);}try{if(window.__nmShowRes)window.__nmShowRes(log0,eh0);}catch(e){}},30);})();}
@@ -38428,6 +38435,7 @@ function nmLwList(eh){var d=nmGeList(eh.grp),nat=d.nat,sc=null;try{sc=scenarioLa
   /* v427: PF(パンツァーファウスト)はドイツ軍の固有SW(4.4.2)。シナリオの年代に合う1種類 */
   var pf=nmPfWep(nat);
   if(pf&&!nmPfOff()&&(nmGeList(eh.grp).items||[]).some(function(x){return !x.broken;}))L.push({w:pf,own:false,pf:1});
+  Object.keys(own).forEach(function(id){if(L.some(function(x){return x.w.id===id;}))return;var w=LATW_DATA.filter(function(q){return q.id===id;})[0];if(w&&!w.oneShot&&w.th)L.push({w:w,own:true,cap:true});}); /* v826: 鹵獲した軽対戦車兵器 */
   return L;}
 function nmLwOpen(n,sd){var eh=nmUnitAt(nmHexOfNode(n),sd);if(!eh||!eh.grp)return;var L=nmLwList(eh);NM_LW={n:n,sd:sd,slot:eh.grp,wid:L.length?(L.filter(function(x){return x.own;})[0]||L[0]).w.id:null,tgt:null,ph:(S.turn&&{pfph:'PFPh',mph:'DFF',dfph:'DFPh',afph:'AFPh'}[S.turn.phase])||'PFPh',a:0,b:0,res:null,c1:0,c2:0,res2:null};NM_RM_SUB='lw';btRmReopen(n);}
 function nmLwRe(n){NM_RM_SUB='lw';btRmReopen(n);}
@@ -38470,11 +38478,12 @@ function nmLwCalc(){var W=NM_LW,w=LATW_DATA.filter(function(x){return x.id===W.w
   if(tgtType==='gun'){var tg=nmGun(te.gun)||{},gsz=tg.targetSize||tg.size||'avg';add(gsz==='small'?1:gsz==='large'?-1:0,'目標サイズ');}
   if(fv){add(VEH_SIZE_DRM[fv.targetSize||'avg']||0,'目標サイズ');var mv=btMovingTargetDRM(tu);add(mv,'移動目標');if(!mv&&/^atr/.test(w.id))add(rng===1?-2:rng===2?-1:0,'Case25');}
   try{add(scenShotDrm(rng,W.ph),'SSR');}catch(e){}
+  r.cap=nmLwIsCap(w,W.slot);if(r.cap)add(2,'鹵獲'); /* v826: 鹵獲(5.5) 命中+2・B#/X#−2 */
   var am=w.ammo&&w.ammo[0];r.tkBase=am?resolveTK(am.tk,rng):null;r.ifp=w.infantryBuilding||null;return r;}
 function nmLwTH(n){var W=NM_LW,C=nmLwCalc();if(!C||C.err||!W.a||!W.b)return;if(C.w.oneShot&&!(W.pf&&W.pf.ok))return;var a=W.a,b=W.b,raw=a+b,fin=raw+C.drm,hit=fin<=C.th,R={raw:raw,fin:fin,hit:hit,isCH:raw===2&&hit,notes:[]};
   if(C.w.oneShot&&raw===12){R.hit=hit=false;R.isCH=false;var px=(nmGeList(W.slot).items||[]).filter(function(x){return x.pid===W.pf.pid;})[0],lg=[];if(px)nmCasRed(W.slot,px,lg);R.notes.push('PF 原DR12: 外れ＋撃ったユニットの損耗'+(lg.length?'('+lg.join('・')+')':''));}
   if(C.w.oneShot){R.notes.push('PFは一発限り(撃ったら使用済み)');if(!S.pfTracker)S.pfTracker=deepCopy(INIT_PF_TRACKER);S.pfTracker.used=(S.pfTracker.used||0)+1;var lm2=nmPfLimit();R.notes.push('PF発射数 '+lm2.used+'/'+lm2.limit);}
-  if(C.w.malfThreshold&&raw>=C.w.malfThreshold){R.malf=C.w.malfType==='destroy'?'destroy':'break';R.notes.push(C.w.lbl+(C.w.malfType==='destroy'?' 除去':' 故障')+'(原DR'+raw+'≧'+C.w.malfThreshold+')');}
+  var mT=C.w.malfThreshold?C.w.malfThreshold-(C.cap?2:0):0;if(mT&&raw>=mT){R.malf=C.w.malfType==='destroy'?'destroy':'break';R.notes.push(C.w.lbl+(C.w.malfType==='destroy'?' 除去':' 故障')+'(原DR'+raw+'≧'+mT+(C.cap?' 鹵獲−2':'')+')');}
   if(hit&&C.fv){R.loc=(a<b)?'turret':'hull';R.face=(C.rng===0)?(a<=2?'rear':(a<=4?'side':'front')):btHitFacing(R.loc==='turret'?C.tu.tca:C.tu.vca,W.tgt,W.n);var tv=btAfvData(C.tu.nm);R.af=afvGetAF(tv,R.face,R.loc);if(C.tkBase!=null)R.tk=gunTkFinal(C.tkBase,R.isCH,R.face==='rear',R.af).final;}
   W.res=R;W.c1=0;W.c2=0;W.res2=null;W.malDone=null;var eh=nmUnitAt(nmHexOfNode(W.n),W.sd);nmStFired(eh,({PFPh:'準備',DFF:'臨機',DFPh:'防御',AFPh:'前進'})[W.ph]);
   try{logResult(function(){return {tabLbl:'MAP 対戦車兵器',text:C.w.lbl+'→'+BTG.nodes[W.tgt].nm+(C.fv?' '+C.fv.lbl:'')+' TH#'+C.th+' DR'+raw+(C.drm?(C.drm>0?'+':'')+C.drm:'')+'='+fin+' '+(hit?(R.isCH?'命中(CH)':'命中'):'ミス')+(R.notes.length?' '+R.notes.join(' '):''),color:hit?'#c8a032':'#556677',detail:null};});}catch(e){}
