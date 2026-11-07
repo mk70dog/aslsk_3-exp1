@@ -1,0 +1,14 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1000,height:657},deviceScaleFactor:2});const e=[];p.on('pageerror',x=>e.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>{S.scen=S.scen||{};S.scen.sel='S24';S.nmMode='judge';S.nmGrpName={};NAVTAB('los');});await p.waitForTimeout(6000);
+const P=process.argv[2];
+await p.evaluate(()=>{nmSuOpen();});await p.waitForTimeout(800);
+await p.evaluate(()=>{var u=document.querySelector('#nmSu [onclick*="nmSuAdd"],#nmSu .ob [onclick]');if(u)u.click();});await p.waitForTimeout(500);
+console.log(await p.evaluate(()=>[...document.querySelectorAll('#nmSu .g .gh')].map(x=>x.innerText.replace(/\s+/g,' ')).join(' | ')));
+await p.screenshot({path:P+'_1.png'});
+await p.evaluate(()=>{var b=document.querySelector('#nmSu [onclick*="nmGrpRename"]');b.click();});await p.waitForTimeout(400);
+await p.fill('#nmGrpRnIn','第1小隊');await p.screenshot({path:P+'_2.png'});
+await p.evaluate(()=>{var b=[...document.querySelectorAll('#nmGrpRn button')].find(x=>/決定/.test(x.textContent));b.click();});await p.waitForTimeout(600);
+console.log(await p.evaluate(()=>[...document.querySelectorAll('#nmSu .g .gh')].map(x=>x.innerText.replace(/\s+/g,' ')).join(' | ')+' // '+nmGrpLbl('A')));
+await p.screenshot({path:P+'_3.png'});
+console.log(JSON.stringify(e));await b.close();})();
