@@ -1,0 +1,11 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1180,height:820}});const e=[];p.on('pageerror',x=>e.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(2000);
+await p.evaluate(async()=>{S.scen=S.scen||{};S.scen.sel='S24';await btEnsureGraph();try{Draw();}catch(x){}await new Promise(r=>setTimeout(r,800));var A=BTG.nodes[131];S_LOS.pxA={x:A.x,y:A.y};S.turn=S.turn||{};S.turn.phase='mph';nmHqOpen();});
+await p.waitForTimeout(600);await p.screenshot({path:'bog0.png'});
+const top=async(l)=>{await p.waitForTimeout(600);console.log(l,await p.evaluate(()=>{var r=document.getElementById('btRm');var c=document.getElementById('nmCcSc');var t=(c&&c.innerText)||(r&&r.style.visibility!=='hidden'&&r.innerText)||'';return t.replace(/\s+/g,' ').slice(0,160);}));};
+await p.evaluate(()=>{var x=[...document.querySelectorAll('#nmHq button')].filter(x=>/ボグ判定/.test(x.textContent))[0];x.click();});await top('bog tile:');
+await p.evaluate(()=>{var vs=nmIjVehs(NM_SC.nat);var v=vs.filter(o=>o.kind!=='gun')[0];if(!v){nmScSet('nat',nmSuNats()[1]);vs=nmIjVehs(NM_SC.nat);v=vs.filter(o=>o.kind!=='gun')[0];}NM_SC.v=v;nmScGo();});await top('bog go:');
+await p.evaluate(()=>{try{BtRmClose();}catch(x){}nmHqOpen();var x=[...document.querySelectorAll('#nmHq button')].filter(x=>/人力移動/.test(x.textContent))[0];x.click();});await top('manh tile:');
+await p.evaluate(()=>{var nats=nmSuNats(),v=null;for(var i=0;i<nats.length&&!v;i++){nmScSet('nat',nats[i]);v=nmIjVehs(NM_SC.nat).filter(o=>o.kind==='gun')[0];}NM_SC.v=v;nmScGo();});await top('manh go:');
+console.log(JSON.stringify(e));await b.close();})();

@@ -1,0 +1,16 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1000,height:657}});const e=[];p.on('pageerror',x=>e.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(2000);
+await p.evaluate(async()=>{S.scen=S.scen||{};S.scen.sel='S24';S.nmMode='judge';await btEnsureGraph();try{Draw();}catch(x){}await new Promise(r=>setTimeout(r,800));S.turn=S.turn||{};S.turn.phase='mph';nmHqOpen();});
+await p.waitForTimeout(600);
+await p.evaluate(()=>{var x=[...document.querySelectorAll('#nmHq button')].filter(x=>/ボグ判定/.test(x.textContent))[0];x.click();});await p.waitForTimeout(600);
+await p.evaluate(()=>{var vs=nmIjVehs(NM_SC.nat);var v=vs.filter(o=>o.kind!=='gun')[0];if(!v){nmScSet('nat',nmSuNats()[1]);vs=nmIjVehs(NM_SC.nat);v=vs.filter(o=>o.kind!=='gun')[0];}NM_SC.v=v;nmScGo();});await p.waitForTimeout(800);
+const P=process.argv[2];await p.waitForTimeout(5000);
+await p.evaluate(()=>{var o=document.querySelector('[data-tip]');});
+await p.screenshot({path:P+'_a.png'});
+await p.evaluate(()=>nmBgMode(NM_BG.n,1));await p.waitForTimeout(600);await p.screenshot({path:P+'_b.png'});
+await p.evaluate(()=>{nmBgUnDie(NM_BG.n,'ur',3);nmBgUnDie(NM_BG.n,'uw',4);});await p.waitForTimeout(600);await p.screenshot({path:P+'_c.png'});
+console.log(await p.evaluate(()=>JSON.stringify(NM_BG.ures)));
+await p.evaluate(()=>{NM_BG.mired=true;nmBgUnDie(NM_BG.n,'ur',4);nmBgUnDie(NM_BG.n,'uw',2);});await p.waitForTimeout(300);console.log(await p.evaluate(()=>NM_BG.ures.t));
+await p.evaluate(()=>{nmBgUnDie(NM_BG.n,'ur',6);nmBgUnDie(NM_BG.n,'uw',2);});await p.waitForTimeout(300);console.log(await p.evaluate(()=>NM_BG.ures.t));
+console.log(JSON.stringify(e));await b.close();})();

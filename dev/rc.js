@@ -1,0 +1,15 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1180,height:820}});const e=[];p.on('pageerror',x=>e.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(2000);
+await p.evaluate(async()=>{S.scen=S.scen||{};S.scen.sel='S24';await btEnsureGraph();try{Draw();}catch(x){}await new Promise(r=>setTimeout(r,800));var A=BTG.nodes[131];S_LOS.pxA={x:A.x,y:A.y};S.turn=S.turn||{};S.turn.phase='mph';nmHqOpen();});
+await p.waitForTimeout(500);
+await p.evaluate(()=>{var x=[...document.querySelectorAll('#nmHq button')].filter(x=>/臨機の白兵戦/.test(x.textContent))[0];x.click();});await p.waitForTimeout(500);
+console.log('sel open',await p.evaluate(()=>!!document.getElementById('nmCcSc')&&NM_CVREACT));
+await p.evaluate(()=>{var C=NM_CCS;var a=nmSuOb(C.an).filter(x=>x.kind==='mmc');C.acs[a[0].kind+'|'+a[0].id]=1;var vs=nmIjVehs(C.dn).filter(o=>o.kind!=='gun');if(!vs.length){nmCcScSet('dn',nmSuNats().filter(k=>k!==C.an)[0]);vs=nmIjVehs(NM_CCS.dn).filter(o=>o.kind!=='gun');}nmCcScSet('dv',vs[0].id);nmCcScGo();});
+await p.waitForTimeout(800);
+const t=()=>p.evaluate(()=>{var o=document.getElementById('btRm');return o?o.innerText.replace(/\s+/g,' ').slice(0,900):'none'});
+console.log(await t());
+await p.evaluate(()=>{var R=nmCvCalc();var x=R.its.filter(q=>q.x.kind!=='smc')[0].x;nmCvPa(NM_CV.n,x.pid,'ok');});await p.waitForTimeout(300);
+await p.evaluate(()=>{NM_CV.fired=true;nmCvRe(NM_CV.n);});await p.waitForTimeout(300);
+console.log(await t());await p.screenshot({path:'rc.png'});
+console.log(JSON.stringify(e));await b.close();})();

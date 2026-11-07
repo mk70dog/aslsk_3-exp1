@@ -1,0 +1,16 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1180,height:820}});const e=[];p.on('pageerror',x=>e.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(2000);
+await p.evaluate(async()=>{S.scen=S.scen||{};S.scen.sel='S24';await btEnsureGraph();try{Draw();}catch(x){}await new Promise(r=>setTimeout(r,800));var A=BTG.nodes[131];S_LOS.pxA={x:A.x,y:A.y};
+ nmScOpen('nmDcOpen');var ob=nmSuOb(NM_SC.nat).filter(x=>x.kind==='mmc');NM_SC.cs[ob[0].kind+'|'+ob[0].id]=1;NM_SC.cs['dc|DC']=1;nmScGo();});
+await p.waitForTimeout(800);
+await p.evaluate(()=>{nmDcpSet('tem',1);nmDcpPlace();nmDcpBoom(5);});await p.waitForTimeout(300);
+await p.evaluate(()=>{NM_DC.vvOpen=1;nmDcpDraw();});await p.waitForTimeout(200);
+const txt=()=>p.evaluate(()=>document.getElementById('nmDcp').innerText.replace(/\s+/g,' ').slice(0,700));
+console.log(await txt());
+await p.evaluate(()=>{var od=NM_DC.sd==='f'?'e':'f';var k=nmSuNats().filter(k=>nmSuSide(k)===od)[0];var v=nmIjVehs(k).filter(o=>o.kind!=='gun')[0];nmDcVvSet('veh',v.id);nmDcVvSet('face','side');});
+await p.evaluate(()=>{nmDcVehPos(NM_DC.n,0,0,'side');});await p.waitForTimeout(200);
+console.log(await txt());
+await p.evaluate(()=>{var V=NM_DC.veh[0];if(V.pos&&V.pos.out!=='area')nmDcVehAtk(NM_DC.n,0);});await p.waitForTimeout(300);
+console.log(await txt());await p.screenshot({path:'dcv.png'});
+console.log(JSON.stringify(e));await b.close();})();

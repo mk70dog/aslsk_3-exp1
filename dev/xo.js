@@ -1,0 +1,13 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1180,height:820}});const e=[];p.on('pageerror',x=>e.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(2000);
+await p.evaluate(async()=>{S.scen=S.scen||{};S.scen.sel='S3';await btEnsureGraph();try{Draw();}catch(x){}await new Promise(r=>setTimeout(r,800));try{Draw();}catch(x){}await new Promise(r=>setTimeout(r,800));
+ var a=131,bn=134;var v=AFV_DATA.filter(v=>/rus|sov/i.test(v.nat||'')&&v.ma)[0];NM_RM_HEX=nmHexOfN(a);nmRmSetVeh(a,v.id,'f');BtRmClose();var A=BTG.nodes[a],B=BTG.nodes[bn];S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB={x:B.x,y:B.y};LosRunPixel();await new Promise(r=>setTimeout(r,400));nmIjOpen();});
+await p.waitForTimeout(1500);await p.evaluate(()=>nmIjBTerr());await p.waitForTimeout(1000);
+const ev=()=>p.evaluate(()=>{var B=nmVfBuild();var r=btOrdEval(nmVfO(B));return r.drm+' '+(r.drmL||[]).join(',');});
+console.log('before',await ev());
+await p.evaluate(()=>{NM_VF.xo={pin:1,cx:1};});console.log('after',await ev());
+await p.evaluate(()=>{NM_VF.xoOpen=1;nmVfRe(NM_VF.from);});await p.waitForTimeout(500);
+console.log('ui',await p.evaluate(()=>/その他の修正/.test(document.getElementById('nmIj').innerText)));
+await p.screenshot({path:'xo.png'});
+console.log(JSON.stringify(e));await b.close();})();

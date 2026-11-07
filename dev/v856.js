@@ -1,0 +1,11 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1180,height:820}});const e=[];p.on('pageerror',x=>e.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(2000);
+await p.evaluate(async()=>{S.scen=S.scen||{};S.scen.sel='S24';await btEnsureGraph();try{Draw();}catch(x){}await new Promise(r=>setTimeout(r,800));S.turn=S.turn||{};S.turn.phase='ccph';nmHqOpen();});
+await p.waitForTimeout(600);await p.screenshot({path:process.argv[2]+'_board.png'});await p.evaluate(()=>{nmHqClose();nmRaqOpen();NM_RAQ.fp=NM_RAQ.fp||4;nmRaqDraw();});await p.waitForTimeout(500);await p.screenshot({path:process.argv[2]+'_raq.png'});await p.evaluate(()=>{nmRaqClose();nmHqOpen();});await p.waitForTimeout(400);
+await p.evaluate(()=>{var x=[...document.querySelectorAll('#nmHq button')].filter(x=>/^白兵戦/.test(x.textContent.trim()))[0];x.click();});await p.waitForTimeout(600);
+await p.evaluate(()=>{var C=NM_CCS;var a=nmSuOb(C.an).filter(x=>x.kind==='mmc');C.acs[a[0].kind+'|'+a[0].id]=1;var d=nmSuOb(C.dn).filter(x=>x.kind==='mmc');if(d[0])C.dcs=C.dcs||{},C.dcs[d[0].kind+'|'+d[0].id]=1;nmCcScDraw();});await p.waitForTimeout(400);
+await p.evaluate(()=>{var o=document.querySelector('#nmCcSc .ccBox');if(o)o.scrollTop=9999;});await p.waitForTimeout(300);
+await p.screenshot({path:process.argv[2]+'_cc.png'});
+console.log(await p.evaluate(()=>{var g=[...document.querySelectorAll('#nmCcSc button')].filter(b=>/nmCcScGo/.test(b.getAttribute('onclick')||''))[0];return g?g.className+' | '+g.innerText:'none'}));
+console.log(JSON.stringify(e));await b.close();})();
