@@ -1,0 +1,12 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1000,height:657},deviceScaleFactor:2});const e=[];p.on('pageerror',x=>e.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>{S.scen=S.scen||{};S.scen.sel='S24';S.nmMode='judge';NAVTAB('los');});await p.waitForTimeout(3000);
+await p.evaluate(async()=>{await btEnsureGraph();try{Draw();}catch(x){}});await p.waitForTimeout(5000);
+const txt=()=>p.evaluate(()=>{var o=document.getElementById('btRm');return o?o.innerText.replace(/\s+/g,' ').slice(0,200):'none'});
+console.log(await p.evaluate(()=>{var c=BTG.nodes.findIndex(function(N){return N&&N.y>330&&N.y<420&&N.x>560&&N.x<640;});window.__c=c;var gi=Object.keys(scenarioGunIds()||{})[0];NM_RM_HEX=nmHexOfN(c);var g=nmGun(gi);var sd=nmSuSide(String(g.nat).split('/')[0])||'f';btRMenu(c);nmRmSetGun(c,gi,sd);return gi+' '+sd;}));
+await p.waitForTimeout(600);console.log('1:',await txt());
+const btns=await p.evaluate(()=>[...document.querySelectorAll('#btRm button,#btRm [onclick]')].map(b=>(b.textContent||'').trim().slice(0,10)+'|'+(b.getAttribute('onclick')||'').slice(0,80)).filter(s=>/↑|方向|CA|Face|face/i.test(s)).slice(0,8));
+console.log(btns.join('\n'));
+console.log('fn2',await p.evaluate(()=>BT_RM_FN[2]));await p.evaluate(()=>{btRmDo(2);});
+console.log('2:',await txt());await p.screenshot({path:process.argv[2]+'.png'});
+console.log(JSON.stringify(e));await b.close();})();
