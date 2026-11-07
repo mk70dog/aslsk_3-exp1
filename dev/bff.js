@@ -1,0 +1,16 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1000,height:657},deviceScaleFactor:2});const e=[];p.on('pageerror',x=>e.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>{S.scen=S.scen||{};S.scen.sel='S24';S.nmMode='judge';NAVTAB('los');});await p.waitForTimeout(3000);
+await p.evaluate(async()=>{await btEnsureGraph();try{Draw();}catch(x){}});await p.waitForTimeout(5000);
+const hide=()=>p.evaluate(()=>{[...document.querySelectorAll('body *')].filter(x=>x.children.length<3&&/自軍・敵軍を自動で設定/.test(x.textContent)).forEach(x=>{var t=x;while(t.parentElement&&t.parentElement!==document.body)t=t.parentElement;if(!/btRm/.test(t.id))t.style.display='none';});});
+const txt=()=>p.evaluate(()=>{var o=document.getElementById('btRm');return o?o.innerText.replace(/\s+/g,' ').slice(0,900):'none'});
+console.log(await p.evaluate(()=>{var c=-1,bd=1e9;BTG.nodes.forEach(function(N,i){if(!N)return;var q=nmClientOfNode(i);if(!q)return;var d=Math.hypot(q.x-480,q.y-420);if(d<bd){bd=d;c=i;}});
+ var t=BTG.nodes[c].nb[0];t=BTG.nodes[t].nb.find(x=>x!==c&&btDist(c,x)===2)||t;
+ var vid=Object.keys(scenarioAfvIdsByVehId()).find(id=>{var v=nmAfv(id);return v&&v.ma&&/GER/.test(v.nat||'')})||Object.keys(scenarioAfvIdsByVehId())[0];
+ NM_RM_HEX=nmHexOfN(c);btRMenu(c);nmRmSetVeh(c,vid,'f');NM_FACE=null;BtRmClose();
+ var tv=Object.keys(scenarioAfvIdsByVehId()).find(id=>id!==vid)||vid;NM_RM_HEX=nmHexOfN(t);btRMenu(t);nmRmSetVeh(t,tv,'e');NM_FACE=null;BtRmClose();
+ NM_RM_HEX=nmHexOfN(c);btRMenu(c);var eh=nmUnitAt(nmHexOfN(c),'f');nmVfOpen(c,'f');nmVfSet(c,'tgt',t);nmVfSet(c,'ph','BFF');window.__c=c;return vid+'->'+tv;}));
+await p.waitForTimeout(700);await hide();console.log(await txt());await p.evaluate(()=>{var b=document.querySelector('#btRm .rmBox');var x=[...b.querySelectorAll('*')].find(y=>/移動射撃の設定/.test(y.textContent)&&y.children.length<4);if(x)x.scrollIntoView({block:'center'});});await p.waitForTimeout(200);await p.screenshot({path:process.argv[2]+'_1.png'});
+await p.evaluate(()=>{nmVfSet(window.__c,'a',2);nmVfSet(window.__c,'b',1);});await p.waitForTimeout(300);
+await p.evaluate(()=>{var b=[...document.querySelectorAll('#btRm button,#btRm [onclick]')].find(x=>/入れた目で命中判定/.test(x.textContent));if(b)b.click();});await p.waitForTimeout(700);await hide();console.log('R:',await txt());await p.screenshot({path:process.argv[2]+'_2.png'});
+console.log(JSON.stringify(e));await b.close();})();
