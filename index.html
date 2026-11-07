@@ -13,6 +13,7 @@ window.losTabpSplit=function(){var h=document.documentElement,tb=document.queryS
  else if(z&&(!h.classList.contains("is-tabp")||!tb)){if(tb){while(z.children.length)tb.insertBefore(z.lastChild,tb.firstChild);}z.parentElement&&z.parentElement.removeChild(z);}};
 /* 2026-10: ダルマ指示 iPad縦の射撃タブ: フェイズ4ボタン(準備射撃/臨機・残留/防御射撃/前進射撃)をメインタブの下に常時表示。親カードの外(#main直下)へ移して固定、横向き等では元の位置へ戻す */
 (function(){var ph=null,raf=0;function run(){raf=0;var s=document.querySelector(".fire-phase-sticky"),h=document.documentElement;
+ if(s&&h.classList.contains("nm-ot")){if(s.style.position==="fixed"){s.style.removeProperty("position");s.style.top="";s.style.left="";s.style.width="";s.style.margin="";s.style.zIndex="";}if(ph&&ph.parentNode)ph.parentNode.removeChild(ph);return} /* v852: 旧タブ(マップから)では固定しない */
  if(!s||!(h.classList.contains("is-tabp")||h.classList.contains("is-tabl"))){if(ph&&ph.parentNode)ph.parentNode.removeChild(ph);return}
  var nh=parseInt(getComputedStyle(h).getPropertyValue("--navh"))||136;
  var mq=document.querySelector("#main .stk-mq");if(mq)nh+=mq.offsetHeight+6;
@@ -37945,10 +37946,10 @@ var NM_HQB_STY='b'; /* ダルマ「B」 */
 function nmHqBackSty(b){var base='position:fixed;left:12px;bottom:14px;z-index:9400;margin:0;border:0;cursor:pointer;font-family:inherit;color:#08101a;background:#7ec8e3;background-image:none;box-shadow:0 4px 14px #000a;';
   var k=NM_HQB_STY;
   if(k==='a'){b.style.cssText=base+'height:46px;padding:0 20px;border-radius:23px;font-size:15px;font-weight:500';b.innerHTML='← '+T('戻る');}
-  else if(k==='b'){b.style.cssText=base+'min-width:160px;min-height:58px;padding:6px 20px;border-radius:20px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;text-align:left';b.innerHTML='<span style="font-size:16px;font-weight:500">← '+T('戻る')+'</span><span style="font-size:11px;font-weight:500;color:#173040">'+T('マップに戻る')+'</span>';}
+  else if(k==='b'){b.style.cssText=base+'min-width:0;min-height:40px;padding:4px 14px;border-radius:14px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;text-align:left';b.innerHTML='<span style="font-size:13px;font-weight:500">← '+T('戻る')+'</span><span style="font-size:10px;font-weight:500;color:#173040">'+T('マップに戻る')+'</span>';}
   else if(k==='c'){b.style.cssText=base+'width:60px;height:60px;padding:0;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0';b.innerHTML='<span style="font-size:22px;line-height:1">←</span><span style="font-size:11px;font-weight:600">'+T('戻る')+'</span>';}
   else {b.style.cssText=base+'height:46px;padding:0 20px;border-radius:12px;font-size:15px;font-weight:500;background:#0b1520;color:#7ec8e3;border:2px solid #7ec8e3';b.innerHTML='← '+T('戻る');}}
-(function(){var st=document.createElement('style');st.textContent='html.nm-ot #nav-sticky-wrap,html.nm-ot #main .stk-mq{display:none!important}';document.head.appendChild(st);
+(function(){var st=document.createElement('style');st.textContent='html.nm-ot #nav-sticky-wrap,html.nm-ot #main .stk-mq,html.nm-ot #ftr{display:none!important}'+ /* v852 sample(ダルマ指示「赤枠部分(上の隙間・下の注意書き)を非表示」「青枠(フェイズのタブ)の最上部固定を解除」「戻るボタンを小さく」「全てのタブ」) */'html.nm-ot .fire-phase-sticky{position:relative!important;top:auto!important;left:auto!important;right:auto!important;width:auto!important;transform:none!important}html.nm-ot #main{padding-top:'+'max(8px,env(safe-area-inset-top,0px))'+'!important;margin-top:0!important}html.nm-ot body{padding-top:0!important;padding-bottom:60px!important}';document.head.appendChild(st);
   setInterval(function(){try{document.documentElement.classList.toggle('nm-ot',!!document.getElementById('nmHqBack'));}catch(e){}},400);})();
 setInterval(function(){try{document.documentElement.classList.toggle('nm-judge',nmModeNow()==='judge');document.documentElement.classList.toggle('nm-lite',nmBarLite());}catch(e){}try{var b=document.getElementById('nmHqBack'),on=nmBarLite()&&S.tab!=='los'&&!!(S.scen&&S.scen.sel);
   if(!on){if(b)b.remove();return;}if(b)return;b=document.createElement('button');b.id='nmHqBack';b.className='b';nmHqBackSty(b);
