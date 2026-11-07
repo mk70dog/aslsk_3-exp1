@@ -1,0 +1,27 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1000,height:657},deviceScaleFactor:2});const e=[];p.on('pageerror',x=>e.push(String(x)));p.on('console',m=>{if(/bd /.test(m.text()))e.push(m.text());});
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>{S.scen=S.scen||{};S.scen.sel='S24';S.nmMode='judge';NAVTAB('los');});await p.waitForTimeout(3000);
+await p.evaluate(async()=>{await btEnsureGraph();try{Draw();}catch(x){}});await p.waitForTimeout(5000);
+const hide=()=>p.evaluate(()=>{[...document.querySelectorAll('body *')].filter(x=>x.children.length<3&&/自軍・敵軍を自動で設定/.test(x.textContent)).forEach(x=>{var t=x;while(t.parentElement&&t.parentElement!==document.body)t=t.parentElement;if(!/btRm|nmIj/.test(t.id))t.style.display='none';});});
+const P=process.argv[2];
+console.log(await p.evaluate(()=>{var c=-1,bd=1e9;BTG.nodes.forEach(function(N,i){if(!N)return;var q=nmClientOfNode(i);if(!q)return;var d=Math.hypot(q.x-480,q.y-420);if(d<bd){bd=d;c=i;}});
+ var t=BTG.nodes[c].nb[0];t=BTG.nodes[t].nb.find(x=>x!==c&&btDist(c,x)===2)||t;
+ var vid=Object.keys(scenarioAfvIdsByVehId()).find(id=>{var v=nmAfv(id);return v&&v.ma&&/GER/.test(v.nat||'')});
+ NM_RM_HEX=nmHexOfN(c);btRMenu(c);nmRmSetVeh(c,vid,'f');NM_FACE=null;BtRmClose();
+ var tv=Object.keys(scenarioAfvIdsByVehId()).find(id=>id!==vid);NM_RM_HEX=nmHexOfN(t);btRMenu(t);nmRmSetVeh(t,tv,'e');NM_FACE=null;BtRmClose();
+ NM_RM_HEX=nmHexOfN(c);btRMenu(c);nmVfOpen(c,'f');nmVfSet(c,'tgt',t);nmVfSet(c,'ph','PF');window.__c=c;window.__t=t;return vid+'->'+tv;}));
+await p.waitForTimeout(500);
+await p.evaluate(()=>{nmVfSet(window.__c,'a',3);nmVfSet(window.__c,'b',4);var b=[...document.querySelectorAll('#btRm button,#btRm [onclick]')].find(x=>/入れた目で命中判定|命中判定/.test(x.textContent)&&/nmVfTH|btRmDo/.test(x.getAttribute('onclick')||''));if(b)b.click();else nmVfTH(window.__c);});
+await p.waitForTimeout(3500);await p.evaluate(()=>{document.querySelectorAll('[id^=nmResImg]').forEach(x=>x.remove());});await hide();await p.evaluate(()=>{var b=document.querySelector('#btRm .rmBox');if(b)b.scrollTop=0;});
+console.log('1:',await p.evaluate(()=>{var x=document.querySelector('.nmBd');var o=nmBdTodo();return (x?'['+x.innerText.replace(/\s+/g,' ')+']':'none')+' todo='+JSON.stringify(o&&o.L)+' cur='+NM_RM_CUR+' res='+!!(NM_VF&&NM_VF.res);}));await p.screenshot({path:P+'_1.png'});
+await p.evaluate(()=>{nmVfSet(window.__c,'a',0);nmVfSet(window.__c,'a',2);nmVfSet(window.__c,'b',5);nmVfTH(window.__c);});await p.waitForTimeout(3500);
+console.log('2:',await p.evaluate(()=>{var x=document.querySelector('.nmBd');return x?x.innerText.replace(/\s+/g,' '):'none'}));
+await p.evaluate(()=>{nmBdTog('acq');});await p.waitForTimeout(300);await hide();await p.screenshot({path:P+'_2.png'});
+console.log('3:',await p.evaluate(()=>{var x=document.querySelector('.nmBd');return x?x.className+' '+x.innerText.replace(/\s+/g,' '):'none'}));
+await p.evaluate(()=>{var o=document.querySelectorAll('[id^=nmResImg],#nmResImg,.nmResImg');o.forEach(x=>x.remove());});
+// residual case: enemy infantry target, DFF HE
+console.log('R:',await p.evaluate(()=>{BtRmClose();var c=window.__c,t2=BTG.nodes[c].nb[2];var H=nmHexOfNode(t2);var slot=nmGeFreeSlot();nmGeAddCore(slot,'SOV','mmc','4-4-7[1]');nmGeSync(slot);nmSideList('e').push({boardId:H.boardId,col:H.col,row:H.row,grp:slot,st:{}});Draw();
+  NM_RM_HEX=nmHexOfN(c);btRMenu(c);nmVfOpen(c,'f');NM_TGT_EH=nmSideList('e')[nmSideList('e').length-1];nmVfSet(c,'tgt',t2);nmVfSet(c,'ph','DFF');nmVfSet(c,'ammo','HE');nmVfSet(c,'a',2);nmVfSet(c,'b',2);nmVfTH(c);window.__t2=t2;return slot;}));
+await p.waitForTimeout(3500);await p.evaluate(()=>{document.querySelectorAll('[id^=nmResImg]').forEach(x=>x.remove());var b=document.querySelector('#btRm .rmBox');if(b)b.scrollTop=0;});await hide();
+console.log('4:',await p.evaluate(()=>{var x=document.querySelector('.nmBd');return x?x.innerText.replace(/\s+/g,' '):'none'}));await p.screenshot({path:P+'_3.png'});
+console.log(JSON.stringify(e));await b.close();})();
