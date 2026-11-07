@@ -1,0 +1,12 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1000,height:657},deviceScaleFactor:2});const e=[];p.on('pageerror',x=>e.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>{S.scen=S.scen||{};S.scen.sel='S24';S.nmMode='judge';NAVTAB('los');});await p.waitForTimeout(6000);
+const P=process.argv[2];
+const st=await p.evaluate(()=>{nmSuOpen();nmSuTab('GER');nmSuNew();var k=NM_SU.slot;nmGeAddCore(k,'GER','mmc','4-6-7[1]');
+  /* make mixed group bypassing guard */var sv=nmGeSaved(k,'GER');var L=nmSuItems(k);L.push({nat:'SOV',kind:'mmc',label:'4-4-7[1]',pid:99});L.push({nat:'SOV',kind:'mmc',label:'4-4-7[1]',pid:98});nmGeSync(k);nmSuDraw();window.__k=k;return k+' '+nmSuItems(k).map(x=>x.nat+x.label).join(',');});
+console.log(st);await p.waitForTimeout(500);await p.screenshot({path:P+'_1.png'});
+await p.evaluate(()=>{nmSuSplitNat(window.__k);});await p.waitForTimeout(500);
+console.log(await p.evaluate(()=>GROUP_SLOTS.map(k=>{var L=nmSuItems(k);return L.length?k+':'+nmSuGNat(nmGeList(k))+'='+L.map(x=>x.nat+x.label).join(','):null}).filter(Boolean).join(' | ')));
+await p.screenshot({path:P+'_2.png'});
+await p.evaluate(()=>{nmSuTab('SOV');});await p.waitForTimeout(400);await p.screenshot({path:P+'_3.png'});
+console.log(JSON.stringify(e));await b.close();})();
