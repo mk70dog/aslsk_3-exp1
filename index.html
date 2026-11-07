@@ -37265,16 +37265,16 @@ function nmGmNewCrew(n,label){var G=NM_GM;if(!G)return;var C=nmGmCrewList(G),slo
   var H=NM_RM_HEX,e={boardId:H.boardId,col:H.col,row:H.row,grp:slot,st:{}};nmSideList(G.sd).push(e);var sv=nmGeSaved(slot,C.nat);if(sv)sv.pickerNat=C.nat;nmGeAddCore(slot,C.nat,'mmc',label);
   var it=(nmGeList(slot).items||[]).slice(-1)[0];if(it)G.eh.man={slot:slot,pid:it.pid};nmGunManSync(G.eh);try{saveState();}catch(x){}Draw();btToast(nmGrpLbl(slot)+'に'+label+'を置き、この砲を操作させました');nmGmBack(n);}
 function nmRmGunManItems(n){var G=NM_GM;if(!G)return nmRMenuItems(n);var eh=G.eh,g=nmGun(eh.gun),it=[],P=nmGunPen(eh),C=nmGunManCands(eh);
-  it.push({ic:'back',t:'← 砲のメニューへ',sub:'あとで決める時もここ',f:"nmGmBack("+n+")"});it.push({sep:1});
-  it.push({ic:'turret',img:g?vaslCtrHTML(g.id,34,''):'',t:(g?nmGunName(g):'砲')+' を操作するユニット',sub:'乗員=正規 / 分隊・半個分隊など=非正規操作(命中+2・B#−2)。国の違う砲は鹵獲(ROF−1・B#−2)'});
-  it.push({ic:'info',t:'<span>いま: <b style="color:'+(!eh.man?'#ffb060':(P.none||P.brk)?'#ff8060':(P.nq||P.cap)?'#ffb060':'#7fd0a0')+'">'+(eh.man?P.txt:'決めていない')+'</b></span>'});
-  it.push({sep:1});it.push({ic:'sel',t:'<span style="font-size:13px;color:#aab4c0">このヘクスのユニットから選ぶ</span>'});
-  if(!C.length)it.push({ic:'info',t:'<span style="font-size:13px;color:#8899aa">このヘクスに歩兵の編成がありません</span>'});
+  it.push({ic:'back',t:'← 砲のメニューへ',sub:'操作するユニットは、あとで砲のメニューからも選べます',f:"nmGmBack("+n+")"});it.push({sep:1});
+  it.push({ic:'turret',img:g?vaslCtrHTML(g.id,34,''):'',t:(g?nmGunName(g):'砲')+' を誰が操作しますか？',sub:'<span style="color:#8fe0b0">乗員=正規</span>　<span style="color:#ffcf80">分隊・半個分隊=非正規(命中+2・B#−2)</span>　<span style="color:#ff9a9a">他国の砲=鹵獲(ROF−1・B#−2)</span>'});
+  it.push({ic:'info',t:'<span>いま: <b style="color:'+(!eh.man?'#ffb060':(P.none||P.brk)?'#ff8060':(P.nq||P.cap)?'#ffb060':'#7fd0a0')+'">'+(eh.man?P.txt:'まだ選んでいない')+'</b>'+(eh.man?'':' <span style="font-size:12px;color:#9ab">(乗員が付いているものとして計算中)</span>')+'</span>'});
+  it.push({sep:1});it.push({ic:'sel',t:'<span style="font-size:14px;color:#ffd060;font-weight:800">① このヘクスのユニットから選ぶ</span>'});
+  if(!C.length)it.push({ic:'info',t:'<span style="font-size:13px;color:#8899aa">このヘクスに歩兵の編成がありません(②か③へ)</span>'});
   C.forEach(function(o){var on=eh.man&&eh.man.slot===o.slot&&eh.man.pid===o.x.pid,crew=nmIsCrew(o.x),gn=((g&&g.nat)||'').split('/'),cap=o.nat&&gn.indexOf(o.nat)<0;
     it.push({ic:'sel',img:vaslCtrHTML('u:'+(o.x.nat||o.nat)+'|'+o.x.label,30)||'',t:'<span>'+(on?'✓ ':'')+nmGeCandLbl(o.items,o.x)+' <span style="font-size:11px;color:#8899aa">編成'+o.slot+'</span> <span style="font-size:11px;padding:1px 6px;border-radius:8px;background:'+(crew?'#1f4d33':'#4d3a12')+';color:'+(crew?'#8fe0b0':'#ffcf80')+'">'+(crew?'正規':'非正規 +2/B#−2')+'</span>'+(cap?' <span style="font-size:11px;color:#ff9a9a">鹵獲</span>':'')+(o.x.broken?' <span style="font-size:11px;color:#ff8060">混乱</span>':'')+'</span>',f:"nmGmPick("+n+",'"+o.slot+"',"+o.x.pid+")"});});
-  var CL=nmGmCrewList(G);if(CL.list.length){it.push({sep:1});it.push({ic:'sel',t:'<span style="font-size:13px;color:#aab4c0">乗員を新しく置いて操作させる(OBから)</span>'});
+  var CL=nmGmCrewList(G);if(CL.list.length){it.push({sep:1});it.push({ic:'sel',t:'<span style="font-size:14px;color:#ffd060;font-weight:800">② 乗員を新しく置く</span>',sub:'シナリオのOBの乗員を、このヘクスに新しい編成で置いて操作させる'});
     CL.list.forEach(function(lb){it.push({ic:'sel',img:vaslCtrHTML('u:'+CL.nat+'|'+lb,30)||'',t:'＋ '+lb+' <span style="font-size:11px;color:#8899aa">'+nmNatLbl(CL.nat)+'・新しい編成</span>',f:"nmGmNewCrew("+n+",'"+lb.replace(/'/g,"\\'")+"')"});});}
-  it.push({sep:1});it.push({ic:'x',t:'決めない',sub:'乗員が付いているものとして計算(操作班混乱は手で)',f:"nmGmPick("+n+",null,0)"});
+  it.push({sep:1});it.push({ic:'sel',t:'<span style="font-size:14px;color:#ffd060;font-weight:800">③ 選ばずに進む</span>'});it.push({ic:'x',t:(!eh.man?'✓ ':'')+'選ばない(乗員が付いているものとして計算)',sub:'操作する兵が混乱した時などは手で設定',f:"nmGmPick("+n+",null,0)"});
   return it;}
 (function(){var o=nmRMenuItems;nmRMenuItems=function(n){if(NM_RM_SUB==='gunman'){NM_RM_SUB=null;NM_RM_CUR='gunman';return nmRmGunManItems(n);}
     if(NM_GM_AFTER&&!NM_FACE&&!NM_RM_SUB){var e=NM_GM_AFTER;NM_GM_AFTER=null;var sd=nmSideList('f').indexOf(e)>=0?'f':'e';if(e.gun&&!e.man&&nmSideList(sd).indexOf(e)>=0){NM_GM={n:n,sd:sd,eh:e};NM_RM_CUR='gunman';return nmRmGunManItems(n);}}
