@@ -38395,11 +38395,49 @@ function nmHqScPick(i,fn){var u=NM_SCU[i];if(!u)return;NM_HQFROM=1;var pk=docume
   if(fn==='nmRlOpen'){NM_RL={n:n0,sd:u.sd,slot:'_T',dm:false,mode:{},res:{}};NM_RM_SUB='rally';}
   else{NM_MCP={n:n0,sd:u.sd,slot:'_T',r:null};NM_MC=null;NM_RM_SUB='mcp';}
   btRmReopen(n0);}
+/* sample(ダルマ指示「マルチ判定で砲撃などを選んで地図に該当するカウンターがない時の表示 使いやすくしたい」→ 3つとも):
+   ① シナリオのユニットを選んで「地図に置く」→ ヘックスをタップ → 置いてそのまま判定へ
+   ② 「置かずに判定」→ 同じく置くが仮のマーカー(判定を閉じると消える)
+   ③ 「配置画面を開く」→ 初期配置 */
+var NM_NU=null;
+function nmNuKind(fn){return fn==='nmHqGunOpen'?'gun':fn==='nmHqAfvOpen'?'afv':'inf';}
+function nmNuUnits(fn){var k=nmNuKind(fn),o=[];var sdOf=function(nat){try{return nmSuSide(nat);}catch(e){return null;}};
+  if(k==='gun'){nmScenGuns().forEach(function(g){var nat=g.nat||'';o.push({k:'gun',id:g.id,nm:nmGunName(g),nat:nat,sd:sdOf(nat)||'f'});});}
+  else if(k==='afv'){Object.keys(scenarioAfvIdsByVehId()||{}).forEach(function(id){var v=nmAfv(id);if(!v)return;o.push({k:'afv',id:id,nm:nmAfvName(v),nat:v.nat||'',sd:sdOf(v.nat)||'f'});});}
+  else{try{nmSuNats().forEach(function(nat){nmSuOb(nat).forEach(function(u){if(u.kind==='mmc')o.push({k:'inf',id:u.label,nm:u.label,nat:nat,sd:sdOf(nat),kind:u.kind});});});}catch(e){}}
+  return o;}
+function nmNuOpen(fn){var U=nmNuUnits(fn);NM_NU={fn:fn,U:U,sel:U.length===1?0:null};nmNuDraw();}
+function nmNuClose(){var o=document.getElementById('nmNu');if(o)o.remove();}
+function nmNuDraw(){var N=NM_NU;if(!N)return;nmNuClose();var k=nmNuKind(N.fn),nm=k==='gun'?'砲':k==='afv'?'車両':'歩兵の編成';
+  var m=document.createElement('div');m.id='nmNu';m.setAttribute('style','position:fixed;inset:0;z-index:9500;background:#0008;display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,monospace');m.onclick=function(e){if(e.target===m)nmNuClose();};
+  var h='<div style="width:min(460px,92vw);max-height:84vh;overflow:auto;background:#1f2227;border:1px solid #39414f;border-radius:14px;padding:12px 14px;color:#e8eef4;box-shadow:0 10px 40px #000" onclick="event.stopPropagation()">'
+   +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><b style="flex:1;font-size:16px;color:#7ec8e3">'+T(NM_HQ_LBL[N.fn]||'判定')+'</b><button class="b sm" style="margin:0;height:34px" onclick="nmNuClose();nmHqOpen()">← '+T('戻る')+'</button></div>'
+   +'<div style="font-size:13px;color:#ffcf70;margin:2px 0 10px">⚠ '+T('地図に'+nm+'がありません')+'</div>';
+  if(N.U.length){h+='<div style="font-size:12px;color:#9ab;margin:0 0 6px">① '+T('どの'+nm+'？（シナリオから）')+'</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">';
+    var last=null;N.U.forEach(function(u,i){var L=NM_SIDE_LBL[u.sd]||{},on=N.sel===i;if(u.nat!==last){last=u.nat;h+='<div style="flex-basis:100%;font-size:11px;font-weight:900;color:'+(L.col||'#9fb2c8')+';margin-top:2px">'+(L.nm||'')+' '+(NAT_FULL_LBL[u.nat]||u.nat)+'</div>';}
+      h+='<button class="b" style="margin:0;height:40px;padding:0 12px;font-size:14px;'+(on?'background:#2f6f9a;border-color:#7ec8e3;color:#fff':'')+'" onclick="NM_NU.sel='+i+';nmNuDraw()">'+(on?'✓ ':'')+'<b>'+u.nm+'</b></button>';});
+    h+='</div><div style="font-size:12px;color:#9ab;margin:0 0 6px">② '+T('どうする？')+'</div>';
+    var dis=N.sel==null?' disabled style="opacity:.4;':' style="';
+    h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+     +'<button class="b"'+dis+'margin:0;min-height:62px;text-align:left;padding:6px 12px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px" onclick="nmNuGo(0)"><b style="font-size:15px">📍 '+T('地図に置く')+'</b><span style="font-size:11px;color:#9ab">'+T('ヘックスをタップ→置いて判定へ')+'</span></button>'
+     +'<button class="b"'+dis+'margin:0;min-height:62px;text-align:left;padding:6px 12px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px" onclick="nmNuGo(1)"><b style="font-size:15px">🎲 '+T('置かずに判定')+'</b><span style="font-size:11px;color:#9ab">'+T('仮に置く(判定を閉じると消える)')+'</span></button></div>';}
+  else h+='<div style="font-size:12px;color:#9ab;margin-bottom:8px">'+T('このシナリオには'+nm+'がいません')+'</div>';
+  h+='<button class="b" style="margin:10px 0 0;width:100%;height:44px;font-size:14px" onclick="nmNuClose();nmSuOpen()">📋 '+T('配置画面を開く')+'</button></div>';
+  m.innerHTML=h;document.body.appendChild(m);}
+var NM_NUPL=null;
+function nmNuGo(tmp){var N=NM_NU;if(!N||N.sel==null)return;NM_NUPL={fn:N.fn,u:N.U[N.sel],tmp:!!tmp};nmNuClose();
+  var b=document.getElementById('nmPickBn');if(!b){b=document.createElement('div');b.id='nmPickBn';b.style.cssText='position:fixed;left:50%;top:70px;transform:translateX(-50%);z-index:9500;background:#0d2a4a;border:2px solid #3ca878;border-radius:8px;padding:8px 14px;color:#e8f4ff;font-size:14px;font-weight:bold;box-shadow:0 6px 18px #000c;display:flex;gap:10px;align-items:center';document.body.appendChild(b);}
+  b.innerHTML='<span>'+(tmp?'🎲':'📍')+' '+T(NM_NUPL.u.nm)+' '+T('を置くヘックスをタップ')+(tmp?'<span style="color:#9ab;font-weight:normal;font-size:12px">（'+T('仮')+'）</span>':'')+'</span><button class="b sm" style="margin:0" onclick="event.stopPropagation();nmNuPlEnd(1)">'+T('やめる')+'</button>';}
+function nmNuPlEnd(back){NM_NUPL=null;var b=document.getElementById('nmPickBn');if(b)b.remove();if(back&&NM_NU)nmNuDraw();}
+function nmNuTap(cx,cy){var P=NM_NUPL;if(!P)return false;var H=losHexAtClient(cx,cy);if(!H)return true;var n=btNodeOf(H.boardId,H.col,H.row);if(n==null||n<0)return true;var u=P.u;
+  var e={boardId:H.boardId,col:H.col,row:H.row,st:{},veh:null,gun:null,tca:null,facing:null};if(P.tmp){e.ijTmp=1;e.ccTmp=1;}
+  if(u.k==='gun')e.gun=u.id;else if(u.k==='afv')e.veh=u.id;else{var slot=nmGeFreeSlot();if(!slot){btToast('空いている編成がありません');return true;}nmGeAddCore(slot,u.nat,u.kind||'mmc',u.id);try{nmGeSync(slot);}catch(x){}e.grp=slot;}
+  nmSideList(u.sd).push(e);if(P.tmp)NM_CCS={open:1};else{try{saveState();}catch(x){}}nmNuPlEnd(0);try{Draw();}catch(x){}nmHqSetA(n,P.fn);return true;}
 function nmHqPickA(fn){var C=[],seen={};['f','e'].forEach(function(sd){(sd==='f'?(S_LOS.friendHexes||[]):(S_LOS.enemyHexes||[])).forEach(function(e){var ak=((fn==='nmHqGunOpen'||fn==='nmHqMhOpen')&&e&&e.gun&&!e.veh)||((fn==='nmHqAfvOpen'||fn==='nmHqBogOpen')&&e&&e.veh&&!e.gun);var rv=(fn==='nmRlOpen'&&e&&(e.veh||e.gun))||ak; /* v758: 回復・修理は車両・砲も選べる */var mv=(fn==='nmHqMvOpen'&&e&&e.veh&&!e.gun)||rv; /* v756: 移動は車両も選べる(ボグ判定など) */if(!e||(e.gun&&!rv)||(!mv&&(!e.grp||e.veh)))return;if((fn==='nmHqGunOpen'||fn==='nmHqAfvOpen'||fn==='nmHqBogOpen'||fn==='nmHqMhOpen')&&!ak)return;var n=null;try{n=btNodeOf(e.boardId,e.col,e.row);}catch(x){}if(n==null||n<0)return;var hk=n+'|'+sd,ix=0;if(ak){ix=seen['#'+hk]||0;seen['#'+hk]=ix+1;}var k=hk+'|'+(ak?'a'+ix:mv?'v'+(e.veh||e.gun):e.grp);if(seen[k])return;seen[k]=1;C.push({n:n,sd:sd,ix:ix,g:mv?null:e.grp,rv:rv?(ak?2:1):0,vn:mv?(function(){if(e.veh&&!e.gun){var v=nmAfv(e.veh);return v?nmAfvName(v):'車両';}var g=nmGun(e.gun);return g?nmGunName(g):'砲';})():null});});});
   if(fn==='nmHqCcOpen'&&!C.length){nmCcScOpen();return;}
   if(NM_SC_FN[fn]&&!C.length){nmScOpen(fn);return;}
   var SU=nmHqScUnits(fn); /* v754(ダルマ指示「選択したシナリオに登場するユニットを選べるように」): 回復・士気損耗はシナリオのユニットからも選べる */
-  if(!C.length&&!SU.length){btToast(fn==='nmHqGunOpen'?'地図に砲のマーカーを置いてください':fn==='nmHqAfvOpen'?'地図に車両のマーカーを置いてください':'地図に編成(歩兵)のマーカーを置いてください');return;}
+  if(!C.length&&!SU.length){nmNuOpen(fn);return;} /* sample(ダルマ指示「地図に該当するカウンターがない時の表示を使いやすく」→ その場で置く・配置画面・置かずに判定): 案内だけでなく、ここから置ける */
   if(C.length===1&&!SU.length){nmHqSetA(C[0].n,fn);return;}
   var o=document.getElementById('nmHqPk');if(o)o.remove();var m=document.createElement('div');m.id='nmHqPk';
   m.setAttribute('style','position:fixed;inset:0;z-index:9500;background:#0008;display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,monospace');
@@ -45284,6 +45322,7 @@ function LosMapClick(ev){
   if(NM_PICK&&ev.clientX!=null&&nmPickTap(ev.clientX,ev.clientY))return; /* v412 */
   if(NM_IP_PL&&ev.clientX!=null&&nmIpPlaceTap(ev.clientX,ev.clientY))return; /* v620 */
   if(NM_SUPL&&ev.clientX!=null&&nmSuPlaceTap(ev.clientX,ev.clientY))return; /* v434 */
+  if(NM_NUPL&&ev.clientX!=null&&nmNuTap(ev.clientX,ev.clientY))return;
   if(ev.clientX!=null&&nmDblCheck(ev.clientX,ev.clientY))return; /* v435: ダブルクリック */
   if(ev.clientX!=null&&!S_LOS.routeMode){try{var _fh=losHexAtClient(ev.clientX,ev.clientY);if(_fh)nmFtSelAt(_fh,1);}catch(e){}} /* v456: マーカーをタップで選ぶ(上の操作ボタン・下の表示の対象) */
 
