@@ -38179,9 +38179,9 @@ function nmScDraw(){var C=NM_SC;if(!C)return;var F=NM_SC_FN[C.fn]||{u:1},o=docum
     +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><button class="b sm" style="margin:0;height:34px" onclick="document.getElementById(\'nmCcSc\').remove();NM_SC=null;nmHqOpen()">← '+T('戻る')+'</button><b style="flex:1;font-size:17px;color:#7ec8e3">'+T(F.lbl)+' — '+T('シナリオのユニットで判定')+'</b></div>'
     +'<div style="font-size:12px;color:#9ab;margin-bottom:6px">'+T(C.fn==='nmHqBogOpen'?'地図にカウンターを置かずに、シナリオに登場する車両を選んで判定します':C.fn==='nmHqMhOpen'?'地図にカウンターを置かずに、シナリオに登場する砲を選んで判定します':'地図にカウンターを置かずに、シナリオに登場するユニット'+(F.v?'・車両・砲':'')+'を選んで判定します')+'</div>'
     +natB+rows
-    +((C.fn==='nmRlOpen'||C.fn==='nmRtOpen')?'<div style="display:flex;align-items:center;gap:8px;margin-top:8px"><span style="font-size:13px;color:#9ab">'+T('選んだユニットの状態')+'</span><button class="b sm" style="margin:0;height:34px;padding:0 12px;'+(!C.brk?'background:#c8a032;color:#000;font-weight:900':'')+'" onclick="nmScSet(\'brk\',false)">'+T('統制')+'</button><button class="b sm" style="margin:0;height:34px;padding:0 12px;'+(C.brk?'background:#c8a032;color:#000;font-weight:900':'')+'" onclick="nmScSet(\'brk\',true)">'+T('混乱')+'</button></div>':'')
+    +(((C.fn==='nmRlOpen'&&nmModeNow()!=='judge')||C.fn==='nmRtOpen')?'<div style="display:flex;align-items:center;gap:8px;margin-top:8px"><span style="font-size:13px;color:#9ab">'+T('選んだユニットの状態')+'</span><button class="b sm" style="margin:0;height:34px;padding:0 12px;'+(!C.brk?'background:#c8a032;color:#000;font-weight:900':'')+'" onclick="nmScSet(\'brk\',false)">'+T('統制')+'</button><button class="b sm" style="margin:0;height:34px;padding:0 12px;'+(C.brk?'background:#c8a032;color:#000;font-weight:900':'')+'" onclick="nmScSet(\'brk\',true)">'+T('混乱')+'</button></div>':'')
     +(vs.length?'<div style="font-size:12px;color:#9ab;margin:10px 0 4px">'+T(C.fn==='nmRlOpen'?'車両・砲(修理)':C.fn==='nmHqBogOpen'?'車両':C.fn==='nmHqMhOpen'?'砲':'車両・砲(ボグ・人力移動など)')+'</div><div style="display:flex;gap:6px;flex-wrap:wrap">'+vs.map(function(v){var on=C.v&&C.v.id===v.id;return '<button class="b sm" style="margin:0;min-height:38px;padding:0 12px;'+(on?'background:#c8a032;color:#000;font-weight:900':'')+'" onclick="nmScSet(\'v\','+(on?'null':'{kind:\''+v.kind+'\',id:\''+v.id+'\'}')+')">'+v.nm+'</button>';}).join('')+'</div>':'')
-    +((C.fn==='nmRlOpen'&&C.v)?'<div style="display:flex;align-items:center;gap:8px;margin-top:8px"><span style="font-size:13px;color:#9ab">'+T('状態')+'</span><button class="b sm" style="margin:0;height:34px;padding:0 12px;'+(C.mal?'background:#c8a032;color:#000;font-weight:900':'')+'" onclick="nmScSet(\'mal\','+(!C.mal)+')">'+T(C.v.kind==='gun'?'砲が故障している':'主砲が故障している')+'</button></div>':'')
+    +((C.fn==='nmRlOpen'&&C.v&&nmModeNow()!=='judge')?'<div style="display:flex;align-items:center;gap:8px;margin-top:8px"><span style="font-size:13px;color:#9ab">'+T('状態')+'</span><button class="b sm" style="margin:0;height:34px;padding:0 12px;'+(C.mal?'background:#c8a032;color:#000;font-weight:900':'')+'" onclick="nmScSet(\'mal\','+(!C.mal)+')">'+T(C.v.kind==='gun'?'砲が故障している':'主砲が故障している')+'</button></div>':'')
     +'<button class="b" style="margin:14px 0 0;width:100%;height:48px;font-size:16px;font-weight:900;'+(ok?'background:var(--ljc,#7ec8e3);color:#08101a;border-color:#7ec8e3':'opacity:.5')+'" '+(ok?'':'disabled ')+'onclick="nmScGo()">'+T('判定する')+'</button></div>';
   var nb=o.querySelector('.ccBox');if(nb)nb.scrollTop=st;}
 function nmScGo(){var C=NM_SC;if(!C)return;var o=document.getElementById('nmCcSc');if(o)o.remove();nmCcScClear();
@@ -38918,6 +38918,33 @@ function nmRmRvItems(n){var P=NM_RV;if(!P)return nmRMenuItems(n);var H=nmHexOfNo
     if(it.length===b0)it.push({ic:'info',t:'<span style="color:#8899aa">修理が必要な故障はありません(状態は車両・砲のメニューで設定)</span>'});});
   if(typeof NM_VS!=='undefined'&&NM_VS&&NM_VS.t)it.push({ic:'info',t:'<span style="color:'+NM_VS.c+'">'+NM_VS.t+'</span>'});
   it.push({sep:1});it.push({ic:'x',t:'閉じる',f:"NM_RV=null;BtRmClose()"});return it;}
+/* v860 sample(ダルマ指示「修理 回復 現状に関係なく実施できるようにする」): ライト版は盤面の状態をアプリが持たないので、
+   修理は 主砲/砲の修理・機関銃ごとの修理・ショック回復・UK回復・ボグ解消 を状態の印に関係なく常に出す(結果は「盤面: 〜」の文だけ)。
+   回復は「統制/混乱」を選ばず、混乱しているものとして判定 */
+var NM_LTREP=null;
+function nmLtRep(n,sd,i,kind,k,dr){var all=nmAllAt(nmHexOfNode(n),sd).filter(function(x){return x.veh||x.gun;}),eh=all[i];if(!eh)return;var auto=!dr;if(!dr)dr=1+Math.floor(Math.random()*6);
+  var gun=!!(eh.gun&&!eh.veh),w=kind==='mg'?k.toUpperCase():gun?T('砲'):T('主砲'),t,c,bd;
+  if(kind==='ma'||kind==='mg'){if(dr===1){t=w+T('の修理 成功');c='#3ca878';bd=T('盤面: 故障のカウンターを外す');}else if(dr===6){t=w+(kind==='ma'&&gun?T(' 破壊(除去)'):T(' 使用不可'));c='#ff7070';bd=kind==='ma'&&gun?T('盤面: 砲を取り除く'):T('盤面: 故障のカウンターを裏(使用不可)にする');}else{t=T('修理 失敗(故障のまま)');c='#c8a032';bd=T('盤面: そのまま');}}
+  else if(kind==='shock'){if(dr<=2){t=T('ショック回復');c='#3ca878';bd=T('盤面: ショックのカウンターを外す');}else{t=T('UK(未確認撃破)になる');c='#ffb040';bd=T('盤面: ショックをUKにする');}}
+  else{if(dr<=3){t=T('UK回復');c='#3ca878';bd=T('盤面: UKのカウンターを外す');}else{t=T('撃破');c='#ff6060';bd=T('盤面: 残骸にする');}}
+  var nm=kind==='ma'||kind==='mg'?w+T('の修理'):kind==='shock'?T('ショック回復'):T('UK回復');
+  NM_LTREP={eh:eh,html:'<span style="font-size:12px;color:#9aa6b4">'+nm+'　'+(auto?T('オートダイス')+' ':'')+'dr'+dr+'</span><br><b style="color:'+c+';font-size:15px">→ '+t+'</b><br><span style="font-size:12px;color:#7ec8e3">'+bd+'</span>'};btRmReopen(n);}
+function nmLtUnbog(n,sd,i){var all=nmAllAt(nmHexOfNode(n),sd).filter(function(x){return x.veh||x.gun;}),eh=all[i];if(!eh)return;NM_SEL_EH=eh;nmVsBogOpen(n,sd);if(NM_BG){NM_BG.fromRv=1;nmBgMode(n,1);}}
+(function(){var oR=nmRmRvItems;nmRmRvItems=function(n){var it=oR.apply(this,arguments);try{var P=NM_RV;if(!P||nmModeNow()!=='judge')return it;
+  var H=nmHexOfNode(P.n),all=nmAllAt(H,P.sd).filter(function(x){return x.veh||x.gun;});if(!all.length)return it;var U=it.slice(0,3);
+  var row=function(t,f){return {row:1,cmp:1,ic:'fire',t:t,btns:[['振る',f+',0)']].concat([1,2,3,4,5,6].map(function(v){return [String(v),f+','+v+')'];}))};};
+  all.forEach(function(eh,i){var ev=eh.veh&&!eh.gun?nmAfv(eh.veh):null,eg=eh.gun?nmGun(eh.gun):null,nm=ev?nmAfvName(ev):eg?nmGunName(eg):T('ユニット'),pre="nmLtRep("+n+",'"+P.sd+"',"+i+",";
+    U.push({sep:1});U.push({ic:'sel',t:'<span>'+nm+'</span>',sub:T('状態に関係なく選べます(1=成功 6=破壊/使用不可)')});
+    var hasMa=!!eg;if(ev){try{hasMa=!!afvToGunData(ev);}catch(e){hasMa=false;}}
+    if(hasMa)U.push(row((eg?T('砲'):T('主砲'))+T('の修理')+' dr',pre+"'ma',''"));
+    if(ev){var ks=[];try{ks=nmVmKeys(ev);}catch(e){}ks.forEach(function(k){U.push(row(k.toUpperCase()+T('の修理')+' dr',pre+"'mg','"+k+"'"));});
+      U.push(row(T('ショック回復')+' dr<small style="font-size:10.5px;color:#9ab"> (2以下)</small>',pre+"'shock',''"));
+      U.push(row(T('UK回復')+' dr<small style="font-size:10.5px;color:#9ab"> (3以下)</small>',pre+"'uk',''"));
+      U.push({ic:'move',t:T('ボグ解消'),sub:T('ボグ判定のパネルで判定'),f:"nmLtUnbog("+n+",'"+P.sd+"',"+i+")"});}
+    if(NM_LTREP&&NM_LTREP.eh===eh)U.push({ic:'info',t:NM_LTREP.html});});
+  U.push({sep:1});U.push({ic:'x',t:'閉じる',f:"NM_RV=null;NM_LTREP=null;BtRmClose()"});return U;}catch(e){console.log('lt rep',e);}return it;};})();
+(function(){var oB=nmRmBogItems;nmRmBogItems=function(n){var it=oB.apply(this,arguments);try{var B=NM_BG;if(B&&B.fromRv&&it[0]&&it[0].ic==='back'){it[0]=Object.assign({},it[0],{sub:T('修理'),f:"NM_BG=null;NM_RM_SUB='rv';btRmReopen("+n+")"});}}catch(e){}return it;};})();
+(function(){var oG=nmScGo;nmScGo=function(){try{if(NM_SC&&NM_SC.fn==='nmRlOpen'&&nmModeNow()==='judge')NM_SC.brk=true;}catch(e){}return oG.apply(this,arguments);};})();
 function nmHqMvOpen(n,sd){NM_HQMV={n:n,sd:sd};NM_RM_SUB='hqmv';btRmReopen(n);}
 function nmRmHqMvItems(n){var P=NM_HQMV;if(!P)return nmRMenuItems(n);var H=nmHexOfNode(P.n),N=BTG.nodes[P.n],L=NM_SIDE_LBL[P.sd],eh=nmUnitAt(H,P.sd),all=nmAllAt(H,P.sd),it=[];
   it.push({ic:'back',t:'← 戻る',sub:'移動 @'+N.nm,f:"NM_HQMV=null;btRmReopen("+n+")"});it.push({sep:1});
