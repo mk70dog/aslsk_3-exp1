@@ -1,11 +1,10 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-07 21:30 (main=v880)
-- 状態: **返事待ち** sample-abreset(ダルマ指示「AB選択の状態のままマルチ判定など別の選択時にAB選択をリセットする」→「どちらも」: タップ待ちの途中(NM_AB_ARM)でも、A・Bを置いた後でも、nmHqOpen/nmTvOpen/nmScenView/nmSuOpen/nmRmTabGo/nmToolArm を始めたら nmAbReset(nmLosOff)。スポット判定(#nmIj)を開いている時は消さない。テスト dev/abr.js)。
-- 注意: マルチ判定の「射撃 A→B」タイルは、ボードを開いた時点でA・Bが消えるので、押した後にA・Bを選び直す流れになる。
-- 「実施」なら main にマージして v881。
-- 次にやること: 返事を待つ。
+- 最終更新: 2026-11-07 21:40 (main=v881)
+- 状態: 調査中 — ダルマ報告「A→B設定後にそのまま別のことを実施するとフリーズしたり受付なかったりする」。dev/frz.js(実際のクリックでA→B→ツールバーのマルチ判定/早見表/見える範囲/攻撃)では再現せず、エラーも全画面の覆いもなし。発生直後の動作ログ(≡→動作ログ→ファイル保存)と、何を押したかをダルマに依頼中。
+- 最後の指示: sample-abreset「実施」→ v881。
+- 次にやること: ログを見て原因を調べる。
 
 ## 0.1 再開のしかた(どのアカウントでも同じ)
 - プロジェクトの指示に「プロジェクト再開」の手順が入っている。「プロジェクト再開」と言われたら:
@@ -99,6 +98,7 @@
 - v855 「近接戦闘」→「白兵戦」(歩兵どうし)、車両への白兵戦を別タイル ccv '&ccv' → nmCcScOpen('veh')。
 - v856 タイル名を 白兵戦（歩兵どうし）／白兵戦（車両を攻撃）／臨機の白兵戦（動く車両）(TL の5番目の要素=表示名、<br>で2行)。白兵戦の判定ボタンを「白兵戦を判定する」+下段「次の画面でダイスを振る」。
 - v857 ①旧タブの「戻る」(#nmHqBack)は地図に戻るだけ。NAVTAB をラップして、地図→タブへ移る時にボード(#nmHq)が開いていたら NM_OT_HQ=true、その時だけ戻りでボードを開き直す ②ボグ判定パネル(nmRmBogItems をラップ)に「ボグ判定(入った時)/ボグ解消(回復)」の切り替え NM_BG.un。nmBgMode/nmBgUnDie/nmBgUnRoll。赤dr(Mired+1) 1-4=解消(始動MP=赤×白、全装軌でない×2)・5=Mired・6以上=走行不能。ライト版は結果と「盤面: 〜」だけ、フル版は状態(bog/mired/imm)も反映。
+- v881 別の操作を始めたらA→Bを消す(nmAbReset、nmHqOpen/nmTvOpen/nmScenView/nmSuOpen/nmRmTabGo/nmToolArm をラップ、#nmIj 中は除く)。テスト dev/abr.js、dev/frz.js(フリーズ調査用)。
 - v880 アプリアイコンを 10-1-8 G の絵に(icon-180/192/512=90%、icon-512m=78%、地の水色 (108,206,253))。index.html・manifest のアイコンは ?v=880。
 - v879 編成の準備を国ごとに(nmSuTab で NM_SU.slot=null、nmSuSlots の条件、NM_SU中の nmGeAddCore ラップ、nmSuSplitNat、混ざった編成の注意)。テスト dev/sun.js。
 - v878 編成名の変更(S.nmGrpName[シナリオ][編成]、nmGrpLbl・nmGrpRename・nmGrpRenameDo、編成の準備の✎)。テスト dev/grn.js。
