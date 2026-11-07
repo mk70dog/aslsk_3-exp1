@@ -36355,7 +36355,7 @@ function nmCcpDraw(){var C=NM_CC;if(!C){nmCcpClose();return;}var o=document.getE
   h+='<div style="margin-top:6px;font-size:11px;color:#6d7c8e">'+T('除去・損耗は編成とマーカーに反映。両軍とも残ったら混戦（Melee）。MMCの元のDRが2なら指揮官誕生')+'</div></div>';
   o.innerHTML=h;var nb=o.querySelector('.ccpBox');if(nb)nb.scrollTop=st0;}
 /* sample(ダルマ指示「不意打ち 実施 もう少しわかりやすくする」): 白兵戦パネルの①不意打ちを作り直す。
-   両軍のカードに修正(CX+1・釘付け+1・未熟兵+1(新兵で指揮官なし/徴集兵)・指揮官の修正(単独は無効)・車両がいる 攻撃側+2/防御側+1・車両がBU/麻痺+1・SSR)を自動で入れ、手で切り替えられる。
+   両軍のカードに修正(CX+1・釘付け+1・未熟兵+1(新兵で指揮官なし/徴集兵)・指揮官の修正(単独は無効)・車両がいる+2・その車両がBU/麻痺+1・SSR)を自動で入れ、手で切り替えられる。
    drは手入力(1〜6)かオートダイス。修正後drが相手より3以上少ない側が不意打ち(先に攻撃・攻撃DR−1・相手+1)。手で結果を選ぶこともできる */
 function nmAbItems(P){return nmCCIts(P).map(function(q){return q.x;});}
 function nmAbAuto(P){var its=nmAbItems(P),u0=function(x){var D=UNITS[x.nat]||{};return (D.mmc||[]).filter(function(q){return q.lbl===x.label;})[0]||{};};
@@ -36384,9 +36384,8 @@ function nmAbHTML(lbl){var C=NM_CC,A=nmAbInit();if(!A)return '';var sg=function(
       +chip(X.pin,"nmAbSet('"+sd+"','pin',"+(!X.pin)+")",T('釘付け')+' +1',au.pin)
       +chip(X.inx,"nmAbSet('"+sd+"','inx',"+(!X.inx)+")",T('未熟兵')+' +1',au.inx)
       +(X.ldr!=null&&X.ldr!==0?chip(X.ldrOn,"nmAbSet('"+sd+"','ldrOn',"+(!X.ldrOn)+")",T('指揮官')+' '+X.ldrNm+' '+sg(X.ldr),true):'')
-      +chip(X.afv===2,"nmAbSet('"+sd+"','afv',"+(X.afv===2?0:2)+")",T('車両がいる(攻撃側)')+' +2',false)
-      +chip(X.afv===1,"nmAbSet('"+sd+"','afv',"+(X.afv===1?0:1)+")",T('車両がいる(防御側)')+' +1',false)
-      +(X.afv?chip(X.bu,"nmAbSet('"+sd+"','bu',"+(!X.bu)+")",T('車両がBU・麻痺')+' +1',false):'')
+      +chip(!!X.afv,"nmAbSet('"+sd+"','afv',"+(X.afv?0:2)+")",T('車両がいる')+' +2',false)
+      +(X.afv?chip(X.bu,"nmAbSet('"+sd+"','bu',"+(!X.bu)+")",T('その車両がBU・麻痺')+' +1',false):'')
       +(X.ssr?chip(true,"",X.ssrNm+' '+sg(X.ssr),true):'')+'</div>';
     x+='<div style="display:flex;align-items:center;gap:4px;margin-top:8px"><span style="font-size:12px;color:#9ab;min-width:28px">dr</span>'+[1,2,3,4,5,6].map(function(v){var on=X.dr===v;return '<button class="b sm" style="margin:0;width:34px;height:34px;padding:0;'+(on?'background:#c8a032!important;color:#000!important;font-weight:900':'')+'" onclick="nmAbDie(\''+sd+'\','+v+')">'+v+'</button>';}).join('')+'</div>';
     if(X.dr)x+='<div style="margin-top:6px;font-size:14px">dr '+X.dr+(X.auto?'<small style="font-size:10px;color:#7ec8e3"> '+T('オートダイス')+'</small>':'')+' '+sg(c.m)+' = <b style="font-size:18px;color:#ffd070">'+(X.dr+c.m)+'</b></div>';
@@ -36396,7 +36395,7 @@ function nmAbHTML(lbl){var C=NM_CC,A=nmAbInit();if(!A)return '';var sg=function(
   else if(C.abMan)res=C.amb?'<b style="color:#3ca878;font-size:16px">'+lbl[C.amb]+T('の不意打ち成功')+'</b> <span style="font-size:12px;color:#9ab">（'+T('手で選択')+'）</span>':'<b>'+T('不意打ちなし')+'</b> <span style="font-size:12px;color:#9ab">（'+T('手で選択')+'）</span>';
   else res='<span style="color:#9ab;font-size:13px">'+T('両軍のdrを入れるか、オートダイスで振ってください')+'</span>';
   var h='<div class="abBox" style="padding:10px;border-radius:12px;background:#121822">';
-  h+='<div style="font-size:12px;color:#9fb2c8;margin-bottom:6px">'+T('林・建物へ突撃して白兵戦になった時だけ（混戦に加わる時はなし）。両軍がdrを1つずつ振り、修正後のdrが相手より3以上少ない側が不意打ち成功')+'</div>';
+  h+='<div style="font-size:12px;color:#9fb2c8;margin-bottom:6px">'+T('林・建物へ突撃して白兵戦になった時だけ（混戦に加わる時はなし）。両軍がdrを1つずつ振り、修正後のdrが相手より3以上少ない側が不意打ち成功。車両の修正は車両がいる側のdrに足す')+'</div>';
   h+='<div style="display:flex;gap:8px;flex-wrap:wrap">'+card('f')+card('e')+'</div>';
   h+='<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px"><div style="flex:1;min-width:240px">'+res+'</div>'
     +(R?'<button class="b sm" style="margin:0;min-height:34px;padding:0 10px" onclick="nmAbClear()">'+T('やり直す')+'</button>':'<button class="b sm abGo" style="margin:0;min-height:44px;padding:4px 16px;background:#7ec8e3!important;color:#08101a!important;border:0!important;border-radius:18px;display:inline-flex;flex-direction:column;align-items:flex-start;gap:2px" onclick="nmAbRoll()">'+(nmAdOn()?'<span class="nmAdTag" style="margin:0">'+T('オートダイス')+'</span>':'')+'<span style="font-size:14px">'+T('不意打ちのdrを振る')+'</span><small style="font-size:10.5px;color:#173040">'+T('入れた側はその目で判定')+'</small></button>')+'</div>';
