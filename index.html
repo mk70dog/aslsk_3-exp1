@@ -36614,6 +36614,7 @@ function nmFtActFill(){var el=document.getElementById('nmFtAct');if(!el)return;v
   if(nmGsBtnOn())h+='<button class="fa g" title="'+T('編成を同期(2台のiPad)')+'" onclick="event.stopPropagation();if(NM_GS.lpDone){NM_GS.lpDone=0;return;}nmGsSync()" onpointerdown="nmGsLpStart()" onpointerup="nmGsLpEnd()" onpointerleave="nmGsLpEnd()" oncontextmenu="event.preventDefault();return false;" style="-webkit-touch-callout:none;user-select:none"><b style="font-size:12px;white-space:nowrap">⇅'+T('同期')+'</b></button>'; /* v818 */
   h+=['fire','view','move'].filter(function(k){return NM_TOOL===k||nmBarLite();}).map(function(k){var t=NM_TOOL_DEF[k],on=NM_TOOL===k||(k==='move'&&(NM_MOVE||S_LOS.routeMode));return '<button class="fa g ftTool'+(on?' on':'')+'" title="'+T(on&&k==='move'&&NM_TOOL!=='move'?'移動をリセットして終了':t[0])+'" onclick="event.stopPropagation();nmToolArm(\''+k+'\')">'+t[1]+'</button>';}).join(''); /* v497 */
   if(nmBarLite())h+='<button class="fa g" title="'+T('早見表')+'" onclick="event.stopPropagation();NM_TVHQ=0;nmTvOpen(\'ref\')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 5.5C7 4 10 4.2 12 6c2-1.8 5-2 8-.5V19c-3-1.5-6-1.3-8 .5-2-1.8-5-2-8-.5z"/><path d="M12 6v13.5"/></svg></button>'
+    +'<button class="fa g" title="'+T('シナリオカード')+'" onclick="event.stopPropagation();nmScenView()"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5"/></svg></button>' /* sample(ダルマ指示「ツールバーにシナリオカードを追加」) */
     +'<button class="fa g" title="'+T('旧タブ')+'" onclick="event.stopPropagation();nmOldTabPop(this)"><b style="font-size:12px;white-space:nowrap">'+T('旧タブ')+'</b></button>'; /* v833(ダルマ指示「ツールバーに早見表、旧タブボタンを追加」) */
   h+='<span class="fsp"></span><button class="fa g" title="'+T('編成・他のタブ')+'" onclick="event.stopPropagation();nmFtMenu(this)">≡</button>';
   el.innerHTML=h;
@@ -36724,6 +36725,7 @@ var NM_TB_ITEMS=[
  {id:'atk',g:1,lb:'選択したスタックを攻撃',m:function(o){return o.indexOf("nmToolArm('atk')")>=0;}},
  {id:'move',g:1,lb:'移動',m:function(o){return o.indexOf("nmToolArm('move')")>=0;}},
  {id:'ref',g:1,lb:'早見表',m:function(o){return o.indexOf("nmTvOpen('ref')")>=0;}}, /* v837: 作り直した早見表 */
+ {id:'card',g:1,lb:'シナリオカード',m:function(o){return /nmScenView\(/.test(o);}},
  {id:'old',g:1,lb:'旧タブ',m:function(o){return /nmOldTabPop/.test(o);}},
  {id:'zout',g:2,lb:'縮小 −',m:function(o){return /nmFtZoom\(-1\)/.test(o);}},
  {id:'zin',g:2,lb:'拡大 ＋',m:function(o){return /nmFtZoom\(1\)/.test(o);}},
