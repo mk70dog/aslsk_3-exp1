@@ -28694,7 +28694,7 @@ function nmRtPerson(x,y,k,col){k=k||1;col=col||'#fff';var sw=2.6*k;
     +'<path d="M'+(x+2*k)+' '+(y-8*k)+' L'+(x+9*k)+' '+(y+3*k)+'" stroke-width="'+(1.8*k)+'"/></g>';}
 function nmRtEndSVG(sty,d,cx){var x=d.x,y=d.y,h='<g transform="rotate('+(-S_LOS.viewRot)+' '+x+' '+y+')">',C=cx?'#e0782a':'#2f7fd8';
   if(sty==='pict'){h+='<circle cx="'+x+'" cy="'+y+'" r="21" fill="'+C+'" stroke="#fff" stroke-width="3"/>'+nmRtPerson(x,y+1,1.05);}
-  else if(sty==='pin'){var P=cx?'#e0782a':'#e0483a';h+='<path d="M'+x+' '+(y+20)+' C'+(x-6)+' '+(y+8)+' '+(x-20)+' '+(y+2)+' '+(x-20)+' '+(y-11)+' A20 20 0 1 1 '+(x+20)+' '+(y-11)+' C'+(x+20)+' '+(y+2)+' '+(x+6)+' '+(y+8)+' '+x+' '+(y+20)+'Z" fill="'+P+'" stroke="#fff" stroke-width="2.5"/><circle cx="'+x+'" cy="'+(y-11)+'" r="13" fill="#fff"/>'+nmRtPerson(x,y-10,0.75,P);}
+  else if(sty==='pin'){var P=cx?'#e0782a':'#2f7fd8';h+='<path d="M'+x+' '+(y+20)+' C'+(x-6)+' '+(y+8)+' '+(x-20)+' '+(y+2)+' '+(x-20)+' '+(y-11)+' A20 20 0 1 1 '+(x+20)+' '+(y-11)+' C'+(x+20)+' '+(y+2)+' '+(x+6)+' '+(y+8)+' '+x+' '+(y+20)+'Z" fill="'+P+'" stroke="#fff" stroke-width="2.5"/><circle cx="'+x+'" cy="'+(y-11)+'" r="13" fill="#fff"/>'+nmRtPerson(x,y-10,0.75,P);}
   else if(sty==='nato'){h+='<rect x="'+(x-21)+'" y="'+(y-16)+'" width="42" height="32" rx="4" fill="'+C+'" stroke="#fff" stroke-width="2.5"/><rect x="'+(x-14)+'" y="'+(y-10)+'" width="28" height="18" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M'+(x-14)+' '+(y-10)+' L'+(x+14)+' '+(y+8)+' M'+(x+14)+' '+(y-10)+' L'+(x-14)+' '+(y+8)+'" stroke="#fff" stroke-width="2.2"/>';}
   else if(sty==='hex'){var Y=cx?'#ff9a3a':'#ffd04a',r=24,pts=[];for(var i=0;i<6;i++){var a=Math.PI/3*i;pts.push((x+r*Math.cos(a)).toFixed(1)+','+(y+r*Math.sin(a)).toFixed(1));}
     h+='<polygon points="'+pts.join(' ')+'" fill="'+Y+'40" stroke="'+Y+'" stroke-width="4"/><circle cx="'+x+'" cy="'+y+'" r="14" fill="#1a2230" stroke="'+Y+'" stroke-width="2"/>'+nmRtPerson(x,y+1,0.8,Y);}
@@ -28780,7 +28780,7 @@ function losMoveRouteOverlaySVG(dispLayout){
       // 直前のヘクスと同座標のため、マーカー画像は重ねて描かない(MPバッジと矢印のみ更新する)。
       var nmSrcR=cell.vcaChange?null:nmRouteCtrSrc();
       if(nmSrcR&&NM_MOVE&&NM_MOVE.live&&idx===rt.hexes.length-1){}else if(nmSrcR)h+=nmRouteCtrSVG(nmSrcR,d,{cx:inCX,last:idx===rt.hexes.length-1}); /* v343: VASLカウンター */
-      else if(!cell.vcaChange&&S_LOS.mfEntityType!=='vehicle'&&idx===rt.hexes.length-1&&S_LOS.nmRtEndSty){h+=nmRtEndSVG(S_LOS.nmRtEndSty,d,inCX);} /* sample(ダルマ指示「白マル部のアイコンを変更する サンプルx5」) */
+      else if(!cell.vcaChange&&S_LOS.mfEntityType!=='vehicle'&&idx===rt.hexes.length-1&&S_LOS.nmRtEndSty!=='img'){h+=nmRtEndSVG(S_LOS.nmRtEndSty||'pin',d,inCX);} /* ダルマ指示「B ピン 通常(青) CXオレンジ」: 既定はピン('img'で従来の写真) */ /* sample(ダルマ指示「白マル部のアイコンを変更する サンプルx5」) */
       else if(!cell.vcaChange){
       h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
       h+='<image href="data:image/png;base64,'+routeImg+'" x="'+(d.x-riw/2)+'" y="'+(d.y-rih/2)+'" width="'+riw+'" height="'+rih+'" preserveAspectRatio="xMidYMid meet"/>';
