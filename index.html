@@ -46249,20 +46249,14 @@ function REF_PAGE(){
   var h='';
   h+='<div class="card" style="padding-bottom:8px"><div class="sh"><div style="flex:1;min-width:0;align-self:stretch;min-height:28px;overflow:hidden;position:relative;background:#000;border:1px solid #404040;border-radius:3px">'+textMarqueeHTML(scenSummaryMarqueeText(),'blu')+'</div></div>';
   // v11.319(Kato指示「IFT/TEM/CCT/損耗等/GUN/LATW/捕捉/AFV 1列目4ボタン・2列目3ボタンに変更」): 従来は3列グリッド(3+3+1)。1段目4個・2段目3個の2段構成に変更
-  h+='<div class="btns" style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">';
-  h+='<button class="b sm xs'+(S.refSub==="ift"?" on":"")+'" onclick="RefSub(\'ift\')">IFT</button>';
-  h+='<button class="b sm xs'+(S.refSub==="tem"?" on":"")+'" onclick="RefSub(\'tem\')">TEM</button>';
-  h+='<button class="b sm xs'+(S.refSub==="cct"?" on":"")+'" onclick="RefSub(\'cct\')">CCT</button>';
-  h+='<button class="b sm xs'+(S.refSub==="smc"?" on":"")+'" onclick="RefSub(\'smc\')">'+T('損耗等')+'</button>';
-  h+='</div>';
-  h+='<div class="btns" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:4px">';
-  h+='<button class="b sm xs'+(S.refSub==="gun"?" on":"")+'" onclick="RefSub(\'gun\')">GUN/LATW</button>';
-  h+='<button class="b sm xs'+(S.refSub==="acq"?" on":"")+'" onclick="RefSub(\'acq\')">'+T('捕捉')+'</button>';
-  h+='<button class="b sm xs'+(S.refSub==="afv"?" on":"")+'" onclick="RefSub(\'afv\')">AFV</button>'; // v11.262: SK3車両チャート
-  h+='</div></div>';
+  /* v853(ダルマ指示「損耗等を兵士に」「上段 IFT TEM CCT＋捕捉 / 下段 兵士 砲 車両」): 2段×3ボタン。CCTと捕捉は1つのボタン(続けて表示) */
+  if(S.refSub==="acq")S.refSub="cct";
+  var RB=function(k,l){return '<button class="b sm xs'+(S.refSub===k?" on":"")+'" onclick="RefSub(\''+k+'\')">'+l+'</button>';};
+  h+='<div class="btns" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px">'+RB('ift','IFT')+RB('tem','TEM')+RB('cct','CCT＋'+T('捕捉'))+'</div>';
+  h+='<div class="btns" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:4px">'+RB('smc',T('兵士'))+RB('gun',T('砲'))+RB('afv',T('車両'))+'</div></div>';
   if(S.refSub==="ift")h+=REF_IFT_CARD();
   else if(S.refSub==="tem")h+=REF_TEM_CARD();
-  else if(S.refSub==="cct")h+=REF_CCT_CARD();
+  else if(S.refSub==="cct")h+=REF_CCT_CARD()+REF_ACQ_CARD();
   else if(S.refSub==="smc")h+=REF_SMC_CARD();
   else if(S.refSub==="gun")h+=REF_GUN_CARD();
   else if(S.refSub==="acq")h+=REF_ACQ_CARD();
