@@ -37696,6 +37696,31 @@ function nmVsBogDie(n,k,v){var B=NM_BG;if(!B)return;B[k]=v;if(B.da&&B.db){var eh
       x.t='<span style="font-size:12px">'+T('修正')+'</span>';x.btns=[[(B.nt?'✓':'')+T('全装軌でない+1'),"NM_BG.nt=!NM_BG.nt;NM_RM_SUB='bog';btRmReopen("+n+")"],[(B.elev?'✓':'')+T('高度を上げる+1'),"NM_BG.elev=!NM_BG.elev;NM_RM_SUB='bog';btRmReopen("+n+")"]];
       it.splice(i+1,0,{ic:'info',t:'<span style="font-size:12px;color:#9aa6b4">'+T('全装軌でない=装甲車・ハーフトラックなど(装甲車は自動)　高度を上げる=丘の稜線を越えて登って入った(移動のルートから自動)')+'</span>'});break;}}
   for(var j=0;j<it.length;j++){if(it[j]&&it[j].t==='DRを振る'){it.splice(j+1,0,{row:1,cmp:1,ic:'',t:'<span style="color:#ff6060">'+T('赤')+'</span>',btns:[1,2,3,4,5,6].map(function(v){return [(B.da===v?'✓':'')+v,"nmVsBogDie("+n+",'da',"+v+")"];})},{row:1,cmp:1,ic:'',t:T('白'),btns:[1,2,3,4,5,6].map(function(v){return [(B.db===v?'✓':'')+v,"nmVsBogDie("+n+",'db',"+v+")"];})});break;}}}catch(e){console.log('bog items',e);}return it;};})();
+/* v857 sample(ダルマ指示「ボグ判定にボグ回復を追加」): ボグ判定のパネルに「ボグ判定(入った時) / ボグ解消(回復)」の切り替え。
+   解消(7.6): 移動フェイズの始め・準備射撃で撃っていない車両。赤dr(Mired+1) 1-4=解消(始動MP=赤×白、全装軌でない×2。MPが足りなくても解消)、5=Mired、6以上=走行不能 */
+function nmBgMode(n,m){var B=NM_BG;if(!B)return;B.un=m;B.ur=0;B.uw=0;B.ures=null;if(m&&B.mired==null){try{var eh=nmVsEh(n,B.sd),st=eh&&nmStOf(eh);B.mired=!!(st&&st.mired);}catch(e){B.mired=false;}}NM_RM_SUB='bog';btRmReopen(n);}
+function nmBgUnDie(n,k,v){var B=NM_BG;if(!B)return;B[k]=(B[k]===v?0:v);B.ures=null;if(B.ur&&B.uw){nmBgUnRoll(n);return;}NM_RM_SUB='bog';btRmReopen(n);}
+function nmBgUnRoll(n){var B=NM_BG;if(!B)return;var r=B.ur||1+Math.floor(Math.random()*6),w=B.uw||1+Math.floor(Math.random()*6),auto=!(B.ur&&B.uw),f=r+(B.mired?1:0),mp=r*w*(B.nt?2:1),R;
+  var dt=(auto?T('オートダイス')+' ':'')+T('赤')+r+(B.mired?'+1':'')+'='+f+'　'+T('白')+w;
+  if(f<=4)R={c:'#3ca878',t:T('ボグ解消'),d:T('始動に')+' '+r+'×'+w+(B.nt?'×2':'')+'='+mp+'MP。'+T('残りのMPで普通に移動できる(MPが足りなくても解消し、そのヘクスでMotion)'),bd:T('盤面: ボグのカウンターを外す')};
+  else if(f===5)R={c:'#ffb040',t:'Mired',d:T('次の解消から赤のdrに+1'),bd:T('盤面: ボグのカウンターを裏(Mired)にする')};
+  else R={c:'#ff6060',t:T('走行不能'),d:T('この車両はもう動けない'),bd:T('盤面: 走行不能(Immobilized)にする')};
+  R.dt=dt;B.ures=R;B.ur=0;B.uw=0;
+  if(nmModeNow()!=='judge'){try{var eh=nmVsEh(n,B.sd);if(eh){var st=nmStOf(eh);nmBkSnap('ボグ解消');if(f<=4){st.bog=0;st.mired=0;}else if(f===5){st.mired=1;}else{st.bog=0;st.imm=1;}}}catch(e){}}
+  NM_RM_SUB='bog';btRmReopen(n);}
+(function(){var oI=nmRmBogItems;nmRmBogItems=function(n){var it=oI.apply(this,arguments);try{var B=NM_BG;if(!B)return it;
+  var tg={row:1,ic:'',t:'<span style="font-size:12px">'+T('判定')+'</span>',btns:[[(!B.un?'✓':'')+T('ボグ判定(入った時)'),"nmBgMode("+n+",0)"],[(B.un?'✓':'')+T('ボグ解消(回復)'),"nmBgMode("+n+",1)"]]};
+  var bi=-1;for(var i=0;i<it.length;i++){if(it[i]&&it[i].sep){bi=i;break;}}
+  if(!B.un){it.splice(bi+1,0,tg);return it;}
+  var eh=nmVsEh(n,B.sd),v=eh&&nmAfv(eh.veh),U=[];for(var k=0;k<=bi;k++)U.push(it[k]);U.push(tg);
+  U.push({ic:'move',t:T('ボグ解消')+': '+(v?nmAfvName(v):T('車両'))+'　'+T('赤')+'dr'+(B.mired?'+1':''),sub:T('移動フェイズの始めに。準備射撃フェイズで撃った車両はできない')});
+  U.push({row:1,ic:'',t:'<span style="font-size:12px">'+T('修正')+'</span>',btns:[[(B.mired?'✓':'')+'Mired +1',"NM_BG.mired=!NM_BG.mired;NM_BG.ures=null;NM_RM_SUB='bog';btRmReopen("+n+")"],[(B.nt?'✓':'')+T('全装軌でない(始動MP×2)'),"NM_BG.nt=!NM_BG.nt;NM_BG.ures=null;NM_RM_SUB='bog';btRmReopen("+n+")"]]});
+  U.push({ic:'info',t:'<span style="font-size:12px;color:#9aa6b4">'+T('赤 1〜4=解消(始動MP=赤×白)　5=Mired　6以上=走行不能')+'</span>'});
+  U.push({ic:'fire',t:'DRを振る',f:"nmBgUnRoll("+n+")"});
+  U.push({row:1,cmp:1,ic:'',t:'<span style="color:#ff6060">'+T('赤')+'</span>',btns:[1,2,3,4,5,6].map(function(x){return [(B.ur===x?'✓':'')+x,"nmBgUnDie("+n+",'ur',"+x+")"];})});
+  U.push({row:1,cmp:1,ic:'',t:T('白'),btns:[1,2,3,4,5,6].map(function(x){return [(B.uw===x?'✓':'')+x,"nmBgUnDie("+n+",'uw',"+x+")"];})});
+  var R=B.ures;if(R)U.push({ic:'info',t:'<div style="font-size:12px;color:#9aa6b4">'+R.dt+'</div><div style="font-size:17px;font-weight:700;color:'+R.c+'">→ '+R.t+'</div><div style="font-size:12px;color:#d8e0e8">'+R.d+'</div><div style="font-size:12px;color:#7ec8e3">'+R.bd+'</div>'});
+  return U;}catch(e){console.log('unbog items',e);}return it;};})();
 /* v580(ダルマ報告「敵軍車両のヘクスへ移動できてしまう」): 歩兵は移動フェイズに敵のいるヘクスへ入れない(入れるのは前進フェイズ。AFVのヘクスへはPAATC 3.7)。
    入ろうとしたら1ヘクス戻して知らせる。前進フェイズは入れる(AFVがいればPAATCを知らせる)。車両は敵のヘクスに入れるが、敵AFVのヘクスで止まる時は注意を出す(3.3.2) */
 (function(){var oY=nmMvSync;nmMvSync=function(){var M=NM_MOVE;var r=oY.apply(this,arguments);try{if(M&&NM_MOVE===M&&M.eh){var rh=(S_LOS.route&&S_LOS.route.hexes)||[],L=rh[rh.length-1],P=rh[rh.length-2];
