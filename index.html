@@ -37736,7 +37736,7 @@ function nmSdPop(){var o=document.getElementById('nmSdPop');if(o){o.remove();ret
   var scan=function(root){if(!root||root.nodeType!==1)return;
     var L=root.matches&&root.matches('.rmTx,button')?[root]:[];root.querySelectorAll&&root.querySelectorAll('.rmTx,button').forEach(function(e){L.push(e);});
     L.forEach(function(e){if(e.querySelector('.nmAdTag'))return;var t='';if(e.classList.contains('rmTx')){for(var c=e.firstChild;c;c=c.nextSibling){if(c.nodeType===1&&c.classList&&c.classList.contains('rmSub'))break;t+=c.textContent;}}else t=e.textContent;
-      var oc=(e.getAttribute&&e.getAttribute('onclick'))||'';if((RE.test(t.trim())&&!/入力/.test(t))||/nmRaqRoll\(0\)/.test(oc))tag(e);});
+      var oc=(e.getAttribute&&e.getAttribute('onclick'))||'';if((RE.test(t.trim())&&!/入力/.test(t))||/nmRaqRoll\(0\)|nmQkRoll\(\)/.test(oc))tag(e);});
     nmAdGoSync();};
   /* v850 sample: スポット判定の「判定する」: オートダイスONで、いま出す段のダイス(赤白)を入れていない時だけ札 */
   window.nmAdGoSync=function(){try{var go=document.querySelector('#nmIj .ijGo');if(!go)return;var ds=[].slice.call(document.querySelectorAll('#nmIj .ijB[onclick*="nmIjNvDie("]'));var keys=[];ds.forEach(function(b){var m=(b.getAttribute('onclick')||'').match(/nmIjNvDie\('([^']+)'/);if(m&&keys.indexOf(m[1])<0)keys.push(m[1]);});
