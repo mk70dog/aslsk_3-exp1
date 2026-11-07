@@ -37730,13 +37730,19 @@ function nmSdPop(){var o=document.getElementById('nmSdPop');if(o){o.remove();ret
   if(pick){nmSdAssign(pick[0],pick[1],true);btToast(T('自軍・敵軍を自動で設定')+': '+nmNatLbl(pick[0])+'='+(pick[1]==='f'?T('自軍'):T('敵軍'))+'　'+T('(ステータスバーの自軍・敵軍を長押しで変更)'));}}}catch(e){}return r;};})();
 /* v849(ダルマ指示「オートダイスロールのボタンはオートダイスと表記を加える」): 「〜を振る」(アプリがダイスを振る)ボタン・項目に「オートダイス」の札を付ける */
 (function(){if(typeof document==='undefined'||window.__nmAd)return;window.__nmAd=1;
-  var st=document.createElement('style');st.textContent='.nmAdTag{display:inline-block;align-self:flex-start;flex:0 0 auto;width:auto;margin-bottom:3px!important;font-size:10.5px;font-weight:800;line-height:1;padding:3px 6px;margin:0 6px 0 0;border-radius:5px;background:#1d3b52;color:#bfe6ff;border:1px solid #4d86ad;vertical-align:middle;letter-spacing:.3px;white-space:nowrap}';document.head.appendChild(st);
-  var RE=/を振る|^\s*(🎲\s*)?振る\s*$/;
+  var st=document.createElement('style');st.textContent='html.nm-adoff .nmAdTag{display:none!important}.nmAdTag{display:inline-block;align-self:flex-start;flex:0 0 auto;width:auto;margin-bottom:3px!important;font-size:10.5px;font-weight:800;line-height:1;padding:3px 6px;margin:0 6px 0 0;border-radius:5px;background:#1d3b52;color:#bfe6ff;border:1px solid #4d86ad;vertical-align:middle;letter-spacing:.3px;white-space:nowrap}';document.head.appendChild(st);
+  var RE=/振る|振り直す/;
   var tag=function(el){if(!el||el.querySelector('.nmAdTag')||el.closest('.nmAdTag'))return;var sp=document.createElement('span');sp.className='nmAdTag';sp.textContent=T('オートダイス');el.insertBefore(sp,el.firstChild);};
   var scan=function(root){if(!root||root.nodeType!==1)return;
     var L=root.matches&&root.matches('.rmTx,button')?[root]:[];root.querySelectorAll&&root.querySelectorAll('.rmTx,button').forEach(function(e){L.push(e);});
     L.forEach(function(e){if(e.querySelector('.nmAdTag'))return;var t='';if(e.classList.contains('rmTx')){for(var c=e.firstChild;c;c=c.nextSibling){if(c.nodeType===1&&c.classList&&c.classList.contains('rmSub'))break;t+=c.textContent;}}else t=e.textContent;
-      if(RE.test(t.trim())&&!/振り直|やり直/.test(t))tag(e);});};
+      var oc=(e.getAttribute&&e.getAttribute('onclick'))||'';if((RE.test(t.trim())&&!/入力/.test(t))||/nmRaqRoll\(0\)|nmQkRoll\(\)/.test(oc))tag(e);});
+    nmAdGoSync();};
+  /* v850 sample: スポット判定の「判定する」: オートダイスONで、いま出す段のダイス(赤白)を入れていない時だけ札 */
+  window.nmAdGoSync=function(){try{var go=document.querySelector('#nmIj .ijGo');if(!go)return;var ds=[].slice.call(document.querySelectorAll('#nmIj .ijB[onclick*="nmIjNvDie("]'));var keys=[];ds.forEach(function(b){var m=(b.getAttribute('onclick')||'').match(/nmIjNvDie\('([^']+)'/);if(m&&keys.indexOf(m[1])<0)keys.push(m[1]);});
+    var last=keys.slice(-2),sel=ds.some(function(b){var m=(b.getAttribute('onclick')||'').match(/nmIjNvDie\('([^']+)'/);return m&&last.indexOf(m[1])>=0&&b.classList.contains('on');});
+    var has=go.querySelector('.nmAdTag'),want=nmAdOn()&&!go.disabled&&!sel&&!/撃破済み/.test(go.textContent);if(want&&!has)tag(go);else if(!want&&has)has.remove();}catch(e){}};
+  var syncCls=function(){document.documentElement.classList.toggle('nm-adoff',!nmAdOn());};setInterval(syncCls,1000);
   var mo=new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(function(n){scan(n);});});});
   var go=function(){mo.observe(document.body,{childList:true,subtree:true});scan(document.body);};if(document.body)go();else document.addEventListener('DOMContentLoaded',go);})();
 /* ===== v518(ダルマ指示): 射撃パネル(主砲・砲/車載機銃/軽対戦車兵器/歩兵)に
@@ -38489,7 +38495,7 @@ function nmIjNvDraw(){var J=NM_IJ,V=NM_VF;if(!J||!V)return;var hA=document.getEl
     h+='</div>';}
   if(!(V.res2&&V.res2.ntc)){V.n1=0;V.n2=0;}
   hR.innerHTML=h+'</div>';
-  setTimeout(nmIjUndoSync,0);var go=document.querySelector('#nmIj .ijGo');if(go){var kl=R&&nmIjNvKilled(),ro=R&&(R.notes||[]).some(function(x){return /^ROF維持/.test(x);});var O2=V.res2,stp=R&&R.hit&&!R.ife&&!R.smk&&!O2?(B.mode==='VTT'?'TK判定する':'効果判定(IFT)する'):(R&&O2&&O2.ntc&&!V.ntc&&!kl?'NTCを判定する':'');go.innerHTML=NM_MI.dice+' '+T(!R?'判定する':stp?stp:kl?'目標は撃破済み':ro?'ROFでもう一度攻撃する':'もう一度判定する');go.style.opacity=kl?'.5':'';}}
+  setTimeout(nmIjUndoSync,0);var go=document.querySelector('#nmIj .ijGo');if(go){var kl=R&&nmIjNvKilled(),ro=R&&(R.notes||[]).some(function(x){return /^ROF維持/.test(x);});var O2=V.res2,stp=R&&R.hit&&!R.ife&&!R.smk&&!O2?(B.mode==='VTT'?'TK判定する':'効果判定(IFT)する'):(R&&O2&&O2.ntc&&!V.ntc&&!kl?'NTCを判定する':'');setTimeout(function(){try{nmAdGoSync();}catch(e){}},0);go.innerHTML=NM_MI.dice+' '+T(!R?'判定する':stp?stp:kl?'目標は撃破済み':ro?'ROFでもう一度攻撃する':'もう一度判定する');go.style.opacity=kl?'.5':'';}}
 function nmIjNvKilled(){var V=NM_VF;return !!(V&&(V.wrecked||(V.res2&&/^撃破/.test(V.res2.t||''))));}
 function nmIjNvNtc(){var V=NM_VF;if(!V)return;var v=(V.n1&&V.n2)?V.n1+V.n2:0;nmVfNtc(V.from,v);}
 /* v692(ダルマ指示「元の射撃タブ・装甲戦闘車両タブと徹底的に見比べて修正」): 元の主砲パネル(nmRmVFireItems)にあった注意・移動射撃のMPなどをA→B判定パネルにも出す */
