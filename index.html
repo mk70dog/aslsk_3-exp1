@@ -36248,6 +36248,13 @@ function nmRmMhItems(n){var M=NM_MH;if(!M)return nmRMenuItems(n);var eh=nmUnitAt
     it.push({ic:'move',t:N.nm+'　'+btTerrJP(N.terr)+'　DRM'+(drm>=0?'+':'')+drm,sub:(c.bld?'建物(大型の砲は不可)　':'')+'DR'+(need-1)+'以下で成功',f:"nmMhDo("+n+","+b+")"});});
   return it;}
 /* sample(ダルマ指示「(人力移動) マップで指示できるようにする」): 地図で、となりのヘクスに必要なDR(成功の見込みで色分け)を出し、タップでそのヘクスへDRを振る */
+/* 色のサンプル(ダルマ指示「色のサンプルX5」): a=信号(緑黄橙赤) b=青の濃淡 c=枠だけ d=アプリの色(水色・金・橙・赤) e=水色の枠で数字の色だけ */
+var NM_MH_PALK='a',NM_MH_PAL={
+ a:{c:['#40ff90','#ffd04a','#ff9a3a','#ff5050']},
+ b:{c:['#7ec8ff','#4a9be8','#2e66b8','#8a8f99'],f:['#7ec8ff55','#4a9be844','#2e66b833','#55555533']},
+ c:{c:['#40ff90','#ffd04a','#ff9a3a','#ff5050'],f:['none','none','none','none'],sw:4},
+ d:{c:['#7ec8e3','#ffd070','#ff9a3a','#ff6060'],f:['#7ec8e355','#ffd07044','#ff9a3a44','#ff606044']},
+ e:{c:['#40ff90','#ffd04a','#ff9a3a','#ff5050'],f:['#7ec8e322','#7ec8e322','#7ec8e322','#7ec8e322'],st:['#7ec8e3','#7ec8e3','#7ec8e3','#7ec8e3']}};
 function nmMhList(){var M=NM_MH;if(!M)return [];var eh=nmUnitAt(nmHexOfNode(M.n),M.sd),g=eh&&nmGun(eh.gun);if(!g)return [];var out=[];
   BTG.nodes[M.n].nb.forEach(function(b){var c=nmMhCost(M.n,b);if(!c)return;var drm=c.mf+c.tem+(c.road?-2:0)+(M.mmc?-1:0)+Math.max(-4,-2*M.xs-M.xh),need=(g.m||0)-drm-1;out.push({tn:b,drm:drm,need:need,bld:c.bld});});return out;}
 function nmMhPick(n){var L=nmMhList();if(!L.length){btToast(T('動かせるヘクスがありません'));return;}var el=document.getElementById('btRm');if(el)el.style.visibility='hidden';
@@ -36258,8 +36265,8 @@ function nmMhPickEnd(tn){var P=NM_PICK;if(!P)return;NM_PICK=null;nmPickBanner(fa
   var oE=nmPickEnd;nmPickEnd=function(tn){var P=NM_PICK;if(P&&P.kind==='mh')return nmMhPickEnd(tn);return oE.apply(this,arguments);};
   var oB=nmPickBanner;nmPickBanner=function(on){var r=oB.apply(this,arguments);try{var P=NM_PICK,b=document.getElementById('nmPickBn');if(on&&P&&P.kind==='mh'&&b)b.firstChild.textContent=T('砲を動かすヘクスをタップ(DRを振ります)');}catch(e){}return r;};
   var oO=nmPickOverlaySVG;nmPickOverlaySVG=function(dl){var P=NM_PICK;if(!P||P.kind!=='mh')return oO.apply(this,arguments);var h='';P.list.forEach(function(x){var H=nmHexOfNode(x.tn);if(!H)return;var g=losColRowToGlobalCanon(H.boardId,H.col,H.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);
-    var col=x.need>=6?'#40ff90':x.need>=4?'#ffd04a':x.need>=2?'#ff9a3a':'#ff5050';
-    h+='<polygon points="'+losHexPolygonPoints(d.x,d.y,losBoardRotById(H.boardId))+'" fill="'+col+'33" stroke="'+col+'" stroke-width="3"/>';
+    var k=x.need>=6?0:x.need>=4?1:x.need>=2?2:3,PL=NM_MH_PAL[NM_MH_PALK]||NM_MH_PAL.a,col=PL.c[k],fil=PL.f?PL.f[k]:col+'33',sw=PL.sw||3;
+    h+='<polygon points="'+losHexPolygonPoints(d.x,d.y,losBoardRotById(H.boardId))+'" fill="'+fil+'" stroke="'+(PL.st?PL.st[k]:col)+'" stroke-width="'+sw+'"/>';
     var t1='DRM'+(x.drm>=0?'+':'')+x.drm,t2=x.need>=2?(x.need>=12?T('自動'):x.need+T('以下')):T('不可');
     h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><rect x="'+(d.x-30)+'" y="'+(d.y-19)+'" width="60" height="38" rx="7" fill="#0c1118e8" stroke="'+col+'" stroke-width="2"/><text x="'+d.x+'" y="'+(d.y-4)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#cfe0ee" font-family="AppFont,AppJP,monospace">'+t1+'</text><text x="'+d.x+'" y="'+(d.y+13)+'" text-anchor="middle" font-size="14" font-weight="900" fill="'+col+'" font-family="AppFont,AppJP,monospace">'+t2+'</text></g>';});
     return h;};})();
