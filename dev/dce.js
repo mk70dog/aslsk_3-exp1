@@ -7,6 +7,6 @@ for(const [lb,n0] of [['8-3-8[E]',131],['4-4-7[2]',134]]){
 console.log(lb,await p.evaluate(([lb,n])=>{var H=nmHexOfNode(n);var slot=nmGeFreeSlot();nmGeAddCore(slot,'GER','mmc',lb);nmGeSync(slot);nmSuDcAdd(slot,nmGeList(slot).items[0].pid);nmSideList('e').push({boardId:H.boardId,col:H.col,row:H.row,grp:slot,st:{}});Draw();nmDcOpen(n,'e');return 'elite='+NM_DC.elite+' '+(document.getElementById('nmDcp').innerText.match(/自動[^\n]*/)||[''])[0];},[lb,n0]));}
 await p.screenshot({path:P+'_1.png'});
 console.log(await p.evaluate(()=>{var D=NM_DC;nmDcpSet('tem',2);nmDcpPlace();var h=document.getElementById('nmDcp').innerText.replace(/\s+/g,' ');return h.slice(0,200);}));
-console.log(await p.evaluate(()=>{var b=[...document.querySelectorAll('#nmDcp button')].find(x=>x.textContent.trim()==='7'&&/nmDsHPick/.test(x.getAttribute('onclick')||''));if(!b)return 'no dice btn';b.click();return 'res after pick='+JSON.stringify(NM_DC.res)+' btn='+document.querySelector('#nmDcp [data-dsk="dcp"]').textContent;}));
+console.log(await p.evaluate(()=>{var b=[...document.querySelectorAll('#nmDcp button')].find(x=>/^7/.test(x.textContent.trim())&&/nmDsHPick/.test(x.getAttribute('onclick')||''));if(!b)return 'no dice btn';b.click();return 'res after pick='+JSON.stringify(NM_DC.res)+' btn='+document.querySelector('#nmDcp [data-dsk="dcp"]').textContent;}));
 await p.screenshot({path:P+'_2.png'});
 console.log(JSON.stringify(e));await b.close();})();
