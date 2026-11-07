@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 - 最終更新: 2026-11-08 07:35 (main=v888)
-- 状態: 返事待ちなし(次: 砲撃・車両の「相手のマーカーがありません」を軽対戦車兵器と同じに → サンプル作成中)。
+- 状態: **返事待ち 1件**
+  1. sample-vftgt(ダルマ「砲撃 車両 時も対戦車兵器と同じようにする」: nmRmVFireItems に「地図で撃てるヘクスを選ぶ」(nmVfPick、NM_PICK kind 'vfh'、LOSが通る24ヘクス以内を緑)・「シナリオの相手から選ぶ」(車両+👤歩兵 MMC、仮のマーカー vfTmp/ccTmp、NM_CCS.open)・「@ヘクス に何がいますか？」(V.pend, nmVfPendSet))。
 - v888 済: 出目は選ぶだけ・「🎲 判定する」で判定。メニュー行は nmDsTag(dr 1〜6 で即実行していた行を選ぶ形に、NM_DST/NM_DSV、nmDsGo)、窓は nmDsHPick/nmDsTake(data-dsk)。個別: ボグ(nmVsBogGo)・ボグ解消・煙幕DR・乗員MC(C.go)・不意打ち(A.done)・人力移動(M.a/M.b)。テスト dev/dsf.js。dev/bog.js は以前から人力移動の所で落ちる(テスト側が古い)。
 - v887 済: マルチ判定で地図に該当カウンターがない時(nmHqPickA)、トーストの代わりに nmNuOpen。シナリオの砲・車両・歩兵を選ぶ→📍地図に置く/🎲置かずに判定(ijTmp+ccTmp、NM_CCS.open で閉じたら消える)→ヘックスをタップ(nmNuTap)→nmHqSetA で判定へ。📋配置画面を開く=nmSuOpen。置いた後の向きの画面はまだ出さない(必要なら追加)。
 - v886 済: 📌 チップを結果の画像(#nmResImg)の下にも出す(nmBdImg、画像は6秒残る .bdHold、チップ以外のタップで閉じる)。パネルでは結果の行(…= N 命中)の下(NM_BD_POS='line'、nmBdLine。見つからなければ上)。
