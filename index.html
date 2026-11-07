@@ -37569,6 +37569,11 @@ function nmHdMarkSVG(cx,cy,v){var R=10,c='#ff2bd6';var ln=function(x1,y1,x2,y2,w
 var NM_LOSOFF_IC='<span style="display:inline-flex;align-items:center;gap:2px;font-weight:800;font-size:12.5px;letter-spacing:.2px;white-space:nowrap">A→B<span style="font-size:13px">✕</span></span>' /* v803(ダルマ指示): ステータスバーのLOS✕もA→B✕に */;
 var NM_LOSOFF_STY='abc';function nmLosOffSty(k){return NM_LOSOFF_STY.indexOf(k)>=0;}
 function nmLosOff(){if(!S_LOS.pxA&&!S_LOS.pxB)return;try{nmBkSnap('LOS解除');}catch(e){}try{losSaveMapScroll();}catch(e){}S_LOS.pxA=null;S_LOS.pxB=null;S_LOS.result=null;NM_AB_ARM=false;try{var o=document.getElementById('nmHdPop');if(o)o.remove();}catch(e){}try{saveState();}catch(e){}Draw();try{nmFtActFill();}catch(e){}try{nmFtBotFill();}catch(e){}}
+/* sample(ダルマ指示「AB選択の状態のままマルチ判定など別の選択時にAB選択をリセットする」→「どちらも」): A→Bでタップ待ちの途中でも、A・Bを置いた後でも、
+   マルチ判定・早見表・シナリオカード・編成・旧タブ・ツールバーの他の操作を始めたら A・B と線を消し、タップ待ちもやめる(スポット判定を開いている時は除く) */
+function nmAbReset(){try{if(document.getElementById('nmIj'))return;var on=!!(S_LOS.pxA||S_LOS.pxB);if(!on&&!NM_AB_ARM)return;NM_AB_ARM=false;if(on)nmLosOff();else{try{nmFtActFill();}catch(e){}}}catch(e){console.log('ab reset',e);}}
+(function(){var go=function(){['nmHqOpen','nmTvOpen','nmScenView','nmSuOpen','nmRmTabGo','nmToolArm'].forEach(function(f){var o=window[f];if(typeof o!=='function'||o.__abr)return;var w=function(){try{nmAbReset();}catch(e){}return o.apply(this,arguments);};w.__abr=1;window[f]=w;});};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(go,0);});else setTimeout(go,0);})();
 /* v572(ダルマ報告「選択したスタックを攻撃が使用できない」): ステータスバーにマーカーを選んでいる時は、ボタンを押したらすぐそのスタックで実行(攻撃される側の一覧/射撃パネル)。選んでいない時は今までどおり光ってヘクスをタップ */
 (function(){var _a=nmToolArm;nmToolArm=function(k){var sel=null;try{sel=null;/* v655: 押すとまず光って、次にヘクスをタップ(選択中のマーカーがあっても即実行しない) */}catch(e){}
   if(!sel)return _a.apply(this,arguments);var n=nmNodeOfEh(sel);if(n==null||n<0)return _a.apply(this,arguments);
