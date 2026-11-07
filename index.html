@@ -38036,7 +38036,10 @@ function nmHqBackSty(b){var base='position:fixed;left:12px;bottom:14px;z-index:9
   setInterval(function(){try{document.documentElement.classList.toggle('nm-ot',!!document.getElementById('nmHqBack'));}catch(e){}},400);})();
 setInterval(function(){try{document.documentElement.classList.toggle('nm-judge',nmModeNow()==='judge');document.documentElement.classList.toggle('nm-lite',nmBarLite());}catch(e){}try{var b=document.getElementById('nmHqBack'),on=nmBarLite()&&S.tab!=='los'&&!!(S.scen&&S.scen.sel);
   if(!on){if(b)b.remove();return;}if(b)return;b=document.createElement('button');b.id='nmHqBack';b.className='b';nmHqBackSty(b);
-  b.onclick=function(){NAVTAB('los');setTimeout(function(){try{nmHqOpen();}catch(e){}},700);};document.body.appendChild(b);}catch(e){}},700);
+  b.onclick=function(){var hq=!!window.NM_OT_HQ;window.NM_OT_HQ=false;NAVTAB('los');if(hq)setTimeout(function(){try{nmHqOpen();}catch(e){}},700);};document.body.appendChild(b);}catch(e){}},700);
+/* v857(ダルマ報告「旧タブから戻るとマルチ判定ボードが起動している」): 戻るでボードを開くのは、ボードを開いたまま旧タブへ移った時だけ。ツールバーの旧タブから入った時は地図に戻るだけ */
+var NM_OT_HQ=false;
+(function(){if(typeof window==='undefined'||window.__nmOtHq)return;window.__nmOtHq=1;var g=function(){var orig=window.NAVTAB;if(typeof orig!=='function'){setTimeout(g,300);return;}window.NAVTAB=function(t){try{if(t!=='los'&&S&&S.tab==='los')window.NM_OT_HQ=!!document.getElementById('nmHq');}catch(e){}return orig.apply(this,arguments);};};g();})();
 /* v641(ダルマ指示「HQの中で完結 射撃から」): A(撃つ側)・B(目標)から、地図の射撃パネルを直接開く。タブの画面は使わない */
 function nmHqFire(){nmHqClose();if(!btGraphReady()){btToast('マップを準備しています…');try{btEnsureGraph().then(nmHqFire);}catch(e){}return;}
   var an=S_LOS.pxA?nmNodeOfPx(S_LOS.pxA):null,bn=S_LOS.pxB?nmNodeOfPx(S_LOS.pxB):null;
