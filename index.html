@@ -36538,6 +36538,14 @@ function nmResOverlaySVG(dl){var h='',R=S_LOS.resid||{};Object.keys(R).forEach(f
   h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><rect x="'+(d.x-w/2)+'" y="'+y+'" width="'+w+'" height="15" rx="3" fill="'+NM_ST_COL['残留']+'" stroke="#d8cfae" stroke-width="1"/><text x="'+d.x+'" y="'+(y+11)+'" text-anchor="middle" font-size="10.5" font-weight="900" fill="#f2ead0" font-family="AppFont,AppJP,monospace">残留'+v+'FP</text></g>';});return h;}
 function nmMfResFp(){var f=getFireState();if(!f||!f.res||!f.res.ift)return 0;var col=f.res.ift.ci;if(col==null||col<0)return 0;var p=0;
   try{p=Math.max(0,fireHindTotal(f))+(f.cx?1:0)+Math.max(0,fireEffLdr(f));}catch(e){}return resTblFp(RES_TBL[col],p);}
+/* sample(ダルマ指示「ミニマルスキン時ボタン四角ドット非表示にする」): ミニマル・フラット(data-uith="3")の時、ボタン・パネルの四隅のリベット(点)を出さない。
+   NM_MINI_DOT: 'a'=四隅の点だけ消す / 'b'=四隅の点と細かいパンチ(地の点々)も消す */
+var NM_MINI_DOT='a';
+(function(){try{var st=document.createElement('style');var M='html:root[data-uith="3"][data-uith="3"][data-uith="3"]',A=M+'[data-minidot="a"][data-minidot="a"] ',B=M+'[data-minidot="b"][data-minidot="b"] ',IDS=':is(#nmHq,#nmTv,#btRm,#nmIj,#nmFtAct,#nmFullTabs,#nmFtBot,#nmFtMn,#nmCcSc,#nmSu,#nmHqPk,#nmCcp,#nmRaq,#nmDcp,#nmMh2,body)';
+  var css=[A+IDS+' *::before,'+A+IDS+' *::after,'+B+IDS+' *::before,'+B+IDS+' *::after{background-image:none!important}',
+    B+':is(#nmHq,#nmTv>div,#btRm .rmBox,#nmIj .ijBox,#nmFtMn,#nmFullTabs,#nmFtBot,#nmCcSc .ccBox,#nmSu>div,#nmHqPk>div)'+'{background:#1c1f27!important}',
+    B+IDS+' :is(.b,.rmB,.rmCls,.ijB,.ijX,.fa,.nb,button):not(.on):not(.nmGoC):not([style*="7ec8e3"]):not([style*="c8a032"]){background:#101216!important}'];
+  st.textContent=css.join('\n');document.head.appendChild(st);document.documentElement.setAttribute('data-minidot',NM_MINI_DOT);}catch(e){console.log('minidot',e);}})();
 function nmMfMove(n,k){var f=getFireState();if(!f)return;if(k==='none'){f.ffmo=false;f.ffnam=false;f.hazardous=false;}else{var on=!f[k];Ftog(k);}f.res=null;Draw();nmMfReopen(n);}
 function nmMfMode(n,v){FsetMode(v);nmMfReopen(n);}
 
