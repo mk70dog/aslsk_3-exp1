@@ -1,0 +1,16 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1000,height:657},deviceScaleFactor:2});const e=[];p.on('pageerror',x=>e.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(2000);
+await p.evaluate(async()=>{S.scen=S.scen||{};S.scen.sel='S24';S.nmMode='judge';S.nmScReg={};await btEnsureGraph();try{Draw();}catch(x){}await new Promise(r=>setTimeout(r,800));S.turn=S.turn||{};S.turn.phase='pfph';});
+await p.waitForTimeout(6000);const P=process.argv[2];
+const hide=()=>p.evaluate(()=>{[...document.querySelectorAll('body *')].filter(x=>x.children.length<3&&/自軍・敵軍を自動で設定/.test(x.textContent)).forEach(x=>{var t=x;while(t.parentElement&&t.parentElement!==document.body)t=t.parentElement;if(!/nmCcSc|btRm/.test(t.id))t.style.display='none';});});
+await p.evaluate(()=>{nmHqOpen();var x=[...document.querySelectorAll('#nmHq button')].filter(x=>/MC|士気/.test(x.textContent))[0];x.click();});await p.waitForTimeout(600);
+const lab=await p.evaluate(()=>{var b=[...document.querySelectorAll('#nmCcSc .nmScRegBox button')].filter(x=>/nmScRegQ/.test(x.getAttribute('onclick'))&&/＋/.test(x.textContent))[0];b.click();b=[...document.querySelectorAll('#nmCcSc .nmScRegBox button')].filter(x=>/nmScRegQ/.test(x.getAttribute('onclick'))&&/＋/.test(x.textContent))[0];b.click();return JSON.stringify(NM_SC.cs);});
+console.log('after reg+ +:',lab);await p.evaluate(()=>{var o=document.querySelector('#nmCcSc .ccBox');if(o)o.scrollTop=0;});await hide();await p.screenshot({path:P+'_1.png'});
+await p.evaluate(()=>nmScGo());await p.waitForTimeout(900);
+console.log('back item:',await p.evaluate(()=>{var it=nmRmMcpItems(NM_MCP.n);return it[0].f+' / '+it[0].sub;}));
+await hide();await p.screenshot({path:P+'_2.png'});
+await p.evaluate(()=>{nmScBack();});await p.waitForTimeout(800);
+console.log('restored:',await p.evaluate(()=>JSON.stringify({open:!!document.getElementById('nmCcSc'),cs:NM_SC&&NM_SC.cs,tmp:nmSideList('f').concat(nmSideList('e')).filter(e=>e.ccTmp).length,rm:!!document.getElementById('btRm')&&document.getElementById('btRm').style.display})));
+await hide();await p.screenshot({path:P+'_3.png'});
+console.log(JSON.stringify(e));await b.close();})();
