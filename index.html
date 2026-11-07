@@ -36546,10 +36546,10 @@ var NM_MINI_DOT='a';
     B+':is(#nmHq,#nmTv>div,#btRm .rmBox,#nmIj .ijBox,#nmFtMn,#nmFullTabs,#nmFtBot,#nmCcSc .ccBox,#nmSu>div,#nmHqPk>div)'+'{background:#1c1f27!important}',
     B+IDS+' :is(.b,.rmB,.rmCls,.ijB,.ijX,.fa,.nb,button):not(.on):not(.nmGoC):not([style*="7ec8e3"]):not([style*="c8a032"]){background:#101216!important}'];
   st.textContent=css.join('\n');document.head.appendChild(st);document.documentElement.setAttribute('data-minidot',NM_MINI_DOT);}catch(e){console.log('minidot',e);}})();
-/* sample(ダルマ指示「ネオンスキン 派手すぎる サンプルX5」): ネオン(data-uith="4")の色を落ち着かせる5案。html[data-neon] a〜e。
+/* v884(ダルマ指示「ネオンスキン 派手すぎる」→「4つともスキンに加える」): ネオン(data-uith="4")の色違い。html[data-neon] a/b/d/e。
    ネオンの規則を読み取り、マゼンタ・シアンを差し替え、光(影)を消した規則を上に重ねる */
 var NM_NEON='';
-var NM_NEON_PAL={a:{m:[196,90,168],c:[79,179,196],nm:'くすんだネオン'},b:{m:[60,200,220],c:[60,200,220],nm:'シアン一色'},c:{m:[138,107,255],c:[111,143,176],nm:'紫と鋼'},d:{m:[63,209,138],c:[47,143,122],nm:'レーダー緑'},e:{m:[255,176,32],c:[122,138,153],nm:'アンバーと灰'}};
+var NM_NEON_PAL={a:{m:[196,90,168],c:[79,179,196],nm:'くすんだネオン'},b:{m:[60,200,220],c:[60,200,220],nm:'シアン一色'},d:{m:[63,209,138],c:[47,143,122],nm:'レーダー緑'},e:{m:[255,176,32],c:[122,138,153],nm:'アンバーと灰'}};
 function nmNeonBuild(){try{var old=document.getElementById('nmNeonCss');if(old)old.remove();var rules=[];
   [].forEach.call(document.styleSheets,function(sh){var rs;try{rs=sh.cssRules;}catch(e){return;}if(!rs)return;var walk=function(L,wrap){[].forEach.call(L,function(r){if(r.cssRules&&!r.selectorText){try{walk(r.cssRules,r.conditionText?'@media '+r.conditionText:null);}catch(e){}return;}if(r.selectorText&&r.selectorText.indexOf('data-uith="4"')>=0)rules.push(wrap?wrap+'{'+r.cssText+'}':r.cssText);});};walk(rs,null);});
   var hx=function(a){return '#'+a.map(function(v){return ('0'+v.toString(16)).slice(-2);}).join('');};var out=[];Object.keys(NM_NEON_PAL).forEach(function(k){var P=NM_NEON_PAL[k],m=P.m.join(', '),c=P.c.join(', '),ml=P.m.map(function(v){return Math.round(v+(255-v)*.45);}).join(', '),cl=P.c.map(function(v){return Math.round(v+(255-v)*.75);}).join(', ');
@@ -36557,7 +36557,7 @@ function nmNeonBuild(){try{var old=document.getElementById('nmNeonCss');if(old)o
       .replace(/#ff2bd6/gi,hx(P.m)).replace(/#ff7be8/gi,hx(P.m.map(function(v){return Math.round(v+(255-v)*.45);}))).replace(/#00e5ff/gi,hx(P.c)).replace(/#d8fbff/gi,hx(P.c.map(function(v){return Math.round(v+(255-v)*.75);}))).replace(/rgb\(255, 43, 214\)/g,'rgb('+m+')').replace(/rgba\(255, 43, 214, /g,'rgba('+m+', ').replace(/rgb\(255, 123, 232\)/g,'rgb('+ml+')')
       .replace(/rgb\(0, 229, 255\)/g,'rgb('+c+')').replace(/rgba\(0, 229, 255, /g,'rgba('+c+', ').replace(/rgb\(216, 251, 255\)/g,'rgb('+cl+')')
       .replace(/(box-shadow|text-shadow):([^;]*);/g,function(all,pr,v){return /inset/.test(v)?all:pr+': none !important;';});out.push(x);});});
-  var st=document.createElement('style');st.id='nmNeonCss';st.textContent=out.join('\n');document.head.appendChild(st);document.documentElement.setAttribute('data-neon',NM_NEON);}catch(e){console.log('neon',e);}}
+  var st=document.createElement('style');st.id='nmNeonCss';st.textContent=out.join('\n');document.head.appendChild(st);}catch(e){console.log('neon',e);}}
 (function(){var tm=null,kick=function(){if(tm)clearTimeout(tm);tm=setTimeout(nmNeonBuild,300);};var go=function(){kick();try{new MutationObserver(function(ms){if(ms.some(function(m){return [].some.call(m.addedNodes,function(n){return n.tagName==='STYLE'&&n.id!=='nmNeonCss';});}))kick();}).observe(document.head,{childList:true});}catch(e){}};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();})();
 function nmMfMove(n,k){var f=getFireState();if(!f)return;if(k==='none'){f.ffmo=false;f.ffnam=false;f.hazardous=false;}else{var on=!f[k];Ftog(k);}f.res=null;Draw();nmMfReopen(n);}
 function nmMfMode(n,v){FsetMode(v);nmMfReopen(n);}
@@ -38210,9 +38210,9 @@ function appVerPop(sp){var o=document.getElementById('appVerPop');if(o)o.remove(
   document.addEventListener('contextmenu',function(e){if(e.target&&e.target.closest&&e.target.closest('.appVerSp'))e.preventDefault();},true);
   var st=document.createElement('style');st.textContent='.appVerSp{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}';document.head.appendChild(st);})();
 /* v488(ダルマ指示「画面 ポップアップ ボタンを全体的にスタイリッシュ」「≡メニューで切り替え」「モノトーン ダークを追加」): 画面スタイル。html[data-uith]で上ステータスバー・メニュー・ポップアップの見た目を変える(端末ごとに保存) */
-var UI_THEMES=[['0','標準','#c8a032','#232a36'],['3','ミニマル・フラット','#f2c14e','#2b2f38'],['4','ネオン・タクティカル','#ff2bd6','#04050a'],['5','スチールパネル','#ff9f1a','#4b5159'],['7','ダーク','#7aa2ff','#000000']];
+var UI_THEMES=[['0','標準','#c8a032','#232a36'],['3','ミニマル・フラット','#f2c14e','#2b2f38'],['4','ネオン・タクティカル','#ff2bd6','#04050a'],['4a','ネオン(くすんだ)','#c45aa8','#04050a'],['4b','ネオン(シアン)','#3cc8dc','#04050a'],['4d','ネオン(レーダー緑)','#3fd18a','#04050a'],['4e','ネオン(アンバー)','#ffb020','#04050a'],['5','スチールパネル','#ff9f1a','#4b5159'],['7','ダーク','#7aa2ff','#000000']];
 function uiThemeGet(){var k='0';try{k=localStorage.getItem('aslsk_uith')||'0';}catch(e){}k=({'9':'11','10':'12'})[k]||k; /* v491: 独軍・ソ連軍はカウンター色の版に置き換え */return UI_THEMES.some(function(x){return x[0]===k;})?k:'0';} /* v489: グラス(1)は削除→標準に戻す */
-function uiThemeApply(k){var de=document.documentElement;if(!k||k==='0')de.removeAttribute('data-uith');else de.setAttribute('data-uith',k);}
+function uiThemeApply(k){var de=document.documentElement;var nk=/^4[a-e]$/.test(k||'')?k.charAt(1):'';NM_NEON=nk;if(nk){k='4';de.setAttribute('data-neon',nk);}else de.removeAttribute('data-neon');if(!k||k==='0')de.removeAttribute('data-uith');else de.setAttribute('data-uith',k);try{if(document.getElementById('nmIj')&&typeof nmIjDraw==='function')nmIjDraw();}catch(e){}} /* v884(ダルマ指示「4つともスキンに加える」): ネオンの色違い4a/4b/4d/4e は data-uith=4 + data-neon */
 function uiThemeSet(k){try{localStorage.setItem('aslsk_uith',k);}catch(e){}uiThemeApply(k);var o=document.getElementById('uiThPop');if(o)o.remove();var t=UI_THEMES.filter(function(x){return x[0]===k;})[0];btToast(T('スキン')+': '+T(t?t[1]:'標準'));}
 function uiThemeName(){var k=uiThemeGet(),t=UI_THEMES.filter(function(x){return x[0]===k;})[0];return T(t?t[1]:'標準');}
 function uiThemePop(){var o=document.getElementById('uiThPop');if(o){o.remove();return;}var m=document.createElement('div');m.id='uiThPop';var cur=uiThemeGet();
