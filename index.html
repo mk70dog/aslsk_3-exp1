@@ -39393,6 +39393,41 @@ function nmLwPendSet(n,what){var W=NM_LW;if(!W||W.pend==null)return;var tn=W.pen
     var rows=[];nmLwFoeNats().forEach(function(k){var vs=nmIjVehs(k).filter(function(o){return o.kind==='veh';});if(vs.length)rows.push({row:1,ic:'',t:'<span style="font-size:12px">'+nmNatLbl(k)+'</span>',btns:vs.map(function(o){return [o.nm,"nmLwPick("+n+",'"+o.id+"')"];})});});
     if(rows.length||w.scw){add.push({ic:'sel',t:T('シナリオの相手から選ぶ'),sub:T('地図に置いていない時。選んだ後、地図で撃てるヘクスをタップ')});add=add.concat(rows);if(w.scw)add.push({row:1,ic:'',t:'',btns:[[T('建物内の歩兵(SCW)'),"nmLwPick("+n+",'scw')"]]});}}
   it.splice.apply(it,[at+1,0].concat(add));}catch(e){console.log('lw tgt',e);}return it;};})();
+/* sample(ダルマ指示「砲撃 車両 時も対戦車兵器と同じようにする」): 主砲・砲の射撃で相手のマーカーが無い時(ある時も)、軽対戦車兵器と同じく
+   ①「地図で撃てるヘクスを選ぶ」(LOSが通るヘクスを緑に。マーカーがあればそれ、無ければ何を撃つか選ぶ) ②「シナリオの相手から選ぶ」(車両・歩兵を選んで撃てるヘクスをタップ。判定用の仮のマーカー) */
+function nmVfFoeNats(){var V=NM_VF;if(!V)return [];var fn=null;try{fn=nmFirerNat(V.sd,V.from);}catch(e){}return nmSuNats().filter(function(k){try{return fn?nmFoeNat(fn,k):true;}catch(e){return true;}});}
+function nmVfFoeRows(n,fx){var rows=[];nmVfFoeNats().forEach(function(k){var vs=nmIjVehs(k).filter(function(o){return o.kind==='veh';}),inf=[];try{var seen={};nmSuOb(k).forEach(function(u){if(u.kind==='mmc'&&!seen[u.label]){seen[u.label]=1;inf.push(u.label);}});}catch(e){}
+  var b=vs.map(function(o){return [o.nm,fx+"("+n+",'"+o.id+"')"];}).concat(inf.map(function(l){return ['👤 '+l,fx+"("+n+",'i:"+l+"')"];}));if(b.length)rows.push({row:1,ic:'',t:'<span style="font-size:12px">'+nmNatLbl(k)+'</span>',btns:b});});return rows;}
+function nmVfWhatNm(w){if(!w)return '';if(/^i:/.test(w))return w.slice(2);var v=nmAfv(w);return v?nmAfvName(v):w;}
+function nmVfPick(n,what){var V=NM_VF;if(!V)return;var A=BTG.nodes[V.from],out=[];
+  BTG.nodes.forEach(function(N,t){if(!N||t===V.from)return;var d=btDist(V.from,t);if(d>24)return;var r=null;try{r=losCheckLOSGlobal(A.x,A.y,N.x,N.y,S_LOS.orchardSeason,S_LOS.grainSeason);}catch(e){}if(r&&r.blocked)return;out.push({tn:t,d:d,blk:false});});
+  if(!out.length){btToast(T('LOSが通るヘクスがありません'));return;}
+  var el=document.getElementById('btRm');if(el)el.style.visibility='hidden';
+  NM_PICK={kind:'vfh',n:n,xy:BT_RM_XY,list:out,hexMode:1,what:what};nmPickBanner(true);Draw();}
+function nmVfPickEnd(tn){var P=NM_PICK;if(!P)return;NM_PICK=null;nmPickBanner(false);var el=document.getElementById('btRm');if(el)el.style.visibility='';var V=NM_VF;if(!V){Draw();return;}
+  if(tn!=null){var od=V.sd==='f'?'e':'f',H=nmHexOfNode(tn),te=nmTgtAt(nmSideList(od),tn);
+    if(P.what){nmSideList(od).filter(function(e){return e.vfTmp;}).forEach(function(e){var L=nmSideList(od),j=L.indexOf(e);if(j>=0)L.splice(j,1);if(e.grp){try{nmIpDelSlot(e.grp);}catch(x){}}});
+      var e={boardId:H.boardId,col:H.col,row:H.row,st:{},ijTmp:1,ccTmp:1,vfTmp:1};
+      if(/^i:/.test(P.what)){var slot=nmGeFreeSlot();if(!slot){btToast(T('空いている編成がありません'));Draw();NM_RM_SUB='vfire';btRmReopen(P.n);return;}var nat=nmVfFoeNats().filter(function(k){return nmSuOb(k).some(function(u){return u.label===P.what.slice(2);});})[0];nmGeAddCore(slot,nat,'mmc',P.what.slice(2));try{nmGeSync(slot);}catch(x){}e.grp=slot;}else e.veh=P.what;
+      nmSideList(od).push(e);NM_CCS={open:1};NM_TGT_EH=e;V.pend=null;Draw();nmVfSet(P.n,'tgt',tn);return;}
+    if(te){NM_TGT_EH=te;V.pend=null;Draw();nmVfSet(P.n,'tgt',tn);return;}
+    V.pend=tn;}
+  Draw();NM_RM_SUB='vfire';btRmReopen(P.n);}
+function nmVfPendSet(n,what){var V=NM_VF;if(!V||V.pend==null)return;var tn=V.pend;NM_PICK={kind:'vfh',n:n,list:[{tn:tn}],what:what};nmVfPickEnd(tn);}
+(function(){var oT=nmPickTap;nmPickTap=function(cx,cy){var P=NM_PICK;if(!P||P.kind!=='vfh')return oT.apply(this,arguments);var H=losHexAtClient(cx,cy),tn=H?btNodeOf(H.boardId,H.col,H.row):null,hit=null;if(tn!=null)P.list.forEach(function(x){if(x.tn===tn)hit=x;});
+  if(!hit){btToast(T('緑のヘクス(LOSが通る)をタップしてください'));return true;}nmVfPickEnd(tn);return true;};
+  var oE=nmPickEnd;nmPickEnd=function(tn){var P=NM_PICK;if(P&&P.kind==='vfh')return nmVfPickEnd(tn);return oE.apply(this,arguments);};
+  var oB=nmPickBanner;nmPickBanner=function(on){var r=oB.apply(this,arguments);try{var P=NM_PICK,b=document.getElementById('nmPickBn');if(on&&P&&P.kind==='vfh'&&b){var nm=nmVfWhatNm(P.what);b.firstChild.textContent=(nm?nm+': ':'')+T('撃てるヘクス(緑)をタップ');}}catch(e){}return r;};
+  var oO=nmPickOverlaySVG;nmPickOverlaySVG=function(dl){var P=NM_PICK;if(!P||P.kind!=='vfh')return oO.apply(this,arguments);var h='';P.list.forEach(function(x){var H=nmHexOfNode(x.tn);if(!H)return;var g=losColRowToGlobalCanon(H.boardId,H.col,H.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);
+    h+='<polygon points="'+losHexPolygonPoints(d.x,d.y,losBoardRotById(H.boardId))+'" fill="#40ff9038" stroke="#40ff90" stroke-width="2.5"/>';});
+    try{var M0=NM_MF;NM_MF={sd:NM_VF.sd,from:NM_VF.from};var tl=nmMfTgtList();NM_MF=M0;var ok={};P.list.forEach(function(x){ok[x.tn]=1;});tl.forEach(function(x){if(!ok[x.tn])return;var H=nmHexOfNode(x.tn),g=losColRowToGlobalCanon(H.boardId,H.col,H.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="34" fill="none" stroke="#40ff90" stroke-width="5"><animate attributeName="stroke-opacity" values="1;.35;1" dur="1.2s" repeatCount="indefinite"/></circle>';});}catch(e){}
+    return h;};})();
+(function(){var oI=nmRmVFireItems;nmRmVFireItems=function(n){var it=oI.apply(this,arguments);try{var V=NM_VF;if(!V||V.tgt!=null)return it;
+  var at=-1;for(var i=0;i<it.length;i++){if(it[i]&&it[i].t==='目標を選ぶ'){at=i;break;}}if(at<0)return it;var add=[];
+  if(V.pend!=null){var N=BTG.nodes[V.pend];add.push({ic:'tgt',t:'<span style="color:#ffd070">@'+N.nm+T(' に何がいますか？')+'</span>',sub:T('相手の車両か歩兵を選ぶ')});add=add.concat(nmVfFoeRows(n,'nmVfPendSet'));add.push({ic:'x',t:T('ヘクスを選び直す'),f:"NM_VF.pend=null;nmVfPick("+n+",null)"});}
+  else{add.push({ic:'tgt',t:'<span style="color:#3ca878">'+T('地図で撃てるヘクスを選ぶ')+'</span>',sub:T('LOSが通るヘクスが緑になります。相手のマーカーは緑の輪'),f:"nmVfPick("+n+",null)"});
+    var rows=nmVfFoeRows(n,'nmVfPick');if(rows.length){add.push({ic:'sel',t:T('シナリオの相手から選ぶ'),sub:T('地図に置いていない時。選んだ後、地図で撃てるヘクスをタップ')});add=add.concat(rows);}}
+  it.splice.apply(it,[at+1,0].concat(add));}catch(e){console.log('vf tgt',e);}return it;};})();
 /* v431(ダルマ指示「対応可能？」→「実施」): PFの使用条件。シナリオごとに「PFを使わない(SSR)」スイッチ(S.pfOffScen)。
    発射数の上限は軽対戦車兵器タブのPF発射数トラッカー(S.pfTracker)と共通: 上限=独軍の分隊数×(1944年6月以前1・44年後半1.5・1945年2)。分隊数が0ならシナリオOBから自動計算。1943年10月より前は使えない */
 function nmPfWep(nat){if(nat!=='GER')return null;var di=(S.latw&&S.latw.dateIdx!=null)?S.latw.dateIdx:99;var w=LATW_DATA.filter(function(w){return w.oneShot&&/^pf/.test(w.id)&&!(w.availIdx>di);}).sort(function(a,b){return (b.availIdx||0)-(a.availIdx||0);})[0]||null;
