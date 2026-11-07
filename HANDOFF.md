@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 - 最終更新: 2026-11-07 23:55 (main=v885)
-- 状態: 返事待ちなし。
+- 状態: **返事待ち 1件**
+  1. sample-bdpos(ダルマ「📌 盤面に置く 2件 結果表示の場所に表示する サンプル」→ 形も場所も両方: NM_BD_STY 'c'チップ/'e'件数バッジ、NM_BD_POS='line' で結果の行(…= N 命中)の下(nmBdLine)。結果の画像(#nmResImg)の下にも出し、その時は画像を6秒残す(nmBdImg、.bdHold)。どれにするか確認中)。
 - v885 済: 射撃結果の上に 📌 チップ(nmBdTodo / nmBdHTML、NM_BD_STY='c'。獲得−1・−2裏返し・外す・残留FP。押すと緑、R.bdDone)。
 - v884 済: ミニマルの四隅の点を消す(NM_MINI_DOT='a')。ネオンの色違いをスキンに追加(UI_THEMES '4a'くすんだ/'4b'シアン/'4d'レーダー緑/'4e'アンバー。uiThemeApply が data-uith="4"+data-neon を付ける。nmNeonBuild が [data-neon] 規則を作る)。
 - 調査中: A→B後のフリーズ(v882 のログ待ち)。
