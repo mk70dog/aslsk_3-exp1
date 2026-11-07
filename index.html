@@ -36538,6 +36538,19 @@ function nmResOverlaySVG(dl){var h='',R=S_LOS.resid||{};Object.keys(R).forEach(f
   h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><rect x="'+(d.x-w/2)+'" y="'+y+'" width="'+w+'" height="15" rx="3" fill="'+NM_ST_COL['残留']+'" stroke="#d8cfae" stroke-width="1"/><text x="'+d.x+'" y="'+(y+11)+'" text-anchor="middle" font-size="10.5" font-weight="900" fill="#f2ead0" font-family="AppFont,AppJP,monospace">残留'+v+'FP</text></g>';});return h;}
 function nmMfResFp(){var f=getFireState();if(!f||!f.res||!f.res.ift)return 0;var col=f.res.ift.ci;if(col==null||col<0)return 0;var p=0;
   try{p=Math.max(0,fireHindTotal(f))+(f.cx?1:0)+Math.max(0,fireEffLdr(f));}catch(e){}return resTblFp(RES_TBL[col],p);}
+/* sample(ダルマ指示「ネオンスキン 派手すぎる サンプルX5」): ネオン(data-uith="4")の色を落ち着かせる5案。html[data-neon] a〜e。
+   ネオンの規則を読み取り、マゼンタ・シアンを差し替え、光(影)を消した規則を上に重ねる */
+var NM_NEON='';
+var NM_NEON_PAL={a:{m:[196,90,168],c:[79,179,196],nm:'くすんだネオン'},b:{m:[60,200,220],c:[60,200,220],nm:'シアン一色'},c:{m:[138,107,255],c:[111,143,176],nm:'紫と鋼'},d:{m:[63,209,138],c:[47,143,122],nm:'レーダー緑'},e:{m:[255,176,32],c:[122,138,153],nm:'アンバーと灰'}};
+function nmNeonBuild(){try{var old=document.getElementById('nmNeonCss');if(old)old.remove();var rules=[];
+  [].forEach.call(document.styleSheets,function(sh){var rs;try{rs=sh.cssRules;}catch(e){return;}if(!rs)return;var walk=function(L,wrap){[].forEach.call(L,function(r){if(r.cssRules&&!r.selectorText){try{walk(r.cssRules,r.conditionText?'@media '+r.conditionText:null);}catch(e){}return;}if(r.selectorText&&r.selectorText.indexOf('data-uith="4"')>=0)rules.push(wrap?wrap+'{'+r.cssText+'}':r.cssText);});};walk(rs,null);});
+  var hx=function(a){return '#'+a.map(function(v){return ('0'+v.toString(16)).slice(-2);}).join('');};var out=[];Object.keys(NM_NEON_PAL).forEach(function(k){var P=NM_NEON_PAL[k],m=P.m.join(', '),c=P.c.join(', '),ml=P.m.map(function(v){return Math.round(v+(255-v)*.45);}).join(', '),cl=P.c.map(function(v){return Math.round(v+(255-v)*.75);}).join(', ');
+    rules.forEach(function(t){var x=t.replace(/html\[data-uith="4"\]/g,'html[data-uith="4"][data-neon="'+k+'"]')
+      .replace(/#ff2bd6/gi,hx(P.m)).replace(/#ff7be8/gi,hx(P.m.map(function(v){return Math.round(v+(255-v)*.45);}))).replace(/#00e5ff/gi,hx(P.c)).replace(/#d8fbff/gi,hx(P.c.map(function(v){return Math.round(v+(255-v)*.75);}))).replace(/rgb\(255, 43, 214\)/g,'rgb('+m+')').replace(/rgba\(255, 43, 214, /g,'rgba('+m+', ').replace(/rgb\(255, 123, 232\)/g,'rgb('+ml+')')
+      .replace(/rgb\(0, 229, 255\)/g,'rgb('+c+')').replace(/rgba\(0, 229, 255, /g,'rgba('+c+', ').replace(/rgb\(216, 251, 255\)/g,'rgb('+cl+')')
+      .replace(/(box-shadow|text-shadow):([^;]*);/g,function(all,pr,v){return /inset/.test(v)?all:pr+': none !important;';});out.push(x);});});
+  var st=document.createElement('style');st.id='nmNeonCss';st.textContent=out.join('\n');document.head.appendChild(st);document.documentElement.setAttribute('data-neon',NM_NEON);}catch(e){console.log('neon',e);}}
+(function(){var tm=null,kick=function(){if(tm)clearTimeout(tm);tm=setTimeout(nmNeonBuild,300);};var go=function(){kick();try{new MutationObserver(function(ms){if(ms.some(function(m){return [].some.call(m.addedNodes,function(n){return n.tagName==='STYLE'&&n.id!=='nmNeonCss';});}))kick();}).observe(document.head,{childList:true});}catch(e){}};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();})();
 function nmMfMove(n,k){var f=getFireState();if(!f)return;if(k==='none'){f.ffmo=false;f.ffnam=false;f.hazardous=false;}else{var on=!f[k];Ftog(k);}f.res=null;Draw();nmMfReopen(n);}
 function nmMfMode(n,v){FsetMode(v);nmMfReopen(n);}
 
