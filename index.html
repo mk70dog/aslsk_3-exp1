@@ -36353,6 +36353,58 @@ function nmCcpDraw(){var C=NM_CC;if(!C){nmCcpClose();return;}var o=document.getE
   h+='<div style="display:flex;gap:8px;margin-top:12px">'+undo+big('nmCcpApply()',ready?T('結果を反映（同時）'):T('両方のDRが出たら反映できます'),ready)+'</div>';
   h+='<div style="margin-top:6px;font-size:11px;color:#6d7c8e">'+T('除去・損耗は編成とマーカーに反映。両軍とも残ったら混戦（Melee）。MMCの元のDRが2なら指揮官誕生')+'</div></div>';
   o.innerHTML=h;var nb=o.querySelector('.ccpBox');if(nb)nb.scrollTop=st0;}
+/* sample(ダルマ指示「不意打ち 実施 もう少しわかりやすくする」): 白兵戦パネルの①不意打ちを作り直す。
+   両軍のカードに修正(CX+1・釘付け+1・未熟兵+1(新兵で指揮官なし/徴集兵)・指揮官の修正(単独は無効)・車両がいる 攻撃側+2/防御側+1・車両がBU/麻痺+1・SSR)を自動で入れ、手で切り替えられる。
+   drは手入力(1〜6)かオートダイス。修正後drが相手より3以上少ない側が不意打ち(先に攻撃・攻撃DR−1・相手+1)。手で結果を選ぶこともできる */
+function nmAbItems(P){return nmCCIts(P).map(function(q){return q.x;});}
+function nmAbAuto(P){var its=nmAbItems(P),u0=function(x){var D=UNITS[x.nat]||{};return (D.mmc||[]).filter(function(q){return q.lbl===x.label;})[0]||{};};
+  var ldr=null,ldrNm='';its.forEach(function(x){if(x.kind!=='smc'||x.broken||x.pinned)return;var c=nmMcUnitMor(x).cmd;if(c!=null&&(ldr==null||c<ldr)){ldr=c;ldrNm=x.label;}});if(its.length<2)ldr=null;
+  var inx=its.some(function(x){if(x.kind==='smc')return false;var u=u0(x);return /\[C\]/.test(x.label)||u.cons||u.conscript||(u.green&&ldr==null);});
+  var ssr=0,ssrNm='';try{var sid=S.scen&&S.scen.sel;if((sid==='S18'||sid==='S35')&&its.some(function(x){return x.nat==='SOV'&&/\[(E|1)\]/.test(x.label);})){ssr=-1;ssrNm='SSR 露エリート/1st Line';}if(sid==='S27'&&its.some(function(x){return x.nat==='GBR';})){ssr=-1;ssrNm='SSR ニュージーランド軍';}}catch(e){}
+  return {cx:false,pin:its.some(function(x){return x.pinned;}),inx:inx,ldr:ldr,ldrNm:ldrNm,ldrOn:ldr!=null&&ldr!==0,afv:0,bu:false,ssr:ssr,ssrNm:ssrNm,dr:0};}
+function nmAbCalc(A){var L=[],m=0;var add=function(t,v){L.push([t,v]);m+=v;};if(A.cx)add('CX',1);if(A.pin)add(T('釘付け'),1);if(A.inx)add(T('未熟兵'),1);if(A.ldrOn&&A.ldr)add(T('指揮官')+' '+A.ldrNm,A.ldr);if(A.afv)add(T('車両がいる'),A.afv);if(A.bu)add(T('車両がBU・麻痺'),1);if(A.ssr)add(A.ssrNm,A.ssr);return {m:m,L:L};}
+function nmAbInit(){var C=NM_CC;if(!C)return null;var S0=nmCCSides(nmHexOfNode(C.n));if(!S0.ok)return null;if(!C.ab){C.ab={f:nmAbAuto(S0.f),e:nmAbAuto(S0.e)};C.ab.f.cx=!!(C.cx||{}).f;C.ab.e.cx=!!(C.cx||{}).e;}return C.ab;}
+function nmAbSet(sd,k,v){var C=NM_CC,A=nmAbInit();if(!A)return;A[sd][k]=v;nmAbEval(false);nmCcpDraw();}
+function nmAbEval(roll){var C=NM_CC,A=C&&C.ab;if(!A)return;if(roll){['f','e'].forEach(function(sd){if(!A[sd].dr){A[sd].dr=1+Math.floor(Math.random()*6);A[sd].auto=1;}});}
+  if(A.f.dr&&A.e.dr){var a=nmAbCalc(A.f),b=nmAbCalc(A.e),fa=A.f.dr+a.m,fb=A.e.dr+b.m;C.ambDr={f:{dr:A.f.dr,m:a.m,fin:fa},e:{dr:A.e.dr,m:b.m,fin:fb}};C.amb=fa<=fb-3?'f':(fb<=fa-3?'e':null);C.abMan=false;
+    if(roll){try{logResult(function(){return {tabLbl:'MAP 不意打ち',text:'不意打ちdr '+fa+' / '+fb+' → '+(C.amb?(C.amb==='f'?'自軍':'敵')+'が不意打ち':'なし'),color:'#c8a032',detail:null};});}catch(e){}}}
+  else{C.ambDr=null;if(!C.abMan)C.amb=null;}}
+function nmAbDie(sd,v){var A=nmAbInit();if(!A)return;A[sd].dr=(A[sd].dr===v&&!A[sd].auto)?0:v;A[sd].auto=0;nmAbEval(false);nmCcpDraw();}
+function nmAbRoll(){var A=nmAbInit();if(!A)return;nmAbEval(true);nmCcpDraw();}
+function nmAbClear(){var C=NM_CC,A=nmAbInit();if(!A)return;A.f.dr=0;A.e.dr=0;A.f.auto=A.e.auto=0;C.ambDr=null;C.amb=null;C.abMan=false;nmCcpDraw();}
+function nmAbMan(v){var C=NM_CC;if(!C)return;C.amb=v;C.abMan=true;C.ambDr=null;var A=nmAbInit();if(A){A.f.dr=0;A.e.dr=0;}nmCcpDraw();}
+function nmAbHTML(lbl){var C=NM_CC,A=nmAbInit();if(!A)return '';var sg=function(v){return (v>=0?'+':'')+v;};
+  var chip=function(on,oc,tx,auto){return '<button class="b sm" style="margin:0;min-height:32px;padding:0 9px;font-size:12px;font-weight:700;'+(on?'border:2px solid #ffd070!important;background:#2a2412!important;color:#ffd070!important':'opacity:.85')+'" onclick="'+oc+'">'+(on?'✓ ':'')+tx+(auto?'<small style="font-size:9.5px;color:#7ec8e3;margin-left:3px">'+T('自動')+'</small>':'')+'</button>';};
+  var card=function(sd){var X=A[sd],c=nmAbCalc(X),col=NM_SIDE_LBL[sd].col,au=nmAbAuto(nmCCSides(nmHexOfNode(C.n))[sd]);
+    var x='<div style="flex:1;min-width:270px;border:2px solid '+col+';border-radius:12px;padding:8px 10px;background:#0e131b">';
+    x+='<div style="display:flex;justify-content:space-between;align-items:baseline"><b style="color:'+col+';font-size:15px">'+lbl[sd]+'</b><span style="font-size:12px;color:#9ab">'+T('修正')+' <b style="color:#ffd070;font-size:15px">'+sg(c.m)+'</b></span></div>';
+    x+='<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">'
+      +chip(X.cx,"nmAbSet('"+sd+"','cx',"+(!X.cx)+")",'CX +1',false)
+      +chip(X.pin,"nmAbSet('"+sd+"','pin',"+(!X.pin)+")",T('釘付け')+' +1',au.pin)
+      +chip(X.inx,"nmAbSet('"+sd+"','inx',"+(!X.inx)+")",T('未熟兵')+' +1',au.inx)
+      +(X.ldr!=null&&X.ldr!==0?chip(X.ldrOn,"nmAbSet('"+sd+"','ldrOn',"+(!X.ldrOn)+")",T('指揮官')+' '+X.ldrNm+' '+sg(X.ldr),true):'')
+      +chip(X.afv===2,"nmAbSet('"+sd+"','afv',"+(X.afv===2?0:2)+")",T('車両がいる(攻撃側)')+' +2',false)
+      +chip(X.afv===1,"nmAbSet('"+sd+"','afv',"+(X.afv===1?0:1)+")",T('車両がいる(防御側)')+' +1',false)
+      +(X.afv?chip(X.bu,"nmAbSet('"+sd+"','bu',"+(!X.bu)+")",T('車両がBU・麻痺')+' +1',false):'')
+      +(X.ssr?chip(true,"",X.ssrNm+' '+sg(X.ssr),true):'')+'</div>';
+    x+='<div style="display:flex;align-items:center;gap:4px;margin-top:8px"><span style="font-size:12px;color:#9ab;min-width:28px">dr</span>'+[1,2,3,4,5,6].map(function(v){var on=X.dr===v;return '<button class="b sm" style="margin:0;width:34px;height:34px;padding:0;'+(on?'background:#c8a032!important;color:#000!important;font-weight:900':'')+'" onclick="nmAbDie(\''+sd+'\','+v+')">'+v+'</button>';}).join('')+'</div>';
+    if(X.dr)x+='<div style="margin-top:6px;font-size:14px">dr '+X.dr+(X.auto?'<small style="font-size:10px;color:#7ec8e3"> '+T('オートダイス')+'</small>':'')+' '+sg(c.m)+' = <b style="font-size:18px;color:#ffd070">'+(X.dr+c.m)+'</b></div>';
+    return x+'</div>';};
+  var R=C.ambDr,res;
+  if(R){var d=Math.abs(R.f.fin-R.e.fin);res=C.amb?'<b style="color:#3ca878;font-size:16px">'+lbl[C.amb]+T('の不意打ち成功')+'</b> <span style="font-size:12px;color:#d8e0e8">（'+T('差')+d+'）'+lbl[C.amb]+T('が先に攻撃。攻撃DR−1・相手の攻撃DR+1')+'</span>':'<b style="font-size:16px">'+T('不意打ちなし')+'</b> <span style="font-size:12px;color:#d8e0e8">（'+T('差')+d+'。3以上で成功）'+T('両軍同時に攻撃')+'</span>';}
+  else if(C.abMan)res=C.amb?'<b style="color:#3ca878;font-size:16px">'+lbl[C.amb]+T('の不意打ち成功')+'</b> <span style="font-size:12px;color:#9ab">（'+T('手で選択')+'）</span>':'<b>'+T('不意打ちなし')+'</b> <span style="font-size:12px;color:#9ab">（'+T('手で選択')+'）</span>';
+  else res='<span style="color:#9ab;font-size:13px">'+T('両軍のdrを入れるか、オートダイスで振ってください')+'</span>';
+  var h='<div class="abBox" style="padding:10px;border-radius:12px;background:#121822">';
+  h+='<div style="font-size:12px;color:#9fb2c8;margin-bottom:6px">'+T('林・建物へ突撃して白兵戦になった時だけ（混戦に加わる時はなし）。両軍がdrを1つずつ振り、修正後のdrが相手より3以上少ない側が不意打ち成功')+'</div>';
+  h+='<div style="display:flex;gap:8px;flex-wrap:wrap">'+card('f')+card('e')+'</div>';
+  h+='<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px"><div style="flex:1;min-width:240px">'+res+'</div>'
+    +(R?'<button class="b sm" style="margin:0;min-height:34px;padding:0 10px" onclick="nmAbClear()">'+T('やり直す')+'</button>':'<button class="b sm abGo" style="margin:0;min-height:44px;padding:4px 16px;background:#7ec8e3!important;color:#08101a!important;border:0!important;border-radius:18px;display:inline-flex;flex-direction:column;align-items:flex-start;gap:2px" onclick="nmAbRoll()">'+(nmAdOn()?'<span class="nmAdTag" style="margin:0">'+T('オートダイス')+'</span>':'')+'<span style="font-size:14px">'+T('不意打ちのdrを振る')+'</span><small style="font-size:10.5px;color:#173040">'+T('入れた側はその目で判定')+'</small></button>')+'</div>';
+  h+='<div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:#9ab">'+T('結果を手で選ぶ')+'：'+[[null,T('なし')],['f',lbl.f+T('が成功')],['e',lbl.e+T('が成功')]].map(function(q){var on=C.abMan&&C.amb===q[0];return '<button class="b sm" style="margin:0;min-height:30px;padding:0 9px;font-size:12px;'+(on?'border:2px solid #ffd070!important;color:#ffd070!important':'')+'" onclick="nmAbMan('+(q[0]?"'"+q[0]+"'":'null')+')">'+q[1]+'</button>';}).join('')+'</div>';
+  return h+'</div>';}
+(function(){var oD=nmCcpDraw;nmCcpDraw=function(){var r=oD.apply(this,arguments);try{var C=NM_CC,o=document.getElementById('nmCcp');if(!C||!o||C.applied)return r;var b=o.querySelector('button[onclick^="nmCCAmb("]');if(!b)return r;var row=b.parentElement;
+    var nx=row.nextElementSibling;if(nx&&/不意打ちdr/.test(nx.textContent))nx.remove();
+    var S0=nmCCSides(nmHexOfNode(C.n));if(!S0.ok)return r;var lbl={f:nmCcpSideNm(S0.f,'f'),e:nmCcpSideNm(S0.e,'e')};
+    var w=document.createElement('div');w.innerHTML=nmAbHTML(lbl);row.parentElement.replaceChild(w.firstChild,row);}catch(e){console.log('amb ui',e);}return r;};})();
 (function(){var o=window.btRmReopen;if(!o)return;window.btRmReopen=function(n){try{if(NM_RM_SUB==='cc'&&document.getElementById('nmCcp')){NM_RM_SUB=null;nmCcpDraw();return;}if(NM_RM_SUB==='dcp'&&document.getElementById('nmDcp')){NM_RM_SUB=null;nmDcpDraw();return;}}catch(e){}return o.apply(this,arguments);};})();
 function nmRmCCItems(n){var C=NM_CC;if(!C)return nmRMenuItems(n);var H=nmHexOfNode(C.n),S0=nmCCSides(H),it=[],sg=function(v){return (v>=0?'+':'')+v;};
   it.push({ic:'back',t:'← 戻る',sub:'白兵戦 @'+BTG.nodes[C.n].nm,f:"NM_CC=null;btRmReopen("+n+")"});it.push({sep:1});
