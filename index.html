@@ -46752,9 +46752,14 @@ function REF_CTR_GUIDE(cat,ttl){S.refCtr=S.refCtr||{};var R=S.refCtr[cat]=S.refC
     lab+='<div onclick="RefCtrSet(\''+cat+'\',\'sel\','+(on?-1:i)+')" style="cursor:pointer;position:absolute;'+(P[1]==='L'?'right:'+(W-CX+18)+'px;text-align:right':'left:'+(CX+CS+18)+'px')+';top:'+y+'px;transform:translateY(-50%);width:'+(CX-26)+'px;padding:4px 7px;border-radius:8px;'+(on?'background:#12303c;outline:2px solid #7ec8e3':'')+'"><b style="color:'+(on?'#7ec8e3':'#ffd070')+';font-size:14px">'+T(x[0])+'</b>'+(x[1]?'<br><span style="font-size:12px;color:'+(on?'#d8f0ff':'#9fb2c8')+'">'+T(x[1])+'</span>':'')+'</div>';
     hot+='<div onclick="RefCtrSet(\''+cat+'\',\'sel\','+(on?-1:i)+')" style="cursor:pointer;position:absolute;left:'+bx+'px;top:'+by+'px;width:'+bw+'px;height:'+bh+'px;border-radius:7px;'+(on?'border:3px solid #7ec8e3;box-shadow:0 0 14px #7ec8e3,inset 0 0 10px #7ec8e388':'')+'"></div>';});});
   svg+='</svg>';
-  h+='<div style="overflow-x:auto"><div style="position:relative;width:'+W+'px;height:'+H+'px;margin:0 auto">'+svg+img+hot+lab+'</div></div>';
+  h+='<div class="refCtrFit" style="overflow:hidden"><div class="refCtrIn" data-w="'+W+'" style="position:relative;width:'+W+'px;height:'+H+'px;margin:0 auto">'+svg+img+hot+lab+'</div></div>';
   h+='<div style="text-align:center;font-size:12px;color:#8fa6bd;margin-top:2px">'+T(F.nm||E.nm)+'</div></div>';
   return h;}
+/* fix(ダルマ報告「ipad mini横表示時横スクロールになる 横幅に合わせて横スクロールをなくす」): カウンターの読み方の図(幅880px固定)を、入る幅に合わせて縮める(zoom)。横スクロールは出さない */
+function nmRefCtrFit(){try{document.querySelectorAll('.refCtrFit').forEach(function(o){var inr=o.querySelector('.refCtrIn');if(!inr)return;var W=+inr.getAttribute('data-w')||880,aw=o.clientWidth;if(!aw)return;var z=Math.min(1,aw/W);z=Math.floor(z*1000)/1000;if(inr.__z!==z){inr.__z=z;inr.style.zoom=z;}});}catch(e){}}
+(function(){if(typeof window==='undefined'||window.__nmRcf)return;window.__nmRcf=1;window.addEventListener('resize',function(){setTimeout(nmRefCtrFit,50);});window.addEventListener('orientationchange',function(){setTimeout(nmRefCtrFit,300);});
+  var go=function(){new MutationObserver(function(ms){if(ms.some(function(m){return [].some.call(m.addedNodes,function(n){return n.nodeType===1&&(n.classList.contains('refCtrFit')||n.querySelector&&n.querySelector('.refCtrFit'));});}))nmRefCtrFit();}).observe(document.body,{childList:true,subtree:true});nmRefCtrFit();};
+  if(document.body)go();else document.addEventListener('DOMContentLoaded',go);})();
 function REF_SMC_MMC_COUNTER_DIAGRAM(){
   var h='<div class="card"><div class="sh">'+T('カウンターの読み方（SMC/MMC）')+'</div>';
   h+='<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:6px">';
