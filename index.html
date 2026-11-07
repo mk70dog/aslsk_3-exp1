@@ -12517,6 +12517,21 @@ function appForceUpdate(){
   try{if(window.caches)p.push(caches.keys().then(function(ks){return Promise.all(ks.map(function(k){return caches.delete(k);}));}));}catch(e){}
   Promise.all(p).catch(function(){}).then(function(){setTimeout(function(){location.replace(location.pathname+'?u='+Date.now());},700);}); // v266: UPDATING表示を見せるため0.7秒待つ
 }
+/* sample(ダルマ指示「アプリ更新 確認して最新版だった場合には 最新版です でアップデートはしない」):
+   アプリ更新を押したら、まずサーバーの sw.js(小さいファイル)の APP_VERSION を見る。いまの版と同じなら「最新版です vNNN」で終わり(読み込み直さない)。
+   新しい版がある・確認できない時は従来どおり更新する */
+var appForceUpdateRun=appForceUpdate;
+function appUpdVerNo(v){var m=String(v||'').match(/v12\.(\d{3})/);return m?800+(+m[1]):null;}
+appForceUpdate=function(){
+  if(!navigator.onLine){try{showToast('オフラインのため更新できません','red');}catch(e){}return;}
+  var en=(typeof S!=='undefined'&&S&&S.lang==='en');try{showToast(en?'Checking for updates…':'最新版か確認中…','blu');}catch(e){}
+  var done=false,to=setTimeout(function(){if(done)return;done=true;appForceUpdateRun();},8000);
+  fetch('./sw.js?chk='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.text();}).then(function(t){if(done)return;done=true;clearTimeout(to);
+    var m=t.match(/APP_VERSION\s*=\s*['"]([^'"]+)['"]/),srv=m&&m[1];
+    if(srv&&srv===APP_VERSION){var vv=appUpdVerNo(APP_VERSION);try{showToast(en?'Already up to date'+(vv?' v'+vv:''):'最新版です'+(vv?' v'+vv:''),'blu');var el=document.getElementById('toastMsg');if(TOAST_TIMER)clearTimeout(TOAST_TIMER);TOAST_TIMER=setTimeout(function(){if(el)el.style.display='none';},2600);}catch(e){}return;}
+    var nv=appUpdVerNo(srv);if(nv){try{showToast((en?'New version v':'新しい版 v')+nv+(en?' – updating…':' に更新します…'),'blu');}catch(e){}}
+    setTimeout(appForceUpdateRun,nv?900:0);
+  }).catch(function(){if(done)return;done=true;clearTimeout(to);appForceUpdateRun();});};
 // v265: iPad横⇔縦/スマホで画面分類(is-tabl)が切り替わったら再描画(編成スロット数・カウンターサイズが分類で変わるため)
 (function(){try{var prev=document.documentElement.classList.contains('is-tabl');new MutationObserver(function(){var now=document.documentElement.classList.contains('is-tabl');if(now!==prev){prev=now;try{if(typeof Draw==='function')Draw();}catch(e){}}}).observe(document.documentElement,{attributes:true,attributeFilter:['class']});}catch(e){}})();
 // v264: 更新後の再読込完了時に14セグで「UPDATES IMPLEMENTED」を表示(URLの?u=を目印にし、表示後はURLから除去)
