@@ -1,0 +1,12 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1000,height:657},deviceScaleFactor:2});const e=[];p.on('pageerror',x=>e.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>{S.scen=S.scen||{};S.scen.sel='S24';S.nmMode='judge';NAVTAB('los');});await p.waitForTimeout(3000);
+await p.evaluate(async()=>{await btEnsureGraph();try{Draw();}catch(x){}});await p.waitForTimeout(5000);
+const hide=()=>p.evaluate(()=>{[...document.querySelectorAll('body *')].filter(x=>x.children.length<3&&/自軍・敵軍を自動で設定/.test(x.textContent)).forEach(x=>{var t=x;while(t.parentElement&&t.parentElement!==document.body)t=t.parentElement;if(!/btRm|nmPickBn/.test(t.id))t.style.display='none';});});
+const txt=()=>p.evaluate(()=>{var o=document.getElementById('btRm');return o?(o.style.visibility+' '+o.innerText.replace(/\s+/g,' ').slice(0,300)):'none'});
+console.log(await p.evaluate(()=>{var c=-1,bd=1e9;BTG.nodes.forEach(function(N,i){if(!N)return;var q=nmClientOfNode(i);if(!q)return;var d=Math.hypot(q.x-480,q.y-420);if(d<bd){bd=d;c=i;}});var gi=Object.keys(scenarioGunIds()||{})[0];NM_RM_HEX=nmHexOfN(c);var g=nmGun(gi);var sd=nmSuSide(String(g.nat).split('/')[0])||'f';btRMenu(c);nmRmSetGun(c,gi,sd);NM_FACE=null;NM_GM_AFTER=null;BtRmClose();NM_RM_HEX=nmHexOfN(c);btRMenu(c);nmMhOpen(c,sd);window.__c=c;return gi+' m='+g.m;}));
+await p.waitForTimeout(700);await hide();await p.screenshot({path:process.argv[2]+'_1.png'});console.log(await txt());
+await p.evaluate(()=>nmMhPick(window.__c));await p.waitForTimeout(700);await hide();await p.screenshot({path:process.argv[2]+'_2.png'});
+console.log('pick',await p.evaluate(()=>JSON.stringify(NM_PICK&&NM_PICK.list)));
+await p.evaluate(()=>{var x=NM_PICK.list[0];nmMhPickEnd(x.tn);});await p.waitForTimeout(700);await hide();await p.screenshot({path:process.argv[2]+'_3.png'});console.log(await txt());
+console.log(JSON.stringify(e));await b.close();})();
