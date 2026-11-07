@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 - 最終更新: 2026-11-08 07:00 (main=v886)
-- 状態: 返事待ちなし。
+- 状態: **返事待ち 1件**
+  1. sample-nounit(ダルマ「マルチ判定で砲撃などを選んで地図に該当カウンターがない時の表示を使いやすく」→ 地図に置く・配置画面・置かずに判定の3つとも。nmHqPickA のトーストを nmNuOpen に。シナリオの砲・車両・歩兵を選ぶ→📍地図に置く/🎲置かずに判定(ijTmp+ccTmp, NM_CCS.open)→ヘックスをタップ(nmNuTap)→nmHqSetA で判定へ。📋配置画面を開く=nmSuOpen)。
 - v886 済: 📌 チップを結果の画像(#nmResImg)の下にも出す(nmBdImg、画像は6秒残る .bdHold、チップ以外のタップで閉じる)。パネルでは結果の行(…= N 命中)の下(NM_BD_POS='line'、nmBdLine。見つからなければ上)。
 - v885 済: 射撃結果の上に 📌 チップ(nmBdTodo / nmBdHTML、NM_BD_STY='c'。獲得−1・−2裏返し・外す・残留FP。押すと緑、R.bdDone)。
 - v884 済: ミニマルの四隅の点を消す(NM_MINI_DOT='a')。ネオンの色違いをスキンに追加(UI_THEMES '4a'くすんだ/'4b'シアン/'4d'レーダー緑/'4e'アンバー。uiThemeApply が data-uith="4"+data-neon を付ける。nmNeonBuild が [data-neon] 規則を作る)。
