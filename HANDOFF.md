@@ -1,11 +1,10 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-07 23:00 (main=v883)
-- 状態: **返事待ち 3件**
+- 最終更新: 2026-11-07 23:40 (main=v884)
+- 状態: **返事待ち 1件**
   1. sample-bdtodo(射撃結果の上に「📌 リアルの盤面に置く」: 目標獲得・残留火力)。
-  2. sample-minidot(ダルマ「ミニマルスキン時ボタン四角ドット非表示」: data-uith="3" で data-minidot a=四隅のリベット(::before)を消す / b=リベットと地の細かい点々も消す。NM_MINI_DOT。既定 a。どちらにするか確認中)。
-  3. sample-neon(ダルマ「ネオンスキン 派手すぎる サンプルX5」: data-neon a くすんだネオン / b シアン一色 / c 紫と鋼 / d レーダー緑 / e アンバーと灰。ネオンの規則(data-uith="4")を読み取り、マゼンタ・シアン(rgbと#hex)を差し替え、光る影(inset以外)を消して [data-neon] を付けて重ねる。nmNeonBuild(新しいstyleが入るたびに作り直す)。スポット判定の選択色は nmIjPhColor が判定ボタンの色を写すので描き直しで反映。どれにするか確認中)。
+- v884 済: ミニマルの四隅の点を消す(NM_MINI_DOT='a')。ネオンの色違いをスキンに追加(UI_THEMES '4a'くすんだ/'4b'シアン/'4d'レーダー緑/'4e'アンバー。uiThemeApply が data-uith="4"+data-neon を付ける。nmNeonBuild が [data-neon] 規則を作る)。
 - 調査中: A→B後のフリーズ(v882 のログ待ち)。
 
 ## 0.1 再開のしかた(どのアカウントでも同じ)
@@ -101,6 +100,7 @@
 - v856 タイル名を 白兵戦（歩兵どうし）／白兵戦（車両を攻撃）／臨機の白兵戦（動く車両）(TL の5番目の要素=表示名、<br>で2行)。白兵戦の判定ボタンを「白兵戦を判定する」+下段「次の画面でダイスを振る」。
 - v857 ①旧タブの「戻る」(#nmHqBack)は地図に戻るだけ。NAVTAB をラップして、地図→タブへ移る時にボード(#nmHq)が開いていたら NM_OT_HQ=true、その時だけ戻りでボードを開き直す ②ボグ判定パネル(nmRmBogItems をラップ)に「ボグ判定(入った時)/ボグ解消(回復)」の切り替え NM_BG.un。nmBgMode/nmBgUnDie/nmBgUnRoll。赤dr(Mired+1) 1-4=解消(始動MP=赤×白、全装軌でない×2)・5=Mired・6以上=走行不能。ライト版は結果と「盤面: 〜」だけ、フル版は状態(bog/mired/imm)も反映。
 - v883 アプリアイコンを 8-1-10 G の絵に(作り方は v880 と同じ、?v=883)。
+- v884 ミニマル: 四隅の点(リベット)を消す。ネオンの色違い4つ(くすんだ・シアン・レーダー緑・アンバー)をスキンに追加。
 - v882 動作ログを localStorage(aslsk_dbglog)に保存、nmDbgText に「前回(開き直す前)の記録」。1.5秒以上の停止「応答なし」、pointerdown の一番上の要素「tap x,y 要素」も記録。テスト dev/dbgp.js。
 - v881 別の操作を始めたらA→Bを消す(nmAbReset、nmHqOpen/nmTvOpen/nmScenView/nmSuOpen/nmRmTabGo/nmToolArm をラップ、#nmIj 中は除く)。テスト dev/abr.js、dev/frz.js(フリーズ調査用)。
 - v880 アプリアイコンを 10-1-8 G の絵に(icon-180/192/512=90%、icon-512m=78%、地の水色 (108,206,253))。index.html・manifest のアイコンは ?v=880。
