@@ -38129,7 +38129,7 @@ function nmHqSpotHTML(r){var ok=r&&r.dataReady,info='';
   return '<div onclick="event.stopPropagation();nmHqClose();'+(ok?'nmIjOpen()':'nmAbArm()')+'" style="cursor:pointer;margin:0 0 10px;width:100%;min-height:64px;border-radius:12px;background:#7ec8e3;color:#0d2233;display:flex;align-items:center;gap:12px;padding:8px 16px;box-sizing:border-box"><span style="font-size:26px;color:#0d2233">⚡</span><span style="display:flex;flex-direction:column;line-height:1.25"><b style="font-size:18px;color:#0d2233 !important">'+T('スポット判定')+(ok?'':'　<small style="font-size:12px;font-weight:700">(まずA→Bを選ぶ)</small>')+'</b><small style="font-size:12.5px;color:#0d2233 !important;opacity:.85">'+info+'</small></span></div>';}
 function nmHqClose(){var e=document.getElementById('nmHq');if(e)e.remove();}
 /* v686(ダルマ指示「全項目をHQ内で作り直す」第1段): HQの爆薬・潰走・回復は、タブへ移動せず地点Aの編成から地図のパネルで開く */
-var NM_HQ_LBL={rally:'回復・修理',rout:'潰走・阻止',dc:'爆薬',mc:'士気・損耗',nmMcpOpen:'士気・損耗',nmHqMvOpen:'移動',nmHqCcOpen:'白兵戦',nmRlOpen:'回復・修理',nmLwOpen:'軽対戦車兵器',nmHqGunOpen:'砲撃',nmHqAfvOpen:'装甲戦闘車両',nmRtOpen:'潰走・阻止',nmDcOpen:'爆薬',cc:'近接戦闘',move:'移動'};
+var NM_HQ_LBL={rally:'回復・修理',rout:'潰走・阻止',dc:'爆薬',mc:'MC・PTC',nmMcpOpen:'MC・PTC',nmHqMvOpen:'移動',nmHqCcOpen:'白兵戦',nmRlOpen:'回復・修理',nmLwOpen:'軽対戦車兵器',nmHqGunOpen:'砲撃',nmHqAfvOpen:'装甲戦闘車両',nmRtOpen:'潰走・阻止',nmDcOpen:'爆薬',cc:'近接戦闘',move:'移動'};
 var NM_SCU=[];
 function nmHqScUnits(fn){if(fn!=='nmRlOpen'&&fn!=='nmMcpOpen')return [];var o=[];try{nmSuNats().forEach(function(nat){var sd=nmSuSide(nat);nmSuOb(nat).forEach(function(u){if(u.kind==='mmc'||u.kind==='smc')o.push({nat:nat,sd:sd,kind:u.kind,label:u.label,n:u.n});});});}catch(e){}NM_SCU=o;return o;}
 function nmHqScHtml(SU,fn){if(!SU.length)return '';var h='<div style="font-size:11px;color:#9ab;margin:12px 0 0;border-top:1px solid #39414f;padding-top:8px">'+T('シナリオのユニットから選ぶ')+'</div>',last='';
@@ -38165,7 +38165,7 @@ function nmHqPickA(fn){var C=[],seen={};['f','e'].forEach(function(sd){(sd==='f'
    攻撃側(国籍・ユニットの数)と防御側(ユニットの数 または 車両1両)を選び、判定のための仮のマーカー(地図に描かない)を1つのヘクスに置いて、白兵戦(CC)・対車両の白兵戦(CCV)パネルを開く。パネルを閉じたら消す */
 var NM_CCS=null;
 /* v806(ダルマ指示「回復修理、ボグ判定修復、爆薬なども地図にカウンターがない状態でも判定可能にする」): 1つの側のユニット(数)または車両・砲を選んで、仮のマーカーで各パネルを開く */
-var NM_SC_FN={nmRlOpen:{u:1,v:1,lbl:'回復・修理'},nmHqMvOpen:{u:1,v:1,lbl:'移動(ボグ・人力移動・煙幕)'},nmDcOpen:{u:1,dc:1,lbl:'爆薬'},nmRtOpen:{u:1,lbl:'潰走・阻止'},nmMcpOpen:{u:1,lbl:'士気・損耗'},nmHqBogOpen:{v:1,lbl:'ボグ判定（車両）'},nmHqMhOpen:{v:1,lbl:'人力移動（砲）'}},NM_SC=null;
+var NM_SC_FN={nmRlOpen:{u:1,v:1,lbl:'回復・修理'},nmHqMvOpen:{u:1,v:1,lbl:'移動(ボグ・人力移動・煙幕)'},nmDcOpen:{u:1,dc:1,lbl:'爆薬'},nmRtOpen:{u:1,lbl:'潰走・阻止'},nmMcpOpen:{u:1,lbl:'MC・PTC'},nmHqBogOpen:{v:1,lbl:'ボグ判定（車両）'},nmHqMhOpen:{v:1,lbl:'人力移動（砲）'}},NM_SC=null;
 function nmScOpen(fn){nmCcScClear();var ns=nmSuNats();if(!ns.length){btToast(T('シナリオを選んでください'));return;}var c=curScen();NM_SC={fn:fn,nat:(c&&c.atk&&ns.indexOf(c.atk)>=0)?c.atk:ns[0],cs:{},v:null,brk:(fn==='nmRlOpen'||fn==='nmRtOpen'),mal:true};nmScDraw();}
 function nmScSet(k,v){var C=NM_SC;if(!C)return;C[k]=v;if(k==='nat'){C.cs={};C.v=null;}if(k==='v'&&v)C.cs={};nmScDraw();}
 function nmScCnt(key,d){var C=NM_SC;if(!C)return;var it=(key==='dc|DC')?{n:3}:nmSuOb(C.nat).filter(function(x){return x.kind+'|'+x.id===key;})[0];if(!it)return;var n=Math.max(0,Math.min((C.cs[key]||0)+d,it.n||1));if(n)C.cs[key]=n;else delete C.cs[key];if(n)C.v=null;nmScDraw();}
@@ -38239,7 +38239,7 @@ function nmHqOpen(gi){var o=document.getElementById('nmHq');if(o)o.remove();var 
   var body;
   if(gi==='qk')body=nmQkBody();
   else{
-    var TL={fire:['!fire','射撃(A→B)','','fire','射撃 A→B'],bog:['@nmHqBogOpen','ボグ判定','','move'],manh:['&manh','人力移動','','move'],gun:['@nmHqGunOpen','砲撃','','fire'],ftab:['&raq','残留火力','','fire'],react:['&react','車両が入ってきた','','cc','臨機の白兵戦<br>（動く車両）'],latw:['@nmLwOpen','軽対戦車兵器','','fire','軽対戦車 LATW'],dc:['@nmDcOpen','爆薬','','fire'],afv:['@nmHqAfvOpen','装甲戦闘車両','','afv','車両 AFV'],move:['@nmHqMvOpen','移動','','move'],mc:['@nmMcpOpen','士気・損耗','','mc'],rout:['@nmRtOpen','潰走・阻止','','mc'],cc:['@nmHqCcOpen','白兵戦','','cc','白兵戦<br>（歩兵どうし）'],ccv:['&ccv','車両への白兵戦','','cc','白兵戦<br>（車両を攻撃）'],rally:['@nmRlOpen','回復・修理','','rally'],ref:['%ref','早見表','','ref'],unit:['%unit','ユニット','','ref'],scen:['%scen','シナリオ','','ref']};
+    var TL={fire:['!fire','射撃(A→B)','','fire','射撃 A→B'],bog:['@nmHqBogOpen','ボグ判定','','move'],manh:['&manh','人力移動','','move'],gun:['@nmHqGunOpen','砲撃','','fire'],ftab:['&raq','残留火力','','fire'],react:['&react','車両が入ってきた','','cc','臨機の白兵戦<br>（動く車両）'],latw:['@nmLwOpen','軽対戦車兵器','','fire','軽対戦車 LATW'],dc:['@nmDcOpen','爆薬','','fire'],afv:['@nmHqAfvOpen','装甲戦闘車両','','afv','車両 AFV'],move:['@nmHqMvOpen','移動','','move'],mc:['@nmMcpOpen','MC・PTC','','mc'],rout:['@nmRtOpen','潰走・阻止','','mc'],cc:['@nmHqCcOpen','白兵戦','','cc','白兵戦<br>（歩兵どうし）'],ccv:['&ccv','車両への白兵戦','','cc','白兵戦<br>（車両を攻撃）'],rally:['@nmRlOpen','回復・修理','','rally'],ref:['%ref','早見表','','ref'],unit:['%unit','ユニット','','ref'],scen:['%scen','シナリオ','','ref']};
     /* v760(ダルマ指示「判定ボード内を使いやすく整理」): 射撃/移動・士気・近接/調べるの3区分・1画面。金枠=今のフェイズでよく使う */
     var ph=(S.turn&&S.turn.phase)||'',REC={rph:['rally','mc'],pfph:['fire','gun','afv','latw','dc'],mph:['move','bog','manh','fire','afv'],dfph:['fire','gun','afv','latw','ftab'],afph:['fire','dc','ftab'],rtph:['rout','mc'],aph:['cc','mc'],ccph:['cc']}[ph]||[];
     var tile=function(k){var t=TL[k],rec=REC.indexOf(k)>=0,oc=t[0]==='&ccv'?"nmHqClose();nmCcScOpen('veh')":t[0]==='&manh'?"nmHqClose();nmMh2Open()":t[0]==='&raq'?"nmHqClose();NM_PBACK='nmHqOpen()';nmRaqOpen()":t[0]==='&react'?"nmHqClose();nmHqRcStart()":t[0].charAt(0)==='%'?"nmHqClose();NM_TVHQ=1;nmTvOpen('"+t[0].slice(1)+"')":t[0].charAt(0)==='@'?"nmHqAtA('"+t[0].slice(1)+"')":t[0]==='!qk'?"nmHqOpen('qk')":t[0].charAt(0)==='!'?'nmHqFire()':"nmHqClose();nmRmTabGo('"+t[0]+"')";return '<button class="b" style="margin:0;height:54px;min-height:0;padding:2px 3px;line-height:1.15;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;font-size:12px;'+((rec&&!nmHqLite())?'border:2px solid #c8a032;background:#2a2412':'')+'" onclick="'+esc(oc)+'">'+nmHqIc(t[3],16)+'<span>'+(t[4]||t[1])+'</span></button>';};
@@ -38973,7 +38973,7 @@ function nmMcpOpen(n,sd){var eh=nmUnitAt(nmHexOfNode(n),sd);if(!eh||!eh.grp)retu
 function nmMcpRe(n){NM_RM_SUB='mcp';btRmReopen(n);}
 function nmMcpSet(n,r){NM_MCP.r=r;NM_MC=null;nmMcpRe(n);}
 function nmRmMcpItems(n){var P=NM_MCP;if(!P)return nmRMenuItems(n);var L=NM_SIDE_LBL[P.sd],N=BTG.nodes[P.n],it=[],te=nmUnitAt(nmHexOfNode(P.n),P.sd);
-  it.push({ic:'back',t:'← 戻る',sub:'士気・損耗'+(P.slot==='_T'?'':' @'+N.nm),f:"NM_MCP=null;NM_MC=null;btRmReopen("+n+")"});it.push({sep:1});
+  it.push({ic:'back',t:'← 戻る',sub:'MC・PTC'+(P.slot==='_T'?'':' @'+N.nm),f:"NM_MCP=null;NM_MC=null;btRmReopen("+n+")"});it.push({sep:1});
   it.push({ic:'sel',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+(P.slot==='_T'?(nmGeList('_T').items[0]||{}).label+' (シナリオ)':nmGrpLbl(P.slot))+'の士気チェック</span>',sub:'射撃の結果(IFT)で出たチェックを選ぶ'});
   var K=[['NMC','MC'],['1MC','1MC'],['2MC','2MC'],['3MC','3MC'],['4MC','4MC'],['PTC','PTC']];
   it.push({row:1,ic:'info',t:'チェックの種類',btns:K.map(function(k){return [(P.r===k[1]?'✓':'')+k[0],"nmMcpSet("+n+",'"+k[1]+"')"];})});
@@ -38982,6 +38982,24 @@ function nmRmMcpItems(n){var P=NM_MCP;if(!P)return nmRMenuItems(n);var L=NM_SIDE
   else nmMcSection(it,n,te,P.r,'mcp|'+P.slot+'|'+P.r,'nmMcpRe',{pick:1});
   it.push({sep:1});it.push({ic:'x',t:'閉じる',f:"NM_MCP=null;BtRmClose()"});
   return it;}
+/* sample(ダルマ指示「マルチ判定 士気・損耗をMC PTCにボタン名変更」「内容をわかりやすく 見やすくする」):
+   ①チェックの種類 ②チェックするユニット ③ダイス の順に番号。選んだ種類の意味を1行で。ユニットごとに「DR○以下で合格/○で釘付け/○以上で混乱」 */
+(function(){var oM=nmRmMcpItems;nmRmMcpItems=function(n){var it=oM.apply(this,arguments);try{var P=NM_MCP;if(!P)return it;
+  var H=function(no,t){return '<span style="white-space:nowrap"><span style="color:#ffd060;font-weight:900">'+no+'</span> '+T(t)+'</span>';};
+  var EX={'MC':'NMC: 修正なしの士気チェック','1MC':'1MC: DRに+1して士気チェック','2MC':'2MC: DRに+2して士気チェック','3MC':'3MC: DRに+3して士気チェック','4MC':'4MC: DRに+4して士気チェック','PTC':'PTC: 釘付け判定(DRが士気を超えたら釘付け。混乱しているユニットには効果なし)'};
+  var RU=P.r==='PTC'?'修正後DR＞士気 → 釘付け　それ以外は影響なし':'修正後DR＜士気 → 合格　＝士気 → 釘付け　＞士気 → 混乱(混乱中なら損耗)　原DR12 → 混乱＋損耗';
+  for(var i=0;i<it.length;i++){var x=it[i];if(!x)continue;
+    if(x.t&&typeof x.t==='string'&&/の士気チェック<\/span>$/.test(x.t)){x.t=x.t.replace('の士気チェック</span>','の MC・PTC</span>');x.sub=T('射撃の結果(IFT)に出たチェックを選びます');}
+    else if(x.row&&x.t==='チェックの種類'){x.t=H('①','チェックの種類');x.btns=x.btns.map(function(b){return [b[0],b[1]];});
+      it.splice(i+1,0,{ic:'info',t:'<span style="font-size:12px;color:#d8e0e8">'+(P.r?T(EX[P.r]||P.r):T('NMC=修正なし　1〜4MC=DRに+1〜+4　PTC=釘付け判定'))+'</span>'+(P.r?'<br><span style="font-size:11.5px;color:#9aa6b4">'+T(RU)+'</span>':'')});i++;}
+    else if(x.t&&typeof x.t==='string'&&/^<span style="color:#8899aa">種類を選ぶと/.test(x.t)){x.t='<span style="color:#8899aa">'+T('① で種類を選ぶと、② ユニットを選んで ③ ダイスを振れます')+'</span>';}
+    else if(x.t&&typeof x.t==='string'&&/^士気チェック: /.test(x.t)){x.t=x.t.replace(/^士気チェック: PTC\(ピン判定\)/,'PTC(釘付け判定)').replace(/^士気チェック: /,'');}
+    else if(x.row&&x.t==='チェックするユニット'){x.t=H('②','チェックするユニット');}
+    else if(x.t==='DR'||(x.row&&x.cmp&&typeof x.t==='string'&&/>DR<\/span>$/.test(x.t))){x.t='<span style="font-size:12px">'+H('③','ダイス')+'</span>';}
+    else if(x.t&&typeof x.t==='string'&&!/→ DR/.test(x.t)){var m=x.t.match(/　士気(\d+)(?: DRM([+-]\d+))?/);if(m&&x.img!=null){var ml=+m[1],d=+(m[2]||0),a=ml-d,brk=/混乱<\/span>/.test(x.t);
+      var tx=P.r==='PTC'?(brk?T('混乱中なので効果なし'):T('原DR')+a+T('以下で影響なし')+'　'+(a+1)+T('以上で釘付け')):T('原DR')+(a-1)+T('以下で合格')+'　'+a+T('で釘付け')+'　'+(a+1)+T('以上で')+(brk?T('損耗'):T('混乱'));
+      x.sub=(x.sub?x.sub+'　':'')+'<span style="color:#ffd070">'+tx+'</span>';}}}
+  }catch(e){console.log('mcp items',e);}return it;};})();
 function nmRmRallyItems(n){var R=NM_RL;if(!R)return nmRMenuItems(n);var d=nmGeList(R.slot),its=d.items,L=NM_SIDE_LBL[R.sd],it=[],sg=function(v){return (v>=0?'+':'')+v;},N=BTG.nodes[R.n];
   it.push({ic:'back',t:'← 戻る',sub:'回復'+(R.slot==='_T'?'':' @'+N.nm),f:"NM_RL=null;btRmReopen("+n+")"});it.push({sep:1});
   var ph=S.turn&&S.turn.phase;it.push({ic:'sel',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+(R.slot==='_T'?(nmGeList('_T').items[0]||{}).label+' (シナリオ)':nmGrpLbl(R.slot))+'の回復</span>',sub:(ph&&ph!=='rph'?'今は回復フェイズではありません。':'')+(N.tem>0?'地形-1(TEM'+N.tem+')。':'')});
