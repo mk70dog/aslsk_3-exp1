@@ -38855,7 +38855,7 @@ function nmRtmPen(){var M=NM_RTM,p=document.getElementById('nmRtmPen');if(!M||M.
     +row('○','#6fe08a',T('潰走ユニットが入る開豁地ヘクスにLOSが通り、通常射程内'))
     +row('○','#6fe08a',T('そのヘクスへ1火力以上で撃てる(砲は17ヘクス未満で命中判定できる)'))
     +row('×','#ff6060',T('白兵戦(メレー)中'))
-    +row('×','#ff6060',T('火力半減かプラス修正がつく: CX/MGを持つ単独の指揮官/BUの車両の主砲/移動中の車両/旋回が必要な砲・主砲'))
+    +row('×','#ff6060',T('火力が半分になる敵、射撃にプラスの修正がつく敵')+'<div style="color:#9ab;font-size:12px;line-height:1.5;margin-top:2px">'+[T('CX(全力移動で疲れている)ユニット'),T('機関銃を1人で撃つ指揮官(分隊と一緒でない)'),T('ハッチを閉めた(BU)車両の主砲'),T('動いている(Motion)車両'),T('向きを変えないと撃てない砲・主砲')].map(function(t){return '・'+t;}).join('<br>')+'</div>')
     +'<div style="margin-top:6px;padding-top:5px;border-top:1px solid #334;color:#9ab;font-size:11px">'+T('他の射撃を使い切っていても阻止できる。このツールでは敵を射程4の歩兵として計算')+' <span style="color:#678">(SK4 3.6)</span></div>';}
   else{
     h+='<b style="color:#ff8080;font-size:14px">⚠ '+T('阻止されたら NMC(士気チェック)')+'</b>'
