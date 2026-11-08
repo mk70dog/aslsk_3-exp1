@@ -3,6 +3,8 @@ await p.goto('file:///home/claude/aslsk_3-exp1/index.html',{timeout:180000});awa
 await p.evaluate(async()=>{S.scen=S.scen||{};S.scen.sel='S24';await btEnsureGraph();try{Draw();}catch(x){}await new Promise(r=>setTimeout(r,1000));S.turn=S.turn||{};S.turn.phase='rtph';nmHqOpen();});await p.waitForTimeout(700);
 await p.evaluate(()=>{[...document.querySelectorAll('#nmHq button')].filter(x=>/潰走/.test(x.textContent))[0].click();});await p.waitForTimeout(900);
 console.log('start',await p.evaluate(()=>JSON.stringify({rtm:!!NM_RTM,step:NM_RTM&&NM_RTM.step,bn:!!document.getElementById('nmRtmBn'),picker:!!document.getElementById('nmCcSc')})));
+{const bb=await p.locator('#nmRtmBn').boundingBox();await p.mouse.move(bb.x+8,bb.y+6);await p.mouse.down();await p.mouse.move(bb.x+8,bb.y+500,{steps:5});await p.mouse.up();const b2=await p.locator('#nmRtmBn').boundingBox();console.log('drag',Math.round(bb.y),'->',Math.round(b2.y));
+await p.evaluate(()=>nmRtmBanner());const b3=await p.locator('#nmRtmBn').boundingBox();console.log('keep',Math.round(b3.y));}
 const tap=async(n)=>p.evaluate((n)=>{window.__H=nmHexOfNode(n);window.losHexAtClient=function(){return window.__H;};return nmRtmTap(1,1);},n);
 const nodes=await p.evaluate(()=>{var N=BTG.nodes;var s=155;var cand=N.map((n,i)=>i).filter(i=>{var d=btDist(s,i);return d>=4&&d<=6;});var e1=cand[0],e2=cand.filter(i=>btDist(i,e1)>=5)[0];var mk=N.map((n,i)=>i).filter(i=>btDist(s,i)===2)[0];return {s,e1,e2,mk};});
 console.log('tap1',await tap(nodes.s),await p.evaluate(()=>NM_RTM.step+' '+NM_RTM.n));
@@ -13,8 +15,7 @@ await p.evaluate(()=>nmRtmMode('e'));
 console.log('tap e1',await tap(nodes.e1),'tap e2',await tap(nodes.e2),await p.evaluate(()=>NM_RTM.E.length));
 await p.screenshot({path:'/tmp/sm/rtm2.png'});
 await p.evaluate(()=>nmRtmDecide());await p.waitForTimeout(800);
-console.log('picker',await p.evaluate(()=>!!document.getElementById('nmCcSc')+' step:'+NM_RTM.step));
-await p.evaluate(()=>{var C=NM_SC;var ob=nmSuOb(C.nat);var u=ob.filter(x=>x.kind==='mmc')[0];C.cs[u.kind+'|'+u.id]=1;nmScDraw();nmScGo();});await p.waitForTimeout(1500);
+await p.waitForTimeout(1200);
 console.log('step3',await p.evaluate(()=>NM_RTM&&NM_RTM.step+' rt:'+!!NM_RT+' plans:'+nmRtCalc().plans.length+' low:'+nmRtCalc().low.length));
 try{await p.evaluate(()=>{LosFitHeight();Draw();});}catch(e){}await p.waitForTimeout(1500);
 await p.screenshot({path:'/tmp/sm/rtm3.png'});
