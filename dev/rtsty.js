@@ -2,5 +2,5 @@ const {chromium}=require('playwright');(async()=>{const b=await chromium.launch(
 await p.goto('file://'+__dirname+'/../index.html',{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(1000);
 await p.evaluate(async()=>{try{localStorage.setItem('nmRtmPos',JSON.stringify({x:20,y:700}));localStorage.setItem('nmRtmPenPos',JSON.stringify({x:860,y:20}));}catch(e){}S.scen=S.scen||{};S.scen.sel='S24';for(var i=0;i<4;i++){try{Draw();}catch(e){}await new Promise(r=>setTimeout(r,1500));}await btEnsureGraph();nmRtmStart();});await p.waitForTimeout(800);
 await p.evaluate(async()=>{var N=BTG.nodes,id=nm=>N.findIndex(n=>n.nm===nm);var tap=n=>{window.__H=nmHexOfNode(n);window.losHexAtClient=()=>window.__H;return nmRtmTap(1,1);};tap(id('vN7'));tap(id('vP9'));NM_RTM.sel=null;var pr=document.getElementById('nmRtmPen');if(pr)pr.style.display='none';});
-for(let k=0;k<=5;k++){await p.evaluate(async(k)=>{window.__sty=k;Draw();await new Promise(r=>setTimeout(r,600));},k);await p.screenshot({path:'/tmp/sm/sty'+k+'.png',clip:{x:500,y:100,width:300,height:230}});}
+for(const k of [0,6,7]){await p.evaluate(async(k)=>{window.__sty=k;Draw();await new Promise(r=>setTimeout(r,600));},k);await p.screenshot({path:'/tmp/sm/sty'+k+'.png',clip:{x:500,y:100,width:300,height:230}});}
 console.log(E);await b.close();})();
