@@ -1,8 +1,9 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-08 16:10 (main=v915)
+- 最終更新: 2026-11-08 (main=v916)
 - 状態: 返事待ちなし。未対応: 混在ヘクスは2画面の連続(①歩兵CC→②車両CC)で、サンプルの1画面統合(車両を目標チップに入れる)ではない。①②は同時ではなく順(①で全滅した歩兵は②で攻撃できない)。車両が両軍にいる場合は最初の車両側だけ。別件: 44秒応答なしはバックアップ復元後の起動中に発生(PCでは再現せず)。
+- v916 済: 判定ボードに新タイル2つ。歩兵用「PAATC（歩兵が車両へ）」nmPaOpen/NM_PA/nmRmPaItems(sub 'pa'。国籍→MMC追加→指揮官→ユニットごとに出目→合格/失敗PIN。修正=指揮官cmd+未熟等+1 nmCvPa1)、車両用「車両が敵AFVへ（停止できる？）」nmVeOpen/NM_VE/nmVeCalc/nmRmVeItems(sub 've'。3.3.2: 自車の使い切らない弾(deplete===0)で原DR5のTK#を計算 → judgeAFVEffects が KIA か SHOCK なら停止可)。白兵戦(CCV)パネルと爆薬(DC)パネルからPAATCの出目判定を削除(CCは「PAATC失敗(使わない)」ボタンのみ、DCは案内文のみ・置く条件なし)。dev/pa.js。【ルール上の前提・要確認】命中箇所(車体/砲塔)が決まっていないので、どちらかで撃破/Shockなら「停止可」。POSSIBLE_SHOCKは数えない。MG/IFEは対象外。
 - v915 済: 混在ヘクスの白兵戦。nmMixVeh/nmMixOk/nmMixGo、NM_MIX={n,isd,vs,att}。nmHqCcOpenが設定、nmCCApplyが att(①で攻撃指定した歩兵pid)を記録、nmMixGo が nmCvOpen+done設定。dev/mix.js。
 - v914 済: 判定ボードの回復・修理を「回復」(nmRlOpen)「修理」(nmRpOpen)に分割。カウンター無しは nmRrOpen(kind) → 回復=仮編成'_T'+nmRmRallyItems内にnmRrRows(国籍・ユニット−/＋)、修理=仮車両+nmRmRvItems(判定モードのラッパーにも nmRrRows)。NM_RR={kind,nat,n,v}。nmScOpen('nmRlOpen'/'nmRpOpen')はnmRrOpenへ。dev/rr.js。
 - v913 済: nmMcSection のLL(LLTC/LLMC)ブロックは pendMc(未判定ユニットあり)の間は案内のみ。LLTCの対象は統制のみ(混乱は除外、従来どおり)。dev/lltc.js。
