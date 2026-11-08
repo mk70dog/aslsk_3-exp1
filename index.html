@@ -38208,14 +38208,14 @@ function nmMh2Open(){var ns=nmSuNats();if(!ns.length){btToast(T('シナリオを
 function nmMh2Close(){var o=document.getElementById('nmMh2');if(o)o.remove();NM_MH2=null;}
 function nmMh2Set(k,v){var M=NM_MH2;if(!M)return;M[k]=v;if(k==='nat'){M.cs={};M.g=null;}if(k!=='a'&&k!=='b')M.res=null;nmMh2Draw();}
 function nmMh2Cnt(key,d){var M=NM_MH2;if(!M)return;var it=nmSuOb(M.nat).filter(function(x){return x.kind+'|'+x.id===key;})[0];if(!it)return;var n=Math.max(0,Math.min((M.cs[key]||0)+d,it.n||1));if(n)M.cs[key]=n;else delete M.cs[key];M.res=null;nmMh2Draw();}
-function nmMh2Calc(){var M=NM_MH2,ob=nmSuOb(M.nat),sel=[];ob.forEach(function(x){var n=M.cs[x.kind+'|'+x.id]||0;for(var i=0;i<n;i++)sel.push(x);});
+function nmMh2Calc(){var M=NM_MH2,ob=nmSuOb(M.nat),sel=[],ldr=[];ob.forEach(function(x){var n=M.cs[x.kind+'|'+x.id]||0;for(var i=0;i<n;i++)(x.kind==='smc'?ldr:sel).push(x);});
   var typ=function(x){return /乗員/.test(x.label)?'crew':/\(HS\)/.test(x.label)?'hs':'sq';};
   var ord=sel.slice().sort(function(a,b){var r={crew:0,sq:1,hs:2};return r[typ(a)]-r[typ(b)];});var main=ord[0]||null,ex=ord.slice(1);
   var L=[],sum=0;var ter=NM_MH2_TER.filter(function(t){return t[0]===M.ter;})[0];var mf=(M.road?1:ter[2])*2;L.push(['MF '+mf+T('(地形の')+(M.road?1:ter[2])+'MF×2)',mf]);sum+=mf;
   if(ter[3]){L.push(['TEM +'+ter[3]+'('+T(ter[1])+')',ter[3]]);sum+=ter[3];}if(M.road){L.push([T('道路のヘクスサイドを越える'),-2]);sum-=2;}
   if(main&&typ(main)==='sq'){L.push([T('分隊が運ぶ'),-1]);sum-=1;}
   var exd=0;ex.forEach(function(x){exd+=typ(x)==='sq'?-2:-1;});exd=Math.max(-4,exd);if(ex.length){L.push([T('追加')+' '+ex.map(function(x){return x.label;}).join('・')+(exd===-4?T('(最大−4)'):''),exd]);sum+=exd;}
-  var g=M.g?nmGun(M.g):null;return {main:main,ex:ex,L:L,drm:sum,g:g,mn:g&&g.m!=null?g.m:null};}
+  var g=M.g?nmGun(M.g):null;return {main:main,ex:ex,ldr:ldr,L:L,drm:sum,g:g,mn:g&&g.m!=null?g.m:null};}
 function nmMh2Roll(a,b){var M=NM_MH2;if(!M)return;if(!a&&!b&&M.a&&M.b){a=M.a;b=M.b;}var C=nmMh2Calc();if(!C.main||!C.g){btToast(T('運ぶユニットと砲を選んでください'));return;}
   if(!a||!b){if(!nmAdOn()){btToast(T('出目を入力してください(オートダイスOFF)'));return;}a=1+Math.floor(Math.random()*6);b=1+Math.floor(Math.random()*6);}
   var dr=a+b,fin=dr+C.drm,t=fin<C.mn?'ok':fin===C.mn?'stop':'fail';M.res={a:a,b:b,dr:dr,fin:fin,t:t};M.a=0;M.b=0;
@@ -38225,9 +38225,9 @@ function nmMh2Draw(){var M=NM_MH2;if(!M)return;var o=document.getElementById('nm
   var bx=o.querySelector('.ccBox'),st=bx?bx.scrollTop:0,C=nmMh2Calc(),col=function(nat){return (UNITS[nat]&&UNITS[nat].col)||'#ccddee';};
   var on='background:#c8a032;color:#000;font-weight:900';var B=function(sel,fn,lb,sub){return '<button class="b sm" style="margin:0;min-height:38px;padding:4px 12px;display:inline-flex;flex-direction:column;align-items:flex-start;justify-content:center;'+(sel?on:'')+'" onclick="'+fn+'"><span>'+lb+'</span>'+(sub?'<small style="font-size:10.5px;opacity:.8">'+sub+'</small>':'')+'</button>';};
   var sec=function(n,t,sub){return '<div style="font-weight:900;color:#ffd060;margin:12px 0 6px">'+n+' '+T(t)+(sub?' <span style="font-weight:400;font-size:12px;color:#9ab">'+sub+'</span>':'')+'</div>';};
-  var ob=nmSuOb(M.nat).filter(function(x){return x.kind==='mmc';});
-  var rows='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+ob.map(function(x){var key=x.kind+'|'+x.id,n=M.cs[key]||0;return '<div style="display:flex;align-items:center;gap:6px;background:'+(n?'#3a3218':'#151a22')+';border:1px solid '+(n?'#c8a032':'#2c3440')+';border-radius:8px;padding:4px 6px"><span style="flex:1;font-weight:800">'+x.label+'</span><small style="color:#8899aa">×'+(x.n||1)+'</small><button class="b sm" style="margin:0;width:32px;height:32px;padding:0" onclick="nmMh2Cnt(\''+key+'\',-1)">−</button><b style="min-width:16px;text-align:center">'+n+'</b><button class="b sm" style="margin:0;width:32px;height:32px;padding:0" onclick="nmMh2Cnt(\''+key+'\',1)">＋</button></div>';}).join('')+'</div>';
-  var who=C.main?('<div style="font-size:12px;color:#9fd3b4;margin-top:6px">'+T('運ぶ')+': <b>'+C.main.label+'</b>'+(C.ex.length?'　'+T('手伝う')+': '+C.ex.map(function(x){return x.label;}).join('・'):'')+'</div>'):'<div style="font-size:12px;color:#8899aa;margin-top:6px">'+T('乗員がいれば乗員、いなければ分隊が運び、ほかは手伝い(追加)になります')+'</div>';
+  var ob=nmSuOb(M.nat).filter(function(x){return x.kind==='mmc'||x.kind==='smc';}); /* sample(ダルマ指示「運ぶユニットに指揮官が表示しない」): 指揮官も選べる(修正なし・一緒に移動) */
+  var rows='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+ob.map(function(x){var key=x.kind+'|'+x.id,n=M.cs[key]||0;return '<div style="display:flex;align-items:center;gap:6px;background:'+(n?'#3a3218':'#151a22')+';border:1px solid '+(n?'#c8a032':'#2c3440')+';border-radius:8px;padding:4px 6px"><span style="flex:1;font-weight:800">'+x.label+(x.kind==='smc'?'<small style="display:block;font-weight:400;font-size:10.5px;color:#9fb2c8">'+T('指揮官・修正なし・一緒に移動')+'</small>':'')+'</span><small style="color:#8899aa">×'+(x.n||1)+'</small><button class="b sm" style="margin:0;width:32px;height:32px;padding:0" onclick="nmMh2Cnt(\''+key+'\',-1)">−</button><b style="min-width:16px;text-align:center">'+n+'</b><button class="b sm" style="margin:0;width:32px;height:32px;padding:0" onclick="nmMh2Cnt(\''+key+'\',1)">＋</button></div>';}).join('')+'</div>';
+  var who=C.main?('<div style="font-size:12px;color:#9fd3b4;margin-top:6px">'+T('運ぶ')+': <b>'+C.main.label+'</b>'+(C.ex.length?'　'+T('手伝う')+': '+C.ex.map(function(x){return x.label;}).join('・'):'')+(C.ldr&&C.ldr.length?'　'+T('一緒に移動')+': '+C.ldr.map(function(x){return x.label;}).join('・')+'<span style="color:#8899aa">（'+T('修正なし')+'）</span>':'')+'</div>'):'<div style="font-size:12px;color:#8899aa;margin-top:6px">'+T('乗員がいれば乗員、いなければ分隊が運び、ほかは手伝い(追加)になります')+'</div>';
   var guns=nmIjVehs(M.nat).filter(function(o){return o.kind==='gun'&&nmMhCan(o.id);});
   var gs=guns.length?'<div style="display:flex;gap:6px;flex-wrap:wrap">'+guns.map(function(o){var g=nmGun(o.id);return B(M.g===o.id,"nmMh2Set('g','"+o.id+"')",o.nm,'M# '+(g&&g.m!=null?g.m:'?'));}).join('')+'</div>':'<div style="font-size:13px;color:#9ab">'+nmNatLbl(M.nat)+T('の砲はこのシナリオにありません')+'</div>';
   /* v859 sample(ダルマ指示「人力移動 鹵獲した砲も選択可能にする」): 相手の国籍の砲を「鹵獲した砲」として選べる。人力移動の修正は変わらない(5.5の鹵獲の不利は射撃だけ) */
@@ -38243,7 +38243,7 @@ function nmMh2Draw(){var M=NM_MH2;if(!M)return;var o=document.getElementById('nm
     +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><button class="b sm" style="margin:0;height:34px" onclick="nmMh2Close();nmHqOpen()">← '+T('戻る')+'</button><b style="flex:1;font-size:17px;color:#7ec8e3">'+T('人力移動(砲)')+'</b><button class="b sm" style="margin:0;height:34px" onclick="nmMh2Close()">✕ '+T('閉じる')+'</button></div>'
     +'<div style="font-size:12px;color:#9ab">'+T('地図にカウンターを置かずに使えます。砲を隣のヘクスへ動かせるか判定します(6.5)')+'</div>'
     +'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">'+nmSuNats().map(function(k){var sel=k===M.nat;return '<button class="b sm" style="margin:0;height:36px;padding:0 14px;'+(sel?'background:'+col(k)+';color:#000;font-weight:900;border-color:#fff':'color:'+col(k))+'" onclick="nmMh2Set(\'nat\',\''+k+'\')">'+nmNatLbl(k)+'</button>';}).join('')+'</div>'
-    +sec('①','運ぶユニット',T('乗員・分隊・半分隊'))+rows+who
+    +sec('①','運ぶユニット',T('乗員・分隊・半分隊・指揮官'))+rows+who
     +sec('②','運ぶ砲')+gs
     +sec('③','入るヘクス')+ters
     +sec('④','判定')+sum
