@@ -22,6 +22,7 @@ await p.screenshot({path:'/tmp/sm/rtm3.png'});
 const pl=await p.evaluate(()=>nmRtCalc().plans.map(P=>P.to));console.log('plans',pl);
 console.log('tap plan',await tap(pl[0]));await p.waitForTimeout(800);
 await p.evaluate(()=>{try{localStorage.removeItem('nmRtmPos');}catch(e){}NM_RTM_POS=null;var b=document.getElementById('nmRtmBn');if(b)b.remove();nmRtmBanner();});await p.waitForTimeout(300);console.log('pick',await p.evaluate(()=>JSON.stringify(NM_RTM&&NM_RTM.pick)+' start:'+NM_RTM.n+' bn:'+(document.getElementById('nmRtmBn')||{}).textContent));await p.screenshot({path:'/tmp/sm/rtm-pick.png'});
+console.log('free',await p.evaluate(()=>{var C=nmRtCalc(),sr=nmRtSearch(NM_RT.n,C.E,C.mf),pl=C.plans.map(P=>P.to).concat(C.low.map(P=>P.to));var k=Object.keys(sr.dist).map(Number).filter(n=>n!==NM_RT.n&&pl.indexOf(n)<0)[0];window.__H=nmHexOfNode(k);nmRtmTap(1,1);return k+' '+JSON.stringify(NM_RTM.pick);}));
 await p.evaluate(()=>nmRtmCancel());await p.waitForTimeout(500);console.log('tmp left',await p.evaluate(()=>nmSideList('f').concat(nmSideList('e')).filter(e=>e.ccTmp||e.ijTmp).length));
 console.log('btsmoke after',await p.evaluate(()=>JSON.stringify(BT.smoke||{})));
 console.log('after',await p.evaluate(()=>JSON.stringify({done:!!(NM_RT&&NM_RT.done),rtm:!!NM_RTM,bn:!!document.getElementById('nmRtmBn')})));
