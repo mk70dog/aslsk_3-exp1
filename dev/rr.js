@@ -9,12 +9,18 @@ console.log('tiles',JSON.stringify(tiles));
 // 回復
 await p.evaluate(()=>{[...document.querySelectorAll('#nmHq button')].filter(x=>/^回復/.test(x.textContent.trim()))[0].click();});await p.waitForTimeout(800);
 let t=await p.evaluate(()=>(document.getElementById('btRm')||{}).innerText||'');
-console.log('rally panel ok',/国籍/.test(t),/回復するユニットを上で選んでください/.test(t),!/ユニットの選択に戻る/.test(t));
-const r1=await p.evaluate(async()=>{var Q=NM_RR,us=nmRrUnits(Q.nat);var iM=us.findIndex(u=>u.kind==='mmc'),iS=us.findIndex(u=>u.kind==='smc');
- nmRrCnt(iM,1);nmRrCnt(iM,1);nmRrCnt(iS,1,0);await new Promise(r=>setTimeout(r,300));var its=nmGeList('_T').items;
- var t=(document.getElementById('btRm')||{}).innerText||'';
- var pid=its.filter(x=>x.kind!=='smc')[0].pid;nmRlDo(Q.n,pid,12);await new Promise(r=>setTimeout(r,300));
- return {n:its.length,broken:its.map(x=>!!x.broken),hasRows:its.filter(x=>x.broken).every(x=>t.indexOf(x.label)>=0),res:Object.keys(NM_RL.res).length,hasDm:/DM/.test(t),ldr:/指揮官/.test(t)};});
+console.log('rally panel ok',/国籍/.test(t),/回復するユニットを選んでください/.test(t),/クラス低下|半減/.test(t));
+const r1=await p.evaluate(async()=>{var Q=NM_RR,sleep=ms=>new Promise(r=>setTimeout(r,ms)),out={};
+ var G=nmRrGroups(Q.nat);out.groups=[G.base.length,G.elr.length,G.cas.length];
+ nmRrPick('mmc',G.base[0]);await sleep(300);var t=(document.getElementById('btRm')||{}).innerText||'';out.sel=Q.sel&&Q.sel.label===G.base[0];out.n1=nmGeList('_T').items.length;
+ out.rows=/③ 回復のしかた/.test(t)&&/④ 林・建物内/.test(t)&&/DM状態/.test(t)&&/以下で回復/.test(t)&&/⑤ 判定/.test(t);
+ var m0=/DR (\d+) 以下/.exec(t);out.thr0=m0&&+m0[1];nmRrTer(1);await sleep(200);t=document.getElementById('btRm').innerText;out.thrTer=+(/DR (\d+) 以下/.exec(t)||[])[1];
+ nmRlSet(Q.n,'dm',true);await sleep(200);t=document.getElementById('btRm').innerText;out.thrDm=+(/DR (\d+) 以下/.exec(t)||[])[1];nmRlSet(Q.n,'dm',false);nmRrTer(0);
+ nmRrModeSet('self');await sleep(200);out.self=nmGeList('_T').items.length;t=document.getElementById('btRm').innerText;out.thrSelf=+(/DR (\d+) 以下/.exec(t)||[])[1];
+ var pid=nmGeList('_T').items[0].pid;nmRlDo(Q.n,pid,2+4);await sleep(300);out.res=Object.keys(NM_RL.res).length;
+ nmRrPick('mmc',G.base[0]);await sleep(200);out.single=nmGeList('_T').items.length;
+ var sm=nmRrUnits(Q.nat).filter(u=>u.kind==='smc')[0];if(sm){nmRrPick('smc',sm.label);await sleep(200);out.smc=nmGeList('_T').items.length;}
+ return out;});
 console.log('rally',JSON.stringify(r1));
 const r1b=await p.evaluate(()=>{var Q=NM_RR,k=nmSuNats();var o=k.filter(x=>x!==Q.nat)[0];if(o)nmRrNat(o);return {nat:NM_RR.nat,items:nmGeList('_T').items.length};});console.log('natSwitch',JSON.stringify(r1b));
 // 修理
