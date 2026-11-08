@@ -33,4 +33,13 @@ const r5=await p.evaluate(()=>{nmCcpUndo();return {applied:NM_CC.applied,atk:JSO
 console.log('undo',JSON.stringify(r5));
 const r6=await p.evaluate(()=>{nmCcaSimple();var Z=nmCcAtkInit();return {f:Z.A.f.length,e:Z.A.e.length,a:Z.A.f[0]&&Z.A.f[0].a.length};});
 console.log('simple',JSON.stringify(r6));
+const r7=await p.evaluate(()=>{var o={};nmCcaSimple();var Z=nmCcAtkInit(),lab=function(sd,g){return g.map(function(m){return nmCcaLbl(Z.I[sd][m].x);}).join('+');};
+ o.g0=nmCcaGroups('f',Z.I.f).map(function(g){return lab('f',g);});
+ var si=Z.I.f.findIndex(function(q){return q.x.kind==='smc';});if(si<0){o.nosmc=1;return o;}
+ nmCcaPair('f',si);Z=nmCcAtkInit();o.g1=nmCcaGroups('f',Z.I.f).map(function(g){return lab('f',g);});
+ nmCcaPair('f',si);Z=nmCcAtkInit();o.g2=nmCcaGroups('f',Z.I.f).map(function(g){return lab('f',g);});
+ // 指揮官のチップ(=その組)をタップすると組ごとに外れる/入る
+ var gi=nmCcaGroups('e',Z.I.e).filter(function(g){return g.length>1;})[0];if(gi){var A=function(){return JSON.stringify(nmCcAtkInit().A.f[0].t);};o.t0=A();nmCcaTog('f',0,'t',gi[0]);o.t1=A();nmCcaTog('f',0,'t',gi[0]);o.t2=A();}
+ return o;});
+console.log('groups',JSON.stringify(r7));
 console.log('errors',JSON.stringify(e));await b.close();})();
