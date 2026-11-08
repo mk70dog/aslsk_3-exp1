@@ -9,12 +9,15 @@ const r=await p.evaluate(async()=>{var n=BTG.nodes.findIndex(N=>/Woods|Building/
  nmSideList(vsd).push({boardId:H.boardId,col:H.col,row:H.row,st:{},veh:vs[0].id});
  nmHqCcOpen(n,asd);await new Promise(r=>setTimeout(r,500));var out={mx:!!NM_MX,turn:NM_MX&&NM_MX.turn,isd:NM_MX&&NM_MX.isd,vs:NM_MX&&NM_MX.vs};
  var t=()=>(document.getElementById('btRm')||{}).innerText||'';var M=NM_MX;out.n=n;out.terr=BTG.nodes[n].terr;
- NM_CV.noPa=false;nmCvAmbSet('v');await new Promise(r=>setTimeout(r,300));out.txtAmb=/不意打ち成功：車両の側が先/.test(t());out.turnAmb=M.turn===M.vs;
- // 車両が先: 車両のみ。攻撃後も車両側が残れば続く、なければ相手
- var P0=null;nmMxSelT('V');var it0=nmMxIts(M.isd).filter(q=>!q.x.broken)[0];nmMxTgtT(String(it0.x.pid));out.v2iDrm=/DRM -1\(不意打ち\)/.test(nmMxPrev().txt);nmMxGo(12);await new Promise(r=>setTimeout(r,300));
- out.ambS=M.ambS===M.vs;out.stays=M.turn===M.vs;out.done=M.ambDone;
- // 歩兵の攻撃(歩兵→歩兵なら +1 不意打ちされた, 敵歩兵が残っていれば)
- var av=nmMxAvail(M.turn);nmMxSelT(av[0]);var tg=nmMxIts(M.isd).filter(q=>!q.x.broken)[0];if(tg)nmMxTgtT(String(tg.x.pid));var pv=nmMxPrev();out.i2i=pv&&(pv.k+':'+/不意打ち-1/.test(pv.txt));if(tg)nmMxTgtT(String(tg.x.pid));nmMxGo(12);await new Promise(r=>setTimeout(r,300));out.afterTurn=M.turn+'/'+M.ambDone+'/'+M.hist.length;
- var av2=nmMxAvail(M.turn);out.av2=av2.length+'/'+M.turn;if(M.turn===M.vs&&av2.length)nmMxPass();out.afterPass=M.turn+'/'+M.ambDone;if(M.turn===M.isd){var a3=nmMxAvail(M.turn);nmMxSelT(a3[0]);nmMxTgtT('V');var pc=nmMxPrev();out.i2vTxt=pc&&(pc.txt||pc.err);}
+ nmMxAmbSet(true);nmMxAmbDr('a',1);nmMxAmbDr('d',6);await new Promise(r=>setTimeout(r,300));
+ out.ambWho=M.ambS===M.isd;out.txtAmb=/不意打ち成功/.test(t());out.turnAmb=M.turn===M.isd;
+ // 突撃側(歩兵)が先に攻撃: 歩兵→歩兵に -1
+ var av=nmMxAvail(M.turn);nmMxSelT(av[0]);var tg=nmMxIts(M.vs).filter(q=>!q.x.broken)[0];nmMxTgtT(String(tg.x.pid));var pv=nmMxPrev();out.i2iDrm=pv&&/不意打ち-1/.test(pv.txt);nmMxGo(12);await new Promise(r=>setTimeout(r,300));
+ out.stays=M.turn===M.isd;out.left=nmMxAvail(M.isd).length;
+ // 残りの歩兵が車両を攻撃(不意打ち-1)
+ var a2=nmMxAvail(M.isd);nmMxSelT(a2[0]);nmMxTgtT('V'+M.vs);var pc=nmMxPrev();out.i2vDrm=pc&&/DRM -1/.test(pc.txt||'');
+ nmMxPass();await new Promise(r=>setTimeout(r,300));out.ambDone=M.ambDone;out.turnAfter=M.turn===M.vs;
+ // 車両側: 車両→歩兵に +1 (不意打ちされた)
+ nmMxSelT('V'+M.vs);var t2=nmMxIts(M.isd).filter(q=>!q.x.broken)[0];if(t2)nmMxTgtT(String(t2.x.pid));var pz=nmMxPrev();out.v2iTxt=pz&&(pz.txt||pz.err);
  return out;});
 console.log(JSON.stringify(r,null,1));console.log('errors',JSON.stringify(e));await b.close();})();
