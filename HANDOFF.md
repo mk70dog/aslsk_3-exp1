@@ -1,8 +1,9 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-08 16:10 (main=v912)
+- 最終更新: 2026-11-08 16:10 (main=v913)
 - 状態: 返事待ち=sample-rally-repair-split(判定ボードの「回復・修理」を「回復」「修理」に分け、それぞれ1画面で完了)。「実施」で実装。別件: 44秒応答なしはバックアップ復元後の起動中に発生(A→Bとは別件の可能性、PCでは再現せず)。
+- v913 済: nmMcSection のLL(LLTC/LLMC)ブロックは pendMc(未判定ユニットあり)の間は案内のみ。LLTCの対象は統制のみ(混乱は除外、従来どおり)。dev/lltc.js。
 - v912 済: 指揮官の負傷dr(nmCasRed)をオートダイスOFFなら手入力に。NM_WPEND/nmWdShow/nmWdDo(入力画面、確定で状態と文言〔…負傷dr入力待ち〕を置換して再描画)、nmCasWound。dev/wd.js。
 - v911 済: カウンターなしの白兵戦の続き。nmCcCarrySnap(反映時にccTmp編成の残りを NM_CCCARRY に保存、両軍残りのみ)、選択画面に「前回の白兵戦の続き」(nmCcCarryGo/nmCcCarryClear)。実行は mel=true(不意打ちなし)。dev/cccarry.js。
 - v910 済: 継続中の混戦(NM_CCMEL[ヘクス]。反映後に両軍残りで立つ)の次の白兵戦は NM_CC.mel=true で不意打ち欄を出さない。途中再開は ambOk/DR入力済なら不意打ち欄を出さない。dev/ccmel.js。未対応(提案済・返事待ち): 歩兵+車両が混在するヘクスの白兵戦(現状は両軍に歩兵がいれば歩兵CCのみで車両は対象外)。SK4 3.8は非車両側先→車両反撃。
