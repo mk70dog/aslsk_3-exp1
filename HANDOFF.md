@@ -1,8 +1,9 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-08 (main=v948)
+- 最終更新: 2026-11-08 (main=v949)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
+- v949 済: 約束(v934 ダルマ指示)どおり、マルチ判定の潰走は常に自軍・敵軍カウンターのない地図(nmRtmStart)。nmHqAtA/nmHqPickA で fn==='nmRtOpen' は即 nmRtmStart(編成の選択 nmHqPk を出さない)。nmRtEnemies は NM_RTM&&!real の時 ijTmp(置いたマーカー)だけ。v948 の『地図に編成がある時は実ユニット』は取り消し。地図のユニットメニューの潰走(nmRtmStartAt、real)は v947 のまま。
 - v948 済: 不具合修正。マルチ判定の潰走は、地図に編成がある時は nmHqAtA('nmRtOpen')→window.nmRtOpen(旧一覧パネル)に行っていた(v934〜947 は地図が空の時の nmScOpen 経路しか直していなかった)。nmHqAtA で fn==='nmRtOpen' は nmRtmStartAt(an,sd)。編成の選択(nmHqPk)から選んだ時も同じ。旧 nmRtOpen を呼ぶ入口は無し(nmRtmFinish 内部のみ)。dev/rtreal.js に hq/pick テスト。
 - v947 済: 地図のユニットメニュー(nmUnitMenu)の『潰走(混乱N)』を nmRtOpen(旧一覧パネル)から nmRtmStartAt(n,sd) に。M.real=1・step3 から開始、NM_RT={n,sd,slot:実ユニット}。地図の実際の敵は nmRtEnemies で自動、SVG で点線『敵4』。実際の敵ヘクスにはマーカー不可。やり直し=足したマーカー・妨害だけ消す。終了=地図へ(判定ボードに戻らない)。ユニットは動かさない(調べるだけ、ダルマ了承)。dev/rtreal.js。総点検 sweep S25/S24 ともエラー0(v946時点)。
 - v946 済: 阻止できる敵タブの×(火力半減・プラス修正)を例ごとの小さな一覧に(CX/1人でMGを撃つ指揮官/BU車両の主砲/止まらずに動いている車両/潰走先が射界の外の砲・主砲)。
