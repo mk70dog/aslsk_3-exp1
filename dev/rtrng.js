@@ -6,7 +6,7 @@ const r=await p.evaluate(()=>{var N=BTG.nodes,id=nm=>N.findIndex(n=>n.nm===nm),n
  var cnt=()=>{var C=nmRtCalc(),sr=nmRtSearch(NM_RT.n,C.E,C.mf);return Object.keys(sr.dist).filter(k=>nmRtInter(+k,C.E)).length;};
  tap(id('vN7'));tap(id('vJ8'));o.inf4=cnt();nmRtmESet('rng',-3);o.inf1=cnt();nmRtmESet('rng',3);nmRtmESet('gun',1);var f=[];for(var k=0;k<6;k++){f.push(cnt());nmRtmESet('fac',1);}o.fac=f.join(',');
  for(var k=0;k<f.indexOf(Math.max.apply(null,f));k++)nmRtmESet('fac',1);
- tap(id('vO9'));tap(id('vL8'));o.sel=nm(NM_RTM.sel);tap(id('vO9'));o.sel2=nm(NM_RTM.sel);tap(id('vO9'));o.del=NM_RTM.E.length;tap(id('vO9'));tap(id('vJ8'));o.n=NM_RTM.E.length+' sel='+nm(NM_RTM.sel);
+ tap(id('vO9'));tap(id('vL8'));o.sel=nm(NM_RTM.sel);tap(id('vO9'));o.sel2=nm(NM_RTM.sel);nmRtmEDel();o.del=NM_RTM.E.length;tap(id('vO9'));tap(id('vJ8'));o.n=NM_RTM.E.length+' sel='+nm(NM_RTM.sel);
  o.bn=document.getElementById('nmRtmBn').textContent;return o;});
 console.log(JSON.stringify(r,null,1));
 await p.evaluate(()=>{nmRtmPenTab('u');Draw();});await p.waitForTimeout(1200);await p.screenshot({path:'/tmp/sm/rtrng.png'});
