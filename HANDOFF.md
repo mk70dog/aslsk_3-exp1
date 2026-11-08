@@ -1,9 +1,9 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-08 (main=v922)
+- 最終更新: 2026-11-08 (main=v923)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
-- v922 済: 判定ボードの回復(RRm: NM_RR.kind='rally'・仮編成'_T')を作り直し。nmRmRallyItems 先頭で nmRrRallyItems(n) へ。NM_RR に sel{kind,label}/mode('ldr'|'self')/ldr/ter。nmRrGroups(nat)=分隊(OB)/クラス低下(ELR_MAP連鎖)/半減(CASUAL_MAP連鎖)、nmRrPick/nmRrModeSet/nmRrLdrSet/nmRrTer/nmRrBuild(_Tを選んだ1ユニット+指揮官で作り直す)。nmRlCalc は RRm の時だけ地形をNM_RR.terで決める。ユニットは1つずつ(同時回復なし)。dev/rr.js 更新。地図のヘクスからの回復(nmRlOpen)は従来のまま。\n- v921 済: 右端の縦ボタン列(nmBarLite)に ↶戻す/↷進む(マークD)。nmFtActFill で bu/br を remove せず bj の直下へ、NM_TB_ITEMS に undo/redo 追加(既存設定は hq の後ろに挿入)。
+- v923 済: 白兵戦パネル(nmCcAtk)の組み分けを nmCcaPairSet(sd,i,k)(k=付け先MMCの添字/-1=単独)で直接選ぶ形に。nmCcaPairHTML を作り直し(旧 nmCcaPair の切り替えは未使用)。\n- v922 済: 判定ボードの回復(RRm: NM_RR.kind='rally'・仮編成'_T')を作り直し。nmRmRallyItems 先頭で nmRrRallyItems(n) へ。NM_RR に sel{kind,label}/mode('ldr'|'self')/ldr/ter。nmRrGroups(nat)=分隊(OB)/クラス低下(ELR_MAP連鎖)/半減(CASUAL_MAP連鎖)、nmRrPick/nmRrModeSet/nmRrLdrSet/nmRrTer/nmRrBuild(_Tを選んだ1ユニット+指揮官で作り直す)。nmRlCalc は RRm の時だけ地形をNM_RR.terで決める。ユニットは1つずつ(同時回復なし)。dev/rr.js 更新。地図のヘクスからの回復(nmRlOpen)は従来のまま。\n- v921 済: 右端の縦ボタン列(nmBarLite)に ↶戻す/↷進む(マークD)。nmFtActFill で bu/br を remove せず bj の直下へ、NM_TB_ITEMS に undo/redo 追加(既存設定は hq の後ろに挿入)。
 - v920 済: NM_MX を一般化(vDead{f,e}、キー 'Vf'/'Ve'、M.both/first、不意打ち M.amb={on,asd,cx,dr,res} を nmMxAmbMod/Eval/Dr で自前計算、nmMxCv(sd,k) が NM_CV の isd/amb/noPa を攻撃ごとに設定)。dev/mx.js, mxamb.js, mxboth.js。
 - v919 済: 混在白兵戦(NM_MX)に不意打ち。画面の「①不意打ち」で『歩兵が林・建物へ突撃した』を選ぶと nmCvAmbItems(NM_CV.noPa=false)。M.ambS=成功側、nmMxNext で成功側が先に全攻撃(ambDone)。歩兵→歩兵は nmMxPrev で±1、車両→歩兵は nmCvCounterCalc の drm、歩兵→車両は nmCvCalc。突撃した側は車両のいない側(isd)と仮定。dev/mxamb.js。
 - v918 済: 混在ヘクス(歩兵＋車両)の白兵戦を SK4 3.8 の交互宣言に作り直し。nmHqCcOpen が nmMxOpen へ(NM_MX。nmRmMxItems、sub 'mx')。攻撃ごとに nmMxGo で即解決(歩兵→歩兵=nmCCCalcL、歩兵→車両=NM_CV(mx=1)の nmCvCalc/nmCvAtk、車両→歩兵=nmCvCounterCalc のFPで目標選択分)。nmCvRe は NM_CV.mx の時 nmMxRe へ。dev/mx.js(旧 mix.js は削除)。【未対応・開示】不意打ち(3.8)はこの画面では扱わない/車両が両軍にいるヘクスは従来画面(トースト表示)/PAATCは別タイル/原DR2の指揮官誕生は歩兵→歩兵と歩兵→車両のみ/車両の攻撃でDR2の特例なし。
