@@ -39761,7 +39761,7 @@ function nmRmPaItems(n){var P=NM_PA;if(!P)return nmRMenuItems(n);var it=[],ns=nm
   it.push({ic:'info',t:'<span style="font-size:12px;color:#9fb2c8">'+T('突撃フェイズに、敵の車両がいるヘクスへ入る歩兵（MMC）ごとに判定。DR＋修正 ≦ 士気 で合格、失敗はPIN。車両が歩兵のいるヘクスに入る時は不要。指揮官は判定不要で修正になる。')+'</span>'});
   if(ns.length>1)it.push({row:1,ic:'sel',t:'国籍',btns:ns.map(function(k){return [(P.nat===k?'✓':'')+nmNatLbl(k),"nmPaNat('"+k+"')"];})});
   var mm=nmPaMmc(),ld=nmPaLdrs();
-  it.push({row:1,ic:'sel',t:'① 突入するMMC（タップで追加）',btns:mm.map(function(u,i){return [u.label+(u.red?' <small style="color:#9fb2c8">'+T(u.red)+'</small>':''),"nmPaAdd("+i+")"];})});
+  it.push({row:1,ic:'sel',t:'① 突入するMMC（タップで追加）',btns:mm.map(function(u,i){var im=vaslCtrHTML('u:'+P.nat+'|'+u.label,44)||'';return ['<span style="display:inline-flex;flex-direction:column;align-items:center;gap:2px;padding:3px 2px;line-height:1.1">'+im+'<span style="font-size:11px">'+u.label+'</span>'+(u.red?'<small style="font-size:10px;color:#ffb070">'+T(u.red)+'</small>':'')+'</span>',"nmPaAdd("+i+")"];})});
   if(ld.length)it.push({row:1,ic:'sel',t:'② 一緒にいる指揮官',btns:[[(P.ldr==null?'✓':'')+'なし',"nmPaLdr(-1)"]].concat(ld.map(function(l,i){return [(P.ldr===i?'✓':'')+l.label+' '+sg(l.c),"nmPaLdr("+i+")"];}))});
   it.push({sep:1});
   if(!P.list.length){it.push({ic:'info',t:T('上でMMCを選ぶと、ここに判定が出ます')});return it;}
