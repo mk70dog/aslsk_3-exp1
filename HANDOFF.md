@@ -1,8 +1,9 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-08 (main=v951)
+- 最終更新: 2026-11-08 (main=v952)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
+- v952 済: 潰走・阻止の地図。①逃/敵/砲を VASL カウンター画像で表示(nmRtmSVG の ctr()、nmRtmCtrId/nmRtmEctr、射程は右下の数字)②敵マーカーの小窓 nmRtmEd を「シナリオのユニットを選ぶ」に変更: タブ 歩兵(損耗・クラス低下も)/SW(対戦車SW・DC・指揮官は除く)/砲/車両(nmRtmUnits、nmRtmEPick)。射程はカウンターの値を自動(砲・車両は16固定)。砲は向き1つ(rtFac)、砲塔付き車両は車体(rtHull)と砲塔(rtFac)、無砲塔車両は車体のみ。1ヘクス=最長射程の1ユニットだけ置く。車体MGの向きは扱わない。③潰走地図のボタンの四角ドットを nmRtmCtrCss で消去。妨害/匍/⚠ は文字のまま。dev/rted.js 更新、dev/rtrng.js 削除。
 - v951 済: PAATC(nmPaOpen)。nmPaMmc に損耗(HS)・クラス低下の MMC を追加(nmRrGroups の base/elr/cas)。MMC・指揮官ボタンを VASL カウンター表示(nmPaCtr、#nmPaCtrCss で .rmB の枠・背景・四角ドットを消し、タイルは固定高さ)。dev/pared.js。
 - v950 済: 敵マーカーの設定を小窓 #nmRtmEd(マーカー横、nmRtmEd)に。①種類 ②射程(数字ボタン nmRtmERng+−/＋) ③砲の向き(SVG の不可視点 nmRtmSelC/nmRtmDir0..5 の画面位置から矢印の向きを求めるので地図と同じ向き、nmRtmEFac)。敵モード: 空き=置いて小窓、置いた敵をタップ=小窓を開く/閉じる、消すは小窓の『消す』(nmRtmEDel)。dev/rted.js、dev/rtrng.js 更新。
 - v949 済: 約束(v934 ダルマ指示)どおり、マルチ判定の潰走は常に自軍・敵軍カウンターのない地図(nmRtmStart)。nmHqAtA/nmHqPickA で fn==='nmRtOpen' は即 nmRtmStart(編成の選択 nmHqPk を出さない)。nmRtEnemies は NM_RTM&&!real の時 ijTmp(置いたマーカー)だけ。v948 の『地図に編成がある時は実ユニット』は取り消し。地図のユニットメニューの潰走(nmRtmStartAt、real)は v947 のまま。
