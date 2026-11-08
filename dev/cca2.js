@@ -23,4 +23,7 @@ console.log('undo',JSON.stringify(r3));
 // 非不意打ちは従来どおり同時
 const r4=await p.evaluate(()=>{var C=NM_CC;C.amb=null;C.a1done=false;nmCcaSimple();nmCcaDrSet('f',0,12);nmCcaDrSet('e',0,12);nmCcpApply();return {applied:C.applied,log:C.log};});
 console.log('simultaneous',JSON.stringify(r4));
+const r5=await p.evaluate(()=>{var C=NM_CC,n=C.n;C.amb='f';C.a1done=false;nmCcaSimple();var Z=nmCcAtkInit(),c0=nmCcaCalc(Z,'f',Z.A.f[0]);nmCcaDrSet('f',0,c0.kill-c0.drm);nmCcpApply();var A=NM_CC.a1done;nmCcpClose();var closed=!NM_CC;nmCCOpen(n);var t=document.getElementById('nmCcp').innerText;
+ var o={a1done:A,closed:closed,resumed:!!NM_CC.resumed,stage:NM_CC.a1done,note:/再開しました/.test(t)};nmCcFresh(n);o.fresh=!NM_CC.a1done&&!NM_CC.resumed;nmCcpClose();return o;});
+console.log('resume',JSON.stringify(r5));
 console.log('errors',JSON.stringify(e));await b.close();})();
