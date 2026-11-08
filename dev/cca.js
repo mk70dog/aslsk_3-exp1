@@ -6,8 +6,10 @@ await p.evaluate(async()=>{S.scen=S.scen||{};S.scen.sel='S24';await btEnsureGrap
 await p.waitForTimeout(600);
 await p.evaluate(()=>{var x=[...document.querySelectorAll('#nmHq button')].filter(x=>/^白兵戦/.test(x.textContent.trim()))[0];x.click();});await p.waitForTimeout(600);
 const r=await p.evaluate(()=>{var C=NM_CCS;var a=nmSuOb(C.an).filter(x=>x.kind==='mmc'||x.kind==='smc');var d=nmSuOb(C.dn).filter(x=>x.kind==='mmc'||x.kind==='smc');
- a.slice(0,3).forEach(x=>C.acs[x.kind+'|'+x.id]=1);d.slice(0,3).forEach(x=>{C.dcs=C.dcs||{};C.dcs[x.kind+'|'+x.id]=1;});nmCcScDraw();nmCcScGo();
- var Z=nmCcAtkInit();return {nf:Z.I.f.length,ne:Z.I.e.length,af:JSON.stringify(Z.A.f),ae:JSON.stringify(Z.A.e),panel:!!document.getElementById('nmCcp')};});
+ a.slice(0,3).forEach(x=>C.acs[x.kind+'|'+x.id]=1);d.slice(0,3).forEach(x=>{C.dcs=C.dcs||{};C.dcs[x.kind+'|'+x.id]=1;});nmCcScDraw();
+ S.savedGroups=S.savedGroups||{};S.savedGroups.S24=S.savedGroups.S24||{};GROUP_SLOTS.forEach(function(k){S.savedGroups.S24[k]={pickerNat:C.an,pickerItems:[],sw:[],swOwner:{},latw:[]};}); /* 空き枠に攻撃側の国籍が残った状態(v904) */
+ nmCcScGo();
+ var Z=nmCcAtkInit();var H0=nmHexOfNode(NM_CC.n),S0=nmCCSides(H0);return {an:C.an,dn:C.dn,sideNat:[nmCcpSideNm(S0.f,'f'),nmCcpSideNm(S0.e,'e')],nf:Z.I.f.length,ne:Z.I.e.length,af:JSON.stringify(Z.A.f),ae:JSON.stringify(Z.A.e),panel:!!document.getElementById('nmCcp')};});
 console.log('open',JSON.stringify(r));
 await p.waitForTimeout(500);await p.screenshot({path:process.argv[2]+'_1default.png'});
 const r2=await p.evaluate(()=>{var o={};var Z=nmCcAtkInit();
