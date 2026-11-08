@@ -1,8 +1,9 @@
 const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1180,height:1500},deviceScaleFactor:1.5});const E=[];p.on('pageerror',x=>E.push(String(x)));
 await p.goto('file:///home/claude/aslsk_3-exp1/index.html',{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(2000);
 const PF=['','#btRm.rmFull ','#nmIj ','#nmCcp ','#nmCcSc ','#nmDcp ','#nmRaq '];
-const CSS=PF.map(f=>`html:root ${f}.dsRow{display:flex!important;flex-wrap:wrap!important;gap:6px!important;align-items:center;justify-content:flex-start;max-width:276px!important;background:none!important;border:0!important;box-shadow:none!important;padding:0!important}
-html:root ${f}.dsRow>button.dsb.dsb:not(.zz){flex:0 0 40px!important;width:40px!important;min-width:40px!important;max-width:40px!important;height:40px!important;min-height:40px!important;padding:0!important;font-size:17px!important;font-weight:800!important;text-align:center!important;display:flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;background:radial-gradient(circle,#000000aa .9px,transparent 1.25px) 0 0/4px 4px,linear-gradient(#131313,#080808)!important;border:0!important;border-radius:6px!important;box-shadow:0 3px 0 #0e0e0c,inset 0 1px 0 #ffffff1f!important;color:#ccddee!important}
+const CSS=PF.map(f=>`html:root ${f}.dsRow{display:flex!important;flex-wrap:nowrap!important;gap:0!important;align-items:stretch;border:1px solid #2a3140!important;border-radius:8px!important;overflow:hidden!important;background:radial-gradient(circle,#000000aa .9px,transparent 1.25px) 0 0/4px 4px,#10141b!important;box-shadow:none!important;padding:0!important;width:100%!important;max-width:100%!important}
+html:root ${f}.dsRow>button.dsb.dsb:not(.zz){flex:1 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;height:38px!important;min-height:38px!important;padding:0!important;margin:0!important;font-size:15px!important;font-weight:800!important;text-align:center!important;display:flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;background:transparent!important;border:0!important;border-right:1px solid #232a36!important;border-radius:0!important;box-shadow:none!important;color:#ccddee!important}
+html:root ${f}.dsRow>button.dsb:last-child{border-right:0!important}
 html:root ${f}.dsRow>button.dsb::before,html:root ${f}.dsRow>button.dsb::after{content:none!important;background-image:none!important}`).join('\n');
 const mark=`window.__ds=function(root){root.querySelectorAll('div,span').forEach(function(c){var bs=[].slice.call(c.children).filter(function(x){return x.tagName==='BUTTON'});var nb=bs.filter(function(x){return /^\\d{1,2}$/.test(x.textContent.trim())});if(nb.length>=5&&nb.length===bs.length)c.classList.add('dsRow');bs.forEach(function(x){x.classList.add('dsb');});});};`;
 await p.evaluate(mark);
@@ -23,7 +24,7 @@ await p.evaluate(()=>{try{nmCcpClose();}catch(e){}try{nmCcScClose&&nmCcScClose()
 await p.evaluate(async()=>{S.turn.phase='pfph';var A=BTG.nodes[131],B=BTG.nodes[134];S_LOS.friendHexes.length=0;S_LOS.enemyHexes.length=0;S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB={x:B.x,y:B.y};try{LosRunPixel();}catch(x){}nmIjOpen();nmIjSet('nat','GER');nmIjSet('cp',1);var ob=nmSuOb('GER');nmIjCnt('mmc|'+ob.filter(x=>x.kind==='mmc')[0].id,2);nmIjPlaceNow();var J=NM_IJ;J.eb=1;try{nmIjSet('bnat','SOV');}catch(x){}});
 await p.waitForTimeout(1500);await p.evaluate(()=>{try{nmIjGo(true);}catch(e){}});await p.waitForTimeout(1500);
 await shot('#nmIj .ijBox','ij',false);
-await p.evaluate(()=>{__ds(document.getElementById('nmIj'));});await p.waitForTimeout(300);await shot('#nmIj .ijBox','ij',true);
+await p.evaluate(()=>{});await p.waitForTimeout(300);await shot('#nmIj .ijBox','ij',true);
 // 3: rally (autodice off)
 await p.evaluate(()=>{var o=document.getElementById('nmIj');if(o)o.remove();try{nmIjClose();}catch(e){}S.nmAutoOff=true;S.turn.phase='rph';nmHqOpen();});
 await p.waitForTimeout(600);
