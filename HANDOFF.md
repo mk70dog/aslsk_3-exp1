@@ -1,9 +1,10 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-08 (main=v942)
+- 最終更新: 2026-11-08 (main=v943)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
-- v942 済: 潰走・阻止をライブ表示に。step1 で逃をタップ→nmRtmDecide で即 step3(決定ボタンなし)。step3 の帯に 敵(n)/LOS妨害(n)/経路 の切替(M.mode e/k/r)+やり直し/終了。敵・妨害の変更で M.pick を消し、SVG は毎回計算(M.cache を使い回さない)。不具合修正: BtRmClose フック(38922付近)が NM_CCS.open で一時ユニット(ccTmp)を消していた→ nmRtmActive() 中は消さない。nmRtmStart で自軍・敵軍が未設定なら nmSdAssign(nat,'f')。dev/rtlive.js(S24 逃vN7 敵vO9,vL8,vN5 → vR7 経路 vO7>vP6>vQ7、阻止 vQ7)。返事待ち: sample-rtm-pen2(阻止されたらカード)。
+- v943 済: 潰走・阻止の結果画面(step3)に阻止カード #nmRtmPen(右下、nmRtmDrag(p,'nmRtmPenPos') でドラッグ移動・位置記憶)。タブ NM_RTM_PT='p'(阻止されたら: 合格/PIN/失敗)/'u'(阻止できる敵: ○×条件)、nmRtmPenTab。nmRtmDrag はキー別(NM_RTM_POS={})。内容は SK4 3.6 準拠。サンプル=samples/sample-rtm-pen3.png。
+- v942 済: 潰走・阻止をライブ表示に。step1 で逃をタップ→nmRtmDecide で即 step3(決定ボタンなし)。step3 の帯に 敵(n)/LOS妨害(n)/経路 の切替(M.mode e/k/r)+やり直し/終了。敵・妨害の変更で M.pick を消し、SVG は毎回計算(M.cache を使い回さない)。不具合修正: BtRmClose フック(38922付近)が NM_CCS.open で一時ユニット(ccTmp)を消していた→ nmRtmActive() 中は消さない。nmRtmStart で自軍・敵軍が未設定なら nmSdAssign(nat,'f')。dev/rtlive.js(S24 逃vN7 敵vO9,vL8,vN5 → vR7 経路 vO7>vP6>vQ7、阻止 vQ7)。
 - v941 済: nmRtPlans の候補(番号)をルール上止まれる行き先だけに。林・建物(cov)があれば MF 最小のもの全部+そこから続けて入れる林・建物(sr.prev が候補のもの)、最大6。cov が無い時は従来どおり(敵から遠い順4つ)。旧パネルの潰走(nmRtOpen)にも効く。番号以外の水色は参考表示。S26 tL9/敵 tK9,tN10,tP9 で tL10 のみを確認(/tmp/q5.js 相当)。
 - v940 済: 潰走・阻止 step3 で番号以外の水色(到達可能)ヘクスもタップ可。nmRtSearch の prev から経路を作り M.pick(no:0)。トーストは『水色のヘクスをタップしてください』。dev/rtm.js に free テスト。返事待ち: sample-rtm-pen(阻止されたらカード、未コミットの改良版は stash)。
 - v939 済: 潰走・阻止は『どこに潰走できる/できない・どこで阻止されるかを調べるツール』(ダルマ指示)。step3 で行き先(番号/匍)をタップすると nmRtGo を呼ばず M.pick={no,to,path,low,inter} を設定し、経路の線と阻止ヘクスをバナーに表示(nmRtmUnpick=別の行き先)。NMC・ユニット移動なし。nmRtmFinish 後の btRm 一覧パネルは消す。サンプル=samples/sample-rtm-pick.png。
