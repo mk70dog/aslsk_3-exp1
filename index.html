@@ -39745,7 +39745,7 @@ function nmVeOpen(){nmXOpen('ve');}
 function nmPaRe(){var P=NM_PA;if(!P)return;NM_RM_SUB='pa';btRmReopen(P.n);}
 function nmPaSeed(){var P=NM_PA,u=P&&nmPaMmc()[0];if(u&&!P.list.length)P.list.push({kind:'mmc',label:u.label,nat:P.nat,res:null});}/* 開いた時・国籍切替時は先頭のMMCを1つ入れておく(v929) */
 function nmPaNat(k){var P=NM_PA;if(!P)return;P.nat=k;P.list=[];P.ldr=null;nmPaSeed();nmPaRe();}
-function nmPaMmc(){var P=NM_PA;return nmSuOb(P.nat).filter(function(u){return u.kind==='mmc';});}
+function nmPaMmc(){var P=NM_PA,o=nmSuOb(P.nat).filter(function(u){return u.kind==='mmc';}),have={};o.forEach(function(u){have[u.label]=1;});try{var G=nmRrGroups(P.nat);G.base.concat(G.cas).forEach(function(l){if(!have[l]&&/\(HS\)$/.test(l)){have[l]=1;o.push({kind:'mmc',label:l,red:'損耗'});}});G.elr.forEach(function(l){if(!have[l]){have[l]=1;o.push({kind:'mmc',label:l,red:'クラス低下'});}});G.cas.forEach(function(l){if(!have[l]){have[l]=1;o.push({kind:'mmc',label:l,red:'損耗'});}});}catch(e){}return o;} /* v951: 損耗(HS)・クラス低下のユニットも選べる */
 function nmPaLdrs(){var P=NM_PA;return nmSuOb(P.nat).filter(function(u){return u.kind==='smc';}).map(function(u){return {label:u.label,c:(nmMcUnitMor({nat:P.nat,kind:'smc',label:u.label})||{}).cmd||0};});}
 function nmPaAdd(i){var P=NM_PA,u=nmPaMmc()[i];if(!P||!u)return;P.list.push({kind:'mmc',label:u.label,nat:P.nat,res:null});nmPaRe();}
 function nmPaDel(i){var P=NM_PA;if(!P)return;P.list.splice(i,1);nmPaRe();}
@@ -39761,7 +39761,7 @@ function nmRmPaItems(n){var P=NM_PA;if(!P)return nmRMenuItems(n);var it=[],ns=nm
   it.push({ic:'info',t:'<span style="font-size:12px;color:#9fb2c8">'+T('突撃フェイズに、敵の車両がいるヘクスへ入る歩兵（MMC）ごとに判定。DR＋修正 ≦ 士気 で合格、失敗はPIN。車両が歩兵のいるヘクスに入る時は不要。指揮官は判定不要で修正になる。')+'</span>'});
   if(ns.length>1)it.push({row:1,ic:'sel',t:'国籍',btns:ns.map(function(k){return [(P.nat===k?'✓':'')+nmNatLbl(k),"nmPaNat('"+k+"')"];})});
   var mm=nmPaMmc(),ld=nmPaLdrs();
-  it.push({row:1,ic:'sel',t:'① 突入するMMC（タップで追加）',btns:mm.map(function(u,i){return [u.label,"nmPaAdd("+i+")"];})});
+  it.push({row:1,ic:'sel',t:'① 突入するMMC（タップで追加）',btns:mm.map(function(u,i){return [u.label+(u.red?' <small style="color:#9fb2c8">'+T(u.red)+'</small>':''),"nmPaAdd("+i+")"];})});
   if(ld.length)it.push({row:1,ic:'sel',t:'② 一緒にいる指揮官',btns:[[(P.ldr==null?'✓':'')+'なし',"nmPaLdr(-1)"]].concat(ld.map(function(l,i){return [(P.ldr===i?'✓':'')+l.label+' '+sg(l.c),"nmPaLdr("+i+")"];}))});
   it.push({sep:1});
   if(!P.list.length){it.push({ic:'info',t:T('上でMMCを選ぶと、ここに判定が出ます')});return it;}
