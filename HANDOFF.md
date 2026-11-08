@@ -1,9 +1,10 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-08 (main=v945)
+- 最終更新: 2026-11-08 (main=v946)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
-- v945 済: 潰走・阻止の敵マーカー(一時 ijTmp)に rtRng/rtGun/rtFac。nmRtEnemies が rng=e.rtRng、rtGun/rtFac を返し、nmRtInter は砲なら nmRtInCA(射界=正面ヘクスサイドの両端稜線の間、±30度)外を除外。nmRtDirs(n)=6方向角。敵モード: 空きタップ=追加して選択(M.sel)/選択中を再タップ=消す/別の敵=選び直し。帯2行目 nmRtmESet('gun'|'rng'|'fac')(砲にすると射程16)。地図に『敵4』『砲16』と射界の扇形(最大8ヘクス描画)。dev/rtrng.js(S24 vJ8: 歩兵4=12/射程1=3、砲6方向=3,0,0,8,6,9)。返事待ち: sample-rtm-pen4(×の項目をわかりやすく)。
+- v946 済: 阻止できる敵タブの×(火力半減・プラス修正)を例ごとの小さな一覧に(CX/1人でMGを撃つ指揮官/BU車両の主砲/止まらずに動いている車両/潰走先が射界の外の砲・主砲)。
+- v945 済: 潰走・阻止の敵マーカー(一時 ijTmp)に rtRng/rtGun/rtFac。nmRtEnemies が rng=e.rtRng、rtGun/rtFac を返し、nmRtInter は砲なら nmRtInCA(射界=正面ヘクスサイドの両端稜線の間、±30度)外を除外。nmRtDirs(n)=6方向角。敵モード: 空きタップ=追加して選択(M.sel)/選択中を再タップ=消す/別の敵=選び直し。帯2行目 nmRtmESet('gun'|'rng'|'fac')(砲にすると射程16)。地図に『敵4』『砲16』と射界の扇形(最大8ヘクス描画)。dev/rtrng.js(S24 vJ8: 歩兵4=12/射程1=3、砲6方向=3,0,0,8,6,9)。
 - v944 済: 潰走・阻止 step3 の帯をコンパクトに(width:max-content、ボタン28px、⠿)。経路モード(M.mode='r')で nmRtmManTap: 最後のヘクスの隣をタップで M.pick={man:true,path,mf,mfMax,inter} に追加(btInfCost・合計MF≤C.mf・敵ヘクス不可・LOS内の敵へ近づく不可・最初の一歩で隣の敵に隣接し続ける不可)、最後をもう一度/『1つ戻す』(nmRtmManBack)で戻す。隣でなければ従来の自動経路。dev/rtlive.js に man テスト。
 - v943 済: 潰走・阻止の結果画面(step3)に阻止カード #nmRtmPen(右下、nmRtmDrag(p,'nmRtmPenPos') でドラッグ移動・位置記憶)。タブ NM_RTM_PT='p'(阻止されたら: 合格/PIN/失敗)/'u'(阻止できる敵: ○×条件)、nmRtmPenTab。nmRtmDrag はキー別(NM_RTM_POS={})。内容は SK4 3.6 準拠。サンプル=samples/sample-rtm-pen3.png。
 - v942 済: 潰走・阻止をライブ表示に。step1 で逃をタップ→nmRtmDecide で即 step3(決定ボタンなし)。step3 の帯に 敵(n)/LOS妨害(n)/経路 の切替(M.mode e/k/r)+やり直し/終了。敵・妨害の変更で M.pick を消し、SVG は毎回計算(M.cache を使い回さない)。不具合修正: BtRmClose フック(38922付近)が NM_CCS.open で一時ユニット(ccTmp)を消していた→ nmRtmActive() 中は消さない。nmRtmStart で自軍・敵軍が未設定なら nmSdAssign(nat,'f')。dev/rtlive.js(S24 逃vN7 敵vO9,vL8,vN5 → vR7 経路 vO7>vP6>vQ7、阻止 vQ7)。
