@@ -35432,10 +35432,11 @@ function nmRtElim(n){var R=NM_RT,d=nmGeList(R.slot),lg=[];nmBkSnap('潰走でき
   var src=nmRtEh();if(src&&!nmGeList(R.slot).items.length){var L=nmSideList(R.sd);L.splice(L.indexOf(src),1);}
   R.done={elim:lg};try{logResult(function(){return {tabLbl:'MAP 潰走',text:lg.join('+')+' 潰走できない → 除去',color:'#ff6060',detail:null};});}catch(e){}nmStSave();nmRtRe(n);}
 function nmRtMc(n,pid,k,dr){var D=NM_RT&&NM_RT.done;if(!D)return;var its=nmGeList(D.slot).items,x=its.filter(function(q){return q.pid===pid;})[0];if(!x)return;var key=pid+':'+k;if(D.mc[key])return;
-  if(!dr)dr=2+Math.floor(Math.random()*6)+Math.floor(Math.random()*6);var u=nmRlUnit(x),bm=(u.bm!=null?u.bm:u.mor)-((x.kind==='smc'&&x.wounded)?1:0),ok=dr<=bm&&dr!==12,lg=[],tx;
+  if(!dr)dr=2+Math.floor(Math.random()*6)+Math.floor(Math.random()*6);var u=nmRlUnit(x),bm=(u.bm!=null?u.bm:u.mor)-((x.kind==='smc'&&x.wounded)?1:0),Ld=(D.ldr!=null&&x.kind!=='smc')?its.filter(function(q){return q.pid===D.ldr&&q.kind==='smc'&&!q.broken&&!q.pinned;})[0]:null,ldm=Ld?(nmMcUnitMor(Ld).cmd||0):0,fin=dr+ldm,ok=fin<=bm&&dr!==12,lg=[],tx; /* sample(徹底確認 3.6): 一緒に潰走する指揮官は修正を足し、ユニットが失敗したら指揮官は除去 */
   /* v896(徹底確認 3.6/3.2.3): 混乱中の原DR12は除去。ちょうどで合格はPIN扱い(この潰走フェイズはもう潰走できない・敵に隣接なら除去) */
-  if(!ok&&dr===12){var ii=its.indexOf(x);if(ii>=0)nmGeDelCore(D.slot,ii);tx='原DR12 → 除去';}else if(!ok){nmCasRed(D.slot,x,lg);tx='損耗 '+lg.join('・');}else if(dr===bm)tx='合格（ちょうど → PIN: この潰走フェイズはもう潰走できない。敵に隣接していれば除去）';else tx='合格';
-  D.mc[key]={dr:dr,ok:ok,t:x.label+' DR'+dr+' (士気'+bm+') → '+tx};
+  if(!ok&&dr===12){var ii=its.indexOf(x);if(ii>=0)nmGeDelCore(D.slot,ii);tx='原DR12 → 除去';}else if(!ok){nmCasRed(D.slot,x,lg);tx='損耗 '+lg.join('・');}else if(fin===bm)tx='合格（ちょうど → PIN: この潰走フェイズはもう潰走できない。敵に隣接していれば除去）';else tx='合格';
+  if(!ok&&Ld){var li=nmGeList(D.slot).items.indexOf(Ld);if(li>=0){nmGeDelCore(D.slot,li);tx+='・同行の指揮官 '+Ld.label+' 除去';}D.ldr=null;}
+  D.mc[key]={dr:dr,ok:ok,t:x.label+' DR'+dr+(ldm?(ldm>0?'+':'')+ldm+'(指揮官)='+fin:'')+' (士気'+bm+') → '+tx};
   try{logResult(function(){return {tabLbl:'MAP 阻止',text:D.mc[key].t,color:ok?'#00aa55':'#cc3333',detail:null};});}catch(e){}nmStSave(D.slot);nmRtRe(n);}
 function nmRmRtItems(n){var R=NM_RT;if(!R)return nmRMenuItems(n);var it=[],L=NM_SIDE_LBL[R.sd];
   it.push({ic:'back',t:'← 戻る',sub:'潰走 @'+BTG.nodes[R.n].nm,f:"NM_RT=null;btRmReopen("+n+")"});it.push({sep:1});
@@ -35443,9 +35444,10 @@ function nmRmRtItems(n){var R=NM_RT;if(!R)return nmRMenuItems(n);var it=[],L=NM_
   if(D){if(D.elim){it.push({ic:'x',t:'<span style="color:#ff6060">潰走できない → '+D.elim.join('・')+' 除去</span>'});it.push({ic:'x',t:'閉じる',f:"BtRmClose()"});return it;}
     it.push({ic:'move',t:'<span>'+(D.low?'匍匐後退':'潰走')+' → <b>'+BTG.nodes[D.to].nm+'</b>（編成'+D.slot+'）</span>',sub:'経路: '+D.path.map(function(x){return BTG.nodes[x].nm;}).join('→')+(D.gone?'　元のマーカーは空になったので外しました':'')});
     if(D.inter.length){it.push({ic:'info',t:'<span style="color:#ffb040">阻止: '+D.inter.map(function(q){return BTG.nodes[q.n].nm+'('+q.who+'から)';}).join('・')+'</span>',sub:'開豁地で敵の射程・LOS内。ユニットごとに阻止の士気チェック(混乱士気、失敗で損耗)'});
-      var its=nmGeList(D.slot).items;D.pids.forEach(function(pid){var x=its.filter(function(q){return q.pid===pid;})[0];D.inter.forEach(function(q,k){var r=D.mc[pid+':'+k];
+      var its=nmGeList(D.slot).items,LL=its.filter(function(q){return q.kind==='smc'&&!q.broken&&!q.pinned;});if(LL.length)it.push({row:1,ic:'sel',t:'<span style="font-size:12px">'+T('一緒に潰走する指揮官')+'</span>',btns:[[(D.ldr==null?'✓':'')+T('なし'),"NM_RT.done.ldr=null;nmRtRe("+n+")"]].concat(LL.map(function(q){return [(D.ldr===q.pid?'✓':'')+q.label+'（'+((nmMcUnitMor(q).cmd||0)>0?'+':'')+(nmMcUnitMor(q).cmd||0)+'）',"NM_RT.done.ldr="+q.pid+";nmRtRe("+n+")"];}))});if(D.ldr!=null)it.push({ic:'info',t:'<span style="font-size:12px;color:#ffd070">'+T('指揮官の修正を阻止の士気チェックに足す。ユニットが失敗したら指揮官は除去(3.6)')+'</span>'});
+      D.pids.forEach(function(pid){var x=its.filter(function(q){return q.pid===pid;})[0];D.inter.forEach(function(q,k){var r=D.mc[pid+':'+k];
         if(r){it.push({ic:'sel',t:'<span style="color:'+(r.ok?'#3ca878':'#ff6060')+'">'+r.t+'</span>'});return;}if(!x)return;
-        it.push({row:1,cmp:1,ic:'sel',img:vaslCtrHTML('u:'+(x.nat||'')+'|'+x.label,26)||'',t:x.label+(D.inter.length>1?' ('+(k+1)+')':''),btns:[['振る',"nmRtMc("+n+","+pid+","+k+",0)"]].concat([[2,'2'],[6,'6'],[7,'7'],[8,'8'],[9,'9'],[12,'12']].map(function(v){return [v[1],"nmRtMc("+n+","+pid+","+k+","+v[0]+")"];}))});});});}
+        it.push({row:1,cmp:1,ic:'sel',img:vaslCtrHTML('u:'+(x.nat||'')+'|'+x.label,26)||'',t:x.label+(D.inter.length>1?' ('+(k+1)+')':''),btns:[2,3,4,5,6,7,8,9,10,11,12].map(function(v){return [String(v),"nmRtMc("+n+","+pid+","+k+","+v+")"];})});});});}
     else if(!D.low)it.push({ic:'info',t:'阻止なし'});
     it.push({ic:'x',t:'閉じる',f:"BtRmClose()"});return it;}
   var C=nmRtCalc();
