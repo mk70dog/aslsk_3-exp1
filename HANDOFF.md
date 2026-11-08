@@ -1,8 +1,8 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-08 13:30 (main=v902)
-- 状態: 返事待ちなし。
+- 最終更新: 2026-11-08 13:45 (main=v902)
+- 状態: 返事待ちあり → sample-advance-word(samples/sample-advance-word.png)。ダルマ指摘「前進 → 突撃？」(車両白兵戦の PAATC『前進で入った』など)。APh の行動を指す『前進』を『突撃』に(ボタン・ヘクスメニュー・札『前進済』・エラー・ログ・ルール早見)。AFPh の短い名前『前進』→『前進射』。シナリオ背景文の『前進した』・『前進射撃』・Bounding First Fire の『前進しながらの射撃』は変えない。「実施」待ち。
 - v902 済: 白兵戦パネル(nmCcpDraw)で攻撃を1つずつ指定(ルール3.8)。NM_CC.atk={f:[{a,t,dr,cas}],e:[…]}(添字は nmCCIts の順)、nmCcAtkInit/nmCcaCalc/nmCcaTog/nmCcaAdd/nmCcaDel/nmCcaSimple/nmCcaDrSet/nmCcaCas/nmCcaHTML。既定=各側『全員で1攻撃』(従来どおり)。1ユニットは1回だけ攻撃・攻撃される(使用済みは暗く)、混乱は攻撃不可。nmCCCalc は nmCCCalcL(ユニット配列)へ分離。nmCCApply は攻撃ごとの結果を同時に反映(除去=その攻撃の目標全員、損耗=目標1ユニット選択/ランダム、指揮官誕生は攻撃ごと C.promo['f0'])。旧ヘクスメニュー nmRmCCItems は『1攻撃のとき C.f/C.e を DR に使う』互換のまま。テスト dev/cca.js、smoke・sweep・ccr エラー0。サンプル samples/sample-cc-designate.png(ブランチ sample-cc-designate、main にマージ済み)。
 - v901 済: フェイズ表記を全て「略称(日本語フェイズ)」に統一(RPh(回復フェイズ)/PFPh(準備射撃フェイズ)/MPh(移動フェイズ)/DFPh(防御射撃フェイズ)/AFPh(前進射撃フェイズ)/RtPh(潰走フェイズ)/APh(突撃フェイズ)/CCPh(白兵戦フェイズ))。公式訳(SK1日本語ルール)は APh=突撃フェイズ(旧『前進フェイズ』は突撃に直した)。対象=画面の日本語文・シナリオSSR・ルール文(コメント・英語表示・英語訳は変更なし)。人力移動の注記は「AFPh(前進射撃フェイズ)の射撃・APh(突撃フェイズ)の突撃はできない」。ログ見出し判定の正規表現(/^(?:RPh\()?回復フェイズ/ など)は新旧両方に一致。テスト smoke・sweep・mh2 エラー0。サンプル samples/sample-phase-notation.png(ブランチ sample-phase-notation、main にマージ済み)。
 - v900 済: 人力移動の運ぶユニットに指揮官(smc)も出す(修正なし・一緒に移動、nmMh2Calc は C.ldr に分けて計算に入れない)。
