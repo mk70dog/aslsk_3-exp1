@@ -34115,7 +34115,7 @@ function nmUnitMenu(it,H,n,sd){
     {var stc=nmStOf(eh);if(stc.cx||stc.imv)it.push({row:1,ic:'move',t:'<span>状態'+(stc.imv&&stc.mv?'　<span style="font-size:12px;color:#ffd060">この手番: '+nmImName(stc.imv)+'</span>':'')+'</span>',btns:[[(stc.cx?'✓':'')+'CX',"nmStTog("+n+",'"+sd+"','cx')"]]});} /* v525: 急速移動でCX */
     if(!NM_MOVE){it.push({ic:'move',t:'このカウンターを移動',sub:'種類を選ぶと開始。1ヘクスずつタップでマーカーが進む(MFを数える)。「ここで止まる」で確定'});it.push({row:1,ic:'',t:'',btns:NM_IM_OPT.map(function(o){return [o[1],"nmMvStartIm("+n+",'"+sd+"','"+o[0]+"')"];})});} /* v450 / v525: 移動・警戒移動・急速移動 */
     var nbk=nmGeList(eh.grp).items.filter(function(x){return x.broken;}).length;if(nbk)it.push({ic:'sel',t:'回復(混乱'+nbk+')',sub:'混乱しているユニットの回復。指揮官回復・自己回復をダイスで',f:"nmRlOpen("+n+",'"+sd+"')"}); /* v416 */
-    if(nbk)it.push({ic:'move',t:'潰走(混乱'+nbk+')',sub:'混乱したユニットを林・建物へ(6MF)。潰走義務・阻止の士気チェック・潰走できない時の除去',f:"nmRtOpen("+n+",'"+sd+"')"}); /* v430 */
+    if(nbk)it.push({ic:'move',t:'潰走(混乱'+nbk+')',sub:'混乱したユニットを林・建物へ(6MF)。潰走義務・阻止の士気チェック・潰走できない時の除去',f:"nmRtmStartAt("+n+",'"+sd+"')"}); /* v430 → v947: 地図表示で */
     var hasDc=!!eh.dcPlaced;try{hasDc=hasDc||nmSuDcList(eh.grp).length>0;}catch(e){hasDc=true;}if(hasDc)it.push({ic:'fire',t:eh.dcPlaced?'爆薬(DC)を爆発させる → '+BTG.nodes[eh.dcPlaced.n].nm:'爆薬(DC)を配置',sub:eh.dcPlaced?'AFPh(前進射撃フェイズ): X#未満で30FP(TEM)':'隣接ヘクスへ設置(DCを持つ統制状態の分隊)',f:"nmDcOpen("+n+",'"+sd+"')"}); /* v430 */
     nmSxRow(it,n,sd,eh); /* v434 */
     if(S.turn&&S.turn.phase==='aph')it.push({ic:'move',t:'突撃(隣接1ヘクス)',sub:'APh(突撃フェイズ): 統制状態のユニットが1ヘクス。敵のいるヘクスへは白兵戦',f:"nmAdvOpen("+n+",'"+sd+"')"}); /* v439 */
@@ -38919,11 +38919,13 @@ function nmRtmTap(cx,cy){if(!nmRtmActive())return false;var M=NM_RTM,H=losHexAtC
   if(M.mode==='k'){BT.smoke=BT.smoke||{};if(M.mkO[n]===undefined&&!(n in M.mkO))M.mkO[n]=BT.smoke[n];var v=M.mk[n]?2:1;if(v>1){delete M.mk[n];if(M.mkO[n]===undefined)delete BT.smoke[n];else BT.smoke[n]=M.mkO[n];}else{M.mk[n]=v;BT.smoke[n]={v:v,k:'m',side:M.sd};}M.cache=null;M.pick=null;try{Draw();}catch(x){}nmRtmBanner();return true;}
   if(n===M.n){btToast(T('潰走するユニットのヘクスです'));return true;}
   var od=M.sd==='f'?'e':'f',L=nmSideList(od),idx=-1;M.E.forEach(function(q,i){if(q.n===n)idx=i;});
+  if(idx<0&&M.real&&NM_RT&&nmRtEnemies(NM_RT.sd).some(function(e){return e.n===n&&!(e.eh&&e.eh.ijTmp);})){btToast(T('地図の敵ユニットです(マーカーは足せません)'));return true;}
   if(idx>=0&&M.sel!==n){M.sel=n;nmRtmBanner();try{Draw();}catch(x){}return true;} /* v945: 別の敵をタップ=選ぶ、選んでいる敵をもう一度=消す */
   if(idx>=0){var j=L.indexOf(M.E[idx].e);if(j>=0)L.splice(j,1);M.E.splice(idx,1);M.sel=null;}else{var en={boardId:H.boardId,col:H.col,row:H.row,st:{},ijTmp:1,ccTmp:1,rtRng:4};L.push(en);M.E.push({n:n,e:en});M.sel=n;}
   M.cache=null;M.pick=null;try{Draw();}catch(x){}nmRtmBanner();return true;}
-function nmRtmReset(){var M=NM_RTM;if(!M)return;nmRtmMkRestore();nmCcScClear();NM_RT=null;M.step=1;M.n=null;M.H=null;M.E=[];M.mode='e';M.cache=null;M.pick=null;M.sel=null;nmRtmBanner();try{Draw();}catch(e){}}
-function nmRtmCancel(){nmRtmEnd(true);nmCcScClear();try{nmHqOpen();}catch(e){}}
+function nmRtmStartAt(n,sd){var eh=nmUnitAt(nmHexOfNode(n),sd);if(!eh||!eh.grp)return;try{BtRmClose();}catch(e){}nmRtmStart();var M=NM_RTM;if(!M)return;var d=nmGeList(eh.grp);M.nat=d.nat||M.nat;M.sd=sd;M.n=n;M.H=nmHexOfNode(n);M.step=3;M.real=1;M.mode='e';NM_RT={n:n,sd:sd,slot:eh.grp,done:null};NM_CCS={open:1};try{Draw();}catch(e){}nmRtmBanner();}
+function nmRtmReset(){var M=NM_RTM;if(!M)return;if(M.real){nmRtmMkRestore();nmCcScClear();M.E=[];M.mk={};M.mode='e';M.pick=null;M.sel=null;nmRtmBanner();try{Draw();}catch(e){}return;} /* v947: 地図のユニットからの時は逃はそのまま */nmRtmMkRestore();nmCcScClear();NM_RT=null;M.step=1;M.n=null;M.H=null;M.E=[];M.mode='e';M.cache=null;M.pick=null;M.sel=null;nmRtmBanner();try{Draw();}catch(e){}}
+function nmRtmCancel(){var re=NM_RTM&&NM_RTM.real;nmRtmEnd(true);nmCcScClear();NM_RT=null;if(!re){try{nmHqOpen();}catch(e){}}else{try{Draw();}catch(e){}}}
 function nmRtmBack(){nmRtmEnd(true);NM_RT=null;nmCcScClear();nmRtmStart();}
 function nmRtmDecide(){var M=NM_RTM;if(!M||M.step!==2)return;M.step='u';nmRtmBanner();var it=nmSuOb(M.nat).filter(function(x){return x.kind==='mmc';})[0]||nmSuOb(M.nat)[0],cs={};if(it)cs[it.kind+'|'+it.id]=1;nmRtmFinish({fn:'nmRtOpen',nat:M.nat,cs:cs,v:null,brk:true,mal:true}); /* v938: 決定でユニット選択を出さず地図の結果へ(先頭の分隊1個・混乱で計算) */}
 function nmRtmFinish(C){var M=NM_RTM;if(!M||M.step!=='u'){nmRtmStart();return;}if(nmSuSide(C.nat)!==M.sd){btToast(T('国籍が違います。潰走するのは手番側のユニットです'));return;}
@@ -38939,6 +38941,7 @@ function nmRtmSVG(dl){if(!nmRtmActive()||!btGraphReady())return '';var M=NM_RTM;
   Object.keys(M.mk||{}).forEach(function(k){var i=+k;h+='<polygon points="'+btHexPoly(i,dl,0.92)+'" fill="#b0b8c4" fill-opacity="0.45" stroke="#e8eef4" stroke-width="2.5" stroke-dasharray="3 3"/>'+lab(i,'妨害','#fff',15);});
   if(M.step===3&&M.pick){var pp=[M.n].concat(M.pick.path).map(function(i){var c=losCanonicalToDisplay(BTG.nodes[i].x,BTG.nodes[i].y,dl);return c.x+','+c.y;}).join(' ');h+='<polyline points="'+pp+'" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><polyline points="'+pp+'" fill="none" stroke="#40d070" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>';var t=M.pick.to;h+='<polygon points="'+btHexPoly(t,dl,1)+'" fill="none" stroke="#fff" stroke-width="5"/>';}
   h+='<polygon points="'+btHexPoly(M.n,dl,1)+'" fill="#ffd040" fill-opacity="0.35" stroke="#ffd040" stroke-width="4"/>'+lab(M.n,'逃','#fff');
+  if(M.real&&M.step===3&&NM_RT){try{nmRtEnemies(NM_RT.sd).forEach(function(e){if(e.eh&&e.eh.ijTmp)return;h+='<polygon points="'+btHexPoly(e.n,dl,1)+'" fill="#ff5a00" fill-opacity="0.25" stroke="#ff8a00" stroke-width="3" stroke-dasharray="7 3"/>'+lab(e.n,(e.go?'敵':'乱')+(e.rng||''),'#fff',15);});}catch(x){}}
   M.E.forEach(function(q){var e=q.e,sel=M.sel===q.n,G=BTG.nodes[q.n];
     if(e.rtGun){var nb=BTG.nodes[G.nb[0]],hs=nb?Math.hypot(nb.x-G.x,nb.y-G.y):40,L2=hs*Math.min(e.rtRng||16,8),d=nmRtDirs(q.n)[(e.rtFac||0)%6],c0=losCanonicalToDisplay(G.x,G.y,dl),pt=function(a,r){var c=losCanonicalToDisplay(G.x+Math.cos(a)*r,G.y+Math.sin(a)*r,dl);return c.x+','+c.y;};
       h+='<polygon points="'+c0.x+','+c0.y+' '+pt(d-Math.PI/6,L2)+' '+pt(d+Math.PI/6,L2)+'" fill="#ff8a00" fill-opacity="0.10" stroke="#ff8a00" stroke-width="2" stroke-dasharray="6 4"/><line x1="'+c0.x+'" y1="'+c0.y+'" x2="'+pt(d,hs*1.3).split(',')[0]+'" y2="'+pt(d,hs*1.3).split(',')[1]+'" stroke="#ffb040" stroke-width="5" stroke-linecap="round"/>';}

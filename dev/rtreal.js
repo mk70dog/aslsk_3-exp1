@@ -1,0 +1,14 @@
+// v947 地図のユニットメニュー「潰走」→ 地図表示(nmRtmStartAt)。S24 で vN7 に混乱した自軍、vO9・vL8 に敵分隊
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1180,height:820}});const E=[];p.on('pageerror',x=>E.push(String(x)));
+await p.goto('file://'+__dirname+'/../index.html',{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(1000);
+await p.evaluate(async()=>{try{localStorage.setItem('nmRtmPos',JSON.stringify({x:20,y:700}));localStorage.setItem('nmRtmPenPos',JSON.stringify({x:20,y:20}));}catch(e){}S.scen=S.scen||{};S.scen.sel='S24';for(var i=0;i<4;i++){try{Draw();}catch(e){}await new Promise(r=>setTimeout(r,1500));}await btEnsureGraph();});
+const r=await p.evaluate(()=>{var N=BTG.nodes,id=nm=>N.findIndex(n=>n.nm===nm),nm=i=>N[i].nm,o={};try{if(!nmSdSet())nmSdAssign('SOV','f',true);}catch(e){}
+ var mk=function(nat,hx,sd,brk){var H=nmHexOfNode(id(hx)),slot=nmGeFreeSlot();var u=nmSuOb(nat).filter(x=>x.kind==='mmc')[0];nmGeAddCore(slot,nat,u.kind,u.label);if(brk)nmGeList(slot).items.forEach(x=>x.broken=true);nmGeSync(slot);var e={boardId:H.boardId,col:H.col,row:H.row,st:{},grp:slot};nmSideList(sd).push(e);return e;};
+ var sdF=nmSuSide('SOV'),sdE=sdF==='f'?'e':'f';mk('SOV','vN7',sdF,true);mk('GER','vO9',sdE,false);mk('GER','vL8',sdE,false);
+ var it=[];nmUnitMenu(it,nmHexOfNode(id('vN7')),id('vN7'),sdF);o.item=(it.filter(x=>/潰走/.test(x.t))[0]||{}).f;eval(o.item);
+ o.st=NM_RTM&&(NM_RTM.step+' real='+NM_RTM.real+' n='+nm(NM_RTM.n));o.E=nmRtCalc().E.map(e=>nm(e.n)+':'+e.rng).join(',');o.plans=nmRtCalc().plans.map(P=>nm(P.to)).join(',');
+ var tap=n=>{window.__H=nmHexOfNode(n);window.losHexAtClient=()=>window.__H;return nmRtmTap(1,1);};tap(id('vO9'));o.tapReal=NM_RTM.E.length;tap(id('vN5'));o.add=NM_RTM.E.length+' E='+nmRtCalc().E.length;nmRtmReset();o.reset=NM_RTM.step+' E='+nmRtCalc().E.length+' n='+nm(NM_RTM.n);
+ o.bn=document.getElementById('nmRtmBn').textContent;return o;});
+console.log(JSON.stringify(r,null,1));await p.evaluate(()=>Draw());await p.waitForTimeout(1200);await p.screenshot({path:'/tmp/sm/rtreal.png'});
+await p.evaluate(()=>nmRtmCancel());console.log('after',await p.evaluate(()=>JSON.stringify({rtm:!!NM_RTM,f:nmSideList('f').length,e:nmSideList('e').length})));
+console.log(E);await b.close();})();
