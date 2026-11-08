@@ -38864,21 +38864,36 @@ function nmRtmPen(){var M=NM_RTM,p=document.getElementById('nmRtmPen');if(!M||M.
     +row('失敗','#ff6060',T('損耗: 分隊→半個分隊(潰走を続けられる)/半個分隊・指揮官→除去。一緒の指揮官も除去'))
     +'<div style="margin-top:6px;padding-top:5px;border-top:1px solid #334;color:#9ab;font-size:11px">'+T('阻止されないのは: 匍匐後退した時/間に妨害がある時/潰走側が高さの有利を受ける時。同じヘクスで阻止されるのは1回だけ')+' <span style="color:#678">(SK4 3.6)</span></div>';}
   p.innerHTML=h;document.body.appendChild(p);nmRtmDrag(p,'nmRtmPenPos');}
-function nmRtmBanner(){var M=NM_RTM;if(!M)return;var b=document.getElementById('nmRtmBn');if(M.step==='u'){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='nmRtmBn';b.setAttribute('style','position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:9400;width:min(94vw,600px);background:#0e1620ee;border:1px solid #4a5566;border-radius:10px;padding:8px 12px;color:#dfe8f0;font:13px/1.7 AppFont,AppJP,monospace;box-shadow:0 6px 20px #000b;touch-action:none');document.body.appendChild(b);nmRtmDrag(b,'nmRtmPos');}
+function nmRtmBanner(){var M=NM_RTM;if(!M)return;var b=document.getElementById('nmRtmBn');if(M.step==='u'){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='nmRtmBn';b.setAttribute('style','position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:9400;width:max-content;max-width:94vw;background:#0e1620ee;border:1px solid #4a5566;border-radius:10px;padding:5px 10px;color:#dfe8f0;font:13px/1.7 AppFont,AppJP,monospace;box-shadow:0 6px 20px #000b;touch-action:none');document.body.appendChild(b);nmRtmDrag(b,'nmRtmPos');}
   var bt=function(t,f,pri){return '<button class="b sm" style="margin:0;height:34px;padding:0 12px;font-weight:800'+(pri?';background:#e0a830;color:#111;border-color:#e0a830':'')+'" onclick="'+f+'">'+T(t)+'</button>';},h='',nk=Object.keys(M.mk||{}).length;
   if(M.step===1)h='<div style="display:flex;align-items:center;gap:8px"><b style="flex:1;color:#ffd040">'+T('潰走・阻止')+' ① '+T('潰走するユニットのヘクスをタップ')+'</b>'+bt('中止','nmRtmCancel()')+'</div>';
   else if(M.step===2)h='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><b style="flex:1;color:#ff9a30;min-width:160px">'+T('潰走・阻止')+' ② '+T(M.mode==='k'?'LOS妨害マーカー':'敵ユニット')+'</b>'+bt((M.mode!=='k'?'✓':'')+'敵('+M.E.length+')',"nmRtmMode('e')",M.mode!=='k')+bt((M.mode==='k'?'✓':'')+'LOS妨害('+nk+')',"nmRtmMode('k')",M.mode==='k')+bt('やり直し','nmRtmReset()')+bt('決定','nmRtmDecide()',1)+'</div><div style="font-size:11px;color:#9ab">'+T(M.mode==='k'?'妨害のあるヘクスをタップ(煙幕・残骸など)。もう一度タップで外す。妨害が1つでもあれば阻止されません':'敵のヘクスをすべてタップ。もう一度タップで外す(射程4の歩兵として計算)')+'</div>';
-  else{var nm=function(i){return BTG.nodes[i].nm;},pk=M.pick,md=M.mode||'e';
-    h='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><b style="flex:1;color:#ffd040;min-width:90px">'+T('潰走・阻止')+'</b>'+bt((md==='e'?'✓':'')+T('敵')+'('+M.E.length+')',"nmRtmMode('e')",md==='e')+bt((md==='k'?'✓':'')+T('LOS妨害')+'('+nk+')',"nmRtmMode('k')",md==='k')+bt((md==='r'?'✓':'')+T('経路'),"nmRtmMode('r')",md==='r')+bt('やり直し','nmRtmReset()')+bt('終了','nmRtmCancel()')+'</div>';
-    if(pk)h+='<div style="font-size:12px"><b style="color:#6fe08a">'+(pk.low?T('匍匐後退'):T('行き先')+(pk.no?' '+pk.no:''))+': '+nm(M.n)+' → '+pk.path.map(nm).join(' → ')+'</b> <span style="color:'+(pk.inter.length?'#ff8080':'#9ab')+'">'+(pk.inter.length?'⚠ '+T('阻止される可能性')+': '+pk.inter.map(nm).join(', '):T('阻止なし'))+'</span></div>';
-    else h+='<div style="font-size:11px;color:#9ab">'+T(md==='k'?'妨害のあるヘクスをタップ(煙幕・残骸など)。もう一度タップで外す。妨害が1つでもあれば阻止されません':md==='r'?'水色のヘクスをタップで経路を表示':'敵のヘクスをタップで追加、もう一度タップで消す(射程4の歩兵として計算)')+'</div>';
-    h+='<div style="font-size:11px;color:#9ab"><span style="color:#ffd040">■</span>'+T('逃')+' <span style="color:#ff8a00">■</span>'+T('敵')+' <span style="color:#7cc4ff">■</span>'+T('潰走できる')+' <span style="color:#888">■</span>'+T('できない')+' <span style="color:#ff5050">⚠</span>'+T('阻止')+' <span style="color:#6fe08a">1</span>'+T('止まれる行き先')+'</div>';}
+  else{var nm=function(i){return BTG.nodes[i].nm;},pk=M.pick,md=M.mode||'e',bs=function(t,f,pri){return '<button class="b sm" style="margin:0;height:28px;padding:0 9px;font-size:12px;font-weight:800'+(pri?';background:#e0a830;color:#111;border-color:#e0a830':'')+'" onclick="'+f+'">'+T(t)+'</button>';};
+    h='<div style="display:flex;align-items:center;gap:5px"><span style="color:#678;font-size:16px;cursor:move;padding:0 2px" title="'+T('ドラッグで移動')+'">⠿</span><b style="color:#ffd040;font-size:13px;margin-right:4px">'+T('潰走')+'</b>'+bs((md==='e'?'✓':'')+T('敵')+M.E.length,"nmRtmMode('e')",md==='e')+bs((md==='k'?'✓':'')+T('妨害')+nk,"nmRtmMode('k')",md==='k')+bs((md==='r'?'✓':'')+T('経路'),"nmRtmMode('r')",md==='r')+(pk&&pk.man?bs('1つ戻す','nmRtmManBack()'):'')+bs('やり直し','nmRtmReset()')+bs('終了','nmRtmCancel()')+'</div>';
+    if(pk)h+='<div style="font-size:11px;line-height:1.5;max-width:560px"><b style="color:#6fe08a">'+(pk.man?T('手動')+' '+pk.mf+'/'+pk.mfMax+'MF':pk.low?T('匍匐後退'):T('行き先')+(pk.no?' '+pk.no:''))+': '+nm(M.n)+'→'+pk.path.map(nm).join('→')+'</b> <span style="color:'+(pk.inter.length?'#ff8080':'#9ab')+'">'+(pk.inter.length?'⚠ '+T('阻止')+': '+pk.inter.map(nm).join(', '):T('阻止なし'))+'</span></div>';
+    else h+='<div style="font-size:11px;line-height:1.5;color:#9ab">'+T(md==='k'?'妨害のヘクスをタップ/もう一度で外す':md==='r'?'隣のヘクスを順にタップで1ヘクスずつ経路(最後をもう一度で戻す)。離れた水色は自動経路':'敵のヘクスをタップ/もう一度で消す(射程4の歩兵)')+' <span style="color:#ffd040">■</span>'+T('逃')+'<span style="color:#ff8a00">■</span>'+T('敵')+'<span style="color:#7cc4ff">■</span>'+T('可')+'<span style="color:#888">■</span>'+T('不可')+'<span style="color:#ff5050">⚠</span>'+T('阻止')+'</div>';}
   b.innerHTML=h;try{nmRtmPen();}catch(e){}}
 function nmRtmStart(C0){var o=document.getElementById('nmCcSc');if(o)o.remove();NM_SC=null;nmCcScClear();try{BtRmClose();}catch(e){}NM_RT=null;nmRtmEnd(true);var ns=nmSuNats();if(!ns.length){btToast(T('シナリオを選んでください'));return;}var c=curScen(),nat=(c&&c.atk&&ns.indexOf(c.atk)>=0)?c.atk:ns[0];try{var an0=resolveFiringNat('PFPh');if(an0&&ns.indexOf(an0)>=0)nat=an0;}catch(e){} /* 潰走するのは手番側(v936: 国籍ボタンなし) */
   try{if(!nmSdSet())nmSdAssign(nat,'f',true);}catch(e){} /* v942: 自軍・敵軍の自動設定で途中から入れ替わらないように */
   NM_RTM={nat:nat,sd:nmSuSide(nat),step:1,n:null,H:null,E:[],mk:{},mkO:{},mode:'e',cache:null};NM_CCS={open:1};
   try{btEnsureGraph().then(function(){Draw();});}catch(e){}try{Draw();}catch(e){}nmRtmBanner();}
 function nmRtmNat(k){var M=NM_RTM;if(!M||M.step!==1)return;M.nat=k;M.sd=nmSuSide(k);nmRtmBanner();}
+function nmRtmManCost(p){var c=0,a=NM_RT.n;for(var i=0;i<p.length;i++){var ic=btInfCost(a,p[i]);c+=ic?ic.c:99;a=p[i];}return c;}
+function nmRtmManSet(p){var M=NM_RTM,C=nmRtCalc();if(!p.length){M.pick=null;}else M.pick={no:0,man:true,to:p[p.length-1],path:p,low:false,mf:Math.round(nmRtmManCost(p)*10)/10,mfMax:C.mf,inter:p.filter(function(x){return nmRtInter(x,C.E);})};try{Draw();}catch(x){}nmRtmBanner();}
+function nmRtmManBack(){var M=NM_RTM;if(!M||!M.pick)return;var p=M.pick.path.slice(0,-1);nmRtmManSet(p);}
+function nmRtmManTap(n){var M=NM_RTM,n0=NM_RT.n,p=(M.pick&&!M.pick.low)?M.pick.path.slice():[],last=p.length?p[p.length-1]:n0;
+  if(p.length&&n===last){p.pop();nmRtmManSet(p);return true;}
+  if(n===n0&&p.length){nmRtmManSet([]);return true;}
+  if(BTG.nodes[last].nb.indexOf(n)<0)return false; /* 隣でなければ自動経路へ */
+  var C=nmRtCalc(),E=C.E,ic=btInfCost(last,n),why='';
+  if(!ic)why='入れないヘクスです';
+  else if(E.some(function(e){return e.n===n;}))why='敵のいるヘクスです';
+  else if(nmRtmManCost(p.concat([n]))>C.mf)why='移動力('+C.mf+'MF)が足りません';
+  else if(p.indexOf(n)>=0)why='同じヘクスは通れません';
+  else{var seen0=E.filter(function(e){return btFLOS(n0,e.n).ok;});for(var i=0;i<E.length&&!why;i++){var e=E[i];if((seen0.indexOf(e)>=0||btFLOS(last,e.n).ok)&&btDist(n,e.n)<btDist(last,e.n))why='敵に近づく方向へは潰走できません';}
+    if(!why&&last===n0&&E.some(function(e){return e.go&&btDist(n0,e.n)<=1&&btDist(n,e.n)<=1;}))why='隣の敵に隣接したままのヘクスへは移れません';}
+  if(why){btToast(T(why));return true;}
+  p.push(n);nmRtmManSet(p);return true;}
 function nmRtmUnpick(){var M=NM_RTM;if(!M)return;M.pick=null;try{Draw();}catch(e){}nmRtmBanner();}
 function nmRtmMode(m){var M=NM_RTM;if(!M)return;M.mode=m;nmRtmBanner();}
 function nmRtmMake(C,H,sd){var slot=nmGeFreeSlot();if(!slot){btToast('空いている編成がありません');return null;}var ob=nmSuOb(C.nat),pid=null;
@@ -38887,6 +38902,7 @@ function nmRtmMake(C,H,sd){var slot=nmGeFreeSlot();if(!slot){btToast('空いて�
   return {boardId:H.boardId,col:H.col,row:H.row,st:{},ijTmp:1,ccTmp:1,grp:slot};}
 function nmRtmTap(cx,cy){if(!nmRtmActive())return false;var M=NM_RTM,H=losHexAtClient(cx,cy);if(!H)return true;var n=btNodeOf(H.boardId,H.col,H.row);
   if(M.step==='u')return true;
+  if(M.step===3&&M.mode==='r'&&NM_RT&&!NM_RT.done&&n!=null&&n>=0&&nmRtmManTap(n))return true;
   if(M.step===3&&M.mode==='r'){if(!NM_RT||NM_RT.done)return false;var C=nmRtCalc(),k=-1,li=-1;C.plans.forEach(function(P,i){if(P.to===n)k=i;});C.low.forEach(function(P,i){if(P.to===n)li=i;});
     if(k>=0||li>=0){var P=k>=0?C.plans[k]:C.low[li];M.pick={no:k>=0?k+1:0,to:P.to,path:P.path,low:!!P.low,inter:P.low?[]:P.path.filter(function(x){return nmRtInter(x,C.E);})};try{Draw();}catch(x){}nmRtmBanner();return true;} /* v939: 潰走だけ(NMCなし) */var sr=nmRtSearch(NM_RT.n,C.E,C.mf);if(n!=null&&n!==NM_RT.n&&sr.dist[n]!=null){var pa=[],c=n;while(c!==NM_RT.n&&c!=null){pa.unshift(c);c=sr.prev[c];}M.pick={no:0,to:n,path:pa,low:false,inter:pa.filter(function(x){return nmRtInter(x,C.E);})};try{Draw();}catch(x){}nmRtmBanner();return true;} /* v940: 水色のヘクスならどこでも経路を表示 */btToast(T('水色のヘクスをタップしてください'));return true;}
   if(n==null||n<0){btToast(T('地図の外です'));return true;}
