@@ -5,7 +5,7 @@ await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeo
 await p.evaluate(async()=>{S.scen=S.scen||{};S.scen.sel='S24';await btEnsureGraph();try{Draw();}catch(x){}await new Promise(r=>setTimeout(r,800));S.turn=S.turn||{};S.turn.phase='ccph';nmHqOpen();});
 await p.waitForTimeout(600);
 await p.evaluate(()=>{var x=[...document.querySelectorAll('#nmHq button')].filter(x=>/^白兵戦/.test(x.textContent.trim()))[0];x.click();});await p.waitForTimeout(600);
-async function open(){return p.evaluate(()=>{var C=NM_CCS;var a=nmSuOb(C.an).filter(x=>x.kind==='mmc'||x.kind==='smc');var d=nmSuOb(C.dn).filter(x=>x.kind==='mmc'||x.kind==='smc');C.acs={};C.dcs={};a.slice(0,3).forEach(x=>C.acs[x.kind+'|'+x.id]=1);d.slice(0,3).forEach(x=>C.dcs[x.kind+'|'+x.id]=1);nmCcScDraw();nmCcScGo();NM_CC.amb='f';nmCcpDraw();var Z=nmCcAtkInit();return {nf:Z.I.f.length,ne:Z.I.e.length};});}
+async function open(){return p.evaluate(()=>{var C=NM_CCS;var a=nmSuOb(C.an).filter(x=>x.kind==='mmc'||x.kind==='smc');var d=nmSuOb(C.dn).filter(x=>x.kind==='mmc'||x.kind==='smc');C.acs={};C.dcs={};a.slice(0,3).forEach(x=>C.acs[x.kind+'|'+x.id]=1);d.slice(0,3).forEach(x=>C.dcs[x.kind+'|'+x.id]=1);nmCcScDraw();nmCcScGo();NM_CC.amb='f';nmCcaSimple();var Z=nmCcAtkInit();return {nf:Z.I.f.length,ne:Z.I.e.length};});}
 console.log('open',JSON.stringify(await open()));
 const t=await p.evaluate(()=>document.getElementById('nmCcp').innerText);
 console.log('stage1 text ok:',/先攻/.test(t)&&/後攻/.test(t)&&/先攻の結果を反映/.test(t));
