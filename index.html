@@ -38833,14 +38833,37 @@ function nmCcCarryGo(){var K=NM_CCCARRY;if(!K||!NM_CCS)return;var o=document.get
 var NM_RTM=null;
 function nmRtmMkRestore(){var M=NM_RTM;if(!M||!M.mkO)return;Object.keys(M.mkO).forEach(function(k){try{if(M.mkO[k]===undefined)delete BT.smoke[k];else BT.smoke[k]=M.mkO[k];}catch(e){}});M.mkO={};M.mk={};}
 function nmRtmActive(){var M=NM_RTM;if(!M)return false;if(M.step===3&&(!NM_RT||NM_RT.done)){nmRtmEnd(true);return false;}if(M.step==='u'&&!NM_SC){M.step=2;nmRtmBanner();}return true;}
-function nmRtmEnd(noDraw){var M=NM_RTM;if(M){try{nmRtmMkRestore();}catch(e){}}var b=document.getElementById('nmRtmBn');if(b)b.remove();NM_RTM=null;if(!noDraw){try{Draw();}catch(e){}}}
-var NM_RTM_POS=null;
-function nmRtmDrag(b){try{if(!NM_RTM_POS){var q=JSON.parse(localStorage.getItem('nmRtmPos')||'null');if(q&&typeof q.x==='number')NM_RTM_POS=q;}}catch(e){}
-  var put=function(){if(!NM_RTM_POS)return;var w=b.offsetWidth||300,x=Math.max(0,Math.min(innerWidth-w,NM_RTM_POS.x)),y=Math.max(0,Math.min(innerHeight-40,NM_RTM_POS.y));b.style.left=x+'px';b.style.top=y+'px';b.style.transform='none';};put();
+function nmRtmEnd(noDraw){var M=NM_RTM;if(M){try{nmRtmMkRestore();}catch(e){}}var b=document.getElementById('nmRtmBn');if(b)b.remove();var pn=document.getElementById('nmRtmPen');if(pn)pn.remove();NM_RTM=null;if(!noDraw){try{Draw();}catch(e){}}}
+var NM_RTM_POS={};
+function nmRtmDrag(b,key){key=key||'nmRtmPos';try{if(!NM_RTM_POS[key]){var q=JSON.parse(localStorage.getItem(key)||'null');if(q&&typeof q.x==='number')NM_RTM_POS[key]=q;}}catch(e){}
+  var put=function(){var P=NM_RTM_POS[key];if(!P)return;var w=b.offsetWidth||300,x=Math.max(0,Math.min(innerWidth-w,P.x)),y=Math.max(0,Math.min(innerHeight-40,P.y));b.style.left=x+'px';b.style.top=y+'px';b.style.right='auto';b.style.bottom='auto';b.style.transform='none';};put();
   var st=null;b.addEventListener('pointerdown',function(ev){if(ev.target.closest&&ev.target.closest('button'))return;var r=b.getBoundingClientRect();st={dx:ev.clientX-r.left,dy:ev.clientY-r.top,id:ev.pointerId};try{b.setPointerCapture(ev.pointerId);}catch(e){}ev.preventDefault();});
-  b.addEventListener('pointermove',function(ev){if(!st||ev.pointerId!==st.id)return;NM_RTM_POS={x:ev.clientX-st.dx,y:ev.clientY-st.dy};put();});
-  var end=function(ev){if(!st)return;st=null;try{localStorage.setItem('nmRtmPos',JSON.stringify(NM_RTM_POS));}catch(e){}};b.addEventListener('pointerup',end);b.addEventListener('pointercancel',end);}
-function nmRtmBanner(){var M=NM_RTM;if(!M)return;var b=document.getElementById('nmRtmBn');if(M.step==='u'){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='nmRtmBn';b.setAttribute('style','position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:9400;width:min(94vw,600px);background:#0e1620ee;border:1px solid #4a5566;border-radius:10px;padding:8px 12px;color:#dfe8f0;font:13px/1.7 AppFont,AppJP,monospace;box-shadow:0 6px 20px #000b;touch-action:none');document.body.appendChild(b);nmRtmDrag(b);}
+  b.addEventListener('pointermove',function(ev){if(!st||ev.pointerId!==st.id)return;NM_RTM_POS[key]={x:ev.clientX-st.dx,y:ev.clientY-st.dy};put();});
+  var end=function(ev){if(!st)return;st=null;try{localStorage.setItem(key,JSON.stringify(NM_RTM_POS[key]));}catch(e){}};b.addEventListener('pointerup',end);b.addEventListener('pointercancel',end);}
+var NM_RTM_PT='p';
+function nmRtmPenTab(t){NM_RTM_PT=t;var p=document.getElementById('nmRtmPen');if(p)p.remove();nmRtmPen();}
+function nmRtmPen(){var M=NM_RTM,p=document.getElementById('nmRtmPen');if(!M||M.step!==3){if(p)p.remove();return;}if(p)return;
+  p=document.createElement('div');p.id='nmRtmPen';p.setAttribute('style','position:fixed;right:76px;bottom:64px;z-index:9390;width:min(46vw,360px);background:#0e1620e6;border:1px solid #ff5050aa;border-radius:10px;padding:8px 12px;color:#dfe8f0;font:13px/1.55 AppFont,AppJP,monospace;box-shadow:0 6px 20px #000b;touch-action:none');
+  var row=function(tag,col,t){return '<div style="display:flex;gap:8px;align-items:flex-start;margin-top:4px"><span style="flex:0 0 52px;text-align:center;border-radius:5px;padding:0 4px;font-weight:900;background:'+col+';color:#111">'+T(tag)+'</span><span style="flex:1">'+t+'</span></div>';};
+  var tb=function(k,l){var on=NM_RTM_PT===k;return '<button class="b sm" style="margin:0;height:28px;padding:0 10px;font-size:12px;font-weight:800'+(on?';background:#e0a830;color:#111;border-color:#e0a830':'')+'" onclick="nmRtmPenTab(\''+k+'\')">'+T(l)+'</button>';};
+  var h='<div style="display:flex;gap:6px;margin-bottom:4px">'+tb('p','阻止されたら')+tb('u','阻止できる敵')+'</div>';
+  if(NM_RTM_PT==='u'){
+    h+='<b style="color:#ff8080;font-size:14px">⚠ '+T('阻止できる敵ユニット')+'</b>'
+    +row('○','#6fe08a',T('統制状態で、PINされていない'))
+    +row('○','#6fe08a',T('潰走ユニットが入る開豁地ヘクスにLOSが通り、通常射程内'))
+    +row('○','#6fe08a',T('そのヘクスへ1火力以上で撃てる(砲は17ヘクス未満で命中判定できる)'))
+    +row('×','#ff6060',T('白兵戦(メレー)中'))
+    +row('×','#ff6060',T('火力半減かプラス修正がつく: CX/MGを持つ単独の指揮官/BUの車両の主砲/移動中の車両/旋回が必要な砲・主砲'))
+    +'<div style="margin-top:6px;padding-top:5px;border-top:1px solid #334;color:#9ab;font-size:11px">'+T('他の射撃を使い切っていても阻止できる。このツールでは敵を射程4の歩兵として計算')+' <span style="color:#678">(SK4 3.6)</span></div>';}
+  else{
+    h+='<b style="color:#ff8080;font-size:14px">⚠ '+T('阻止されたら NMC(士気チェック)')+'</b>'
+    +'<div style="color:#9ab;font-size:11px">'+T('一緒に潰走する指揮官がいれば、その修正を使える')+'</div>'
+    +row('合格','#6fe08a',T('そのまま潰走を続ける'))
+    +row('PIN','#ffd040',T('ここで止まる。敵に隣接していたら除去'))
+    +row('失敗','#ff6060',T('損耗: 分隊→半個分隊(潰走を続けられる)/半個分隊・指揮官→除去。一緒の指揮官も除去'))
+    +'<div style="margin-top:6px;padding-top:5px;border-top:1px solid #334;color:#9ab;font-size:11px">'+T('阻止されないのは: 匍匐後退した時/間に妨害がある時/潰走側が高さの有利を受ける時。同じヘクスで阻止されるのは1回だけ')+' <span style="color:#678">(SK4 3.6)</span></div>';}
+  p.innerHTML=h;document.body.appendChild(p);nmRtmDrag(p,'nmRtmPenPos');}
+function nmRtmBanner(){var M=NM_RTM;if(!M)return;var b=document.getElementById('nmRtmBn');if(M.step==='u'){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='nmRtmBn';b.setAttribute('style','position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:9400;width:min(94vw,600px);background:#0e1620ee;border:1px solid #4a5566;border-radius:10px;padding:8px 12px;color:#dfe8f0;font:13px/1.7 AppFont,AppJP,monospace;box-shadow:0 6px 20px #000b;touch-action:none');document.body.appendChild(b);nmRtmDrag(b,'nmRtmPos');}
   var bt=function(t,f,pri){return '<button class="b sm" style="margin:0;height:34px;padding:0 12px;font-weight:800'+(pri?';background:#e0a830;color:#111;border-color:#e0a830':'')+'" onclick="'+f+'">'+T(t)+'</button>';},h='',nk=Object.keys(M.mk||{}).length;
   if(M.step===1)h='<div style="display:flex;align-items:center;gap:8px"><b style="flex:1;color:#ffd040">'+T('潰走・阻止')+' ① '+T('潰走するユニットのヘクスをタップ')+'</b>'+bt('中止','nmRtmCancel()')+'</div>';
   else if(M.step===2)h='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><b style="flex:1;color:#ff9a30;min-width:160px">'+T('潰走・阻止')+' ② '+T(M.mode==='k'?'LOS妨害マーカー':'敵ユニット')+'</b>'+bt((M.mode!=='k'?'✓':'')+'敵('+M.E.length+')',"nmRtmMode('e')",M.mode!=='k')+bt((M.mode==='k'?'✓':'')+'LOS妨害('+nk+')',"nmRtmMode('k')",M.mode==='k')+bt('やり直し','nmRtmReset()')+bt('決定','nmRtmDecide()',1)+'</div><div style="font-size:11px;color:#9ab">'+T(M.mode==='k'?'妨害のあるヘクスをタップ(煙幕・残骸など)。もう一度タップで外す。妨害が1つでもあれば阻止されません':'敵のヘクスをすべてタップ。もう一度タップで外す(射程4の歩兵として計算)')+'</div>';
@@ -38849,7 +38872,7 @@ function nmRtmBanner(){var M=NM_RTM;if(!M)return;var b=document.getElementById('
     if(pk)h+='<div style="font-size:12px"><b style="color:#6fe08a">'+(pk.low?T('匍匐後退'):T('行き先')+(pk.no?' '+pk.no:''))+': '+nm(M.n)+' → '+pk.path.map(nm).join(' → ')+'</b> <span style="color:'+(pk.inter.length?'#ff8080':'#9ab')+'">'+(pk.inter.length?'⚠ '+T('阻止される可能性')+': '+pk.inter.map(nm).join(', '):T('阻止なし'))+'</span></div>';
     else h+='<div style="font-size:11px;color:#9ab">'+T(md==='k'?'妨害のあるヘクスをタップ(煙幕・残骸など)。もう一度タップで外す。妨害が1つでもあれば阻止されません':md==='r'?'水色のヘクスをタップで経路を表示':'敵のヘクスをタップで追加、もう一度タップで消す(射程4の歩兵として計算)')+'</div>';
     h+='<div style="font-size:11px;color:#9ab"><span style="color:#ffd040">■</span>'+T('逃')+' <span style="color:#ff8a00">■</span>'+T('敵')+' <span style="color:#7cc4ff">■</span>'+T('潰走できる')+' <span style="color:#888">■</span>'+T('できない')+' <span style="color:#ff5050">⚠</span>'+T('阻止')+' <span style="color:#6fe08a">1</span>'+T('止まれる行き先')+'</div>';}
-  b.innerHTML=h;}
+  b.innerHTML=h;try{nmRtmPen();}catch(e){}}
 function nmRtmStart(C0){var o=document.getElementById('nmCcSc');if(o)o.remove();NM_SC=null;nmCcScClear();try{BtRmClose();}catch(e){}NM_RT=null;nmRtmEnd(true);var ns=nmSuNats();if(!ns.length){btToast(T('シナリオを選んでください'));return;}var c=curScen(),nat=(c&&c.atk&&ns.indexOf(c.atk)>=0)?c.atk:ns[0];try{var an0=resolveFiringNat('PFPh');if(an0&&ns.indexOf(an0)>=0)nat=an0;}catch(e){} /* 潰走するのは手番側(v936: 国籍ボタンなし) */
   try{if(!nmSdSet())nmSdAssign(nat,'f',true);}catch(e){} /* v942: 自軍・敵軍の自動設定で途中から入れ替わらないように */
   NM_RTM={nat:nat,sd:nmSuSide(nat),step:1,n:null,H:null,E:[],mk:{},mkO:{},mode:'e',cache:null};NM_CCS={open:1};
