@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 - 最終更新: 2026-11-08 (main=v918)
-- 状態: 返事待ちなし。未対応: 混在ヘクスは2画面の連続(①歩兵CC→②車両CC)で、サンプルの1画面統合(車両を目標チップに入れる)ではない。①②は同時ではなく順(①で全滅した歩兵は②で攻撃できない)。車両が両軍にいる場合は最初の車両側だけ。別件: 44秒応答なしはバックアップ復元後の起動中に発生(PCでは再現せず)。
+- 状態: 返事待ち=混在白兵戦の不意打ち追加サンプル(sample-mx-ambush.png)。未対応: 混在画面に不意打ちなし/車両が両軍のヘクスは従来画面。
 - v918 済: 混在ヘクス(歩兵＋車両)の白兵戦を SK4 3.8 の交互宣言に作り直し。nmHqCcOpen が nmMxOpen へ(NM_MX。nmRmMxItems、sub 'mx')。攻撃ごとに nmMxGo で即解決(歩兵→歩兵=nmCCCalcL、歩兵→車両=NM_CV(mx=1)の nmCvCalc/nmCvAtk、車両→歩兵=nmCvCounterCalc のFPで目標選択分)。nmCvRe は NM_CV.mx の時 nmMxRe へ。dev/mx.js(旧 mix.js は削除)。【未対応・開示】不意打ち(3.8)はこの画面では扱わない/車両が両軍にいるヘクスは従来画面(トースト表示)/PAATCは別タイル/原DR2の指揮官誕生は歩兵→歩兵と歩兵→車両のみ/車両の攻撃でDR2の特例なし。
 - v917 済: 「見える範囲」の精密判定(btRmViewRefine)が1.5秒ごとに Draw すると保存済みのスクロール位置に戻されていた → Draw前に losSaveMapScroll()。dev/vs.js。
 - v916 済: 判定ボードに新タイル2つ。歩兵用「PAATC（歩兵が車両へ）」nmPaOpen/NM_PA/nmRmPaItems(sub 'pa'。国籍→MMC追加→指揮官→ユニットごとに出目→合格/失敗PIN。修正=指揮官cmd+未熟等+1 nmCvPa1)、車両用「車両が敵AFVへ（停止できる？）」nmVeOpen/NM_VE/nmVeCalc/nmRmVeItems(sub 've'。3.3.2: 自車の使い切らない弾(deplete===0)で原DR5のTK#を計算 → judgeAFVEffects が KIA か SHOCK なら停止可)。白兵戦(CCV)パネルと爆薬(DC)パネルからPAATCの出目判定を削除(CCは「PAATC失敗(使わない)」ボタンのみ、DCは案内文のみ・置く条件なし)。dev/pa.js。【ルール上の前提・要確認】命中箇所(車体/砲塔)が決まっていないので、どちらかで撃破/Shockなら「停止可」。POSSIBLE_SHOCKは数えない。MG/IFEは対象外。
