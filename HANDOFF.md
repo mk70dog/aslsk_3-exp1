@@ -1,8 +1,9 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-08 16:10 (main=v914)
-- 状態: 返事待ちなし。未対応(提案済・返事待ち): 歩兵+車両が混在するヘクスの白兵戦(現状は両軍に歩兵がいれば歩兵CCのみ)。別件: 44秒応答なしはバックアップ復元後の起動中に発生(PCでは再現せず)。
+- 最終更新: 2026-11-08 16:10 (main=v915)
+- 状態: 返事待ちなし。未対応: 混在ヘクスは2画面の連続(①歩兵CC→②車両CC)で、サンプルの1画面統合(車両を目標チップに入れる)ではない。①②は同時ではなく順(①で全滅した歩兵は②で攻撃できない)。車両が両軍にいる場合は最初の車両側だけ。別件: 44秒応答なしはバックアップ復元後の起動中に発生(PCでは再現せず)。
+- v915 済: 混在ヘクスの白兵戦。nmMixVeh/nmMixOk/nmMixGo、NM_MIX={n,isd,vs,att}。nmHqCcOpenが設定、nmCCApplyが att(①で攻撃指定した歩兵pid)を記録、nmMixGo が nmCvOpen+done設定。dev/mix.js。
 - v914 済: 判定ボードの回復・修理を「回復」(nmRlOpen)「修理」(nmRpOpen)に分割。カウンター無しは nmRrOpen(kind) → 回復=仮編成'_T'+nmRmRallyItems内にnmRrRows(国籍・ユニット−/＋)、修理=仮車両+nmRmRvItems(判定モードのラッパーにも nmRrRows)。NM_RR={kind,nat,n,v}。nmScOpen('nmRlOpen'/'nmRpOpen')はnmRrOpenへ。dev/rr.js。
 - v913 済: nmMcSection のLL(LLTC/LLMC)ブロックは pendMc(未判定ユニットあり)の間は案内のみ。LLTCの対象は統制のみ(混乱は除外、従来どおり)。dev/lltc.js。
 - v912 済: 指揮官の負傷dr(nmCasRed)をオートダイスOFFなら手入力に。NM_WPEND/nmWdShow/nmWdDo(入力画面、確定で状態と文言〔…負傷dr入力待ち〕を置換して再描画)、nmCasWound。dev/wd.js。
