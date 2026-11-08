@@ -39049,6 +39049,28 @@ function nmIjNvNtc(){var V=NM_VF;if(!V)return;var v=(V.n1&&V.n2)?V.n1+V.n2:0;nmV
 /* v692(ダルマ指示「元の射撃タブ・装甲戦闘車両タブと徹底的に見比べて修正」): 元の主砲パネル(nmRmVFireItems)にあった注意・移動射撃のMPなどをA→B判定パネルにも出す */
 /* v848(ダルマ指示「マルチ判定は旧タブの機能を全てモーラ？」→「実施」): 砲撃・戦車の「その他の修正」(旧タブ砲撃のTH DRM)。[キー,DRM,名前,条件] */
 var NM_VF_XO=[['pin',2,'射手がピン'],['cx',1,'射手CX'],['nq',2,'非熟練(分隊・HSが撃つ)'],['conc',2,'隠蔽目標'],['hip',2,'HIPの砲'],['empty',2,'空のヘクスへ地域射撃',function(V,B){return !!V.att;}]];
+/* sample(ダルマ指示「マルチ判定 射撃系 ルールに完全対応」→「実施」):
+   ① 砲が目標: 据え付けTEM+2(6.3。動いていない砲・舗装道路以外。他のTEMと重ねず良い方。空中炸裂の−1は重ねる)と目標のサイズ(6.7/Case22)
+   ② 迫撃砲→車両: 地域目標(ATT)でIFT。FPの列は半分、TEM・全AF≦4は−1・全AF≧8は+1・オープントップ−1。KIA=撃破、K/#かそれより1多い=砲塔ショック/車体走行不能(7.11)
+   ③ 迫撃砲は建物のヘクスから撃てない(6.9) */
+function nmVfTgtGun(B){var te=B&&B.te;return (te&&te.gun&&!te.veh)?te:null;}
+function nmVfEmp(B){var te=nmVfTgtGun(B);if(!te)return false;var V=NM_VF;if(V&&V.noEmp!=null)return !V.noEmp;var st=te.st||{};return !(st.gunMoved||te.mhMoved);}
+(function(){
+  var oO=nmVfO;nmVfO=function(B){var o=oO.apply(this,arguments);try{var te=nmVfTgtGun(B);if(te&&!nmVfIsAtt(B)&&!B.attVeh){var g=nmGun(te.gun)||{},sz=VEH_SIZE_DRM[g.targetSize||'avg']||0;var X=[];if(sz)X.push({v:sz,l:'目標の砲のサイズ'});if(nmVfEmp(B)){var t=(BTG.nodes[NM_VF.tgt]||{}).tem||0;if(t<2)X.push({v:2-t,l:'据え付け(TEM+2)'});}if(X.length)o.xdrms=(o.xdrms||[]).concat(X);}}catch(e){console.log('vfO gun',e);}return o;};
+  var oT=nmVfAttTem;nmVfAttTem=function(B){var t=oT.apply(this,arguments);try{if(nmVfEmp(B)){var N=BTG.nodes[NM_VF.tgt]||{},ab=B&&B.gd&&B.gd.gsType==='MTR'&&/Woods|Forest|林|森/.test(N.terr||'');t=ab?1:Math.max(N.tem||0,2);}}catch(e){}return t;};
+  var oB=nmVfBuild;nmVfBuild=function(){var r=oB.apply(this,arguments);try{if(r&&r.mode==='VTT'&&r.gd&&r.gd.thType==='area'){r.mode='ITT';r.attVeh=true;r.ammos=['HE'];}}catch(e){}return r;};
+  var oH=nmVfTH;nmVfTH=function(n){var V=NM_VF,B=null;try{B=nmVfBuild();}catch(e){}if(V&&B&&B.gd&&B.gd.gsType==='MTR'&&(BTG.nodes[V.from]||{}).bldgT){btToast(T('迫撃砲は建物のヘクスからは撃てません(6.9)'));return;}return oH.apply(this,arguments);};
+  var oE=nmVfEff;nmVfEff=function(n){var V=NM_VF,B=null;try{B=nmVfBuild();}catch(e){}var R=V&&V.res;if(!B||!B.attVeh||!R||!R.hit||!V.c1||!V.c2)return oE.apply(this,arguments);
+    var c=V.c1+V.c2,te=B.te,fv=nmAfv(te.veh)||{},tv=btAfvData(fv.lbl),band=afvAFBand(tv),dm=nmVfAttTem(B),dl=['TEM'+(dm>=0?'+':'')+dm];if(band==='low'){dm-=1;dl.push('全AF≦4 −1');}else if(band==='high'){dm+=1;dl.push('全AF≧8 +1');}if(fv.ot){dm-=1;dl.push('オープントップ −1');}
+    var fp=(R.fp||0)/2,col=ci(fp),fin=c+dm,r=IFT[Math.max(0,Math.min(15,fin))][col],r1=IFT[Math.max(0,Math.min(15,fin-1))][col],loc=(V.a<V.b)?'turret':'hull',o={c:c,iftCol:IFT_LBL[col]};
+    if(/KIA/.test(r)){o.t='撃破';o.col='#ff4040';}else if(/^K/.test(r)||/^K/.test(r1)){o.t=loc==='turret'?'ショック(砲塔)':'走行不能(車体)';o.col='#ffb040';}else{o.t='効果なし';o.col='#8899aa';}
+    o.t=o.t+'　<span style="font-size:12px;color:#9fb2c8">'+T('地域目標→車両(7.11)')+' '+fp+'FP '+T('列')+'・'+dl.join(' ')+' → DR'+c+(dm?(dm>0?'+':'')+dm:'')+'='+fin+' '+r+'</span>';
+    if(te.ce&&!/撃破|ショック/.test(o.t)){var cr=IFT[Math.max(0,Math.min(15,c+2))][col];o.t+='<br><span style="font-size:12px;color:#ffd070">CE乗員へ付随攻撃: '+fp+'FP DR'+c+'+2(CE)='+(c+2)+' → '+cr+'</span>';}
+    V.res2=o;V.ntc=0;V.reDice=0;try{nmVfLog(B,'eff');}catch(e){}Draw();nmVfRe(n);};
+  /* 目標が砲の時の据え付け切替 */
+  var oI=nmRmVFireItems;nmRmVFireItems=function(n){var it=oI.apply(this,arguments);try{var V=NM_VF,B=nmVfBuild();if(V&&B&&B.attVeh){it=it.filter(function(x){return !(x&&/結果を印にする|^目標の状態/.test(String(x.t||'').replace(/<[^>]*>/g,'')));});it.forEach(function(x){if(x&&x.sub)x.sub=String(x.sub).replace('対歩兵(ITT)',T('地域目標(ATT)・車両は7.11'));});}if(!V||V.tgt==null||V.res||!nmVfTgtGun(B))return it;var on=nmVfEmp(B);var at=-1;for(var i=0;i<it.length;i++){if(it[i]&&/^目標: /.test(String(it[i].t||'').replace(/<[^>]*>/g,''))){at=i;break;}}
+    var row={row:1,ic:'turret',t:'<span style="font-size:13px">'+T('目標の砲')+'</span>',btns:[[(on?'✓':'')+T('据え付け TEM+2'),"NM_VF.noEmp=false;nmVfRe("+n+")"],[(on?'':'✓')+T('動いた・舗装道路（なし）'),"NM_VF.noEmp=true;nmVfRe("+n+")"]]};it.splice(at>=0?at+1:it.length,0,row);}catch(e){console.log('vf emp row',e);}return it;};
+})();
 function nmVfXo(n,k){var V=NM_VF;if(!V)return;V.xo=V.xo||{};V.xo[k]=!V.xo[k];try{nmVfClrRes();}catch(e){}nmVfRe(n);}
 function nmXoBox(open,togOc,chips,note){return '<div style="margin-top:6px;border:1px dashed #3a5566;border-radius:10px;padding:6px 8px"><div style="cursor:pointer;font-size:13px;color:#7ec8e3;font-weight:800" onclick="'+togOc+'">'+(open?'▾ ':'▸ ')+T('その他の修正（旧タブにあった設定）')+'</div>'+(open?'<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">'+chips+'</div>'+(note?'<div class="ijNote" style="margin-top:4px">'+note+'</div>':''):'')+'</div>';}
 function nmIjNvMore(B,V,n,bt,SG,lab){var h='',nt=[];
