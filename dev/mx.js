@@ -15,11 +15,11 @@ const r=await p.evaluate(async()=>{var n=0,H=nmHexOfNode(n),ns=nmSuNats();var a=
  out.prev1=nmMxPrev()&&nmMxPrev().k;nmMxGo(12);await new Promise(r=>setTimeout(r,300));out.h1=M.hist.length;out.turn2=M.turn;
  // 2: 車両側の番 - 車両が歩兵を攻撃
  var av2=nmMxAvail(M.turn);out.av2=av2.slice();
- if(av2.indexOf('V')>=0){nmMxSelT('V');var it=nmMxIts(M.isd).filter(q=>!q.x.broken)[0];if(it)nmMxTgtT(String(it.x.pid));var pv=nmMxPrev();out.v2i=pv&&(pv.k||pv.err);if(pv&&pv.k)nmMxGo(12);}
+ if(av2.indexOf('V'+M.vs)>=0){nmMxSelT('V'+M.vs);var it=nmMxIts(M.isd).filter(q=>!q.x.broken)[0];if(it)nmMxTgtT(String(it.x.pid));var pv=nmMxPrev();out.v2i=pv&&(pv.k||pv.err);if(pv&&pv.k)nmMxGo(12);}
  else nmMxPass();
  await new Promise(r=>setTimeout(r,300));out.h2=M.hist.length;out.turn3=M.turn;
  // 3: 残りの歩兵が車両を攻撃
- var av3=nmMxAvail(M.turn);out.av3=av3.length;if(M.turn===M.isd&&av3.length&&nmMxVehOf(M.vs)&&!M.vDead){nmMxSelT(av3[0]);nmMxTgtT('V');var pc=nmMxPrev();out.i2v=pc&&(pc.k||pc.err);if(pc&&pc.k)nmMxGo(2);}
+ var av3=nmMxAvail(M.turn);out.av3=av3.length;if(M.turn===M.isd&&av3.length&&nmMxVehOf(M.vs)&&!M.vDead[M.vs]){nmMxSelT(av3[0]);nmMxTgtT('V'+M.vs);var pc=nmMxPrev();out.i2v=pc&&(pc.k||pc.err);if(pc&&pc.k)nmMxGo(2);}
  await new Promise(r=>setTimeout(r,500));out.h3=M.hist.length;out.panel=/✓/.test(t());out.hist=M.hist.map(h=>h.t);
  nmMxPass();nmMxPass();out.ended=M.ended;await new Promise(r=>setTimeout(r,300));out.endTxt=/白兵戦おわり/.test(t());return out;});
 console.log(JSON.stringify(r,null,1));console.log('errors',JSON.stringify(e));await b.close();})();
