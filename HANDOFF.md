@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 - 最終更新: 2026-11-08 (main=v920)
-- 状態: 返事待ちなし。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
+- 状態: 返事待ち=サンプル sample-undo-bar(右端の縦ボタン列に↶↷を追加。判定の下。ダルマの「実施」待ち。実装方針: nmFtActFill の nmBarLite 分岐で ↶↷ を remove せず残して判定の直下へ)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
 - v920 済: NM_MX を一般化(vDead{f,e}、キー 'Vf'/'Ve'、M.both/first、不意打ち M.amb={on,asd,cx,dr,res} を nmMxAmbMod/Eval/Dr で自前計算、nmMxCv(sd,k) が NM_CV の isd/amb/noPa を攻撃ごとに設定)。dev/mx.js, mxamb.js, mxboth.js。
 - v919 済: 混在白兵戦(NM_MX)に不意打ち。画面の「①不意打ち」で『歩兵が林・建物へ突撃した』を選ぶと nmCvAmbItems(NM_CV.noPa=false)。M.ambS=成功側、nmMxNext で成功側が先に全攻撃(ambDone)。歩兵→歩兵は nmMxPrev で±1、車両→歩兵は nmCvCounterCalc の drm、歩兵→車両は nmCvCalc。突撃した側は車両のいない側(isd)と仮定。dev/mxamb.js。
 - v918 済: 混在ヘクス(歩兵＋車両)の白兵戦を SK4 3.8 の交互宣言に作り直し。nmHqCcOpen が nmMxOpen へ(NM_MX。nmRmMxItems、sub 'mx')。攻撃ごとに nmMxGo で即解決(歩兵→歩兵=nmCCCalcL、歩兵→車両=NM_CV(mx=1)の nmCvCalc/nmCvAtk、車両→歩兵=nmCvCounterCalc のFPで目標選択分)。nmCvRe は NM_CV.mx の時 nmMxRe へ。dev/mx.js(旧 mix.js は削除)。【未対応・開示】不意打ち(3.8)はこの画面では扱わない/車両が両軍にいるヘクスは従来画面(トースト表示)/PAATCは別タイル/原DR2の指揮官誕生は歩兵→歩兵と歩兵→車両のみ/車両の攻撃でDR2の特例なし。
