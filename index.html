@@ -40528,13 +40528,20 @@ function nmVfWhatNm(w){if(!w)return '';if(/^i:/.test(w))return w.slice(2);var v=
    近いヘクスから順に緑にし、同じ地点からの結果は覚えておく(2回目からはすぐ)。計算は従来と同じ精密なLOS(losCheckLOSGlobal) */
 /* sample(ダルマ指示「グリーンが見えにくい サンプルx4」): 撃てるヘクスの見せ方。window.__pkSty 0=従来 1=A(撃てないヘクスを暗く) 2=B(水色の太枠) 3=C(マゼンタ) 4=D(暗く+黄緑の太枠) */
 function nmPickHexSVG(P,dl){var st=window.__pkSty==null?4:window.__pkSty, /* v967: 既定=案D(ダルマ「d」) */h='',ok={};P.list.forEach(function(x){ok[x.tn]=1;});
-  if(st===1||st===4){var done=!P.busy,no={};(P.no||[]).forEach(function(t){no[t]=1;});BTG.nodes.forEach(function(N,i){if(ok[i]||i===P.from)return;var out=P.maxD!=null&&btDist(P.from,i)>P.maxD;if(!(done||no[i]||out))return;h+='<polygon points="'+btHexPoly(i,dl,1.0)+'" fill="#0b0d12" fill-opacity="0.62"/>';});}
+  if(st===1||st===4||st===5||st===6){var done=!P.busy,no={};(P.no||[]).forEach(function(t){no[t]=1;});BTG.nodes.forEach(function(N,i){if(ok[i]||i===P.from)return;var out=P.maxD!=null&&btDist(P.from,i)>P.maxD;if(!(done||no[i]||out))return;h+='<polygon points="'+btHexPoly(i,dl,1.0)+'" fill="#0b0d12" fill-opacity="0.62"/>';});}
   P.list.forEach(function(x){var H=nmHexOfNode(x.tn);if(!H)return;var g=losColRowToGlobalCanon(H.boardId,H.col,H.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl),pts=losHexPolygonPoints(d.x,d.y,losBoardRotById(H.boardId));
     if(st===1)h+='<polygon points="'+pts+'" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.5"/>';
     else if(st===2)h+='<polygon points="'+pts+'" fill="#00d8ff" fill-opacity="0.30" stroke="#003a48" stroke-width="5"/><polygon points="'+pts+'" fill="none" stroke="#3ff0ff" stroke-width="2.5"/>';
     else if(st===3)h+='<polygon points="'+pts+'" fill="#ff3cc8" fill-opacity="0.30" stroke="#ffffff" stroke-width="4"/><polygon points="'+pts+'" fill="none" stroke="#ff3cc8" stroke-width="2.2"/>';
     else if(st===4)h+='<polygon points="'+pts+'" fill="#c8ff3c" fill-opacity="0.14" stroke="#1a2a00" stroke-width="5"/><polygon points="'+pts+'" fill="none" stroke="#c8ff3c" stroke-width="2.5"/>';
-    else h+='<polygon points="'+pts+'" fill="#40ff9038" stroke="#40ff90" stroke-width="2.5"/>';});return h;}
+    else if(st===5){}
+    else if(st===6){(P.__ctr=P.__ctr||[]).push({x:d.x,y:d.y,pts:pts});}
+    else h+='<polygon points="'+pts+'" fill="#40ff9038" stroke="#40ff90" stroke-width="2.5"/>';});
+  /* sample(ダルマ「マップ表示方法変更 砲撃・軽対戦車砲・戦車」): 5=E 撃てないヘクスを暗くするだけ(枠なし) 6=F 撃てる範囲の外周だけを線で囲む(暗く+外周) */
+  if(st===6&&P.__ctr){var C=P.__ctr;P.__ctr=null;var near=function(x,y,r){return C.some(function(c){var dx=c.x-x,dy=c.y-y;return dx*dx+dy*dy<r*r;});};
+    C.forEach(function(c){var p=c.pts.split(' ').map(function(q){var a=q.split(',');return [+a[0],+a[1]];});for(var k=0;k<p.length;k++){var a=p[k],b=p[(k+1)%p.length],mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2,nx=c.x+2*(mx-c.x),ny=c.y+2*(my-c.y),rr=Math.hypot(mx-c.x,my-c.y)*0.6;
+      if(!near(nx,ny,rr))h+='<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="#1a2a00" stroke-width="7" stroke-linecap="round"/><line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="#c8ff3c" stroke-width="3.5" stroke-linecap="round"/>';}});}
+  return h;}
 function nmLosHexAsync(P,from,maxD,ok){var N=BTG.nodes,A=N[from];if(!A)return;var key=from+'|'+S_LOS.orchardSeason+'|'+S_LOS.grainSeason;if(!BTG.losAsyncC)BTG.losAsyncC={};var C=BTG.losAsyncC[key]||(BTG.losAsyncC[key]={});
   var todo=[];N.forEach(function(M,t){if(!M||t===from)return;var d=btDist(from,t);if(d>maxD||!ok(M,t))return;todo.push({t:t,d:d});});todo.sort(function(a,b){return a.d-b.d;});
   P.from=from;P.maxD=maxD;var i=0,step=function(){if(NM_PICK!==P)return;var t0=performance.now(),add=0;while(i<todo.length&&performance.now()-t0<30){var q=todo[i++],v=C[q.t];if(v==null){var r=null;try{r=losCheckLOSGlobal(A.x,A.y,N[q.t].x,N[q.t].y,S_LOS.orchardSeason,S_LOS.grainSeason);}catch(e){}v=C[q.t]=!(r&&r.blocked);}if(v){P.list.push({tn:q.t,d:q.d,blk:false});add++;}else{(P.no=P.no||[]).push(q.t);add++;}}
