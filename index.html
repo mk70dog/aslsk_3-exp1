@@ -39454,7 +39454,21 @@ function nmIjSd(){var J=NM_IJ;if(J.pick!=null){var s0=nmIjShooters(J.a)[J.pick];
 function nmIjTgts(){var J=NM_IJ,H=nmHexOfNode(J.b);if(!H)return [];if(J.pick==null)return nmAllAt(H,'e').concat(nmAllAt(H,'f'));var od=nmIjSd()==='f'?'e':'f',sh=nmIjShooters(J.a)[J.pick],fn=sh&&sh.eh?nmIjEhNat(sh.eh):'';return nmAllAt(H,od).filter(function(e){return nmFoeNat(fn,nmIjEhNat(e));});}
 function nmIjTgtDef(){return nmIjTgts().length?0:'h';}
 function nmIjReady(){var J=NM_IJ;if(J.pick!=null)return true;if(J.place!=null)return true;return !!(J.cp&&(J.cv||Object.keys(J.cs).length));}
-function nmIjDraw(){var J=NM_IJ;if(!J)return;nmRsSave();J.prepped=0;J.nv=0;if(J.emb){J.emb=0;if(document.querySelector('#nmIj #btRm'))BtRmClose();} /* v672: 設定を変えたら前の結果は消す */
+/* sample(ダルマ指示「ボタンのデザインを他のパネルと同じにする」): スポット判定(#nmIj)のボタンを、ほかのパネル(#btRm・人力移動など)と同じ見た目に。スキン(ネオンなど)に関係なく
+   ・ふつう: 暗い地+細い枠 ・選択中: 金(他のパネルの選択と同じ) ・判定する: 水色(オートダイスの大ボタンと同じ) */
+function nmIjBtnCss(){if(document.getElementById('nmIjBtnCss'))return;var Q='html:root:root:root:root:root #nmIj ',st=document.createElement('style');st.id='nmIjBtnCss';
+  st.textContent=[Q+'.ijB,'+Q+'.ijC,'+Q+'.ijF,'+Q+'.ijMini,'+Q+'.ijX,'+Q+'.dsRow{background:#151a22!important;background-image:none!important;border:1px solid #2c3440!important;border-radius:8px!important;box-shadow:none!important;color:#e8eef4!important;text-shadow:none!important}',
+   Q+'.ijB::before,'+Q+'.ijB::after,'+Q+'.ijC::before,'+Q+'.ijC::after{content:none!important;display:none!important}',
+   Q+'.ijB small,'+Q+'.ijC small{color:#9fb2c8!important}',
+   Q+'.ijB.on,'+Q+'.ijC.on,'+Q+'.ijF.on{background:linear-gradient(#f2c244,#c8941c)!important;border-color:#f2c244!important;color:#1a1204!important}',
+   Q+'.ijB.on b,'+Q+'.ijB.on small,'+Q+'.ijF.on b{color:#1a1204!important}',
+   Q+'.ijRow>div.ijB.on{background:#1d1a12!important;border:1.5px solid #c8a032!important;color:#ffd070!important}',Q+'.ijRow>div.ijB.on b{color:#ffd070!important}',Q+'.ijRow>div.ijB.on small{color:#c8b480!important}',
+   Q+'.ijB.ijSum,'+Q+'.ijB.on.ijSum{background:#1d1a12!important;border:1.5px solid #c8a032!important;color:#e8eef4!important}',Q+'.ijB.ijSum b,'+Q+'.ijB.ijSum small{color:#e8eef4!important}',
+   Q+'.ijB.ijAdd{border-color:#3a4250!important}',
+   Q+'.dsRow>button.dsb.dsb:not(.zz){color:#ccddee!important;background:transparent!important}',Q+'.dsRow>button.dsb.dsb.on:not(.zz),'+Q+'.dsRow>button.dsb.dsb.dsOn:not(.zz){background:linear-gradient(#f2c244,#c8941c)!important;color:#1a1204!important}',
+   Q+'.ijGo{background:#7ec8e3!important;background-image:none!important;border:0!important;color:#0b1a24!important;border-radius:12px!important;box-shadow:none!important}',Q+'.ijGo *{color:#0b1a24!important}'].join('\n');
+  document.head.appendChild(st);}
+function nmIjDraw(){var J=NM_IJ;if(!J)return;try{nmIjBtnCss();}catch(e){}nmRsSave();J.prepped=0;J.nv=0;if(J.emb){J.emb=0;if(document.querySelector('#nmIj #btRm'))BtRmClose();} /* v672: 設定を変えたら前の結果は消す */
   var el=document.getElementById('nmIj');if(!el){el=document.createElement('div');el.id='nmIj';el.onclick=function(e){if(e.target===el)nmIjClose();};document.body.appendChild(el);}
   var bx=el.querySelector('.ijBox'),st=bx?bx.scrollTop:0,sts={};['.ijL','.ijR','.ijCols'].forEach(function(q){var e=el.querySelector(q);if(e)sts[q]=e.scrollTop;}); /* v779: 左右の列のスクロールも保つ */
   var r=S_LOS.result||{},sn=0;try{sn=scenSnowHind(r.range);}catch(x){}var fail=r.blocked||((r.hindranceDrm||0)+sn>=6),HA=nmHexOfNode(J.a),HB=nmHexOfNode(J.b);
