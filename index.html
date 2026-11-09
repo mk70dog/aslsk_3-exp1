@@ -38817,7 +38817,7 @@ function nmScDraw(){var C=NM_SC;if(!C)return;var F=NM_SC_FN[C.fn]||{u:1},o=docum
   var bx=o.querySelector('.ccBox'),st=bx?bx.scrollTop:0,ns=nmSuNats(),col=function(nat){return (UNITS[nat]&&UNITS[nat].col)||'#ccddee';};
   var natB='<div style="display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 8px">'+ns.map(function(k){var on=k===C.nat;return '<button class="b sm" style="margin:0;height:36px;padding:0 14px;'+(on?'background:'+col(k)+';color:#000;font-weight:900;border-color:#fff':'color:'+col(k))+'" onclick="nmScSet(\'nat\',\''+k+'\')">'+nmNatLbl(k)+'</button>';}).join('')+'</div>';
   var ob=nmSuOb(C.nat).filter(function(x){return x.kind==='mmc'||x.kind==='smc'||(F.dc&&x.kind==='dc');});if(F.dc&&!ob.some(function(x){return x.kind==='dc';}))ob.push({kind:'dc',id:'DC',label:'爆薬(DC)',n:3});
-  var rows='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+ob.map(function(x){var key=x.kind+'|'+x.id,n=C.cs[key]||0;return '<div style="display:flex;align-items:center;gap:6px;background:'+(n?'#3a3218':'#151a22')+';border:1px solid '+(n?'#c8a032':'#2c3440')+';border-radius:8px;padding:4px 6px"><span style="flex:1;font-weight:800">'+x.label+'</span><small style="color:#8899aa">×'+(x.n||1)+'</small><button class="b sm" style="margin:0;width:32px;height:32px;padding:0" onclick="nmScCnt(\''+key+'\',-1)">−</button><b style="min-width:16px;text-align:center">'+n+'</b><button class="b sm" style="margin:0;width:32px;height:32px;padding:0" onclick="nmScCnt(\''+key+'\',1)">＋</button></div>';}).join('')+'</div>';
+  var rows='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+ob.map(function(x){var key=x.kind+'|'+x.id,n=C.cs[key]||0;return '<div style="display:flex;align-items:center;gap:6px;background:'+(n?'#3a3218':'#151a22')+';border:1px solid '+(n?'#c8a032':'#2c3440')+';border-radius:8px;padding:4px 6px">'+nmUnitLbl(C.nat,x)+'<small style="color:#8899aa">×'+(x.n||1)+'</small><button class="b sm" style="margin:0;width:32px;height:32px;padding:0" onclick="nmScCnt(\''+key+'\',-1)">−</button><b style="min-width:16px;text-align:center">'+n+'</b><button class="b sm" style="margin:0;width:32px;height:32px;padding:0" onclick="nmScCnt(\''+key+'\',1)">＋</button></div>';}).join('')+'</div>';
   var vs=F.v?nmIjVehs(C.nat).filter(function(o){return C.fn==='nmHqBogOpen'?o.kind==='veh':C.fn==='nmHqMhOpen'?o.kind==='gun':true;}):[];if(!F.u)rows=vs.length?'':'<div style="font-size:13px;color:#9ab;padding:8px 2px">'+nmNatLbl(C.nat)+T(C.fn==='nmHqMhOpen'?'の砲はこのシナリオにありません':'の車両はこのシナリオにありません')+'</div>'; /* v854(ダルマ指示「ボグ判定で車両以外を表示しない」): ボグ判定は車両だけ・人力移動は砲だけ(歩兵の一覧は出さない) */
   var hasU=Object.keys(C.cs).some(function(k){return /^(mmc|smc)\|/.test(k);}),ok=hasU||C.v;
   o.innerHTML='<div class="ccBox" style="width:min(760px,94vw);max-height:88vh;overflow:auto;background:#1f2227;border:1px solid #39414f;border-radius:14px;padding:12px 14px;color:#e8eef4;box-shadow:0 10px 40px #000" onclick="event.stopPropagation()">'
@@ -38855,6 +38855,61 @@ function nmRtmActive(){var M=NM_RTM;if(!M)return false;if(M.step===3&&(!NM_RT||N
 function nmRtmEnd(noDraw){var M=NM_RTM;if(M){try{nmRtmMkRestore();}catch(e){}}var b=document.getElementById('nmRtmBn');if(b)b.remove();var pn=document.getElementById('nmRtmPen');if(pn)pn.remove();var ed=document.getElementById('nmRtmEd');if(ed)ed.remove();NM_RTM=null;if(!noDraw){try{Draw();}catch(e){}}}
 var NM_RTM_POS={};
 function nmRtmDragPut(b,key){var P=NM_RTM_POS[key];if(!P)return;var w=b.offsetWidth||300,x=Math.max(0,Math.min(innerWidth-w,P.x)),y=Math.max(0,Math.min(innerHeight-40,P.y));b.style.left=x+'px';b.style.top=y+'px';}
+
+/* v955: すべてのパネル(position:fixedのカード・小窓・ポップアップ)を、ボタン以外の場所をつかんでドラッグ移動できる(CSSのtranslateで動かす)。
+   スクロールできるパネルは上端の帯(見出し)だけで移動(スクロールと競合しないため)。地図・ボタン・入力欄・独自ドラッグの要素は対象外。 */
+var NM_GD={el:null,sx:0,sy:0,ox:0,oy:0,on:false,id:null};
+function nmGdPanel(t){
+  if(!t||!t.closest)return null;
+  if(t.closest('button,input,select,textarea,a,label,canvas,svg,[draggable="true"],[onpointerdown],[ontouchstart],[onmousedown],#toastMsg,#btToast,#ctrPop,#nmRtmBn,#nmRtmPen,#nmRtmEd,#nmMvBar,#nmVmv,#nmStallPop,#nmRmPop,#btRm'))return null;
+  var vw=innerWidth,vh=innerHeight,e=t;
+  while(e&&e!==document.body&&e!==document.documentElement){
+    var cs=getComputedStyle(e),r=e.getBoundingClientRect();
+    var bg=cs.backgroundColor,al=1;var m=bg.match(/rgba?\(([^)]+)\)/);if(m){var p=m[1].split(',');al=p.length>3?parseFloat(p[3]):1;}
+    var card=al>=0.6&&r.width>=180&&r.height>=70&&r.width<vw-24&&r.height<vh-24&&(cs.boxShadow!=='none'||parseFloat(cs.borderTopWidth)>0||parseFloat(cs.borderTopLeftRadius)>0);
+    if(card){
+      var sc=(e.scrollHeight>e.clientHeight+4)&&/(auto|scroll)/.test(cs.overflowY);
+      return {el:e,scroll:sc,top:r.top};
+    }
+    if(cs.position==='fixed'&&r.width>=vw-24&&r.height>=vh-24)return null; /* 全画面の背景まで来たら対象なし */
+    e=e.parentElement;
+  }
+  return null;}
+(function(){
+  var start=function(x,y,t){var P=nmGdPanel(t);if(!P)return false;if(P.scroll&&y-P.top>46)return false;
+    var el=P.el,tr=(el.style.translate||'0px 0px').split(' ');var ox=parseFloat(tr[0])||0,oy=parseFloat(tr[1])||0;
+    el.style.userSelect='none';el.style.webkitUserSelect='none';NM_GD.el=el;NM_GD.sx=x;NM_GD.sy=y;NM_GD.ox=ox;NM_GD.oy=oy;NM_GD.on=false;return true;};
+  var move=function(x,y){var D=NM_GD;if(!D.el)return false;var dx=x-D.sx,dy=y-D.sy;if(!D.on&&Math.abs(dx)+Math.abs(dy)<6)return false;D.on=true;
+    var r=D.el.getBoundingClientRect(),cx=(parseFloat((D.el.style.translate||'0 0').split(' ')[0])||0),nx=D.ox+dx,ny=D.oy+dy;
+    var bx=r.left-cx,by=r.top-(parseFloat((D.el.style.translate||'0 0').split(' ')[1])||0);
+    nx=Math.max(-bx-r.width+60,Math.min(innerWidth-bx-60,nx));ny=Math.max(-by,Math.min(innerHeight-by-40,ny));
+    D.el.style.translate=nx+'px '+ny+'px';return true;};
+  var end=function(){var D=NM_GD;if(D.el&&D.on){var sw=function(ev){ev.stopPropagation();ev.preventDefault();};D.el.addEventListener('click',sw,{capture:true,once:true});setTimeout(function(){try{D.el.removeEventListener('click',sw,true);}catch(e){}},50);}D.el=null;D.on=false;};
+  document.addEventListener('pointerdown',function(ev){if(ev.pointerType==='touch')return;if(ev.button!==0)return;start(ev.clientX,ev.clientY,ev.target);},true);
+  document.addEventListener('pointermove',function(ev){if(ev.pointerType==='touch'||!NM_GD.el)return;if(move(ev.clientX,ev.clientY))ev.preventDefault();},true);
+  document.addEventListener('pointerup',function(ev){if(ev.pointerType==='touch')return;end();},true);
+  document.addEventListener('touchstart',function(ev){if(ev.touches.length!==1){NM_GD.el=null;return;}var t=ev.touches[0];start(t.clientX,t.clientY,ev.target);},{capture:true,passive:true});
+  document.addEventListener('touchmove',function(ev){if(!NM_GD.el)return;var t=ev.touches[0];if(move(t.clientX,t.clientY)&&ev.cancelable)ev.preventDefault();},{capture:true,passive:false});
+  document.addEventListener('touchend',end,true);document.addEventListener('touchcancel',end,true);
+})();
+
+/* v955: マルチ判定の白兵戦・スポット判定のユニット行を VASL カウンター画像つきに(潰走・PAATC と同じ) */
+function nmUnitLbl(nat,x){var id=null;if(x.kind==='mmc'||x.kind==='smc')id='u:'+nat+'|'+x.label;else if(x.kind==='sw')id='u:SW|'+x.id;
+  var im='';try{if(id&&VASL_CTR_MAP[id])im=vaslCtrHTML(id,40,'','',40);}catch(e){}
+  return '<span style="flex:1;display:flex;align-items:center;gap:8px;font-weight:800;min-width:0">'+(im?'<span style="flex-shrink:0;display:flex">'+im+'</span>':'')+'<span>'+x.label+'</span></span>';}
+/* v955: 全ボタンの4隅ドット(角のビス)を消す。スタイルシートを走査して、背景画像に radial-gradient(ドット・粒)を持つボタン系ルールから radial-gradient の層だけを外す */
+function nmDotOff(){try{if(document.getElementById('nmDotOff'))return;var out=[],split=function(v){var a=[],d=0,c='',i;for(i=0;i<v.length;i++){var ch=v[i];if(ch==='(')d++;if(ch===')')d--;if(ch===','&&d===0){a.push(c.trim());c='';}else c+=ch;}if(c.trim())a.push(c.trim());return a;};
+  var btnSel=/(button|\.b\b|\.nb\b|\.rmB|\.rmCls|\.ijB|\.judg3d|\.phz-sq|\.tb-reset|\.resetbtn|\.scen-card|\.battle-rec-btn|\.sm\b|btn)/;
+  var one=function(r){if(!r.selectorText||!r.style)return null;var bi=r.style.getPropertyValue('background-image')||'';
+    if(!/radial-gradient/.test(bi))return null;if(!btnSel.test(r.selectorText))return null;
+    var L=split(bi),keep=L.filter(function(x){return x.indexOf('radial-gradient')!==0;});
+    return r.selectorText+'{background-image:'+(keep.length?keep.join(','):'none')+'!important}';};
+  var walk=function(rules,wrap){for(var k=0;k<rules.length;k++){var r=rules[k];
+    if(r.cssRules&&!r.selectorText){var inner=[];for(var j=0;j<r.cssRules.length;j++){var o2=one(r.cssRules[j]);if(o2)inner.push(o2);}if(inner.length&&r.conditionText!=null)out.push('@media '+r.conditionText+'{'+inner.join('')+'}');continue;}
+    var o=one(r);if(o)out.push(o);}};
+  for(var si=0;si<document.styleSheets.length;si++){var ss=document.styleSheets[si],rl=null;try{rl=ss.cssRules;}catch(e){continue;}if(!rl)continue;walk(rl);}
+  var st=document.createElement('style');st.id='nmDotOff';st.textContent=out.join('\n');document.head.appendChild(st);window.__dotRules=out.length;}catch(e){window.__dotErr=String(e);}}
+setTimeout(nmDotOff,0);setTimeout(nmDotOff,1500);
 var NM_RTM_Z=9460;
 function nmRtmFront(b){NM_RTM_Z++;b._z=NM_RTM_Z;b.style.zIndex=String(NM_RTM_Z);}
 function nmRtmFree(pw,ph,cr){var rs=['nmRtmBn','nmRtmPen'].map(function(i){var e=document.getElementById(i);return e?e.getBoundingClientRect():null;}).filter(Boolean),W=innerWidth,H=innerHeight,m=8,C=[{x:cr.left+50,y:cr.top-ph/2},{x:cr.left-50-pw,y:cr.top-ph/2},{x:m,y:m},{x:W-pw-80,y:m},{x:m,y:H-ph-80},{x:W-pw-80,y:H-ph-80}];
@@ -39015,7 +39070,7 @@ function nmCcScDraw(){var C=NM_CCS;if(!C)return;var o=document.getElementById('n
   var bx=o.querySelector('.ccBox'),st=bx?bx.scrollTop:0,ns=nmSuNats(),col=function(nat){return (UNITS[nat]&&UNITS[nat].col)||'#ccddee';};
   var natB=function(w,cur){return '<div style="display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 8px">'+ns.filter(function(k){return w==='a'||k!==C.an;}).map(function(k){var on=k===cur;return '<button class="b sm" style="margin:0;height:36px;padding:0 14px;'+(on?'background:'+col(k)+';color:#000;font-weight:900;border-color:#fff':'color:'+col(k))+'" onclick="nmCcScSet(\''+(w==='a'?'an':'dn')+'\',\''+k+'\')">'+nmNatLbl(k)+'</button>';}).join('')+'</div>';};
   var rows=function(w){var nat=w==='a'?C.an:C.dn,cs=w==='a'?C.acs:C.dcs;return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+nmSuOb(nat).filter(function(x){return x.kind==='mmc'||x.kind==='smc';}).map(function(x){var key=x.kind+'|'+x.id,n=cs[key]||0;
-    return '<div style="display:flex;align-items:center;gap:6px;background:'+(n?'#3a3218':'#151a22')+';border:1px solid '+(n?'#c8a032':'#2c3440')+';border-radius:8px;padding:4px 6px"><span style="flex:1;font-weight:800">'+x.label+'</span><small style="color:#8899aa">×'+(x.n||1)+'</small><button class="b sm" style="margin:0;width:32px;height:32px;padding:0" onclick="nmCcScCnt(\''+w+'\',\''+key+'\',-1)">−</button><b style="min-width:16px;text-align:center">'+n+'</b><button class="b sm" style="margin:0;width:32px;height:32px;padding:0" onclick="nmCcScCnt(\''+w+'\',\''+key+'\',1)">＋</button></div>';}).join('')+'</div>';};
+    return '<div style="display:flex;align-items:center;gap:6px;background:'+(n?'#3a3218':'#151a22')+';border:1px solid '+(n?'#c8a032':'#2c3440')+';border-radius:8px;padding:4px 6px">'+nmUnitLbl(nat,x)+'<small style="color:#8899aa">×'+(x.n||1)+'</small><button class="b sm" style="margin:0;width:32px;height:32px;padding:0" onclick="nmCcScCnt(\''+w+'\',\''+key+'\',-1)">−</button><b style="min-width:16px;text-align:center">'+n+'</b><button class="b sm" style="margin:0;width:32px;height:32px;padding:0" onclick="nmCcScCnt(\''+w+'\',\''+key+'\',1)">＋</button></div>';}).join('')+'</div>';};
   var vs=C.mode==='veh'?nmIjVehs(C.dn).filter(function(v){return v.kind==='veh';}):[];
   var na=Object.keys(C.acs).length,nd=Object.keys(C.dcs).length,ok=na&&(nd||C.dv);
   var h='<div class="ccBox" style="width:min(760px,94vw);max-height:88vh;overflow:auto;background:#1f2227;border:1px solid #39414f;border-radius:14px;padding:12px 14px;color:#e8eef4;box-shadow:0 10px 40px #000" onclick="event.stopPropagation()">'
