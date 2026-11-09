@@ -34462,7 +34462,7 @@ function nmFacePad(eh,kind,n,sd){
 function nmRmFaceItems(n,sd){
   var H=NM_RM_HEX,eh=H&&nmUnitAt(H,sd),L=NM_SIDE_LBL[sd],it=[];if(!eh){NM_FACE=null;return nmRMenuItems(n);}
   var v=eh.veh?nmAfv(eh.veh):null,tur=v&&nmAfvTurret(v),g=(!v&&eh.gun)?nmGun(eh.gun):null;
-  it.push(NM_IJFM&&NM_IJ?{ic:'back',t:'← 判定に戻る',sub:'判定に戻って計算し直す',f:"nmIjFaceBack()"}:{ic:'back',t:'← 完了',sub:'メニューに戻る',f:"NM_FACE=null;btRmReopen("+n+")"});
+  it.push(NM_IJFM&&NM_IJ?{ic:'back',t:'← 判定に戻る',sub:'判定に戻って計算し直す',f:"nmIjFaceBack()"}:{ic:'back',t:'← 完了',sub:(NM_VF&&NM_VF_FROM!=null?'砲撃に戻る':'メニューに戻る'),f:"NM_FACE=null;"+(NM_VF&&NM_VF_FROM!=null?"NM_RM_HEX=nmHexOfN("+NM_VF_FROM+");var _f=NM_VF_FROM;NM_VF_FROM=null;btRmReopen(_f)":"btRmReopen("+n+")")});
   if(NM_IJFM&&NM_IJ){var sw=nmIjFmSwItem();if(sw)it.push(sw);}
   it.push({sep:1});
   it.push({ic:'turret',img:v?vaslCtrHTML(v.id,34,''):g?vaslCtrHTML(g.id,34,''):'',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+(v?nmAfvName(v):g?nmGunName(g):L.mk)+'</span>',sub:'矢印のボタンで方向を決める'+(tur?'(砲塔は車体と違う時だけ地図に「砲」)':v?'(無砲塔)':g?'(砲身の向き=CA)':'')});
@@ -34860,6 +34860,8 @@ function nmVfEff(n){var V=NM_VF,B=nmVfBuild(),R=V&&V.res;if(!R||!R.hit||!V.c1||!
 function nmVfLog(B,k){var V=NM_VF,R=V.res;try{logResult(function(){var who=B.v?nmAfvName(B.v)+'主砲':nmGunName(B.g),tg=BTG.nodes[V.tgt].nm+(B.tu?' '+B.tu.nm:'');
   var tx=k==='th'?(who+'→'+tg+' '+B.mode+'/'+V.ammo+' TH#'+R.ev.th+' '+diceEmojiStr(V.a,V.b)+'→'+R.fin+' '+(R.hit?'命中':'外れ')):(who+'→'+tg+' '+(B.mode==='VTT'?'TK#'+R.tk:R.fp+'FP')+' DR'+V.res2.c+' → '+V.res2.t);
   return {tabLbl:'MAP '+(B.v?'主砲':'砲撃'),text:tx,color:k==='th'?(R.hit?'#c8a032':'#556677'):V.res2.col,detail:null};});}catch(e){}}
+function nmVfFaceMap(n){var V=NM_VF;if(!V)return;var B=nmVfBuild();if(!B)return;var useA=!B.eh||B.eh.facing==null,node=useA?V.from:V.tgt,eh=useA?B.eh:B.te,sd=useA?V.sd:(function(){try{return nmIjEhSd(eh);}catch(e){return V.sd==='f'?'e':'f';}})();if(!eh)return;NM_RM_HEX=nmHexOfN(node);NM_FACE={sd:sd};NM_RM_SUB=null;NM_VF_FROM=V.from;btRmReopen(node);}
+var NM_VF_FROM=null;
 function nmVfNtc(n,v){var V=NM_VF;if(!V)return;V.ntc=v||(2+Math.floor(Math.random()*6)+Math.floor(Math.random()*6));try{logResult(function(){return {tabLbl:'MAP NTC',text:'ショックの可能性 NTC DR'+V.ntc+' → '+(V.ntc>8?'ショック':'効果なし'),color:V.ntc>8?'#ffb040':'#3ca878',detail:null};});}catch(e){}Draw();nmVfRe(n);}
 function nmVfApplySt(n,k){var V=NM_VF,B=nmVfBuild();if(!B||!B.te)return;var st=nmStOf(B.te);st[k]=!st[k];nmStSave();nmVfRe(n);}
 function nmVfApplyMal(n){var B=nmVfBuild();if(!B)return;var st=nmStOf(B.eh);st.mal=!st.mal;nmStSave();nmVfRe(n);}
@@ -34890,7 +34892,7 @@ function nmRmVFireItems(n){
   it.push({ic:'tgt',img:B.te?nmMfTgtImg(B.te):'',t:'目標: '+(B.te?nmMfTgtName(B.te):'')+' @'+BTG.nodes[V.tgt].nm,sub:'距離'+btDist(V.from,V.tgt)+'　'+(B.mode==='VTT'?'対車両(VTT)':'対歩兵(ITT)')+'　選択し直す',f:"nmVfSet("+n+",'tgt',null)"});
   if(B.te&&B.te.veh&&!(V.res&&!V.edit))try{nmTgtMvRow(it,n,B.te,'nmVfRe');}catch(e){} /* v515 */
   if(B.te&&!(V.res&&!V.edit)){try{if(B.te.veh)nmTgtCeRow(it,n,'vf',B.te);else nmInfMvRow(it,n,'vf');var au=nmOvAuto('vf');nmOvRow(it,n,'vf',au.tem,au.hind);}catch(e){console.log(e);}} /* v518 */
-  if(B.note&&!vdone)it.push({ic:'info',t:'<span style="font-size:12px;color:#c8a032">'+B.note+'</span>'});
+  if(B.note&&!vdone){it.push({ic:'info',t:'<span style="font-size:12px;color:#c8a032">'+B.note+'</span>'+(/未設定/.test(B.note)?'<br><button class="b" style="margin:6px 0 0;height:34px;padding:0 16px;font-size:14px;font-weight:900;color:#ffc83c;border:1px solid #e8c060;background:#151a22;border-radius:8px" onclick="event.stopPropagation();nmVfFaceMap('+n+')">地図で方向を設定</button>':'')});} /* v1007(ダルマ「砲撃パネルに地図で方向を設定」→実施): 向きが未設定の側の向きパネルを開く(スポット判定と同じ仕様)。完了で砲撃に戻る */
   if(!vdone){var acq=B.eh.acq&&B.eh.acq.n===V.tgt?B.eh.acq.lvl:0;it.push({row:1,ic:'fire',t:'<span style="font-size:13px">集中射撃</span>',btns:[[(V.int?'✓':'')+'集中射撃+2',V.ph==='AF'?null:"NM_VF.int=!NM_VF.int;nmVfRe("+n+")"]].concat(B.att?[[(V.att?'✓':'')+'ATT(地域)',"NM_VF.att=!NM_VF.att;nmVfRe("+n+")"]]:[])}); /* v439 */
     {var aq=(B.eh.acq&&B.eh.acq.n===V.tgt)?B.eh.acq.lvl:0;it.push({row:1,ic:'tgt',t:'<span style="font-size:13px">目標獲得</span>',btns:[[0,'なし'],[-1,'−1'],[-2,'−2']].map(function(x){return [(aq===x[0]?'✓':'')+x[1],"nmVfAcqSet("+n+","+x[0]+")"];})});} /* v534(ダルマ指示「目標の獲得を手入力」) */
     if(V.int)it.push({ic:'info',t:'<span style="font-size:12px;color:#c8a032">集中射撃: TH+2・B#−2・このターン1回(防御射撃は隣接のみ)</span>'});
