@@ -2,6 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- 返事待ち: sample-ijpick2(スポット判定の＋カウンターを選択: 旧画面の流用をやめ nmIjPickDraw で国籍と数の欄(5列・48px)だけ。A=J.cs/nmIjCnt・鹵獲/質の低下も、B=J.bcs/nmIjBCnt。もどる/これをA(B)に置く)
+
 - v1030: sample-ijflat2(スポット判定の2画面目: mf/vm/lw も nmIjStageGo で共通の判定パネル(btRm)を開く・戻る=nmIjStageBack。＋カウンターを選択は #nmIj.ijPick で全幅・nmIjPickDone/Cancel。置いた編成を候補に二重に出さない)・sample-respop(nmResImg はどこをタップしてもすぐ消す・外のタップは下に通さない)を反映。返事待ちなし。未対応: 古いテスト aud/dcr/vft の修正
 
 
