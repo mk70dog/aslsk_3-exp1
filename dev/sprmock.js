@@ -1,0 +1,19 @@
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1180,height:820},deviceScaleFactor:2});const E=[];p.on('pageerror',x=>E.push(String(x)));
+await p.goto('file://'+__dirname+'/../index.html',{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(1000);
+const r=await p.evaluate(async()=>{const W=ms=>new Promise(r=>setTimeout(r,ms));S.scen=S.scen||{};S.scen.sel='S24';for(var i=0;i<4;i++){try{Draw();}catch(e){}await W(1500);}await btEnsureGraph();var N=BTG.nodes,id=nm=>N.findIndex(n=>n.nm===nm);var o=[];
+try{try{nmModeSet('judge');}catch(e){}await W(1500);var A=N[id('tK6')],B=N[id('tN6')];S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB={x:B.x,y:B.y};LosRunPixel();await W(4000);nmIjOpen();await W(800);nmIjSet('ph','dff');await W(300);nmIjSet('place',0);await W(500);nmIjBTerr();await W(2500);
+var h=document.getElementById('ijRes');if(!h)return ['nohost'];
+var pill=function(a,on){return a.map(function(t,i){return '<button class="mkB'+(i===on?' on':'')+'">'+t+'</button>';}).join('');};
+var row=function(l,c){return '<div style="display:flex;align-items:center;gap:10px;margin:7px 0"><div style="width:74px;font-size:13px;color:#9fb2c8">'+l+'</div><div style="display:flex;flex-wrap:wrap;flex:1">'+c+'</div></div>';};
+var dice=function(l,col){return '<div style="display:flex;align-items:center;gap:8px"><b style="color:'+col+';font-size:15px">'+l+'</b>'+[1,2,3,4,5,6].map(function(n){return '<button class="mkB">'+n+'</button>';}).join('')+'</div>';};
+h.innerHTML='<div style="padding:12px 14px;display:flex;flex-direction:column;height:100%;box-sizing:border-box;color:#e8eef4">'
++'<div style="display:flex;align-items:baseline;justify-content:space-between"><b style="font-size:16px;color:#7ec8e3">⑤ 修正</b><span style="font-size:12px;color:#9fb2c8">自動のままでOK</span></div>'
++'<div style="border-top:1px solid #2c3440;margin:8px 0"></div>'
++row('地形のTEM',pill(['自動(0)','-1','0','+1','+2','+3'],0))+row('妨害',pill(['自動(+2)','0','+1','+2','+3','+4','+5'],0))
++'<div style="font-size:12px;color:#c8b480;margin:4px 0 0">ⓘ 方向が未設定のため、目標の方を向いているとして計算</div>'
++'<div style="margin:12px 0 0;padding:10px 12px;border:1.5px solid #c8a032;border-radius:10px;background:#1d1a12"><div style="font-size:13px;color:#9fb2c8">結果の見込み</div><div style="font-size:19px;font-weight:800;margin-top:2px">FP 0 → 1列 <span style="color:#7ec8e3">DRM +2</span></div><div style="font-size:12px;color:#9fb2c8;margin-top:2px">内訳: 妨害+2</div></div>'
++'<div style="border-top:1px solid #2c3440;margin:14px 0 8px"></div><div style="font-size:13px;color:#9fb2c8;margin-bottom:6px">⑥ ダイス 入力しなければ自動で振る</div>'
++'<div style="display:flex;gap:18px;flex-wrap:wrap">'+dice('赤','#ff6b6b')+dice('白','#e8eef4')+'</div>'
++'</div>';var st=document.createElement('style');st.textContent='#ijRes .mkB{position:relative;min-width:44px;height:40px;margin:0 4px 4px 0;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;font:800 15px inherit;font-family:inherit;background:#2c3442;border:1px solid #4a5262;color:#e8eef4;border-radius:8px;box-shadow:0 4px 0 #0e0e0c,0 5px 2px #0000008c,inset 0 1px 0 #ffffff1f;background-image:radial-gradient(circle 1.6px at 5px 5px,#3e4335 99%,transparent 100%),radial-gradient(circle 1.6px at calc(100% - 5px) 5px,#3a3f1f 99%,transparent 100%),radial-gradient(circle 1.6px at 5px calc(100% - 5px),#423c10 99%,transparent 100%),radial-gradient(circle 1.6px at calc(100% - 5px) calc(100% - 5px),#43474b 99%,transparent 100%)}#ijRes .mkB.on{background:linear-gradient(#e0b84a,#b88a1e);color:#1a1200;border:0;box-shadow:0 4px 0 #6a4a00,inset 0 1px 0 #ffffff40}';document.head.appendChild(st);
+o.push('ok');}catch(e){o.push(String(e));}return o;});
+await p.waitForTimeout(500);await p.screenshot({path:process.argv[2]});console.log(E,r);await b.close();})();
