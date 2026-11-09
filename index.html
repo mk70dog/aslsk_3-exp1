@@ -36892,11 +36892,13 @@ function nmMfResFp(){var f=getFireState();if(!f||!f.res||!f.res.ift)return 0;var
 /* sample(ダルマ指示「射撃後のリアルマップボードへの残留カウンターの配置や捕捉マーカーの配置を忘れがちなので、結果表示時に目立つようにする」):
    射撃の結果が出たら、リアルの盤面に置く/裏返す/外すカウンターを、結果の上にオレンジの枠で大きく出す。「置いた」をタップでチェック(済は緑) */
 (function(){var oT=nmVfTH;nmVfTH=function(n){try{var V=NM_VF,B=nmVfBuild();V.acqPrev=B&&B.eh&&B.eh.acq?{n:B.eh.acq.n,lvl:B.eh.acq.lvl}:null;}catch(e){}return oT.apply(this,arguments);};})();
+/* sample(ダルマ指示「獲得の実カウンターを表示する」): 目標獲得の札をVASLの実カウンター画像(−1/−2)で出す。画像が無ければ🎯 */
+function nmAcqIc(lvl,px){try{var k=lvl===-2?'MS/acq2wh.gif':'MS/acq1wh.gif',src=(typeof BT_VC!=='undefined'&&BT_VC.imgs&&BT_VC.imgs[k])||(VASL_CTR_IMG&&VASL_CTR_IMG[k]);if(src)return '<img src="'+src+'" style="width:'+(px||30)+'px;height:'+(px||30)+'px;vertical-align:middle;border-radius:3px">';}catch(e){}return '🎯';}
 function nmBdTodo(){var L=[],nm=function(t){try{return BTG.nodes[t].nm;}catch(e){return '?';}};
   try{var V=NM_VF;if(V&&V.res&&V.tgt!=null){var R=V.res,B=null;try{B=nmVfBuild();}catch(e){}var eh=B&&B.eh,ac=eh&&eh.acq,pv=V.acqPrev;
-    if(ac&&ac.n===V.tgt){if(pv&&pv.n===V.tgt&&pv.lvl===ac.lvl){}else if(pv&&pv.n===V.tgt&&ac.lvl===-2&&pv.lvl===-1)L.push({k:'acq',ic:'🎯',s:'獲得 −2 に裏返す',t:'目標獲得カウンターを −2 に裏返す',sub:nm(V.tgt)+' の目標(次の命中判定に −2)'});
-      else L.push({k:'acq',ic:'🎯',s:'獲得 −1 を置く',t:'目標獲得カウンター −1 を置く',sub:nm(V.tgt)+' の目標に(½インチ。地域射撃ATTは⅝インチ)'+(pv&&pv.n!==V.tgt?'。前の目標の獲得は外す':'')});}
-    else if(pv)L.push({k:'acqx',ic:'🎯',s:'獲得を外す',t:'目標獲得カウンターを外す',sub:(V.ammo==='Smoke'||V.ammo==='WP')?'煙幕・WPを撃ったので獲得を失う(6.10)':V.ammo==='IFE'?'IFEで撃ったので獲得を失う':'獲得を失った'});
+    if(ac&&ac.n===V.tgt){if(pv&&pv.n===V.tgt&&pv.lvl===ac.lvl){}else if(pv&&pv.n===V.tgt&&ac.lvl===-2&&pv.lvl===-1)L.push({k:'acq',ic:nmAcqIc(-2),s:'獲得 −2 に裏返す',t:'目標獲得カウンターを −2 に裏返す',sub:nm(V.tgt)+' の目標(次の命中判定に −2)'});
+      else L.push({k:'acq',ic:nmAcqIc(-1),s:'獲得 −1 を置く',t:'目標獲得カウンター −1 を置く',sub:nm(V.tgt)+' の目標に(½インチ。地域射撃ATTは⅝インチ)'+(pv&&pv.n!==V.tgt?'。前の目標の獲得は外す':'')});}
+    else if(pv)L.push({k:'acqx',ic:nmAcqIc(pv&&pv.lvl),s:'獲得を外す',t:'目標獲得カウンターを外す',sub:(V.ammo==='Smoke'||V.ammo==='WP')?'煙幕・WPを撃ったので獲得を失う(6.10)':V.ammo==='IFE'?'IFEで撃ったので獲得を失う':'獲得を失った'});
     if(B&&B.mode==='ITT'&&V.ph==='DFF'&&V.ammo==='HE'&&R.hit&&R.fp){var vr=Math.min(12,Math.floor(R.fp/2));if(vr>0)L.push({k:'res',ic:'🔥',s:'残留 '+vr+'FP を置く',t:'残留火力 '+vr+'FP のカウンターを置く',sub:nm(V.tgt)+' に(MPh(移動フェイズ)の終わりに外す)'});}
     return {L:L,R:R};}}catch(e){console.log('bd vf',e);}
   try{var M=NM_MF,f=getFireState();if(M&&M.tgt!=null&&f&&f.res&&S.fireSub==='dff'){var rf=nmMfResFp();if(rf>0)L.push({k:'res',ic:'🔥',s:'残留 '+rf+'FP を置く',t:'残留火力 '+rf+'FP のカウンターを置く',sub:nm(M.tgt)+' に(MPh(移動フェイズ)の終わりに外す)'});return {L:L,R:f.res};}}catch(e){console.log('bd mf',e);}
