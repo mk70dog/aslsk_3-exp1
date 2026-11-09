@@ -1,8 +1,9 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-08 (main=v954)
+- 最終更新: 2026-11-08 (main=v955)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
+- v955 済: ①全パネルをドラッグ移動(nmGdPanel/NM_GD: position:fixed のカードをボタン以外でつかんで CSS translate で移動、スクロールするパネルは上端46pxの帯だけ、潰走3パネル・nmPdAttach系・#btRm は対象外=既存の動き)。②マルチ判定の白兵戦(nmCcScDraw)・スポット判定(nmScDraw、MC/PTC・爆薬など)のユニット行を VASL カウンター画像つき(nmUnitLbl)。③全ボタンの4隅ドット: nmDotOff() が起動時にスタイルシートを走査し、ボタン系ルールの背景画像から radial-gradient の層だけ外す上書きシートを作る(window.__dotRules に件数)。dev/pdrag.js。
 - v954 済: 潰走地図のパネル3つ(帯 #nmRtmBn・阻止カード #nmRtmPen・敵設定 #nmRtmEd)を全部ドラッグ可に。#nmRtmEd は nmRtmDrag(p,'nmRtmEdPos')、初期位置は nmRtmFree で他パネルと重ならない場所、触ると nmRtmFront で最前面、文字選択なし(nmRtmCtrCss)。dev/rtdrag.js。
 - 方針(2026-11-09 ダルマ確認): 地図のユニットメニューの『潰走』(nmRtmStartAt)は、実ユニットと地図上の実敵を使う今の作りのまま。カウンターなし地図にはそろえない。
 - v953 済: 潰走地図。①ルール修正(SK4 3.6): nmRtSearch を状態(ヘクス,LOSに入った敵の集合)の探索に変更=一度LOSに入った敵にはLOSを出た後も近づけない、path[]で実経路を返す(nmRtPlans も path 使用)。匍匐(nmRtCalc の low)も LOS のある敵に近づくヘクスは不可。手動経路(nmRtmManTap)も経路全体のLOSで判定。②表示: 近づく所は暗く(近の表示なし)、阻止ヘクスの⚠なし、匍=青丸「匍」、行き先=緑丸の数字、LOS妨害=黄丸「妨」(nmRtmSVG の bd()、既定 STY=8、window.__sty で他案)。行き先ヘクスには匍の丸を出さない。dev/rtnear.js、rtsty.js、rtsty8.js。
