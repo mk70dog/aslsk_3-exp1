@@ -38954,6 +38954,12 @@ function nmGdPanel(t){
     var bg=cs.backgroundColor,al=1;var m=bg.match(/rgba?\(([^)]+)\)/);if(m){var p=m[1].split(',');al=p.length>3?parseFloat(p[3]):1;}
     var card=al>=0.6&&r.width>=180&&r.height>=70&&r.width<vw-24&&r.height<vh-24&&(cs.boxShadow!=='none'||parseFloat(cs.borderTopWidth)>0||parseFloat(cs.borderTopLeftRadius)>0);
     if(card){
+      /* v970(ダルマ指示「パネル内はドラック移動はしない」): パネルの中の枠(ポップアップ・欄)は動かさない。上に別のパネル(枠)や大きな固定パネルがあれば対象外 */
+      for(var u=e.parentElement;u&&u!==document.body&&u!==document.documentElement;u=u.parentElement){var cu=getComputedStyle(u),ru=u.getBoundingClientRect();
+        if(cu.position==='fixed'&&ru.width>=vw-24&&ru.height>=vh-24)break;
+        if(cu.position==='fixed'||cu.position==='absolute'){if(ru.width>=vw*0.6||ru.height>=vh*0.6)return null;}
+        var bu=cu.backgroundColor,au=1,mu=bu.match(/rgba?\(([^)]+)\)/);if(mu){var pu=mu[1].split(',');au=pu.length>3?parseFloat(pu[3]):1;}
+        if(au>=0.6&&ru.width>=180&&ru.height>=70&&(cu.boxShadow!=='none'||parseFloat(cu.borderTopWidth)>0||parseFloat(cu.borderTopLeftRadius)>0))return null;}
       var sc=(e.scrollHeight>e.clientHeight+4)&&/(auto|scroll)/.test(cs.overflowY);
       return {el:e,scroll:sc,top:r.top};
     }
