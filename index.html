@@ -40074,6 +40074,8 @@ function nmRrTer(v){var Q=NM_RR;if(!Q)return;Q.ter=v?1:0;NM_RM_SUB='rally';btRmR
 function nmRrUnitCss(){if(document.getElementById('nmRrUnitCss'))return;var st=document.createElement('style');st.id='nmRrUnitCss';var R='html:root:root:root:root #btRm .rmIt.rmRow:has(.rrU)';
   st.textContent=R+'{flex-wrap:nowrap!important;align-items:flex-start!important}'+R+' .rmTx{flex:0 0 72px!important;min-width:72px!important;padding-top:8px}'+R+' .rmBtns{flex:1 1 auto!important;display:flex!important;flex-wrap:wrap!important;justify-content:flex-start!important;gap:6px!important;background:none!important;border:0!important;box-shadow:none!important;padding:0!important}'+R+' .rmBtns>button.rmB{border-radius:8px!important;border:1px solid #39414f!important;height:auto!important;min-height:38px!important;padding:2px 10px 2px 4px!important;font-size:13px!important}'+R+' .rmIc{display:none!important}';
   document.head.appendChild(st);}
+function nmRlDie(n,k,v){var R=NM_RL;if(!R)return;R[k]=(R[k]===v?0:v);NM_RM_SUB=NM_RM_SUB||'rally';btRmReopen(n);}
+function nmRlGo(n,pid){var R=NM_RL;if(!R)return;var dr=(R.da&&R.db)?R.da+R.db:(nmAdOn()?2+Math.floor(Math.random()*6)+Math.floor(Math.random()*6):0);if(!dr){btToast(T('出目を選んでください'));return;}R.da=0;R.db=0;nmRlDo(n,pid,dr);}
 function nmRrRallyItems(n){var Q=NM_RR,R=NM_RL,it=[],sg=function(v){return (v>=0?'+':'')+v;},ns=nmSuNats(),its=nmGeList('_T').items,x=its[0];
   it.push({ic:'back',t:T('← 戻る'),sub:T('回復'),f:"NM_RR=null;NM_RL=null;btRmReopen("+n+")"});it.push({sep:1});
   it.push({row:1,ic:'sel',t:T('① 国籍'),btns:ns.map(function(k){return [(Q.nat===k?'✓':'')+nmNatLbl(k),"nmRrNat('"+k+"')"];})});it.push({sep:1});
@@ -40098,8 +40100,12 @@ function nmRrRallyItems(n){var Q=NM_RR,R=NM_RL,it=[],sg=function(v){return (v>=0
   it.push({ic:'sel',img:vaslCtrHTML('u:'+(x.nat||Q.nat)+'|'+x.label,30)||'',t:'<span style="font-size:20px;font-weight:800;color:#f0b030">DR '+(c.bm-c.drm)+' '+T('以下で回復')+'</span>'+(r0?'　→ DR'+r0.dr+'='+r0.fin+' <b style="color:'+(r0.st==='ok'?'#3ca878':'#ff6060')+'">'+r0.txt+'</b>':''),sub:x.label+'　'+T('混乱士気')+c.bm+'　DRM'+sg(c.drm)+(c.dl.length?'('+c.dl.join('・')+')':'')});
   if(r0&&r0.promo)nmPromoRows(it,n,'rl',x.pid,r0.promo);
   if(!r0&&mode==='self'&&!so.ok)it.push({ic:'info',t:'<span style="font-size:12px;color:#ffb040">'+so.why+'</span>'});
-  if(nmAdOn())it.push({row:1,ic:'fire',t:T('⑤ 判定'),btns:[['🎲 '+T('判定する'),"nmRlDo("+n+","+x.pid+",2+Math.floor(Math.random()*6)+Math.floor(Math.random()*6))"]]});
-  else{it.push({ic:'info',t:T('⑤ 判定')+' <span style="font-size:12px;color:#9ab">'+T('(出目を選ぶ)')+'</span>'});[[2,3,4,5,6,7,8,9,10,11,12]].forEach(function(vs,j){it.push({row:1,cmp:1,ic:j?'':'fire',t:'<span style="font-size:12px;color:#8899aa">'+(j?'':'DR')+'</span>',btns:vs.map(function(v){return [v,"nmRlDo("+n+","+x.pid+","+v+")"];})});});}
+  /* v997 sample(ダルマ「回復 ダイス選択できない 使いやすくする」): ほかの判定と同じく 赤・白のダイスを選んで(選んだ目は金色)「判定する」。選ばなければ自動で振る(オートダイスOFFの時は選ぶ) */
+  if(!r0){var da=R.da||0,db=R.db||0,thr=c.bm-c.drm;
+    it.push({ic:'info',t:T('⑤ 判定')+' <span style="font-size:12px;color:#9ab">'+T(nmAdOn()?'(出目を選ぶ・選ばなければ自動で振る)':'(出目を選ぶ)')+'</span>'});
+    [['da','赤','#ff6060'],['db','白','#e8eef4']].forEach(function(d){var cv=R[d[0]]||0;it.push({row:1,cmp:1,ic:'',t:'<span style="color:'+d[2]+'">'+T(d[1])+'</span>',btns:[1,2,3,4,5,6].map(function(v){return [(cv===v?'✓':'')+v,"nmRlDie("+n+",'"+d[0]+"',"+v+")"];})});});
+    var both=da&&db,can=both||nmAdOn();
+    it.push({row:1,ic:'fire',t:both?'<span style="font-size:13px">'+T('赤')+da+'＋'+T('白')+db+'＝<b style="color:'+(da+db<=thr?'#3ca878':'#ff6060')+'">'+(da+db)+'</b> '+(da+db<=thr?T('回復'):T('失敗'))+'</span>':'',btns:[['🎲 '+T('判定する'),can?"nmRlGo("+n+","+x.pid+")":null]]});}
   it.push({sep:1});it.push({ic:'x',t:T('閉じる'),f:"BtRmClose()"});
   return it;}
 function nmRrRows(it,n){var Q=NM_RR;if(!Q)return;var ns=nmSuNats();
