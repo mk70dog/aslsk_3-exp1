@@ -2,11 +2,11 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 返事待ち: sample-ijflat2(スポット判定: ①主砲以外(機関銃 vm・歩兵 mf)の判定画面の右側を平らに nmIjXFlatCss・戻る/攻撃側/目標の重複行を出さない・赤白ダイスは修正の後(.nvDie)・判定するは下に全幅 ②1画面目の＋カウンターを選択は選ぶ欄だけ全幅(#nmIj.ijPick, nmIjPickDone/nmIjPickCancel) ③置いた編成を候補に二重に出さない)、sample-respop
+- v1030: sample-ijflat2(スポット判定の2画面目: mf/vm/lw も nmIjStageGo で共通の判定パネル(btRm)を開く・戻る=nmIjStageBack。＋カウンターを選択は #nmIj.ijPick で全幅・nmIjPickDone/Cancel。置いた編成を候補に二重に出さない)・sample-respop(nmResImg はどこをタップしてもすぐ消す・外のタップは下に通さない)を反映。返事待ちなし。未対応: 古いテスト aud/dcr/vft の修正
+
 
 - v1029: PF(nmPfWep)は4.4.2どおり 1943/10以降 かつ 敵(独軍以外)のAFVがシナリオにいる時 または SSRにPFの記載がある時だけ。S24・S26は出る、S20・S23(敵AFVなし)は出ない。PFはシナリオカードのOBには載らない固有SW
 
-- 返事待ち: sample-respop(結果の画像ポップアップ nmResImg: どこをタップしてもすぐ消す・外のタップは下に通さない nmResTapArm)
 
 - v1028: sample-dcfit・sample-fmpos・sample-ijdedup を反映。返事待ちなし。未対応: 古いテスト aud/dcr/vft の修正
 
