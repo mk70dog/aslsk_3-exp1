@@ -38430,7 +38430,7 @@ function nmBog1Open(nat,vid){var ns=nmSuNats();if(!ns.length){btToast(T('シナ�
   var oI=nmRmBogItems;nmRmBogItems=function(n){var it=oI.apply(this,arguments);try{var B=NM_BG;if(!B||!NM_BOG1)return it;var eh=nmVsEh(n,B.sd);if(!eh||!eh.ccTmp)return it;
     for(var i=0;i<it.length;i++){if(it[i]&&it[i].ic==='back'){it.splice(i,(it[i+1]&&it[i+1].sep)?2:1);break;}}
     var M=NM_BOG1,ns=nmSuNats();
-    var head={row:1,ic:'',t:'<b style="font-size:16px;color:#7ec8e3">'+T('ボグ判定(車両)')+'</b>',btns:[['✕ '+T('閉じる'),"NM_BOG1=null;BtRmClose()"]]};
+    var head={row:1,ic:'',t:'<b style="font-size:16px;color:#7ec8e3">'+T('ボグ判定(車両)')+'</b>',btns:[['← '+T('戻る'),"NM_BOG1=null;BtRmClose();nmHqOpen()"],['✕ '+T('閉じる'),"NM_BOG1=null;BtRmClose()"]]}; /* v990(ダルマ「戻るを追加」) */
     var natR={row:1,ic:'tank',t:'<span style="font-size:12px">'+T('車両')+'</span>',btns:ns.map(function(k){return [(k===M.nat?'✓':'')+nmNatLbl(k),"nmBog1Open('"+k+"')"];})};
     var vs=nmIjVehs(M.nat).filter(function(o){return o.kind==='veh';});
     var vR={html:'<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;width:100%">'+vs.map(function(o){var on=o.id===M.vid,c=nmCtrChip(o.id,36);return '<button class="rmB'+(on?' on':'')+'" style="min-width:0;height:auto;min-height:44px;padding:3px 12px;display:inline-flex;align-items:center;gap:8px" onclick="event.stopPropagation();nmBog1Open(\''+M.nat+'\',\''+o.id+'\')">'+c+'<span>'+o.nm+'</span></button>';}).join('')+'</div>'};
