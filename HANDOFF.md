@@ -2,6 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- 返事待ち: sample-taphex(置くヘクスをタップ→そのヘクスを0.45秒塗ってからパネル。色 A黄/Bオレンジ/C水色、NM_TAPHEX/nmTapHexSVG)
+
 - 返事待ち: sample-fmpos(砲撃→地図で方向: パネルがA・B両方を避ける nmIjFmPts / ドラッグ位置を NM_FM_MOVED で保つ・汎用ドラッグ(translate)と二重にしない)
 
 - 返事待ち: sample-dcfit(爆薬①置くをスクロールなし: 2列時は六角210px・地形で選ぶを右列へ)
