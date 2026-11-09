@@ -35545,7 +35545,7 @@ function nmRmCvItems(n){var C=NM_CV;if(!C)return nmRMenuItems(n);var R=nmCvCalc(
    敵に隣接しない林・建物を最短で(なければ敵から最も遠いヘクス)。匍匐後退(1ヘクス、阻止なし)も選べる。開豁地で阻止できる敵がいれば阻止の士気チェック(失敗で損耗)。行き先がなければ除去。
    爆薬: 統制状態のMMCがいる編成から隣接ヘクスへ設置(地図に「DC」)、AFPh(前進射撃フェイズ)に爆発: 原DR≧X#(10、エリート12、鹵獲−2)で不発、それ以外は30FP列・DRM=TEM(CX+1)で、そのヘクスの相手の編成へ士気チェック */
 var NM_RT=null,NM_DC=null;
-function nmRtEnemies(sd){var o=[],osd=sd==='f'?'e':'f';nmSideList(osd).forEach(function(e){if(NM_RTM&&!NM_RTM.real&&!e.ijTmp)return; /* v949: マルチ判定の地図では置いた敵マーカーだけ */var n=btNodeOf(e.boardId,e.col,e.row);if(n==null||n<0)return;var go=true,rng=0,caF=null,why='';
+function nmRtEnemies(sd){var o=[],osd=sd==='f'?'e':'f';nmSideList(osd).forEach(function(e){if(NM_RTM&&!NM_RTM.real&&!e.ijTmp)return; /* v949: マルチ判定の地図では置いた敵マーカーだけ */var n=btNodeOf(e.boardId,e.col,e.row);if(n==null||n<0)return;var go=true,rng=0,caF=null,why='',wpn=null;
   /* v960(ルール厳守 SK4 3.6): 阻止できるのは『未混乱・ピンでない』敵で、射撃力が半減・正のDRMにならないもの。白兵戦中(同じヘクスに潰走側のユニット)・CX・単独の指揮官のMG・BUの主砲・Motionの車両・射界(CA)を変えないと撃てない砲/主砲 は阻止できない */
   var mel=!e.ijTmp&&(function(){try{return nmAllAt(e,sd).some(function(x){return x!==e&&!x.ijTmp;});}catch(x){return false;}})();
   var okMMC=function(x){return x.kind!=='smc'&&x.kind!=='sw'&&!x.broken&&!x.pinned&&!x.cx;};
@@ -35557,12 +35557,19 @@ function nmRtEnemies(sd){var o=[],osd=sd==='f'?'e':'f';nmSideList(osd).forEach(f
     if(!el.length&&go)why='ピン・CX・指揮官だけ';}
   else if(!e.ijTmp&&(e.veh||e.gun)){var st=e.st||{};
     if(e.veh&&!e.gun){var a=null;try{a=nmAfv(e.veh);}catch(x){}var tur=!!(a&&a.turretType),f=tur?(e.tca!=null?e.tca:e.facing):e.facing;
-      if(st.brk||st.shock||st.stun||st.recall||st.mal)why='ショック・スタン・リコール・主砲故障';else if(st.mv==='mot')why='Motion';else if(!e.ce)why='BU(主砲は不可)';else if(f==null)why='向き未設定';else{rng=16;caF=nmToBtFace(f,e.boardId);}}
+      /* v961(ダルマ指示「BUの車両の機関銃による阻止 対応させる」): 車両は武器ごとに判定。主砲=CEの時だけ(BUは+1で不可)・射程16・砲塔はTCA/無砲塔はVCA。BMG=射程8・VCA(固定式BMGは移動目標に+1で不可)。CMG=射程12・TCA(RSTはCEだと撃てない)。RMG=射程8・TCAの後ろ。AAMG=CEの時だけ・射程8・射界なし */
+      if(st.brk||st.shock||st.stun||st.recall)why='ショック・スタン・リコール';else if(st.mv==='mot')why='Motion';else{var W=[],mg=(a&&a.mg)||{},vF=e.facing!=null?nmToBtFace(e.facing,e.boardId):null,tF=tur?(e.tca!=null?nmToBtFace(e.tca,e.boardId):vF):vF;
+        if(e.ce&&!st.mal&&(tur?tF:vF)!=null)W.push({rng:16,caF:tur?tF:vF,nm:'主砲'});
+        if(mg.bmg&&!mg.bmgFixed&&vF!=null)W.push({rng:8,caF:vF,nm:'BMG'});
+        if(mg.cmg&&tF!=null&&!(e.ce&&a&&a.turretType==='RST'))W.push({rng:12,caF:tF,nm:'CMG'});
+        if(mg.rmg&&tF!=null)W.push({rng:8,caF:(tF+3)%6,nm:'RMG'});
+        if(mg.aamg&&e.ce)W.push({rng:8,caF:null,nm:'AAMG'});
+        if(W.length){wpn=W;rng=Math.max.apply(null,W.map(function(w){return w.rng;}));}else why=f==null?'向き未設定':(!e.ce?'BU(主砲は不可)・撃てる機関銃なし':'撃てる武器なし');}}
     else{var man=false;try{man=nmAllAt(e,osd).some(function(x){return x.grp&&!x.veh&&!x.gun&&(nmGeList(x.grp).items||[]).some(okMMC);});}catch(x){}
       if(st.mal||st.brk)why='砲の故障';else if(!man)why='操作するユニットなし';else if(e.facing==null)why='向き未設定';else{rng=16;caF=nmToBtFace(e.facing,e.boardId);}}}
   else if(!e.veh&&!e.gun)rng=4;
   if(e.ijTmp&&e.rtRng)rng=e.rtRng;if(mel){rng=0;why='白兵戦中';}
-  o.push({n:n,go:go,rng:rng,eh:e,rtGun:!!(e.ijTmp&&e.rtGun),rtFac:e.rtFac||0,caF:caF,why:why});});return o;}
+  if(mel)wpn=null;o.push({n:n,go:go,rng:rng,eh:e,rtGun:!!(e.ijTmp&&e.rtGun),rtFac:e.rtFac||0,caF:caF,why:why,wpn:wpn});});return o;}
 /* v960: 稜線の例外(SK4 丘)。潰走で『敵のLOSが交わるヘクスサイドから稜線を越えて』上がったヘクスでは高所の有利(+1)が無く、阻止を受ける */
 function nmRtCrestSide(f,n,p){var F=BTG.nodes[f],B=BTG.nodes[n],A=BTG.nodes[p];if(!F||!B||!A)return false;var mx=(A.x+B.x)/2,my=(A.y+B.y)/2,dx=B.x-A.x,dy=B.y-A.y,L=Math.sqrt(dx*dx+dy*dy)||1,s=L/Math.sqrt(3)/2,px=-dy/L*s,py=dx/L*s;
   var P1={x:mx+px,y:my+py},P2={x:mx-px,y:my-py},cr=function(o,a,b){return (a.x-o.x)*(b.y-o.y)-(a.y-o.y)*(b.x-o.x);};
@@ -35570,7 +35577,7 @@ function nmRtCrestSide(f,n,p){var F=BTG.nodes[f],B=BTG.nodes[n],A=BTG.nodes[p];i
 function nmRtDirs(n){var N=BTG.nodes[n],b=null;(N.nb||[]).some(function(q){var M2=BTG.nodes[q];b=Math.atan2(M2.y-N.y,M2.x-N.x);return true;});if(b==null)b=0;var o=[];for(var k=0;k<6;k++)o.push(b+k*Math.PI/3);o=o.map(function(a){return Math.atan2(Math.sin(a),Math.cos(a));}).sort(function(x,y){return x-y;});return o;}
 function nmRtInCA(g,f,n){if(g===n)return true;var G=BTG.nodes[g],N=BTG.nodes[n],a=Math.atan2(N.y-G.y,N.x-G.x),d=nmRtDirs(g)[f%6],x=Math.abs(Math.atan2(Math.sin(a-d),Math.cos(a-d)));return x<=Math.PI/6+0.02;} /* v945: 砲の射界(正面ヘクスサイドの両端の稜線の間) */
 function nmRtAdjGO(n,E){return E.some(function(e){return e.go&&btDist(e.n,n)<=1;});}
-function nmRtInter(n,E,prev){var N=BTG.nodes[n];if(!N||!N.og)return null;var who=null;E.some(function(e){if(!e.go||!e.rng)return false;var d=btDist(e.n,n);if(d>e.rng)return false;if(e.rtGun&&!nmRtInCA(e.n,e.rtFac,n))return false;if(e.caF!=null&&e.n!==n&&!btInArc(e.caF,btAng(e.n,n)))return false;var l=btLOS(e.n,n,true);var ha=N.elev>BTG.nodes[e.n].elev&&!(prev!=null&&BTG.nodes[prev]&&BTG.nodes[prev].elev<N.elev&&nmRtCrestSide(e.n,n,prev));if(l.ok&&!l.hind&&!ha){who=BTG.nodes[e.n].nm;return true;}return false;});return who;}
+function nmRtInter(n,E,prev){var N=BTG.nodes[n];if(!N||!N.og)return null;var who=null;E.some(function(e){if(!e.go||!e.rng)return false;var d=btDist(e.n,n);if(d>e.rng)return false;if(e.rtGun&&!nmRtInCA(e.n,e.rtFac,n))return false;if(e.caF!=null&&e.n!==n&&!btInArc(e.caF,btAng(e.n,n)))return false;if(e.wpn&&!e.wpn.some(function(w){return d<=w.rng&&(w.caF==null||e.n===n||btInArc(w.caF,btAng(e.n,n)));}))return false;var l=btLOS(e.n,n,true);var ha=N.elev>BTG.nodes[e.n].elev&&!(prev!=null&&BTG.nodes[prev]&&BTG.nodes[prev].elev<N.elev&&nmRtCrestSide(e.n,n,prev));if(l.ok&&!l.hind&&!ha){who=BTG.nodes[e.n].nm;return true;}return false;});return who;}
 /* v960: 経路の各ヘクスの阻止(直前のヘクスで稜線の例外を判定) */function nmRtPathInter(path,E,n0){if(n0==null)n0=NM_RT?NM_RT.n:null;return (path||[]).filter(function(x,i){return nmRtInter(x,E,i?path[i-1]:n0);});}
 function nmRtSearch(n0,E,mfMax){ /* v953: SK4 3.6 敵のLOSに一度でも入ったら、その敵には以後近づけない(LOSを出た後も)。状態=(ヘクス, LOSに入った敵の集合) */
   var dist={},prev={},path={},blk={},occ={},lc={},spa={},alt={};E.forEach(function(e){occ[e.n]=1;});
