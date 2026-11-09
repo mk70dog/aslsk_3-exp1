@@ -1,8 +1,10 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-09 (main=v983)
+- 最終更新: 2026-11-09 (main=v984)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
+- v984 済: (ダルマ「実施」) ①潰走の行けるヘクス(青 #3aa0ff 22%塗り)→枠線だけ(dev/rtcap.js、samples/sample-rt-outline.png) ②判定パネル #btRm.rmFull をスクロールなしで全体表示: style#nmRmCompact(.rmIt の上下余白3px、.rmB 高さ34px、.dsRow のある行は文字とダイスを1行に)。砲撃(車両目標)で674→490px。dev/vfcap.js、samples/sample-vf-noscroll.png。
+  返事待ち: スポット判定の右側をマルチ判定の判定ツールと同じボタン・ダイスで専用に作り直す(sample-spot-right、作成途中)。
 - v983 済: (ダルマ「実カウンターに変更」→実施) シナリオのユニットで判定(nmCcScDraw)の車両・砲ボタンを nmCtrChip(40px)+名前に(ボグ判定・人力移動・修理)。dev/bogctr.js、サンプル=samples/sample-bog-ctr.png。
 - v982 済: (ダルマ「軽対戦車砲 マップ表示が遅い→実施(案1+2)」) nmLosHexAsync の再描画を0.4秒に1回へ間引き(LOSは近い順のまま)。計測 dev/hexperf.js: 再描画617→61回・全体138s→26s(1ヘクス約40msのLOS計算自体は残る)。
 - v981 済: (ダルマ「実施」) スポット判定(#nmIj)の背景・ボタン・選択色(金)・「判定する」(青)をマルチ判定(砲撃パネル)と同じに。nmIjMjCss(nmIjBtnCss から呼ぶ、html:root×6で上書き)。dev/spdes.js、サンプル=samples/sample-spot-design.png。

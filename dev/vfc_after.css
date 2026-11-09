@@ -1,0 +1,5 @@
+html:root:root:root #btRm.rmFull .rmBox .rmIt{padding-top:3px!important;padding-bottom:3px!important;min-height:0!important}
+html:root:root:root #btRm.rmFull .rmBox .rmIt.rmSum,html:root:root:root #btRm.rmFull .rmBox .rmIt.rmAct{margin-top:3px!important;margin-bottom:3px!important;padding-top:6px!important;padding-bottom:6px!important}
+html:root:root:root #btRm.rmFull .rmBox .rmIt:has(.dsRow){flex-wrap:nowrap!important;align-items:center!important}
+html:root:root:root #btRm.rmFull .rmBox .rmIt:has(.dsRow) .dsRow{flex:1!important;margin:0 0 0 8px!important}
+html:root:root:root #btRm.rmFull .rmBox .rmB{min-height:0!important;height:34px!important}
