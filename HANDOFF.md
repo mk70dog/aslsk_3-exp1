@@ -2,6 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- v1024: sample-mh2 反映済み。返事待ち: sample-bog(ボグ車両ボタン), sample-vfsw(砲撃の方向設定にA/B車両切替。samples/sample-vfsw.pngはブランチ内)
+
 - v1023: 編成の準備(#nmSu)のOB/編成タイル(.chip/.u)は実カウンター付きなので、カウンター化observerの対象から除外(ラベルが二重化し指揮官が別国籍になっていた)。返事待ち: sample-bog, sample-mh2
 
 - sample-mc2 実施済み(MC・PTC登録欄=実カウンター5列)。回復パネルは最新版で統一済み(iPadの旧表示は版を要確認)。返事待ち: sample-mh2
