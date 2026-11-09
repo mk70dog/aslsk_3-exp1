@@ -2,6 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- 返事待ち: sample-respop(結果の画像ポップアップ nmResImg: どこをタップしてもすぐ消す・外のタップは下に通さない nmResTapArm)。質問中: 軽対戦車兵器の選択にPF(ルール4.4.2の独軍固有)を残すか、OBの兵器だけにするか
+
 - v1028: sample-dcfit・sample-fmpos・sample-ijdedup を反映。返事待ちなし。未対応: 古いテスト aud/dcr/vft の修正
 
 
