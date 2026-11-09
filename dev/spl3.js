@@ -1,0 +1,8 @@
+// 実際の共通判定パネル(#btRm)を、スポット判定と同じ A(III号N tT9)→B(シャーマン tO10) で開く
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1000,height:657},deviceScaleFactor:2});const E=[];p.on('pageerror',x=>E.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(1000);
+const r=await p.evaluate(async()=>{const W=ms=>new Promise(r=>setTimeout(r,ms));S.scen=S.scen||{};S.scen.sel='S24';for(var i=0;i<4;i++){try{Draw();}catch(e){}await W(1500);}await btEnsureGraph();var N=BTG.nodes,id=nm=>N.findIndex(n=>n.nm===nm);var o=[];
+try{try{nmModeSet('judge');}catch(e){}await W(1500);var a=id('tT9'),bb=id('tO10');var HA=nmHexOfNode(a),HT=nmHexOfNode(bb);var all=[].concat.apply([],nmSuNats().map(k=>nmIjVehs(k)));var av=all.filter(x=>x.kind==='veh'&&/III号N/.test(x.nm))[0],tv=all.filter(x=>x.kind==='veh'&&/シャーマン/.test(x.nm))[0];nmSideList('f').push({boardId:HA.boardId,col:HA.col,row:HA.row,st:{},veh:av.id});nmSideList('e').push({boardId:HT.boardId,col:HT.col,row:HT.row,st:{},veh:tv.id});Draw();await W(500);
+S.turn=S.turn||{};S.turn.phase='dff';NM_RM_HEX=nmHexOfN(a);nmVfOpen(a,'f');await W(1200);nmVfSet(a,'tgt',bb);await W(2500);o.push('tgt '+(NM_VF&&NM_VF.tgt));
+document.querySelectorAll('.btToast,#btToast').forEach(x=>x.remove());}catch(e){o.push(String(e));}return o;});
+console.log(JSON.stringify(r),JSON.stringify(E));await p.waitForTimeout(800);await p.screenshot({path:process.argv[2]});await b.close();})();
