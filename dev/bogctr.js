@@ -1,0 +1,4 @@
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1180,height:820},deviceScaleFactor:2});const E=[];p.on('pageerror',x=>E.push(String(x)));
+await p.goto('file://'+__dirname+'/../index.html',{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(1000);
+const r=await p.evaluate(async()=>{const W=ms=>new Promise(r=>setTimeout(r,ms));S.scen=S.scen||{};S.scen.sel='S24';for(var i=0;i<4;i++){try{Draw();}catch(e){}await W(1500);}var o=[];try{nmScOpen('nmHqBogOpen');await W(1500);o.push('ok');}catch(e){o.push(String(e));}return o;});
+try{await p.click('#nmCcSc button:has-text("独軍")',{timeout:3000});await p.waitForTimeout(800);}catch(e){}await p.screenshot({path:process.argv[2]});console.log(E,r);await b.close();})();
