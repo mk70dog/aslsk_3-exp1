@@ -1,8 +1,9 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-09 (main=v990)
+- 最終更新: 2026-11-09 (main=v991)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
+- v991 済: (ダルマ「全ての判定パネル 戻るの横にクリアボタン」→実施) ①#btRm の判定パネル: nmRMenuItems を包み、先頭の back 項目の f にある NM_xx=null(NM_CLR_VARS)のパネルに「↺ クリア/選び直す」を足す。開いた時の状態を JSON で写し(NM_CLR_SNAP)、クリアで戻す(nat はそのまま、NM_DSV も消す、PAATC は先頭MMC、回復は nmRrNat)。btRmFullApply の後に nmClrPair で戻ると1行に ②見出しパネル(nmMh2/nmDcp/nmRaq/nmCcSc): 戻るボタンを複製して ↺ クリア(NM_CLR_HD、MutationObserver)。dev/clr2.js。
 - v990 済: (ダルマ「全部実施」) ①爆薬(DC) ①置くを画面幅760px以上で2列(nmDcpDraw two) ②ボグ判定(NM_BOG1)の見出しに ← 戻る(nmHqOpen) ③人力移動の結果をポップアップ(NM_MH2.popSeen、OKで閉じる・結果は下にも残る) ④PAATC: 説明1行・カウンター36px・ユニットごと1行で出目タップ=即判定(🎲自動・外す)、成功/失敗ボタンと「PAATCを判定」はなくした ⑤回復: ユニットを左寄せ・1つずつ(nmRrUnitCss、.rrU)。dev/dcp.js bog1b.js mh2r.js pa.js rr.js。
   返事待ち: スポット判定の右側の作り直し(sample-spot-right、作成途中)。
 - v989 済: バグ修正(ダルマ「ヘクスがずれている？」) nmDcpHexSVG: 六角形を常に平らな上(flat-top)で描いていた→最初の隣の方向から向きを決める(辺が隣を向く)・間隔 R√3+3。dev/dcp.js(引数でヘクス名)。
