@@ -1,0 +1,6 @@
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1000,height:657},deviceScaleFactor:2});const e=[];p.on('pageerror',x=>e.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>{S.scen=S.scen||{};S.scen.sel='S25';S.nmMode='judge';NAVTAB('los');});await p.waitForTimeout(3000);
+await p.evaluate(()=>{nmMh2Open();var M=NM_MH2;M.nat='SOV';var u=nmSuOb('SOV').find(x=>x.kind==='mmc');M.cs['mmc|'+u.id]=1;var g=nmIjVehs('SOV').find(o=>o.kind==='gun');M.g=g&&g.id;nmMh2Draw();nmMh2Die('a',3);nmMh2Die('b',5);});await p.waitForTimeout(800);
+console.log(await p.evaluate(()=>[...document.querySelectorAll('#nmMh2 .dsRow>button')].filter(x=>{var c=getComputedStyle(x).backgroundImage;return /gradient/.test(c);}).map(x=>x.textContent.trim()).join(',')));
+await p.evaluate(()=>{var b=document.querySelector('#nmMh2 .ccBox, #nmMh2 > div');[...document.querySelectorAll('#nmMh2 *')].forEach(x=>{if(x.scrollHeight>x.clientHeight+20)x.scrollTop=9999;});});await p.waitForTimeout(300);await p.screenshot({path:'/tmp/sm/mh2die.png'});
+console.log(JSON.stringify(e));await b.close();})();
