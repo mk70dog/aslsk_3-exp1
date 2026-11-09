@@ -1,8 +1,9 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-08 (main=v955)
+- 最終更新: 2026-11-08 (main=v956)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
+- v956 済: 潰走地図に国籍の切り替え(案B): 帯の「ソ連 ⇄」(nmRtmNatBtn)をタップ→ nmRtmNatCycle で潰走する側の国籍を順に切り替え。敵は反対側(nmRtmEnat)。ヘクス・敵マーカー(射程・種類・向き)・LOS妨害は引き継ぐ。地図のユニットメニューからの潰走(M.real)では出さない。ダルマは「B」とだけ返信(実施の語なし)したので、問題があれば戻す。dev/rtnat.js。
 - v955 済: ①全パネルをドラッグ移動(nmGdPanel/NM_GD: position:fixed のカードをボタン以外でつかんで CSS translate で移動、スクロールするパネルは上端46pxの帯だけ、潰走3パネル・nmPdAttach系・#btRm は対象外=既存の動き)。②マルチ判定の白兵戦(nmCcScDraw)・スポット判定(nmScDraw、MC/PTC・爆薬など)のユニット行を VASL カウンター画像つき(nmUnitLbl)。③全ボタンの4隅ドット: nmDotOff() が起動時にスタイルシートを走査し、ボタン系ルールの背景画像から radial-gradient の層だけ外す上書きシートを作る(window.__dotRules に件数)。dev/pdrag.js。
 - v954 済: 潰走地図のパネル3つ(帯 #nmRtmBn・阻止カード #nmRtmPen・敵設定 #nmRtmEd)を全部ドラッグ可に。#nmRtmEd は nmRtmDrag(p,'nmRtmEdPos')、初期位置は nmRtmFree で他パネルと重ならない場所、触ると nmRtmFront で最前面、文字選択なし(nmRtmCtrCss)。dev/rtdrag.js。
 - 方針(2026-11-09 ダルマ確認): 地図のユニットメニューの『潰走』(nmRtmStartAt)は、実ユニットと地図上の実敵を使う今の作りのまま。カウンターなし地図にはそろえない。
