@@ -34894,7 +34894,7 @@ function nmRmVFireItems(n){
   var odd='';if(B.mode==='VTT'){try{var od=btVTTOdds(o,ev);odd='　撃破'+pc(od.kill)+'・走行不能'+pc(od.imm);}catch(e){}}
   var AJ=nmVfAttAdj(B,ev);if(AJ.err&&!V.res){it.push({ic:'x',t:'撃てません: '+AJ.err});return it;}
   if(!vdone&&(ev.k||V.caHull)&&btOrdTurreted(B.w))it.push({row:1,ic:'rot',t:'<span style="font-size:13px">射角の外: 向きを変える</span>',btns:[[(V.caHull?'':'✓')+'砲塔を回す',"NM_VF.caHull=false;nmVfRe("+n+")"],[(V.caHull?'✓':'')+'車体ごと回す',"NM_VF.caHull=true;nmVfRe("+n+")"]]}); /* v718 */
-  if(!vdone)it.push({ic:'fire',t:'<span>'+(AJ.att?'ATT ':'')+'命中TH# <b>'+AJ.th+'</b>　DRM <b>'+sg(ev.drm+AJ.adj)+'</b>　→ 原DR <b>'+(AJ.th-ev.drm-AJ.adj)+'</b>以下で命中</span>',sub:(function(){var RF=nmVfRof(B,ev);return RF.base?'ROF: '+(RF.n?'赤'+RF.n+'以下でもう一度撃てる':'なし')+(RF.why.length?'('+RF.why.join('・')+')':'')+'　':'';})()+(ev.drmL.length||AJ.l.length?'DRM内訳: '+ev.drmL.concat(AJ.l).join(' ')+'　':'')+'命中'+pc(AJ.att?nmPHit(AJ.th,ev.drm+AJ.adj,ev.case16):ev.pHit)+(AJ.att?'':odd)});
+  if(!vdone)it.push({ic:'fire',t:'<span style="display:inline-block;width:fit-content;max-width:100%;white-space:nowrap;padding:3px 12px;border:1.5px solid #c8a032;border-radius:10px;background:#1d1a12;color:#ffd070;font-size:17px;font-weight:800;letter-spacing:.5px">'+(AJ.att?'ATT ':'')+'命中TH# <b>'+AJ.th+'</b>　DRM <b>'+sg(ev.drm+AJ.adj)+'</b>　→ 原DR <b>'+(AJ.th-ev.drm-AJ.adj)+'</b>以下で命中</span>',sub:(function(){var RF=nmVfRof(B,ev);return RF.base?'ROF: '+(RF.n?'赤'+RF.n+'以下でもう一度撃てる':'なし')+(RF.why.length?'('+RF.why.join('・')+')':'')+'　':'';})()+(ev.drmL.length||AJ.l.length?'DRM内訳: '+ev.drmL.concat(AJ.l).join(' ')+'　':'')+'命中'+pc(AJ.att?nmPHit(AJ.th,ev.drm+AJ.adj,ev.case16):ev.pHit)+(AJ.att?'':odd)});
   var R=V.res;
   if(!R){it.push({sep:1});
     it.push({ic:'fire',t:'命中判定のダイスを振る',sub:'赤白のダイス(赤が白より小さいと砲塔に命中)',f:"nmVfRoll("+n+",'th')"});
@@ -36609,7 +36609,7 @@ function nmVsBogOpen(n,sd){var eh=nmVsEh(n,sd),N=BTG.nodes[n],tj=btTerrJP(N.terr
 function nmRmBogItems(n){var B=NM_BG;if(!B)return nmRMenuItems(n);var eh=nmVsEh(n,B.sd),v=eh&&nmAfv(eh.veh),gp=(v&&v.gp)||'normal',R=BOG_CHECK_RULES,it=[];
   var drm=(R.groundPressureDrm[gp]||0)+(R.terrainDrm[B.terr]||0)+(B.nt?R.notFullyTrackedDrm:0)+(B.elev?R.gainingElevationDrm:0);
   it.push({ic:'back',t:'← 戻る',sub:'ボグ判定',f:"NM_BG=null;btRmReopen("+n+")"});it.push({sep:1});
-  it.push({ic:'move',t:'ボグ判定: '+(v?nmAfvName(v):'車両')+'　DRM+'+drm,sub:'DR≧12でボグ(停止)。接地圧'+({low:'低0',normal:'中+1',high:'高+2'}[gp]||gp)});
+  it.push({ic:'move',t:'ボグ判定: '+(v?nmAfvName(v):'車両')+'<br><span style="display:inline-block;width:fit-content;max-width:100%;padding:3px 14px;border:1.5px solid #c8a032;border-radius:10px;background:#1d1a12;color:#ffd070;font-size:19px;font-weight:800;letter-spacing:.5px">DRM +'+drm+'　→ DR 12以上でボグ</span>',sub:'DR≧12でボグ(停止)。接地圧'+({low:'低0',normal:'中+1',high:'高+2'}[gp]||gp)});
   it.push({row:1,ic:'hex',t:'進入した地形',btns:[['woodsFull','林(全MP)'],['woodsHalf','林+3'],['woodenBuilding','木造+3'],['stoneBuilding','石造+4']].map(function(x){return [(B.terr===x[0]?'✓':'')+x[1],"NM_BG.terr='"+x[0]+"';NM_RM_SUB='bog';btRmReopen("+n+")"];})});
   it.push({row:1,ic:'',t:'',btns:[[(B.nt?'✓':'')+'全装軌でない+1',"NM_BG.nt=!NM_BG.nt;NM_RM_SUB='bog';btRmReopen("+n+")"],[(B.elev?'✓':'')+'高度を上げる+1',"NM_BG.elev=!NM_BG.elev;NM_RM_SUB='bog';btRmReopen("+n+")"]]});
   it.push({ic:'fire',t:'DRを振る',f:"nmVsBog("+n+","+drm+")"});if(NM_VS&&NM_VS.eh===eh&&NM_VS.t)it.push({ic:'info',t:'<span style="color:'+NM_VS.c+'">'+NM_VS.t+'</span>'});return it;}
