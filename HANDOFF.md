@@ -1,8 +1,9 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-09 (main=v986)
+- 最終更新: 2026-11-09 (main=v987)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
+- v987 済: (ダルマ「実施」) 人力移動(砲) nmMh2Draw を画面幅760px以上で2列(min(1120px,97vw)・max-height 94vh)。dev/mh2.js、samples/sample-mh-noscroll.png。
 - v986 済: バグ修正(ダルマ報告「残留FP ダイス 選択しても色が変わらない」): ①FPの選択色 #2a2412 を dsUni の dsOn 判定に追加 ②mark() が nmDsHPick の付けた dsOn を消していた→消さない(他のパネルのダイスも同じ)。dev/raq.js。
 - v985 済: (ダルマ「実施」) 判定パネルをさらにつめる: 目標の移動(37538付近)を row 項目にして なし/Motion を同じ行に(説明は短く)、.rmAct の .rmSub を1行(省略…)。dev/vfcap2.js。
 - v984 済: (ダルマ「実施」) ①潰走の行けるヘクス(青 #3aa0ff 22%塗り)→枠線だけ(dev/rtcap.js、samples/sample-rt-outline.png) ②判定パネル #btRm.rmFull をスクロールなしで全体表示: style#nmRmCompact(.rmIt の上下余白3px、.rmB 高さ34px、.dsRow のある行は文字とダイスを1行に)。砲撃(車両目標)で674→490px。dev/vfcap.js、samples/sample-vf-noscroll.png。
