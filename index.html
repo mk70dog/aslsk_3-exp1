@@ -39635,12 +39635,21 @@ function nmIjHtmlSeg(html){var d=document.createElement('div');d.innerHTML=html;
     bs.forEach(function(b){var on=/ff9030/.test(b.getAttribute('style')||'');b.removeAttribute('style');b.className='ijB'+(on?' on':'')+(num&&/^自動/.test(b.textContent.trim())?' auto':'');if(!b.querySelector('b')){b.innerHTML='<b>'+b.innerHTML+'</b>';}g.appendChild(b);});});
   return d.innerHTML.replace(/class="rmB"/g,'class="ijB"');}
 function nmIjItemsHTML(it){try{it=nmDsTag(it);}catch(e){}var h='',esc=function(f){return String(f).replace(/&/g,'&amp;').replace(/"/g,'&quot;');};
-  it.forEach(function(x){if(!x||x.sep)return;
+  try{nmNvLayCss();}catch(e){}
+  it.forEach(function(x){if(!x)return;if(x.sep){h+='<div class="nvSep"></div>';return;}
     if(x.html){h+='<div class="ijRow nvHtml">'+nmIjHtmlSeg(x.html)+'</div>';return;}
-    if(x.row){var bs=(x.btns||[]).map(function(b){var on=/^✓/.test(b[0]),lb=String(b[0]).replace(/^✓/,'');return '<button class="ijB'+(on?' on':'')+'"'+(b[1]?' onclick="'+esc(b[1])+'"':' disabled')+'><b>'+lb+'</b></button>';}).join('');h+='<div class="ijRow" style="align-items:center">'+(x.t?'<span class="ijFl" style="min-width:0;color:#9fb2c8">'+x.t+'</span>':'')+'<div class="ijSg'+((x.btns||[]).length<=3?' sm':'')+'">'+bs+'</div></div>';return;}
+    if(x.row){var bs=(x.btns||[]).map(function(b){var on=/^✓/.test(b[0]),lb=String(b[0]).replace(/^✓/,'');return '<button class="ijB'+(on?' on':'')+'"'+(b[1]?' onclick="'+esc(b[1])+'"':' disabled')+'><b>'+lb+'</b></button>';}).join('');h+='<div class="ijRow nvRw" style="align-items:center">'+(x.ic&&(nmIconSVG(x.ic)||btRmIcon(x.ic))?'<span class="nvIc">'+(nmIconSVG(x.ic)||btRmIcon(x.ic))+'</span>':'')+(x.t?'<span class="ijFl" style="min-width:0;color:#9fb2c8">'+x.t+'</span>':'')+'<div class="ijSg'+((x.btns||[]).length<=3?' sm':'')+'">'+bs+'</div></div>';return;}
     if(x.f)h+='<button class="ijB nvIt" onclick="'+esc(x.f)+'"><b>'+x.t+'</b>'+(x.sub?'<small>'+x.sub+'</small>':'')+'</button>';
-    else h+='<div class="ijNote">'+x.t+(x.sub?' <span class="nvDim">'+x.sub+'</span>':'')+'</div>';});
+    else h+='<div class="ijNote nvNt"><span class="nvIc">ⓘ</span><span>'+x.t+(x.sub?' <span class="nvDim">'+x.sub+'</span>':'')+'</span></div>';});
   return h;}
+/* 判定パネル右側(nvBox)のレイアウトを、砲撃などの専用パネルと同じ「アイコン+ラベル左・ボタン右寄せ・水色の区切り・ⓘ注意書き」に */
+function nmNvLayCss(){if(document.getElementById('nmNvLayCss'))return;var Q='html:root:root #nmIj .nvBox ',st=document.createElement('style');st.id='nmNvLayCss';
+  st.textContent=[Q+'.ijRow.nvRw{display:flex;flex-wrap:nowrap;align-items:center;gap:12px;padding:6px 4px;margin:4px 0}',
+   Q+'.ijRow.nvRw .ijFl{flex:1 1 auto;color:#e8eef4!important;font-size:15px}',
+   Q+'.ijRow.nvRw .ijSg{flex:0 1 auto;margin-left:auto;max-width:62%}',
+   Q+'.nvIc{flex:0 0 28px;display:flex;justify-content:center;align-items:center;color:#cfd6df}',Q+'.nvIc svg{width:24px;height:24px}',
+   Q+'.nvSep{height:1px;background:#0e6a7a;margin:10px 4px}',
+   Q+'.ijNote.nvNt{display:flex;gap:12px;align-items:flex-start;color:#c8a032;padding:4px 4px}',Q+'.ijNote.nvNt .nvIc{font-size:20px;line-height:1.2}'].join('\n');document.head.appendChild(st);}
 /* v683(ダルマ指示「続けて作り直す」実施): 機関銃・編成射撃・LATWも専用パネルの見た目で表示(メニューの外枠・フェイズ行・戻る・ダイスを振る・閉じるは出さない) */
 function nmIjEmbedIt(it,n){var host=document.getElementById('ijRes');if(!host||!it||!it.length)return false;
   var ib=document.querySelector('#nmIj .ijBox'),st=(typeof NM_IJ_ST==='number')?NM_IJ_ST:(ib?ib.scrollTop:0);NM_IJ_ST=null;
