@@ -1,12 +1,12 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-09 (main=v1005)
+- 最終更新: 2026-11-09 (main=v1006)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
 - v1001 済: (ダルマ「実施」sample-spl2) スポット判定を2段階に: 1画面目 nmIjSetupDraw=A・Bを実カウンターのタイル(nmIjTileChips)で選ぶ+方向+「判定へ」(nmIjStageGo)。車両・砲の主砲は共通の判定パネル nmVfOpen(戻る=nmIjStageBack、J.vfStage)、歩兵・SWなどは J.stage='old' で従来画面。車両名は nmAfvName=afvOfficialName(ユニットタブと同じ)に統一(マルチ判定含む)。
 - v1002 済: (ダルマ「実カウンターに変更する」→sample-mcctr→実施) MC・PTCの②チェックするユニットと(登録)ユニットに実カウンター画像(MutationObserverで付与。ラベルから nmCtrUid で引く、無ければそのまま)。
 - v1000 済: (ダルマ「右側の表示が埋め込みになっている…埋め込みでない表示に」→sample-spot-right→「実施」) スポット判定(車両の主砲など nmIjNvDraw)の右側: nmIjFlatCss(nmIjMjCss から呼ぶ)で #ijRes/.nvBox を display:contents にして枠・⑤修正/⑥ダイス見出し・内側スクロールをなくし、地形TEM/妨害/その他→注意書き→命中TH#(ROF・故障・命中は1行のピル)→判定する(全幅)→赤白ダイスの順(order)。.ijR:has(#ijRes .nvBox>.ijCp) の時だけ。左側④の下端が切れる件は従来どおり(未対応)。dev/sprt.js・sprt.css。
-- 返事待ち: PAATC(nmPaCtr)もカウンターだけに(ラベル・損耗/クラス低下タグ・指揮官の修正を消す)。サンプル=samples/sample-paatc.png(ブランチ sample-paatc)。
+- v1006 済: (ダルマ「実施」sample-paatc) PAATC(nmPaCtr)のMMC・指揮官を nmCoBtn でカウンターだけ(ラベル・損耗/クラス低下タグ・指揮官の修正を消す)。
 - v1005 済: (ダルマ「実施」sample-lwafv) 軽対戦車の兵士・兵器をカウンターだけ(射程ラベル消去)、車両・砲ボタンはカウンター下にユニットタブと同じ名称(nmCoBtn の4番目の引数=ラベル)、スポット判定1画面目(nmIjSetupDraw)のタイルを枠なしカウンター(nmIjCoT)に。編成(grp)タイル・「＋カウンターを選択」・潰走画面などは未適用。
 - v1004 済: (ダルマ「引き続き追加」) カウンターだけ表示(nmCoBtn(id,fb,on)・全ボタン共通CSS button:has(>.coMk))を軽対戦車の兵器(射程は小さく残す)・操作する兵士、nmHqPk系の車両・砲/歩兵の選択(40606付近 ch)にも。未適用: スポット判定1画面目のタイル、潰走・その他 nmCtrChip 利用箇所は要洗い出し。
 - v1003 済: (ダルマ「シアン・実施・他のパネルも統一」sample-ctronly) ユニット選択ボタンを実カウンターだけに(nmCoBtn/nmCoCss: 64px・ラベルなし・枠なし・選択=シアン #4fd8ff の光+下線)。適用済み: 回復(nmRrRallyItems)・MC②チェックするユニット・シナリオのユニット選択(nmCcSc)・カウンター数選択(ijGrid)。未適用: 車両・砲のボタン、スポット判定1画面目のタイル、ほか nmCtrChip を使う各パネル(要確認)。画像の無いユニット(独2-2-8(乗員)など)は文字付きのまま。
