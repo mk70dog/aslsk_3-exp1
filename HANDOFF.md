@@ -2,6 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- v1026: sample-bog(ボグ判定の車両ボタン=実カウンターのみ)・sample-vfsw(砲撃→地図で方向: 設定する車両 A/B 切替 nmVfFmSwItem/nmVfFmSw)を反映。返事待ちなし。未対応: 古いテスト aud/dcr/vft の修正
+
 - v1025: オートダイスのデフォルトOFF(S.nmAutoOff===false の時だけON。未設定=OFF)。OFFの時は「〜を振る」ボタン/項目を作らない(nmAdTag)・タグ済みの物は .nmAdB で非表示。以前ONに戻した人(false)はONのまま。返事待ち: sample-bog, sample-vfsw。未対応: 古いテスト aud/dcr/vft の修正
 
 - v1024: sample-mh2 反映済み。返事待ち: sample-bog(ボグ車両ボタン), sample-vfsw(砲撃の方向設定にA/B車両切替。samples/sample-vfsw.pngはブランチ内)
