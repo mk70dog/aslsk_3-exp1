@@ -3,6 +3,7 @@
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 - 最終更新: 2026-11-08 (main=v953)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
+- 方針(2026-11-09 ダルマ確認): 地図のユニットメニューの『潰走』(nmRtmStartAt)は、実ユニットと地図上の実敵を使う今の作りのまま。カウンターなし地図にはそろえない。
 - v953 済: 潰走地図。①ルール修正(SK4 3.6): nmRtSearch を状態(ヘクス,LOSに入った敵の集合)の探索に変更=一度LOSに入った敵にはLOSを出た後も近づけない、path[]で実経路を返す(nmRtPlans も path 使用)。匍匐(nmRtCalc の low)も LOS のある敵に近づくヘクスは不可。手動経路(nmRtmManTap)も経路全体のLOSで判定。②表示: 近づく所は暗く(近の表示なし)、阻止ヘクスの⚠なし、匍=青丸「匍」、行き先=緑丸の数字、LOS妨害=黄丸「妨」(nmRtmSVG の bd()、既定 STY=8、window.__sty で他案)。行き先ヘクスには匍の丸を出さない。dev/rtnear.js、rtsty.js、rtsty8.js。
 - v952 済: 潰走・阻止の地図。①逃/敵/砲を VASL カウンター画像で表示(nmRtmSVG の ctr()、nmRtmCtrId/nmRtmEctr、射程は右下の数字)②敵マーカーの小窓 nmRtmEd を「シナリオのユニットを選ぶ」に変更: タブ 歩兵(損耗・クラス低下も)/SW(対戦車SW・DC・指揮官は除く)/砲/車両(nmRtmUnits、nmRtmEPick)。射程はカウンターの値を自動(砲・車両は16固定)。砲は向き1つ(rtFac)、砲塔付き車両は車体(rtHull)と砲塔(rtFac)、無砲塔車両は車体のみ。1ヘクス=最長射程の1ユニットだけ置く。車体MGの向きは扱わない。③潰走地図のボタンの四角ドットを nmRtmCtrCss で消去。妨害/匍/⚠ は文字のまま。dev/rted.js 更新、dev/rtrng.js 削除。
 - v951 済: PAATC(nmPaOpen)。nmPaMmc に損耗(HS)・クラス低下の MMC を追加(nmRrGroups の base/elr/cas)。MMC・指揮官ボタンを VASL カウンター表示(nmPaCtr、#nmPaCtrCss で .rmB の枠・背景・四角ドットを消し、タイルは固定高さ)。dev/pared.js。
