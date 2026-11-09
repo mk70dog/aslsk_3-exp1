@@ -1,6 +1,8 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
+
+- 返事待ち: sample-mc2(MC・PTC登録欄を実カウンター5列に。samples/sample-mc2.png)。回復パネルは最新版で統一済み(iPadの旧表示は版を要確認)
 - 最終更新: 2026-11-09 (main=v1021)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
 - v1021 済: (ダルマ「方向の設定をスポット判定の方式に統一」sample-facemode→実施) ①スポット判定→砲撃の「地図で方向を設定」は nmIjFaceMap(A/B切替・地図に方向バー・隅に配置・「砲撃に戻る」= nmIjFaceBack が vfStage なら nmVfRe)。②そのほかの NM_FACE の向き設定パネルは .rmFull にせず(btRmFullApply)、btRMenu の後で nmIjFmPlace でユニットを避けた隅に置く(nmIjFmPts は NM_FACE 時 BT.rmHex を使う)。返事待ち: sample-mh2。
