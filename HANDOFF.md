@@ -1,7 +1,7 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-09 (main=v1006)
+- 最終更新: 2026-11-09 (main=v1007)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
 - v1001 済: (ダルマ「実施」sample-spl2) スポット判定を2段階に: 1画面目 nmIjSetupDraw=A・Bを実カウンターのタイル(nmIjTileChips)で選ぶ+方向+「判定へ」(nmIjStageGo)。車両・砲の主砲は共通の判定パネル nmVfOpen(戻る=nmIjStageBack、J.vfStage)、歩兵・SWなどは J.stage='old' で従来画面。車両名は nmAfvName=afvOfficialName(ユニットタブと同じ)に統一(マルチ判定含む)。
 - v1002 済: (ダルマ「実カウンターに変更する」→sample-mcctr→実施) MC・PTCの②チェックするユニットと(登録)ユニットに実カウンター画像(MutationObserverで付与。ラベルから nmCtrUid で引く、無ければそのまま)。
@@ -10,7 +10,7 @@
 - v1005 済: (ダルマ「実施」sample-lwafv) 軽対戦車の兵士・兵器をカウンターだけ(射程ラベル消去)、車両・砲ボタンはカウンター下にユニットタブと同じ名称(nmCoBtn の4番目の引数=ラベル)、スポット判定1画面目(nmIjSetupDraw)のタイルを枠なしカウンター(nmIjCoT)に。編成(grp)タイル・「＋カウンターを選択」・潰走画面などは未適用。
 - v1004 済: (ダルマ「引き続き追加」) カウンターだけ表示(nmCoBtn(id,fb,on)・全ボタン共通CSS button:has(>.coMk))を軽対戦車の兵器(射程は小さく残す)・操作する兵士、nmHqPk系の車両・砲/歩兵の選択(40606付近 ch)にも。未適用: スポット判定1画面目のタイル、潰走・その他 nmCtrChip 利用箇所は要洗い出し。
 - v1003 済: (ダルマ「シアン・実施・他のパネルも統一」sample-ctronly) ユニット選択ボタンを実カウンターだけに(nmCoBtn/nmCoCss: 64px・ラベルなし・枠なし・選択=シアン #4fd8ff の光+下線)。適用済み: 回復(nmRrRallyItems)・MC②チェックするユニット・シナリオのユニット選択(nmCcSc)・カウンター数選択(ijGrid)。未適用: 車両・砲のボタン、スポット判定1画面目のタイル、ほか nmCtrChip を使う各パネル(要確認)。画像の無いユニット(独2-2-8(乗員)など)は文字付きのまま。
-- 返事待ち: 砲撃パネル(主砲)の注意書きに「地図で方向を設定」ボタンを追加(スポット判定と同じ仕様)。サンプル=samples/sample-vfdir.png(ブランチ sample-vfdir)。
+- v1007 済: (ダルマ「地図で方向を設定はスポット判定と同じ仕様で追加」→お任せで実施) 砲撃パネルの方向未設定の注意書きに「地図で方向を設定」ボタン(nmVfFaceMap: 未設定の側=攻撃側→目標の順で nmRmFaceItems を開く。完了で NM_VF_FROM の砲撃パネルへ戻る)。
 - v999 済: (ダルマ「ダイスボタン横幅を増やす」→サンプルA→実施) #btRm.rmFull のダイス行を全幅1行に(nmRmCompact に追記: .rmIt:has(.dsRow) を折り返し、.dsRow 100%、ボタン46px・18px)。dev/dicew.js、samples/sample-dicew-A/B/C.png。返事待ち: ダルマ「スポット判定のパネル修正は？」の意味(下の確認待ち)。
 - v998 済: バグ修正(ダルマ「グリーンの帯はなし」回復のクラス低下の行) スキン(uith=5 の data-sthov など)の .rmIt:hover/:active の背景が iPad でボタン行に残る → style#nmRowNoHov で .rmIt.rmRow の hover/active/focus を透明に(Chromium では再現せず)。
 - v997 済: (ダルマ「回復 ダイス選択できない 使いやすくする」→「1画面のまま」→実施) nmRrRallyItems: 赤白ダイス(nmRlDie、NM_RL.da/db、選んだ目=金)+見込み+「判定する」(nmRlGo、未選択は自動・オートダイスOFFは選ぶまで押せない)。DR○以下で回復を金枠、④修正=林・建物内−1/DM+4 を1行トグル、下の閉じるを削除。dev/rldice.js。
