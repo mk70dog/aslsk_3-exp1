@@ -38491,7 +38491,9 @@ function nmSdPop(){var o=document.getElementById('nmSdPop');if(o){o.remove();ret
   var skip=function(b){return b.id==='nmHqBack'||!!b.closest('#nmFullTabs,#nmFtBot,#nmFtAct,#nmMvBar,#btFullTop,#btFullBot');};
   var fix=function(b){if(b.__nmBk||b.tagName!=='BUTTON'||skip(b))return;var t=(b.textContent||'').trim();var bk=BK.test(t),cl=CL.test(t);if(!bk&&!cl)return;
     if(b.children.length&&!bk)return;b.__nmBk=1;b.classList.add('nmBkU');
-    if(bk){var rest=t.replace(/^←\s*/,'');b.innerHTML='<span class="nmBkAr">←</span><span>'+rest+'</span>';}
+    if(bk){var sm=b.querySelector('small'),bb=b.querySelector('b'); /* 見出し+説明(b+small)のボタンは、説明を2行目に残す(連結しない) */
+      if(sm&&bb){var tt=(bb.textContent||'').replace(/^\s*←\s*/,'').trim(),ss=(sm.textContent||'').trim();b.innerHTML='<span class="nmBkAr">←</span><span class="nmBkT"><span>'+tt+'</span><small style="display:block;font-size:11px;font-weight:400;color:#9fb2c8;letter-spacing:0">'+ss+'</small></span>';['flex-direction:row','align-items:center','justify-content:flex-start','width:100%','padding:9px 16px','gap:12px','border:0','box-shadow:none','background:transparent'].forEach(function(d){var k=d.split(':');b.style.setProperty(k[0],k[1],'important');});}
+      else{var rest=t.replace(/^←\s*/,'');b.innerHTML='<span class="nmBkAr">←</span><span>'+rest+'</span>';}}
     else{b.innerHTML='<span class="nmBkAr">✕</span><span>'+T('閉じる')+'</span>';}};
   var scan=function(r){if(!r||r.nodeType!==1)return;if(r.tagName==='BUTTON')fix(r);r.querySelectorAll&&r.querySelectorAll('button').forEach(fix);};
   var mo=new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(scan);});});
