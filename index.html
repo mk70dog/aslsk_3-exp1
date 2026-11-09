@@ -35024,10 +35024,32 @@ function nmStUnitTog(n,slot,idx,k){var d=nmGeList(slot),x=d.items[idx];if(!x)ret
 function nmStWreck(n,sd,H0){var H=H0||NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(!eh)return;var vid=eh.veh||null,l=nmWreckList(H);
   if(sd==='f'){var L=nmSideList('f');L.splice(L.indexOf(eh),1);}else{var E=nmSideList('e');E.splice(E.indexOf(eh),1);}
   if(l.length<3)l.push(vid);nmWreckSave(H,l);}
-function nmMcParse(r){if(!r||r==='-')return null;var m;if(r==='PTC')return {k:'PTC',drm:0};if((m=/^(\d?)MC$/.exec(r)))return {k:'MC',drm:m[1]?+m[1]:0};if((m=/^K(\d)$/.exec(r)))return {k:'MC',drm:+m[1],cas:1};if((m=/^(\d)KIA$/.exec(r)))return {k:'MC',drm:0,kia:+m[1]};return null;}
+function nmMcParse(r){if(!r||r==='-')return null;var m;if(r==='PTC')return {k:'PTC',drm:0};if(r==='INT')return {k:'INT',drm:0};if((m=/^(\d?)MC$/.exec(r)))return {k:'MC',drm:m[1]?+m[1]:0};if((m=/^K(\d)$/.exec(r)))return {k:'MC',drm:+m[1],cas:1};if((m=/^(\d)KIA$/.exec(r)))return {k:'MC',drm:0,kia:+m[1]};return null;}
 var NM_MC=null; /* {key, r, res:{idx:{dr,fin,ok}}} */
 function nmMcUnitMor(x){var D=UNITS[x.nat]||{},u=((x.kind==='smc'?D.smc:D.mmc)||[]).filter(function(q){return q.lbl===x.label;})[0];var w=(x.kind==='smc'&&x.wounded)?1:0;return u?{mor:u.mor-w,cmd:(u.cmd||0)+w}:{mor:null,cmd:0};} /* v405: 負傷SMCは士気・指揮修正が1悪化(3.2.3) */
 function nmMcLdrDrm(items,res){var best=0;items.forEach(function(x,i){if(x.kind!=='smc'||x.broken||x.pinned)return; /* v896: PINの指揮官は修正を使えない(3.2.3) */var r=res[x.pid];if(r&&!r.ok)return;var c=nmMcUnitMor(x).cmd;if(c<best)best=c;});return best;}
+/* sample(ダルマ案「潰走の判定と阻止のMCは別のタイルで」→ 指揮官は手で動かす(案2)): MC・PTCのタイルの「阻止」(SK4 3.6)。
+   対象は混乱したユニットだけ。混乱状態の士気で判定(NMC)。失敗→損耗(半分隊は潰走を続けられる)・原DR12→除去・ちょうど→PIN(このRtPhはもう潰走できない・敵に隣接なら除去)。
+   一緒に潰走した指揮官(未混乱・ピンでない)を選ぶと、その指揮修正を足す。ユニットが失敗したら、その指揮官も除去 */
+function nmMcIntSection(it,n,te,d,items,M,reopen){var sg=function(v){return (v>=0?'+':'')+v;};
+  var LL=items.filter(function(x){return x.kind==='smc'&&!x.broken&&!x.pinned;}),Ld=M.ldr!=null?items.filter(function(x){return x.pid===M.ldr;})[0]:null,ldm=Ld?(nmMcUnitMor(Ld).cmd||0):0;
+  it.push({ic:'sel',t:'阻止のMC(潰走中)　'+nmGrpLbl(te.grp),sub:'損耗した半分隊は潰走を続けられる。釘付けになって敵に隣接していれば除去。一緒に潰走した指揮官は、手で行き先へ動かしてから選ぶ'});
+  if(LL.length)it.push({row:1,ic:'sel',t:'<span style="font-size:12px">一緒に潰走した指揮官</span>',btns:[[(Ld?'':'✓')+'なし',"NM_MC.ldr=null;"+reopen+"("+n+")"]].concat(LL.map(function(q){var c=nmMcUnitMor(q).cmd||0;return [(Ld&&Ld.pid===q.pid?'✓':'')+q.label+'('+sg(c)+')',"NM_MC.ldr="+q.pid+";"+reopen+"("+n+")"];}))});
+  if(Ld)it.push({ic:'info',t:'<span style="font-size:12px;color:#ffd070">指揮官の修正'+sg(ldm)+'を足す。ユニットが失敗したら指揮官も除去</span>'});
+  var br=items.map(function(x,i){return i;}).filter(function(i){return items[i].broken;});
+  if(!br.length){it.push({ic:'info',t:'混乱したユニットがいません'});return;}
+  (M.gone||[]).forEach(function(g){it.push({ic:'x',t:'<span style="color:#ff6060">'+g+'</span>'});});
+  br.forEach(function(i){var x=items[i],u=nmRlUnit(x),bm=(u.bm!=null?u.bm:u.mor)-((x.kind==='smc'&&x.wounded)?1:0),rr=M.res[x.pid];
+    var tt=x.label+'　混乱士気'+(bm!=null?bm:'?')+(ldm&&x.kind!=='smc'?' DRM'+sg(ldm):'');if(rr)tt+='　→ DR'+rr.dr+(rr.ld?sg(rr.ld):'')+'='+rr.fin+' <b style="color:'+(rr.ok?'#3ca878':'#ff6060')+'">'+rr.txt+'</b>';
+    it.push({ic:'sel',img:vaslCtrHTML('u:'+(x.nat||d.nat)+'|'+x.label,30)||'',t:tt});
+    if(!rr)[[2,3,4,5,6,7],[8,9,10,11,12]].forEach(function(vs,j){it.push({row:1,cmp:1,ic:j?'':'fire',t:'<span style="font-size:12px;color:#8899aa">'+(j?'':'DR')+'</span>',btns:vs.map(function(v){return [v,"nmMcIntSet("+n+",'"+te.grp+"',"+x.pid+","+v+",'"+reopen+"')"];})});});});
+  if(Object.keys(M.res).length)it.push({ic:'fire',t:'次の阻止のMC(2か所目以降)',sub:'阻止を受けたヘクスごとに、もう一度振る',f:"NM_MC.res={};"+reopen+"("+n+")"});}
+function nmMcIntSet(n,slot,pid,dr,reopen){var M=NM_MC;if(!M)return;var its=nmGeList(slot).items,x=its.filter(function(q){return q.pid===pid;})[0];if(!x||M.res[pid])return;nmBkSnap('阻止のMC');
+  var u=nmRlUnit(x),bm=(u.bm!=null?u.bm:u.mor)-((x.kind==='smc'&&x.wounded)?1:0),Ld=M.ldr!=null?its.filter(function(q){return q.pid===M.ldr;})[0]:null,ld=(Ld&&x.kind!=='smc')?(nmMcUnitMor(Ld).cmd||0):0,fin=dr+ld,ok=fin<=bm&&dr!==12,lg=[],txt;
+  if(!ok&&dr===12){var ii=its.indexOf(x);if(ii>=0)nmGeDelCore(slot,ii);txt='原DR12 → 除去';}else if(!ok){nmCasRed(slot,x,lg);txt='損耗 '+lg.join('・');}else if(fin===bm){x.pinned=true;txt='合格(ちょうど → PIN: もう潰走できない。敵に隣接していれば除去)';}else txt='合格(潰走を続ける)';
+  if(!ok&&Ld){var li=nmGeList(slot).items.indexOf(Ld);if(li>=0){nmGeDelCore(slot,li);txt+='・一緒の指揮官 '+Ld.label+' 除去';(M.gone=M.gone||[]).push(Ld.label+' 除去(一緒に潰走したユニットが失敗)');}M.ldr=null;}
+  M.res[pid]={dr:dr,ld:ld,fin:fin,ok:ok,txt:txt};try{nmGeSync(slot);}catch(e){}
+  try{logResult(function(){return {tabLbl:'MAP 阻止',text:x.label+' DR'+dr+(ld?(ld>0?'+':'')+ld+'(指揮官)='+fin:'')+' (混乱士気'+bm+') → '+txt,color:ok?'#00aa55':'#cc3333',detail:null};});}catch(e){}try{nmStSave(slot);}catch(e){}window[reopen](n);}
 function nmMcSection(it,n,te,r,key,reopen,opt){ /* 射撃の結果(IFT)rの士気チェックを itに積む。v746: opt.pick=1なら1ユニットずつ選んで振る(回復と同じ形) */
   var P=nmMcParse(r);if(!P||!te)return;var sg=function(v){return (v>=0?'+':'')+v;};
   if(!NM_MC||NM_MC.key!==key)NM_MC={key:key,r:r,res:{}};var M=NM_MC;
@@ -35037,6 +35059,7 @@ function nmMcSection(it,n,te,r,key,reopen,opt){ /* 射撃の結果(IFT)rの士�
     var st=nmStOf(te),sd=(nmSideList('f').indexOf(te)>=0)?'f':'e';
     it.push({row:1,ic:'sel',t:'目標の状態',btns:[[(st.brk?'✓':'')+'混乱',"nmMcPlainTog("+n+",'"+sd+"','brk','"+reopen+"')"],[(st.pin?'✓':'')+'PIN',"nmMcPlainTog("+n+",'"+sd+"','pin','"+reopen+"')"]]});return;}
   var d=nmGeList(te.grp),items=d.items||[],ld=nmMcLdrDrm(items,M.res);
+  if(P.k==='INT'){nmMcIntSection(it,n,te,d,items,M,reopen);return;}
   it.push({ic:'sel',t:'士気チェック: '+(P.k==='PTC'?'PTC(ピン判定)':'MC'+(P.drm?'(DRM'+sg(P.drm)+')':''))+'　'+nmGrpLbl(te.grp),sub:(P.cas?'損耗1(先に1ユニットを損耗させる)。':'')+(P.kia?'最低'+P.kia+'ユニット除去・残り全員混乱(✕で除去、混乱で印)。':'')+'指揮官が先。合格した指揮官の修正'+(ld?sg(ld):'')+'を分隊に加える'});
   if(P.cas&&!M.casDone&&items.length){it.push({row:1,ic:'x',t:'損耗1',btns:[['無作為',"nmMcCas("+n+",'"+te.grp+"',-1,'"+reopen+"')"]].concat(items.map(function(x,i){return [x.label,"nmMcCas("+n+",'"+te.grp+"',"+i+",'"+reopen+"')"];}))});} /* v426 */
   if(M.casDone)it.push({ic:'x',t:'<span style="color:#ff6060">損耗: '+M.casDone+'</span>'});
@@ -35668,11 +35691,8 @@ function nmRmRtItems(n){var R=NM_RT;if(!R)return nmRMenuItems(n);var it=[],L=NM_
   var D=R.done;
   if(D){if(D.elim){it.push({ic:'x',t:'<span style="color:#ff6060">潰走できない → '+D.elim.join('・')+' 除去</span>'});it.push({ic:'x',t:'閉じる',f:"BtRmClose()"});return it;}
     it.push({ic:'move',t:'<span>'+(D.low?'匍匐後退':'潰走')+' → <b>'+BTG.nodes[D.to].nm+'</b>（編成'+D.slot+'）</span>',sub:'経路: '+D.path.map(function(x){return BTG.nodes[x].nm;}).join('→')+(D.gone?'　元のマーカーは空になったので外しました':'')+((D.carried&&D.carried.length)?'　SWを運ぶ: '+D.carried.join('・'):'')+((D.dropped&&D.dropped.length)?'　<span style="color:#ffb040">IPC超過で落とす: '+D.dropped.join('・')+'</span>':'')});
-    if(D.inter.length){it.push({ic:'info',t:'<span style="color:#ffb040">阻止: '+D.inter.map(function(q){return BTG.nodes[q.n].nm+'('+q.who+'から)';}).join('・')+'</span>',sub:'開豁地で敵の射程・LOS内。ユニットごとに阻止の士気チェック(混乱士気、失敗で損耗)'});
-      var its=nmGeList(D.slot).items,LL=its.filter(function(q){return q.kind==='smc'&&!q.broken&&!q.pinned;});if(LL.length)it.push({row:1,ic:'sel',t:'<span style="font-size:12px">'+T('一緒に潰走する指揮官')+'</span>',btns:[[(D.ldr==null?'✓':'')+T('なし'),"NM_RT.done.ldr=null;nmRtRe("+n+")"]].concat(LL.map(function(q){return [(D.ldr===q.pid?'✓':'')+q.label+'（'+((nmMcUnitMor(q).cmd||0)>0?'+':'')+(nmMcUnitMor(q).cmd||0)+'）',"NM_RT.done.ldr="+q.pid+";nmRtRe("+n+")"];}))});if(D.ldr!=null)it.push({ic:'info',t:'<span style="font-size:12px;color:#ffd070">'+T('指揮官の修正を阻止の士気チェックに足す。ユニットが失敗したら指揮官は除去(3.6)')+'</span>'});
-      D.pids.forEach(function(pid){var x=its.filter(function(q){return q.pid===pid;})[0];D.inter.forEach(function(q,k){var r=D.mc[pid+':'+k];
-        if(r){it.push({ic:'sel',t:'<span style="color:'+(r.ok?'#3ca878':'#ff6060')+'">'+r.t+'</span>'});return;}if(!x)return;
-        it.push({row:1,cmp:1,ic:'sel',img:vaslCtrHTML('u:'+(x.nat||'')+'|'+x.label,26)||'',t:x.label+(D.inter.length>1?' ('+(k+1)+')':''),btns:[2,3,4,5,6,7,8,9,10,11,12].map(function(v){return [String(v),"nmRtMc("+n+","+pid+","+k+","+v+")"];})});});});}
+    if(D.inter.length){it.push({ic:'info',t:'<span style="color:#ffb040">阻止: '+D.inter.map(function(q){return BTG.nodes[q.n].nm+'('+q.who+'から)';}).join('・')+'</span>',sub:'開豁地で敵の射程・LOS内。阻止1か所ごとに阻止のMC。一緒に潰走する指揮官は手で行き先へ動かしてください'});
+      it.push({ic:'fire',t:'阻止のMCをする（MC・PTCのタイル）',sub:BTG.nodes[D.to].nm+' の'+nmGrpLbl(D.slot)+'　'+D.inter.length+'回',f:"NM_RT=null;NM_MCP={n:"+D.to+",sd:'"+R.sd+"',slot:'"+D.slot+"',r:'INT'};NM_MC=null;NM_RM_SUB='mcp';btRmReopen("+D.to+")"});}
     else if(!D.low)it.push({ic:'info',t:'阻止なし'});
     it.push({ic:'x',t:'閉じる',f:"BtRmClose()"});return it;}
   var C=nmRtCalc();
@@ -40224,7 +40244,7 @@ function nmMcpSet(n,r){NM_MCP.r=r;NM_MC=null;nmMcpRe(n);}
 function nmRmMcpItems(n){var P=NM_MCP;if(!P)return nmRMenuItems(n);var L=NM_SIDE_LBL[P.sd],N=BTG.nodes[P.n],it=[],te=nmUnitAt(nmHexOfNode(P.n),P.sd);
   it.push({ic:'back',t:'← 戻る',sub:'MC・PTC'+(P.slot==='_T'?'':' @'+N.nm),f:"NM_MCP=null;NM_MC=null;btRmReopen("+n+")"});it.push({sep:1});
   it.push({ic:'sel',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+(P.slot==='_T'?(nmGeList('_T').items[0]||{}).label+' (シナリオ)':nmGrpLbl(P.slot))+'の士気チェック</span>',sub:'射撃の結果(IFT)で出たチェックを選ぶ'});
-  var K=[['NMC','MC'],['1MC','1MC'],['2MC','2MC'],['3MC','3MC'],['4MC','4MC'],['PTC','PTC']];
+  var K=[['NMC','MC'],['1MC','1MC'],['2MC','2MC'],['3MC','3MC'],['4MC','4MC'],['PTC','PTC'],['阻止','INT']];
   it.push({row:1,ic:'info',t:'チェックの種類',btns:K.map(function(k){return [(P.r===k[1]?'✓':'')+k[0],"nmMcpSet("+n+",'"+k[1]+"')"];})});
   if(!P.r){it.push({ic:'info',t:'<span style="color:#8899aa">種類を選ぶと、ユニットごとにDRを振れます</span>'});}
   else if(!te||!te.grp){it.push({ic:'info',t:'この場所に編成のマーカーがありません'});}
@@ -40235,8 +40255,8 @@ function nmRmMcpItems(n){var P=NM_MCP;if(!P)return nmRMenuItems(n);var L=NM_SIDE
    ①チェックの種類 ②チェックするユニット ③ダイス の順に番号。選んだ種類の意味を1行で。ユニットごとに「DR○以下で合格/○で釘付け/○以上で混乱」 */
 (function(){var oM=nmRmMcpItems;nmRmMcpItems=function(n){var it=oM.apply(this,arguments);try{var P=NM_MCP;if(!P)return it;
   var H=function(no,t){return '<span style="white-space:nowrap"><span style="color:#ffd060;font-weight:900">'+no+'</span> '+T(t)+'</span>';};
-  var EX={'MC':'NMC: 修正なしの士気チェック','1MC':'1MC: DRに+1して士気チェック','2MC':'2MC: DRに+2して士気チェック','3MC':'3MC: DRに+3して士気チェック','4MC':'4MC: DRに+4して士気チェック','PTC':'PTC: 釘付け判定(DRが士気を超えたら釘付け。混乱しているユニットには効果なし)'};
-  var RU=P.r==='PTC'?'修正後DR＞士気 → 釘付け　それ以外は影響なし':'修正後DR＜士気 → 合格　＝士気 → 釘付け　＞士気 → 混乱(混乱中なら損耗)　原DR12 → 混乱＋損耗';
+  var EX={'MC':'NMC: 修正なしの士気チェック','1MC':'1MC: DRに+1して士気チェック','2MC':'2MC: DRに+2して士気チェック','3MC':'3MC: DRに+3して士気チェック','4MC':'4MC: DRに+4して士気チェック','PTC':'PTC: 釘付け判定(DRが士気を超えたら釘付け。混乱しているユニットには効果なし)','INT':'阻止: 潰走中に阻止を受けた混乱ユニットのMC(SK4 3.6)。阻止1か所ごとに1回'};
+  var RU=P.r==='INT'?'混乱状態の士気で判定。修正後DR＜士気 → 合格(潰走を続ける)　＝士気 → 釘付け(もう潰走できない)　＞士気 → 損耗　原DR12 → 除去':P.r==='PTC'?'修正後DR＞士気 → 釘付け　それ以外は影響なし':'修正後DR＜士気 → 合格　＝士気 → 釘付け　＞士気 → 混乱(混乱中なら損耗)　原DR12 → 混乱＋損耗';
   for(var i=0;i<it.length;i++){var x=it[i];if(!x)continue;
     if(x.t&&typeof x.t==='string'&&/の士気チェック<\/span>$/.test(x.t)){x.t=x.t.replace('の士気チェック</span>','の MC・PTC</span>');x.sub=T('射撃の結果(IFT)に出たチェックを選びます');}
     else if(x.row&&x.t==='チェックの種類'){x.t=H('①','チェックの種類');x.btns=x.btns.map(function(b){return [b[0],b[1]];});
