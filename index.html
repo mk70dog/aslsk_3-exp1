@@ -34910,7 +34910,7 @@ function nmRmVFireItems(n){
   if(R.wp&&B.te&&!B.te.veh)nmMcSection(it,n,B.te,'MC','wp:'+V.tgt+':'+V.a+V.b,'nmVfRe'); /* v440: WPのNMC */
   if(R.hit&&!R.smk){
     if(nmVfIsAtt(B)&&B.mode==='ITT')R.idrm=(R.idrm||0)+nmVfAttTem(B); /* v439: ATTはTEMをIFTへ */
-    if(B.mode==='VTT')it.push({ic:'tgt',t:'<span>TK# '+(R.basic==null?'なし':(R.basic+(R.raw===2?'×2(CH)':'')+(R.face==='rear'?'+1(背面)':'')+'−AF'+R.af+' = <b>'+R.tk+'</b>'))+'</span>',sub:nmVfTgtAspect(B)+'　'+(R.tk!=null?'2D6が'+R.tk+'未満で撃破・同じで'+(R.loc==='hull'?'走行不能':(V.ammo==='HE'?'ショック':'効果なし'))+'・'+(R.tk+1)+'で'+(V.ammo==='HE'?(R.loc==='turret'?'ショック':'走行不能'):'ショックの可能性'):'')});
+    if(B.mode==='VTT')it.push({ic:'tgt',t:'<span style="display:inline-block;width:fit-content;max-width:100%;padding:3px 14px;border:1.5px solid #c8a032;border-radius:10px;background:#1d1a12;color:#ffd070;font-size:19px;font-weight:800;letter-spacing:.5px">TK# '+(R.basic==null?'なし':(R.basic+(R.raw===2?'×2(CH)':'')+(R.face==='rear'?'+1(背面)':'')+'−AF'+R.af+' = <b>'+R.tk+'</b>'))+'</span>',sub:nmVfTgtAspect(B)+'　'+(R.tk!=null?'2D6が'+R.tk+'未満で撃破・同じで'+(R.loc==='hull'?'走行不能':(V.ammo==='HE'?'ショック':'効果なし'))+'・'+(R.tk+1)+'で'+(V.ammo==='HE'?(R.loc==='turret'?'ショック':'走行不能'):'ショックの可能性'):'')});
     else it.push({ic:'tgt',t:'<span>'+(R.ch?'クリティカル(TEM反転) ':'')+R.fp+'FP　'+IFT_LBL[ci(R.fp)]+'列'+(R.idrm?'　DRM '+sg(R.idrm):'')+'</span>',sub:'IFTで効果を判定'});
     var O=V.res2;
     if(O){it.push({ic:'fire',t:'<span>'+diceEmojiStr(V.c1,V.c2)+'　'+O.c+(B.mode==='ITT'&&R.idrm?' '+sg(R.idrm):'')+'　<b style="color:'+O.col+'">'+O.t+'</b></span>',sub:B.mode==='VTT'?'TK#'+R.tk:(O.iftCol+'列')});
@@ -40668,7 +40668,7 @@ function nmRmLwItems(n){var W=NM_LW;if(!W)return nmRMenuItems(n);var it=[],L=NM_
   it.push({ic:'fire',t:'<span>'+diceEmojiStr(W.a,W.b)+'　'+R.raw+(C.drm?' '+sg(C.drm):'')+' = '+R.fin+'　<b style="color:'+(R.hit?'#c8a032':'#8899aa')+'">'+(R.hit?(R.isCH?'命中(CH)':'命中'):'ミス')+'</b></span>',sub:'TH#'+C.th+(R.hit&&C.fv?'　'+(R.loc==='turret'?'砲塔':'車体')+'・'+({front:'前面',side:'側面',rear:'背面'}[R.face]):'')});
   R.notes.forEach(function(t){it.push({ic:'info',t:'<span style="color:#ffb040">'+t+'</span>'});});
   if(R.malf&&!C.w.oneShot){var ap=W.malDone;it.push({ic:'fire',t:ap?'<span style="color:#3ca878">✓ '+ap+'</span>':(R.malf==='destroy'?C.w.lbl+'を編成から外す(除去)':C.w.lbl+'を故障中にする(修理待ち)'),sub:ap?'':(R.malf==='destroy'?'':'RPh(回復フェイズ)にdr1で修理・dr6で除去(「SWの修理」)'),f:ap?'':"nmLwMal("+n+")"});} /* v438 */
-  if(R.hit){if(C.fv)it.push({ic:'tgt',t:'<span>TK# '+(C.tkBase==null?'なし':(C.tkBase+(R.isCH?'×2(CH)':'')+(R.face==='rear'?'+1(背面)':'')+'−AF'+R.af+' = <b>'+R.tk+'</b>'))+'</span>'});
+  if(R.hit){if(C.fv)it.push({ic:'tgt',t:'<span style="display:inline-block;width:fit-content;max-width:100%;padding:3px 14px;border:1.5px solid #c8a032;border-radius:10px;background:#1d1a12;color:#ffd070;font-size:19px;font-weight:800;letter-spacing:.5px">TK# '+(C.tkBase==null?'なし':(C.tkBase+(R.isCH?'×2(CH)':'')+(R.face==='rear'?'+1(背面)':'')+'−AF'+R.af+' = <b>'+R.tk+'</b>'))+'</span>'});
     else it.push({ic:'tgt',t:'<span>建物内の歩兵へ '+C.ifp+'FP('+IFT_LBL[ci(C.ifp)]+'列)</span>'});
     var O=W.res2;
     if(O){it.push({ic:'fire',t:'<span>'+diceEmojiStr(W.c1,W.c2)+'　'+O.c+'　<b style="color:'+O.col+'">'+O.t+'</b></span>'});
