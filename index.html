@@ -39005,11 +39005,16 @@ function nmRtmDrag(b,key){key=key||'nmRtmPos';try{if(!NM_RTM_POS[key]){var q=JSO
 var NM_RTM_PT='p';
 function nmRtmPenTab(t){NM_RTM_PT=t;var p=document.getElementById('nmRtmPen');if(p)p.remove();nmRtmPen();}
 function nmRtmPen(){var M=NM_RTM,p=document.getElementById('nmRtmPen');if(!M||M.step!==3){if(p)p.remove();return;}if(p)return;
-  p=document.createElement('div');p.id='nmRtmPen';p.setAttribute('style','position:fixed;right:76px;bottom:64px;z-index:9390;width:min(46vw,360px);background:#0e1620e6;border:1px solid #ff5050aa;border-radius:10px;padding:8px 12px;color:#dfe8f0;font:13px/1.55 AppFont,AppJP,monospace;box-shadow:0 6px 20px #000b;touch-action:none');
+  p=document.createElement('div');p.id='nmRtmPen';p.setAttribute('style','position:fixed;right:76px;bottom:64px;z-index:9390;width:min(46vw,360px);max-height:72vh;overflow:auto;background:#0e1620e6;border:1px solid #ff5050aa;border-radius:10px;padding:8px 12px;color:#dfe8f0;font:13px/1.55 AppFont,AppJP,monospace;box-shadow:0 6px 20px #000b;touch-action:none');
   var row=function(tag,col,t){return '<div style="display:flex;gap:8px;align-items:flex-start;margin-top:4px"><span style="flex:0 0 52px;text-align:center;border-radius:5px;padding:0 4px;font-weight:900;background:'+col+';color:#111">'+T(tag)+'</span><span style="flex:1">'+t+'</span></div>';};
   var tb=function(k,l){var on=NM_RTM_PT===k;return '<button class="b sm" style="margin:0;height:28px;padding:0 10px;font-size:12px;font-weight:800'+(on?';background:#e0a830;color:#111;border-color:#e0a830':'')+'" onclick="nmRtmPenTab(\''+k+'\')">'+T(l)+'</button>';};
-  var h='<div style="display:flex;gap:6px;margin-bottom:4px">'+tb('p','阻止されたら')+tb('u','阻止できる敵')+'</div>';
-  if(NM_RTM_PT==='u'){
+  var h='<div style="display:flex;gap:6px;margin-bottom:4px">'+tb('p','阻止されたら')+tb('u','阻止できる敵')+tb('n','例外・注意')+'</div>';
+  /* sample(ダルマ指示「赤枠内に例外事項や注意事項を表記する」): 3つ目のタブ「例外・注意」。ルールの例外(SK4 3.6)と、アプリが判定しないこと */
+  if(NM_RTM_PT==='n'){var li=function(a){return '<div style="font-size:12px;line-height:1.55">'+a.map(function(t){return '・'+T(t);}).join('<br>')+'</div>';};
+    h+='<b style="color:#ff8080;font-size:14px">⚠ '+T('ルールの例外')+'</b>'+li(['DMがついていない混乱ユニットは、自分から潰走しない(林・建物でLOS外なら留まれる)','敵に隣接・開豁地で阻止を受ける位置にいるユニットはDMになり、必ず潰走する','敵から遠ざからない林・建物は無視してよい(入ってもよい)','林・建物に着いたら止まる。すぐ隣の林・建物へは続けて入れる','自分のいる建物の別のヘクスは無視する','積み重ね制限(3分隊相当+指揮官4)を超えるヘクスには入れない','匍匐は阻止されないが、ほかの潰走の制限はかかる','6MF以内に林・建物がなければ、制限に合うどのヘクスでもよい','潰走しなければならないのに潰走できないユニットは除去'])
+    +'<b style="display:block;margin-top:6px;color:#ffd040;font-size:14px">'+T('アプリの注意')+'</b>'+li(['DMの有無は判定しない。DMか(必ず潰走する位置か)は自分で確認','行き先の番号は8件まで。ほかは「経路」で手で引く','敵の射程・砲の向きは敵をタップして設定(未設定は射程4の歩兵)','隠蔽は扱わない(見えている敵はすべてLOSが通る敵として計算)','一緒に潰走する指揮官は「⚠阻止」のパネルで選ぶ'])
+    +'<div style="margin-top:6px;padding-top:5px;border-top:1px solid #334;color:#678;font-size:11px">(SK4 3.6)</div>';}
+  else if(NM_RTM_PT==='u'){
     h+='<b style="color:#ff8080;font-size:14px">⚠ '+T('阻止できる敵ユニット')+'</b>'
     +row('○','#6fe08a',T('統制状態で、PINされていない'))
     +row('○','#6fe08a',T('潰走ユニットが入る開豁地ヘクスにLOSが通り、通常射程内'))

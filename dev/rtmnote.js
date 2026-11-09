@@ -1,0 +1,6 @@
+// sample: 潰走マップの情報パネルに「例外・注意」タブ
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1000,height:700},deviceScaleFactor:2});const Er=[];p.on('pageerror',x=>Er.push(String(x)));
+await p.goto('file://'+__dirname+'/../index.html',{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(1000);
+await p.evaluate(async()=>{try{localStorage.setItem('nmRtmPos',JSON.stringify({x:150,y:8}));localStorage.removeItem('nmRtmPenPos');}catch(e){}S.scen=S.scen||{};S.scen.sel='S24';for(var i=0;i<4;i++){try{Draw();}catch(e){}await new Promise(r=>setTimeout(r,1500));}await btEnsureGraph();nmRtmStart();});await p.waitForTimeout(800);
+await p.evaluate(async()=>{var N=BTG.nodes,id=nm=>N.findIndex(n=>n.nm===nm),w=ms=>new Promise(r=>setTimeout(r,ms));var tap=n=>{window.__H=nmHexOfNode(n);window.losHexAtClient=()=>window.__H;return nmRtmTap(1,1);};tap(id('vN7'));await w(300);nmRtmDecide();await w(800);nmRtmPenTab('n');});
+await p.waitForTimeout(800);await p.evaluate(()=>{document.querySelectorAll('.btToast,#btToast,[id^=nmToast]').forEach(x=>x.remove());});await p.screenshot({path:'/tmp/sm/rtmnote.png'});console.log('err',Er.length,Er.slice(0,2));await b.close();})();
