@@ -40367,8 +40367,7 @@ function nmLwPendSet(n,what){var W=NM_LW;if(!W||W.pend==null)return;var tn=W.pen
   if(!hit){btToast(T('緑のヘクス(射程内・LOSが通る)をタップしてください'));return true;}nmLwPickEnd(tn);return true;};
   var oE=nmPickEnd;nmPickEnd=function(tn){var P=NM_PICK;if(P&&P.kind==='lw')return nmLwPickEnd(tn);return oE.apply(this,arguments);};
   var oB=nmPickBanner;nmPickBanner=function(on){var r=oB.apply(this,arguments);try{var P=NM_PICK,b=document.getElementById('nmPickBn');if(on&&P&&P.kind==='lw'&&b){var nm=P.what==='scw'?T('建物内の歩兵(SCW)'):P.what?(function(){var v=nmAfv(P.what);return v?nmAfvName(v):P.what;})():'';b.firstChild.textContent=(nm?nm+': ':'')+T('撃てるヘクス(緑)をタップ');}}catch(e){}return r;};
-  var oO=nmPickOverlaySVG;nmPickOverlaySVG=function(dl){var P=NM_PICK;if(!P||P.kind!=='lw')return oO.apply(this,arguments);var h='';P.list.forEach(function(x){var H=nmHexOfNode(x.tn);if(!H)return;var g=losColRowToGlobalCanon(H.boardId,H.col,H.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);
-    h+='<polygon points="'+losHexPolygonPoints(d.x,d.y,losBoardRotById(H.boardId))+'" fill="#40ff9038" stroke="#40ff90" stroke-width="2.5"/>';});
+  var oO=nmPickOverlaySVG;nmPickOverlaySVG=function(dl){var P=NM_PICK;if(!P||P.kind!=='lw')return oO.apply(this,arguments);var h=nmPickHexSVG(P,dl);
     try{var od=NM_LW.sd==='f'?'e':'f';var M0=NM_MF;NM_MF={sd:NM_LW.sd,from:NM_LW.n};var tl=nmMfTgtList();NM_MF=M0;var ok={};P.list.forEach(function(x){ok[x.tn]=1;});tl.forEach(function(x){if(!ok[x.tn])return;var H=nmHexOfNode(x.tn),g=losColRowToGlobalCanon(H.boardId,H.col,H.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="34" fill="none" stroke="#40ff90" stroke-width="5"><animate attributeName="stroke-opacity" values="1;.35;1" dur="1.2s" repeatCount="indefinite"/></circle>';});}catch(e){}
     return h;};})();
 (function(){var oI=nmRmLwItems;nmRmLwItems=function(n){var it=oI.apply(this,arguments);try{var W=NM_LW;if(!W||W.tgt!=null)return it;var w=LATW_DATA.filter(function(x){return x.id===W.wid;})[0];if(!w)return it;
@@ -40389,9 +40388,18 @@ function nmVfFoeRows(n,fx){var rows=[];nmVfFoeNats().forEach(function(k){var vs=
 function nmVfWhatNm(w){if(!w)return '';if(/^i:/.test(w))return w.slice(2);var v=nmAfv(w);return v?nmAfvName(v):w;}
 /* v960(ダルマ報告「シナリオの相手から選ぶ→マップに切り替わるまでかなり時間がかかる」): 撃てるヘクス(LOS)の計算を少しずつ行い、地図はすぐ表示。
    近いヘクスから順に緑にし、同じ地点からの結果は覚えておく(2回目からはすぐ)。計算は従来と同じ精密なLOS(losCheckLOSGlobal) */
+/* sample(ダルマ指示「グリーンが見えにくい サンプルx4」): 撃てるヘクスの見せ方。window.__pkSty 0=従来 1=A(撃てないヘクスを暗く) 2=B(水色の太枠) 3=C(マゼンタ) 4=D(暗く+黄緑の太枠) */
+function nmPickHexSVG(P,dl){var st=window.__pkSty||0,h='',ok={};P.list.forEach(function(x){ok[x.tn]=1;});
+  if(st===1||st===4){var done=!P.busy,no={};(P.no||[]).forEach(function(t){no[t]=1;});BTG.nodes.forEach(function(N,i){if(ok[i]||i===P.from)return;var out=P.maxD!=null&&btDist(P.from,i)>P.maxD;if(!(done||no[i]||out))return;h+='<polygon points="'+btHexPoly(i,dl,1.0)+'" fill="#0b0d12" fill-opacity="0.62"/>';});}
+  P.list.forEach(function(x){var H=nmHexOfNode(x.tn);if(!H)return;var g=losColRowToGlobalCanon(H.boardId,H.col,H.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl),pts=losHexPolygonPoints(d.x,d.y,losBoardRotById(H.boardId));
+    if(st===1)h+='<polygon points="'+pts+'" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.5"/>';
+    else if(st===2)h+='<polygon points="'+pts+'" fill="#00d8ff" fill-opacity="0.30" stroke="#003a48" stroke-width="5"/><polygon points="'+pts+'" fill="none" stroke="#3ff0ff" stroke-width="2.5"/>';
+    else if(st===3)h+='<polygon points="'+pts+'" fill="#ff3cc8" fill-opacity="0.30" stroke="#ffffff" stroke-width="4"/><polygon points="'+pts+'" fill="none" stroke="#ff3cc8" stroke-width="2.2"/>';
+    else if(st===4)h+='<polygon points="'+pts+'" fill="#c8ff3c" fill-opacity="0.14" stroke="#1a2a00" stroke-width="5"/><polygon points="'+pts+'" fill="none" stroke="#c8ff3c" stroke-width="2.5"/>';
+    else h+='<polygon points="'+pts+'" fill="#40ff9038" stroke="#40ff90" stroke-width="2.5"/>';});return h;}
 function nmLosHexAsync(P,from,maxD,ok){var N=BTG.nodes,A=N[from];if(!A)return;var key=from+'|'+S_LOS.orchardSeason+'|'+S_LOS.grainSeason;if(!BTG.losAsyncC)BTG.losAsyncC={};var C=BTG.losAsyncC[key]||(BTG.losAsyncC[key]={});
   var todo=[];N.forEach(function(M,t){if(!M||t===from)return;var d=btDist(from,t);if(d>maxD||!ok(M,t))return;todo.push({t:t,d:d});});todo.sort(function(a,b){return a.d-b.d;});
-  var i=0,step=function(){if(NM_PICK!==P)return;var t0=performance.now(),add=0;while(i<todo.length&&performance.now()-t0<30){var q=todo[i++],v=C[q.t];if(v==null){var r=null;try{r=losCheckLOSGlobal(A.x,A.y,N[q.t].x,N[q.t].y,S_LOS.orchardSeason,S_LOS.grainSeason);}catch(e){}v=C[q.t]=!(r&&r.blocked);}if(v){P.list.push({tn:q.t,d:q.d,blk:false});add++;}}
+  P.from=from;P.maxD=maxD;var i=0,step=function(){if(NM_PICK!==P)return;var t0=performance.now(),add=0;while(i<todo.length&&performance.now()-t0<30){var q=todo[i++],v=C[q.t];if(v==null){var r=null;try{r=losCheckLOSGlobal(A.x,A.y,N[q.t].x,N[q.t].y,S_LOS.orchardSeason,S_LOS.grainSeason);}catch(e){}v=C[q.t]=!(r&&r.blocked);}if(v){P.list.push({tn:q.t,d:q.d,blk:false});add++;}else{(P.no=P.no||[]).push(q.t);add++;}}
     if(add)try{Draw();}catch(e){}if(i<todo.length){P.busy=1;setTimeout(step,0);}else{P.busy=0;if(!P.list.length){btToast(T('LOSが通るヘクスがありません'));}try{Draw();}catch(e){}}};
   step();}
 function nmVfPick(n,what){var V=NM_VF;if(!V)return;
@@ -40411,8 +40419,7 @@ function nmVfPendSet(n,what){var V=NM_VF;if(!V||V.pend==null)return;var tn=V.pen
   if(!hit){btToast(T('緑のヘクス(LOSが通る)をタップしてください'));return true;}nmVfPickEnd(tn);return true;};
   var oE=nmPickEnd;nmPickEnd=function(tn){var P=NM_PICK;if(P&&P.kind==='vfh')return nmVfPickEnd(tn);return oE.apply(this,arguments);};
   var oB=nmPickBanner;nmPickBanner=function(on){var r=oB.apply(this,arguments);try{var P=NM_PICK,b=document.getElementById('nmPickBn');if(on&&P&&P.kind==='vfh'&&b){var nm=nmVfWhatNm(P.what);b.firstChild.textContent=(nm?nm+': ':'')+T('撃てるヘクス(緑)をタップ');}}catch(e){}return r;};
-  var oO=nmPickOverlaySVG;nmPickOverlaySVG=function(dl){var P=NM_PICK;if(!P||P.kind!=='vfh')return oO.apply(this,arguments);var h='';P.list.forEach(function(x){var H=nmHexOfNode(x.tn);if(!H)return;var g=losColRowToGlobalCanon(H.boardId,H.col,H.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);
-    h+='<polygon points="'+losHexPolygonPoints(d.x,d.y,losBoardRotById(H.boardId))+'" fill="#40ff9038" stroke="#40ff90" stroke-width="2.5"/>';});
+  var oO=nmPickOverlaySVG;nmPickOverlaySVG=function(dl){var P=NM_PICK;if(!P||P.kind!=='vfh')return oO.apply(this,arguments);var h=nmPickHexSVG(P,dl);
     try{var M0=NM_MF;NM_MF={sd:NM_VF.sd,from:NM_VF.from};var tl=nmMfTgtList();NM_MF=M0;var ok={};P.list.forEach(function(x){ok[x.tn]=1;});tl.forEach(function(x){if(!ok[x.tn])return;var H=nmHexOfNode(x.tn),g=losColRowToGlobalCanon(H.boardId,H.col,H.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="34" fill="none" stroke="#40ff90" stroke-width="5"><animate attributeName="stroke-opacity" values="1;.35;1" dur="1.2s" repeatCount="indefinite"/></circle>';});}catch(e){}
     return h;};})();
 (function(){var oI=nmRmVFireItems;nmRmVFireItems=function(n){var it=oI.apply(this,arguments);try{var V=NM_VF;if(!V||V.tgt!=null)return it;
