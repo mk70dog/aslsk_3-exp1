@@ -40003,14 +40003,14 @@ function nmRrRallyItems(n){var Q=NM_RR,R=NM_RL,it=[],sg=function(v){return (v>=0
   it.push({ic:'back',t:T('← 戻る'),sub:T('回復'),f:"NM_RR=null;NM_RL=null;btRmReopen("+n+")"});it.push({sep:1});
   it.push({row:1,ic:'sel',t:T('① 国籍'),btns:ns.map(function(k){return [(Q.nat===k?'✓':'')+nmNatLbl(k),"nmRrNat('"+k+"')"];})});it.push({sep:1});
   it.push({ic:'info',t:'<span style="font-size:12px;color:#9ab">'+T('② 回復するユニット(シナリオの駒。タップで選ぶ)')+'</span>'});
-  var G=nmRrGroups(Q.nat),pk=function(kind,l){return [(Q.sel&&Q.sel.label===l?'✓':'')+l,"nmRrPick('"+kind+"','"+l.replace(/'/g,"\\'")+"')"];};
+  var G=nmRrGroups(Q.nat),pk=function(kind,l){var c=nmCtrChip(nmCtrUid(Q.nat,l),34);return [(Q.sel&&Q.sel.label===l?'✓':'')+(c?'<span style="display:inline-flex;align-items:center;gap:6px">'+c+'<span>'+l+'</span></span>':l),"nmRrPick('"+kind+"','"+l.replace(/'/g,"\\'")+"')"];}; /* sample(ダルマ指示「実カウンターに変更する」回復) */
   [['分隊',G.base],['クラス低下',G.elr],['半減',G.cas]].forEach(function(r){if(r[1].length)it.push({row:1,ic:'sel',t:T(r[0]),btns:r[1].map(function(l){return pk('mmc',l);})});});
   var sm=nmRrUnits(Q.nat).filter(function(u){return u.kind==='smc';});if(sm.length)it.push({row:1,ic:'sel',t:T('指揮官'),btns:sm.map(function(u){return pk('smc',u.label);})});
   if(!Q.sel||!x){it.push({sep:1});it.push({ic:'info',t:'<span style="font-size:12px;color:#9ab">'+T('回復するユニットを選んでください')+'</span>'});it.push({ic:'x',t:T('閉じる'),f:"BtRmClose()"});return it;}
   it.push({sep:1});
   var r0=R.res[x.pid],ldrs=sm.filter(function(u){return u.label!==x.label;});
   if(x.kind!=='smc'){it.push({row:1,ic:'info',t:T('③ 回復のしかた'),btns:[[(Q.mode==='ldr'?'✓':'')+T('指揮官回復 (LDR)'),ldrs.length?"nmRrModeSet('ldr')":null],[(Q.mode!=='ldr'?'✓':'')+T('自己回復 (+1)'),"nmRrModeSet('self')"]]});
-    if(Q.mode==='ldr'&&ldrs.length)it.push({row:1,ic:'sel',t:T('指揮官の能力'),btns:ldrs.map(function(u){var c=(nmMcUnitMor({nat:Q.nat,kind:'smc',label:u.label})||{}).cmd||0;return [(Q.ldr===u.label?'✓':'')+u.label+' ('+sg(c)+')',"nmRrLdrSet('"+u.label+"')"];})});
+    if(Q.mode==='ldr'&&ldrs.length)it.push({row:1,ic:'sel',t:T('指揮官の能力'),btns:ldrs.map(function(u){var c=(nmMcUnitMor({nat:Q.nat,kind:'smc',label:u.label})||{}).cmd||0;var cc=nmCtrChip(nmCtrUid(Q.nat,u.label),34),tx=u.label+' ('+sg(c)+')';return [(Q.ldr===u.label?'✓':'')+(cc?'<span style="display:inline-flex;align-items:center;gap:6px">'+cc+'<span>'+tx+'</span></span>':tx),"nmRrLdrSet('"+u.label+"')"];})});
     if(!ldrs.length)it.push({ic:'info',t:'<span style="font-size:12px;color:#9ab">'+T('このシナリオに指揮官がいないため自己回復のみ')+'</span>'});}
   else it.push({ic:'info',t:'<span style="font-size:12px;color:#9ab">'+T('指揮官の回復は自己回復(+1)')+'</span>'});
   it.push({row:1,ic:'info',t:T('④ 林・建物内'),btns:[[(Q.ter?'':'✓')+T('なし'),"nmRrTer(0)"],[(Q.ter?'✓':'')+'−1',"nmRrTer(1)"]]});
@@ -40031,7 +40031,7 @@ function nmRrRows(it,n){var Q=NM_RR;if(!Q)return;var ns=nmSuNats();
     nmRrUnits(Q.nat).forEach(function(u,i){var mine=its.filter(function(x){return x.label===u.label;}),cb=mine.filter(function(x){return x.broken;}).length,cg=mine.length-cb;
       if(u.kind==='smc')it.push({row:1,ic:'sel',t:u.label+' <small style="color:#8899aa">×'+(u.n||1)+'</small>',btns:[['混乱 ×'+cb,"nmRrCnt("+i+",1,1)"],['統制(回復を助ける) ×'+cg,"nmRrCnt("+i+",1,0)"],['−混乱',"nmRrCnt("+i+",-1,1)"],['−統制',"nmRrCnt("+i+",-1,0)"]]});
       else it.push({row:1,ic:'sel',t:u.label+' <small style="color:#8899aa">×'+(u.n||1)+'</small>',btns:[[(cb?'✓':'')+'混乱 ×'+cb,"nmRrCnt("+i+",1)"],['−',"nmRrCnt("+i+",-1)"]]});});}
-  else{var vs=nmIjVehs(Q.nat);if(!vs.length)it.push({ic:'info',t:'<span style="color:#9ab">'+nmNatLbl(Q.nat)+'の車両・砲はこのシナリオにありません</span>'});else it.push({row:1,ic:'sel',t:'車両・砲',btns:vs.map(function(v,i){return [((Q.v&&Q.v.id===v.id)?'✓':'')+v.nm,"nmRrVeh("+i+")"];})});}}
+  else{var vs=nmIjVehs(Q.nat);if(!vs.length)it.push({ic:'info',t:'<span style="color:#9ab">'+nmNatLbl(Q.nat)+'の車両・砲はこのシナリオにありません</span>'});else it.push({row:1,ic:'sel',t:'車両・砲',btns:vs.map(function(v,i){var c=nmCtrChip(v.id,34);return [((Q.v&&Q.v.id===v.id)?'✓':'')+(c?'<span style="display:inline-flex;align-items:center;gap:6px">'+c+'<span>'+v.nm+'</span></span>':v.nm),"nmRrVeh("+i+")"];})});}}
 /* v916(ダルマ指示「PAATCも車両のいるヘクスに突入する専用タイルに」「AFVのいるヘクスへ突入は2つに分ける」「パネルはわかりやすく使いやすく」): 判定ボードに2つ新設。
    (1) 歩兵用 PAATC（歩兵が車両へ突入）3.7 / (2) 車両用「車両が敵AFVへ突入（停止できるか）」3.3.2。白兵戦・爆薬のパネルからPAATCの判定は外した */
 var NM_PA=null,NM_VE=null;
@@ -40199,7 +40199,7 @@ function nmLtUnbog(n,sd,i){var all=nmAllAt(nmHexOfNode(n),sd).filter(function(x)
   var H=nmHexOfNode(P.n),all=nmAllAt(H,P.sd).filter(function(x){return x.veh||x.gun;});if(!all.length)return it;var U=it.slice(0,3);if(NM_RR&&NM_RR.kind==='repair'){nmRrRows(U,n);U.push({sep:1});}
   var row=function(t,f){return {row:1,cmp:1,ic:'fire',t:t,btns:[['振る',f+',0)']].concat([1,2,3,4,5,6].map(function(v){return [String(v),f+','+v+')'];}))};};
   all.forEach(function(eh,i){var ev=eh.veh&&!eh.gun?nmAfv(eh.veh):null,eg=eh.gun?nmGun(eh.gun):null,nm=ev?nmAfvName(ev):eg?nmGunName(eg):T('ユニット'),pre="nmLtRep("+n+",'"+P.sd+"',"+i+",";
-    U.push({sep:1});U.push({ic:'sel',t:'<span>'+nm+'</span>',sub:T('状態に関係なく選べます(1=成功 6=破壊/使用不可)')});
+    U.push({sep:1});U.push({ic:'sel',img:nmCtrChip(eh.gun||eh.veh,40)||undefined,t:'<span>'+nm+'</span>',sub:T('状態に関係なく選べます(1=成功 6=破壊/使用不可)')}); /* sample(実カウンター 修理) */
     var hasMa=!!eg;if(ev){try{hasMa=!!afvToGunData(ev);}catch(e){hasMa=false;}}
     if(hasMa)U.push(row((eg?T('砲'):T('主砲'))+T('の修理')+' dr',pre+"'ma',''"));
     if(ev){var ks=[];try{ks=nmVmKeys(ev);}catch(e){}ks.forEach(function(k){U.push(row(k.toUpperCase()+T('の修理')+' dr',pre+"'mg','"+k+"'"));});
