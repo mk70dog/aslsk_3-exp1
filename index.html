@@ -38852,12 +38852,12 @@ function nmNuDraw(){var N=NM_NU;if(!N)return;nmNuClose();var k=nmNuKind(N.fn),nm
   if(N.U.length){h+='<div style="font-size:12px;color:#9ab;margin:0 0 6px">① '+T('どの'+nm+'？（シナリオから）')+'</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">';
     var last=null;N.U.forEach(function(u,i){var L=NM_SIDE_LBL[u.sd]||{},on=N.sel===i;if(u.nat!==last){last=u.nat;h+='<div style="flex-basis:100%;font-size:11px;font-weight:900;color:'+(L.col||'#9fb2c8')+';margin-top:2px">'+(L.nm||'')+' '+(NAT_FULL_LBL[u.nat]||u.nat)+'</div>';}
       h+='<button class="b" style="margin:0;min-height:48px;padding:2px 12px;display:inline-flex;align-items:center;gap:8px;font-size:14px;'+(on?'background:#2f6f9a;border-color:#7ec8e3;color:#fff':'')+'" onclick="NM_NU.sel='+i+';if(nmHqLite())nmNuGo(1);else nmNuDraw()">'+(on?'✓ ':'')+nmCtrChip(u.k==='inf'?nmCtrUid(u.nat,u.id):u.id,40)+'<b>'+u.nm+'</b></button>';});
-    h+='</div><div style="font-size:12px;color:#9ab;margin:0 0 6px">② '+T('どうする？')+'</div>';
+    if(nmHqLite()){h+='</div><div style="font-size:12px;color:#9ab">'+T('選ぶと地図に切り替わります。置くヘクスをタップ(仮・判定を閉じると消える)')+'</div>';}else{h+='</div><div style="font-size:12px;color:#9ab;margin:0 0 6px">② '+T('どうする？')+'</div>';
     var dis=N.sel==null?' disabled style="opacity:.4;':' style="';
     var lite=nmHqLite(); /* sample(ダルマ指示「ライトモードでは地図に置くは不要」): ライト版は「置かずに判定」だけ(配置画面も出さない) */
     h+='<div style="display:grid;grid-template-columns:'+(lite?'1fr':'1fr 1fr')+';gap:8px">'
      +(lite?'':'<button class="b"'+dis+'margin:0;min-height:62px;text-align:left;padding:6px 12px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px" onclick="nmNuGo(0)"><b style="font-size:15px">📍 '+T('地図に置く')+'</b><span style="font-size:11px;color:#9ab">'+T('ヘックスをタップ→置いて判定へ')+'</span></button>')
-     +'<button class="b"'+dis+'margin:0;min-height:62px;text-align:left;padding:6px 12px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px" onclick="nmNuGo(1)"><b style="font-size:15px">🎲 '+T('置かずに判定')+'</b><span style="font-size:11px;color:#9ab">'+T('仮に置く(判定を閉じると消える)')+'</span></button></div>';}
+     +'<button class="b"'+dis+'margin:0;min-height:62px;text-align:left;padding:6px 12px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px" onclick="nmNuGo(1)"><b style="font-size:15px">🎲 '+T('置かずに判定')+'</b><span style="font-size:11px;color:#9ab">'+T('仮に置く(判定を閉じると消える)')+'</span></button></div>';}}
   else h+='<div style="font-size:12px;color:#9ab;margin-bottom:8px">'+T('このシナリオには'+nm+'がいません')+'</div>';
   h+=(nmHqLite()?'':'<button class="b" style="margin:10px 0 0;width:100%;height:44px;font-size:14px" onclick="nmNuClose();nmSuOpen()">📋 '+T('配置画面を開く')+'</button>')+'</div>';
   m.innerHTML=h;document.body.appendChild(m);}
