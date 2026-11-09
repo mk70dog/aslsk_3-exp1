@@ -40261,7 +40261,7 @@ function nmRmVeItems(n){var V=NM_VE;if(!V)return nmRMenuItems(n);var it=[],ns=nm
   it.push({ic:'info',t:'<span style="font-size:12px;color:#9fb2c8">'+T('移動フェイズに、車両が敵AFVのいるヘクスへ入る時、そこで停止できるか（3.3.2）。入った時に、自分の砲（使い切らない弾）で原DR5のTKを振って、相手を撃破かShockにできる時だけ停止できます。できなければ通り抜けるだけ。')+'</span>'});
   var mk=function(natK,idK,lbl){var nt=V[natK];var vs=nmIjVehs(nt).filter(function(v){return v.kind==='veh';});
     if(ns.length>1)it.push({row:1,ic:'sel',t:lbl+' '+T('国籍'),btns:ns.map(function(k){return [(nt===k?'✓':'')+nmNatLbl(k),"nmVeSet('"+natK+"','"+k+"')"];})});
-    it.push(vs.length?{row:1,ic:'turret',t:lbl,btns:vs.map(function(v){return [(V[idK]===v.id?'✓':'')+v.nm,"nmVeSet('"+idK+"','"+v.id+"')"];})}:{ic:'info',t:'<span style="color:#9ab">'+nmNatLbl(nt)+T('の車両はこのシナリオにありません')+'</span>'});};
+    it.push(vs.length?{row:1,ic:'turret',t:lbl,btns:vs.map(function(v){var on=V[idK]===v.id;return [nmCoBtn(v.id,(on?'✓':'')+v.nm,on,v.nm),"nmVeSet('"+idK+"','"+v.id+"')"];})}:{ic:'info',t:'<span style="color:#9ab">'+nmNatLbl(nt)+T('の車両はこのシナリオにありません')+'</span>'});};
   mk('vnat','v','① '+T('入る車両'));mk('tnat','t','② '+T('敵のAFV'));
   it.push({row:1,ic:'move',t:'③ '+T('敵AFVの向き（こちらから見た面）'),btns:[['front','正面'],['side','側面'],['rear','背面 TK+1']].map(function(f){return [(V.face===f[0]?'✓':'')+T(f[1]),"nmVeSet('face','"+f[0]+"')"];})});
   var R=nmVeCalc();it.push({sep:1});
