@@ -1,0 +1,6 @@
+// sample: 残留火力の札を実カウンター画像で
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1000,height:500},deviceScaleFactor:2});const Er=[];p.on('pageerror',x=>Er.push(String(x)));
+await p.goto('file://'+__dirname+'/../index.html',{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>{S.scen=S.scen||{};S.scen.sel='S25';NAVTAB('los');});await p.waitForTimeout(3000);
+console.log(await p.evaluate(()=>{var o=nmBdTodo;var vals=[2,4,6,12];var box=document.createElement('div');box.style.cssText='position:fixed;left:20px;top:20px;width:940px;z-index:99999;display:flex;flex-direction:column;gap:10px;background:#1f2227;padding:12px;border-radius:12px';
+ vals.forEach(function(v){nmBdTodo=function(){return {L:[{k:'res',ic:nmResIc(v),s:'残留 '+v+'FP を置く',t:'残留火力 '+v+'FP のカウンターを置く',sub:'tR9 に(MPh(移動フェイズ)の終わりに外す)'}],R:{}};};var d=document.createElement('div');d.innerHTML=nmBdHTML();box.appendChild(d);});nmBdTodo=o;document.body.appendChild(box);return [2,4,6,8].map(v=>v+':'+/<img/.test(nmResIc(v))).join(' ');}));
+await p.waitForTimeout(500);await p.screenshot({path:'/tmp/sm/resctr.png'});console.log('err',Er.length);await b.close();})();
