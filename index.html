@@ -36980,7 +36980,7 @@ html:root ${f}.dsRow>button.dsb.dsb:not(.zz){flex:1 1 0!important;width:auto!imp
 html:root #nmNu .b[style*="#2f6f9a"]{background:linear-gradient(#f2c244,#c8941c)!important;color:#1a1204!important;border-color:#ffd070!important}
 html:root ${f}.dsRow.dsLb{flex:0 1 330px!important;width:auto!important}
 html:root ${f}.dsRow>button.dsb:last-child{border-right:0!important}
-html:root ${f}.dsRow>button.dsb.dsb.dsOn:not(.zz),button.dsb.dsb.on:not(.zz){background:linear-gradient(#f2c244,#c8941c)!important;color:#1a1204!important}
+html:root ${f}.dsRow>button.dsb.dsb.dsOn:not(.zz),html:root ${f}.dsRow>button.dsb.dsb.on:not(.zz),button.dsb.dsb.on:not(.zz){background:linear-gradient(#f2c244,#c8941c)!important;color:#1a1204!important}
 html:root ${f}.dsRow>button.dsb::before,html:root ${f}.dsRow>button.dsb::after{content:none!important;background-image:none!important}`).join('\n');
 var st=document.createElement('style');st.id='nmDsUni';var X1=function(){var P='radial-gradient(circle,#000000aa 1px,transparent 1.35px) 0 0/4px 4px,radial-gradient(circle at 50% 70%,#ffffff14 1px,transparent 1.4px) 0 0/4px 4px,#1c1f27',B='radial-gradient(circle,#000000aa .9px,transparent 1.25px) 0 0/4px 4px,linear-gradient(#131313 0%,#0d0d0d 50%,#080808 100%)',SH='0 4px 0 #0e0e0c,0 5px 2px #0000008c,inset 0 1px 0 #ffffff1f,inset 0 -2px 0 #00000038',RV='radial-gradient(circle 1.6px at 5px 5px,#3e4335 99%,transparent 100%),radial-gradient(circle 1.6px at calc(100% - 5px) 5px,#3a3f1f 99%,transparent 100%),radial-gradient(circle 1.6px at 5px calc(100% - 5px),#423c10 99%,transparent 100%),radial-gradient(circle 1.6px at calc(100% - 5px) calc(100% - 5px),#43474b 99%,transparent 100%)',R='html:root ',
 BTN=function(i){return R+i+' button.tb-reset';};
@@ -40288,11 +40288,9 @@ function nmLwSet(n,k,v){var W=NM_LW;if(k==='tgt'||k==='a'||k==='b'||k==='wid'){W
    ①「地図で撃てるヘクスを選ぶ」: 射程内でLOSが通るヘクスを地図で緑にし、タップしたヘクスを目標に(相手のマーカーがあればそれ、無ければそのヘクスで何を撃つか選ぶ)
    ②「シナリオの相手から選ぶ」: 地図に置いていない相手の車両(と建物内の歩兵SCW)を選び、地図で撃てるヘクスをタップして置く(判定用の仮のカウンター) */
 function nmLwFoeNats(){var W=NM_LW;if(!W)return [];var fn=null;try{fn=nmFirerNat(W.sd,W.n);}catch(e){}return nmSuNats().filter(function(k){try{return fn?nmFoeNat(fn,k):true;}catch(e){return true;}});}
-function nmLwPick(n,what){var W=NM_LW;if(!W)return;var w=LATW_DATA.filter(function(x){return x.id===W.wid;})[0];if(!w){btToast(T('先に兵器を選んでください'));return;}var A=BTG.nodes[W.n],out=[];
-  BTG.nodes.forEach(function(N,t){if(!N||t===W.n)return;var d=btDist(W.n,t);if(d>w.rng)return;if(what==='scw'&&!N.bldgT)return;var r=null;try{r=losCheckLOSGlobal(A.x,A.y,N.x,N.y,S_LOS.orchardSeason,S_LOS.grainSeason);}catch(e){}if(r&&r.blocked)return;out.push({tn:t,d:d,blk:false});});
-  if(!out.length){btToast(T('射程内でLOSが通るヘクスがありません'));return;}
+function nmLwPick(n,what){var W=NM_LW;if(!W)return;var w=LATW_DATA.filter(function(x){return x.id===W.wid;})[0];if(!w){btToast(T('先に兵器を選んでください'));return;}
   var el=document.getElementById('btRm');if(el)el.style.visibility='hidden';
-  NM_PICK={kind:'lw',n:n,xy:BT_RM_XY,list:out,hexMode:1,what:what};nmPickBanner(true);Draw();}
+  NM_PICK={kind:'lw',n:n,xy:BT_RM_XY,list:[],hexMode:1,what:what};nmPickBanner(true);Draw();nmLosHexAsync(NM_PICK,W.n,w.rng,function(N){return !(what==='scw'&&!N.bldgT);});}
 function nmLwPickEnd(tn){var P=NM_PICK;if(!P)return;NM_PICK=null;nmPickBanner(false);var el=document.getElementById('btRm');if(el)el.style.visibility='';var W=NM_LW;if(!W){Draw();return;}
   if(tn!=null){var od=W.sd==='f'?'e':'f',H=nmHexOfNode(tn),te=nmTgtAt(nmSideList(od),tn);
     if(P.what&&P.what!=='scw'){nmSideList(od).filter(function(e){return e.lwTmp;}).forEach(function(e){nmStRemoveVeh(od,e);});var e={boardId:H.boardId,col:H.col,row:H.row,veh:P.what,st:{},ijTmp:1,ccTmp:1,lwTmp:1};nmSideList(od).push(e);NM_TGT_EH=e;W.pend=null;Draw();nmLwSet(P.n,'tgt',tn);return;}
@@ -40324,11 +40322,16 @@ function nmVfFoeNats(){var V=NM_VF;if(!V)return [];var fn=null;try{fn=nmFirerNat
 function nmVfFoeRows(n,fx){var rows=[];nmVfFoeNats().forEach(function(k){var vs=nmIjVehs(k).filter(function(o){return o.kind==='veh';}),inf=[];try{var seen={};nmSuOb(k).forEach(function(u){if(u.kind==='mmc'&&!seen[u.label]){seen[u.label]=1;inf.push(u.label);}});}catch(e){}
   var b=vs.map(function(o){return [o.nm,fx+"("+n+",'"+o.id+"')"];}).concat(inf.map(function(l){return ['👤 '+l,fx+"("+n+",'i:"+l+"')"];}));if(b.length)rows.push({row:1,ic:'',t:'<span style="font-size:12px">'+nmNatLbl(k)+'</span>',btns:b});});return rows;}
 function nmVfWhatNm(w){if(!w)return '';if(/^i:/.test(w))return w.slice(2);var v=nmAfv(w);return v?nmAfvName(v):w;}
-function nmVfPick(n,what){var V=NM_VF;if(!V)return;var A=BTG.nodes[V.from],out=[];
-  BTG.nodes.forEach(function(N,t){if(!N||t===V.from)return;var d=btDist(V.from,t);if(d>24)return;var r=null;try{r=losCheckLOSGlobal(A.x,A.y,N.x,N.y,S_LOS.orchardSeason,S_LOS.grainSeason);}catch(e){}if(r&&r.blocked)return;out.push({tn:t,d:d,blk:false});});
-  if(!out.length){btToast(T('LOSが通るヘクスがありません'));return;}
+/* v960(ダルマ報告「シナリオの相手から選ぶ→マップに切り替わるまでかなり時間がかかる」): 撃てるヘクス(LOS)の計算を少しずつ行い、地図はすぐ表示。
+   近いヘクスから順に緑にし、同じ地点からの結果は覚えておく(2回目からはすぐ)。計算は従来と同じ精密なLOS(losCheckLOSGlobal) */
+function nmLosHexAsync(P,from,maxD,ok){var N=BTG.nodes,A=N[from];if(!A)return;var key=from+'|'+S_LOS.orchardSeason+'|'+S_LOS.grainSeason;if(!BTG.losAsyncC)BTG.losAsyncC={};var C=BTG.losAsyncC[key]||(BTG.losAsyncC[key]={});
+  var todo=[];N.forEach(function(M,t){if(!M||t===from)return;var d=btDist(from,t);if(d>maxD||!ok(M,t))return;todo.push({t:t,d:d});});todo.sort(function(a,b){return a.d-b.d;});
+  var i=0,step=function(){if(NM_PICK!==P)return;var t0=performance.now(),add=0;while(i<todo.length&&performance.now()-t0<30){var q=todo[i++],v=C[q.t];if(v==null){var r=null;try{r=losCheckLOSGlobal(A.x,A.y,N[q.t].x,N[q.t].y,S_LOS.orchardSeason,S_LOS.grainSeason);}catch(e){}v=C[q.t]=!(r&&r.blocked);}if(v){P.list.push({tn:q.t,d:q.d,blk:false});add++;}}
+    if(add)try{Draw();}catch(e){}if(i<todo.length){P.busy=1;setTimeout(step,0);}else{P.busy=0;if(!P.list.length){btToast(T('LOSが通るヘクスがありません'));}try{Draw();}catch(e){}}};
+  step();}
+function nmVfPick(n,what){var V=NM_VF;if(!V)return;
   var el=document.getElementById('btRm');if(el)el.style.visibility='hidden';
-  NM_PICK={kind:'vfh',n:n,xy:BT_RM_XY,list:out,hexMode:1,what:what};nmPickBanner(true);Draw();}
+  NM_PICK={kind:'vfh',n:n,xy:BT_RM_XY,list:[],hexMode:1,what:what};nmPickBanner(true);Draw();nmLosHexAsync(NM_PICK,V.from,24,function(){return true;});}
 function nmVfPickEnd(tn){var P=NM_PICK;if(!P)return;NM_PICK=null;nmPickBanner(false);var el=document.getElementById('btRm');if(el)el.style.visibility='';var V=NM_VF;if(!V){Draw();return;}
   if(tn!=null){var od=V.sd==='f'?'e':'f',H=nmHexOfNode(tn),te=nmTgtAt(nmSideList(od),tn);
     if(P.what){nmSideList(od).filter(function(e){return e.vfTmp;}).forEach(function(e){var L=nmSideList(od),j=L.indexOf(e);if(j>=0)L.splice(j,1);if(e.grp){try{nmIpDelSlot(e.grp);}catch(x){}}});
