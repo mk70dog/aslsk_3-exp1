@@ -34487,6 +34487,7 @@ function nmRmFaceItems(n,sd){
   var v=eh.veh?nmAfv(eh.veh):null,tur=v&&nmAfvTurret(v),g=(!v&&eh.gun)?nmGun(eh.gun):null;
   it.push(NM_IJFM&&NM_IJ?{keepBack:1,ic:'back',t:(NM_IJ.vfStage?'← 砲撃に戻る':'← 判定に戻る'),sub:(NM_IJ.vfStage?'砲撃パネルに戻る':'判定に戻って計算し直す'),f:"nmIjFaceBack()"}:{keepBack:1,ic:'back',t:'← 完了',sub:(NM_VF&&NM_VF_FROM!=null?'砲撃に戻る':'メニューに戻る'),f:"NM_FACE=null;"+(NM_VF&&NM_VF_FROM!=null?"NM_RM_HEX=nmHexOfN("+NM_VF_FROM+");var _f=NM_VF_FROM;NM_VF_FROM=null;nmVfRe(_f)":"btRmReopen("+n+")")});
   if(NM_IJFM&&NM_IJ){var sw=nmIjFmSwItem();if(sw)it.push(sw);}
+  if(!NM_IJFM&&NM_VF&&NM_VF_FROM!=null){var sw2=nmVfFmSwItem(n);if(sw2)it.push(sw2);} /* 砲撃→地図で方向: スポット判定と同じく、撃つ側A・目標Bを切り替えて設定 */
   if(NM_VF&&NM_VF_FROM!=null&&NM_IJ&&NM_IJ.vfStage)it.push({ic:'back',t:'← 設定に戻る',sub:'スポット判定のA・Bの選択に戻る',f:"NM_FACE=null;NM_VF_FROM=null;nmIjStageBack()"}); /* v1016: 砲撃→地図で方向を設定 から1画面目へ */
   it.push({sep:1});
   it.push({ic:'turret',img:v?vaslCtrHTML(v.id,34,''):g?vaslCtrHTML(g.id,34,''):'',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+(v?nmAfvName(v):g?nmGunName(g):L.mk)+'</span>',sub:'矢印のボタンで方向を決める'+(tur?'(砲塔は車体と違う時だけ地図に「砲」)':v?'(無砲塔)':g?'(砲身の向き=CA)':'')});
@@ -34494,6 +34495,10 @@ function nmRmFaceItems(n,sd){
   if(tur&&eh.facing!=null)it.push({ic:'rot',t:'砲塔を車体と同じ向きに',f:(sd==='f'?'nmRmSetTcaF':'nmRmSetTca')+"("+n+","+eh.facing+")"});
   return it;
 }
+function nmVfFmSwItem(n){var V=NM_VF;if(!V)return null;var B=null;try{B=nmVfBuild();}catch(e){}if(!B)return null;var r=[];
+  [['A',V.from,B.eh],['B',V.tgt,B.te]].forEach(function(q){var eh=q[2];if(!eh||!(eh.veh||eh.gun))return;var v=eh.veh?nmAfv(eh.veh):null,g=!v&&eh.gun?nmGun(eh.gun):null;r.push([(String(n)===String(q[1])?'✓':'')+q[0]+' '+(v?nmAfvName(v):g?nmGunName(g):'')+(eh.facing==null?' (未設定)':''),"nmVfFmSw('"+q[0]+"')"]);});
+  return r.length>1?{row:1,ic:'turret',t:'設定する車両',btns:r}:null;}
+function nmVfFmSw(w){var V=NM_VF,B=nmVfBuild();if(!V||!B)return;var node=w==='A'?V.from:V.tgt,eh=w==='A'?B.eh:B.te;if(!eh)return;var sd=w==='A'?V.sd:(function(){try{return nmIjEhSd(eh);}catch(e){return V.sd==='f'?'e':'f';}})();NM_RM_HEX=nmHexOfN(node);NM_FACE={sd:sd};NM_RM_SUB=null;NM_VF_FROM=V.from;btRmReopen(node);}
 function nmRmFaceOpen(n,sd){NM_FACE={sd:sd};btRmReopen(n);}
 /* v401(ダルマ指示「マップタブ 敵軍マーカーに編成を選択可能にする」「右クリックから編成を編集できるようにする」): 射撃タブの編成(S.savedGroups / 射撃タブで選択中の編成)と共有。
    射撃タブで今選んでいる編成なら射撃タブの選択中の内容を直接変え(FgAddPickItem/FgRemovePickItem)、登録済みの内容にも同じものを書く */
