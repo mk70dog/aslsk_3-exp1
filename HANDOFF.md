@@ -2,6 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- 返事待ち: sample-dcfit(爆薬①置くをスクロールなし: 2列時は六角210px・地形で選ぶを右列へ)
+
 - v1026: sample-bog(ボグ判定の車両ボタン=実カウンターのみ)・sample-vfsw(砲撃→地図で方向: 設定する車両 A/B 切替 nmVfFmSwItem/nmVfFmSw)を反映。返事待ちなし。未対応: 古いテスト aud/dcr/vft の修正
 
 - v1025: オートダイスのデフォルトOFF(S.nmAutoOff===false の時だけON。未設定=OFF)。OFFの時は「〜を振る」ボタン/項目を作らない(nmAdTag)・タグ済みの物は .nmAdB で非表示。以前ONに戻した人(false)はONのまま。返事待ち: sample-bog, sample-vfsw。未対応: 古いテスト aud/dcr/vft の修正
