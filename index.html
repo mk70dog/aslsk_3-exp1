@@ -34480,7 +34480,7 @@ function nmFacePad(eh,kind,n,sd){
 function nmRmFaceItems(n,sd){
   var H=NM_RM_HEX,eh=H&&nmUnitAt(H,sd),L=NM_SIDE_LBL[sd],it=[];if(!eh){NM_FACE=null;return nmRMenuItems(n);}
   var v=eh.veh?nmAfv(eh.veh):null,tur=v&&nmAfvTurret(v),g=(!v&&eh.gun)?nmGun(eh.gun):null;
-  it.push(NM_IJFM&&NM_IJ?{keepBack:1,ic:'back',t:'← 判定に戻る',sub:'判定に戻って計算し直す',f:"nmIjFaceBack()"}:{keepBack:1,ic:'back',t:'← 完了',sub:(NM_VF&&NM_VF_FROM!=null?'砲撃に戻る':'メニューに戻る'),f:"NM_FACE=null;"+(NM_VF&&NM_VF_FROM!=null?"NM_RM_HEX=nmHexOfN("+NM_VF_FROM+");var _f=NM_VF_FROM;NM_VF_FROM=null;nmVfRe(_f)":"btRmReopen("+n+")")});
+  it.push(NM_IJFM&&NM_IJ?{keepBack:1,ic:'back',t:(NM_IJ.vfStage?'← 砲撃に戻る':'← 判定に戻る'),sub:(NM_IJ.vfStage?'砲撃パネルに戻る':'判定に戻って計算し直す'),f:"nmIjFaceBack()"}:{keepBack:1,ic:'back',t:'← 完了',sub:(NM_VF&&NM_VF_FROM!=null?'砲撃に戻る':'メニューに戻る'),f:"NM_FACE=null;"+(NM_VF&&NM_VF_FROM!=null?"NM_RM_HEX=nmHexOfN("+NM_VF_FROM+");var _f=NM_VF_FROM;NM_VF_FROM=null;nmVfRe(_f)":"btRmReopen("+n+")")});
   if(NM_IJFM&&NM_IJ){var sw=nmIjFmSwItem();if(sw)it.push(sw);}
   if(NM_VF&&NM_VF_FROM!=null&&NM_IJ&&NM_IJ.vfStage)it.push({ic:'back',t:'← 設定に戻る',sub:'スポット判定のA・Bの選択に戻る',f:"NM_FACE=null;NM_VF_FROM=null;nmIjStageBack()"}); /* v1016: 砲撃→地図で方向を設定 から1画面目へ */
   it.push({sep:1});
@@ -34879,7 +34879,8 @@ function nmVfEff(n){var V=NM_VF,B=nmVfBuild(),R=V&&V.res;if(!R||!R.hit||!V.c1||!
 function nmVfLog(B,k){var V=NM_VF,R=V.res;try{logResult(function(){var who=B.v?nmAfvName(B.v)+'主砲':nmGunName(B.g),tg=BTG.nodes[V.tgt].nm+(B.tu?' '+B.tu.nm:'');
   var tx=k==='th'?(who+'→'+tg+' '+B.mode+'/'+V.ammo+' TH#'+R.ev.th+' '+diceEmojiStr(V.a,V.b)+'→'+R.fin+' '+(R.hit?'命中':'外れ')):(who+'→'+tg+' '+(B.mode==='VTT'?'TK#'+R.tk:R.fp+'FP')+' DR'+V.res2.c+' → '+V.res2.t);
   return {tabLbl:'MAP '+(B.v?'主砲':'砲撃'),text:tx,color:k==='th'?(R.hit?'#c8a032':'#556677'):V.res2.col,detail:null};});}catch(e){}}
-function nmVfFaceMap(n){var V=NM_VF;if(!V)return;var B=nmVfBuild();if(!B)return;var useA=!B.eh||B.eh.facing==null,node=useA?V.from:V.tgt,eh=useA?B.eh:B.te,sd=useA?V.sd:(function(){try{return nmIjEhSd(eh);}catch(e){return V.sd==='f'?'e':'f';}})();if(!eh)return;NM_RM_HEX=nmHexOfN(node);NM_FACE={sd:sd};NM_RM_SUB=null;NM_VF_FROM=V.from;btRmReopen(node);}
+function nmVfFaceMap(n){var V=NM_VF;if(!V)return;if(NM_IJ&&NM_IJ.vfStage&&typeof nmIjFaceMap==='function'){nmIjFaceMap();return;} /* v1021(ダルマ「方向の設定をスポット判定の方式に統一」): スポット判定から来た時は同じ方式(A/B切替・地図にバー・隅に置く) */
+  var B=nmVfBuild();if(!B)return;var useA=!B.eh||B.eh.facing==null,node=useA?V.from:V.tgt,eh=useA?B.eh:B.te,sd=useA?V.sd:(function(){try{return nmIjEhSd(eh);}catch(e){return V.sd==='f'?'e':'f';}})();if(!eh)return;NM_RM_HEX=nmHexOfN(node);NM_FACE={sd:sd};NM_RM_SUB=null;NM_VF_FROM=V.from;btRmReopen(node);}
 var NM_VF_FROM=null;
 function nmVfNtc(n,v){var V=NM_VF;if(!V)return;V.ntc=v||(2+Math.floor(Math.random()*6)+Math.floor(Math.random()*6));try{logResult(function(){return {tabLbl:'MAP NTC',text:'ショックの可能性 NTC DR'+V.ntc+' → '+(V.ntc>8?'ショック':'効果なし'),color:V.ntc>8?'#ffb040':'#3ca878',detail:null};});}catch(e){}Draw();nmVfRe(n);}
 function nmVfApplySt(n,k){var V=NM_VF,B=nmVfBuild();if(!B||!B.te)return;var st=nmStOf(B.te);st[k]=!st[k];nmStSave();nmVfRe(n);}
@@ -39517,7 +39518,7 @@ var NM_IJ_ST=null;
 function nmIjPeek(){var el=document.getElementById('nmIj');if(!el)return;var gc=null;try{var g0=el.querySelector('.ijGo');if(g0){var cs=getComputedStyle(g0);gc={bg:cs.backgroundImage&&cs.backgroundImage!=='none'?cs.backgroundImage:cs.backgroundColor,c:cs.color,b:cs.border,bs:cs.boxShadow};}}catch(e){}el.style.display='none';var b=document.getElementById('nmIjBack');if(b)b.remove();b=document.createElement('button');b.id='nmIjBack';
   b.style.cssText='position:fixed;left:50%;bottom:calc(var(--nmsumh,64px) + 14px);transform:translateX(-50%);z-index:9800;padding:12px 30px;border-radius:999px;border:1px solid #7ec8e3;background:var(--ljc,#7ec8e3);color:#08101a;font-weight:900;font-size:16px;box-shadow:0 6px 24px #000c;font-family:inherit;display:inline-flex;align-items:center;gap:8px';
   if(gc){b.style.background=gc.bg;b.style.color=gc.c;b.style.border=gc.b&&!/^0px/.test(gc.b)?gc.b:'none';if(gc.bs&&gc.bs!=='none')b.style.boxShadow=gc.bs;} /* v807(ダルマ指示「判定に戻るボタンを判定するボタンと同じ色にする」): 判定画面の「判定する」の色(テーマごと)を写す */
-  b.innerHTML=NM_MI.judge+' '+T('判定に戻る');b.onclick=function(e){e.stopPropagation();nmIjUnpeek();};document.body.appendChild(b);}
+  b.innerHTML=NM_MI.judge+' '+T((NM_IJ&&NM_IJ.vfStage)?'砲撃に戻る':'判定に戻る');b.onclick=function(e){e.stopPropagation();nmIjUnpeek();};document.body.appendChild(b);}
 function nmIjUnpeek(){var b=document.getElementById('nmIjBack');if(b)b.remove();var el=document.getElementById('nmIj');if(el)el.style.display='';}
 function nmIjClose(){nmRsClear();NM_IJ_UNDO=[];var bk=document.getElementById('nmIjBack');if(bk)bk.remove();nmIjTmpClear();NM_IJ=null;var el=document.getElementById('nmIj');if(el)el.remove();}
 /* v688(ダルマ報告「?」): Aに置くカウンターを選んだら、すぐAに置いて設定・ダイス欄を出す(判定するを押す前から) */
@@ -39732,7 +39733,7 @@ function nmIjFaceMap(w){var J=NM_IJ;if(!J)return;var a=nmIjFmEh('A'),t=nmIjFmEh(
   if(!o){btToast(T('地図のA・Bマーカーのバーで方向を決めて「判定に戻る」'));return;}
   NM_IJFM=w;try{Draw();}catch(e){}NM_RM_HEX=nmHexOfN(o.n);NM_FACE={sd:nmIjEhSd(o.eh)};var q=null;try{q=nmClientOfNode(o.n);}catch(e){}BT_RM_XY=q?{x:q.x+60,y:q.y}:{x:innerWidth/2,y:innerHeight/3};btRMenu(o.n);nmIjFmPlace();}
 /* v790(ダルマ指示「設定パネルを車両と重ならないようにする」「パネルをドラッグして動かせるようにする」): 地図で方向を設定する時は、A・Bの車両を避けた画面の隅に置く。パネルのボタン以外の所をドラッグすると動かせる(動かした位置は開き直しても保つ) */
-function nmIjFmPts(){var J=NM_IJ,r=[];if(!J)return r;[J.a,J.b].forEach(function(n){var q=null;try{q=nmClientOfNode(n);}catch(e){}if(q)r.push(q);});return r;}
+function nmIjFmPts(){var J=NM_IJ,r=[];if(!J||!window.NM_IJFM){try{if(window.NM_FACE&&BT&&BT.rmHex!=null){var q0=nmClientOfNode(BT.rmHex);if(q0)r.push(q0);}}catch(e){}if(!J||!window.NM_IJFM)return r;}[J.a,J.b].forEach(function(n){var q=null;try{q=nmClientOfNode(n);}catch(e){}if(q)r.push(q);});return r;}
 function nmIjFmBounds(){var Hh=innerHeight,MT=8,MB=8,MR=8,tb=document.getElementById('nmFullTabs')||document.getElementById('btFullTop'),fb=document.getElementById('nmFtBot')||document.getElementById('btFullBot'),ta=document.getElementById('nmFtAct');
   try{if(tb)MT=Math.max(8,tb.getBoundingClientRect().bottom+4);if(fb)MB=Math.max(8,Hh-fb.getBoundingClientRect().top+4);if(ta){var rr=ta.getBoundingClientRect();if(rr.width&&rr.left>innerWidth/2)MR=Math.max(8,innerWidth-rr.left+6);}}catch(e){}return {T:MT,B:Hh-MB,L:8,R:innerWidth-MR};}
 function nmIjFmPlace(){var box=document.querySelector('#btRm .rmBox');if(!box)return;var b=nmIjFmBounds(),w=box.offsetWidth,h=Math.min(box.offsetHeight,b.B-b.T),P=nmIjFmPts(),RAD=84;
@@ -39750,7 +39751,7 @@ function nmIjFmDrag(){var box=document.querySelector('#btRm .rmBox');if(!box||bo
     e.preventDefault();var b=nmIjFmBounds(),w=box.offsetWidth,h=box.offsetHeight,nl=Math.min(Math.max(b.L,st.l+dx),Math.max(b.L,b.R-w)),nt=Math.min(Math.max(b.T,st.t+dy),Math.max(b.T,b.B-h));box.style.left=nl+'px';box.style.top=nt+'px';if(box.closest('.rmFull')){box.classList.add('rmMoved');box.style.setProperty('--rml',nl+'px');box.style.setProperty('--rmt',nt+'px');NM_RM_MOVED={l:nl,t:nt};}});
   var end=function(e){if(st&&st.mv){var k=function(ev){ev.stopPropagation();ev.preventDefault();window.removeEventListener('click',k,true);};window.addEventListener('click',k,true);setTimeout(function(){window.removeEventListener('click',k,true);},300);}st=null;};
   box.addEventListener('pointerup',end);box.addEventListener('pointercancel',function(){st=null;});box.style.touchAction='pan-y';}
-(function(){var o=window.btRMenu;if(typeof o!=='function')return;window.btRMenu=function(){var r=o.apply(this,arguments);try{nmIjFmDrag();nmRmMovedApply();}catch(e){}return r;};})();
+(function(){var o=window.btRMenu;if(typeof o!=='function')return;window.btRMenu=function(){var r=o.apply(this,arguments);try{nmIjFmDrag();nmRmMovedApply();}catch(e){}try{if(window.NM_FACE&&!window.NM_IJFM)nmIjFmPlace();}catch(e){}return r;};})();
 function nmIjFmSw(w){var o=nmIjFmEh(w);if(!o)return;NM_IJFM=w;NM_RM_HEX=nmHexOfN(o.n);NM_FACE={sd:nmIjEhSd(o.eh)};try{Draw();}catch(e){}btRmReopen(o.n);}
 function nmIjFmSwItem(){var r=[];['A','B'].forEach(function(w){var o=nmIjFmEh(w);if(!o)return;var v=o.eh.veh?nmAfv(o.eh.veh):null,g=!v&&o.eh.gun?nmGun(o.eh.gun):null;r.push([(NM_IJFM===w?'✓':'')+w+' '+(v?nmAfvName(v):g?nmGunName(g):'')+(o.eh.facing==null?' (未設定)':''),"nmIjFmSw('"+w+"')"]);});return r.length>1?{row:1,ic:'turret',t:'設定する車両',btns:r}:null;}
 /* v789(ダルマ指示「A車両とB車両と方向バーを表示する」): 地図で方向を設定している間は、判定用の仮のA・Bカウンターも地図に描き、車体(A青/B赤)・砲塔(黄の「砲」)の方向バーを出す。未設定は相手の方を向いた薄いバー */
@@ -39765,7 +39766,7 @@ function nmIjFmBarsSVG(L){var J=NM_IJ;if(!window.NM_IJFM||!J||typeof BTG==='unde
     var g=function(on,x){return '<g'+(on?'':' opacity=".4"')+'>'+x+'</g>';};
     h+=g(eh.facing!=null,arrow(fa,54,4,col));if(tur)h+=g(eh.facing!=null,arrow(ft,ft===fa?74:50,5,'#ffd040','badge'));});
   return h;}
-function nmIjFaceBack(){NM_IJFM=null;NM_FACE=null;try{Draw();}catch(e){}try{var rm=document.getElementById('btRm');if(rm&&!rm.closest('#nmIj'))BtRmClose();}catch(e){}var em=document.getElementById('btRmIjHold');if(em)em.id='btRm';nmIjUnpeek();if(NM_IJ){nmIjFaceDef();nmIjDraw();}}
+function nmIjFaceBack(){if(NM_IJ&&NM_IJ.vfStage&&NM_VF){NM_IJFM=null;NM_FACE=null;NM_VF_FROM=null;try{var b0=document.getElementById('nmIjBack');if(b0)b0.remove();var rm0=document.getElementById('btRm');if(rm0)rm0.remove();Draw();}catch(e){}try{nmVfRe(NM_VF.from);}catch(e){}return;}NM_IJFM=null;NM_FACE=null;try{Draw();}catch(e){}try{var rm=document.getElementById('btRm');if(rm&&!rm.closest('#nmIj'))BtRmClose();}catch(e){}var em=document.getElementById('btRmIjHold');if(em)em.id='btRm';nmIjUnpeek();if(NM_IJ){nmIjFaceDef();nmIjDraw();}}
 function nmIjFaceApply(o){var J=NM_IJ0;if(!J)return;var eh=o&&o.eh;
   if(eh&&(eh.veh||eh.gun)){if(eh.facing==null){eh.facing=J.fa==='T'?J.tw:J.fa;if(eh.veh&&nmAfvTurret(nmAfv(eh.veh)))eh.tca=J.ft;}}
   var te=J.te;if(te&&te.veh&&J.ta&&J.ta!=='map'&&!J.tUn&&te.facing==null){te.facing=J.taf;}try{saveState();}catch(e){}}
@@ -41722,7 +41723,7 @@ function BtRmFit(n,ax){ /* v361: ツールバーの↔(横幅に合わせる)・
   setTimeout(function(){var e=document.getElementById('losScrollWrap');if(e){e.scrollLeft=S_LOS.scrollLeft;e.scrollTop=S_LOS.scrollTop;}btRmReopen(n);},30);
 }
 /* v699(ダルマ指示「他もインスタント判定のように画面をいっぱいに使用する」): メニューから開いた判定・射撃などのパネル(最初のメニュー以外)は画面いっぱい・2列 */
-function btRmFullApply(){try{var el=document.getElementById('btRm');if(!el||el.closest('#nmIj'))return;if(window.NM_IJFM){el.classList.remove('rmFull');return;} /* v795(バグ修正 ダルマ報告「レイアウトが変わった？」): 判定から地図で方向を設定する時の向きのパネルは画面いっぱい・2列にしない(判定の結果を出していると NM_RM_CUR が残っていて広がっていた) */var on=!!(typeof NM_RM_CUR!=='undefined'&&NM_RM_CUR);el.classList.toggle('rmFull',on);if(!on||innerWidth<760)return;
+function btRmFullApply(){try{var el=document.getElementById('btRm');if(!el||el.closest('#nmIj'))return;if(window.NM_IJFM||window.NM_FACE){el.classList.remove('rmFull');return;} /* v1021: 方向の設定パネルはどれも画面いっぱいにしない(スポット判定と同じ) */ /* v795(バグ修正 ダルマ報告「レイアウトが変わった？」): 判定から地図で方向を設定する時の向きのパネルは画面いっぱい・2列にしない(判定の結果を出していると NM_RM_CUR が残っていて広がっていた) */var on=!!(typeof NM_RM_CUR!=='undefined'&&NM_RM_CUR);el.classList.toggle('rmFull',on);if(!on||innerWidth<760)return;
   var bx=el.querySelector('.rmBox');if(!bx||bx.querySelector('.rmCols'))return;
   try{bx.querySelectorAll('.rmIt div').forEach(function(c){var bs=[].slice.call(c.children).filter(function(e){return e.tagName==='BUTTON'&&e.classList.contains('rmB');});if(bs.length<2||/position:absolute/.test(bs[0].getAttribute('style')||''))return;var g=document.createElement('span');g.className='rmBtns';bs[0].parentNode.insertBefore(g,bs[0]);bs.forEach(function(b){var on=/ff9030/.test(b.getAttribute('style')||'');b.removeAttribute('style');if(on)b.classList.add('on');g.appendChild(b);});c.style.justifyContent='space-between';});}catch(e){} /* 従来パネルのボタン列も連結バーに */
   try{[].slice.call(bx.querySelectorAll('.rmIt')).forEach(function(it){var t=(it.querySelector('.rmTx')||{}).textContent||'';if(/^(ATT )?命中TH#|^FP\s*\d/.test(t.trim()))it.classList.add('rmSum');else if(/ダイスを振る$|判定する$|入れた目で/.test(((it.querySelector('.rmTx')||{}).firstChild||{}).textContent||t.split('\n')[0]))it.classList.add('rmAct');});}catch(e){}var its=[].slice.call(bx.children).filter(function(c){return c.classList.contains('rmIt')||c.classList.contains('rmSep')||c.tagName==='HR'||c.tagName==='DIV';});if(its.length<4)return;
