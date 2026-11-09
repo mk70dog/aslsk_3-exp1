@@ -37542,6 +37542,12 @@ var BADGE_MALF_IMG={gun:'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBD
 function nmResKind(t){if(/撃破|KIA|除去|残骸|Elim/.test(t))return 'kill';if(/外れ|ミス|効果なし|影響なし|No Effect|失敗|不発|故障|MISS|→\s*-\s*$|\s-$/i.test(t))return 'ng'; /* v817(バグ修正 ダルマ報告「結果ノーエフェクトで成功の画像」): 射撃の結果は「No Effect」と記録されるので失敗側に */
   /* v612(バグ修正 ダルマ報告「ボグ判定失敗なのに成功の画像」): ボグした(停止)のは失敗側 */
   if(/→\s*ボグ(?!解消)|ボグ状態/.test(t)&&!/ボグ解消/.test(t))return 'ng';return 'ok';}
+/* sample(ダルマ「タップですぐにポップアップを消す」): 結果の画像ポップアップは、画面のどこをタップしてもすぐ消す。ポップアップの外のタップは下のボタンに通さない(押し間違い防止)。中のボタン(裏返すの印など)は押せる */
+function nmResTapArm(){if(window.__nmResTap)return;window.__nmResTap=1;var swallow=false;
+  document.addEventListener('pointerdown',function(e){var m=document.getElementById('nmResImg');if(!m)return;var inside=m.contains(e.target);if(inside&&e.target.closest('button,input,label,[onclick]:not(#nmResImg)')){setTimeout(function(){var m2=document.getElementById('nmResImg');if(m2)m2.remove();},0);return;}
+    m.remove();if(!inside){swallow=true;e.preventDefault();e.stopPropagation();}},true);
+  document.addEventListener('click',function(e){if(swallow){swallow=false;e.preventDefault();e.stopPropagation();}},true);
+  document.addEventListener('pointerup',function(e){if(swallow){e.stopPropagation();}},true);}
 function nmResImgShow(r){var o=document.getElementById('nmResImg');if(o)o.remove();var k=nmResKind(r.t),img=btFxNatImg(r.nat,k); /* v506(ダルマ指示「モノクロの画像だけ使う」): 国籍の成功・失敗・撃破と、ROF維持の時はROF成功(砲=gun・機関銃=sw)。ほかの画像は使わない */
   if(r.rof&&k!=='kill'){try{var rb=BADGE_ROF_IMG[r.rof]||BADGE_ROF_IMG.gun;if(rb)img='<div style="margin:2px auto 4px"><img src="data:image/png;base64,'+rb+'" style="display:block;margin:0 auto;height:min(180px,24vh);width:auto;max-width:100%;border-radius:5px;border:1px solid #2a3a50"></div>';}catch(x){}}
   if(r.malf&&k!=='kill'){img='<div style="margin:2px auto 4px"><img src="'+BADGE_MALF_IMG[r.malf]+'" style="display:block;margin:0 auto;height:min(180px,24vh);width:auto;max-width:100%;border-radius:5px;border:1px solid #2a3a50"></div>';} /* v508: 故障は ROF成功より優先 */
@@ -37550,7 +37556,7 @@ function nmResImgShow(r){var o=document.getElementById('nmResImg');if(o)o.remove
   var col=k==='kill'?'#ff4040':k==='ng'?'#8899aa':'#60e060';var m=document.createElement('div');m.id='nmResImg';
   m.style.cssText='position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);z-index:9790;width:'+(r._big?'min(600px,90vw)':'min(320px,86vw)')+';background:#0b0d12f2;border:1px solid #2c323c;border-radius:12px;box-shadow:0 10px 30px #000d;padding:8px 10px;text-align:center;font-family:AppFont,AppJP,monospace;cursor:pointer;animation:nmResIn .18s ease-out';
   m.innerHTML=img+'<div style="font-size:11px;color:#8a94a2;margin-top:2px">'+r.lb+'</div><div style="font-size:15px;font-weight:900;color:'+col+';margin-top:2px;line-height:1.35;overflow-wrap:anywhere">'+r.t+'</div>';
-  m.onclick=function(){m.remove();};document.body.appendChild(m);setTimeout(function(){if(m.parentNode){m.style.transition='opacity .3s';m.style.opacity='0';setTimeout(function(){m.remove();},320);}},2500);
+  m.onclick=function(){m.remove();};document.body.appendChild(m);nmResTapArm();setTimeout(function(){if(m.parentNode){m.style.transition='opacity .3s';m.style.opacity='0';setTimeout(function(){m.remove();},320);}},2500);
   if(!document.getElementById('nmResCss')){var st=document.createElement('style');st.id='nmResCss';st.textContent='@keyframes nmResIn{from{opacity:0;transform:translate(-50%,-50%) scale(.92)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}';document.head.appendChild(st);}}
 /* v509(バグ修正 ダルマ報告「射撃判定後にA・Bが出る」): 射撃パネル(歩兵・主砲・機関銃・軽対戦車兵器)は目標までのLOSを測るため起点A・目標Bを使う。
    パネルを閉じたら、開く前の起点A・目標B(無ければ無し)に戻す */
