@@ -38850,7 +38850,7 @@ function nmNuDraw(){var N=NM_NU;if(!N)return;nmNuClose();var k=nmNuKind(N.fn),nm
    +'<div style="font-size:13px;color:#ffcf70;margin:2px 0 10px">⚠ '+T('地図に'+nm+'がありません')+'</div>';
   if(N.U.length){h+='<div style="font-size:12px;color:#9ab;margin:0 0 6px">① '+T('どの'+nm+'？（シナリオから）')+'</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">';
     var last=null;N.U.forEach(function(u,i){var L=NM_SIDE_LBL[u.sd]||{},on=N.sel===i;if(u.nat!==last){last=u.nat;h+='<div style="flex-basis:100%;font-size:11px;font-weight:900;color:'+(L.col||'#9fb2c8')+';margin-top:2px">'+(L.nm||'')+' '+(NAT_FULL_LBL[u.nat]||u.nat)+'</div>';}
-      h+='<button class="b" style="margin:0;min-height:48px;padding:2px 12px;display:inline-flex;align-items:center;gap:8px;font-size:14px;'+(on?'background:#2f6f9a;border-color:#7ec8e3;color:#fff':'')+'" onclick="NM_NU.sel='+i+';if(nmHqLite()&&window.__nuB)nmNuGo(1);else nmNuDraw()">'+(on?'✓ ':'')+nmCtrChip(u.k==='inf'?nmCtrUid(u.nat,u.id):u.id,40)+'<b>'+u.nm+'</b></button>';});
+      h+='<button class="b" style="margin:0;min-height:48px;padding:2px 12px;display:inline-flex;align-items:center;gap:8px;font-size:14px;'+(on?'background:#2f6f9a;border-color:#7ec8e3;color:#fff':'')+'" onclick="NM_NU.sel='+i+';if(nmHqLite()&&window.__nuB!==0)nmNuGo(1);else nmNuDraw()">'+(on?'✓ ':'')+nmCtrChip(u.k==='inf'?nmCtrUid(u.nat,u.id):u.id,40)+'<b>'+u.nm+'</b></button>';});
     h+='</div><div style="font-size:12px;color:#9ab;margin:0 0 6px">② '+T('どうする？')+'</div>';
     var dis=N.sel==null?' disabled style="opacity:.4;':' style="';
     var lite=nmHqLite(); /* sample(ダルマ指示「ライトモードでは地図に置くは不要」): ライト版は「置かずに判定」だけ(配置画面も出さない) */
