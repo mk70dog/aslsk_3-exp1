@@ -38848,11 +38848,25 @@ function nmNuUnits(fn){var k=nmNuKind(fn),o=[];var sdOf=function(nat){try{return
   return o;}
 function nmNuOpen(fn){var U=nmNuUnits(fn);NM_NU={fn:fn,U:U,sel:U.length===1?0:null};nmNuDraw();}
 function nmNuClose(){var o=document.getElementById('nmNu');if(o)o.remove();}
+/* sample(ダルマ指示「対戦車兵器ボタン 兵器と操作する兵士を選択するとマップ画面表示」): ライト版で地図に歩兵が無い時、
+   ① 兵器(シナリオの軽対戦車兵器・PF)と ② 操作する兵士(シナリオの歩兵)を選ぶ → 地図で仮に置くヘクスをタップ → その兵器を選んだ状態で判定へ */
+var NM_LW_PRE=null;
+function nmLwNatList(nat){var sc=null;try{sc=scenarioLatwIds();}catch(e){}var di=(S.latw&&S.latw.dateIdx!=null)?S.latw.dateIdx:99;
+  var L=LATW_DATA.filter(function(w){return !w.oneShot&&w.th&&(w.nat||'').split('/').indexOf(nat)>=0&&(!sc||sc[w.id])&&!(w.availIdx>di);});var pf=null;try{pf=nmPfWep(nat);}catch(e){}if(pf&&!nmPfOff())L.push(pf);return L;}
+function nmLwNuHTML(N){var h='',nats=[];try{nats=nmSuNats();}catch(e){}var any=false;
+  nats.forEach(function(nat){var W=nmLwNatList(nat);if(!W.length)return;any=true;var sd=nmSuSide(nat),Ls=NM_SIDE_LBL[sd]||{},us=N.U.map(function(u,i){return {u:u,i:i};}).filter(function(o){return o.u.nat===nat;});
+    h+='<div style="font-size:11px;font-weight:900;color:'+(Ls.col||'#9fb2c8')+';margin:6px 0 4px">'+(Ls.nm||'')+' '+(NAT_FULL_LBL[nat]||nat)+'</div>';
+    h+='<div style="font-size:12px;color:#9ab;margin:0 0 4px">① '+T('兵器')+'</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">'+W.map(function(w){var on=N.lw===w.id&&N.lwNat===nat;return '<button class="b" style="margin:0;min-height:44px;padding:2px 12px;display:inline-flex;align-items:center;gap:8px;font-size:14px;'+(on?'background:#2f6f9a;border-color:#7ec8e3;color:#fff':'')+'" onclick="NM_NU.lw=\''+w.id+'\';NM_NU.lwNat=\''+nat+'\';if(NM_NU.sel!=null&&NM_NU.U[NM_NU.sel].nat!==\''+nat+'\')NM_NU.sel=null;nmLwNuGo()">'+(on?'✓ ':'')+nmCtrChip(VASL_CTR_MAP['u:SW|'+w.id]?'u:SW|'+w.id:null,36)+'<b>'+w.lbl+'</b><small style="color:#9ab">'+T('射程')+w.rng+'</small></button>';}).join('')+'</div>';
+    h+='<div style="font-size:12px;color:#9ab;margin:0 0 4px">② '+T('操作する兵士')+'</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">'+us.map(function(o){var on=N.sel===o.i;return '<button class="b" style="margin:0;min-height:48px;padding:2px 12px;display:inline-flex;align-items:center;gap:8px;font-size:14px;'+(on?'background:#2f6f9a;border-color:#7ec8e3;color:#fff':'')+'" onclick="NM_NU.sel='+o.i+';if(NM_NU.lwNat&&NM_NU.lwNat!==\''+nat+'\')NM_NU.lw=null;nmLwNuGo()">'+(on?'✓ ':'')+nmCtrChip(nmCtrUid(nat,o.u.id),40)+'<b>'+o.u.nm+'</b></button>';}).join('')+'</div>';});
+  if(!any)h+='<div style="font-size:12px;color:#9ab">'+T('このシナリオには軽対戦車兵器がありません')+'</div>';
+  return h+'<div style="font-size:12px;color:#9ab">'+T('両方選ぶと地図に切り替わります。置くヘクスをタップ(仮・判定を閉じると消える)')+'</div>';}
+function nmLwNuGo(){var N=NM_NU;if(!N)return;if(N.lw&&N.sel!=null){NM_LW_PRE=N.lw;nmNuGo(1);return;}nmNuDraw();}
 function nmNuDraw(){var N=NM_NU;if(!N)return;nmNuClose();var k=nmNuKind(N.fn),nm=k==='gun'?'砲':k==='afv'?'車両':'歩兵の編成';
   var m=document.createElement('div');m.id='nmNu';m.setAttribute('style','position:fixed;inset:0;z-index:9500;background:#0008;display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,monospace');m.onclick=function(e){if(e.target===m)nmNuClose();};
   var h='<div style="width:min(460px,92vw);max-height:84vh;overflow:auto;background:#1f2227;border:1px solid #39414f;border-radius:14px;padding:12px 14px;color:#e8eef4;box-shadow:0 10px 40px #000" onclick="event.stopPropagation()">'
    +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><b style="flex:1;font-size:16px;color:#7ec8e3">'+T(NM_HQ_LBL[N.fn]||'判定')+'</b><button class="b sm" style="margin:0;height:34px" onclick="nmNuClose();nmHqOpen()">← '+T('戻る')+'</button></div>'
    +'<div style="font-size:13px;color:#ffcf70;margin:2px 0 10px">⚠ '+T('地図に'+nm+'がありません')+'</div>';
+  if(nmHqLite()&&N.fn==='nmLwOpen'){h+=nmLwNuHTML(N)+'</div>';m.innerHTML=h;document.body.appendChild(m);return;}
   if(N.U.length){h+='<div style="font-size:12px;color:#9ab;margin:0 0 6px">① '+T('どの'+nm+'？（シナリオから）')+'</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">';
     var last=null;N.U.forEach(function(u,i){var L=NM_SIDE_LBL[u.sd]||{},on=N.sel===i;if(u.nat!==last){last=u.nat;h+='<div style="flex-basis:100%;font-size:11px;font-weight:900;color:'+(L.col||'#9fb2c8')+';margin-top:2px">'+(L.nm||'')+' '+(NAT_FULL_LBL[u.nat]||u.nat)+'</div>';}
       h+='<button class="b" style="margin:0;min-height:48px;padding:2px 12px;display:inline-flex;align-items:center;gap:8px;font-size:14px;'+(on?'background:#2f6f9a;border-color:#7ec8e3;color:#fff':'')+'" onclick="NM_NU.sel='+i+';if(nmHqLite())nmNuGo(1);else nmNuDraw()">'+(on?'✓ ':'')+nmCtrChip(u.k==='inf'?nmCtrUid(u.nat,u.id):u.id,40)+'<b>'+u.nm+'</b></button>';});
@@ -40358,7 +40372,7 @@ function nmLwList(eh){var d=nmGeList(eh.grp),nat=d.nat,sc=null;try{sc=scenarioLa
   if(pf&&!nmPfOff()&&(nmGeList(eh.grp).items||[]).some(function(x){return !x.broken;}))L.push({w:pf,own:false,pf:1});
   Object.keys(own).forEach(function(id){if(L.some(function(x){return x.w.id===id;}))return;var w=LATW_DATA.filter(function(q){return q.id===id;})[0];if(w&&!w.oneShot&&w.th)L.push({w:w,own:true,cap:true});}); /* v826: 鹵獲した軽対戦車兵器 */
   return L;}
-function nmLwOpen(n,sd){var eh=nmUnitAt(nmHexOfNode(n),sd);if(!eh||!eh.grp)return;var L=nmLwList(eh);NM_LW={n:n,sd:sd,slot:eh.grp,wid:L.length?(L.filter(function(x){return x.own;})[0]||L[0]).w.id:null,tgt:null,ph:(S.turn&&{pfph:'PFPh',mph:'DFF',dfph:'DFPh',afph:'AFPh'}[S.turn.phase])||'PFPh',a:0,b:0,res:null,c1:0,c2:0,res2:null};NM_RM_SUB='lw';btRmReopen(n);}
+function nmLwOpen(n,sd){var eh=nmUnitAt(nmHexOfNode(n),sd);if(!eh||!eh.grp)return;var L=nmLwList(eh),pre=NM_LW_PRE;NM_LW_PRE=null;NM_LW={n:n,sd:sd,slot:eh.grp,wid:(pre&&L.some(function(x){return x.w.id===pre;}))?pre:L.length?(L.filter(function(x){return x.own;})[0]||L[0]).w.id:null,tgt:null,ph:(S.turn&&{pfph:'PFPh',mph:'DFF',dfph:'DFPh',afph:'AFPh'}[S.turn.phase])||'PFPh',a:0,b:0,res:null,c1:0,c2:0,res2:null};NM_RM_SUB='lw';btRmReopen(n);}
 function nmLwRe(n){NM_RM_SUB='lw';btRmReopen(n);}
 function nmLwSet(n,k,v){var W=NM_LW;if(k==='tgt'||k==='a'||k==='b'||k==='wid'){W.wrecked=0;W.wrC=null;}W[k]=v;if(k==='tgt'||k==='wid')W.pf=null;if(k!=='c1'&&k!=='c2'){if(k!=='a'&&k!=='b'){W.a=0;W.b=0;}W.res=null;}W.c1=k==='c1'||k==='c2'?W.c1:0;if(k!=='c1'&&k!=='c2')W.c2=0;W.res2=null;
   if(k==='tgt'&&v!=null){var A=BTG.nodes[W.n],T0=BTG.nodes[v];S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB={x:T0.x,y:T0.y};try{LosRunPixel();}catch(e){}}nmLwRe(n);}
