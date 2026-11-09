@@ -39150,7 +39150,7 @@ function nmRtmEd(){var M=NM_RTM,p=document.getElementById('nmRtmEd'),e=nmRtmSelE
   p.innerHTML=h;
   var pw=430,ph=p.offsetHeight||260,f=nmRtmFree(pw,ph,cr);p.style.left=f.x+'px';p.style.top=f.y+'px';if(!p._dr){p._dr=1;nmRtmDrag(p,'nmRtmEdPos');}else{try{nmRtmDragPut(p,'nmRtmEdPos');}catch(e){}}if(p._z)p.style.zIndex=String(p._z);}
 function nmRtmUnpick(){var M=NM_RTM;if(!M)return;M.pick=null;try{Draw();}catch(e){}nmRtmBanner();}
-function nmRtmMode(m){var M=NM_RTM;if(!M)return;M.mode=m;nmRtmBanner();}
+function nmRtmMode(m){var M=NM_RTM;if(!M)return;M.mode=m;try{Draw();}catch(e){}nmRtmBanner();} /* v966: 「経路」に切り替えた時に地図を描き直す(いけないヘクスを暗く。以前は次に地図が描かれるまで前の表示のままだった) */
 function nmRtmMake(C,H,sd){var slot=nmGeFreeSlot();if(!slot){btToast('空いている編成がありません');return null;}var ob=nmSuOb(C.nat),pid=null;
   ob.filter(function(x){return (x.kind==='mmc'||x.kind==='smc')&&C.cs[x.kind+'|'+x.id];}).forEach(function(x){for(var i=0;i<C.cs[x.kind+'|'+x.id];i++){nmGeAddCore(slot,C.nat,x.kind,x.label);var its=nmGeList(slot).items;pid=its.length?its[its.length-1].pid:pid;}});
   (nmGeList(slot).items||[]).forEach(function(x){x.broken=true;x.pinned=false;});try{nmGeSync(slot);}catch(q){}
