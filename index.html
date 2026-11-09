@@ -40092,21 +40092,19 @@ function nmRrRallyItems(n){var Q=NM_RR,R=NM_RL,it=[],sg=function(v){return (v>=0
     if(Q.mode==='ldr'&&ldrs.length)it.push({row:1,ic:'sel',t:T('指揮官の能力'),btns:ldrs.map(function(u){var c=(nmMcUnitMor({nat:Q.nat,kind:'smc',label:u.label})||{}).cmd||0;var cc=nmCtrChip(nmCtrUid(Q.nat,u.label),34),tx=u.label+' ('+sg(c)+')';return [(Q.ldr===u.label?'✓':'')+(cc?'<span style="display:inline-flex;align-items:center;gap:6px">'+cc+'<span>'+tx+'</span></span>':tx),"nmRrLdrSet('"+u.label+"')"];})});
     if(!ldrs.length)it.push({ic:'info',t:'<span style="font-size:12px;color:#9ab">'+T('このシナリオに指揮官がいないため自己回復のみ')+'</span>'});}
   else it.push({ic:'info',t:'<span style="font-size:12px;color:#9ab">'+T('指揮官の回復は自己回復(+1)')+'</span>'});
-  it.push({row:1,ic:'info',t:T('④ 林・建物内'),btns:[[(Q.ter?'':'✓')+T('なし'),"nmRrTer(0)"],[(Q.ter?'✓':'')+'−1',"nmRrTer(1)"]]});
-  it.push({row:1,ic:'info',t:T('DM状態'),btns:[[(R.dm?'':'✓')+T('なし'),"nmRlSet("+n+",'dm',false)"],[(R.dm?'✓':'')+'+4',"nmRlSet("+n+",'dm',true)"]]});
+  it.push({row:1,ic:'info',t:T('④ 修正'),btns:[[(Q.ter?'✓':'')+T('林・建物内 −1'),"nmRrTer("+(Q.ter?0:1)+")"],[(R.dm?'✓':'')+T('DM +4'),"nmRlSet("+n+",'dm',"+(!R.dm)+")"]]}); /* v997 sample: 林・建物とDMを1行(押すたびにON/OFF) */
   var ssrB=[];try{if(ssrCommissarOn())ssrB.push([(R.comm?'✓':'')+T('政治委員と同じヘクス'),"nmRlSet("+n+",'comm',"+(!R.comm)+")"]);var sl=rallySsrBmLabel();if(sl)ssrB.push([(R.ssrBm?'✓':'')+sl.replace(/^SSR：/,''),"nmRlSet("+n+",'ssrBm',"+(!R.ssrBm)+")"]);}catch(e){}
   if(ssrB.length)it.push({row:1,ic:'info',t:'SSR',btns:ssrB});
   var mode=R.mode[x.pid]||'self',c=nmRlCalc(x,its,mode),so=nmRlSelfOk(x);it.push({sep:1});
-  it.push({ic:'sel',img:vaslCtrHTML('u:'+(x.nat||Q.nat)+'|'+x.label,30)||'',t:'<span style="font-size:20px;font-weight:800;color:#f0b030">DR '+(c.bm-c.drm)+' '+T('以下で回復')+'</span>'+(r0?'　→ DR'+r0.dr+'='+r0.fin+' <b style="color:'+(r0.st==='ok'?'#3ca878':'#ff6060')+'">'+r0.txt+'</b>':''),sub:x.label+'　'+T('混乱士気')+c.bm+'　DRM'+sg(c.drm)+(c.dl.length?'('+c.dl.join('・')+')':'')});
+  it.push({ic:'sel',img:vaslCtrHTML('u:'+(x.nat||Q.nat)+'|'+x.label,30)||'',t:'<span style="display:inline-block;width:fit-content;padding:3px 14px;border:1.5px solid #c8a032;border-radius:10px;background:#1d1a12;color:#ffd070;font-size:19px;font-weight:800">DR '+(c.bm-c.drm)+' '+T('以下で回復')+'</span>'+(r0?'　→ DR'+r0.dr+'='+r0.fin+' <b style="color:'+(r0.st==='ok'?'#3ca878':'#ff6060')+'">'+r0.txt+'</b>':''),sub:x.label+'　'+T('混乱士気')+c.bm+'　DRM'+sg(c.drm)+(c.dl.length?'('+c.dl.join('・')+')':'')});
   if(r0&&r0.promo)nmPromoRows(it,n,'rl',x.pid,r0.promo);
   if(!r0&&mode==='self'&&!so.ok)it.push({ic:'info',t:'<span style="font-size:12px;color:#ffb040">'+so.why+'</span>'});
   /* v997 sample(ダルマ「回復 ダイス選択できない 使いやすくする」): ほかの判定と同じく 赤・白のダイスを選んで(選んだ目は金色)「判定する」。選ばなければ自動で振る(オートダイスOFFの時は選ぶ) */
   if(!r0){var da=R.da||0,db=R.db||0,thr=c.bm-c.drm;
-    it.push({ic:'info',t:T('⑤ 判定')+' <span style="font-size:12px;color:#9ab">'+T(nmAdOn()?'(出目を選ぶ・選ばなければ自動で振る)':'(出目を選ぶ)')+'</span>'});
+    it.push({ic:'',t:'<span style="font-size:12px;color:#9fb2c8">⑤ '+T(nmAdOn()?'出目を選ぶ(選ばなければ自動で振る)':'出目を選ぶ')+'</span>'});
     [['da','赤','#ff6060'],['db','白','#e8eef4']].forEach(function(d){var cv=R[d[0]]||0;it.push({row:1,cmp:1,ic:'',t:'<span style="color:'+d[2]+'">'+T(d[1])+'</span>',btns:[1,2,3,4,5,6].map(function(v){return [(cv===v?'✓':'')+v,"nmRlDie("+n+",'"+d[0]+"',"+v+")"];})});});
     var both=da&&db,can=both||nmAdOn();
     it.push({row:1,ic:'fire',t:both?'<span style="font-size:13px">'+T('赤')+da+'＋'+T('白')+db+'＝<b style="color:'+(da+db<=thr?'#3ca878':'#ff6060')+'">'+(da+db)+'</b> '+(da+db<=thr?T('回復'):T('失敗'))+'</span>':'',btns:[['🎲 '+T('判定する'),can?"nmRlGo("+n+","+x.pid+")":null]]});}
-  it.push({sep:1});it.push({ic:'x',t:T('閉じる'),f:"BtRmClose()"});
   return it;}
 function nmRrRows(it,n){var Q=NM_RR;if(!Q)return;var ns=nmSuNats();
   it.push({row:1,ic:'sel',t:'国籍',btns:ns.map(function(k){return [(Q.nat===k?'✓':'')+nmNatLbl(k),"nmRrNat('"+k+"')"];})});
