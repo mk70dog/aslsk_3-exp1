@@ -35615,9 +35615,9 @@ function nmRtPlans(n0,E,mfMax,okTo){var sr=nmRtSearch(n0,E,mfMax),nearE=function
       if(!hit.length)return;var had=alts[q]&&set.indexOf(q)>=0?alts[q].map(function(P){return P.join(',');}):[];var add=hit.filter(function(P){return had.indexOf(P.join(','))<0;});if(set.indexOf(q)<0){set.push(q);alts[q]=[];}if(add.length&&alts[q].length<12){alts[q]=alts[q].concat(add).slice(0,12);ch=1;}});}
     set.forEach(function(n){var A=alts[n]||[];if(A.length){A.sort(function(x,y){return cost(x)-cost(y);});if(!pth[n]||cost(A[0])<cost(pth[n]))pth[n]=A[0].slice();}});return set;}; /* 2つの考え方(A・B)は別々に計算し、同じヘクスはMFの少ない経路を使う */
   var near=function(L){if(!L.length)return [];var m=Math.min.apply(null,L.map(function(n){return sr.dist[n];}));return L.filter(function(n){return sr.dist[n]===m;});};
-  var sel=[];[cov,cov.filter(function(n){return !ign(n);})].forEach(function(L){var g=near(L);grow(g).forEach(function(n){if(sel.indexOf(n)<0)sel.push(n);});});
+  var sel=[],base=[];[cov,cov.filter(function(n){return !ign(n);})].forEach(function(L){var g=near(L);g.forEach(function(n){if(base.indexOf(n)<0)base.push(n);});grow(g).forEach(function(n){if(sel.indexOf(n)<0)sel.push(n);});});
   var L=(sel.length?sel:ks).slice().sort(function(a,b){return sel.length?((sr.dist[a]-sr.dist[b])||(nearE(b)-nearE(a))||(BTG.nodes[b].tem-BTG.nodes[a].tem)):((nearE(b)-nearE(a))||(BTG.nodes[b].tem-BTG.nodes[a].tem)||(sr.dist[a]-sr.dist[b]));}).slice(0,sel.length?8:4);
-  var out=L.map(function(to){var P=(pth[to]||sr.path[to]||[to]).slice();var mf=0,x=n0;P.forEach(function(h){var ic=btInfCost(x,h);mf+=ic?ic.c:0;x=h;});return {to:to,path:P,mf:mf,cover:sel.length>0,low:false,ign:sel.length>0&&ign(to)};});out.all=sel.length?sel.slice():null;return out;}
+  var out=L.map(function(to){var P=(pth[to]||sr.path[to]||[to]).slice();var mf=0,x=n0;P.forEach(function(h){var ic=btInfCost(x,h);mf+=ic?ic.c:0;x=h;});return {to:to,path:P,mf:mf,cover:sel.length>0,low:false,ign:sel.length>0&&ign(to)};});out.all=sel.length?sel.slice():null;out.base=base.slice();return out;}
 function nmRtEh(){var R=NM_RT;return R?nmAllAt(nmHexOfNode(R.n),R.sd).filter(function(e){return e.grp===R.slot&&!e.veh&&!e.gun;})[0]||null:null;}
 function nmRtOpen(n,sd){var eh=nmUnitAt(nmHexOfNode(n),sd);if(!eh||!eh.grp)return;NM_RT={n:n,sd:sd,slot:eh.grp,done:null};NM_RM_SUB='rout';btRmReopen(n);}
 function nmRtCalc(){var R=NM_RT,E=nmRtEnemies(R.sd),its=nmGeList(R.slot).items||[],br=its.filter(function(x){return x.broken;});
@@ -39087,10 +39087,10 @@ function nmRtmNat(k){var M=NM_RTM;if(!M||M.step!==1)return;M.nat=k;M.sd=nmSuSide
    行き先=一番近い林・建物(無視する/しない両方)とそこから続けて入れる林・建物。行き先に入ったら、その先は行き先の林・建物だけ。林・建物が6MF以内に無ければ、届くヘクスはどこでもよい(SK4 3.6) */
 function nmRtLegal(C){var R=NM_RT;if(!R)return null;var n0=R.n,E=C.E,mf=C.mf,all=C.plans.all,ok={},dest={};ok[n0]=1;C.low.forEach(function(P){ok[P.to]=1;});
   if(!all){var sr=nmRtSearch(n0,E,mf);Object.keys(sr.dist).forEach(function(k){ok[k]=1;});return {ok:ok,dest:null};}
-  all.forEach(function(d){dest[d]=1;});var occ={};E.forEach(function(e){occ[e.n]=1;});
+  all.forEach(function(d){dest[d]=1;});var base={};(C.plans.base||all).forEach(function(d){base[d]=1;}); /* 続けて入る林・建物(一番近いものでない行き先)は、一番近い林・建物に入ってからだけ */var occ={};E.forEach(function(e){occ[e.n]=1;});
   var dfs=function(path,cost,a,seenM,inD){BTG.nodes[a].nb.forEach(function(b){var ic=btInfCost(a,b);if(!ic||occ[b]||b===n0||path.indexOf(b)>=0)return;var nc=cost+ic.c;if(nc>mf+1e-9)return;
       for(var i=0;i<E.length;i++){if((seenM&(1<<i))&&btDist(b,E[i].n)<btDist(a,E[i].n))return;if(btDist(a,E[i].n)<=1&&btDist(b,E[i].n)<=1)return;}
-      if(inD&&!dest[b])return;var m2=seenM;E.forEach(function(e,i){if(btFLOS(b,e.n).ok)m2|=(1<<i);});var np=path.concat([b]);
+      if(inD&&!dest[b])return;if(!inD&&dest[b]&&!base[b])return;var m2=seenM;E.forEach(function(e,i){if(btFLOS(b,e.n).ok)m2|=(1<<i);});var np=path.concat([b]);
       if(dest[b])np.forEach(function(h){ok[h]=1;});dfs(np,nc,b,m2,inD||!!dest[b]);});};
   var m0=0;E.forEach(function(e,i){if(btFLOS(n0,e.n).ok)m0|=(1<<i);});dfs([],0,n0,m0,false);return {ok:ok,dest:dest};}
 function nmRtmLegal(){var M=NM_RTM;if(!M||!NM_RT)return null;var C=nmRtCalc(),key=NM_RT.n+'|'+C.mf+'|'+C.E.map(function(e){return e.n+':'+e.go+':'+e.rng+':'+(e.caF==null?'':e.caF)+':'+(e.rtFac||0);}).join(',')+'|'+Object.keys(M.mk||{}).join(',')+'|'+(C.plans.all||[]).join(',');if(M.legalC&&M.legalC.key===key)return M.legalC.v;var L=nmRtLegal(C);M.legalC={key:key,v:L};return L;}

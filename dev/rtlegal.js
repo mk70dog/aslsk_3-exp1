@@ -7,5 +7,5 @@ console.log(await p.evaluate(async()=>{var N=BTG.nodes,id=nm=>N.findIndex(n=>n.n
  var o={plans:C.plans.map(q=>N[q.to].nm).join(','),all:(C.plans.all||[]).map(q=>N[q].nm).join(','),ok:Object.keys(LG.ok).length,reach:Object.keys(nmRtSearch(NM_RT.n,C.E,C.mf).dist).length};
  // 行き先へ行ってからさらに外へ
  var d=C.plans[0];var msgs=[];var oT=btToast;btToast=function(m){msgs.push(m);};d.path.forEach(h=>nmRtmManTap(h));var last=d.path[d.path.length-1];var out=N[last].nb.find(q=>!LG.dest[q]&&btInfCost(last,q));if(out!=null)nmRtmManTap(out);
- var bad=N.findIndex((z,zi)=>!LG.ok[zi]&&btDist(zi,NM_RT.n)===1&&btInfCost(NM_RT.n,zi));btToast=oT;o.msgs=msgs.join(' / ');o.pick=NM_RTM.pick&&NM_RTM.pick.path.map(h=>N[h].nm).join('>');try{Draw();}catch(e){}nmRtmBanner();return JSON.stringify(o);}));
+ var bad=N.findIndex((z,zi)=>!LG.ok[zi]&&btDist(zi,NM_RT.n)===1&&btInfCost(NM_RT.n,zi));btToast=oT;o.msgs=msgs.join(' / ');o.okHex=Object.keys(LG.ok).map(k=>N[k].nm).join(',');o.base=(C.plans.base||[]).map(q=>N[q].nm).join(',');o.pick=NM_RTM.pick&&NM_RTM.pick.path.map(h=>N[h].nm).join('>');try{Draw();}catch(e){}nmRtmBanner();return JSON.stringify(o);}));
 await p.waitForTimeout(800);await p.screenshot({path:'/tmp/sm/rtlegal.png'});console.log('err',Er.length,Er.slice(0,2));await b.close();})();
