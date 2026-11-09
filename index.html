@@ -40389,7 +40389,7 @@ function nmVfWhatNm(w){if(!w)return '';if(/^i:/.test(w))return w.slice(2);var v=
 /* v960(ダルマ報告「シナリオの相手から選ぶ→マップに切り替わるまでかなり時間がかかる」): 撃てるヘクス(LOS)の計算を少しずつ行い、地図はすぐ表示。
    近いヘクスから順に緑にし、同じ地点からの結果は覚えておく(2回目からはすぐ)。計算は従来と同じ精密なLOS(losCheckLOSGlobal) */
 /* sample(ダルマ指示「グリーンが見えにくい サンプルx4」): 撃てるヘクスの見せ方。window.__pkSty 0=従来 1=A(撃てないヘクスを暗く) 2=B(水色の太枠) 3=C(マゼンタ) 4=D(暗く+黄緑の太枠) */
-function nmPickHexSVG(P,dl){var st=window.__pkSty||0,h='',ok={};P.list.forEach(function(x){ok[x.tn]=1;});
+function nmPickHexSVG(P,dl){var st=window.__pkSty==null?4:window.__pkSty, /* v967: 既定=案D(ダルマ「d」) */h='',ok={};P.list.forEach(function(x){ok[x.tn]=1;});
   if(st===1||st===4){var done=!P.busy,no={};(P.no||[]).forEach(function(t){no[t]=1;});BTG.nodes.forEach(function(N,i){if(ok[i]||i===P.from)return;var out=P.maxD!=null&&btDist(P.from,i)>P.maxD;if(!(done||no[i]||out))return;h+='<polygon points="'+btHexPoly(i,dl,1.0)+'" fill="#0b0d12" fill-opacity="0.62"/>';});}
   P.list.forEach(function(x){var H=nmHexOfNode(x.tn);if(!H)return;var g=losColRowToGlobalCanon(H.boardId,H.col,H.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl),pts=losHexPolygonPoints(d.x,d.y,losBoardRotById(H.boardId));
     if(st===1)h+='<polygon points="'+pts+'" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.5"/>';
