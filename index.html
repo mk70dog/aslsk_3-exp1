@@ -40056,13 +40056,18 @@ function nmRrPick(kind,label){var Q=NM_RR;if(!Q)return;if(Q.sel&&Q.sel.label===l
 function nmRrModeSet(m){var Q=NM_RR;if(!Q||!Q.sel)return;Q.mode=m;if(m==='ldr'&&!Q.ldr){var ls=nmRrUnits(Q.nat).filter(function(u){return u.kind==='smc';});Q.ldr=ls.length?ls[0].label:null;if(!Q.ldr)Q.mode='self';}nmRrRe();}
 function nmRrLdrSet(l){var Q=NM_RR;if(!Q)return;Q.ldr=l;Q.mode='ldr';nmRrRe();}
 function nmRrTer(v){var Q=NM_RR;if(!Q)return;Q.ter=v?1:0;NM_RM_SUB='rally';btRmReopen(Q.n);}
+function nmRrUnitCss(){if(document.getElementById('nmRrUnitCss'))return;var st=document.createElement('style');st.id='nmRrUnitCss';var R='html:root:root:root:root #btRm .rmIt.rmRow:has(.rrU)';
+  st.textContent=R+'{flex-wrap:nowrap!important;align-items:flex-start!important}'+R+' .rmTx{flex:0 0 72px!important;min-width:72px!important;padding-top:8px}'+R+' .rmBtns{flex:1 1 auto!important;display:flex!important;flex-wrap:wrap!important;justify-content:flex-start!important;gap:6px!important;background:none!important;border:0!important;box-shadow:none!important;padding:0!important}'+R+' .rmBtns>button.rmB{border-radius:8px!important;border:1px solid #39414f!important;height:auto!important;min-height:38px!important;padding:2px 10px 2px 4px!important;font-size:13px!important}'+R+' .rmIc{display:none!important}';
+  document.head.appendChild(st);}
 function nmRrRallyItems(n){var Q=NM_RR,R=NM_RL,it=[],sg=function(v){return (v>=0?'+':'')+v;},ns=nmSuNats(),its=nmGeList('_T').items,x=its[0];
   it.push({ic:'back',t:T('← 戻る'),sub:T('回復'),f:"NM_RR=null;NM_RL=null;btRmReopen("+n+")"});it.push({sep:1});
   it.push({row:1,ic:'sel',t:T('① 国籍'),btns:ns.map(function(k){return [(Q.nat===k?'✓':'')+nmNatLbl(k),"nmRrNat('"+k+"')"];})});it.push({sep:1});
   it.push({ic:'info',t:'<span style="font-size:12px;color:#9ab">'+T('② 回復するユニット(シナリオの駒。タップで選ぶ)')+'</span>'});
-  var G=nmRrGroups(Q.nat),pk=function(kind,l){var c=nmCtrChip(nmCtrUid(Q.nat,l),34);return [(Q.sel&&Q.sel.label===l?'✓':'')+(c?'<span style="display:inline-flex;align-items:center;gap:6px">'+c+'<span>'+l+'</span></span>':l),"nmRrPick('"+kind+"','"+l.replace(/'/g,"\\'")+"')"];}; /* sample(ダルマ指示「実カウンターに変更する」回復) */
-  [['分隊',G.base],['クラス低下',G.elr],['半減',G.cas]].forEach(function(r){if(r[1].length)it.push({row:1,ic:'sel',t:T(r[0]),btns:r[1].map(function(l){return pk('mmc',l);})});});
-  var sm=nmRrUnits(Q.nat).filter(function(u){return u.kind==='smc';});if(sm.length)it.push({row:1,ic:'sel',t:T('指揮官'),btns:sm.map(function(u){return pk('smc',u.label);})});
+  var G=nmRrGroups(Q.nat),pk=function(kind,l){var c=nmCtrChip(nmCtrUid(Q.nat,l),28);return [(Q.sel&&Q.sel.label===l?'✓':'')+(c?'<span style="display:inline-flex;align-items:center;gap:6px">'+c+'<span>'+l+'</span></span>':l),"nmRrPick('"+kind+"','"+l.replace(/'/g,"\\'")+"')"];}; /* sample(ダルマ指示「実カウンターに変更する」回復) */
+  /* v990 sample(ダルマ「スクロールなしで画面表示・整理して見やすくする」回復): ユニットのボタンを左寄せ・1つずつ離して並べる(nmRrUnitCss)、カウンター28px */
+  try{nmRrUnitCss();}catch(e){}
+  [['分隊',G.base],['クラス低下',G.elr],['半減',G.cas]].forEach(function(r){if(r[1].length)it.push({row:1,ic:'',t:'<span class="rrU" style="font-size:12px;color:#9fb2c8">'+T(r[0])+'</span>',btns:r[1].map(function(l){return pk('mmc',l);})});});
+  var sm=nmRrUnits(Q.nat).filter(function(u){return u.kind==='smc';});if(sm.length)it.push({row:1,ic:'',t:'<span class="rrU" style="font-size:12px;color:#9fb2c8">'+T('指揮官')+'</span>',btns:sm.map(function(u){return pk('smc',u.label);})});
   if(!Q.sel||!x){it.push({sep:1});it.push({ic:'info',t:'<span style="font-size:12px;color:#9ab">'+T('回復するユニットを選んでください')+'</span>'});it.push({ic:'x',t:T('閉じる'),f:"BtRmClose()"});return it;}
   it.push({sep:1});
   var r0=R.res[x.pid],ldrs=sm.filter(function(u){return u.label!==x.label;});
