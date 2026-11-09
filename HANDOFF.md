@@ -2,13 +2,12 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 返事待ち: sample-ijdedup(スポット判定1画面目: 車両の主砲/機関銃が同じカウンター2つに見えていた→1つにまとめ「撃つ武器」行で選ぶ。①②の見出しと国籍を1行・カウンターを選択を低く→スクロールなし)
+- v1028: sample-dcfit・sample-fmpos・sample-ijdedup を反映。返事待ちなし。未対応: 古いテスト aud/dcr/vft の修正
+
 
 - v1027: sample-taphex 反映(置くヘクスをタップ→0.45秒オレンジ #ff8c1a で塗ってからパネル。NM_TAPHEX/nmTapHexSVG)。返事待ち: sample-dcfit, sample-fmpos
 
-- 返事待ち: sample-fmpos(砲撃→地図で方向: パネルがA・B両方を避ける nmIjFmPts / ドラッグ位置を NM_FM_MOVED で保つ・汎用ドラッグ(translate)と二重にしない)
 
-- 返事待ち: sample-dcfit(爆薬①置くをスクロールなし: 2列時は六角210px・地形で選ぶを右列へ)
 
 - v1026: sample-bog(ボグ判定の車両ボタン=実カウンターのみ)・sample-vfsw(砲撃→地図で方向: 設定する車両 A/B 切替 nmVfFmSwItem/nmVfFmSw)を反映。返事待ちなし。未対応: 古いテスト aud/dcr/vft の修正
 
