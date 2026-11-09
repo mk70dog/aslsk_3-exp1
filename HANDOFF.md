@@ -2,7 +2,9 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 返事待ち: sample-respop(結果の画像ポップアップ nmResImg: どこをタップしてもすぐ消す・外のタップは下に通さない nmResTapArm)。質問中: 軽対戦車兵器の選択にPF(ルール4.4.2の独軍固有)を残すか、OBの兵器だけにするか
+- v1029: PF(nmPfWep)は4.4.2どおり 1943/10以降 かつ 敵(独軍以外)のAFVがシナリオにいる時 または SSRにPFの記載がある時だけ。S24・S26は出る、S20・S23(敵AFVなし)は出ない。PFはシナリオカードのOBには載らない固有SW
+
+- 返事待ち: sample-respop(結果の画像ポップアップ nmResImg: どこをタップしてもすぐ消す・外のタップは下に通さない nmResTapArm)
 
 - v1028: sample-dcfit・sample-fmpos・sample-ijdedup を反映。返事待ちなし。未対応: 古いテスト aud/dcr/vft の修正
 
