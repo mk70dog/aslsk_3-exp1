@@ -39013,21 +39013,16 @@ function nmRtmPen(){var M=NM_RTM,p=document.getElementById('nmRtmPen');if(!M||M.
   if(NM_RTM_PT==='n'){var li=function(a){return '<div style="font-size:12px;line-height:1.55">'+a.map(function(t){return '・'+T(t);}).join('<br>')+'</div>';};
     h+='<b style="color:#ff8080;font-size:14px">⚠ '+T('注意')+'</b>'+li(['DMのない混乱ユニットは潰走しなくてよい(敵に隣接・阻止される開豁地なら必ず潰走)','敵から遠ざからない林・建物は無視してよい','潰走できなければ除去'])
     +'<div style="margin-top:6px;padding-top:5px;border-top:1px solid #334;color:#ffd040;font-size:12px">'+T('アプリはDMを判定しません。敵の射程・向きは敵をタップして設定')+'</div>';}
-  else if(NM_RTM_PT==='u'){
-    h+='<b style="color:#ff8080;font-size:14px">⚠ '+T('阻止できる敵ユニット')+'</b>'
-    +row('○','#6fe08a',T('統制状態で、PINされていない'))
-    +row('○','#6fe08a',T('潰走ユニットが入る開豁地ヘクスにLOSが通り、通常射程内'))
-    +row('○','#6fe08a',T('そのヘクスへ1火力以上で撃てる(砲は17ヘクス未満で命中判定できる)'))
-    +row('×','#ff6060',T('白兵戦(メレー)中'))
-    +row('×','#ff6060',T('火力が半分になる敵、射撃にプラスの修正がつく敵')+'<div style="color:#9ab;font-size:12px;line-height:1.5;margin-top:2px">'+[T('CX(全力移動で疲れている)ユニット'),T('機関銃を1人で撃つ指揮官(分隊と一緒でない)'),T('ハッチを閉めた(BU)車両の主砲'),T('止まらずに動いている車両(Motion)'),T('潰走先が砲の向き(射界)の外にある砲・主砲')].map(function(t){return '・'+t;}).join('<br>')+'</div>')
-    +'<div style="margin-top:6px;padding-top:5px;border-top:1px solid #334;color:#9ab;font-size:11px">'+T('他の射撃を使い切っていても阻止できる。射程と砲の向きは敵ごとに設定(敵をタップ)')+' <span style="color:#678">(SK4 3.6)</span></div>';}
+  else if(NM_RTM_PT==='u'){ /* sample(ダルマ指示「阻止されたら 阻止できる敵 も同じように整理」): 重要なことに絞る */
+    h+='<b style="color:#ff8080;font-size:14px">⚠ '+T('阻止できる敵')+'</b>'
+    +row('○','#6fe08a',T('統制・PINなしで、LOSが通り通常射程内'))
+    +row('×','#ff6060',T('白兵戦中・CX・Motionの車両・向きの外の砲'));}
   else{
-    h+='<b style="color:#ff8080;font-size:14px">⚠ '+T('阻止されたら NMC(士気チェック)')+'</b>'
-    +'<div style="color:#9ab;font-size:11px">'+T('一緒に潰走する指揮官がいれば、その修正を使える')+'</div>'
-    +row('合格','#6fe08a',T('そのまま潰走を続ける'))
-    +row('PIN','#ffd040',T('ここで止まる。敵に隣接していたら除去'))
-    +row('失敗','#ff6060',T('損耗: 分隊→半個分隊(潰走を続けられる)/半個分隊・指揮官→除去。一緒の指揮官も除去'))
-    +'<div style="margin-top:6px;padding-top:5px;border-top:1px solid #334;color:#9ab;font-size:11px">'+T('阻止されないのは: 匍匐後退した時/間に妨害がある時/潰走側が高さの有利を受ける時。同じヘクスで阻止されるのは1回だけ')+' <span style="color:#678">(SK4 3.6)</span></div>';}
+    h+='<b style="color:#ff8080;font-size:14px">⚠ '+T('阻止されたら NMC(混乱状態の士気)')+'</b>'
+    +row('合格','#6fe08a',T('潰走を続ける'))
+    +row('PIN','#ffd040',T('止まる(敵に隣接なら除去)'))
+    +row('失敗','#ff6060',T('損耗(一緒の指揮官も除去)'))
+    +'<div style="margin-top:6px;padding-top:5px;border-top:1px solid #334;color:#9ab;font-size:12px">'+T('匍匐・妨害・高所の有利があれば阻止されない')+'</div>';}
   p.innerHTML=h;document.body.appendChild(p);nmRtmDrag(p,'nmRtmPenPos');}
 function nmRtmBanner(){var M=NM_RTM;if(!M)return;var b=document.getElementById('nmRtmBn');if(M.step==='u'){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='nmRtmBn';b.setAttribute('style','position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:9400;width:max-content;max-width:94vw;background:#0e1620ee;border:1px solid #4a5566;border-radius:10px;padding:5px 10px;color:#dfe8f0;font:13px/1.7 AppFont,AppJP,monospace;box-shadow:0 6px 20px #000b;touch-action:none');document.body.appendChild(b);nmRtmDrag(b,'nmRtmPos');}
   var bt=function(t,f,pri){return '<button class="b sm" style="margin:0;height:34px;padding:0 12px;font-weight:800'+(pri?';background:#e0a830;color:#111;border-color:#e0a830':'')+'" onclick="'+f+'">'+T(t)+'</button>';},h='',nk=Object.keys(M.mk||{}).length;
