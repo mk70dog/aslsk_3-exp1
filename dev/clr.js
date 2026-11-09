@@ -3,8 +3,8 @@ await p.goto('file://'+__dirname+'/../index.html',{timeout:180000});await p.wait
 const which=process.argv[3];
 const r=await p.evaluate(async(which)=>{const W=ms=>new Promise(r=>setTimeout(r,ms));S.scen=S.scen||{};S.scen.sel='S24';for(var i=0;i<4;i++){try{Draw();}catch(e){}await W(1500);}await btEnsureGraph();var o=[];
 try{if(which==='rr'){nmRrOpen('rally');await W(1500);nmRrNat('GER');await W(500);nmRrPick('mmc',nmRrGroups('GER').base[0]);await W(800);
-  var it=document.querySelector('#btRm .rmIt');it.style.position='relative';var bt=document.createElement('button');bt.className='rmB';bt.textContent='↺ クリア';bt.style.cssText='position:absolute;right:16px;top:50%;transform:translateY(-50%);height:36px;padding:0 14px';it.appendChild(bt);}
+  var it=document.querySelector('#btRm .rmIt');var c=it.cloneNode(true);var tx=c.querySelector('.rmTx')||c;tx.innerHTML=tx.innerHTML.replace('←','↺').replace('戻る','クリア').replace(/回復(?=<|$)/,'選び直す');var w=document.createElement('div');w.style.cssText='display:flex;width:100%';it.parentNode.insertBefore(w,it);it.style.flex='1';c.style.flex='1';w.appendChild(it);w.appendChild(c);}
  else{nmMh2Open();await W(600);var M=NM_MH2;var ob=nmSuOb(M.nat).filter(x=>x.kind==='mmc');nmMh2Cnt(ob[0].kind+'|'+ob[0].id,1);await W(500);
-  var hb=[...document.querySelectorAll('#nmMh2 button')].find(x=>/戻る/.test(x.textContent));var bt=document.createElement('button');bt.className='b sm';bt.textContent='↺ クリア';bt.style.cssText='margin:0;height:34px';hb.after(bt);}
+  var hb=[...document.querySelectorAll('#nmMh2 button')].find(x=>/戻る/.test(x.textContent));var bt=hb.cloneNode(true);bt.innerHTML=bt.innerHTML.replace('←','↺').replace('戻る','クリア');bt.removeAttribute('onclick');hb.after(bt);}
 o.push('ok');}catch(e){o.push(String(e));}return o;},which);
 await p.waitForTimeout(400);await p.screenshot({path:process.argv[2]});console.log(E,r);await b.close();})();
