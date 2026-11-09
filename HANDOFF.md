@@ -6,7 +6,7 @@
 - v1001 済: (ダルマ「実施」sample-spl2) スポット判定を2段階に: 1画面目 nmIjSetupDraw=A・Bを実カウンターのタイル(nmIjTileChips)で選ぶ+方向+「判定へ」(nmIjStageGo)。車両・砲の主砲は共通の判定パネル nmVfOpen(戻る=nmIjStageBack、J.vfStage)、歩兵・SWなどは J.stage='old' で従来画面。車両名は nmAfvName=afvOfficialName(ユニットタブと同じ)に統一(マルチ判定含む)。
 - v1002 済: (ダルマ「実カウンターに変更する」→sample-mcctr→実施) MC・PTCの②チェックするユニットと(登録)ユニットに実カウンター画像(MutationObserverで付与。ラベルから nmCtrUid で引く、無ければそのまま)。
 - v1000 済: (ダルマ「右側の表示が埋め込みになっている…埋め込みでない表示に」→sample-spot-right→「実施」) スポット判定(車両の主砲など nmIjNvDraw)の右側: nmIjFlatCss(nmIjMjCss から呼ぶ)で #ijRes/.nvBox を display:contents にして枠・⑤修正/⑥ダイス見出し・内側スクロールをなくし、地形TEM/妨害/その他→注意書き→命中TH#(ROF・故障・命中は1行のピル)→判定する(全幅)→赤白ダイスの順(order)。.ijR:has(#ijRes .nvBox>.ijCp) の時だけ。左側④の下端が切れる件は従来どおり(未対応)。dev/sprt.js・sprt.css。
-- 返事待ち: 回復パネルのユニットをカウンターだけ(ラベルなし・大きく・サイズ統一)。サンプル=samples/sample-ctronly_1.png(現状=_0)、ブランチ sample-ctronly。
+- 返事待ち: 回復パネルのユニットをカウンターだけ(ラベルなし・大きく・サイズ統一)。ボタン枠なし・指揮官も同様(選択=金の光+下線)。サンプル=samples/sample-ctronly_1.png(現状=_0)、ブランチ sample-ctronly。
 - 返事待ち: 砲撃パネル(主砲)の注意書きに「地図で方向を設定」ボタンを追加(スポット判定と同じ仕様)。サンプル=samples/sample-vfdir.png(ブランチ sample-vfdir)。
 - v999 済: (ダルマ「ダイスボタン横幅を増やす」→サンプルA→実施) #btRm.rmFull のダイス行を全幅1行に(nmRmCompact に追記: .rmIt:has(.dsRow) を折り返し、.dsRow 100%、ボタン46px・18px)。dev/dicew.js、samples/sample-dicew-A/B/C.png。返事待ち: ダルマ「スポット判定のパネル修正は？」の意味(下の確認待ち)。
 - v998 済: バグ修正(ダルマ「グリーンの帯はなし」回復のクラス低下の行) スキン(uith=5 の data-sthov など)の .rmIt:hover/:active の背景が iPad でボタン行に残る → style#nmRowNoHov で .rmIt.rmRow の hover/active/focus を透明に(Chromium では再現せず)。
