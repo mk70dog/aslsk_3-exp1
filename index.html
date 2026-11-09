@@ -40433,7 +40433,9 @@ function nmLwPendSet(n,what){var W=NM_LW;if(!W||W.pend==null)return;var tn=W.pen
    ①「地図で撃てるヘクスを選ぶ」(LOSが通るヘクスを緑に。マーカーがあればそれ、無ければ何を撃つか選ぶ) ②「シナリオの相手から選ぶ」(車両・歩兵を選んで撃てるヘクスをタップ。判定用の仮のマーカー) */
 function nmVfFoeNats(){var V=NM_VF;if(!V)return [];var fn=null;try{fn=nmFirerNat(V.sd,V.from);}catch(e){}return nmSuNats().filter(function(k){try{return fn?nmFoeNat(fn,k):true;}catch(e){return true;}});}
 function nmVfFoeRows(n,fx){var rows=[];nmVfFoeNats().forEach(function(k){var vs=nmIjVehs(k).filter(function(o){return o.kind==='veh';}),inf=[];try{var seen={};nmSuOb(k).forEach(function(u){if(u.kind==='mmc'&&!seen[u.label]){seen[u.label]=1;inf.push(u.label);}});}catch(e){}
-  var b=vs.map(function(o){return [o.nm,fx+"("+n+",'"+o.id+"')"];}).concat(inf.map(function(l){return ['👤 '+l,fx+"("+n+",'i:"+l+"')"];}));if(b.length)rows.push({row:1,ic:'',t:'<span style="font-size:12px">'+nmNatLbl(k)+'</span>',btns:b});});return rows;}
+  /* sample(ダルマ指示「実カウンターに変更する」): シナリオの相手の車両・歩兵ボタンを実カウンター(画像が無ければ従来の文字) */
+  var ch=function(id,t){var c=nmCtrChip(id,34);return c?'<span style="display:inline-flex;align-items:center;gap:6px">'+c+'<span>'+t+'</span></span>':t;};
+  var b=vs.map(function(o){return [ch(o.id,o.nm),fx+"("+n+",'"+o.id+"')"];}).concat(inf.map(function(l){var c=nmCtrUid(k,l);return [c?ch(c,l):'👤 '+l,fx+"("+n+",'i:"+l+"')"];}));if(b.length)rows.push({row:1,ic:'',t:'<span style="font-size:12px">'+nmNatLbl(k)+'</span>',btns:b});});return rows;}
 function nmVfWhatNm(w){if(!w)return '';if(/^i:/.test(w))return w.slice(2);var v=nmAfv(w);return v?nmAfvName(v):w;}
 /* v960(ダルマ報告「シナリオの相手から選ぶ→マップに切り替わるまでかなり時間がかかる」): 撃てるヘクス(LOS)の計算を少しずつ行い、地図はすぐ表示。
    近いヘクスから順に緑にし、同じ地点からの結果は覚えておく(2回目からはすぐ)。計算は従来と同じ精密なLOS(losCheckLOSGlobal) */
