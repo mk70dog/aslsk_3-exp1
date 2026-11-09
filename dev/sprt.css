@@ -1,0 +1,22 @@
+/* スポット判定の右側: 埋め込みの枠・見出し・内側スクロールをやめて、砲撃パネルと同じ平らな行に */
+html:root:root:root:root:root:root:root:root #nmIj .ijR #ijRes .nvBox,html:root:root:root:root:root:root:root:root #nmIj .ijR .ijFt{background:none!important;border:0!important;box-shadow:none!important}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) {display:flex!important;flex-direction:column!important;overflow:visible!important}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) #ijRes,html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) #ijRes .nvBox{display:contents!important}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) #ijRes .nvBox>.ijS{display:none!important}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) #ijRes .nvBox>.ijCp{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;order:1}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) #ijRes .nvBox>.ijCp .ijRow{margin-bottom:2px!important}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) #ijRes .nvBox>.ijCp>*:not(.ijRow){margin:2px 0!important}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) #ijRes .nvBox>.ijNote{order:2;font-size:11px!important;line-height:1.3!important;margin:2px 0!important}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) #ijRes .nvBox>.nvSum{order:3;gap:3px!important;padding:6px 12px!important;margin:3px 0 0!important}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) #ijRes .nvBox .nvDim{font-size:11px!important;line-height:1.3!important;margin:0!important}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) .ijFt{order:4;margin:6px 0 0!important;padding:0!important}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) .ijFt .ijGo{position:static!important;width:100%!important;max-width:none!important;height:auto!important;min-height:0!important;margin:0!important;padding:3px 16px!important}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) .ijFt .ijGo small{display:none!important}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) #ijRes .nvBox>.ijRow:has(button[onclick*="nmIjNvDie"]){order:5;margin-top:6px!important}
+html:root:root:root:root:root:root:root:root #nmIj .ijR:has(#ijRes .nvBox>.ijCp) #ijRes .nvBox>.ijRow:has(button[onclick*="nmIjNvDie"]) ~ *{order:6}
+html:root:root:root:root:root:root:root:root #nmIj .nvChips{display:flex!important;flex-wrap:wrap!important;gap:6px!important;margin:0!important}
+html:root:root:root:root:root:root:root:root #nmIj .nvChip{display:inline-flex!important;flex-direction:row!important;align-items:baseline!important;gap:6px!important;flex:0 0 auto!important;padding:2px 12px!important;min-height:0!important;width:auto!important;border-radius:999px!important}
+html:root:root:root:root:root:root:root:root #nmIj .nvChip .nvChL::after{content:":"}
+html:root:root:root:root:root:root:root:root #nmIj .nvChip .nvChL,html:root:root:root:root:root:root:root:root #nmIj .nvChip .nvChS{font-size:12px!important}
+html:root:root:root:root:root:root:root:root #nmIj .nvChip b{font-size:15px!important}
+html:root:root:root:root:root:root:root:root #nmIj .nvChip:nth-child(-n+2) .nvChS{display:none!important}

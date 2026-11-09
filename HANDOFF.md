@@ -1,8 +1,10 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-09 (main=v999)
+- 最終更新: 2026-11-09 (main=v1000)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
+- v1000 済: (ダルマ「右側の表示が埋め込みになっている…埋め込みでない表示に」→sample-spot-right→「実施」) スポット判定(車両の主砲など nmIjNvDraw)の右側: nmIjFlatCss(nmIjMjCss から呼ぶ)で #ijRes/.nvBox を display:contents にして枠・⑤修正/⑥ダイス見出し・内側スクロールをなくし、地形TEM/妨害/その他→注意書き→命中TH#(ROF・故障・命中は1行のピル)→判定する(全幅)→赤白ダイスの順(order)。.ijR:has(#ijRes .nvBox>.ijCp) の時だけ。左側④の下端が切れる件は従来どおり(未対応)。dev/sprt.js・sprt.css。
+- 返事待ち: 砲撃パネル(主砲)の注意書きに「地図で方向を設定」ボタンを追加(スポット判定と同じ仕様)。サンプル=samples/sample-vfdir.png(ブランチ sample-vfdir)。
 - v999 済: (ダルマ「ダイスボタン横幅を増やす」→サンプルA→実施) #btRm.rmFull のダイス行を全幅1行に(nmRmCompact に追記: .rmIt:has(.dsRow) を折り返し、.dsRow 100%、ボタン46px・18px)。dev/dicew.js、samples/sample-dicew-A/B/C.png。返事待ち: ダルマ「スポット判定のパネル修正は？」の意味(下の確認待ち)。
 - v998 済: バグ修正(ダルマ「グリーンの帯はなし」回復のクラス低下の行) スキン(uith=5 の data-sthov など)の .rmIt:hover/:active の背景が iPad でボタン行に残る → style#nmRowNoHov で .rmIt.rmRow の hover/active/focus を透明に(Chromium では再現せず)。
 - v997 済: (ダルマ「回復 ダイス選択できない 使いやすくする」→「1画面のまま」→実施) nmRrRallyItems: 赤白ダイス(nmRlDie、NM_RL.da/db、選んだ目=金)+見込み+「判定する」(nmRlGo、未選択は自動・オートダイスOFFは選ぶまで押せない)。DR○以下で回復を金枠、④修正=林・建物内−1/DM+4 を1行トグル、下の閉じるを削除。dev/rldice.js。
@@ -19,7 +21,7 @@
 - v986 済: バグ修正(ダルマ報告「残留FP ダイス 選択しても色が変わらない」): ①FPの選択色 #2a2412 を dsUni の dsOn 判定に追加 ②mark() が nmDsHPick の付けた dsOn を消していた→消さない(他のパネルのダイスも同じ)。dev/raq.js。
 - v985 済: (ダルマ「実施」) 判定パネルをさらにつめる: 目標の移動(37538付近)を row 項目にして なし/Motion を同じ行に(説明は短く)、.rmAct の .rmSub を1行(省略…)。dev/vfcap2.js。
 - v984 済: (ダルマ「実施」) ①潰走の行けるヘクス(青 #3aa0ff 22%塗り)→枠線だけ(dev/rtcap.js、samples/sample-rt-outline.png) ②判定パネル #btRm.rmFull をスクロールなしで全体表示: style#nmRmCompact(.rmIt の上下余白3px、.rmB 高さ34px、.dsRow のある行は文字とダイスを1行に)。砲撃(車両目標)で674→490px。dev/vfcap.js、samples/sample-vf-noscroll.png。
-  返事待ち: スポット判定の右側をマルチ判定の判定ツールと同じボタン・ダイスで専用に作り直す(sample-spot-right、作成途中)。
+  (スポット判定の右側の作り直しは v1000 で実施。)
 - v983 済: (ダルマ「実カウンターに変更」→実施) シナリオのユニットで判定(nmCcScDraw)の車両・砲ボタンを nmCtrChip(40px)+名前に(ボグ判定・人力移動・修理)。dev/bogctr.js、サンプル=samples/sample-bog-ctr.png。
 - v982 済: (ダルマ「軽対戦車砲 マップ表示が遅い→実施(案1+2)」) nmLosHexAsync の再描画を0.4秒に1回へ間引き(LOSは近い順のまま)。計測 dev/hexperf.js: 再描画617→61回・全体138s→26s(1ヘクス約40msのLOS計算自体は残る)。
 - v981 済: (ダルマ「実施」) スポット判定(#nmIj)の背景・ボタン・選択色(金)・「判定する」(青)をマルチ判定(砲撃パネル)と同じに。nmIjMjCss(nmIjBtnCss から呼ぶ、html:root×6で上書き)。dev/spdes.js、サンプル=samples/sample-spot-design.png。
