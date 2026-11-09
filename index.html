@@ -38484,7 +38484,7 @@ function nmBog1Open(nat,vid){var ns=nmSuNats();if(!ns.length){btToast(T('シナ�
     var head={row:1,ic:'',t:'<b style="font-size:16px;color:#7ec8e3">'+T('ボグ判定(車両)')+'</b>',btns:[['← '+T('戻る'),"NM_BOG1=null;BtRmClose();nmHqOpen()"],['✕ '+T('閉じる'),"NM_BOG1=null;BtRmClose()"]]}; /* v990(ダルマ「戻るを追加」) */
     var natR={row:1,ic:'tank',t:'<span style="font-size:12px">'+T('車両')+'</span>',btns:ns.map(function(k){return [(k===M.nat?'✓':'')+nmNatLbl(k),"nmBog1Open('"+k+"')"];})};
     var vs=nmIjVehs(M.nat).filter(function(o){return o.kind==='veh';});
-    var vR={html:'<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;width:100%">'+vs.map(function(o){var on=o.id===M.vid,c=nmCtrChip(o.id,36);return '<button class="rmB'+(on?' on':'')+'" style="min-width:0;height:auto;min-height:44px;padding:3px 12px;display:inline-flex;align-items:center;gap:8px" onclick="event.stopPropagation();nmBog1Open(\''+M.nat+'\',\''+o.id+'\')">'+c+'<span>'+o.nm+'</span></button>';}).join('')+'</div>'};
+    var vR={html:'<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;width:100%">'+vs.map(function(o){var on=o.id===M.vid,co=nmCoBtn(o.id,o.nm,on);return '<button class="rmB" style="min-width:0;height:auto;padding:0;display:inline-flex" onclick="event.stopPropagation();nmBog1Open(\''+M.nat+'\',\''+o.id+'\')">'+co+'</button>';}).join('')+'</div>'};
     it.unshift(head,natR,vR,{sep:1});}catch(e){console.log('bog1',e);}return it;};})();
 /* v857 sample(ダルマ指示「ボグ判定にボグ回復を追加」): ボグ判定のパネルに「ボグ判定(入った時) / ボグ解消(回復)」の切り替え。
    解消(7.6): MPh(移動フェイズ)の始め・準備射撃で撃っていない車両。赤dr(Mired+1) 1-4=解消(始動MP=赤×白、全装軌でない×2。MPが足りなくても解消)、5=Mired、6以上=走行不能 */
