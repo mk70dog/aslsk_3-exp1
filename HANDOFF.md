@@ -1,10 +1,11 @@
 # ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-07 / v858)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
-- 最終更新: 2026-11-09 (main=v978)
+- 最終更新: 2026-11-09 (main=v979)
 - 状態: 返事待ちなし(未実施は「6. 未実施・保留」に整理済み)。混在白兵戦(NM_MX)の既知の仮定: ATTACKERの既定=シナリオの攻撃側(画面で変更可)/不意打ちの車両修正は +2(BU・麻痺+1)を車両側の修正に足す/車両攻撃の原DR2特例はルール上なし(指揮官誕生は歩兵のみ)。
+- v979 済: (ダルマ「実施」) 潰走の行き先候補(nmRtPlans)の上限8件を外して全件を番号表示(林・建物の候補がある時。無い時は従来の4件)。dev/rtcap.js、サンプル=samples/sample-rtcap-*.png。
 - v978 済: (ダルマ「実施」) ①判定パネル右側(nvBox)のレイアウトを砲撃など専用パネルと同じ行に(nmIjItemsHTML の row にアイコン、nmNvLayCss で左ラベル・右寄せボタン・ⓘ注意書き)。②戻る行(button の b+small)を nmBkU が連結していた不具合を修正(見出し・説明を分け、全幅・枠なし)。dev/nvlay.js・bksub.js、サンプル=samples/sample-nv-*.png・sample-bk-*.png。
-  未対応: 配置メニューの白い「新しい編成」ボタン(iPad のみ崩れ、Chromium で再現不可)/行き先候補8件の上限を外す(ダルマ『全部番号表示』、サンプル未提示)。
+  未対応: 配置メニューの白い「新しい編成」ボタン(iPad のみ崩れ、Chromium で再現不可)。
 - v977 済: ①バグ修正(ダルマ報告「ダイス選択で色が変わらない」人力移動): 選択をインライン背景色で示すダイスボタンが .dsRow の透明背景(!important)に負けていた → 変換時に dsOn を付ける(dsRow の mark 内)。dev/mh2die.js。②回復パネル(nmRrRallyItems)の分隊・クラス低下・半減・指揮官・指揮官の能力ボタン、修理(nmRrRows の車両・砲、nmRmRvItems の見出し)を実カウンター(ダルマ「実施」)。dev/rrctr.js。
 - v976 済: (ダルマ「実施」) ①主砲・砲・軽対戦車兵器の「シナリオの相手から選ぶ」(nmVfFoeRows)の車両・歩兵ボタンを実カウンター(👤は外す) ②スポット判定(#nmIj)のボタンをスキンに関係なく他のパネルと同じデザインに(nmIjBtnCss: ふつう=暗い地+細枠、選択=金、未選択/選択中の欄=暗い地+金枠、判定する=水色)。ネオン(くすんだ)などでピンク・紫だったため。dev/foectr.js・ijsty.js。
 - v975 済: (ダルマ「実施」) ①白兵戦(シナリオのユニットで判定 nmCcScDraw)にクラス低下・損耗ユニット(nmCcScOb=nmSuOb+nmRrGroups、オレンジのタグ) ②白兵戦の「攻撃する組」「目標の組」を実カウンター(nmCcaChip、混乱は暗く) ③スポット判定の「Aに置く」「目標を選ぶ」の編成(中のユニット最大4)・車両・砲と、カウンター選択の一覧を実カウンター(nmIjPlChips) ④自由フランス軍の不足画像6種(6-4-8[E]・4-4-7[2]・4-3-6[G]・2-4-7[1](HS)・2-2-6[G](HS)・3-3-8[E](HS))を VASL リポジトリ(github vasl-developers/vasl dist/images/ff/*.svg を4倍で描画→192px)から VASL_CTR_IMG u_ff_* / VASL_CTR_MAP_U に追加。全80シナリオで画像なし0(dev/ctrcov.js)。VASL画像はこのリポジトリを add_repo→git clone(--filter=blob:none、必要ファイルだけ checkout)で取れる。dev/ccctr.js・ijctr.js。
