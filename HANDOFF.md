@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- v1035: バグ修正2件(ダルマ「ボタンがはみ出ている」「DRが化けている」)。①スポット判定1画面目: .ijBox:has(.ijFtSet) の .ijCols/.ijL が内容の幅(1745px)に広がっていた→width:100%・min-width:0(nmIjStCss)。②dsUni(mark)の 2〜7 と 8〜12 の結合が、l+1===f の行すべてを結合していた→次の行(rs[ri+1])とだけ。dev/ijwrap.js・mcdr.js・dsmerge.js。返事待ち: ダルマ「一列5から7に変更・もう少し見やすく・サンプルx4」(カウンター選択パネル ijGrid)
+- v1035: バグ修正2件(ダルマ「ボタンがはみ出ている」「DRが化けている」)。①スポット判定1画面目: .ijBox:has(.ijFtSet) の .ijCols/.ijL が内容の幅(1745px)に広がっていた→width:100%・min-width:0(nmIjStCss)。②dsUni(mark)の 2〜7 と 8〜12 の結合が、l+1===f の行すべてを結合していた→次の行(rs[ri+1])とだけ。dev/ijwrap.js・mcdr.js・dsmerge.js。返事待ち: sample-pk7-A/B/C/D(ダルマ「一列5から7に変更・もう少し見やすく・サンプルx4」カウンター選択パネル .pkG 7列の4案。ブランチ sample-v1036・dev/pk7.js・samples/sample-pk7-*.png。A=標準7列 B=数を大きく+右上に×N C=枠なし D=−/＋を全幅。「実施」+案の記号で main へ)
 
 
 - v1034: sample-gobeside 反映(スポット判定1画面目の「判定へ ▶」→「ステップ2へ ▶」・「地図で方向を変更/設定」の右横 nmIjGoBeside。方向ボタンが無い画面は下の帯のまま)。返事待ちなし。未対応: 古いテスト aud/dcr/vft の修正
