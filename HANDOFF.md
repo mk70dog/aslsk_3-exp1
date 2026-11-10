@@ -2,6 +2,9 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- v1037: バグ修正(ダルマ「射撃タブで開く→旧射撃タブが一瞬開いてステップ1が開く」)。原因=BtRmClose の後ろ処理(NM_IJ.vfStage かつ btRm なし→nmIjStageBack)。ステップ2の「射撃タブで開く」(34668付近 f)に nmIjLeave() を足し、スポット判定(NM_IJ・#nmIj・#nmIjAb・#nmIjBack)を仮カウンターを残したまま終えてから NAVTAB('fire')。dev/stage2.js。返事待ちなし。
+
+
 - v1036: sample-pk89 の B9 を反映(カウンター選択 .pkG を9列・B案: 在庫×Nは右上バッジ・選択数を大きく・選択中は水色の光。nmIjPickDraw の nmIjPick2Css 末尾に追記)。返事待ちなし。未対応: 古いテスト aud/dcr/vft の修正
 
 
