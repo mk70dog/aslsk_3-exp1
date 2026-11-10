@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 返事待ち: sample-swas-1/2(ダルマ「カウンター選択で作成した構成を編集できるように・S24ドイツ SWを追加できない/質の低下・半減が登録できない・ソ連はSWの割り当てができない」→確認の回答: ①編成タイルに「編集」ボタン ②B側もA側と同じ(SW・鹵獲・質の低下・半減) ③SWを分隊に割り当てる欄を追加)。原因メモ: nmIjBPutCs(B側)は mmc/smc のみ。nmIjPlace(A側)はSWを最後に追加した分隊(pid)へ全て渡す。編集は v793 の nmIjCsEdit(Aのみ)が2段階化で消えていた。ブランチ sample-v1038・dev/swas.js swas2.js。「実施」で実装
+- v1038: 実施(ダルマ「カウンター選択で作成した構成を編集できるように/S24ドイツ SW追加・質の低下/半減が登録できない/ソ連はSWの割り当てができない」+ PP・積み重ねの警告)。①編成タイル(1画面目の①攻撃側・②目標)に「✎ 編集」ボタン(ijCs を持つ編成のみ。A=nmIjCsEdit・B=nmIjBCsEdit)→今の数が入った選択画面→決定で同じ場所の編成を置き換え(A: nmIjAutoPlace の nmIjTmpClear、B: nmIjBPut が既存 ijB を置換)。②B側もAと同じ選択(SW・鹵獲 cap|・質の低下 red|。nmIjBCnt を cap/red 対応)。③編成作成を共通化 nmIjMkGrp(nat,cs,asg)(nmIjSqList/nmIjSwList)。SWの持ち主=J.asg(A)/J.basg(B) キー'kind|id#i'→分隊の番号(未選択=最後の分隊)、編集用に eh.ijAsg に保存。選択画面 .pkBody 先頭に #swAs「SWの持ち主を選ぶ」(分隊2つ以上の時)。④警告のみ(止めない) #swWarn: 1分隊のSW合計PP>運搬量 nmSuIPC、積み重ね(nmRtSqEq 3分隊相当+SMC4)。FT車両攻撃はスポット判定で対応済み(v823)。検証 dev/swas3.js(A・B・編集置換・警告)。返事待ちなし。未対応: 古いテスト aud/dcr/vft
 - v1037: バグ修正(ダルマ「射撃タブで開く→旧射撃タブが一瞬開いてステップ1が開く」)。原因=BtRmClose の後ろ処理(NM_IJ.vfStage かつ btRm なし→nmIjStageBack)。ステップ2の「射撃タブで開く」(34668付近 f)に nmIjLeave() を足し、スポット判定(NM_IJ・#nmIj・#nmIjAb・#nmIjBack)を仮カウンターを残したまま終えてから NAVTAB('fire')。dev/stage2.js。返事待ちなし。
 
 
