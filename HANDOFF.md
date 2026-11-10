@@ -2,6 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- v1041: 砲の煙幕弾(nmVfBuild の弾薬リストに、砲も gd.ammo に Smoke があれば 'Smoke'。S25 の76.2mm連隊砲で確認)。ダルマ「ABにDCを追加はなし」→ DC をスポット判定に入れる案(sample-smkdc の mode:'dc')は採用しない(ブランチは見本のまま)。返事待ちなし。未対応: 古いテスト aud/dcr/vft
 - v1040: 実施2件。①sample-swuse: 歩兵の射撃(2画面目・地図の射撃 nmRmMFireItems)の「フェイズ」の下に『使うSW』(nmMfSwRow・SW実カウンター・タップで使う/使わない nmMfSwUse)。FTは単独(FTを使う=分隊FPも他SWも使わない/外す=編成のSWと分隊のFPに戻る。FtogSW・fgRecomputeFromPicker を使用。編成は FT があると他のSWは入らない)。『この射撃: …』の1行。②sample-reg: カウンターを選択で作った編成(仮 ijTmp)のタイルに『＋ 登録』(nmIjRegOpen→nmIjReg)。登録だけ=編成を残してマーカーは仮に戻す(nmIjPlaceList の候補に出る)/登録して置く=ijTmp等を外して通常マーカーに。登録すると編集は出なくなる(ijCs削除)。検証 dev/swuse2.js・reg2.js。返事待ちなし(ブランチ sample-swuse/sample-reg は main に未マージの見本のまま)。未対応: 古いテスト aud/dcr/vft
 - v1039: sample-pk4col 反映(カウンター選択 nmIjPickDraw: 1列目=指揮官(能力順)・兵士(クラス順)、2列目=SWを実カウンター nmSuSwImg、3列目=質の低下・半減、4列目=鹵獲。A・B共通)。返事待ちなし。未対応: 古いテスト aud/dcr/vft
 - v1038: 実施(ダルマ「カウンター選択で作成した構成を編集できるように/S24ドイツ SW追加・質の低下/半減が登録できない/ソ連はSWの割り当てができない」+ PP・積み重ねの警告)。①編成タイル(1画面目の①攻撃側・②目標)に「✎ 編集」ボタン(ijCs を持つ編成のみ。A=nmIjCsEdit・B=nmIjBCsEdit)→今の数が入った選択画面→決定で同じ場所の編成を置き換え(A: nmIjAutoPlace の nmIjTmpClear、B: nmIjBPut が既存 ijB を置換)。②B側もAと同じ選択(SW・鹵獲 cap|・質の低下 red|。nmIjBCnt を cap/red 対応)。③編成作成を共通化 nmIjMkGrp(nat,cs,asg)(nmIjSqList/nmIjSwList)。SWの持ち主=J.asg(A)/J.basg(B) キー'kind|id#i'→分隊の番号(未選択=最後の分隊)、編集用に eh.ijAsg に保存。選択画面 .pkBody 先頭に #swAs「SWの持ち主を選ぶ」(分隊2つ以上の時)。④警告のみ(止めない) #swWarn: 1分隊のSW合計PP>運搬量 nmSuIPC、積み重ね(nmRtSqEq 3分隊相当+SMC4)。FT車両攻撃はスポット判定で対応済み(v823)。検証 dev/swas3.js(A・B・編集置換・警告)。返事待ちなし。未対応: 古いテスト aud/dcr/vft
