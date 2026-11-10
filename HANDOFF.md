@@ -2,6 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- v1044: 編成のFP表示(サンプルB採用)。タイル(A/B・歩兵編成)に nmIjFpTag、選択画面フッターに nmIjFpBox(nmIjCsFP=兵FP+SW FP、FT・SMC除く、数変更で更新)。dev/fpv.js で確認。返事待ちなし。
 - v1043: 編成の編集画面(edSlotA/B)に「💾 別の編成として保存」(nmIjGrpSaveAs: 空き枠に新規編成、元は不変)。決定ボタンは「この編成を更新してA/Bに置く」。dev/gedit.js で確認。返事待ちなし。
 - v1042: スポット判定1画面目の「✎ 編集」を編成の準備で作った編成(編成A/B/T等、ijCsなし)のタイルにも表示(A・B)。nmIjGrpEdit→nmIjCsFromGrp で編成の中身を cs/asg(数・SWの持ち主)に直して選択画面へ。決定で nmIjGrpRebuild が同じ枠を空にして nmIjMkGrp(…,slot) で作り直す(マーカー・枠は維持)。登録ボタンは一時編成のみ。dev/gedit.js で確認。返事待ちなし。
 - v1041: 砲の煙幕弾(nmVfBuild の弾薬リストに、砲も gd.ammo に Smoke があれば 'Smoke'。S25 の76.2mm連隊砲で確認)。ダルマ「ABにDCを追加はなし」→ DC をスポット判定に入れる案(sample-smkdc の mode:'dc')は採用しない(ブランチは見本のまま)。返事待ちなし。未対応: 古いテスト aud/dcr/vft
