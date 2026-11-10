@@ -2,6 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- v1071: ①スポット判定タイルの「地図のマーカー」表記を削除 ②カウンターが枠からはみ出す件: タイルの min-width を中身に合わせ !important で設定(nmIjGrpBadge) ③火力パネルのダイス縦幅 46→32px(#btRm.rmFull .rmBox .dsRow>button.dsb の height。他パネルのdsRowは未変更) ④ステップ2へのちらつき対策: 保持の解除条件に btRm.rmFull を追加(コンパクト表示の途中状態が出るのを防ぐ)。v1070はPages success確認済み。
 - v1070: 「ステップ2へ」で2画面目の前に一瞬別パネルが映る件: 判定パネル(btRm)は開き直しを数回して仕上がる(btRmReopen/BtRmClose×3, LosRunPixel)。nmIjStageGo をラップし、仕上がる(innerHTMLが約140ms変化なし, 最大1.2秒)まで #btRm を hidden・1画面目を表示のまま保持→一度に切替(style#nmStgHold)。
 - v1069: ボタン四隅のドットが残る不具合: nmDotOff が初回(起動1.5秒後)しか走らず、パネルを開いた時に入るCSS(btRm.rmFull .rmB等)を拾えなかった。<style>追加で再走査(MutationObserver)し、対象に .dsRow・*Btn を追加。スポット判定2画面目・1画面目でradial残りなしを確認。
 - v1068: 編成カプセルを「国｜部隊名｜FP」の固定長に(サンプル③)。長い説明・ユニット名は出さない。文字色は inline important で白固定(暗くなる不具合の修正)。
