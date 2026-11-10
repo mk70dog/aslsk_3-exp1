@@ -16,7 +16,10 @@ var sh=nmIjShooters(NM_IJ.a),ix=sh.findIndex(x=>x.eh&&x.eh.grp&&!x.eh.ijCs);o.pu
 var eds=[].slice.call(document.querySelectorAll('#nmIj .ijEd')).map(e=>e.textContent.trim());o.push('btns '+JSON.stringify(eds));
 var eh2=sh[ix].eh,slot=eh2.grp,d0=nmGeList(slot);o.push('slot '+slot+' items '+d0.items.length+' sw '+(d0.sw||[]).length+' own '+JSON.stringify(d0.own));
 nmIjSet('pick',ix);nmIjGrpEdit('a');await W(600);o.push('edit cs '+JSON.stringify(NM_IJ.cs)+' asg '+JSON.stringify(NM_IJ.asg)+' cp '+NM_IJ.cp);
-nmIjCnt(m[0].kind+'|'+m[0].id,1);nmIjPickDone();await W(1500);
+nmIjCnt(m[0].kind+'|'+m[0].id,1);
+var fb=[].slice.call(document.querySelectorAll('#nmIj button')).map(e=>e.textContent.trim()).filter(t=>/保存|更新/.test(t));o.push('footer '+JSON.stringify(fb));
+var slots0=GROUP_SLOTS.filter(k=>(nmGeList(k).items||[]).length).join(',');nmIjGrpSaveAs();await W(800);var slots1=GROUP_SLOTS.filter(k=>(nmGeList(k).items||[]).length).join(',');o.push('saveAs slots '+slots0+' -> '+slots1+' cp '+NM_IJ.cp+' origItems '+nmGeList(slot).items.length);
+nmIjSet('pick',nmIjShooters(NM_IJ.a).findIndex(x=>x.eh&&x.eh.grp===slot));nmIjGrpEdit('a');await W(600);nmIjCnt(m[0].kind+'|'+m[0].id,1);nmIjPickDone();await W(1500);
 var sh2=nmIjShooters(NM_IJ.a),eh3=(sh2.find(x=>x.eh&&x.eh.grp===slot)||{}).eh,d1=nmGeList(slot);o.push('after: marker kept '+!!eh3+' items '+d1.items.length+' sw '+(d1.sw||[]).length+' own '+JSON.stringify(d1.own)+' cp '+NM_IJ.cp);
 /* B側 */
 var bn=nmSuNats().filter(k=>nmFoeNat(NT,k))[0];nmIjSet('bnat',bn);nmIjSet('bcp',1);await W(600);
