@@ -2,6 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- 返事待ち: sample-swas-1/2(ダルマ「カウンター選択で作成した構成を編集できるように・S24ドイツ SWを追加できない/質の低下・半減が登録できない・ソ連はSWの割り当てができない」→確認の回答: ①編成タイルに「編集」ボタン ②B側もA側と同じ(SW・鹵獲・質の低下・半減) ③SWを分隊に割り当てる欄を追加)。原因メモ: nmIjBPutCs(B側)は mmc/smc のみ。nmIjPlace(A側)はSWを最後に追加した分隊(pid)へ全て渡す。編集は v793 の nmIjCsEdit(Aのみ)が2段階化で消えていた。ブランチ sample-v1038・dev/swas.js swas2.js。「実施」で実装
 - v1037: バグ修正(ダルマ「射撃タブで開く→旧射撃タブが一瞬開いてステップ1が開く」)。原因=BtRmClose の後ろ処理(NM_IJ.vfStage かつ btRm なし→nmIjStageBack)。ステップ2の「射撃タブで開く」(34668付近 f)に nmIjLeave() を足し、スポット判定(NM_IJ・#nmIj・#nmIjAb・#nmIjBack)を仮カウンターを残したまま終えてから NAVTAB('fire')。dev/stage2.js。返事待ちなし。
 
 
