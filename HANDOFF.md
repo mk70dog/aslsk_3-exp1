@@ -2,6 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- v1073: ステップ2をステップ1に統一(幕45%・ドット背景・未選択ボタン#2c3442・命中枠=2px金/14px角丸・命中TH#文字14px)。選択カウンターは変更なしで名前だけ金の丸ラベル(style#nmStep2Unify)
 - v1072: 選択中ボタン=金枠線だけ(塗りなし・文字は薄い金)・ダイス縦幅32px を全パネル共通に(style#nmSelGold、:root×9、対象パネルIDリスト P と選択クラス .ijB/.ijC/.ijF/.rmB/.rmCls/.b/.nb/.dsb/.fa の .on と inline の background:#ff9030/#c8a032)。スポット判定1・2画面で確認、他パネルは未確認。
 - v1071: ①スポット判定タイルの「地図のマーカー」表記を削除 ②カウンターが枠からはみ出す件: タイルの min-width を中身に合わせ !important で設定(nmIjGrpBadge) ③火力パネルのダイス縦幅 46→32px(#btRm.rmFull .rmBox .dsRow>button.dsb の height。他パネルのdsRowは未変更) ④ステップ2へのちらつき対策: 保持の解除条件に btRm.rmFull を追加(コンパクト表示の途中状態が出るのを防ぐ)。v1070はPages success確認済み。
 - v1070: 「ステップ2へ」で2画面目の前に一瞬別パネルが映る件: 判定パネル(btRm)は開き直しを数回して仕上がる(btRmReopen/BtRmClose×3, LosRunPixel)。nmIjStageGo をラップし、仕上がる(innerHTMLが約140ms変化なし, 最大1.2秒)まで #btRm を hidden・1画面目を表示のまま保持→一度に切替(style#nmStgHold)。
