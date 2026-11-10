@@ -2,6 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- 返事待ち: sample-ijab(スポット判定の「マップを確認」中に上の帯 #nmIjAb「A地点を変える/B地点を変える」→ヘクスをタップ(nmIjAbTap)で S_LOS.pxA/pxB と J.a/J.b を変え LosRunPixel。判定に戻ると測り直し後に描き直す)
+
 - v1031: sample-ijpick2 反映(＋カウンターを選択 = nmIjPickDraw: 国籍と数の欄だけ、A=J.cs/nmIjCnt(鹵獲・質の低下も)、B=J.bcs/nmIjBCnt)。返事待ちなし。未対応: 古いテスト aud/dcr/vft の修正
 
 
