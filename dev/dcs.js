@@ -1,0 +1,11 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1148,height:798},deviceScaleFactor:1.5});const E=[];p.on('pageerror',x=>E.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(1000);
+const r=await p.evaluate(async()=>{const W=ms=>new Promise(r=>setTimeout(r,ms));var o=[];S.scen=S.scen||{};S.scen.sel='S25';for(var i=0;i<4;i++){try{Draw();}catch(e){}await W(1500);}await btEnsureGraph();var N=BTG.nodes;try{nmModeSet('judge');}catch(e){}await W(1500);
+var a=-1,b2=-1;for(var i=0;i<N.length&&a<0;i++){for(var j=0;j<N.length;j++){if(i!==j&&N[i].nm&&N[j].nm&&btDist(i,j)===1&&N[i].nm[0]===N[j].nm[0]&&btFLOS(i,j).ok){a=i;b2=j;break;}}}o.push('A '+N[a].nm+' B '+N[b2].nm);
+S_LOS.pxA={x:N[a].x,y:N[a].y};S_LOS.pxB={x:N[b2].x,y:N[b2].y};LosRunPixel();await W(4000);nmIjOpen();await W(1500);
+try{var NT='GER';nmIjSet('nat',NT);NM_IJ.cp=1;nmIjDraw();await W(500);var ob=nmSuOb(NT),dc=ob.filter(x=>x.kind==='dc')[0],m=ob.filter(x=>x.kind==='mmc')[0],s=ob.filter(x=>x.kind==='smc')[0];nmIjCnt(m.kind+'|'+m.id,1);if(s)nmIjCnt(s.kind+'|'+s.id,1);nmIjCnt(dc.kind+'|'+dc.id,1);nmIjPickDone();await W(1500);
+var sh=nmIjShooters(NM_IJ.a);o.push('shooters '+sh.map(x=>x.mode+':'+x.nm).join(' | '));}catch(e){o.push('EXC '+e+(e.stack||'').slice(0,250));}return o;});
+console.log(r.join('\n'),E);await p.screenshot({path:process.argv[2]+'/sample-dc-1.png'});
+const r2=await p.evaluate(async()=>{const W=ms=>new Promise(r=>setTimeout(r,ms));var o=[];try{var sh=nmIjShooters(NM_IJ.a),ix=sh.findIndex(x=>x.mode==='dc');nmIjSet('pick',ix);await W(500);nmIjBTerr();await W(500);nmIjStageGo();await W(2500);o.push('dc panel '+!!document.getElementById('nmDcp'));}catch(e){o.push('EXC '+e+(e.stack||'').slice(0,250));}return o;});
+console.log(r2.join('\n'),E);await p.screenshot({path:process.argv[2]+'/sample-dc-2.png'});await b.close();})();

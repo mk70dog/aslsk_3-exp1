@@ -1,0 +1,10 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1148,height:798},deviceScaleFactor:1.5});const E=[];p.on('pageerror',x=>E.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(1000);
+const r=await p.evaluate(async()=>{const W=ms=>new Promise(r=>setTimeout(r,ms));var o=[];S.scen=S.scen||{};S.scen.sel='S25';for(var i=0;i<4;i++){try{Draw();}catch(e){}await W(1500);}await btEnsureGraph();var N=BTG.nodes;try{nmModeSet('judge');}catch(e){}await W(1500);
+var a=-1,b2=-1;for(var i=0;i<N.length&&a<0;i++){for(var j=i+1;j<N.length;j++){if(N[i].nm&&N[j].nm&&btDist(i,j)===6&&btFLOS(i,j).ok){a=i;b2=j;break;}}}o.push('A '+N[a].nm+' B '+N[b2].nm);
+S_LOS.pxA={x:N[a].x,y:N[a].y};S_LOS.pxB={x:N[b2].x,y:N[b2].y};LosRunPixel();await W(4000);nmIjOpen();await W(1500);
+try{var sh=nmIjPlaceList('SOV');var gi=sh.findIndex(x=>x.kind==='gun'&&/76/.test(x.id));o.push('gun idx '+gi+' of '+sh.length);nmIjSet('nat','SOV');await W(300);var pl=nmIjPlaceList('SOV');gi=pl.findIndex(x=>x.kind==='gun'&&/76/.test(x.id));nmIjSet('place',gi);await W(1000);
+nmIjSet('bnat','GER');nmIjBTerr();await W(500);nmIjStageGo();await W(2500);o.push('stage '+NM_IJ.stage+' vf '+NM_IJ.vfStage);
+var t=document.body.innerText;o.push(/煙幕/.test(t)?'has 煙幕 text':'no 煙幕');}catch(e){o.push('EXC '+e+(e.stack||'').slice(0,250));}return o;});
+console.log(r.join('\n'),E);await p.screenshot({path:process.argv[2]+'/sample-smk-1.png'});await b.close();})();

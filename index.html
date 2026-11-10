@@ -34818,6 +34818,7 @@ function nmVfBuild(){ /* nmShotCalcと同じ攻撃する側・目標の組み立
     r.mode='VTT';r.ammos=btAPCRAvail(w)?['AP','HE','APCR']:['AP','HE'];if(te.facing==null)r.note=(r.note?r.note+'。':'')+'目標の向きが未設定のため、攻撃する側の方を向いているとして計算';}
   r.ammos=r.ammos.filter(function(am){return !(am==='AP'&&gd.ammo&&!gd.ammo.some(function(a){return a.type==='AP';}));});
   if(v&&v.ma&&(v.ma.specialAmmo||[]).some(function(a){return a.type==='Smoke';})&&!eh.smkOut)r.ammos.push('Smoke'); /* v439 */
+  else if(!v&&gd&&(gd.ammo||[]).some(function(a){return a.type==='Smoke';})&&!eh.smkOut)r.ammos.push('Smoke'); /* v1040sample: 砲(対戦車砲・歩兵砲・迫撃砲)の煙幕弾 */
   if(nmVfWp(r)&&!eh.wpOut)r.ammos.push('WP');
   if(gd.ife>0&&r.mode==='ITT')r.ammos.push('IFE');
   r.att=!!(g&&g.attBands);
@@ -39572,6 +39573,7 @@ function nmIjShooters(nA){var H=nmHexOfNode(nA),out=[];if(!H)return out;
     if(eh.grp&&!eh.veh&&!eh.gun){var fp=0;try{fp=nmGrpFP(eh.grp);}catch(x){}var gi0=nmGeList(eh.grp),its0=(gi0.items||[]).filter(function(x){return !x.broken;}).map(function(x){return x.label.replace(/\[.*$/,'');});var wp0=nmGrpWpnTxt(eh);out.push({sd:sd,eh:eh,mode:'mf',nm:nm.replace(/\s*\(.*\)$/,'')+' 歩兵の射撃',w:'FP'+fp+(its0.length?' · '+its0.slice(0,3).join('・')+(its0.length>3?'…':''):'')+(wp0?'／'+wp0:'')});
       var lw=[];try{lw=nmLwList(eh).filter(function(x){return x.own||x.pf;});}catch(x){}if(lw.length){var sv0=nmGrpData(eh.grp),ow0={};((sv0&&sv0.latw)||[]).forEach(function(e){var q=latwNormEntry(e);ow0[q.id]=q.pid;});
         out.push({sd:sd,eh:eh,mode:'lw',nm:lw.map(function(x){return x.w.lbl||x.w.id;}).slice(0,2).join('・'),w:'軽対戦車兵器 · '+lw.slice(0,2).map(function(x){if(x.pf)return 'PF判定(dr1〜3)で撃てる';var u=(gi0.items||[]).filter(function(y){return y.pid===ow0[x.w.id];})[0];return u?u.label.replace(/\[.*$/,'')+'が運ぶ':nmGrpLbl(eh.grp);}).join('・')});} /* v550(ダルマ指摘「乗員が2ある」): 1つの編成が歩兵の射撃と対戦車兵器の2つに出ていて分かりにくい。名前を攻撃するもので分け、編成が持っていない対戦車兵器(シナリオにあるだけ)は出さない */}
+      var dcl=[];try{dcl=nmSuDcList(eh.grp)||[];}catch(x){}if(dcl.length)out.push({sd:sd,eh:eh,mode:'dc',nm:'爆薬(DC)',w:'DC×'+dcl.length+' · 置く先=B(4.3)'}); /* v1040sample: 爆薬(DC) */
     else if(eh.gun)out.push({sd:sd,eh:eh,mode:'vf',nm:nm,w:'砲の射撃'});
     else if(v){if(v.ma)out.push({sd:sd,eh:eh,mode:'vf',nm:nm,w:'主砲 '+(v.ma.cal||'')+'mm'});if(nmVmKeys(v).length)out.push({sd:sd,eh:eh,mode:'vm',nm:nm,w:'機関銃 '+nmVmKeys(v).map(function(k){return k.toUpperCase();}).join('/')});}});});
   return out;}
@@ -39679,6 +39681,7 @@ function nmIjStageGo(){var J=NM_IJ;if(!J)return;var a=J.a,b=J.b,o=(J.pick!=null)
     try{if(o.mode==='mf'){nmMfOpen(a,o.sd,o.eh.grp);nmMfPh(a,J.ph);if(setT)nmMfTgt(a,b);}
       else if(o.mode==='vm'){nmVmOpen(a,o.sd);if(setT)nmVmSet(a,'tgt',b);nmVmSet(a,'ph',P0[2]);}
       else if(o.mode==='lw'){nmLwOpen(a,o.sd);if(setT)nmLwSet(a,'tgt',b);nmLwSet(a,'ph',P0[3]);}
+      else if(o.mode==='dc'){nmDcOpen(a,o.sd);if(NM_DC&&b!=null)NM_DC.to=b;}
       else{J.vfStage=0;J.stage='old';if(el0)el0.style.display='';nmIjDraw();}}catch(e){console.log('ijStage2',e);J.vfStage=0;J.stage='old';if(el0)el0.style.display='';nmIjDraw();}
     return;}
   var tgv=J.tgt,tg=typeof tgv==='number'?nmIjTgts()[tgv]||null:null,P=NM_IJ_PH.filter(function(p){return p[0]===J.ph;})[0]||NM_IJ_PH[0];
