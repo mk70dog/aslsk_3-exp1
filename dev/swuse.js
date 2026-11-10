@@ -1,0 +1,15 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1148,height:798},deviceScaleFactor:1.5});const E=[];p.on('pageerror',x=>E.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(1000);
+const r=await p.evaluate(async()=>{const W=ms=>new Promise(r=>setTimeout(r,ms));var o=[];S.scen=S.scen||{};S.scen.sel='S24';for(var i=0;i<4;i++){try{Draw();}catch(e){}await W(1500);}await btEnsureGraph();var N=BTG.nodes,id=nm=>N.findIndex(n=>n.nm===nm);try{nmModeSet('judge');}catch(e){}await W(1500);var A=N[id('tT9')],B=N[id('tO10')];S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB={x:B.x,y:B.y};LosRunPixel();await W(4000);nmIjOpen();await W(1500);
+try{var NT='GER';nmIjSet('nat',NT);NM_IJ.cp=1;nmIjDraw();await W(500);var ob=nmSuOb(NT);var g=l=>ob.filter(x=>x.label===l)[0];
+nmIjCnt('mmc|8-3-8[E]',1);nmIjCnt('smc|9-1',1);['ft241','hmg716_ge'].forEach(function(i){var x=ob.filter(y=>y.id===i)[0];if(x)nmIjCnt(x.kind+'|'+x.id,1);});nmIjPickDone();await W(1500);
+nmIjSet('bnat','SOV');var bl=nmIjPlaceList('SOV');o.push('bl '+bl.length);nmIjBTerr();await W(500);
+nmIjStageGo();await W(2500);
+var tw=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),nd=null,t;while(t=tw.nextNode()){if(t.nodeValue.indexOf('フェイズ')>=0&&t.nodeValue.length<8){nd=t.parentNode;break;}}var row=nd;while(row&&row.parentNode&&row.parentNode.children.length<4)row=row.parentNode;o.push(row?row.tagName+'.'+row.className+' par '+row.parentNode.children.length:'none');
+var h='<div id="swUseS" style="margin:6px 0 4px 0;padding:8px 10px;border:1px solid #2c3440;border-radius:10px;background:#101620"><div style="font-size:13px;font-weight:800;color:#e8eef4;margin-bottom:6px">使うSW <span style="font-size:11px;color:#8fa6bd;font-weight:400">タップで 使う / 使わない</span></div><div style="display:flex;gap:10px;flex-wrap:wrap">';
+function c(lab,on,ctr,sub){return '<div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 10px;border-radius:10px;border:2px solid '+(on?'#4fd8ff':'#39414f')+';background:'+(on?'#1b2a3a':'#0d1117')+';opacity:'+(on?1:.55)+'">'+ctr+'<b style="font-size:12px;color:'+(on?'#4fd8ff':'#9fb2c8')+'">'+(on?'✓ 使う':'使わない')+'</b><small style="font-size:10.5px;color:#8fa6bd">'+sub+'</small></div>';}
+var ft=ob.filter(y=>y.id==='ft241')[0],hm=ob.filter(y=>y.id==='hmg716_ge')[0];
+h+=c('FT',false,nmSuSwImg('sw','ft241',48),'FT 24-1 · 1PP')+c('HMG',true,nmSuSwImg('sw','hmg716_ge',48),'HMG 7-16 · 4PP')+'</div><div style="font-size:12px;margin-top:6px;color:#c9d6e4">この射撃: <b style="color:#ffd070">分隊 8-3-8 + HMG</b> のFPで判定(FTは使わない)</div></div>';
+if(row){row.insertAdjacentHTML('afterend',h);}}catch(e){o.push('EXC '+e+(e.stack||'').slice(0,200));}return o;});
+console.log(r,E);await p.waitForTimeout(500);await p.screenshot({path:process.argv[2]+'/sample-swuse.png'});await b.close();})();
