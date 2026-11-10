@@ -39544,9 +39544,23 @@ var NM_IJ_ST=null;
 function nmIjPeek(){var el=document.getElementById('nmIj');if(!el)return;var gc=null;try{var g0=el.querySelector('.ijGo');if(g0){var cs=getComputedStyle(g0);gc={bg:cs.backgroundImage&&cs.backgroundImage!=='none'?cs.backgroundImage:cs.backgroundColor,c:cs.color,b:cs.border,bs:cs.boxShadow};}}catch(e){}el.style.display='none';var b=document.getElementById('nmIjBack');if(b)b.remove();b=document.createElement('button');b.id='nmIjBack';
   b.style.cssText='position:fixed;left:50%;bottom:calc(var(--nmsumh,64px) + 14px);transform:translateX(-50%);z-index:9800;padding:12px 30px;border-radius:999px;border:1px solid #7ec8e3;background:var(--ljc,#7ec8e3);color:#08101a;font-weight:900;font-size:16px;box-shadow:0 6px 24px #000c;font-family:inherit;display:inline-flex;align-items:center;gap:8px';
   if(gc){b.style.background=gc.bg;b.style.color=gc.c;b.style.border=gc.b&&!/^0px/.test(gc.b)?gc.b:'none';if(gc.bs&&gc.bs!=='none')b.style.boxShadow=gc.bs;} /* v807(ダルマ指示「判定に戻るボタンを判定するボタンと同じ色にする」): 判定画面の「判定する」の色(テーマごと)を写す */
-  b.innerHTML=NM_MI.judge+' '+T((NM_IJ&&NM_IJ.vfStage)?'砲撃に戻る':'判定に戻る');b.onclick=function(e){e.stopPropagation();nmIjUnpeek();};document.body.appendChild(b);}
-function nmIjUnpeek(){var b=document.getElementById('nmIjBack');if(b)b.remove();var el=document.getElementById('nmIj');if(el)el.style.display='';}
-function nmIjClose(){nmRsClear();NM_IJ_UNDO=[];var bk=document.getElementById('nmIjBack');if(bk)bk.remove();nmIjTmpClear();NM_IJ=null;var el=document.getElementById('nmIj');if(el)el.remove();}
+  b.innerHTML=NM_MI.judge+' '+T((NM_IJ&&NM_IJ.vfStage)?'砲撃に戻る':'判定に戻る');b.onclick=function(e){e.stopPropagation();nmIjUnpeek();};document.body.appendChild(b);try{nmIjAbBar();}catch(e){}}
+/* sample(ダルマ「AB地点の変更を可能にする」): スポット判定の「マップを確認」で、A地点・B地点を地図のタップで変えられる。変えたらLOSを測り直し、判定に戻ると新しいA・Bで選び直す */
+var NM_IJAB=null;
+function nmIjAbBar(){var J=NM_IJ,o=document.getElementById('nmIjAb');if(o)o.remove();if(!J||J.vfStage||J.stage!=='set')return;var d=document.createElement('div');d.id='nmIjAb';
+  d.style.cssText='position:fixed;left:50%;top:calc(var(--navh,0px) + 14px);transform:translateX(-50%);z-index:9800;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:14px;background:#0d1520f2;border:1px solid #39414f;box-shadow:0 6px 24px #000c;font-family:inherit;color:#e8eef4;font-size:14px';
+  var bt=function(k,col){var on=NM_IJAB===k;return '<button onclick="event.stopPropagation();nmIjAbArm(\''+k+'\')" style="height:44px;padding:0 16px;border-radius:10px;font-family:inherit;font-weight:900;font-size:15px;white-space:nowrap;cursor:pointer;'+(on?'background:'+col+';color:#fff;border:2px solid #fff':'background:#1a2029;color:#e8eef4;border:1px solid #3a4250')+'">'+T(k==='a'?'A地点を変える':'B地点を変える')+'</button>';};
+  d.innerHTML=bt('a','#2a6fdb')+bt('b','#d62839')+'<span style="font-size:12px;color:#9fb2c8;white-space:nowrap">'+(NM_IJAB?T((NM_IJAB==='a'?'A':'B')+'にするヘクスをタップ'):T('ボタンを押してから地図のヘクスをタップ'))+'</span>';
+  d.onclick=function(e){e.stopPropagation();};document.body.appendChild(d);}
+function nmIjAbArm(k){NM_IJAB=NM_IJAB===k?null:k;nmIjAbBar();}
+function nmIjAbTap(cx,cy){var k=NM_IJAB,J=NM_IJ;if(!k||!J)return false;var H=losHexAtClient(cx,cy);if(!H)return true;var n=btNodeOf(H.boardId,H.col,H.row);if(n==null||n<0)return true;var N=BTG.nodes[n];if(!N)return true;
+  if((k==='a'&&n===J.b)||(k==='b'&&n===J.a)){btToast(T('AとBは別のヘクスにしてください'));return true;}
+  try{nmIjTmpClear(true,k==='a');}catch(e){}
+  if(k==='a'){S_LOS.pxA={x:N.x,y:N.y};J.a=n;var sh=nmIjShooters(n);J.pick=sh.length?0:null;J.place=null;J.cs={};J.cv=null;J.cp=0;}else{S_LOS.pxB={x:N.x,y:N.y};J.b=n;J.bcs={};J.bcp=0;}
+  J.tgt=nmIjTgtDef();try{nmIjFaceDef();}catch(e){}NM_IJAB=null;J.abChg=1;try{LosRunPixel();}catch(e){}try{NM_TAPHEX={n:n};Draw();setTimeout(function(){NM_TAPHEX=null;try{Draw();}catch(e){}},450);}catch(e){}
+  try{nmIjDraw();var el=document.getElementById('nmIj');if(el)el.style.display='none';}catch(e){}nmIjAbBar();btToast(T((k==='a'?'A':'B')+'地点を')+N.nm+T('に変えました'));return true;}
+function nmIjUnpeek(){NM_IJAB=null;var ab=document.getElementById('nmIjAb');if(ab)ab.remove();var b=document.getElementById('nmIjBack');if(b)b.remove();if(NM_IJ&&NM_IJ.abChg){NM_IJ.abChg=0;try{nmIjAfterLos(function(){try{nmIjDraw();}catch(e){}});}catch(e){}}var el=document.getElementById('nmIj');if(el)el.style.display='';}
+function nmIjClose(){nmRsClear();NM_IJ_UNDO=[];var bk=document.getElementById('nmIjBack');if(bk)bk.remove();NM_IJAB=null;var ab0=document.getElementById('nmIjAb');if(ab0)ab0.remove();nmIjTmpClear();NM_IJ=null;var el=document.getElementById('nmIj');if(el)el.remove();}
 /* v688(ダルマ報告「?」): Aに置くカウンターを選んだら、すぐAに置いて設定・ダイス欄を出す(判定するを押す前から) */
 function nmIjTgtDefSafe(){var J=NM_IJ;try{if(J&&J.pick!=null)J.tgt=nmIjTgtDef();}catch(e){}}
 
@@ -46751,6 +46765,7 @@ function LosMapClick(ev){
   if(NM_RTM&&ev.clientX!=null&&nmRtmTap(ev.clientX,ev.clientY))return; /* v934 */
   if(NM_SUPL&&ev.clientX!=null&&nmSuPlaceTap(ev.clientX,ev.clientY))return; /* v434 */
   if(NM_NUPL&&ev.clientX!=null&&nmNuTap(ev.clientX,ev.clientY))return;
+  if(window.NM_IJAB&&ev.clientX!=null&&nmIjAbTap(ev.clientX,ev.clientY))return; /* スポット判定のマップを確認: A・B地点の変更 */
   if(ev.clientX!=null&&nmDblCheck(ev.clientX,ev.clientY))return; /* v435: ダブルクリック */
   if(ev.clientX!=null&&!S_LOS.routeMode){try{var _fh=losHexAtClient(ev.clientX,ev.clientY);if(_fh)nmFtSelAt(_fh,1);}catch(e){}} /* v456: マーカーをタップで選ぶ(上の操作ボタン・下の表示の対象) */
 
