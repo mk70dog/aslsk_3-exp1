@@ -1,0 +1,15 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1148,height:798},deviceScaleFactor:1.5});const E=[];p.on('pageerror',x=>E.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>NAVTAB('los'));await p.waitForTimeout(1000);
+const r=await p.evaluate(async()=>{const W=ms=>new Promise(r=>setTimeout(r,ms));var o=[];S.scen=S.scen||{};S.scen.sel='S24';for(var i=0;i<4;i++){try{Draw();}catch(e){}await W(1500);}await btEnsureGraph();var N=BTG.nodes,id=nm=>N.findIndex(n=>n.nm===nm);try{nmModeSet('judge');}catch(e){}await W(1500);var A=N[id('tT9')],B=N[id('tO10')];S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB={x:B.x,y:B.y};LosRunPixel();await W(4000);nmIjOpen();await W(1500);
+var fp=()=>{var m=document.body.innerText.match(/FP\s*\d+\s*→\s*\d+列/);return m?m[0]:'?';},sws=()=>JSON.stringify((getFireState().grps[0]||{}).sw),txt=()=>{var m=document.body.innerText.match(/この射撃:[^\n]*/);return m?m[0]:'-';};
+try{var NT='GER';nmIjSet('nat',NT);NM_IJ.cp=1;nmIjDraw();await W(500);var ob=nmSuOb(NT);
+nmIjCnt('mmc|8-3-8[E]',1);nmIjCnt('smc|9-1',1);['ft241','hmg716_ge'].forEach(function(i){var x=ob.filter(y=>y.id===i)[0];if(x)nmIjCnt(x.kind+'|'+x.id,1);});nmIjPickDone();await W(1500);
+nmIjBTerr();await W(500);nmIjStageGo();await W(2500);
+o.push('open: '+fp()+' sw '+sws()+' '+txt());
+var uids=nmGeList(NM_MF.slot).sw;o.push('uids '+uids);
+var ft=uids.filter(u=>/^ft241/.test(u))[0];
+nmMfSwUse(NM_MF.from,ft);await W(1500);o.push('FT toggled: '+fp()+' sw '+sws()+' '+txt());
+nmMfSwUse(NM_MF.from,ft);await W(1500);o.push('FT toggled again: '+fp()+' sw '+sws()+' '+txt());
+}catch(e){o.push('EXC '+e+(e.stack||'').slice(0,300));}return o;});
+console.log(r.join('\n'),E);await p.screenshot({path:process.argv[2]+'/v1040-sw.png'});await b.close();})();
