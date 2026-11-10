@@ -2,6 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- v1048: 「A地点を変える/B地点を変える」帯(#nmIjAb)に「✕ 閉じる」(nmIjAbHide: J.abHide=1で帯を隠す。判定に戻る nmIjUnpeek/2 で解除)。返事待ちなし。
 - v1047: ヘッダーの🔥残留火力ボタンを、残留FP(S_LOS.resid)が無い間は非表示(nmIjHasResid)。返事待ち: 「編成を追加するボタンは？」→ ＋カウンターを選択がそれ。名前を「＋ 編成を追加」に変える案を提示。
 - v1046: 1画面目のタイル整理(サンプル tidy 採用)。nmIjStCss に追記: 編成タイル(.ijFpL を持つ button.ijB)=幅190・高136、FPは右上の小バッジ、.ijEdBar は下端中央、.ijTW は relative。返事待ち: ダルマ「残留火力ボタンは必要ない？」(ヘッダーの🔥残留火力=nmRaqOpen 残留火力の攻撃。残留FPが無い時は隠す案を回答済み、返事待ち)。
 - v1045: ダルマ「全部実施」(AB判定の追加5案)。調べたら DRM内訳(parts)・士気判定+反映(nmMcSection)・SW故障の記録(v425 nmSwMalApplied)は既存だったため、未実装の2件だけ実装: ①FP内訳(nmMfFpBreak 兵+SW、射程調整前の素のFP) ②判定履歴 NM_MFH(nmMfHistPush・直近4件表示・↶取り消す nmMfUndo=UndoLast・同じ出目で再計算 nmMfRedo)。dev内検証は /tmp のみ。返事待ちなし。
