@@ -1,0 +1,7 @@
+// MC(複数ユニット)のDR行の重複表示を調べる
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1148,height:798},deviceScaleFactor:1});const E=[];p.on('pageerror',x=>E.push(String(x)));
+await p.goto('file://'+require('path').resolve(__dirname,'../index.html'),{timeout:180000});await p.waitForTimeout(4000);await p.evaluate(()=>{S.scen=S.scen||{};S.scen.sel='S24';S.nmMode='judge';NAVTAB('los');});await p.waitForTimeout(3000);
+const r=await p.evaluate(async()=>{const W=ms=>new Promise(r=>setTimeout(r,ms));await btEnsureGraph();var o=[];try{var slot=nmGeFreeSlot();nmGeAddCore(slot,'GER','smc','9-1');nmGeAddCore(slot,'GER','mmc','8-3-8[E]');nmGeAddCore(slot,'GER','mmc','8-3-8[E]');nmGeAddCore(slot,'GER','mmc','4-4-7[2]');nmGeSync(slot);
+var N=BTG.nodes,nn=N.findIndex(x=>x.nm==='tO10'),H=nmHexOfNode(nn);nmSideList('e').push({boardId:H.boardId,col:H.col,row:H.row,st:{},grp:slot});Draw();await W(500);NM_RM_HEX=nmHexOfN(nn);NM_MCP={n:nn,sd:'e',slot:slot,r:'2MC'};NM_MC=null;NM_RM_SUB='mcp';btRmReopen(nn);await W(1500);
+var rows=[].slice.call(document.querySelectorAll('#btRm .dsRow'));o.push('dsRows '+rows.length+': '+rows.map(x=>[].map.call(x.children,c=>c.textContent.trim()).join(',')).join(' | '));}catch(e){o.push('ERR '+e);}return o;});
+console.log(JSON.stringify(r,null,1),JSON.stringify(E));await p.screenshot({path:process.argv[2]});await b.close();})();
