@@ -2,6 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- v1123: 車両・砲の見出し「独: Sherman…」が、カウンターの国ではなく地図の側(f/e)の国になっていた → そのカウンターの国(nmNatShortOf)で表示(向きパネル・ヘクスメニュー)。
 - v1122: 回復(rally)の作業用の部隊「_T」がスポット判定に出ていた→ 出さない(nmIjPlaceList/nmIjShooters で除外)、回復を閉じたら中身を消す(BtRmClose後・nmIjOpen時に nmTmpTClean)。検証: 回復→閉じる→_Tが空になることを確認。
 - v1121: 部隊の初期名の記号を国ごとにA,B…と数える(内部の枠GROUP_SLOTSはそのまま)。例: 枠A独→部隊A(独)、枠B ソ→部隊A(ソ)、枠C ソ→部隊B(ソ)。自分で付けた名前はそのまま。※サンプル未提示でユーザー「実施」。
 - v1120: カウンター選択の金枠を1.0pxに(nmPkCss)。ボグ等の車両タイル行(.rmBtns)の overflow:hidden で角の線が切れていた→ overflow:visible・角丸12px(nmPkCorner)。検証画面で確認済み。
