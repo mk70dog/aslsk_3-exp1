@@ -35062,6 +35062,8 @@ function nmRmVFireItems(n){
   if(vdone){it.push({row:1,ic:'route',t:'<span style="font-size:13px">'+((NM_VF_PH.filter(function(x){return x[0]===V.ph;})[0]||[])[1]||'')+'射撃'+(B.v?'・'+(V.ce?'CE':'BU'):'')+'・'+(V.ammo||'')+'</span>',btns:[['設定を変える',"NM_VF.edit=1;nmVfRe("+n+")"]]});}
   else{
   it.push({row:1,ic:'route',t:'フェイズ',btns:NM_VF_PH.map(function(x){return [(V.ph===x[0]?'✓':'')+x[1],"nmVfSet("+n+",'ph','"+x[0]+"')"];})});
+  if(B.g){var GQ={};try{GQ=nmGunPen(B.eh);}catch(e){}it.push({row:1,ic:'sel',t:'操作',btns:[[(GQ.nq?'':'✓')+'操作員(乗員)',"nmVfNqSet("+n+",0)"],[(GQ.nq?'✓':'')+'非操作員(分隊・HS)',"nmVfNqSet("+n+",1)"]]}); /* sample-gunop: 1.2.6 Non-Qualified Use */
+    if(GQ.nq)it.push({ic:'info',t:'<span style="font-size:12px;color:#ffb060">非操作員(Non-Qualified Use 1.2.6): 命中+2・赤TH#・B#−2(元のB#以上で除去)・ROF−1</span>'});}
   if(B.eh.st&&B.eh.st.fired&&!V.res)it.push({ic:'info',t:'<span style="color:#ffb040">このマーカーは射撃済('+B.eh.st.fired+')</span>',sub:'もう一度撃てるか確かめてください'});
   if(B.v&&B.eh.st&&B.eh.st.mv)it.push({ic:'move',t:'<span style="color:#c8a032">'+(B.eh.st.mv==='mot'?'Motion状態':'このターン移動済み')+'として計算</span>',sub:'ヘクスメニューの「移動」で変えられます'});
   if(B.te&&B.te.st&&B.te.st.mv&&B.te.veh)it.push({ic:'move',t:'<span style="color:#c8a032">目標は'+(B.te.st.mv==='mot'?'Motion状態':'移動中('+({4:'>3MP',3:'≤3MP',1:'≤1MP'}[B.te.st.mv]||'')+')')+'として計算</span>'});
@@ -38122,6 +38124,8 @@ function nmIsCrew(x){return !!x&&/乗員|crew/i.test(x.label||'');}
 function nmGunManCands(eh){var H=nmHexOfN(btNodeOf(eh.boardId,eh.col,eh.row)),sd=nmSideList('f').indexOf(eh)>=0?'f':'e',o=[];if(!H)return o;
   nmAllAt(H,sd).forEach(function(e){if(!e.grp||e.veh||e.gun)return;var d=nmGeList(e.grp);(d.items||[]).forEach(function(x){o.push({slot:e.grp,x:x,nat:x.nat||d.nat,items:d.items});});});return o;}
 function nmGunMan(eh){var m=eh&&eh.man;if(!m)return null;var c=nmGunManCands(eh).filter(function(o){return o.slot===m.slot&&o.x.pid===m.pid;})[0];return c?{slot:c.slot,x:c.x,nat:c.nat,items:c.items,crew:nmIsCrew(c.x),missing:false}:{missing:true};}
+function nmVfNqSet(n,v){var eh=nmVfEh();if(!eh)return;eh.nqSel=v;try{nmVfClrRes();}catch(e){NM_VF.res=null;}try{nmStSave();}catch(e){}nmVfRe(n);}
+(function(){var o=nmGunPen;nmGunPen=function(eh){var r=o.apply(this,arguments);if(eh&&eh.gun&&eh.nqSel!=null){r.nq=eh.nqSel===1;if(!r.none)r.txt=(r.nq?'非正規操作(命中+2・B#−2)':'正規(乗員)')+(r.cap?'・鹵獲(ROF−1・B#−2)':'')+(r.brk?'・操作するユニットが混乱':'');}return r;};})();
 function nmGunPen(eh){var g=eh&&eh.gun?nmGun(eh.gun):null,M=nmGunMan(eh),r={nq:false,cap:false,none:false,brk:false,txt:''};if(!g||!M)return r;if(M.missing){r.none=true;r.txt='操作するユニットがいません(射撃できない)';return r;}
   r.nq=!M.crew;var gn=(g.nat||'').split('/');r.cap=!!M.nat&&gn.indexOf(M.nat)<0;r.brk=!!M.x.broken;
   r.txt=(r.nq?'非正規操作(命中+2・B#−2)':'正規(乗員)')+(r.cap?'・鹵獲(ROF−1・B#−2)':'')+(r.brk?'・操作するユニットが混乱':'');return r;}
