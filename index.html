@@ -39872,7 +39872,9 @@ function nmFtBotFill(){var el=document.getElementById('nmFtBot'),on=document.doc
   else h+='<div class="cd" style="flex:1 1 auto;color:#8899aa;font-size:13px">起点A・目標Bを選ぶとLOSを表示</div>';return h;})();
   var _lastFn=function(fx){var h='';var L=S.log&&S.log[0];if(L){var tx=String(L.x||'').replace(/<[^>]*>/g,'');h+='<div class="cd" onclick="nmLjOpen('+L.ts+')" style="cursor:pointer;flex:0 1 auto;max-width:36%;background:#1f1710;border-color:#6b4a1e;flex-direction:column;align-items:flex-start;justify-content:center;gap:0"><div style="font-size:11px;color:#c8a032;white-space:nowrap">'+T('最後の判定')+' · '+String(L.t||'').replace(/<[^>]*>/g,'')+'</div><div class="t1" style="color:'+(L.c||'#e8eef4')+';max-width:100%">'+tx+'</div></div>';}else h+='<div class="cd" style="flex:'+fx+';color:#8899aa;font-size:13px">'+T('最後の判定はまだありません')+'</div>';return h;};
   var _one=function(k,w){if(k==='guide')return w==='L'?_guideH:_guideH.replace('flex:1 1 auto','flex:1 1 0');if(k==='last')return w==='L'?_lastFn('1 1 0').replace('flex:0 1 auto;max-width:36%','flex:1 1 0;max-width:none'):_lastFn('0 1 auto');return _cardOf(k,'1 1 0');};
-  h+=_one(_bL,'L')+(nmBotN()===3?_one(nmBotKind('M'),'M'):'')+_one(_bR,'R'); /* v1136 v1144 */
+  var _bM=nmBotKind('M');try{var _rr=S_LOS.result;if(_rr&&_rr.dataReady&&[_bL,_bR].concat(nmBotN()===3?[_bM]:[]).indexOf('guide')<0){ /* v1158(sample): A→Bを選んだ間は、SSR(なければ勝利条件)の枠をLOS+「判定」のカードに自動で替える */
+      if(nmBotN()===3){if(_bM==='ssr')_bM='guide';else if(_bL==='ssr')_bL='guide';else if(_bR==='ssr')_bR='guide';else _bM='guide';}else{if(_bL==='ssr')_bL='guide';else if(_bR==='ssr')_bR='guide';else _bL='guide';}}}catch(e){}
+  h+=_one(_bL,'L')+(nmBotN()===3?_one(_bM,'M'):'')+_one(_bR,'R'); /* v1136 v1144 */
   el.innerHTML=h;try{nmBotAutoW(el);}catch(e){}try{nmRbRender();}catch(e){}}
 /* v481(ダルマ指示「インスタント判定機能」): 地図で地点A→Bを選ぶ → ステータスバーのLOSをタップ → AとBの射撃判定のポップアップ。
    射撃フェイズ・Aで攻撃するもの(Aのマーカー/編成/車両。Aに何も無ければ編成や車両をAに置いて攻撃する)・Bの目標を選んで、今ある射撃パネルで判定 */
