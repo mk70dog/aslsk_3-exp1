@@ -35015,8 +35015,10 @@ function nmVfTH(n){var V=NM_VF,B=nmVfBuild();if(!V||!B||!V.a||!V.b)return;if(V.i
     else if(R.hit){var sk=V.ph==='PF'?'s3':'d2';nmSmokePut(V.tgt,sk);R.notes.push((sk==='s3'?'煙幕+3':'拡散煙幕+2')+'を'+TN0.nm+'に置きました');}R.smk=1;}
   if(V.ammo==='WP'){var wp=nmVfWp(B);if(wp!=null&&raw>wp){R.hit=false;B.eh.wpOut=1;R.notes.push('WP弾なし(原DR'+raw+'>欠乏No.'+wp+')。撃っていない扱い');}
     else if(R.hit){var wk=V.ph==='PF'?'w2':'w1';nmSmokePut(V.tgt,wk);R.notes.push((wk==='w2'?'WP+2':'拡散WP+1')+'を'+TN0.nm+'に置きました。そのヘクスの歩兵はNMC(士気チェック)');R.wp=1;
-      var wt=TN0.tem||0;if(wt>0){var wch=(raw===2);R.notes.push(wch?'<b>WPのCH(原DR2)</b>: NMCの出目に <b>+'+wt+'</b>(目標のTEM+'+wt+'が逆転して不利・6.2)':'WPの命中: NMCの出目から <b>−'+wt+'</b>(目標のTEM+'+wt+'を引く・有利・6.2)');}
-      if(B.gd&&B.gd.gsType==='MTR')R.notes.push('迫撃砲の空中炸裂(林内の目標)なら、NMCの出目にさらに +1(6.2)');}R.smk=1;} /* v440 / WPのTEM(sample-wptem) */
+      var wab=(B.gd&&B.gd.gsType==='MTR'&&/Woods/i.test(TN0.terr||''))?1:0,wt=wab?-1:(TN0.tem||0),wch=(raw===2),wd=wch?(wt>0?wt:-wt):-wt,wtn=(TN0.terr||'').replace('Stone Building','石造建物').replace('Wooden Building','木造建物').replace('MultipleWooden','木造建物').replace('Woods','林');R.wpDrm=wd;
+      if(wab)R.notes.push('迫撃砲の<b>空中炸裂</b>(林内の目標): 林のTEMは−1になり、NMCの出目に <b>+1</b>(6.2・1.1.1)'+(wch?'。CHでも負のTEMは足さない':''));
+      else if(wt>0)R.notes.push(wch?'<b>WPのCH(原DR2)</b>: '+wtn+'のTEM+'+wt+'が逆転 → NMCの出目に <b>+'+wt+'</b>(不利・6.2)':'WPの命中: '+wtn+'のTEM+'+wt+'を引く → NMCの出目に <b>−'+wt+'</b>(有利・6.2)');
+      else R.notes.push('WPの命中: 目標の地形のTEMは0なのでNMCの出目に補正なし');}R.smk=1;} /* v440 / WPのTEM(sample-wptem) */
   var acqPrev=B.eh.acq?JSON.parse(JSON.stringify(B.eh.acq)):null;var acq0=B.eh.acq&&B.eh.acq.n===V.tgt?B.eh.acq.lvl:0;B.eh.acq={n:V.tgt,uid:B.tu?B.tu.id:null,lvl:Math.max(-2,acq0-1),from:V.from,f:B.eh.facing==null?null:B.eh.facing,t:B.eh.tca==null?null:B.eh.tca,mv:(B.eh.st&&B.eh.st.mv)||0};if(nmStOf(B.eh).mal)delete B.eh.acq; /* v439: 目標獲得(同じ目標で−1→−2) */
   /* v540(ダルマ指示「目標獲得をルールに合わせる」 ASLSK 6.10/6.11): 煙幕・WPは獲得しない(それまでの獲得も外れる)。移動射撃・Motionの車両は獲得しない(同じ目標なら今の獲得のまま)。
      ATTはヘクスの獲得(そのヘクスの誰にでも)。目標の情報(向かう先を追うため)を記録 */
@@ -35118,7 +35120,7 @@ function nmRmVFireItems(n){
   it.push({ic:'fire',t:'<span>'+diceEmojiStr(V.a,V.b)+'　'+(ev.case16?'Case16('+Math.max(V.a,V.b)+'+'+Math.min(V.a,V.b)+'×2)='+R.thr:R.raw)+((R.fin-R.thr)?' '+sg(R.fin-R.thr):'')+' = '+R.fin+'　<b style="color:'+(R.hit?'#c8a032':'#8899aa')+'">'+(R.hit?'命中':'外れ')+'</b></span>',sub:'TH#'+(R.th||ev.th)+(R.hit&&B.mode==='VTT'?'　'+(R.loc==='turret'?'砲塔':'車体')+'・'+({front:'前面',side:'側面',rear:'背面'}[R.face])+'に命中':'')+(R.hit&&R.ch?'　クリティカルヒット':'')+(R.hit&&B.mode==='VTT'&&R.raw===2?'　クリティカルヒット':'')});
   R.notes.forEach(function(t){it.push({ic:'info',t:t});});
   if(R.notes.some(function(t){return /故障/.test(t);})){var ss=nmStOf(B.eh);it.push({ic:'sel',t:(ss.mal?'✓ ':'')+'撃った'+(B.v?'車両に「主砲故障」':'砲に「故障」')+'の印',f:"nmVfApplyMal("+n+")"});} /* v405 */
-  if(R.wp&&B.te&&!B.te.veh)nmMcSection(it,n,B.te,'MC','wp:'+V.tgt+':'+V.a+V.b,'nmVfRe'); /* v440: WPのNMC */
+  if(R.wp&&B.te&&!B.te.veh)nmMcSection(it,n,B.te,'MC'+(R.wpDrm?(R.wpDrm>0?'+':'')+R.wpDrm:''),'wp:'+V.tgt+':'+V.a+V.b,'nmVfRe'); /* v440: WPのNMC(sample-wptem: TEM分の加減入り) */
   if(R.hit&&!R.smk){
     if(nmVfIsAtt(B)&&B.mode==='ITT')R.idrm=(R.idrm||0)+nmVfAttTem(B); /* v439: ATTはTEMをIFTへ */
     if(B.mode==='VTT')it.push({ic:'tgt',t:'<span style="display:inline-block;width:fit-content;max-width:100%;padding:2px 10px;border:1px solid #c8a032;border-radius:10px;background:#1d1a12;color:#ffd070;font-size:14px;font-weight:600;letter-spacing:.5px">TK# '+(R.basic==null?'なし':(R.basic+(R.raw===2?'×2(CH)':'')+(R.face==='rear'?'+1(背面)':'')+'−AF'+R.af+' = <b>'+R.tk+'</b>'))+'</span>',sub:nmVfTgtAspect(B)+'　'+(R.tk!=null?'2D6が'+R.tk+'未満で撃破・同じで'+(R.loc==='hull'?'走行不能':(V.ammo==='HE'?'ショック':'効果なし'))+'・'+(R.tk+1)+'で'+(V.ammo==='HE'?(R.loc==='turret'?'ショック':'走行不能'):'ショックの可能性'):'')});
@@ -35277,7 +35279,7 @@ function nmStUnitTog(n,slot,idx,k){var d=nmGeList(slot),x=d.items[idx];if(!x)ret
 function nmStWreck(n,sd,H0){var H=H0||NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(!eh)return;var vid=eh.veh||null,l=nmWreckList(H);
   if(sd==='f'){var L=nmSideList('f');L.splice(L.indexOf(eh),1);}else{var E=nmSideList('e');E.splice(E.indexOf(eh),1);}
   if(l.length<3)l.push(vid);nmWreckSave(H,l);}
-function nmMcParse(r){if(!r||r==='-')return null;var m;if(r==='PTC')return {k:'PTC',drm:0};if((m=/^(\d?)MC$/.exec(r)))return {k:'MC',drm:m[1]?+m[1]:0};if((m=/^K(\d)$/.exec(r)))return {k:'MC',drm:+m[1],cas:1};if((m=/^(\d)KIA$/.exec(r)))return {k:'MC',drm:0,kia:+m[1]};return null;}
+function nmMcParse(r){if(!r||r==='-')return null;var m;if(r==='PTC')return {k:'PTC',drm:0};if((m=/^(\d?)MC$/.exec(r)))return {k:'MC',drm:m[1]?+m[1]:0};if((m=/^MC([+-]\d+)$/.exec(r)))return {k:'MC',drm:+m[1]}; /* sample-wptem: WPのNMCはTEM分を出目に加減(6.2) */if((m=/^K(\d)$/.exec(r)))return {k:'MC',drm:+m[1],cas:1};if((m=/^(\d)KIA$/.exec(r)))return {k:'MC',drm:0,kia:+m[1]};return null;}
 var NM_MC=null; /* {key, r, res:{idx:{dr,fin,ok}}} */
 function nmMcUnitMor(x){var D=UNITS[x.nat]||{},u=((x.kind==='smc'?D.smc:D.mmc)||[]).filter(function(q){return q.lbl===x.label;})[0];var w=(x.kind==='smc'&&x.wounded)?1:0;return u?{mor:u.mor-w,cmd:(u.cmd||0)+w}:{mor:null,cmd:0};} /* v405: 負傷SMCは士気・指揮修正が1悪化(3.2.3) */
 function nmMcLdrDrm(items,res){var best=0;items.forEach(function(x,i){if(x.kind!=='smc'||x.broken||x.pinned)return; /* v896: PINの指揮官は修正を使えない(3.2.3) */var r=res[x.pid];if(r&&!r.ok)return;var c=nmMcUnitMor(x).cmd;if(c<best)best=c;});return best;}
@@ -40455,7 +40457,7 @@ function nmIjNvDraw(){var J=NM_IJ,V=NM_VF;if(!J||!V)return;var hA=document.getEl
         }
       else h+='<div class="ijS" style="margin-top:6px">'+T('TK判定のダイス')+' <span style="color:#8fa6bd;font-size:11px">'+T(nmAdOn()?'入力しなければ自動で振る':'出目を入力してください(オートダイスOFF)')+'</span></div><div class="ijRow" style="align-items:center">'+dice('c1','赤','#ff9090')+'<span style="width:12px"></span>'+dice('c2','白','#e8eef4')+'</div>';}
     if(R.ife){var ri=rm(R.ife.r);h+='<div class="nvRt" style="margin-top:6px">'+diceEmojiStr(V.a,V.b)+' IFE '+R.ife.fp+'FP('+R.ife.col+'列) '+R.raw+(R.ife.drm?'+'+R.ife.drm:'')+'='+R.fin+' → <b style="color:'+ri.c+'">'+ri.t+'</b> <span class="nvDim">命中判定なし・DRM=TEM・妨害</span></div>';var im=[];try{nmMcSection(im,n,te,R.ife.r,'vife:'+V.tgt+':'+V.a+V.b,'nmVfRe');}catch(e){}h+=nmIjItemsHTML(im);}
-    if(R.wp&&te&&!te.veh){var wm=[];try{nmMcSection(wm,n,te,'MC','wp:'+V.tgt+':'+V.a+V.b,'nmVfRe');}catch(e){}h+=nmIjItemsHTML(wm);}
+    if(R.wp&&te&&!te.veh){var wm=[];try{nmMcSection(wm,n,te,'MC'+(R.wpDrm?(R.wpDrm>0?'+':'')+R.wpDrm:''),'wp:'+V.tgt+':'+V.a+V.b,'nmVfRe');}catch(e){}h+=nmIjItemsHTML(wm);}
     if(R.hit&&!R.smk&&B.mode==='ITT'){if(nmVfIsAtt(B))R.idrm=(R.idrm||0)+nmVfAttTem(B);
       h+='<div class="nvRt" style="margin-top:6px">'+(R.ch?'クリティカル(TEM反転) ':'')+R.fp+'FP '+IFT_LBL[ci(R.fp)]+'列'+(R.idrm?' DRM '+sg(R.idrm):'')+'</div>';
       if(O){h+='<div class="nvRt">'+diceEmojiStr(V.c1,V.c2)+' '+O.c+(R.idrm?' '+sg(R.idrm):'')+' <b style="color:'+O.col+'">'+O.t+'</b> <span class="nvDim">'+O.iftCol+'列</span></div>';
