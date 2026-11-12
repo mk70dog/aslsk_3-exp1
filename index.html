@@ -42033,7 +42033,7 @@ function nmMenuMark(k){
 function btRMenu(n,lp){ // lp=長押しで開いた(指を離した直後のクリックで閉じない)
   var keepO=nmScrollKeep();
   try{var _ib=document.querySelector('#nmIj .ijBox');NM_IJ_ST=(_ib&&NM_IJ&&NM_IJ.emb)?_ib.scrollTop:null;}catch(e){}
-  NM_IN_RM=1;try{BtRmClose();}finally{NM_IN_RM=0;}BT_RM_FN=[];window.NM_MU_F=0;var it=btActive()?btRMenuItems(n):nmRMenuItems(n);var MU1=window.NM_MU_F;window.NM_MU_F=0;nmHqBackIns(it);nmBackAll(it);try{it=nmDsTag(it);}catch(e){console.log('dsTag',e);}try{it=nmAdTag(it);}catch(e){console.log('adTag',e);}
+  NM_IN_RM=1;try{BtRmClose();}finally{NM_IN_RM=0;}BT_RM_FN=[];window.NM_MU_F=0;var it=btActive()?btRMenuItems(n):nmRMenuItems(n);var MU1=window.NM_MU_F||!(typeof NM_RM_CUR!=='undefined'&&NM_RM_CUR);window.NM_MU_F=0; /* sample-emptyhex: 何もないヘクスのメニューなど、判定パネル以外のメニューはすべて基本画像のデザイン */nmHqBackIns(it);nmBackAll(it);try{it=nmDsTag(it);}catch(e){console.log('dsTag',e);}try{it=nmAdTag(it);}catch(e){console.log('adTag',e);}
   var h='<div class="rmBox">',cls0=false,CLS=(1)?'':'<button class="rmCls" onclick="event.stopPropagation();BtRmClose()">✕ '+T('閉じる')+'</button>'; /* v481(ダルマ指示「閉じるを追加 他のメニューでも」): どのメニューも先頭の行の右に「閉じる」 */
   it.forEach(function(x){if(x.sep){h+=x.lbl?'<div style="display:flex;align-items:center;gap:8px;margin:8px 4px 2px;font-size:12px;font-weight:700;color:#e0b850"><span>'+x.lbl+'</span><span style="flex:1;height:1px;background:#39414f"></span></div>':'<div class="rmSep"></div>';return;}
     if(!cls0){cls0=true;if(!CLS){}else if(x.html||x.arr||x.row)h+='<div class="rmIt rmRow" style="justify-content:flex-end;padding:2px 10px;min-height:0" onclick="event.stopPropagation()">'+CLS+'</div>';else x._cls=1;}
