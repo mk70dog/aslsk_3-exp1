@@ -34646,7 +34646,7 @@ function nmRmFaceItems(n,sd){
   it.push({ic:'turret',img:v?vaslCtrHTML(v.id,34,''):g?vaslCtrHTML(g.id,34,''):'',t:'<span><span style="color:'+L.col+'">'+nmNatShortOf((v||g||{}).nat,L.nm)+'</span>: '+(v?nmAfvName(v):g?nmGunName(g):L.mk)+'</span>',sub:'矢印のボタンで方向を決める'+(tur?'(砲塔は車体と違う時だけ地図に「砲」)':v?'(無砲塔)':g?'(砲身の向き=CA)':'')});
   it.push({html:'<div style="display:flex;gap:8px;justify-content:center;width:100%">'+nmFacePad(eh,'vca',n,sd)+(tur?nmFacePad(eh,'tca',n,sd):'')+'</div>'});
   if(tur&&eh.facing!=null)it.push({ic:'rot',t:'砲塔を車体と同じ向きに',f:(sd==='f'?'nmRmSetTcaF':'nmRmSetTca')+"("+n+","+eh.facing+")"});
-  it.push({ic:'ok',t:'<b style="font-size:17px">'+(g?'次へ':'OK')+'</b>',sub:g?'次: 操作員・非操作員を選ぶ':(NM_VF&&NM_VF_FROM!=null?'砲撃に戻る':'メニューに戻る'),f:g?("NM_FACE.op=1;btRmReopen("+n+")"):_doneF}); /* sample-faceok */
+  it.push({ic:'ok',t:'<b style="font-size:17px">'+(g?'次へ':'完了')+'</b>',sub:g?'次: 操作員・非操作員を選ぶ':'マップに戻る',f:g?("NM_FACE.op=1;btRmReopen("+n+")"):((NM_IJFM&&NM_IJ)?_doneF:"NM_FACE=null;NM_VF_FROM=null;BtRmClose()")}); /* sample-faceok */
   return it;
 }
 function nmFaceNq(n,v){var H=NM_RM_HEX,sd=NM_FACE&&NM_FACE.sd,eh=H&&sd&&nmUnitAt(H,sd);if(eh){eh.nqSel=v;try{nmStSave();}catch(e){}}if(NM_FACE)NM_FACE.opDone=1;btRmReopen(n);}
@@ -42430,7 +42430,7 @@ function btRmReopen(n){if(NM_RV&&!NM_RM_SUB)NM_RM_SUB='rv'; /* v759: 修理パ�
   var nb=document.querySelector('#btRm .rmBox');if(nb&&ob){if(pos&&nb.offsetHeight<=innerHeight-16){nb.style.left=pos.l;nb.style.top=pos.t;var r=nb.getBoundingClientRect();if(r.bottom>innerHeight-8)nb.style.top=Math.max(8,innerHeight-8-r.height)+'px';}nb.scrollTop=st;}try{btRmClamp(document.querySelector('#btRm .rmBox'));}catch(e){}
   /* v602(バグ修正 ダルマ報告「拡大縮小を選ぶとメニューが上にずれる」): clampが高さと位置を取り直してずれるので、開き直し前の位置・高さに戻す */
   try{var fb=document.querySelector('#btRm .rmBox');if(fb&&ob)fb.style.animation='none';
-    if(fb&&pos&&pos.t&&fb.querySelector('.plWrap')){fb.style.left=pos.l;fb.style.top=pos.t;fb.scrollTop=0;btRmClamp(fb);var r2=fb.getBoundingClientRect(),H2=innerHeight;if(r2.bottom>H2-8||r2.top<8)fb.style.top=Math.max(8,Math.min(r2.top,H2-8-r2.height))+'px';return;} /* v786(ダルマ報告「スクロールせずに全て表示」): 配置パネルは元のメニューの高さに縮めず、全部が見える高さにする */
+    if(fb&&pos&&pos.t&&(fb.querySelector('.plWrap')||NM_FACE)){ /* sample-facefull: 方向の画面も元のメニューの高さに縮めず全部見せる */fb.style.left=pos.l;fb.style.top=pos.t;fb.scrollTop=0;btRmClamp(fb);var r2=fb.getBoundingClientRect(),H2=innerHeight;if(r2.bottom>H2-8||r2.top<8)fb.style.top=Math.max(8,Math.min(r2.top,H2-8-r2.height))+'px';return;} /* v786(ダルマ報告「スクロールせずに全て表示」): 配置パネルは元のメニューの高さに縮めず、全部が見える高さにする */
     if(fb&&pos&&pos.t&&pos.h){var nh=fb.offsetHeight;if(nh>pos.h+1){fb.style.maxHeight=pos.h+'px';}fb.style.left=pos.l;fb.style.top=pos.t;fb.scrollTop=st;}}catch(e){}}
 function btRmClamp(box){if(!box||!btMapFullOn())return;var Hh=innerHeight,MT=8,MB=8,tb=document.getElementById('nmFullTabs')||document.getElementById('btFullTop'),fb=document.getElementById('nmFtBot')||document.getElementById('btFullBot');if(tb)MT=Math.max(8,tb.getBoundingClientRect().bottom+4);if(fb)MB=Math.max(8,Hh-fb.getBoundingClientRect().top+4);var st=box.scrollTop;box.style.maxHeight=(Hh-MT-MB)+'px';var r=box.getBoundingClientRect(),y=Math.min(Math.max(MT,r.top),Hh-MB-r.height);box.style.top=y+'px';box.scrollTop=st;} /* v501 */
 var BT_RM_SAVE=null;function btRmSave(){var b=document.querySelector('#btRm .rmBox');BT_RM_SAVE=b?{l:b.style.left,t:b.style.top,h:b.offsetHeight}:null;} /* v602 */
