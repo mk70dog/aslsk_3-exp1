@@ -37522,6 +37522,7 @@ function nmToolRun(gx,gy){nmToolRunN(nmNodeOfPx({x:gx,y:gy}));}
 function nmToolRunN(n){var k=NM_TOOL;NM_TOOL=null;NM_FACE=null;NM_RM_VEH=0;NM_GM=null;NM_GM_AFTER=null; /* v558(バグ修正 ダルマ報告「ツールバーの射撃でマーカーをタップしても向きの画面が出る」): 前に閉じた向きの画面の状態が残っていた */try{nmFtActFill();}catch(e){}if(n==null||n<0)return;
   if(k==='cost'&&NM_COST_DST!=null){var d=NM_COST_DST;if(n===d){nmCostEnd();return;}NM_COST_S0=n;NM_RM_HEX=nmHexOfN(d);nmRmShow('ncost',d,'n');NM_TOOL='cost';try{nmFtActFill();}catch(e){}return;} /* v810 */
   if(k==='view'){ /* v785(ダルマ指示): 別のヘクスをタップで起点を変更・同じヘクスをタップで終了 */
+    if(BT_RMS&&BT_RMS.k==='view'&&BT_RMS.bd&&BT_RMS.n!==n){BT_RMS.bdN=n;Draw();return;} /* v1158: 内訳ON中は、タップしたヘクスの妨害の内訳を出す */
     if(BT_RMS&&BT_RMS.k==='view'&&BT_RMS.n===n){BtRmShowOff();try{nmFtActFill();}catch(e){}return;}
     NM_RM_HEX=nmHexOfN(n);nmRmShow('view',n);NM_TOOL='view';try{nmFtActFill();}catch(e){}return;}
   if(k==='move'){var ML=nmToolMovePick(n);if(ML.length===1){nmToolMoveGo(n,0);return;}if(ML.length>1){nmToolMoveAsk(n,ML);return;}nmIjMenuAt(n);nmRmSubOpen('march',n);return;}
@@ -41761,7 +41762,8 @@ function nmRmPanelHTML(){ /* 通常のMAPタブ: 右クリックの表示結果(
   var o=btRmLive();if(!o||!BTG.nodes[o.n])return '';
   var N=BTG.nodes[o.n],h='<div id="nmRmPop" style="position:fixed;left:50%;bottom:calc(var(--nmsumh,0px) + 10px);transform:translateX(-50%);z-index:8915;max-height:42vh;overflow-y:auto;max-width:min(640px,96vw);background:#0a1420;border:1px solid #66ccff;border-radius:6px;padding:6px 9px;box-shadow:0 4px 20px #000a;font:12px/1.5 AppFont,AppJP,monospace;color:#ccddee"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">',body='';
   if(o.k==='view'){h+='<b style="color:#66ccff">見える範囲: '+N.nm+' から</b>';
-    body=(o.todo?'<span style="color:#ffd040">精密な判定中 '+Math.round(100*o.done/Math.max(1,o.tot))+'%(今は簡易判定)</span>　':'')+'見える '+((o.c0||0)+(o.c1||0))+'ヘクス(うち妨害あり '+(o.c1||0)+')　黒=見えない・緑=妨害なし・黄=妨害あり(+数字=LOS妨害)';}
+    body=(o.todo?'<span style="color:#ffd040">精密な判定中 '+Math.round(100*o.done/Math.max(1,o.tot))+'%(今は簡易判定)</span>　':'')+'見える '+((o.c0||0)+(o.c1||0))+'ヘクス(うち妨害あり '+(o.c1||0)+')　黒=見えない・緑=妨害なし・黄=妨害あり(+数字=LOS妨害の合計)'
+      +'<div style="margin-top:3px"><button class="b sm'+(o.bd?' on':'')+'" style="padding:3px 10px" onclick="nmViewBdTog()">内訳'+(o.bd?' ON':'')+'</button> <span style="color:#9ab">'+(o.bd?'ヘクスをタップ → 起点からそのヘクスまでの妨害の内訳(起点の変更は「内訳」をOFFにして)':'ONにすると、タップしたヘクスの妨害の足し算を表示')+'</span></div>'+(o.bd&&o.bdN!=null?nmViewBdHTML(o):'');}
   else if(o.k==='nthreat'||o.k==='nfire'){var FR=o.k==='nfire',fT=o.H?nmUnitAt(o.H,'f'):null,fTV=fT&&fT.veh?nmAfv(fT.veh):null;
     h+='<b style="color:'+(FR?'#80c0ff':'#ff8080')+'">'+N.nm+(fTV?'('+nmAfvName(fTV)+')':'')+(FR?' から攻撃可能な敵軍（自軍→敵軍）':' を攻撃可能な敵軍（敵軍→自軍）')+'</b>';
     body=(o.list.length?'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:2px">'+o.list.map(function(x,i){var on=o.sel===i,ev=x.eh.veh?nmAfv(x.eh.veh):null,eg=(!ev&&x.eh.gun)?nmGun(x.eh.gun):null,b=nmThreatBest(x.calc);
@@ -42007,6 +42009,21 @@ function btRmView(o){
   o.m=m;btRmViewCount(o);o.todo=ids;o.done=0;o.tot=ids.length;
   setTimeout(function(){btRmViewRefine(o);},50);
 }
+/* v1158(sample): 見える範囲の「内訳」 起点→タップしたヘクスの妨害を、通過したヘクスごとに足し算で表示(A→Bと同じ計算) */
+function nmViewBdTog(){var o=BT_RMS;if(!o||o.k!=='view')return;o.bd=!o.bd;o.bdN=null;Draw();}
+function nmViewBdCalc(o){var A=BTG.nodes[o.n],B=BTG.nodes[o.bdN],r=null;
+  try{r=losCheckLOSGlobal(A.x,A.y,B.x,B.y,S_LOS.orchardSeason,S_LOS.grainSeason);}catch(e){}
+  if(!r||r.error)return null;
+  var L=(r.hindranceHexes||[]).map(function(hh){return {hex:String(hh[0]||'').replace(/^([A-Za-z]+)盤\s*/,function(m,b){return b.toLowerCase();}),what:nmHdWhat(hh),v:nmHdVal(hh),own:/自ヘクス/.test(hh[1]||'')};});
+  var sn=0;try{sn=scenSnowHind(r.range);}catch(e){}if(sn)L.push({hex:'—',what:'降雪(シナリオ)',v:sn});
+  var tot=0;L.forEach(function(x){tot+=x.v;});
+  return {blocked:!!r.blocked,L:L,tot:tot,why:r.blockingTerrain?((r.blockingHex||'')+' '+(typeof losTerrainNameJP==='function'?losTerrainNameJP(r.blockingTerrain):r.blockingTerrain)):'',res:r};}
+function nmViewBdHTML(o){var A=BTG.nodes[o.n],B=BTG.nodes[o.bdN],I=nmViewBdCalc(o);if(!I)return '';
+  var h='<div style="margin-top:4px;border-top:1px solid #234;padding-top:3px"><b style="color:#ffd0a0">'+A.nm+' → '+B.nm+'</b> 距離'+btDist(o.n,o.bdN)+'　';
+  if(I.blocked)h+='<b style="color:#ff6060">見えない</b>'+(I.why?'(さえぎる: '+I.why+')':'')+'</div>';
+  else if(!I.L.length)h+='<b style="color:#60e060">妨害なし(+0)</b></div>';
+  else h+=I.L.map(function(x){return '<span style="white-space:nowrap"><b style="color:#9cf">'+x.hex+'</b> '+x.what+' <b style="color:#ffd040">+'+x.v+'</b></span>';}).join(' <span style="color:#789">＋</span> ')+' <span style="color:#789">＝</span> <b style="color:#ffd040;font-size:14px">合計+'+I.tot+'</b>'+(I.tot>=6?' <b style="color:#ff6060">(+6以上で見えない)</b>':'')+'</div>';
+  return h;}
 function btRmViewCount(o){var c0=0,c1=0;Object.keys(o.m).forEach(function(k){var v=o.m[k];if(v===0)c0++;else if(v>0)c1++;});o.c0=c0;o.c1=c1;}
 function btRmViewRefine(o){
   if(BT_RMS!==o||!o.todo)return;
@@ -42232,6 +42249,7 @@ function btRmShowSVG0(dl){
       else if(v===0)h+='<polygon points="'+btHexPoly(i,dl)+'" fill="#40ff60" fill-opacity="0.16"/>';
       else{h+='<polygon points="'+btHexPoly(i,dl)+'" fill="#ffd040" fill-opacity="0.26"/>';}});
     Object.keys(o.m).forEach(function(k){var v=o.m[k];if(v>0)h+=btRmTxt(btDispPt(+k,dl),'+'+v);});
+    if(o.bd&&o.bdN!=null&&BTG.nodes[o.bdN]){var bp=btDispPt(o.bdN,dl),ap=btDispPt(o.n,dl);h+='<line x1="'+ap.x+'" y1="'+ap.y+'" x2="'+bp.x+'" y2="'+bp.y+'" stroke="#fff" stroke-width="3" stroke-dasharray="8 5"/><polygon points="'+btHexPoly(o.bdN,dl)+'" fill="none" stroke="#fff" stroke-width="4"/>';}
     h+='<polygon points="'+btHexPoly(o.n,dl)+'" fill="none" stroke="#66ccff" stroke-width="2.5"/>';
     h+=nmFeatMarkSVG('eye',c,nmNodeOcc(o.n)); /* v352(ダルマ指示「ここから見える・ここを撃てる・ここまでのマップ上のマークを変更」) */
   }else if(o.k==='threat'){
