@@ -34638,8 +34638,8 @@ function nmRmFaceItems(n,sd){
   if(g&&NM_FACE&&NM_FACE.op){ /* sample-faceok: OKの後に、砲を操作する人(乗員/非操作員)を選ぶ */
     var GQ2={};try{GQ2=nmGunPen(eh);}catch(e){}
     it.push({ic:'turret',img:vaslCtrHTML(g.id,34,''),t:'<span><span style="color:'+L.col+'">'+nmNatShortOf(g.nat,L.nm)+'</span>: '+nmGunName(g)+'</span>',sub:'この砲を撃つのは?(1.2.6 非正規操作は命中+2・B#−2)'});
-    it.push({row:1,ic:'sel',t:'操作',btns:[[(GQ2.nq?'':'✓')+'操作員(乗員)',"nmFaceNq("+n+",0)"],[(GQ2.nq?'✓':'')+'非操作員(分隊・HS)',"nmFaceNq("+n+",1)"]]});
-    if(GQ2.txt)it.push({ic:'info',t:'<span style="font-size:12px;color:#9fb2c8">'+GQ2.txt+'</span>'});
+    it.push({row:1,ic:'sel',t:'操作',btns:[[(eh.nqSel===0?'✓':'')+'操作員(乗員)',"nmFaceNq("+n+",0)"],[(eh.nqSel===1?'✓':'')+'非操作員(分隊・HS)',"nmFaceNq("+n+",1)"]]}); /* 最初はどちらも未選択(nqSelがnullの間は✓なし) */
+    if(eh.nqSel!=null&&GQ2.txt)it.push({ic:'info',t:'<span style="font-size:12px;color:#9fb2c8">'+GQ2.txt+'</span>'});
     if(NM_FACE.opDone)it.push({ic:'ok',t:'<b style="font-size:17px">完了</b>',sub:'マップに戻る',f:(NM_IJFM&&NM_IJ)?_doneF:"NM_FACE=null;NM_VF_FROM=null;BtRmClose()"}); /* sample-facedone: どちらかを選ぶと完了ボタンが出る */
     return it;}
   it.push({ic:'turret',img:v?vaslCtrHTML(v.id,34,''):g?vaslCtrHTML(g.id,34,''):'',t:'<span><span style="color:'+L.col+'">'+nmNatShortOf((v||g||{}).nat,L.nm)+'</span>: '+(v?nmAfvName(v):g?nmGunName(g):L.mk)+'</span>',sub:'矢印のボタンで方向を決める'+(tur?'(砲塔は車体と違う時だけ地図に「砲」)':v?'(無砲塔)':g?'(砲身の向き=CA)':'')});
