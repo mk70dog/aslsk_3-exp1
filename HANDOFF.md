@@ -2,6 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- v1151: サイドバー(nmBarLite)の判定の下に「部隊」ボタン(#nmSbSu、兵士マーク案C、nmSuOpen)。NM_TB_ITEMSに'su'追加(既存設定ではhqの直後に挿入)。
 - v1150: 自動同期(S.nmAsOn初期ON、⇅同期長押しのポップでON/OFF、ONは⇅に緑の点)。nmAsLoop=20秒ごとnmGsSync({auto:1})で相手ファイルを受信し変化があれば反映+トースト。送信は自分の編成・ターン・PF使用数が変わった時のみ(nmAsKick: nmSuClose/nmIjClose/nmPhaseStep/nmPfUse)。ペイロードv2に turn{cur,half,phase,ended,at}・pf{used,at}、後から変えた方を採用(S.nmAsTurnAt/S.nmAsPfAt)。2台での実地テスト未。
 - v1149: 部隊の準備の各ユニットに状態ボタン(混乱・PIN・CX・負傷[SMC]・クラス低下[ELR_MAPにある時]・損耗[乗員以外])。nmSuStChips/nmSuStOp。スポット判定の状態変更と同じデータ。
 - v1148: 部隊の準備に⇅同期で受信した相手の編成(相手A等)を、その国のタブの下に「相手のiPadの編成」として見るだけで表示(nmSuOppSlots)。相手が使ったユニットはOBの残りから引く(nmSuUsed)。ダルマ報告「同期 部隊の準備に出ない」。
