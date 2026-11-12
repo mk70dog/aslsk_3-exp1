@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 返事待ち: sample-gunop(ダルマ「砲撃 マルチ判定 スポット判定時 操作員 非操作員 選択ボタン追加 サンプル」)。判定パネルの砲撃(nmVf、スポット判定2画面目も同じパネル)のフェイズの下に「操作: 操作員(乗員)/非操作員(分隊・HS)」(nmVfNqSet→eh.nqSel、nmGunPen をラップして nq を上書き)。非操作員で TH+2・赤TH#・B#−2・ROF−1 が既存計算で効くのを確認。samples/sample-gunop-*.png。要確認: ルール上 元のB#以上は「除去」だが nmVfTH の結果文は「故障」のまま(既存の乖離)。
+- 返事待ちなし(v1153 実施済み)。
+- v1153: sample-gunop 実施(ダルマ「結果文も合わせて直す 実施」)。砲撃(判定パネル・スポット判定2画面目)のフェイズの下に『操作: 操作員(乗員)/非操作員(分隊・HS)』(nmVfNqSet→eh.nqSel、nmGunPen をラップ)。非操作員は 1.2.6 どおり TH+2・赤TH#・B#−2・ROF−1。結果文の乖離を解消: 非操作員(非車両の砲)で原DR≧元のB#(印刷のB#)→『砲は永久に除去』(mal は立てない)、原DR≧B#−2 かつ元のB#未満→故障。通常射撃(nmVfTH)とIFE枠の両方。確認: dev外の /tmp テストで raw=B#/B#−1/B#−2/B#−3 と操作員を確認(g_45at B#9: 9→除去・8,7→故障・6→なし・操作員9→故障)、smoke errors 0。
 - v1152: ターン表が同期しない(ダルマ報告): 最初の同期前(起動から約24秒)にフェイズを送るとNM_GS.tsが未設定で変更扱いにならず、at=0のまま送られ相手が無視していた → nmPhaseStepで必ずS.nmAsTurnAt=今に、起動時に基準を取り1.5秒後に1回同期。2ページのモック(fetch差し替え)で双方向に確認(/tmp/sy.js)。
 - v1151: サイドバー(nmBarLite)の判定の下に「部隊」ボタン(#nmSbSu、兵士マーク案C、nmSuOpen)。NM_TB_ITEMSに'su'追加(既存設定ではhqの直後に挿入)。
 - v1150: 自動同期(S.nmAsOn初期ON、⇅同期長押しのポップでON/OFF、ONは⇅に緑の点)。nmAsLoop=20秒ごとnmGsSync({auto:1})で相手ファイルを受信し変化があれば反映+トースト。送信は自分の編成・ターン・PF使用数が変わった時のみ(nmAsKick: nmSuClose/nmIjClose/nmPhaseStep/nmPfUse)。ペイロードv2に turn{cur,half,phase,ended,at}・pf{used,at}、後から変えた方を採用(S.nmAsTurnAt/S.nmAsPfAt)。2台での実地テスト未。
