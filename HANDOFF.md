@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 返事待ちなし(v1160 実施済み)。保留: ①WPのNMCはヘクスのTEMのみ(ユニットごとの陣地等のTEMは未対応)。②M4A1・M4A3E2・英シャーマンの発煙迫撃砲(sM)の開始時期は実物の裏面で未確認。③ジャンボの「A4⁴/5⁵」の「/」の読みはルール原文に明記なし。④v1150 の自動同期の2台での実地テスト未。
+- 返事待ちなし(v1161 実施済み)。保留: ①WPのNMCはヘクスのTEMのみ(ユニットごとの陣地等のTEMは未対応)。②M4A1・M4A3E2・英シャーマンの発煙迫撃砲(sM)の開始時期は実物の裏面で未確認。③ジャンボの「A4⁴/5⁵」の「/」の読みはルール原文に明記なし。④v1150 の自動同期の2台での実地テスト未。 ④判定の入力画面(ダイス・修正値)に「クリア」が要るかは未決(ダルマに確認中)。⑤車両の移動中の煙幕(行軍のmapSmokeDispCard)で直したい点があるか確認中。
+- v1161: sample-stclear・sample-mjclear 実施。①nmStClrRow/nmStClr: nmStFiredRowの最後に「状態をクリア」行(射撃済・移動/Motion・ACQ(eh.acq)を1つずつ+全部。混乱・PIN・CE/BUは対象外)。②nmIjClearAll: スポット判定の設定画面(ijFtSet)左に「クリア」=nmIjClose→nmIjOpen(A・Bはそのまま)。マルチ判定のユニット選択(NM_SC)には元から「↺ クリア」あり(重複は付けていない)。
 - v1160: ダルマ「SSR枠がLOS+判定に替わるのはいらない・赤枠(A/Bの小さなバー nmAbBd)がABを実施しても出ないことがある」。①v1159の②(下の帯のSSR枠→guide自動切替)を取り消し。②原因=nmAbBdClose(×)で NM_ABBD_X にA/Bの座標を記録し、nmLosOffしても消えず、同じA・Bを選び直すとnmAbBoardが非表示のまま → nmAbBoard冒頭(pxA/pxBが無い時)・nmLosOff・Aを選び直す時に NM_ABBD_X=null。解除→同じA/B再選択で出ることを確認(旧版は出ない)。他の非表示条件(btRm/nmHq/nmIjが開いている・S.nmAbBdOff・移動中)は仕様のまま。
 - v1159: sample-viewhind・sample-spotbtn 実施(ダルマ「実施」)。①見える範囲のパネルに「内訳」ボタン(BT_RMS.bd): ON中にヘクスをタップすると BT_RMS.bdN を設定し nmViewBdCalc(losCheckLOSGlobalのhindranceHexes)で足し算を表示、地図に白い点線と枠。起点変更は内訳OFFで。②nmFtBotFill: S_LOS.result.dataReady かつ3枠/2枠のどれも 'guide' でない時、SSR枠(なければ…)を一時的に 'guide'(LOS+判定)に替える(v1144の既定でLOSカードが出なくなっていた)。画面上部のA/Bの小さなバーに判定ボタンが出ない件(ダルマ画面)は原因未調査。
 - v1158: sample-ipadswap2 実施(ダルマ「プレイ中同期を別のiPadに変更→iPadを入れ替えて続ける→位置も→実施」)。⇅同期の長押し(nmGsRoleAsk)に「1P/2Pを引き継ぐ」(nmGsTakeover): Gistの aslsk_grp_<p1|p2>.json から自分の側の編成・ターン・PF・map(自軍/敵軍/残骸/煙幕/建物マーク/route/resid/A・B)を取り込み、端末ID(dev)をこのiPadへ書き換えて送る(前のiPadは「もう1台も同じ」で外れる)。nmGsSync の送信に map:nmsPayloadMap()(groups除く・約数百B)を追加(v3・変化があれば20秒ごと)。取込前に nmBkSnap('引き継ぎ前')で元に戻す可。Gistは模擬fetchで確認、実機2台のテストは未。
