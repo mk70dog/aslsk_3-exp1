@@ -39562,7 +39562,7 @@ function nmDotOff(){try{var _old=document.getElementById('nmDotOff');if(_old)_ol
   var walk=function(rules,wrap){for(var k=0;k<rules.length;k++){var r=rules[k];
     if(r.cssRules&&!r.selectorText){var inner=[];for(var j=0;j<r.cssRules.length;j++){var o2=one(r.cssRules[j]);if(o2)inner.push(o2);}if(inner.length&&r.conditionText!=null)out.push('@media '+r.conditionText+'{'+inner.join('')+'}');continue;}
     var o=one(r);if(o)out.push(o);}};
-  for(var si=0;si<document.styleSheets.length;si++){var ss=document.styleSheets[si],rl=null;if(ss.ownerNode&&ss.ownerNode.id==='nmDotOff')continue;try{rl=ss.cssRules;}catch(e){continue;}if(!rl)continue;walk(rl);}
+  for(var si=0;si<document.styleSheets.length;si++){var ss=document.styleSheets[si],rl=null;if(ss.ownerNode&&(ss.ownerNode.id==='nmDotOff'||ss.ownerNode.id==='nmMuCss'))continue; /* v1178: .rmBox が btnSel の \.rmB に当たりメニューの背景ドットまで消していた → 統一メニューのCSSは対象外 */try{rl=ss.cssRules;}catch(e){continue;}if(!rl)continue;walk(rl);}
   var st=document.createElement('style');st.id='nmDotOff';st.textContent=out.join('\n');document.head.appendChild(st);window.__dotRules=out.length;}catch(e){window.__dotErr=String(e);}}
 setTimeout(nmDotOff,0);setTimeout(nmDotOff,1500);
 /* v1069: 後から追加されるスタイル(パネルを開いた時に入るCSS)にも効くよう、<style>が増えたら再走査 */
