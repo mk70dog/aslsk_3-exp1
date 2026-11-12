@@ -34640,7 +34640,7 @@ function nmRmFaceItems(n,sd){
     it.push({ic:'turret',img:vaslCtrHTML(g.id,34,''),t:'<span><span style="color:'+L.col+'">'+nmNatShortOf(g.nat,L.nm)+'</span>: '+nmGunName(g)+'</span>',sub:'この砲を撃つのは?(1.2.6 非正規操作は命中+2・B#−2)'});
     it.push({row:1,ic:'sel',t:'操作',btns:[[(GQ2.nq?'':'✓')+'操作員(乗員)',"nmFaceNq("+n+",0)"],[(GQ2.nq?'✓':'')+'非操作員(分隊・HS)',"nmFaceNq("+n+",1)"]]});
     if(GQ2.txt)it.push({ic:'info',t:'<span style="font-size:12px;color:#9fb2c8">'+GQ2.txt+'</span>'});
-    it.push({ic:'ok',t:'<b style="font-size:17px">OK</b>',sub:'砲撃に戻る',f:_doneF});
+    if(NM_FACE.opDone)it.push({ic:'ok',t:'<b style="font-size:17px">完了</b>',sub:'マップに戻る',f:(NM_IJFM&&NM_IJ)?_doneF:"NM_FACE=null;NM_VF_FROM=null;BtRmClose()"}); /* sample-facedone: どちらかを選ぶと完了ボタンが出る */
     return it;}
   it.push({ic:'turret',img:v?vaslCtrHTML(v.id,34,''):g?vaslCtrHTML(g.id,34,''):'',t:'<span><span style="color:'+L.col+'">'+nmNatShortOf((v||g||{}).nat,L.nm)+'</span>: '+(v?nmAfvName(v):g?nmGunName(g):L.mk)+'</span>',sub:'矢印のボタンで方向を決める'+(tur?'(砲塔は車体と違う時だけ地図に「砲」)':v?'(無砲塔)':g?'(砲身の向き=CA)':'')});
   it.push({html:'<div style="display:flex;gap:8px;justify-content:center;width:100%">'+nmFacePad(eh,'vca',n,sd)+(tur?nmFacePad(eh,'tca',n,sd):'')+'</div>'});
@@ -34648,7 +34648,7 @@ function nmRmFaceItems(n,sd){
   it.push({ic:'ok',t:'<b style="font-size:17px">'+(g?'次へ':'OK')+'</b>',sub:g?'次: 操作員・非操作員を選ぶ':(NM_VF&&NM_VF_FROM!=null?'砲撃に戻る':'メニューに戻る'),f:g?("NM_FACE.op=1;btRmReopen("+n+")"):_doneF}); /* sample-faceok */
   return it;
 }
-function nmFaceNq(n,v){var H=NM_RM_HEX,sd=NM_FACE&&NM_FACE.sd,eh=H&&sd&&nmUnitAt(H,sd);if(eh){eh.nqSel=v;try{nmStSave();}catch(e){}}btRmReopen(n);}
+function nmFaceNq(n,v){var H=NM_RM_HEX,sd=NM_FACE&&NM_FACE.sd,eh=H&&sd&&nmUnitAt(H,sd);if(eh){eh.nqSel=v;try{nmStSave();}catch(e){}}if(NM_FACE)NM_FACE.opDone=1;btRmReopen(n);}
 function nmVfFmSwItem(n){var V=NM_VF;if(!V)return null;var B=null;try{B=nmVfBuild();}catch(e){}if(!B)return null;var r=[];
   [['A',V.from,B.eh],['B',V.tgt,B.te]].forEach(function(q){var eh=q[2];if(!eh||!(eh.veh||eh.gun))return;var v=eh.veh?nmAfv(eh.veh):null,g=!v&&eh.gun?nmGun(eh.gun):null;r.push([(String(n)===String(q[1])?'✓':'')+q[0]+' '+(v?nmAfvName(v):g?nmGunName(g):'')+(eh.facing==null?' (未設定)':''),"nmVfFmSw('"+q[0]+"')"]);});
   return r.length>1?{row:1,ic:'turret',t:'設定する車両',btns:r}:null;}
