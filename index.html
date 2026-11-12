@@ -10243,7 +10243,7 @@ var APP_VERSION_HIST_v584="v584(バグ修正 ダルマ報告「アプリ起動�
 var APP_VERSION_HIST_v585="v585(ダルマ指示「全体マップは2倍以上拡大時、ドラッグしてスクロールする時に表示」): 地図の全体図を、拡大2倍以上で地図をドラッグ/スクロール(ホイール含む)している間だけ表示し、止めて2秒で消す。全体図を触っている間は出したまま";
 var APP_VERSION_HIST_v586="v586(ダルマ報告「全体マップが表示しない」「1.5倍に変更」): 全体図の表示条件を拡大1.5倍(150%)以上に変更。地図の拡大・縮小の表示は%(2倍=200%)。スクロールの発生を待たず、ドラッグ/タッチの動きでも出す";
 var APP_VERSION_HIST_v587="v587(ダルマ指示「横幅ピッタリか縦幅ピッタリを基準にそこから1.2倍で全体マップを表示」): 全体図の表示条件を、全体が画面に収まる倍率(横幅ピッタリ・縦幅ピッタリの小さい方)の1.2倍以上に変更(従来は150%固定)";
-var APP_VERSION_HIST_v1178="v1178(ダルマ報告「なおらない」(v1177 iPad画像: 向きの案内線の起点がカウンターから下にずれ、向きも指の方向と合わない): ①ドラッグ中は毎回カウンターの今の画面位置を取り直して向きと案内線を計算(開始時の位置に固定していた) ②ページ(window)のスクロールも固定 ③マウス操作でも地図スクロールを固定。右クリックの短いメニューを攻撃・移動・方向・消去のタイルに(サンプルどおり、歩兵の移動は種類選択へ)";
+var APP_VERSION_HIST_v1178="v1178(ダルマ指示「基本画像」・報告「なおらない」): ①向きドラッグ中は毎回カウンターの今の画面位置を取り直して向きと案内線を計算(開始時の位置のままで案内線がカウンターからずれていた)・ページ(window)とマウス操作のスクロールも固定 ②右クリックの短いメニューを基本画像(sample-menusteel7)どおりのタイル(攻撃・移動・方向・消去、歩兵の移動は種類選択へ) ③背景ドットが nmDotOff(.rmBox を .rmB と誤認)で消えていたのを修正 ④左クリックの通常メニューは v1173 の見た目に戻す(サンプルに無い範囲だったため)。統一デザインは右クリックの短いメニューと方向パネルだけ。計算済みスタイルを本物の≡メインメニューと突き合わせ済み、左クリックはv1173と画素一致";
 var APP_VERSION_HIST_v1177="v1177(ダルマ報告「方向ドラッグ 場所によってスクロールして場所がズレる」: 原因=向きが変わるたびの Draw() が古い保存値 S_LOS.scrollLeft/Top へ地図を戻していた(地図をスクロールした後の位置で再現: 556→257・728→257 など)。nmAimLock の開始時に losSaveMapScroll() で実位置を保存。5地点(ズーム0.8〜2.2・スクロール位置違い)で前後のスクロール一致を確認";
 var APP_VERSION_HIST_v1176="v1176(ダルマ報告「右左クリック両方少ないメニュー」: 左タップ(ユニットのあるヘクス・nmRClick 47921行)が引数なしで呼んでいて短いメニューになっていた。nmRClick(e,lp,full) に full を追加し左タップは通常メニュー(full=true)、右クリックだけ短いメニュー";
 var APP_VERSION_HIST_v1175="v1175(ダルマ報告「砲のドラッグでスクロールしてズレる」(iPad): 向き(矢印)ドラッグ中は地図のスクロールを固定(nmAimLock: 開始時のscrollLeft/Topを保持・overflow:hidden・touch-action:none・スクロールされたら戻す・指を離すと解除)。実機iPad確認待ち";
@@ -34254,12 +34254,12 @@ function nmRmBuildB(n,U,X2){
   if(face)tl('rot','方向',face.f);
   if(del)tl('x','消去',del.f,1);
   if(T.length<2)return null;
-  var th='<div style="display:flex;gap:8px;width:100%">'+T.map(function(x){var ix=BT_RM_FN.push(x.f)-1;return '<button class="nmMuT'+(x.red?' red':'')+'" onclick="event.stopPropagation();btRmDo('+ix+')"><span class="nmMuC">'+(nmIconSVG(x.ic)||btRmIcon(x.ic))+'</span>'+x.t+'</button>';}).join('')+'</div>';
+  var th='<div style="display:flex;gap:8px;width:100%">'+T.map(function(x){var ix=BT_RM_FN.push(x.f)-1;return '<button onclick="event.stopPropagation();btRmDo('+ix+')" style="flex:1 1 0;min-width:0;min-height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:#323842;border:1px solid #5a6270;border-radius:14px;color:'+(x.red?'#ff9a9a':'#f0f0f0')+';font-size:16px;font-weight:900;padding:6px 2px"><span style="display:flex;width:34px;height:34px;align-items:center;justify-content:center">'+(nmIconSVG(x.ic)||btRmIcon(x.ic))+'</span>'+x.t+'</button>';}).join('')+'</div>';
   var uo=nmRmUOpen(),xo=nmRmXOpen(),top=[head,{html:th}];
   if(rest.length){top.push({ic:'sel',t:(uo?'▾ ':'▸ ')+'状態・操作',sub:uo?'タップで閉じる':'状態・操作するユニット・MG・煙幕手榴弾・回復など',f:"nmRmUFold("+n+")"});if(uo)top=top.concat(rest);}
   var hx=hexIt.concat(X2.filter(function(x){return !x.sep;})),hexL=[];
   if(hx.length){hexL.push({ic:'hex',t:(xo?'▾ ':'▸ ')+'ヘクス',sub:xo?'タップで閉じる':'配置・残骸・煙幕・マーク',f:"nmRmXFold("+n+")"});if(xo)hexL=hexL.concat(hx);}
-  window.NM_MU_F=1;return {top:top,hex:hexL};
+  return {top:top,hex:hexL}; /* v1178(ダルマ指示「基本画像」): 左クリックの通常メニューは統一デザインの対象外(v1173の見た目に戻す) */
 }
 (function(){var o=nmRMenuItems;nmRMenuItems=function(n){if(NM_RM_SUB==='imv'){NM_RM_SUB=null;NM_RM_CUR='imv';return [{ic:'back',t:'← 戻る',sub:'メニューに戻る',f:"nmRmBackTop("+n+")"},{sep:1}].concat(NM_RM_IMV||[]);}return o.apply(this,arguments);};})();
 function nmRmAOpen(){try{return localStorage.getItem('nmRmAOpen')==='1';}catch(e){return false;}}
@@ -34443,7 +34443,7 @@ function nmUnitMenu(it,H,n,sd){
 window.NM_RQ=0;
 function nmMuTiles(T){return '<div style="display:flex;gap:8px;width:100%">'+T.map(function(x){var ix=BT_RM_FN.push(x.f)-1;return '<button class="nmMuT'+(x.red?' red':'')+'" onclick="event.stopPropagation();btRmDo('+ix+')"><span class="nmMuC">'+(nmIconSVG(x.ic)||btRmIcon(x.ic))+'</span>'+x.t+'</button>';}).join('')+'</div>';}
 function nmRqItems(n){
-  var H=NM_RM_HEX;if(!H)return null;window.NM_MU_F=1;var fa=nmAllAt(H,'f'),ea=nmAllAt(H,'e');if(fa.length+ea.length!==1)return null;
+  var H=NM_RM_HEX;if(!H)return null;var fa=nmAllAt(H,'f'),ea=nmAllAt(H,'e');if(fa.length+ea.length!==1)return null;
   var sd=fa.length?'f':'e',eh=nmUnitAt(H,sd),L=NM_SIDE_LBL[sd];if(!eh)return null;
   var ev=eh.veh?nmAfv(eh.veh):null,eg=(!ev&&eh.gun)?nmGun(eh.gun):null,it=[],q="("+n+",'"+sd+"')",del=sd==='f'?"nmRmFriendDel()":"nmRmEnemy()";
   var DEL={ic:'x',t:'カウンターを消去',sub:L.nm+'の配置を取り消す',f:del};
@@ -34451,16 +34451,16 @@ function nmRqItems(n){
     it.push({ic:'sel',img:gs.length?nmGrpImgHTML(gs[0],eh.grp):'',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+nmGrpLbl(eh.grp)+'</span>',sub:(nmGrpText(eh.grp)||'(中身なし)')});
     var T=[{ic:'fire',t:'射撃',f:"nmMfOpen("+n+",'"+sd+"','"+eh.grp+"')"}];
     if(!NM_MOVE){NM_RM_IMV=[{ic:'move',t:'このカウンターを移動',sub:'種類を選ぶと開始。1ヘクスずつタップで進む'},{row:1,ic:'',t:'',btns:NM_IM_OPT.map(function(o){return [o[1],"nmMvStartIm("+n+",'"+sd+"','"+o[0]+"')"];})}];T.push({ic:'move',t:'移動',f:"NM_RM_SUB='imv';btRmReopen("+n+")"});}
-    T.push({ic:'x',t:'消去',f:del,red:1});it.push({html:nmMuTiles(T)});return it;}
+    T.push({ic:'x',t:'消去',f:del,red:1});it.push({html:nmMuTiles(T)});window.NM_MU_F=1;return it;}
   if(eg){it.push({ic:'turret',img:vaslCtrHTML(eg.id,34,''),t:'<span><span style="color:'+L.col+'">'+nmNatShortOf(eg.nat,L.nm)+'</span>: '+nmGunName(eg)+'</span>',sub:eg.nat});
-    it.push({html:nmMuTiles([{ic:'fire',t:'攻撃',f:"nmVfOpen"+q},{ic:'rot',t:'方向',f:"nmRmFaceOpen"+q},{ic:'x',t:'消去',f:del,red:1}])});return it;}
+    it.push({html:nmMuTiles([{ic:'fire',t:'攻撃',f:"nmVfOpen"+q},{ic:'rot',t:'方向',f:"nmRmFaceOpen"+q},{ic:'x',t:'消去',f:del,red:1}])});window.NM_MU_F=1;return it;}
   if(!ev)return null;
   it.push({ic:'turret',img:vaslCtrHTML(ev.id,34,''),t:'<span><span style="color:'+L.col+'">'+nmNatShortOf(ev.nat,L.nm)+'</span>: '+nmAfvName(ev)+'</span>',sub:nmNatLbl(String(ev.nat).split('/')[0])});
   var T=[];if(ev.ma)T.push({ic:'fire',t:'攻撃',f:"nmVfOpen"+q});
   else if(nmVmKeys(ev).length)T.push({ic:'fire',t:'攻撃',f:"nmVmOpen"+q});
   if(ev.mp&&!NM_MOVE)T.push({ic:'move',t:'移動',f:"nmMvStart"+q});
   T.push({ic:'rot',t:'方向',f:"nmRmFaceOpen"+q});T.push({ic:'x',t:'消去',f:del,red:1});
-  it.push({html:nmMuTiles(T)});return it;}
+  it.push({html:nmMuTiles(T)});window.NM_MU_F=1;return it;}
 (function(){var o=nmRMenuItems;nmRMenuItems=function(n){if(window.NM_RQ){window.NM_RQ=0;try{if(!NM_FACE&&!NM_RM_SUB&&!NM_RM_VEH){var q=nmRqItems(n);if(q)return q;}}catch(e){console.log('nmRq',e);}}return o.apply(this,arguments);};})();
 /* v345(ダルマ指示「自軍・敵軍カウンターをドラッグ&ドロップ可能にする」): 通常のMAPタブで自軍・敵軍のカウンターを掴んで別のヘクスへ。
    マウス=左ボタン、指=1本。8px動いたらドラッグ開始(動かさずに長押し=メニューは従来どおり)。カウンターの上から始めた指の操作では地図をスクロールしない。
@@ -34711,8 +34711,8 @@ function nmFacePad(eh,kind,n,sd){
   return h+'</div>';
 }
 function nmRmFaceItems(n,sd){
-  window.NM_MU_F=1;
   var H=NM_RM_HEX,eh=H&&nmUnitAt(H,sd),L=NM_SIDE_LBL[sd],it=[];if(!eh){NM_FACE=null;return nmRMenuItems(n);}
+  window.NM_MU_F=1; /* v1178: 方向パネルの時だけ統一デザイン */
   var v=eh.veh?nmAfv(eh.veh):null,tur=v&&nmAfvTurret(v),g=(!v&&eh.gun)?nmGun(eh.gun):null;
   it.push(NM_IJFM&&NM_IJ?{keepBack:1,ic:'back',t:(NM_IJ.vfStage?'← 砲撃に戻る':'← 判定に戻る'),sub:(NM_IJ.vfStage?'砲撃パネルに戻る':'判定に戻って計算し直す'),f:"nmIjFaceBack()"}:{keepBack:1,ic:'back',t:'← 完了',sub:(NM_VF&&NM_VF_FROM!=null?'砲撃に戻る':'メニューに戻る'),f:"NM_FACE=null;"+(NM_VF&&NM_VF_FROM!=null?"NM_RM_HEX=nmHexOfN("+NM_VF_FROM+");var _f=NM_VF_FROM;NM_VF_FROM=null;nmVfRe(_f)":"btRmReopen("+n+")")});
   if(NM_IJFM&&NM_IJ){var sw=nmIjFmSwItem();if(sw)it.push(sw);}
