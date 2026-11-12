@@ -35511,7 +35511,7 @@ function nmsApply(P,rl){var m=P.map||{},sc=P.scen;nmBkSnap('受信前(共有で�
   var abCh=JSON.stringify([S_LOS.pxA,S_LOS.pxB])!==JSON.stringify([m.pxA||null,m.pxB||null]);S_LOS.pxA=m.pxA||null;S_LOS.pxB=m.pxB||null;if(!S_LOS.pxA||!S_LOS.pxB)S_LOS.result=null;
   NMS.lastHash=nmsHash();try{saveState();}catch(e){}
   if(abCh&&S_LOS.pxA&&S_LOS.pxB){try{LosRunPixel();}catch(e){}}else nmsRedraw(true);
-  try{showToast(T('マップを受け取りました'),'grn');}catch(e){}nmsLog();}
+  try{if(nmsMode()!=='auto')showToast(T('マップを受け取りました'),'grn');}catch(e){} /* v1158(sample): 自動のマップ共有は受信のたびに通知しない */nmsLog();}
 function nmsNow(){var m=document.getElementById('nmFtMn');if(m)m.remove();
   if(!(S.scen&&S.scen.sel)){btToast('シナリオを選んでください');return;}
   if(!GIST_CONFIGURED()){btToast('同期の準備がまだです(マップ同期の画面で設定してください)');return;}
@@ -37465,7 +37465,7 @@ function nmGsSync(o){o=o||{};var Q=!!o.auto,sc=S.scen&&S.scen.sel;if(!sc){if(!Q)
       NM_GS.ts=nmAsTurnSig();NM_GS.ps=nmAsPfSig();
       if(got.length||!Q){NM_GS.at=Date.now();try{saveState();}catch(e){}try{Draw();}catch(e){}try{nmIjDraw();}catch(e){}try{nmFtBotFill();}catch(e){}try{if(NM_SU)nmSuDraw();}catch(e){}}}
     var fin=function(){NM_GS.busy=false;NM_GS.sig=JSON.stringify([sc,own,turn,pf,mapSnap]);
-      if(Q){if(got.length)nmGsDone('相手('+opN+')から受信: '+got.join('・'));else nmGsBtnSt('');return;}
+      if(Q){if(got.some(function(x){return /^ターン/.test(x);}))nmGsDone('相手('+opN+')から受信: '+got.join('・'));else if(got.length)nmGsMark(got);else nmGsBtnSt('');return;} /* v1158(sample): 自動同期の受信は、ターンが変わった時だけ通知。編成・PFだけなら通知せず、⇅同期の点を橙にして知らせる(押すと内容) */
       if(!P){nmGsDone('このiPad('+me+'): '+nOwn+'編成を送りました。相手('+opN+')のiPadでまだ同期していません。相手が⇅同期を押したあと、もう一度押してください');return;}
       if(P.scen!==sc){nmGsDone('このiPad('+me+'): '+nOwn+'編成を送信・相手('+opN+')は別のシナリオ('+P.scen+')です');return;}
       nmGsDone('このiPad('+me+'): 送信 '+nOwn+'編成・受信 相手'+nIn+'編成'+(got.length?'・'+got.filter(function(x){return !/^編成/.test(x);}).join('・'):'').replace(/・$/,''));};
@@ -37476,6 +37476,7 @@ try{setTimeout(nmAsLoop,4000);}catch(e){}
 /* v826(ダルマ確認「⇅同期を長押しで1P/2Pを選び直す」→実施) */
 function nmGsLpStart(){nmGsLpEnd();NM_GS.lpDone=0;NM_GS.lpT=setTimeout(function(){NM_GS.lpDone=1;var r=nmsRole();nmGsRoleAsk('今は「'+(r==='p1'?'1P':r==='p2'?'2P':'未設定')+'」です。このiPadをどちらにしますか？');},600);}
 function nmGsLpEnd(){if(NM_GS.lpT){clearTimeout(NM_GS.lpT);NM_GS.lpT=null;}}
+function nmGsMark(got){NM_GS.newAt=Date.now();NM_GS.newTx=got.join('・');nmGsBtnSt('');try{nmDbg('編成同期(通知なし): '+NM_GS.newTx);}catch(e){}try{nmFtActFill();}catch(e){}clearTimeout(NM_GS.newT);NM_GS.newT=setTimeout(function(){try{nmFtActFill();}catch(e){}},9000);}
 function nmGsDone(m){btToast('⇅ '+m);try{nmDbg('編成同期: '+m);}catch(e){}nmGsBtnSt('');}
 function nmGsBtnSt(t){var b=document.querySelector('button[onclick*="nmGsSync"]');if(b)b.style.opacity=t?'.6':'';}
 function nmFtActFill(){var el=document.getElementById('nmFtAct');if(!el)return;var ph=S.turn&&S.turn.phase,A=NM_FT_ACT[ph]||[],h='';
@@ -37488,7 +37489,7 @@ function nmFtActFill(){var el=document.getElementById('nmFtAct');if(!el)return;v
   if(nmLosOffSty('a')&&S_LOS.pxA)h+='<button class="fa g" title="'+T('A→Bを解除')+'" onclick="event.stopPropagation();nmLosOff()">'+NM_LOSOFF_IC+'</button>'; /* v571 A */
   if(nmBarLite())h+='<button class="fa g" title="'+T('マルチ判定')+'" onclick="event.stopPropagation();nmHqOpen()"><b>'+T('判定')+'</b></button>';
   if(nmBarLite())h+='<button class="fa g" id="nmSbSu" title="'+T('部隊の準備')+'" onclick="event.stopPropagation();nmSuOpen()" style="flex-direction:column"><span style="display:flex;flex-direction:column;align-items:center;line-height:1"><svg viewBox="0 0 24 24" width="24" height="22" fill="currentColor"><circle cx="12" cy="6" r="2.6"/><path d="M8.5 21l1.3-7.5-2 1.5-1.5-2.5 4-3.5h3.4l4 3.5-1.5 2.5-2-1.5 1.3 7.5h-2.4l-1.1-5-1.1 5z"/><circle cx="5" cy="9" r="1.8" opacity=".55"/><circle cx="19" cy="9" r="1.8" opacity=".55"/></svg><small style="font-size:9px;margin-top:2px">'+T('部隊')+'</small></span></button>'; /* v1151(ダルマ指示「サイドバーに部隊ボタン」案C): 部隊の準備を開く */
-  if(nmGsBtnOn())h+='<button class="fa g" title="'+T('編成を同期(2台のiPad)')+'" onclick="event.stopPropagation();if(NM_GS.lpDone){NM_GS.lpDone=0;return;}nmGsSync()" onpointerdown="nmGsLpStart()" onpointerup="nmGsLpEnd()" onpointerleave="nmGsLpEnd()" oncontextmenu="event.preventDefault();return false;" style="-webkit-touch-callout:none;user-select:none"><b style="font-size:12px;white-space:nowrap;position:relative">⇅'+T('同期')+(nmAsOn()&&nmsRole()?'<i style="position:absolute;right:-5px;top:-1px;width:7px;height:7px;border-radius:50%;background:#3ccf6e"></i>':'')+'</b></button>'; /* v818 / v1150: 自動同期ONは緑の点 */
+  if(nmGsBtnOn())h+='<button class="fa g" title="'+T('編成を同期(2台のiPad)')+'" onclick="event.stopPropagation();if(NM_GS.lpDone){NM_GS.lpDone=0;return;}nmGsSync()" onpointerdown="nmGsLpStart()" onpointerup="nmGsLpEnd()" onpointerleave="nmGsLpEnd()" oncontextmenu="event.preventDefault();return false;" style="-webkit-touch-callout:none;user-select:none"><b style="font-size:12px;white-space:nowrap;position:relative">⇅'+T('同期')+(nmAsOn()&&nmsRole()?'<i style="position:absolute;right:-5px;top:-1px;width:'+((NM_GS.newAt&&Date.now()-NM_GS.newAt<9000)?'10':'7')+'px;height:'+((NM_GS.newAt&&Date.now()-NM_GS.newAt<9000)?'10':'7')+'px;border-radius:50%;background:'+((NM_GS.newAt&&Date.now()-NM_GS.newAt<9000)?'#ffb020':'#3ccf6e')+'"></i>':'')+'</b></button>'; /* v818 / v1150: 自動同期ONは緑の点 */
   h+=['fire','view','move'].filter(function(k){return NM_TOOL===k||nmBarLite();}).map(function(k){var t=NM_TOOL_DEF[k],on=NM_TOOL===k||(k==='move'&&(NM_MOVE||S_LOS.routeMode));return '<button class="fa g ftTool'+(on?' on':'')+'" title="'+T(on&&k==='move'&&NM_TOOL!=='move'?'移動をリセットして終了':t[0])+'" onclick="event.stopPropagation();nmToolArm(\''+k+'\')">'+t[1]+'</button>';}).join(''); /* v497 */
   if(nmBarLite())h+='<button class="fa g" title="'+T('早見表')+'" onclick="event.stopPropagation();NM_TVHQ=0;nmTvOpen(\'ref\')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 5.5C7 4 10 4.2 12 6c2-1.8 5-2 8-.5V19c-3-1.5-6-1.3-8 .5-2-1.8-5-2-8-.5z"/><path d="M12 6v13.5"/></svg></button>'
     +'<button class="fa g" title="'+T('シナリオカード')+'" onclick="event.stopPropagation();nmScenView()"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5"/></svg></button>' /* sample(ダルマ指示「ツールバーにシナリオカードを追加」) */
