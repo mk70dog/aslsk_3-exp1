@@ -37399,8 +37399,24 @@ var NM_GS={busy:false,at:0};
 function nmGsBtnOn(){try{return nmModeNow()==='judge';}catch(e){return false;}}
 function nmGsRoleAsk(msg){var el=document.getElementById('nmGsPop');if(el)el.remove();el=document.createElement('div');el.id='nmGsPop';el.style.cssText='position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center';el.onclick=function(e){if(e.target===el)el.remove();};
   var b=function(r,t,s){return '<button onclick="nmGsSetRole(\''+r+'\')" style="flex:1;height:64px;border-radius:10px;border:1px solid #3a4555;background:#262d38;color:#e8eef4;font-weight:800;font-size:16px">'+t+'<br><small style="font-weight:600;color:#9fb0c4;font-size:11px">'+s+'</small></button>';};
-  el.innerHTML='<div style="background:#1b2028;border:2px solid #7ec8e3;border-radius:14px;padding:14px 16px;width:min(360px,92vw);color:#e8eef4" onclick="event.stopPropagation()"><div style="font-weight:800;color:#7ec8e3;font-size:15px">⇅ 編成の同期</div><div style="font-size:12.5px;color:'+(msg?'#ffb060':'#9fb0c4')+';margin:4px 0 12px">'+(msg||'このiPadはどちら？ 2台で別々を選んでください')+'</div><div style="display:flex;gap:8px">'+b('p1','1P','先手')+b('p2','2P','後手')+'</div><div onclick="nmAsToggle()" style="margin-top:12px;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:#141a22;cursor:pointer"><span style="flex:1;font-weight:800">自動同期<br><small style="font-weight:600;color:#9fb0c4;font-size:11px">20秒ごとに受信・変更したら送信</small></span><span id="nmAsSw" style="padding:4px 14px;border-radius:8px;font-weight:900;'+(nmAsOn()?'background:#2f9e5a;color:#fff':'background:#3a4250;color:#9fb0c4')+'">'+(nmAsOn()?'ON':'OFF')+'</span></div></div>';document.body.appendChild(el);}
+  el.innerHTML='<div style="background:#1b2028;border:2px solid #7ec8e3;border-radius:14px;padding:14px 16px;width:min(360px,92vw);color:#e8eef4" onclick="event.stopPropagation()"><div style="font-weight:800;color:#7ec8e3;font-size:15px">⇅ 編成の同期</div><div style="font-size:12.5px;color:'+(msg?'#ffb060':'#9fb0c4')+';margin:4px 0 12px">'+(msg||'このiPadはどちら？ 2台で別々を選んでください')+'</div><div style="display:flex;gap:8px">'+b('p1','1P','先手')+b('p2','2P','後手')+'</div><div style="margin-top:10px;border-top:1px solid #2a3b4d;padding-top:8px"><div style="font-size:12px;color:#9fb0c4;margin-bottom:6px">別のiPadからプレイを引き継ぐ(前のiPadの編成・ターン・PFをこのiPadへ。前のiPadは同期から外れます)</div><div style="display:flex;gap:8px"><button onclick="nmGsTakeover(\'p1\')" style="flex:1;height:44px;border-radius:10px;border:1px solid #c8a032;background:#2a2412;color:#ffd24a;font-weight:800;font-size:14px">1Pを引き継ぐ</button><button onclick="nmGsTakeover(\'p2\')" style="flex:1;height:44px;border-radius:10px;border:1px solid #c8a032;background:#2a2412;color:#ffd24a;font-weight:800;font-size:14px">2Pを引き継ぐ</button></div></div><div onclick="nmAsToggle()" style="margin-top:12px;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:#141a22;cursor:pointer"><span style="flex:1;font-weight:800">自動同期<br><small style="font-weight:600;color:#9fb0c4;font-size:11px">20秒ごとに受信・変更したら送信</small></span><span id="nmAsSw" style="padding:4px 14px;border-radius:8px;font-weight:900;'+(nmAsOn()?'background:#2f9e5a;color:#fff':'background:#3a4250;color:#9fb0c4')+'">'+(nmAsOn()?'ON':'OFF')+'</span></div></div>';document.body.appendChild(el);}
 function nmAsToggle(){S.nmAsOn=!nmAsOn();try{saveState();}catch(e){}var w=document.getElementById('nmAsSw');if(w){w.textContent=nmAsOn()?'ON':'OFF';w.style.background=nmAsOn()?'#2f9e5a':'#3a4250';w.style.color=nmAsOn()?'#fff':'#9fb0c4';}try{nmFtActFill();}catch(e){}}
+/* v1158(sample): プレイ中にiPadを入れ替える。Gistの自分の側のファイル(編成・ターン・PF)をこのiPadへ取り込み、端末IDをこのiPadに書き換える(前のiPadは「もう1台も同じ」で同期から外れる)。地図のマーカーは同期の対象外なので取り込まれない */
+function nmGsTakeover(r){var el=document.getElementById('nmGsPop');if(el)el.remove();var sc=S.scen&&S.scen.sel,me=r==='p1'?'1P':'2P';
+  if(!GIST_CONFIGURED()){btToast('GitHub Gistの設定がありません');return;}if(!sc){btToast('先に同じシナリオを選んでください');return;}
+  fetch('https://api.github.com/gists/'+gistGetId()+'?t='+Date.now(),{headers:nmsHdr(),cache:'no-store'}).then(function(x){if(!x.ok)throw new Error('受信 '+x.status);return x.json();}).then(function(g){
+    var f=(g.files||{})['aslsk_grp_'+r+'.json'],P=null;try{P=f&&f.content?JSON.parse(f.content):null;}catch(e){}
+    if(!P){btToast('⇅ 引き継ぎ: 「'+me+'」の記録がありません');return;}
+    if(P.scen!==sc){btToast('⇅ 引き継ぎ: 前のiPadは別のシナリオ('+P.scen+')です。同じシナリオを選んでください');return;}
+    try{localStorage.setItem('aslsk_mapsync_side',r);}catch(e){}
+    var G=S.savedGroups[sc]||(S.savedGroups[sc]={}),n=0;Object.keys(P.groups||{}).forEach(function(k){G[k]=JSON.parse(JSON.stringify(P.groups[k]));n++;});
+    if(P.turn&&(P.turn.at||0)>=(S.nmAsTurnAt||0)){var t=P.turn;if(!S.turn)S.turn={cur:1,half:0,ended:false,phase:'rph'};S.turn.cur=t.cur;S.turn.half=t.half;S.turn.phase=t.phase;S.turn.ended=!!t.ended;S.nmAsTurnAt=t.at;try{syncAutoSideFromHalf();}catch(e){}try{renderPhaseTracker();}catch(e){}}
+    if(P.pf&&(P.pf.at||0)>=(S.nmAsPfAt||0)){S.pfTracker=S.pfTracker||{};S.pfTracker.used=P.pf.used||0;S.nmAsPfAt=P.pf.at;}
+    var nm0=0;if(P.map){nmBkSnap('引き継ぎ前');var m=P.map;S_LOS.friendHexes=m.friendHexes||[];S_LOS.enemyHexes=m.enemyHexes||[];S_LOS.wreckHexes=m.wreckHexes||{};S_LOS.wreckVeh=m.wreckVeh||{};S_LOS.smoke=m.smoke||{};S_LOS.buildingMarks=m.buildingMarks||{};S_LOS.route=m.route||null;S_LOS.resid=m.resid||{};S_LOS.pxA=m.pxA||null;S_LOS.pxB=m.pxB||null;if(!S_LOS.pxA||!S_LOS.pxB)S_LOS.result=null;nm0=(S_LOS.friendHexes.length+S_LOS.enemyHexes.length);
+      if(S_LOS.pxA&&S_LOS.pxB){try{LosRunPixel();}catch(e){}}} /* 地図のマーカーの位置も引き継ぐ(元に戻すで取り消せる) */
+    P.dev=nmsDev();P.at=Date.now();var body={files:{}};body.files['aslsk_grp_'+r+'.json']={content:JSON.stringify(P)};
+    return fetch('https://api.github.com/gists/'+gistGetId(),{method:'PATCH',headers:nmsHdr(),body:JSON.stringify(body)}).then(function(x){if(!x.ok)throw new Error('送信 '+x.status);try{saveState();}catch(e){}try{Draw();}catch(e){}try{nmSuDraw&&NM_SU&&nmSuDraw();}catch(e){}btToast('⇅ 「'+me+'」を引き継ぎました: '+n+'編成・'+nmAsTurnLbl(S.turn)+(P.map?'・マーカー'+nm0+'個':'(地図の位置は前のiPadが未送信)'));try{nmGsSync({auto:1});}catch(e){}});
+  }).catch(function(e){btToast('⇅ 引き継げませんでした: '+(e.message||e));});}
 function nmGsSetRole(r){try{localStorage.setItem('aslsk_mapsync_side',r);}catch(e){}var el=document.getElementById('nmGsPop');if(el)el.remove();nmGsSync();}
 /* v1150(ダルマ指示「同期を自動に: 部隊の準備を閉じた時・スポット判定の部隊編集を閉じた時・ターン表・PFの増減」「受ける側は定期的に確認」):
    自動同期(S.nmAsOn、初期ON)。20秒ごとに相手のファイルを確認して新しければ取り込む。自分の編成・ターン・PF使用数が変わっていれば送る。
@@ -37420,7 +37436,8 @@ function nmGsSync(o){o=o||{};var Q=!!o.auto,sc=S.scen&&S.scen.sel;if(!sc){if(!Q)
   var me=rl==='p1'?'1P':'2P',op=rl==='p1'?'p2':'p1',opN=op==='p1'?'1P':'2P';
   var own=nmGsOwn((S.savedGroups&&S.savedGroups[sc])||{}),nOwn=Object.keys(own).length,body={files:{}};
   var T0=S.turn||{},turn={cur:T0.cur||1,half:T0.half||0,phase:T0.phase||'rph',ended:!!T0.ended,at:S.nmAsTurnAt||0},pf={used:(S.pfTracker&&S.pfTracker.used)||0,at:S.nmAsPfAt||0};
-  var needSend=!Q||JSON.stringify([sc,own,turn,pf])!==NM_GS.sig;
+  var mapSnap=null;try{mapSnap=nmsPayloadMap();delete mapSnap.groups;}catch(e){} /* v1158(sample): 引き継ぎ用に、自分の地図のマーカー(自軍・敵軍・残骸・煙幕など)の写しも一緒に送る */
+  var needSend=!Q||JSON.stringify([sc,own,turn,pf,mapSnap])!==NM_GS.sig;
   NM_GS.busy=true;if(!Q)nmGsBtnSt('受信中');
   fetch('https://api.github.com/gists/'+gistGetId()+'?t='+Date.now(),{headers:nmsHdr(),cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('受信 '+r.status);return r.json();}).then(function(gist){
     var fs=gist.files||{},mine=fs['aslsk_grp_'+rl+'.json'],P0=null;try{P0=mine&&mine.content?JSON.parse(mine.content):null;}catch(e){}
@@ -37435,13 +37452,13 @@ function nmGsSync(o){o=o||{};var Q=!!o.auto,sc=S.scen&&S.scen.sel;if(!sc){if(!Q)
       if(P.pf&&(P.pf.at||0)>(S.nmAsPfAt||0)){S.pfTracker=S.pfTracker||{};S.pfTracker.used=P.pf.used||0;S.nmAsPfAt=P.pf.at;var L=null;try{L=nmPfLimit();}catch(e){}got.push('PF 残り'+(L?(L.limit-(P.pf.used||0))+'/'+L.limit:'?'));pf=P.pf;}
       NM_GS.ts=nmAsTurnSig();NM_GS.ps=nmAsPfSig();
       if(got.length||!Q){NM_GS.at=Date.now();try{saveState();}catch(e){}try{Draw();}catch(e){}try{nmIjDraw();}catch(e){}try{nmFtBotFill();}catch(e){}try{if(NM_SU)nmSuDraw();}catch(e){}}}
-    var fin=function(){NM_GS.busy=false;NM_GS.sig=JSON.stringify([sc,own,turn,pf]);
+    var fin=function(){NM_GS.busy=false;NM_GS.sig=JSON.stringify([sc,own,turn,pf,mapSnap]);
       if(Q){if(got.length)nmGsDone('相手('+opN+')から受信: '+got.join('・'));else nmGsBtnSt('');return;}
       if(!P){nmGsDone('このiPad('+me+'): '+nOwn+'編成を送りました。相手('+opN+')のiPadでまだ同期していません。相手が⇅同期を押したあと、もう一度押してください');return;}
       if(P.scen!==sc){nmGsDone('このiPad('+me+'): '+nOwn+'編成を送信・相手('+opN+')は別のシナリオ('+P.scen+')です');return;}
       nmGsDone('このiPad('+me+'): 送信 '+nOwn+'編成・受信 相手'+nIn+'編成'+(got.length?'・'+got.filter(function(x){return !/^編成/.test(x);}).join('・'):'').replace(/・$/,''));};
     if(!needSend){fin();return;}
-    body.files['aslsk_grp_'+rl+'.json']={content:JSON.stringify({v:2,scen:sc,at:Date.now(),dev:nmsDev(),side:rl,groups:own,turn:turn,pf:pf})};
+    body.files['aslsk_grp_'+rl+'.json']={content:JSON.stringify({v:2,scen:sc,at:Date.now(),dev:nmsDev(),side:rl,groups:own,turn:turn,pf:pf,map:mapSnap})};
     return fetch('https://api.github.com/gists/'+gistGetId(),{method:'PATCH',headers:nmsHdr(),body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw new Error('送信 '+r.status);fin();});}).catch(function(e){NM_GS.busy=false;nmGsBtnSt('');if(Q){try{nmDbg('自動同期失敗: '+(e.message||e));}catch(x){}return;}nmGsDone('同期できませんでした: '+(e.message||e));});}
 try{setTimeout(nmAsLoop,4000);}catch(e){}
 /* v826(ダルマ確認「⇅同期を長押しで1P/2Pを選び直す」→実施) */
