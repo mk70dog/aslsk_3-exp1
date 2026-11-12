@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 返事待ち: ①sample-viewhind(見える範囲の妨害の内訳・内訳ボタンON→ヘクスをタップ)・②sample-spotbtn(A→B選択中は下の帯のSSR枠をLOS+判定カードに自動で替える)。どちらも「実施」待ち(ブランチはpush済み・samples/にPNG)。保留: ①WPのNMCはヘクスのTEMのみ(ユニットごとの陣地等のTEMは未対応)。②M4A1・M4A3E2・英シャーマンの発煙迫撃砲(sM)の開始時期は実物の裏面で未確認。③ジャンボの「A4⁴/5⁵」の「/」の読みはルール原文に明記なし。④v1150 の自動同期の2台での実地テスト未。
+- 返事待ちなし(v1159 実施済み)。保留: ①WPのNMCはヘクスのTEMのみ(ユニットごとの陣地等のTEMは未対応)。②M4A1・M4A3E2・英シャーマンの発煙迫撃砲(sM)の開始時期は実物の裏面で未確認。③ジャンボの「A4⁴/5⁵」の「/」の読みはルール原文に明記なし。④v1150 の自動同期の2台での実地テスト未。
+- v1159: sample-viewhind・sample-spotbtn 実施(ダルマ「実施」)。①見える範囲のパネルに「内訳」ボタン(BT_RMS.bd): ON中にヘクスをタップすると BT_RMS.bdN を設定し nmViewBdCalc(losCheckLOSGlobalのhindranceHexes)で足し算を表示、地図に白い点線と枠。起点変更は内訳OFFで。②nmFtBotFill: S_LOS.result.dataReady かつ3枠/2枠のどれも 'guide' でない時、SSR枠(なければ…)を一時的に 'guide'(LOS+判定)に替える(v1144の既定でLOSカードが出なくなっていた)。画面上部のA/Bの小さなバーに判定ボタンが出ない件(ダルマ画面)は原因未調査。
 - v1158: sample-ipadswap2 実施(ダルマ「プレイ中同期を別のiPadに変更→iPadを入れ替えて続ける→位置も→実施」)。⇅同期の長押し(nmGsRoleAsk)に「1P/2Pを引き継ぐ」(nmGsTakeover): Gistの aslsk_grp_<p1|p2>.json から自分の側の編成・ターン・PF・map(自軍/敵軍/残骸/煙幕/建物マーク/route/resid/A・B)を取り込み、端末ID(dev)をこのiPadへ書き換えて送る(前のiPadは「もう1台も同じ」で外れる)。nmGsSync の送信に map:nmsPayloadMap()(groups除く・約数百B)を追加(v3・変化があれば20秒ごと)。取込前に nmBkSnap('引き継ぎ前')で元に戻す可。Gistは模擬fetchで確認、実機2台のテストは未。
 - v1157: sample-wptem 実施(ダルマ「WP弾 建物 ペナルティ→TEMの逆加算・出目に→2→実施」)。WP命中のNMCの出目に目標ヘクスのTEM(木造+2・石造+3・林+1・他0)を自動で加減(ルール6.2): 通常命中=出目−TEM(有利)、WPのCH(原DR2)=出目+TEM(逆転・不利)、迫撃砲の空中炸裂(林内の目標)=+1(林のTEMが−1になる・CHでも負のTEMは足さない)。nmMcParse に 'MC+n'/'MC-n' 形式を追加、nmVfTH のWP枠で R.wpDrm を求め nmMcSection(結果画面・スポット判定の2か所)に渡す。確認(/tmp のPlaywright): 石造=−3/+3(CH)、木造=−2、林=−1、士気チェック画面に DRM が入る、smoke errors 0。空中炸裂(迫撃砲)は画面確認なし(コードのみ)。
 - 返事待ちなし(v1156 実施済み)。保留: ①M4A1・M4A3E2・英シャーマンの発煙迫撃砲(sM)の開始時期は実物の裏面で未確認(M4A3だけ写真で 4+=1944年と確認し修正。他は "1944-06" のまま)。②ジャンボの「A4⁴/5⁵」の「/」の読みはルール原文に明記なし。③GUNタブ側の特殊弾(gd.ammo・resolveDeplete)は月キー対応済み・日付は S.gun.depletionDate で別管理のため変更なし。
