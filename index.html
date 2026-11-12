@@ -34256,12 +34256,12 @@ function nmRmBuildB(n,U,X2){
   if(face)tl('rot','方向',face.f);
   if(del)tl('x','消去',del.f,1);
   if(T.length<2)return null;
-  var th='<div style="display:flex;gap:8px;width:100%">'+T.map(function(x){var ix=BT_RM_FN.push(x.f)-1;return '<button onclick="event.stopPropagation();btRmDo('+ix+')" style="flex:1 1 0;min-width:0;min-height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:#323842;border:1px solid #5a6270;border-radius:14px;color:'+(x.red?'#ff9a9a':'#f0f0f0')+';font-size:16px;font-weight:900;padding:6px 2px"><span style="display:flex;width:34px;height:34px;align-items:center;justify-content:center">'+(nmIconSVG(x.ic)||btRmIcon(x.ic))+'</span>'+x.t+'</button>';}).join('')+'</div>';
+  var th=nmMuTiles(T); /* 基本画像のタイル(右クリックと同じ) */
   var uo=nmRmUOpen(),xo=nmRmXOpen(),top=[head,{html:th}];
   if(rest.length){top.push({ic:'sel',t:(uo?'▾ ':'▸ ')+'状態・操作',sub:uo?'タップで閉じる':'状態・操作するユニット・MG・煙幕手榴弾・回復など',f:"nmRmUFold("+n+")"});if(uo)top=top.concat(rest);}
   var hx=hexIt.concat(X2.filter(function(x){return !x.sep;})),hexL=[];
   if(hx.length){hexL.push({ic:'hex',t:(xo?'▾ ':'▸ ')+'ヘクス',sub:xo?'タップで閉じる':'配置・残骸・煙幕・マーク',f:"nmRmXFold("+n+")"});if(xo)hexL=hexL.concat(hx);}
-  return {top:top,hex:hexL}; /* v1178(ダルマ指示「基本画像」): 左クリックの通常メニューは統一デザインの対象外(v1173の見た目に戻す) */
+  window.NM_MU_F=1;return {top:top,hex:hexL}; /* 左クリックの通常メニューも基本画像のデザイン */
 }
 (function(){var o=nmRMenuItems;nmRMenuItems=function(n){if(NM_RM_SUB==='imv'){NM_RM_SUB=null;NM_RM_CUR='imv';return [{ic:'back',t:'← 戻る',sub:'メニューに戻る',f:"nmRmBackTop("+n+")"},{sep:1}].concat(NM_RM_IMV||[]);}return o.apply(this,arguments);};})();
 function nmRmAOpen(){try{return localStorage.getItem('nmRmAOpen')==='1';}catch(e){return false;}}
