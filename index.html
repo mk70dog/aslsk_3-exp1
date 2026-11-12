@@ -35462,7 +35462,13 @@ function nmStSetMv(n,sd,v){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if
 function nmStFired(eh,ph){if(!eh)return;var st=nmStOf(eh);st.fired=ph||'済';try{saveState();}catch(e){}}
 function nmStClearFired(){[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){if(eh.st)delete eh.st.fired;});});nmStSave();}
 function nmStAnyFired(){return [S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].some(function(L){return L.some(function(eh){return eh.st&&eh.st.fired;});});}
-function nmStFiredRow(it,n,sd,eh){var st=nmStOf(eh);it.push({row:1,ic:'fire',t:'射撃',btns:[[(st.fired?'✓射撃済'+(st.fired!=='済'&&st.fired!=='射撃済'?'('+st.fired+')':''):'射撃済にする'),"nmStTog("+n+",'"+sd+"','fired')"]]});}
+function nmStFiredRow(it,n,sd,eh){var st=nmStOf(eh);it.push({row:1,ic:'fire',t:'射撃',btns:[[(st.fired?'✓射撃済'+(st.fired!=='済'&&st.fired!=='射撃済'?'('+st.fired+')':''):'射撃済にする'),"nmStTog("+n+",'"+sd+"','fired')"]]});nmStClrRow(it,n,sd,eh);}
+/* v1158(sample): マーカーの状態(射撃済・移動/Motion・目標獲得ACQ)を1つずつ、または全部クリアする行。混乱・PIN・CE/BUは別の操作なので対象外 */
+function nmStClrList(eh){var st=eh.st||{},o=[];if(st.fired)o.push(['fired','射撃済'+(st.fired!=='済'&&st.fired!=='射撃済'?'('+st.fired+')':'')]);if(st.mv)o.push(['mv',st.mv==='mot'?'Motion':'移動']);if(eh.acq)o.push(['acq','ACQ(目標獲得)']);return o;}
+function nmStClrRow(it,n,sd,eh){var L=nmStClrList(eh);if(!L.length)return;var b=L.map(function(x){return ['✕ '+x[1],"nmStClr("+n+",'"+sd+"','"+x[0]+"')"];});if(L.length>1)b.push(['全部クリア',"nmStClr("+n+",'"+sd+"','all')"]);it.push({row:1,ic:'x',t:'状態をクリア',btns:b});}
+function nmStClr(n,sd,k){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(!eh)return;var st=nmStOf(eh);
+  if(k==='fired'||k==='all')delete st.fired;if(k==='mv'||k==='all'){delete st.mv;delete st.mvd;}if(k==='acq'||k==='all')eh.acq=null;
+  try{nmStSave(eh.grp);}catch(e){nmStSave();}btRmReopen(n);}
 
 /* v407(ダルマ指示「マップタブの情報を別iPadで同期して共有」「切り替え式」): 対戦記録と同じGistに aslsk_map.json を置き、マップの状態と編成を共有。
    モード: off / manual(送る・受け取るボタン) / auto(変更から約3秒で送る・約6秒ごとに受け取る)。後から送った方が勝ち。シナリオが違う相手の内容は反映しない。
