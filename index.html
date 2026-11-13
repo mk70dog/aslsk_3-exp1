@@ -38676,8 +38676,9 @@ var NM_RM_MORE=(function(){try{return localStorage.getItem('nmRmMore')==='1';}ca
 /* v654(ダルマ指示「赤枠を折りたたみにする」): マーカーのメニューの 状態・移動・使ったMP・射撃済 の行を1つに畳む */
 var NM_RM_ST=(function(){try{return localStorage.getItem('nmRmSt')==='1';}catch(e){return false;}})(); /* v1180: 開閉を記憶 */
 function nmRmStTog(n){NM_RM_ST=!NM_RM_ST;try{localStorage.setItem('nmRmSt',NM_RM_ST?'1':'0');}catch(e){}window.NM_RM_GROW=1;try{btRmReopen(n);}catch(e){}}
-(function(){var go=function(){var o=nmRMenuItems;nmRMenuItems=function(n){var it=o.apply(this,arguments);try{if(NM_RM_SUB||!it||!it.length||window.NM_RM_NOFOLD!==false)return it; /* sample-rmst: 「▲ 状態・移動・射撃済を閉じる」も出さず常に表示 */
+(function(){var go=function(){var o=nmRMenuItems;nmRMenuItems=function(n){var it=o.apply(this,arguments);try{if(NM_RM_SUB||!it||!it.length)return it;
   var t=function(x){return x&&typeof x.t==='string'?x.t.replace(/<[^>]*>/g,''):'';};
+  if(window.NM_RM_NOFOLD!==false)return it.filter(function(x){return !(x&&x.row&&/^(移動|使ったMP)/.test(t(x)));}); /* sample-rmst: 「▲ 状態・移動・射撃済を閉じる」も出さず常に表示。ダルマ「移動は消去」→ 移動(なし/Motion)・使ったMP の行は出さない */
   var fold=function(x){return !!(x&&x.row&&/^(状態|移動|使ったMP|射撃)/.test(t(x)));};
   var keep=[],more=[],pos=-1;it.forEach(function(x){if(fold(x)){if(pos<0)pos=keep.length;more.push(x);}else keep.push(x);});if(!more.length)return it;
   var tg={ic:'sel',t:(NM_RM_ST?'▲ 状態・移動・射撃済を閉じる':'▼ 状態・移動・射撃済'),f:"nmRmStTog("+n+")"};
