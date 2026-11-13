@@ -32206,6 +32206,7 @@ function btCmdHTML(){
   h+=btResHTML(); /* v1212: S6 戦術予備 */
   if(cmdH.indexOf('data-btof')<0){var ofb=btOFirePanelHTML();if(ofb)h+='<div data-btof="1">'+ofb+'</div>';}
   setTimeout(btCmdMeasure,0);
+  if(h&&btMapFullOn()&&window.NM_BT_CMDPOP!==false)return '<div id="btCmd" class="bt-cmd bt-cmdpop"><div class="btCmdGrip" onpointerdown="btCmdDrag(event)" title="'+T('ドラッグで移動')+'"><span></span></div>'+h+'</div>'; /* v1219(ダルマ「マップは常に全画面表示で右バー下バーとポップアップでゲームを操作進行する」): 全画面では指示カードを動かせるポップアップに */
   return h?'<div id="btCmd" class="bt-cmd">'+h+'</div>':'';
 }
 function btCmdMeasure(){
@@ -52446,6 +52447,18 @@ function btSuDragInit(el){var D=null;
   el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);}
 (function(){var _D=window.Draw;if(typeof _D!=='function')return;window.Draw=function(){var r=_D.apply(this,arguments);try{btSuPopSync();}catch(e){console.log('btSuPop',e);}return r;};})();
 
+
+/* v1219: 全画面の指示カード=ポップアップ(左下、ドラッグで移動、位置を記憶 localStorage btCmdPos) */
+(function(){try{var st=document.createElement('style');st.id='btCmdPopCss';var SH='0 10px 30px rgba(0,0,0,.6)';
+ st.textContent='html.bt-mapfull #main .bt-cmd.bt-cmdpop{top:auto !important;bottom:var(--btcmdy,calc(var(--nmsumh,0px) + var(--btfbot,0px) + 10px)) !important;left:var(--btcmdx,12px) !important;right:auto !important;width:min(660px,calc(100vw - 110px));max-height:46vh;overflow-y:auto;background-color:#1c1f27 !important;background-image:radial-gradient(circle,rgba(0,0,0,.667) 1px,rgba(0,0,0,0) 1.35px),radial-gradient(circle at 50% 70%,rgba(255,255,255,.08) 1px,rgba(0,0,0,0) 1.4px) !important;background-size:4px 4px,4px 4px !important;border:1px solid #4a5566 !important;border-radius:10px !important;box-shadow:'+SH+';padding:0 8px 8px !important;box-sizing:border-box}'
+  +'html.bt-mapfull #main .bt-cmd.bt-cmdpop .btCmdGrip{position:sticky;top:0;z-index:2;display:flex;justify-content:center;align-items:center;height:18px;margin:0 -8px 4px;cursor:move;touch-action:none;background:#1c1f27}'
+  +'html.bt-mapfull #main .bt-cmd.bt-cmdpop .btCmdGrip span{width:44px;height:4px;border-radius:2px;background:#8899aa}';
+ document.head.appendChild(st);
+ var P=null;try{P=JSON.parse(localStorage.getItem('btCmdPos')||'null');}catch(e){}if(P){document.documentElement.style.setProperty('--btcmdx',P.x+'px');document.documentElement.style.setProperty('--btcmdy',P.y+'px');}}catch(e){console.log('btCmdPopCss',e);}})();
+function btCmdDrag(e){var el=document.getElementById('btCmd');if(!el)return;e.preventDefault();e.stopPropagation();var r=el.getBoundingClientRect(),H=document.documentElement.clientHeight,W=document.documentElement.clientWidth,dx=e.clientX-r.left,dy=e.clientY-r.top,de=document.documentElement,mv=0;
+ var m=function(ev){mv=1;var x=Math.max(0,Math.min(W-120,ev.clientX-dx)),top=Math.max(0,Math.min(H-40,ev.clientY-dy)),y=Math.max(0,H-(top+r.height));de.style.setProperty('--btcmdx',x+'px');de.style.setProperty('--btcmdy',y+'px');};
+ var u=function(){window.removeEventListener('pointermove',m);window.removeEventListener('pointerup',u);window.removeEventListener('pointercancel',u);if(mv){try{localStorage.setItem('btCmdPos',JSON.stringify({x:parseFloat(de.style.getPropertyValue('--btcmdx'))||12,y:parseFloat(de.style.getPropertyValue('--btcmdy'))||80}));}catch(x){}}};
+ window.addEventListener('pointermove',m);window.addEventListener('pointerup',u);window.addEventListener('pointercancel',u);}
 </script>
 </body>
 </html>
