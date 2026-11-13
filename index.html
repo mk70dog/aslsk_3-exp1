@@ -32183,6 +32183,7 @@ function BtResTog(sid){var s=btStackById(sid);if(!btResOn(s))return;if(!s.resv){
 function btResChip(x){if(!btResOn(x))return '';return btBtn(x.resv?'✓ '+T('T3予備'):T('T3予備にする'),"event.stopPropagation();BtResTog('"+x.id+"')",{on:!!x.resv,st:';padding:2px 7px;flex:0 0 auto;'+(x.resv?'color:#ff9a3d;border-color:#ff9a3d':'')});} /* v1218: 編成を変える画面でも予備を指定 */
 function btResCntHTML(){var c=btResSum(),ch=function(l,a,b){return '<span style="display:inline-block;margin-right:6px;padding:1px 8px;border-radius:9px;border:1px solid '+(a>b?'#ff6a6a':a>=b?'#ffd24a':'#4a5566')+';color:'+(a>b?'#ff9a9a':a>=b?'#ffd24a':'#e8eef4')+';font-size:12px;font-weight:800">'+l+' '+a+'/'+b+'</span>';};return ch('MMC',c.mmc,BT_RES_CAP.mmc)+ch('SMC',c.smc,BT_RES_CAP.smc)+ch('SW',c.sw,BT_RES_CAP.sw);}
 function btResHTML(){var s=BT.sel?btStackById(BT.sel):null;if(!btResOn(s))return '';var c=btResSum(),ch=function(l,a,b){return '<span style="display:inline-block;margin-right:6px;padding:1px 8px;border-radius:9px;border:1px solid '+(a>=b?'#ffd24a':'#4a5566')+';color:'+(a>=b?'#ffd24a':'#e8eef4')+';font-size:12px;font-weight:800">'+l+' '+a+'/'+b+'</span>';};
+  if(btMapFullOn())return '<div style="margin-top:4px;border:1px solid #ff9a3d;border-radius:6px;padding:4px 8px;font-size:12px;color:#e8eef4;display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b style="color:#ff9a3d">'+T('戦術予備(SSR2) T3')+'</b>'+btResCntHTML()+btBtn(s.resv?'✓ '+T('T3予備')+' → '+T('T1に入れる'):T('このスタックをT3予備にする'),"BtResTog('"+s.id+"')",{on:!!s.resv,st:';padding:2px 8px'})+'</div>'; /* v1219: 全画面では1行 */
   return '<div style="margin-top:6px;border:1px solid #ff9a3d;border-radius:6px;padding:6px 8px;font-size:12px;color:#e8eef4"><div style="color:#ff9a3d;font-weight:800;margin-bottom:4px">'+T('戦術予備(SSR2)')+' <span style="color:#8899aa;font-weight:400">'+T('T3に北端または東端から進入')+'</span></div><div style="margin-bottom:5px">'+ch('MMC',c.mmc,5)+ch('SMC',c.smc,1)+ch('SW',c.sw,2)+'</div>'+btBtn(s.resv?'✓ '+T('戦術予備(T3)')+' → '+T('T1に入れる'):T('このスタックを戦術予備(T3)にする'),"BtResTog('"+s.id+"')",{on:!!s.resv})+'<div style="color:#8899aa;margin-top:4px">'+T('指定しない場合は、T1に入らなかったスタックを上限まで予備にします')+'</div></div>';}
 function btCmdHTML(){
   if(!btAvail()||!btActive()||!btGraphReady()){setTimeout(btCmdMeasure,0);return '';}
@@ -32239,7 +32240,7 @@ function btCmdCardHTML(){ // v288(ダルマ指示「なるべく縦幅が大き�
   var title=vm?vm.head+' <span style="color:#8899aa">'+(vv?'AF'+vv.afFront.hull+'/'+vv.afSide.hull+' ':'')+btVehStatTxt(vu)+'</span>':'<span style="color:#ffd060;font-weight:bold">'+BT_SIDE_NAME[s.side]+' @ '+((s.n!=null&&s.n>=0)?BTG.nodes[s.n].nm+' '+BTG.nodes[s.n].terr:(T('盤外')+'('+btOffLbl(s)+')'))+'</span>';
   var rg=!!(BT.regroup&&btRegroupOK(s)),hb=!rg; // v313: 編成を変える画面以外は、右側に見出しと帯の内容をまとめる
   var head0=h;
-  h='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+(btMapFullOn()?'':btPhStepSpans()+btBtn(T('次へ')+' ▶','BtNext()',{dim:!canNext,st:P}))+btOffInlineHTML()+(hb?'':'<span style="color:#404858">│</span>'+title)+'</div>';
+  h='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+(btMapFullOn()?'':btPhStepSpans()+btBtn(T('次へ')+' ▶','BtNext()',{dim:!canNext,st:P}))+(btMapFullOn()?'':btOffInlineHTML())+((hb&&!btMapFullOn())?'':(btMapFullOn()&&!rg?'':'<span style="color:#404858">│</span>')+title)+'</div>'; /* v1219: 全画面では盤外の一覧は上の帯にあるので出さない・見出しを左に */
   if(rg){h+=btRegroupPanelHTML(s);return head0+h+'</div>';} // v290: 編成を変える画面
   // ユニット: 車両は「▲名前 状態」、歩兵・SWはチェック付きの札を横に並べる
   var chips=[],selIds=(BT.selU&&BT.selU.sid===s.id)?BT.selU.ids:null,canSel=!BT.fire&&!vm;
@@ -32302,6 +32303,7 @@ function btCmdCardHTML(){ // v288(ダルマ指示「なるべく縦幅が大き�
   // v331(ダルマ指示⑤): 射撃の確認パネル(目標・ダイスを振る・取消)は、指示カード左列の兵器ボタンの下(空き)に表示する
   var ofp=btOFirePanelHTML();if(ofp)h+='<div data-btof="1">'+ofp.replace('margin-top:6px;border','margin-top:5px;border')+'</div>';
   // v313(ダルマ指示「帯(対戦ON〜戦闘記録)を指示カードの右の空きにコンパクトにして移動」): 左=フェイズ・ユニット・ボタン、右=見出し・帯の内容
+  if(btMapFullOn())return head0+h+'</div>'; /* v1219(ダルマ「全画面オンでもこの画面」): 全画面では帯の内容(対戦ON・アプリ・編集…)は≡メニューと同じなので出さず、指示カードを小さく */
   return head0+'<div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap"><div style="flex:1 1 430px;min-width:0">'+h+'</div><div style="flex:1 1 320px;min-width:0;border-left:1px solid #2a3040;padding-left:9px">'+'<div style="font-size:12.5px">'+title+'</div>'+btBandMiniHTML()+'</div></div></div>';
 }
 // 帯の内容のコンパクト版(指示カードの右側)
