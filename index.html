@@ -49218,12 +49218,12 @@ function REF_SMOKE_CARD(){
   h+=css+'<div class="rsk">';
   // ① 種類カード
   var K=[
-    ['s','a','主砲・砲の煙幕弾','PFPh・DFPhの開始時','撃てるヘクス(ATTで命中)','PFPh <span class="big">+3</span> / DFPh <span class="big">+2</span>分散','原TH DR ≤ s# なら弾がある。煙幕以外を撃った後は不可'],
-    ['WP','w','主砲・砲の白燐弾','PFPh・DFPhの開始時、防御射撃','撃てるヘクス(ATTで命中)','PFPh <span class="big">+2</span> / MPh・DFPh <span class="big">+1</span>分散','命中したユニットはNMC(DRからTEMを引く)'],
-    ['sD','d','発煙弾発射機','MPh','自分のヘクス','<span class="big">+2</span>分散','BU +1'],
-    ['sM','d','発煙迫撃砲','MPh','1〜3ヘクス(LOS・TCA内)','<span class="big">+2</span>分散','BU +1・止まっていない +2・TCA変更は射撃と同じDRM・妨害DRM・建物内は不可'],
-    ['sP','d','発煙ポット','MPh','自分のヘクス','<span class="big">+2</span>分散','CEの時だけ'],
-    ['sN','d','近接防御兵器','MPh','自分のヘクス','<span class="big">+2</span>分散','BUの時だけ(BU +1 込み)。CCPhは攻撃にも使える']
+    ['s','a','主砲・砲の煙幕弾','PFPh(準備射撃フェイズ)・DFPh(防御射撃フェイズ)の開始時','撃てるヘクス(ATTで命中)','PFPh(準備射撃フェイズ) <span class="big">+3</span><br>DFPh(防御射撃フェイズ) <span class="big">+2</span>分散','原TH DR ≤ s# なら弾がある。煙幕以外を撃った後は不可'],
+    ['WP','w','主砲・砲の白燐弾','PFPh(準備射撃フェイズ)・DFPh(防御射撃フェイズ)の開始時、防御射撃','撃てるヘクス(ATTで命中)','PFPh(準備射撃フェイズ) <span class="big">+2</span><br>MPh(移動フェイズ)・DFPh(防御射撃フェイズ) <span class="big">+1</span>分散','命中したユニットはNMC(DRからTEMを引く)'],
+    ['sD','d','発煙弾発射機','MPh(移動フェイズ)','自分のヘクス','<span class="big">+2</span>分散','BU +1'],
+    ['sM','d','発煙迫撃砲','MPh(移動フェイズ)','1〜3ヘクス(LOS・TCA内)','<span class="big">+2</span>分散','BU +1・止まっていない +2・TCA変更は射撃と同じDRM・妨害DRM・建物内は不可'],
+    ['sP','d','発煙ポット','MPh(移動フェイズ)','自分のヘクス','<span class="big">+2</span>分散','CEの時だけ'],
+    ['sN','d','近接防御兵器','MPh(移動フェイズ)','自分のヘクス','<span class="big">+2</span>分散','BUの時だけ(BU +1 込み)。CCPh(白兵戦フェイズ)は攻撃にも使える']
   ];
   h+='<div class="card"><div class="sh">'+T('煙幕の種類')+' <span style="color:'+G+';font-size:11px;font-weight:400">SK4 1.2.5・6.2・7.5</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">';
   K.forEach(function(k){h+='<div class="kc"><div class="kh"><span class="tg '+k[1]+'">'+k[0]+'</span><span class="kn">'+k[2]+'</span></div><div class="kv"><span>使える時</span><span>'+k[3]+'</span><span>置く場所</span><span>'+k[4]+'</span><span>置く煙幕</span><span>'+k[5]+'</span><span>条件</span><span>'+k[6]+'</span></div></div>';});
@@ -49231,21 +49231,31 @@ function REF_SMOKE_CARD(){
   // ② 共通ルール/効果
   h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
   h+='<div class="card" style="margin:0"><div class="sh">'+T('煙幕装置の共通ルール')+' <span style="color:'+G+';font-size:11px;font-weight:400">sD・sM・sP・sN</span></div><div style="font-size:12.5px;line-height:1.7;padding:2px 4px">'+
-    ['<b>1プレイヤーターンに1回</b>、MPh中だけ','乗員が気絶・ショックでなく、まだ<b>武器を撃っていない</b>(BFF・DFF含む)','自軍のMPh: 成功で <b>1MP</b>(失敗はMP不要)','相手のMPh: LOS内の敵がMP/MFを使った後に使える','失敗しても次のプレイヤーターンにまた試せる','使った後も撃てる。動けない車両でも使える'].map(function(x){return '<div>・'+x+'</div>';}).join('')+'</div></div>';
+    ['<b>1プレイヤーターンに1回</b>、MPh(移動フェイズ)中だけ','乗員が気絶・ショックでなく、まだ<b>武器を撃っていない</b>(BFF・DFF含む)','自軍のMPh(移動フェイズ): 成功で <b>1MP</b>(失敗はMP不要)','相手のMPh(移動フェイズ): LOS内の敵がMP/MFを使った後に使える','失敗しても次のプレイヤーターンにまた試せる','使った後も撃てる。動けない車両でも使える'].map(function(x){return '<div>・'+x+'</div>';}).join('')+'</div></div>';
   h+='<div class="card" style="margin:0"><div class="sh">'+T('煙幕カウンターの効果')+'</div><table>'+
     [['通常の煙幕','+3'],['分散した煙幕・1/2インチ煙幕・通常のWP','+2'],['分散したWP','+1'],['1ヘクスの上限','+3'],['煙幕のヘクスから外へ撃つ','さらに+1'],['煙幕のヘクスに入る','+1 MF/MP']].map(function(r,i){return '<tr'+(i%2?' class="z"':'')+'><td>'+r[0]+'</td><td class="num" style="color:'+C+';text-align:right">'+r[1]+'</td></tr>';}).join('')+
-    '</table><div class="nt" style="padding:4px 8px">置いた側の次のPFPh開始時: 分散は取り除き、通常は分散面にする</div></div>';
+    '</table><div class="nt" style="padding:4px 8px">置いた側の次のPFPh(準備射撃フェイズ)開始時: 分散は取り除き、通常は分散面にする</div></div>';
   h+='</div>';
   var NAT={GER:'ドイツ',SOV:'ソ連',USA:'アメリカ','USA/FFR':'アメリカ/自由フランス','USA/GBR/FFR':'アメリカ/イギリス/自由フランス',GBR:'イギリス','ITA/GBR':'イタリア/イギリス',ITA:'イタリア',SLO:'スロバキア',POL:'ポーランド'};
   var OD=['GER','SOV','USA','USA/FFR','USA/GBR/FFR','GBR','ITA/GBR','ITA','SLO','POL'];
   var srt=function(L){return L.slice().sort(function(a,b){var x=OD.indexOf(a.nat),y=OD.indexOf(b.nat);return (x<0?99:x)-(y<0?99:y);});};
   var bar=function(p,lbl){if(p==null)return '<div class="pc"><small>'+lbl+'</small><b style="color:#4a5566">—</b></div>';var c=p>=58?'#4cc38a':(p>=28?'#ffd24a':'#ff8a6a');return '<div class="pc"><small>'+lbl+'</small><b style="color:'+c+'">'+p+'%</b><span class="bar"><i style="width:'+p+'%;background:'+c+'"></i></span></div>';};
   var am=function(a,cls){if(!a)return '<span style="color:#4a5566">—</span>';var d=a.deplete,y=null;if(d&&typeof d==='object'){y=Object.keys(d)[0];d=d[y];}return '<span class="tg '+cls+'">'+(cls==='w'?'WP':'s')+d+'</span>'+(a.availFrom?'<span class="wh">'+refSmkWhen(a.availFrom)+'</span>':(y?'<span class="wh">'+y+'年〜</span>':''));};
+  // v1202: 国で切り替え(S.refSmkNat)
+  var natOf=function(n){return String(n||'').split('/');};
+  var NL={GER:'ドイツ',SOV:'ソ連',USA:'アメリカ',GBR:'イギリス',FFR:'自由フランス',ITA:'イタリア',SLO:'スロバキア',POL:'ポーランド'};
+  var has={};var cnt=function(L,f){L.forEach(function(x){if(!f(x))return;natOf(x.nat).forEach(function(k){has[k]=(has[k]||0)+1;});});};
+  cnt(typeof AFV_DATA!=='undefined'?AFV_DATA:[],function(v){var sa=(v.ma&&v.ma.specialAmmo||[]);return v.smoke||sa.some(function(a){return a.type==='Smoke'||a.type==='WP';});});
+  cnt(typeof GUN_DATA!=='undefined'?GUN_DATA:[],function(g){return (g.ammo||[]).some(function(a){return /^smoke$/i.test(a.type)||a.type==='WP';});});
+  var NO=['GER','SOV','USA','GBR','FFR','ITA','SLO','POL'].filter(function(k){return has[k];});
+  var SN=S.refSmkNat&&has[S.refSmkNat]?S.refSmkNat:NO[0];
+  var inN=function(x){return natOf(x.nat).indexOf(SN)>=0;};
+  h+='<div class="card" style="padding:8px 10px"><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="color:'+G+';font-size:12px;font-weight:700;margin-right:4px">'+T('国')+'</span>'+NO.map(function(k){return '<button class="b sm'+(k===SN?' on':'')+'" style="min-width:84px" onclick="S.refSmkNat=\''+k+'\';try{saveState();}catch(e){}Draw();">'+T(NL[k]||k)+' <span style="color:'+G+';font-size:10px">'+has[k]+'</span></button>';}).join('')+'</div></div>';
   // ③ 車両
   h+='<div class="card"><div class="sh">'+T('車両別の煙幕')+' <span style="color:'+G+';font-size:11px;font-weight:400">成功率=2D6で使用No.以下(BUは+1)</span></div><div style="overflow-x:auto"><table>';
   h+='<tr><th>車両</th><th>煙幕装置</th><th>成功率</th><th>主砲の煙幕弾</th><th>主砲の白燐弾</th><th>注意</th></tr>';
   var pn=null,z=0;
-  srt(typeof AFV_DATA!=='undefined'?AFV_DATA:[]).forEach(function(v){
+  srt((typeof AFV_DATA!=='undefined'?AFV_DATA:[]).filter(inN)).forEach(function(v){
     var sm=v.smoke,sa=(v.ma&&v.ma.specialAmmo||[]);
     var s1=sa.filter(function(a){return a.type==='Smoke';})[0],w1=sa.filter(function(a){return a.type==='WP';})[0];
     if(!sm&&!s1&&!w1)return;
@@ -49262,7 +49272,7 @@ function REF_SMOKE_CARD(){
   var CAT={AT:'対戦車砲',INF:'歩兵砲',ART:'野砲',AA:'対空砲',MTR:'迫撃砲'};
   h+='<div class="card"><div class="sh">'+T('砲別の煙幕')+' <span style="color:'+G+';font-size:11px;font-weight:400">ATTで命中が必要(迫撃砲はいつもATT)</span></div><div style="overflow-x:auto"><table>';
   h+='<tr><th>砲</th><th>種類</th><th>煙幕弾</th><th>白燐弾</th></tr>';pn=null;
-  srt(typeof GUN_DATA!=='undefined'?GUN_DATA:[]).forEach(function(g){
+  srt((typeof GUN_DATA!=='undefined'?GUN_DATA:[]).filter(inN)).forEach(function(g){
     var A=g.ammo||[],sm=A.filter(function(a){return /^smoke$/i.test(a.type);})[0],wp=A.filter(function(a){return a.type==='WP';})[0];
     if(!sm&&!wp)return;
     if(g.nat!==pn){pn=g.nat;z=0;h+='<tr class="nat"><td colspan="4">'+(NAT[g.nat]||g.nat)+'</td></tr>';}
