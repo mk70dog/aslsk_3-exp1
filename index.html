@@ -31725,6 +31725,7 @@ function btMapTap(boardId,col,row){
   if(!btGraphReady()){btEnsureGraph().then(function(){Draw();});return;}
   var n=btNodeOf(boardId,col,row);if(n==null)return;
   if(btLPTap(n))return; // v286: 長押しでスタックの詳細
+  if(BT.sideView){BT.sideView=false;try{nmFtActFill();}catch(e){}BtRmShow('view',n);return;} /* sample-btside: ツールバーの「見える範囲」→タップしたヘクスから */
   if(BT_RCLK){btLosRTap(n);return;} // v307: 右クリックでLOS
   if(BT.losAB&&!BT.losAB.rc){btLosABTap(n);return;} // v284: A▶︎B測定中は測定だけ(右クリックで始めた測定は、左クリックは通常の操作)
   if(BT.fire){btFireTap(n);return;}
@@ -33914,6 +33915,7 @@ function btLosABEval(a,b){
 }
 function btLosABHTML(){
   var L=BT.losAB;if(!L)return '';
+  try{if(btSideOn()&&window.NM_BT_SLIM!==false&&btMapFullOn())return '';}catch(e){} /* sample-btside3: 地図の札(btLosCd)で表示するので、上の指示カードには出さない */
   var h='<div style="border:1px solid #66ccff;border-radius:4px;padding:5px 7px;margin:0 0 5px;background:#0a1420">';
   h+='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><b style="color:#66ccff;font-size:12px">LOS測定(A▶︎B)</b>';
   h+='<span style="font-size:11px;color:#9ab">'+(L.rc?'右クリック: 1回目=起点(A)、2回目=目標(B)(左クリックは通常の操作)':'地図をタップ: 1回目=起点(A)、2回目=目標(B)(部隊は動きません)')+'</span>';
@@ -35770,7 +35772,7 @@ function nmSyInfo(){var m=nmsMode(),st=NMS.status||'',ago=NMS.last?Math.round((D
   if(st==='エラー')return {c:'#ff7060',t:'同期エラー',spin:0,btn:1};
   if(/別のシナリオ|まだ/.test(st))return {c:'#ffb040',t:(nmsRole()==='p1'?'1P':nmsRole()==='p2'?'2P':'')+' 相手待ち',spin:0,btn:1};
   return {c:'#7cc4ff',t:(m==='auto'?'自動':'手動')+(agoT?' · '+agoT:''),spin:0,btn:1};}
-function nmSyChipFill(){var tb=document.getElementById('nmFullTabs');var el=document.getElementById('nmSyChip');if(!tb||nmModeNow()==='judge'){if(el)el.remove();return;}
+function nmSyChipFill(){var tb=document.getElementById('nmFullTabs');var el=document.getElementById('nmSyChip');if(!tb||nmModeNow()==='judge'||nmModeNow()==='ai'){if(el)el.remove();return;} /* sample-btside: 対戦モードでは同期の札を出さない */
   if(!document.getElementById('nmSyCss')){var st=document.createElement('style');st.id='nmSyCss';st.textContent='@keyframes nmSySp{to{transform:rotate(360deg)}}#nmSyChip{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 3px 0 7px;margin:0 4px;border-radius:7px;font:bold 12px AppFont,AppJP,monospace;background:#14181fdd;cursor:pointer;-webkit-user-select:none;user-select:none}#nmSyChip .ic{display:inline-flex}#nmSyChip.sp .ic svg{animation:nmSySp 1.4s linear infinite}#nmSyChip .nw{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:5px;border:1px solid;font-size:11px}@media(max-width:900px){#nmSyChip .tx{display:none}}';document.head.appendChild(st);}
   if(!el){el=document.createElement('span');el.id='nmSyChip';var off=tb.querySelector('.nmFullOff');if(off)tb.insertBefore(el,off);else tb.appendChild(el);
     el.onclick=function(e){e.stopPropagation();if(e.target.closest&&e.target.closest('.nw')){nmsNow();return;}nmMapClearTop(0,'sync');};}
@@ -37735,6 +37737,7 @@ function nmFtActFill(){var el=document.getElementById('nmFtAct');if(!el)return;v
     +'<button class="fa g" title="'+T('シナリオカード')+'" onclick="event.stopPropagation();nmScenView()"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5"/></svg></button>' /* sample(ダルマ指示「ツールバーにシナリオカードを追加」) */
     +'<button class="fa g" title="'+T('旧タブ')+'" onclick="event.stopPropagation();nmOldTabPop(this)"><b style="font-size:12px;white-space:nowrap">'+T('旧タブ')+'</b></button>'; /* v833(ダルマ指示「ツールバーに早見表、旧タブボタンを追加」) */
   h+='<span class="fsp"></span><button class="fa g" title="'+T('編成・他のタブ')+'" onclick="event.stopPropagation();nmFtMenu(this)">≡</button>';
+  if(typeof btActive==='function'&&btActive()&&btSideOn())h=btSideActHTML();
   el.innerHTML=h;
   /* v768(ダルマ指示「ツールバー サイド時 上から メインメニュー・判定・LOS。戻る・進む・全画面解除は非表示」) */
   if(nmBarLite()){try{var bu=el.querySelector('button[onclick*="nmLastUndo"]'),br=el.querySelector('button[onclick*="nmLastRedo"]'),bj=el.querySelector('button[onclick*="nmHqOpen"]'),ba=el.querySelector('button[onclick*="nmAbArm"]');
@@ -42812,7 +42815,7 @@ function btMapFullSync(){
   var c=document.getElementById('btCmd'),fullT=(on&&c?c.offsetHeight:0);
   var sr=document.getElementById('losSumRow'),fixSum=on&&!!sr&&!(typeof btActive==='function'&&btActive()); /* v361: 通常モードの全画面はLOS結果の行を下に固定 */
   /* v361(ダルマ指示「全画面表示時に上部に(射撃〜シナリオの7タブを)横並び1列で常時表示」) */
-  var tb=document.getElementById('nmFullTabs'),nmOn=on&&!(typeof btActive==='function'&&btActive());
+  var tb=document.getElementById('nmFullTabs'),nmOn=on&&(!(typeof btActive==='function'&&btActive())||btSideOn()); /* sample-btside: 対戦モードもツールバーを左右に */
   if(nmOn&&!tb){tb=document.createElement('div');tb.id='nmFullTabs';
     tb.innerHTML='<div id="nmFtPh"></div><div id="nmFtAct"></div>' /* v456(ダルマ指示 A案): タブの代わりにフェイズ別の操作ボタン。他のタブは≡から */
       +nmFtZoomBtns() /* v447 */
@@ -42876,10 +42879,49 @@ function btFtMenu(btn){var m=document.getElementById('nmFtMn');if(m){m.remove();
   var it=[[T('セーブ・ロード'),'BtSvOpen()'],[T('LOS測定(起点A・目標B)'),'BtLosAB()'],[T('記録を書き出す'),'BtRecExport()'],['—'],[(BT.vasl===false?'':'✓ ')+T('VASLカウンター表示'),'BtVaslToggle()'],[(BT.cam===false?'':'✓ ')+T('クローズアップ'),'BtCam()'],[T('演出設定'),'BtFxOpen()'],[(S.nmRealOn?'✓ ':'')+T('リアル盤へを表示'),"S.nmRealOn=!S.nmRealOn;try{saveState();}catch(e){}nmRbRender();Draw()"],[NM_MI.skin+' '+T('スキン')+': '+uiThemeName(),"uiThemePop()"],['—'],[T('全画面を終える'),'BtMapFull(null)']];
   m.innerHTML=appMenuHTML('nmFtMn',it,[]);
   m.onclick=function(e){e.stopPropagation();};document.body.appendChild(m);setTimeout(function(){document.addEventListener('pointerdown',function f(e){var mm=document.getElementById('nmFtMn');if(!mm){document.removeEventListener('pointerdown',f,true);return;}if(mm.contains(e.target))return;if(!btn.contains(e.target))mm.remove();document.removeEventListener('pointerdown',f,true);},true);},0);} /* v833(ダルマ指示「マップタップで閉じる」): メニューの中を触っても見張りを続け、外(マップなど)を触ったら閉じる */
+
+/* sample-btside2(ダルマ指示「アプリ対戦モードで使用しないものは非表示にしてスッキリ」「マップはなるべく広く」): 判定・部隊・旧タブも外し、下の帯はLOS測定中だけ。
+   sample-btside(ダルマ指示「アプリ対戦モードでもツールバーをデフォルトで右側に表示・ライト判定モードと内容を同じに」「なるべくマップを広く」):
+   対戦モードでも #nmFullTabs を左右に置く(位置はライト判定と同じ設定 nmTbPos、既定=右)。上の帯はフェイズ・次へ・フェイズの操作だけ。
+   中身: ≡・判定(参考)・部隊(開始前だけ)・↶↷(対戦の取り消し)・A→B(対戦のLOS)・見える範囲・早見表・カード・旧タブ・DR・リアル盤。攻撃・移動・同期は出さない */
+function btSideOn(){try{return window.NM_BT_SIDE!==false&&nmTbPos()!=='T';}catch(e){return false;}}
+function btSideActHTML(){var h='',mv=BT.mv,un=BT.started&&mv&&(mv.veh?btVCanUndo():true),rd=BT.started&&mv&&mv.veh&&btVCanRedo(),nr=(typeof NM_RB!=='undefined'&&NM_RB.items)?NM_RB.items.length:0;
+  var b=function(on,dis,ttl,oc,inner,st){return '<button class="fa g'+(on?' on':'')+(dis?' dis':'')+'" title="'+T(ttl)+'" onclick="event.stopPropagation();'+oc+'"'+(st?' style="'+st+'"':'')+'>'+inner+'</button>';};
+  h+=b(0,!un,'一つ戻る','btFtUndo();nmFtActFill()','<span style="font-size:15px;line-height:1">↶</span>')+b(0,!rd,'やり直す(車両の移動)','if(btVCanRedo())BtVRedo();nmFtActFill()','<span style="font-size:15px;line-height:1">↷</span>');
+  h+=b(!!BT.losAB,0,'LOS測定(起点A・目標B)','BtLosAB();nmFtActFill()','A→B');
+  h+=b(!!BT.sideView,0,'このヘクスから見える範囲(次にタップしたヘクス)','BT.sideView=!BT.sideView;nmFtActFill()',NM_TOOL_DEF.view[1]);
+  h+=b(0,0,'早見表','NM_TVHQ=0;nmTvOpen(\'ref\')','<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 5.5C7 4 10 4.2 12 6c2-1.8 5-2 8-.5V19c-3-1.5-6-1.3-8 .5-2-1.8-5-2-8-.5z"/><path d="M12 6v13.5"/></svg>');
+  h+=b(0,0,'シナリオカード','nmScenView()','<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5"/></svg>');
+  if(BT.started)h+=b(0,0,'DR','btFtDice()','🎲')+b(0,!nr,'リアル盤へ','nmFtRb()','▣'+(nr?' <span class="bd">'+nr+'</span>':''));
+  h+='<span class="fsp"></span><button class="fa g" title="'+T('メインメニュー')+'" onclick="event.stopPropagation();btFtMenu(this)">≡</button>';
+  return h;}
+(function(){if(typeof document==='undefined')return;var st=document.createElement('style');st.id='btSideCss';st.textContent=
+  'html.nm-tbR #btFullTop,html.nm-tbR #btFullBot{right:var(--nmtbw)!important}html.nm-tbL #btFullTop,html.nm-tbL #btFullBot{left:var(--nmtbw)!important}'
+ +'html.nm-tbR.bt-mapfull:has(#btFullTop) #losScrollWrap,html.nm-tbL.bt-mapfull:has(#btFullTop) #losScrollWrap{top:var(--btftop,0px)!important}'
+ +'html.nm-tbR:has(#btFullTop) #nmFullTabs,html.nm-tbL:has(#btFullTop) #nmFullTabs{top:0!important;bottom:0!important;padding-top:calc(4px + var(--nmsat))!important;z-index:8915!important}'
+ +'html.nm-tbR.bt-mapfull #main .bt-cmd{right:var(--nmtbw)!important}html.nm-tbL.bt-mapfull #main .bt-cmd{left:var(--nmtbw)!important}'
+ +'#btFullTop{min-height:0}#btFullTop .nb{height:28px!important}#btFullBot.slim{height:32px!important;padding:2px 6px!important}#btFullBot.slim .cd{border-radius:6px}';
+ document.head.appendChild(st);})();
+
+/* sample-btside3(ダルマ指示「A→BでLOSの情報はタスクバーに表示せずに判定モードと同じようにマップ上に表示」): Bのヘクスの横に小さな結果の札(判定モードの #nmAbBd と同じ見た目)。⇄=AとBを入れ替え、✕=測定を終わる */
+function btLosCardSync(on){var el=document.getElementById('btLosCd'),LA=BT&&BT.losAB;
+  if(!on||!LA||!btGraphReady()||LA.a==null){if(el)el.remove();return;}
+  if(!el){el=document.createElement('div');el.id='btLosCd';el.onpointerdown=function(e){e.stopPropagation();};el.onclick=function(e){e.stopPropagation();};document.body.appendChild(el);el.style.cssText='position:fixed;z-index:9100;background:#141922ee;border:1.5px solid #c040c0;border-radius:10px;padding:6px 8px 6px 10px;color:#e8eef4;font-family:AppFont,AppJP,monospace;font-size:13px;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px #000a';}
+  var bt=function(lb,fn){return '<button onclick="event.stopPropagation();'+fn+'" style="font:inherit;font-weight:900;font-size:13px;padding:5px 9px;border-radius:8px;border:1px solid #4a5262;background:#1b222c;color:#e8eef4">'+lb+'</button>';};
+  var h,n=LA.b!=null?LA.b:LA.a;
+  if(LA.b==null)h='<span style="color:#aab4c0">'+T('目標(B)のヘクスをタップ')+'</span>';
+  else{var r=btLosABEval(LA.a,LA.b),ed=(BTG.nodes[LA.b].elev||0)-(BTG.nodes[LA.a].elev||0);
+    h='<div style="white-space:nowrap"><b style="color:'+(r.ok?'#3ca878':'#ff6060')+'">LOS '+(r.ok?'OK':'NG')+'</b> '+T('距離')+r.dist+'<br><span style="color:#aab4c0">'+(r.ok?T('妨害')+'+'+r.hind+'・'+T('地形')+'+'+r.terr+'・'+T('高低差')+(ed>0?'+':'')+ed:(r.why||''))+'</span></div>'+bt('⇄','var L=BT.losAB;if(L&&L.b!=null){var x=L.a;L.a=L.b;L.b=x;}Draw()');}
+  h+=bt('✕','BtLosAB();try{nmFtActFill();}catch(e){}');
+  if(el.__h!==h){el.__h=h;el.innerHTML=h;}
+  var q=null;try{q=nmClientOfNode(n);}catch(e){}var sw=document.getElementById('losScrollWrap'),wr=sw&&sw.getBoundingClientRect();if(!q||(wr&&(q.x<wr.left||q.x>wr.right||q.y<wr.top||q.y>wr.bottom))){el.style.display='none';return;}el.style.display='flex';
+  var W=el.offsetWidth||180,H=el.offsetHeight||40,x=q.x+30,y=q.y-H/2,R=innerWidth-(nmTbW()||0)-6;
+  if(x+W>R)x=q.x-30-W;x=Math.max(6,Math.min(R-W,x));y=Math.max(40,Math.min(innerHeight-H-40,y));
+  el.style.left=Math.round(x)+'px';el.style.top=Math.round(y)+'px';}
 function btFullBars(on){
   var de=document.documentElement,t=document.getElementById('btFullTop'),b=document.getElementById('btFullBot');
   function setV(k,v){if(de.style.getPropertyValue(k)!==v)de.style.setProperty(k,v);}
-  if(!on){if(t)t.remove();if(b)b.remove();BT_FB_H={t:'',b:''};setV('--btftop','0px');setV('--btfbot','0px');return 0;}
+  if(!on){if(t)t.remove();if(b)b.remove();var lcd=document.getElementById('btLosCd');if(lcd)lcd.remove();BT_FB_H={t:'',b:''};setV('--btftop','0px');setV('--btfbot','0px');return 0;}
   if(!document.getElementById('btFullCss')){var st=document.createElement('style');st.id='btFullCss';
     st.textContent='#btFullTop{position:fixed;left:0;right:0;top:0;z-index:8912;display:flex;align-items:center;gap:4px;padding:calc(2px + min(env(safe-area-inset-top,0px),24px)) 4px 3px 4px;background:#0a0c14;box-shadow:0 4px 14px #000a;color:#e8eef4;font-family:AppFont,AppJP,monospace}'
      +'#btFullTop .nb{flex:0 0 auto;height:30px;padding:0 9px;margin:0;font-size:13px;font-weight:bold;white-space:nowrap;background:linear-gradient(#232a36,#161b24);border:1px solid #39414f;border-radius:4px;color:#c9d3df;display:flex;align-items:center;justify-content:center}'
@@ -42898,11 +42940,13 @@ function btFullBars(on){
   else{var canNext=!(BT.mv&&BT.app&&BT.mv.side===BT.app);th+=btPhStepSpans()+'<button class="nb go'+(canNext?'':' dim')+'" onclick="BtNext()">'+T('次へ')+' ▶</button>';
     if(BT.app&&btSideNow()===BT.app)th+='<span style="font-size:12px;color:#c8a032;padding:0 4px">'+T('アプリの番')+'</span>';
     th+='<span style="width:6px"></span>'+btFtActHTML();}
-  if(BT.started){var mv=BT.mv,un=mv&&(mv.veh?btVCanUndo():true),rd=mv&&mv.veh&&btVCanRedo(),nr=(NM_RB.items||[]).length;
+  var sideOn=btSideOn();
+  if(BT.started&&!sideOn){var mv=BT.mv,un=mv&&(mv.veh?btVCanUndo():true),rd=mv&&mv.veh&&btVCanRedo(),nr=(NM_RB.items||[]).length;
     th+='<span style="width:6px"></span><button class="nb'+(un?'':' dim')+'" title="'+T(mv&&!mv.veh?'移動を取り消す':'一つ戻る(車両の移動)')+'" onclick="btFtUndo()">↶</button><button class="nb'+(rd?'':' dim')+'" title="'+T('やり直す(車両の移動)')+'" onclick="if(btVCanRedo())BtVRedo()">↷</button>'
       +'<button class="nb" onclick="btFtDice()">🎲 DR</button><button class="nb'+(nr?'':' dim')+'" title="'+T('リアル盤へ')+'" onclick="nmFtRb()">▣'+(nr?' <span style="background:#c8a032;color:#111;border-radius:8px;padding:0 5px;font-size:11px;margin-left:3px">'+nr+'</span>':'')+'</button>';}
-  th+='<button class="nb" title="'+T('メインメニュー')+'" onclick="btFtMenu(this)">≡</button>';
-  th+='<span class="sp appVerSp">'+appVerBadgeHTML()+'</span>'+nmFtZoomBtns()
+  if(!sideOn)th+='<button class="nb" title="'+T('メインメニュー')+'" onclick="btFtMenu(this)">≡</button>';
+  if(sideOn){var shh=btSideActHTML();if(shh!==BT_FB_H.s){BT_FB_H.s=shh;setTimeout(function(){try{nmFtActFill();}catch(e){}},0);}}
+  if(!sideOn)th+='<span class="sp appVerSp">'+appVerBadgeHTML()+'</span>'+nmFtZoomBtns()
     +'<button class="nb" onclick="BtMapFull(null)" title="'+T('全画面表示オフ')+'">✕</button>';
   if(th!==BT_FB_H.t){t.innerHTML=th;BT_FB_H.t=th;appVerFit();}
   // 下: 選択中のスタックと最後の記録
@@ -42918,7 +42962,11 @@ function btFullBars(on){
   if(LA&&LA.a!=null&&LA.b!=null){var lr=btLosABEval(LA.a,LA.b);c3='<div class="t1"><span style="color:'+(lr.ok?'#60e060':'#ff5050')+'">'+BTG.nodes[LA.a].nm+'→'+BTG.nodes[LA.b].nm+' '+(lr.ok?'LOS OK':'LOSなし')+'</span> · '+T('距離')+' '+lr.dist+'</div><div class="t2">'+(lr.ok?T('妨害')+' +'+lr.hind+' · '+T('地形')+' +'+lr.terr:(lr.why||''))+'</div>';}
   else c3='<div class="t2" style="cursor:pointer" onclick="BtLosAB()">'+(LA?T('地図をタップ: 1回目=起点(A)、2回目=目標(B)'):T('タップでLOS測定(起点A・目標B)'))+'</div>';
   var bh='<div class="cd" style="flex:0 1 32%">'+c1+'</div><div class="cd" style="flex:0 1 30%">'+c3+'</div><div class="cd" style="flex:1 1 0">'+c2+'</div>';
+  var slim=sideOn&&window.NM_BT_SLIM!==false;
+  if(slim){var ls2=last?[].concat(last).map(function(x){return String(x).replace(/<[^>]*>/g,'');}).slice(-2).join(' ／ ').replace(/[<>&]/g,''):T('記録はまだありません');bh='<div class="cd" style="flex:1 1 0;flex-direction:row;align-items:center;gap:10px;padding:0 10px"><span class="t2" style="color:#8899aa;flex:0 0 auto">'+T('最後の記録')+'</span><span class="t1" style="font-size:13px;font-weight:bold;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+ls2+'</span></div>';} /* sample-btside3(ダルマ「最後の記録 タスクバーに表示」): 下の帯は最後の記録の1行だけ */
+  b.classList.toggle('slim',slim);
   if(bh!==BT_FB_H.b){b.innerHTML=bh;BT_FB_H.b=bh;}
+  try{btLosCardSync(sideOn&&slim);}catch(e){console.log('btLosCard',e);}
   setV('--btftop',t.offsetHeight+'px');setV('--btfbot',b.offsetHeight+'px');
   return t.offsetHeight;
 }
