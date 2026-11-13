@@ -42879,20 +42879,18 @@ function btFtMenu(btn){var m=document.getElementById('nmFtMn');if(m){m.remove();
   m.innerHTML=appMenuHTML('nmFtMn',it,[]);
   m.onclick=function(e){e.stopPropagation();};document.body.appendChild(m);setTimeout(function(){document.addEventListener('pointerdown',function f(e){var mm=document.getElementById('nmFtMn');if(!mm){document.removeEventListener('pointerdown',f,true);return;}if(mm.contains(e.target))return;if(!btn.contains(e.target))mm.remove();document.removeEventListener('pointerdown',f,true);},true);},0);} /* v833(ダルマ指示「マップタップで閉じる」): メニューの中を触っても見張りを続け、外(マップなど)を触ったら閉じる */
 
-/* sample-btside(ダルマ指示「アプリ対戦モードでもツールバーをデフォルトで右側に表示・ライト判定モードと内容を同じに」「なるべくマップを広く」):
+/* sample-btside2(ダルマ指示「アプリ対戦モードで使用しないものは非表示にしてスッキリ」「マップはなるべく広く」): 判定・部隊・旧タブも外し、下の帯はLOS測定中だけ。
+   sample-btside(ダルマ指示「アプリ対戦モードでもツールバーをデフォルトで右側に表示・ライト判定モードと内容を同じに」「なるべくマップを広く」):
    対戦モードでも #nmFullTabs を左右に置く(位置はライト判定と同じ設定 nmTbPos、既定=右)。上の帯はフェイズ・次へ・フェイズの操作だけ。
    中身: ≡・判定(参考)・部隊(開始前だけ)・↶↷(対戦の取り消し)・A→B(対戦のLOS)・見える範囲・早見表・カード・旧タブ・DR・リアル盤。攻撃・移動・同期は出さない */
 function btSideOn(){try{return window.NM_BT_SIDE!==false&&nmTbPos()!=='T';}catch(e){return false;}}
 function btSideActHTML(){var h='',mv=BT.mv,un=BT.started&&mv&&(mv.veh?btVCanUndo():true),rd=BT.started&&mv&&mv.veh&&btVCanRedo(),nr=(typeof NM_RB!=='undefined'&&NM_RB.items)?NM_RB.items.length:0;
   var b=function(on,dis,ttl,oc,inner,st){return '<button class="fa g'+(on?' on':'')+(dis?' dis':'')+'" title="'+T(ttl)+'" onclick="event.stopPropagation();'+oc+'"'+(st?' style="'+st+'"':'')+'>'+inner+'</button>';};
-  h+=b(0,0,'マルチ判定(参考の計算。結果は対戦のユニットに反映されません)','nmHqOpen()','<b>'+T('判定')+'</b>');
-  if(!BT.started)h+=b(0,0,'部隊の準備','nmSuOpen()','<b style="font-size:12px">'+T('部隊')+'</b>');
   h+=b(0,!un,'一つ戻る','btFtUndo();nmFtActFill()','<span style="font-size:15px;line-height:1">↶</span>')+b(0,!rd,'やり直す(車両の移動)','if(btVCanRedo())BtVRedo();nmFtActFill()','<span style="font-size:15px;line-height:1">↷</span>');
   h+=b(!!BT.losAB,0,'LOS測定(起点A・目標B)','BtLosAB();nmFtActFill()','A→B');
   h+=b(!!BT.sideView,0,'このヘクスから見える範囲(次にタップしたヘクス)','BT.sideView=!BT.sideView;nmFtActFill()',NM_TOOL_DEF.view[1]);
   h+=b(0,0,'早見表','NM_TVHQ=0;nmTvOpen(\'ref\')','<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 5.5C7 4 10 4.2 12 6c2-1.8 5-2 8-.5V19c-3-1.5-6-1.3-8 .5-2-1.8-5-2-8-.5z"/><path d="M12 6v13.5"/></svg>');
   h+=b(0,0,'シナリオカード','nmScenView()','<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5"/></svg>');
-  h+=b(0,0,'旧タブ','nmOldTabPop(this)','<b style="font-size:12px;white-space:nowrap">'+T('旧タブ')+'</b>');
   if(BT.started)h+=b(0,0,'DR','btFtDice()','🎲')+b(0,!nr,'リアル盤へ','nmFtRb()','▣'+(nr?' <span class="bd">'+nr+'</span>':''));
   h+='<span class="fsp"></span><button class="fa g" title="'+T('メインメニュー')+'" onclick="event.stopPropagation();btFtMenu(this)">≡</button>';
   return h;}
@@ -42948,7 +42946,8 @@ function btFullBars(on){
   else c3='<div class="t2" style="cursor:pointer" onclick="BtLosAB()">'+(LA?T('地図をタップ: 1回目=起点(A)、2回目=目標(B)'):T('タップでLOS測定(起点A・目標B)'))+'</div>';
   var bh='<div class="cd" style="flex:0 1 32%">'+c1+'</div><div class="cd" style="flex:0 1 30%">'+c3+'</div><div class="cd" style="flex:1 1 0">'+c2+'</div>';
   if(bh!==BT_FB_H.b){b.innerHTML=bh;BT_FB_H.b=bh;}
-  setV('--btftop',t.offsetHeight+'px');setV('--btfbot',b.offsetHeight+'px');
+  var bHide=sideOn&&window.NM_BT_SLIM!==false&&!(BT.losAB);b.style.display=bHide?'none':''; /* sample-btside2: 下の帯はLOS測定中だけ(選んだスタックは上の指示カード、記録は≡) */
+  setV('--btftop',t.offsetHeight+'px');setV('--btfbot',(bHide?0:b.offsetHeight)+'px');
   return t.offsetHeight;
 }
 /* v361(ダルマ指示「全画面表示時、デフォルトでは上下左右にブランクを表示しないように拡大縮小」): 地図の枠を縦・横とも盤で埋める倍率(はみ出す方はスクロール)にして、使用可能範囲の中央へ */
