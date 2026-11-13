@@ -10,8 +10,8 @@ function REF_SMOKE_CARD(){
   h+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">';
   h+='<tr><th style="'+TH+'">種類</th><th style="'+TH+'">裏面の表記</th><th style="'+TH+'">使える時</th><th style="'+TH+'">置く場所・射程</th><th style="'+TH+'">置く煙幕</th><th style="'+TH+'">条件・DRM</th></tr>';
   var R=[
-    [tag('s','#e8eef4')+'<br>主砲の煙幕弾','s<b>8</b> = 欠乏No.','PFPh開始時・DFPh開始時(ATTで命中が必要)','主砲で撃てるヘクス','PFPh: <b>+3</b> 通常<br>DFPh: <b>+2</b> 分散','原TH DR ≤ 欠乏No.で使える(超えたら弾が無く、撃っていない扱い)。そのフェイズに煙幕以外を撃った後は煙幕を撃てない'],
-    [tag('WP','#e8eef4')+'<br>主砲の白燐弾','WP<b>7</b> = 欠乏No.','PFPh開始時・DFPh開始時・防御射撃(ATT)','主砲で撃てるヘクス','PFPh: <b>+2</b> 通常<br>MPh・DFPh: <b>+1</b> 分散','命中したユニットはNMC(DRからTEMを引く)。ほかは煙幕弾と同じ'],
+    [tag('s','#e8eef4')+'<br>主砲・砲の煙幕弾','s<b>8</b> = 欠乏No.','PFPh開始時・DFPh開始時(ATTで命中が必要)','主砲・砲で撃てるヘクス','PFPh: <b>+3</b> 通常<br>DFPh: <b>+2</b> 分散','原TH DR ≤ 欠乏No.で使える(超えたら弾が無く、撃っていない扱い)。そのフェイズに煙幕以外を撃った後は煙幕を撃てない'],
+    [tag('WP','#e8eef4')+'<br>主砲・砲の白燐弾','WP<b>7</b> = 欠乏No.','PFPh開始時・DFPh開始時・防御射撃(ATT)','主砲・砲で撃てるヘクス','PFPh: <b>+2</b> 通常<br>MPh・DFPh: <b>+1</b> 分散','命中したユニットはNMC(DRからTEMを引く)。ほかは煙幕弾と同じ'],
     [tag('sD',C)+'<br>発煙弾発射機','sD<b>7</b> = 使用No.','MPh(下の共通ルール)','自分のヘクス','<b>+2</b> 分散','BU +1'],
     [tag('sM',C)+'<br>発煙迫撃砲','sM<b>8</b> = 使用No.','MPh(下の共通ルール)','1〜3ヘクス・LOS内・TCA内','<b>+2</b> 分散','BU +1、移動中/停止していない +2、TCAを変えたら射撃と同じDRM、間の妨害DRMも加える、建物の中からは不可'],
     [tag('sP',C)+'<br>発煙ポット','sP<b>#</b> = 使用No.','MPh(下の共通ルール)','自分のヘクス','<b>+2</b> 分散','CEの時だけ使える'],
@@ -45,6 +45,19 @@ function REF_SMOKE_CARD(){
       if(sm.availFrom)nt.push('装置は'+refSmkWhen(sm.availFrom));if(sm.note)nt.push(String(sm.note).replace(/\(.*$/,''));if(sm.options)nt.push('どちらか一方を宣言して使う');}
     var am=function(t){var a=sa.filter(function(x){return x.type===t;})[0];if(!a)return '—';return '<b>'+a.deplete+'</b>'+(a.availFrom?'<span style="color:'+G+';font-size:10px"> '+refSmkWhen(a.availFrom)+'</span>':'');};
     h+='<tr><td style="'+TD+'">'+(NAT[v.nat]||v.nat)+'</td><td style="'+TD+';white-space:nowrap">'+v.lbl+'</td><td style="'+TD+'">'+dev+'</td><td style="'+TD+';white-space:nowrap">'+pr+'</td><td style="'+TD+'">'+am('Smoke')+'</td><td style="'+TD+'">'+am('WP')+'</td><td style="'+TD+';color:'+G+'">'+nt.join('・')+'</td></tr>';
+  });
+  h+='</table></div></div>';
+  // ⑤ 砲別一覧(GUN_DATA から)
+  var CAT={AT:'対戦車砲',INF:'歩兵砲',ART:'野砲',AA:'対空砲',MTR:'迫撃砲'};
+  var dep=function(a){if(!a)return '—';var d=a.deplete;if(d&&typeof d==='object'){var y=Object.keys(d);return '<b>'+d[y[0]]+'</b><span style="color:'+G+';font-size:10px"> '+y[0]+'年以降</span>';}return '<b>'+d+'</b>';};
+  h+='<div class="card"><div class="sh">'+T('砲別の煙幕')+' <span style="color:'+G+';font-size:11px;font-weight:400">s#・WP#=欠乏No.(原TH DR がこれ以下なら使える)。ATTで命中が必要</span></div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">';
+  h+='<tr><th style="'+TH+'">国</th><th style="'+TH+'">砲</th><th style="'+TH+'">種類</th><th style="'+TH+'">s#</th><th style="'+TH+'">WP#</th><th style="'+TH+'">注意</th></tr>';
+  var GOD=['GER','SOV','USA','USA/FFR','USA/GBR/FFR','GBR','ITA/GBR','ITA','SLO','POL'];
+  (typeof GUN_DATA!=='undefined'?GUN_DATA:[]).slice().sort(function(a,b){var x=GOD.indexOf(a.nat),y=GOD.indexOf(b.nat);return (x<0?99:x)-(y<0?99:y);}).forEach(function(g){
+    var A=g.ammo||[],sm=A.filter(function(a){return /^smoke$/i.test(a.type);})[0],wp=A.filter(function(a){return a.type==='WP';})[0];
+    if(!sm&&!wp)return;
+    var nt=[];if(g.gunCategory==='MTR')nt.push('迫撃砲はいつもATT');
+    h+='<tr><td style="'+TD+'">'+(NAT[g.nat]||g.nat.replace('USA','米').replace('GBR','英').replace('FFR','仏').replace('ITA','伊'))+'</td><td style="'+TD+';white-space:nowrap">'+g.lbl+'</td><td style="'+TD+'">'+(CAT[g.gunCategory]||g.gunCategory||'')+'</td><td style="'+TD+'">'+dep(sm)+'</td><td style="'+TD+'">'+dep(wp)+'</td><td style="'+TD+';color:'+G+'">'+nt.join('・')+'</td></tr>';
   });
   h+='</table></div></div>';
   return h;
