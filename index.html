@@ -34268,7 +34268,8 @@ function nmRmBuildB(n,U,X2){
   if(T.length<2)return null;
   var th=nmMuTiles(T); /* 基本画像のタイル(右クリックと同じ) */
   var uo=nmRmUOpen(),xo=nmRmXOpen(),top=[head,{html:th}];
-  if(rest.length){top.push({ic:'sel',t:(uo?'▾ ':'▸ ')+'状態・操作',sub:uo?'タップで閉じる':'状態・操作するユニット・MG・煙幕手榴弾・回復など',f:"nmRmUFold("+n+")"});if(uo)top=top.concat(rest);}
+  if(rest.length&&window.NM_RM_NOFOLD!==false){top=top.concat(rest);} /* sample-rmst(ダルマ指示「赤枠部分無くして状態は常に表示」): 「▼ 状態・操作 タップで閉じる」の見出しを出さず、中身を常に表示 */
+  else if(rest.length){top.push({ic:'sel',t:(uo?'▾ ':'▸ ')+'状態・操作',sub:uo?'タップで閉じる':'状態・操作するユニット・MG・煙幕手榴弾・回復など',f:"nmRmUFold("+n+")"});if(uo)top=top.concat(rest);}
   var hx=hexIt.concat(X2.filter(function(x){return !x.sep;})),hexL=[];
   if(hx.length){hexL.push({ic:'hex',t:(xo?'▾ ':'▸ ')+'ヘクス',sub:xo?'タップで閉じる':'配置・残骸・煙幕・マーク',f:"nmRmXFold("+n+")"});if(xo)hexL=hexL.concat(hx);}
   window.NM_MU_F=1;return {top:top,hex:hexL}; /* 左クリックの通常メニューも基本画像のデザイン */
@@ -38675,7 +38676,7 @@ var NM_RM_MORE=(function(){try{return localStorage.getItem('nmRmMore')==='1';}ca
 /* v654(ダルマ指示「赤枠を折りたたみにする」): マーカーのメニューの 状態・移動・使ったMP・射撃済 の行を1つに畳む */
 var NM_RM_ST=(function(){try{return localStorage.getItem('nmRmSt')==='1';}catch(e){return false;}})(); /* v1180: 開閉を記憶 */
 function nmRmStTog(n){NM_RM_ST=!NM_RM_ST;try{localStorage.setItem('nmRmSt',NM_RM_ST?'1':'0');}catch(e){}window.NM_RM_GROW=1;try{btRmReopen(n);}catch(e){}}
-(function(){var go=function(){var o=nmRMenuItems;nmRMenuItems=function(n){var it=o.apply(this,arguments);try{if(NM_RM_SUB||!it||!it.length)return it;
+(function(){var go=function(){var o=nmRMenuItems;nmRMenuItems=function(n){var it=o.apply(this,arguments);try{if(NM_RM_SUB||!it||!it.length||window.NM_RM_NOFOLD!==false)return it; /* sample-rmst: 「▲ 状態・移動・射撃済を閉じる」も出さず常に表示 */
   var t=function(x){return x&&typeof x.t==='string'?x.t.replace(/<[^>]*>/g,''):'';};
   var fold=function(x){return !!(x&&x.row&&/^(状態|移動|使ったMP|射撃)/.test(t(x)));};
   var keep=[],more=[],pos=-1;it.forEach(function(x){if(fold(x)){if(pos<0)pos=keep.length;more.push(x);}else keep.push(x);});if(!more.length)return it;
