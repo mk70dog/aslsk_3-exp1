@@ -1,0 +1,5 @@
+html:root:root #btRm.rmFull .rmCols>.rmCol:first-child{flex:0 0 42%!important}
+html:root:root:root:root #btRm.rmFull .rmCol:last-child .rmBtns .rmB.rmDie,html:root:root:root:root #btRm.rmFull .rmCol:last-child .dsRow button{width:34px!important;height:34px!important;min-width:34px!important;flex:0 0 34px!important;font-size:14px!important}
+html:root:root:root #btRm.rmFull .rmCol:last-child .rmIt:has(img){background:#14171d!important;border-radius:8px 8px 0 0!important;border-left:3px solid #ffd070!important;margin:8px 0 0!important;box-shadow:none!important}
+html:root:root:root #btRm.rmFull .rmCol:last-child .rmIt:has(img)+.rmIt.rmRow,html:root:root:root #btRm.rmFull .rmCol:last-child .rmIt:has(img).rmRow{background:#14171d!important;border-radius:0 0 8px 8px!important;border-left:3px solid #ffd070!important;margin:0!important;box-shadow:0 3px 0 #0e0e0c!important}
+html:root:root:root #btRm.rmFull .rmCol:last-child .rmIt.rmRow:has(img){border-radius:8px!important;border-left-color:#3ca878!important}
