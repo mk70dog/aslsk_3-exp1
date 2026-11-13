@@ -1,0 +1,12 @@
+html:root:root:root:root #nmCcSc .ccBox div[style*="grid-template-columns:1fr 1fr"]{display:grid!important;gap:6px!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img){position:relative!important;display:grid!important;background:#14171d!important;border-radius:8px!important;box-shadow:0 3px 0 #0e0e0c,0 4px 2px rgba(0,0,0,.45),0 0 0 .5px #2a2f3a!important;min-height:0!important;height:auto!important;width:auto!important;margin:0!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>span:first-child{grid-area:i!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:1px!important;min-width:0!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>span:first-child span[data-ctr]{font-size:10px!important;line-height:1.1!important;white-space:nowrap}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>small{font-size:10px!important;color:#8899aa!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>button{width:24px!important;height:24px!important;min-width:0!important;min-height:0!important;padding:0!important;margin:0!important;font-size:14px!important;border-radius:6px!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>button:first-of-type{grid-area:m!important}html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>button:last-of-type{grid-area:p!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>b{grid-area:n!important;text-align:center!important;font-size:15px!important;align-self:center}
+html:root:root:root:root #nmCcSc .ccBox div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img){grid-template-columns:24px 1fr 24px!important;grid-template-rows:auto 13px 24px!important;grid-template-areas:"i i i" "s s s" "m n p"!important;gap:4px 2px!important;padding:6px 6px 6px!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img) img{width:40px!important;height:40px!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>small{grid-area:s!important;text-align:center;line-height:13px;white-space:nowrap;overflow:hidden}

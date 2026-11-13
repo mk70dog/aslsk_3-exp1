@@ -1,0 +1,13 @@
+html:root:root:root:root #nmCcSc .ccBox div[style*="grid-template-columns:1fr 1fr"]{display:grid!important;gap:6px!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img){position:relative!important;display:grid!important;background:#14171d!important;border-radius:8px!important;box-shadow:0 3px 0 #0e0e0c,0 4px 2px rgba(0,0,0,.45),0 0 0 .5px #2a2f3a!important;min-height:0!important;height:auto!important;width:auto!important;margin:0!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>span:first-child{grid-area:i!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:1px!important;min-width:0!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>span:first-child span[data-ctr]{font-size:10px!important;line-height:1.1!important;white-space:nowrap}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>small{font-size:10px!important;color:#8899aa!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>button{width:24px!important;height:24px!important;min-width:0!important;min-height:0!important;padding:0!important;margin:0!important;font-size:14px!important;border-radius:6px!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>button:first-of-type{grid-area:m!important}html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>button:last-of-type{grid-area:p!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>b{grid-area:n!important;text-align:center!important;font-size:15px!important;align-self:center}
+html:root:root:root:root #nmCcSc .ccBox div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:repeat(auto-fill,minmax(104px,1fr))!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img){grid-template-columns:24px 1fr 24px!important;grid-template-areas:"m i p" "s s s"!important;align-items:center!important;gap:2px!important;padding:6px 4px 4px!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img) img{width:44px!important;height:44px!important}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>small{grid-area:s!important;text-align:center;line-height:12px;white-space:nowrap;margin-top:8px}
+html:root:root:root:root #nmCcSc .ccBox .nmPk:has(img)>b{position:absolute!important;left:50%;top:46px;transform:translateX(-50%);min-width:22px;height:18px;line-height:18px;border-radius:9px;background:#1b222c;border:1px solid #4a5566;font-size:12px!important;color:#ffd24a!important}
