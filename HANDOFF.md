@@ -2,6 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
+- 【返事待ち 2026-11-13 12:20】sample-viewtem(ブランチ sample-viewtem、samples/sample-viewtem.png): ダルマ指示「los妨害とtemを表示 サンプルx3」。見える範囲(btRmView の地図描画 o.k===view)の数字を nmViewTemSVG に。window.NM_VIEW_TEM=1(2段: 妨害の下に TEM+n 水色)/2(合計=妨害+TEM を白で大きく・下に 妨害+TEM の内訳)/3(バッジ: 左上=妨害の黄の丸・右下=T+n の紺の丸)。TEM は BTG.nodes[i].tem(見えるヘクスだけ)。0=今の表示。案の返事待ち。
 - 【返事待ち 2026-11-13 12:10】sample-emptytap(ブランチ sample-emptytap、samples/sample-emptytap.png): ダルマ指示「空のヘクスタップでこのパネル表示」(このパネル=配置パネル nmRmVehItems: 国・部隊/車両/砲・煙幕/残骸/マーク)。地図のタップ処理(v411 の nmUnitAt 判定の直後)で、地点Aが無く自軍・敵のいないヘクスなら nmEmptyPlOpen → NM_RM_VEH=NM_PL.sd||f で btRMenu。地点Aがある時のタップ=B地点は従来どおり。window.NM_EMPTY_PL=false で無効。「実施」待ち。
 - 【2026-11-13 12:00】main=v1191(push 済み)。v1190 の経緯: (前のセッションで push が拒否された分を claude/v1190.patch から当て直した。合流コミットは差分に無かったので再現: style#nmRmBtnOnCss2 に .coMk の金枠と PAATC 案2-1 の CSS、⑥の「敵」の言い換え。sample-ve も push 済み。samples/sample-ve3-pa21.png は差分に無く未収録)。返事待ちなし。保留: ①WPのNMCはヘクスのTEMのみ ②M4A1・M4A3E2・英シャーマンの発煙迫撃砲(sM)の開始時期は未確認 ③ジャンボの「A4⁴/5⁵」の「/」の読み ④v1150 自動同期の2台テスト未 ⑤判定の入力画面に「クリア」が要るか未決 ⑥車両の移動中の煙幕で直したい点があるか確認中。教訓: オートダイスOFFで「〜を振る」ボタンは .nmAdB として隠れる。振るボタンしか無い判定は OFF の時の判定ボタンが要る(不意打ちで発生)。
 - v1191: sample-rmst 実施(ダルマ「赤枠部分無くして状態は常に表示」「移動は消去」→質問で 移動+使ったMP)。ヘクスメニュー: nmRmCompose の top で rest を見出し「▸ 状態・操作」なしで常に入れる、v654 の畳み(nmRmStTog「▲ 状態・移動・射撃済を閉じる」)は通さず、x.row の /^(移動|使ったMP)/ を除く。window.NM_RM_NOFOLD=false で元に戻る。「▼ その他」「LOS・移動」「ヘクス」の畳みはそのまま。目標の移動は攻撃パネル(nmTgtMvSet)で設定。確認: PzKpfw IIIN のメニュー撮影・smoke 0エラー。
