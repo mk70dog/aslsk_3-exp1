@@ -49270,7 +49270,7 @@ function REF_SMOKE_CARD(){
       pr=ops.map(function(o){var n=o.deplete!=null?o.deplete:o.depleteByYear[Object.keys(o.depleteByYear)[0]];var ce=o.type==='sN'?null:refSmkP(n),bu=o.type==='sP'?null:refSmkP(n-1);return bar(ce,'CE')+bar(bu,'BU');}).join('');
       if(sm.availFrom)nt.push('装置は'+refSmkWhen(sm.availFrom));if(sm.note)nt.push(String(sm.note).replace(/\(.*$/,''));if(sm.options)nt.push('どちらか一方を宣言');
       if(ops.some(function(o){return o.depleteByYear;}))nt.push('成功率は最初の年');}
-    h+='<tr'+((z++)%2?' class="z"':'')+'><td style="white-space:nowrap;font-weight:700">'+v.lbl+'</td><td>'+dev+'</td><td>'+pr+'</td><td>'+am(s1,'a')+'</td><td>'+am(w1,'w')+'</td><td class="nt">'+nt.join('・')+'</td></tr>';
+    h+='<tr'+((z++)%2?' class="z"':'')+'><td style="white-space:nowrap;font-weight:700"><div style="display:flex;align-items:center;gap:10px">'+(vaslCtrHTML(v.id,56,'')||'<span style="display:inline-block;width:56px"></span>')+'<span>'+v.lbl+'</span></div></td><td>'+dev+'</td><td>'+pr+'</td><td>'+am(s1,'a')+'</td><td>'+am(w1,'w')+'</td><td class="nt">'+nt.join('・')+'</td></tr>';
   });
   h+='</table></div></div>';
   // ④ 砲
@@ -49281,7 +49281,7 @@ function REF_SMOKE_CARD(){
     var A=g.ammo||[],sm=A.filter(function(a){return /^smoke$/i.test(a.type);})[0],wp=A.filter(function(a){return a.type==='WP';})[0];
     if(!sm&&!wp)return;
     if(g.nat!==pn){pn=g.nat;z=0;h+='<tr class="nat"><td colspan="4">'+(NAT[g.nat]||g.nat)+'</td></tr>';}
-    h+='<tr'+((z++)%2?' class="z"':'')+'><td style="white-space:nowrap;font-weight:700">'+g.lbl+'</td><td class="nt" style="font-size:12px">'+(CAT[g.gunCategory]||'')+'</td><td>'+am(sm,'a')+'</td><td>'+am(wp,'w')+'</td></tr>';
+    h+='<tr'+((z++)%2?' class="z"':'')+'><td style="white-space:nowrap;font-weight:700"><div style="display:flex;align-items:center;gap:10px">'+(vaslCtrHTML(g.id,56,'')||'<span style="display:inline-block;width:56px"></span>')+'<span>'+g.lbl+'</span></div></td><td class="nt" style="font-size:12px">'+(CAT[g.gunCategory]||'')+'</td><td>'+am(sm,'a')+'</td><td>'+am(wp,'w')+'</td></tr>';
   });
   h+='</table></div></div></div>';
   return h;
