@@ -33915,6 +33915,7 @@ function btLosABEval(a,b){
 }
 function btLosABHTML(){
   var L=BT.losAB;if(!L)return '';
+  try{if(btSideOn()&&window.NM_BT_SLIM!==false&&btMapFullOn())return '';}catch(e){} /* sample-btside3: 地図の札(btLosCd)で表示するので、上の指示カードには出さない */
   var h='<div style="border:1px solid #66ccff;border-radius:4px;padding:5px 7px;margin:0 0 5px;background:#0a1420">';
   h+='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><b style="color:#66ccff;font-size:12px">LOS測定(A▶︎B)</b>';
   h+='<span style="font-size:11px;color:#9ab">'+(L.rc?'右クリック: 1回目=起点(A)、2回目=目標(B)(左クリックは通常の操作)':'地図をタップ: 1回目=起点(A)、2回目=目標(B)(部隊は動きません)')+'</span>';
@@ -42899,12 +42900,28 @@ function btSideActHTML(){var h='',mv=BT.mv,un=BT.started&&mv&&(mv.veh?btVCanUndo
  +'html.nm-tbR.bt-mapfull:has(#btFullTop) #losScrollWrap,html.nm-tbL.bt-mapfull:has(#btFullTop) #losScrollWrap{top:var(--btftop,0px)!important}'
  +'html.nm-tbR:has(#btFullTop) #nmFullTabs,html.nm-tbL:has(#btFullTop) #nmFullTabs{top:0!important;bottom:0!important;padding-top:calc(4px + var(--nmsat))!important;z-index:8915!important}'
  +'html.nm-tbR.bt-mapfull #main .bt-cmd{right:var(--nmtbw)!important}html.nm-tbL.bt-mapfull #main .bt-cmd{left:var(--nmtbw)!important}'
- +'#btFullTop{min-height:0}#btFullTop .nb{height:28px!important}';
+ +'#btFullTop{min-height:0}#btFullTop .nb{height:28px!important}#btFullBot.slim{height:32px!important;padding:2px 6px!important}#btFullBot.slim .cd{border-radius:6px}';
  document.head.appendChild(st);})();
+
+/* sample-btside3(ダルマ指示「A→BでLOSの情報はタスクバーに表示せずに判定モードと同じようにマップ上に表示」): Bのヘクスの横に小さな結果の札(判定モードの #nmAbBd と同じ見た目)。⇄=AとBを入れ替え、✕=測定を終わる */
+function btLosCardSync(on){var el=document.getElementById('btLosCd'),LA=BT&&BT.losAB;
+  if(!on||!LA||!btGraphReady()||LA.a==null){if(el)el.remove();return;}
+  if(!el){el=document.createElement('div');el.id='btLosCd';el.onpointerdown=function(e){e.stopPropagation();};el.onclick=function(e){e.stopPropagation();};document.body.appendChild(el);el.style.cssText='position:fixed;z-index:9100;background:#141922ee;border:1.5px solid #c040c0;border-radius:10px;padding:6px 8px 6px 10px;color:#e8eef4;font-family:AppFont,AppJP,monospace;font-size:13px;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px #000a';}
+  var bt=function(lb,fn){return '<button onclick="event.stopPropagation();'+fn+'" style="font:inherit;font-weight:900;font-size:13px;padding:5px 9px;border-radius:8px;border:1px solid #4a5262;background:#1b222c;color:#e8eef4">'+lb+'</button>';};
+  var h,n=LA.b!=null?LA.b:LA.a;
+  if(LA.b==null)h='<span style="color:#aab4c0">'+T('目標(B)のヘクスをタップ')+'</span>';
+  else{var r=btLosABEval(LA.a,LA.b),ed=(BTG.nodes[LA.b].elev||0)-(BTG.nodes[LA.a].elev||0);
+    h='<div style="white-space:nowrap"><b style="color:'+(r.ok?'#3ca878':'#ff6060')+'">LOS '+(r.ok?'OK':'NG')+'</b> '+T('距離')+r.dist+'<br><span style="color:#aab4c0">'+(r.ok?T('妨害')+'+'+r.hind+'・'+T('地形')+'+'+r.terr+'・'+T('高低差')+(ed>0?'+':'')+ed:(r.why||''))+'</span></div>'+bt('⇄','var L=BT.losAB;if(L&&L.b!=null){var x=L.a;L.a=L.b;L.b=x;}Draw()');}
+  h+=bt('✕','BtLosAB();try{nmFtActFill();}catch(e){}');
+  if(el.__h!==h){el.__h=h;el.innerHTML=h;}
+  var q=null;try{q=nmClientOfNode(n);}catch(e){}var sw=document.getElementById('losScrollWrap'),wr=sw&&sw.getBoundingClientRect();if(!q||(wr&&(q.x<wr.left||q.x>wr.right||q.y<wr.top||q.y>wr.bottom))){el.style.display='none';return;}el.style.display='flex';
+  var W=el.offsetWidth||180,H=el.offsetHeight||40,x=q.x+30,y=q.y-H/2,R=innerWidth-(nmTbW()||0)-6;
+  if(x+W>R)x=q.x-30-W;x=Math.max(6,Math.min(R-W,x));y=Math.max(40,Math.min(innerHeight-H-40,y));
+  el.style.left=Math.round(x)+'px';el.style.top=Math.round(y)+'px';}
 function btFullBars(on){
   var de=document.documentElement,t=document.getElementById('btFullTop'),b=document.getElementById('btFullBot');
   function setV(k,v){if(de.style.getPropertyValue(k)!==v)de.style.setProperty(k,v);}
-  if(!on){if(t)t.remove();if(b)b.remove();BT_FB_H={t:'',b:''};setV('--btftop','0px');setV('--btfbot','0px');return 0;}
+  if(!on){if(t)t.remove();if(b)b.remove();var lcd=document.getElementById('btLosCd');if(lcd)lcd.remove();BT_FB_H={t:'',b:''};setV('--btftop','0px');setV('--btfbot','0px');return 0;}
   if(!document.getElementById('btFullCss')){var st=document.createElement('style');st.id='btFullCss';
     st.textContent='#btFullTop{position:fixed;left:0;right:0;top:0;z-index:8912;display:flex;align-items:center;gap:4px;padding:calc(2px + min(env(safe-area-inset-top,0px),24px)) 4px 3px 4px;background:#0a0c14;box-shadow:0 4px 14px #000a;color:#e8eef4;font-family:AppFont,AppJP,monospace}'
      +'#btFullTop .nb{flex:0 0 auto;height:30px;padding:0 9px;margin:0;font-size:13px;font-weight:bold;white-space:nowrap;background:linear-gradient(#232a36,#161b24);border:1px solid #39414f;border-radius:4px;color:#c9d3df;display:flex;align-items:center;justify-content:center}'
@@ -42945,9 +42962,12 @@ function btFullBars(on){
   if(LA&&LA.a!=null&&LA.b!=null){var lr=btLosABEval(LA.a,LA.b);c3='<div class="t1"><span style="color:'+(lr.ok?'#60e060':'#ff5050')+'">'+BTG.nodes[LA.a].nm+'→'+BTG.nodes[LA.b].nm+' '+(lr.ok?'LOS OK':'LOSなし')+'</span> · '+T('距離')+' '+lr.dist+'</div><div class="t2">'+(lr.ok?T('妨害')+' +'+lr.hind+' · '+T('地形')+' +'+lr.terr:(lr.why||''))+'</div>';}
   else c3='<div class="t2" style="cursor:pointer" onclick="BtLosAB()">'+(LA?T('地図をタップ: 1回目=起点(A)、2回目=目標(B)'):T('タップでLOS測定(起点A・目標B)'))+'</div>';
   var bh='<div class="cd" style="flex:0 1 32%">'+c1+'</div><div class="cd" style="flex:0 1 30%">'+c3+'</div><div class="cd" style="flex:1 1 0">'+c2+'</div>';
+  var slim=sideOn&&window.NM_BT_SLIM!==false;
+  if(slim){var ls2=last?[].concat(last).map(function(x){return String(x).replace(/<[^>]*>/g,'');}).slice(-2).join(' ／ ').replace(/[<>&]/g,''):T('記録はまだありません');bh='<div class="cd" style="flex:1 1 0;flex-direction:row;align-items:center;gap:10px;padding:0 10px"><span class="t2" style="color:#8899aa;flex:0 0 auto">'+T('最後の記録')+'</span><span class="t1" style="font-size:13px;font-weight:bold;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+ls2+'</span></div>';} /* sample-btside3(ダルマ「最後の記録 タスクバーに表示」): 下の帯は最後の記録の1行だけ */
+  b.classList.toggle('slim',slim);
   if(bh!==BT_FB_H.b){b.innerHTML=bh;BT_FB_H.b=bh;}
-  var bHide=sideOn&&window.NM_BT_SLIM!==false&&!(BT.losAB);b.style.display=bHide?'none':''; /* sample-btside2: 下の帯はLOS測定中だけ(選んだスタックは上の指示カード、記録は≡) */
-  setV('--btftop',t.offsetHeight+'px');setV('--btfbot',(bHide?0:b.offsetHeight)+'px');
+  try{btLosCardSync(sideOn&&slim);}catch(e){console.log('btLosCard',e);}
+  setV('--btftop',t.offsetHeight+'px');setV('--btfbot',b.offsetHeight+'px');
   return t.offsetHeight;
 }
 /* v361(ダルマ指示「全画面表示時、デフォルトでは上下左右にブランクを表示しないように拡大縮小」): 地図の枠を縦・横とも盤で埋める倍率(はみ出す方はスクロール)にして、使用可能範囲の中央へ */
