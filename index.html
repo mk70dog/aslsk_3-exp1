@@ -29627,7 +29627,7 @@ var BT_SCFG={
     zone:function(o,N){var k=btHexNum(N);return k!=null&&k<=9;},
     zoneTxt:function(){return '番号9以下のヘクス';},
     ent:[{id:'e1',side:'SOV',turn:1,off:'S',lbl:'第9親衛狙撃師団(北端)'}],
-    vic:'n',vicN:2,vicSide:'SOV',bl:'vic',flip:true,ssr:{bm:{GER:1},camo:'SOV'}},
+    vic:'n',vicN:2,vicSide:'SOV',bl:'vic',flip:true,ssr:{bm:{GER:1},camo:'SOV'},note:'戦術予備(SSR2): T1に盤外に残したスタック(合計MMC5・SMC1・SW2まで)はT3に北端から進入(東端からは未対応)'},
   S24:{grp:function(o){if(o.side==='SOV')return 'e1';return ['setup','g1','g3'][o.gi]||'setup';},
     zone:function(){return true;},zoneTxt:function(){return '任意';},
     ent:[{id:'e1',side:'SOV',turn:1,off:'W',lbl:'第3親衛戦車軍団(西端)'},{id:'g1',side:'GER',turn:1,off:'E',mpHalf:true,lbl:'第505重戦車大隊・第5装甲師団(東端・MP半分使用済み)'},{id:'g3',side:'GER',turn:3,off:'E',lbl:'第5装甲師団工兵大隊(東端)'}],
@@ -30117,6 +30117,7 @@ function btMoveStart(sid,uids,opt){
   if(btPhId()!=='MPh'||BT.mv)return 'MPh(移動フェイズ)中のみ・同時に1スタック';
   var s=btStackById(sid);if(!s)return 'スタックがありません';
   if(s.side!==btSideNow())return 'ATTACKER側のみ移動できます';
+  if((s.n==null||s.n<0)&&s.due&&s.due>BT.turn)return 'このスタックはT'+s.due+'に進入します'; /* v1193: S6 戦術予備 */
   var units=s.u.filter(function(u){return uids.indexOf(u.id)>=0;});
   // 移動するユニットが持つSWも一緒に
   s.u.forEach(function(w){if(w.own&&uids.indexOf(w.own)>=0&&units.indexOf(w)<0)units.push(w);});
@@ -30686,6 +30687,7 @@ function btPhaseLeave(id){
   if(id==='AFPh'){btClearMarks(att,['P','A','R','B','I']);} // v281: 移動射撃(B)の印も前進射撃フェイズの終わりに外す(外し忘れで、移動射撃した車両がその後ずっと撃てなかった)
   if(id==='APh'){ // 進入予定ターンに入らなかった部隊は除去(3.3: 進入ターンの移動・前進フェイズに入らなければ除去。v284で車両も対象)
     var log=[];
+    if(btScId()==='S6'&&att==='SOV'&&BT.turn===1){var cap={mmc:5,smc:1,sw:2},kept=[];BT.stacks.forEach(function(s){if(s.side!=='SOV'||!(s.n==null||s.n<0)||s.due!==1)return;var ok=true;var q={mmc:0,smc:0,sw:0};s.u.forEach(function(u){var k=btI(u,'SOV').kind;if(k==='mmc')q.mmc++;else if(k==='smc')q.smc++;else if(btIsSWK(k))q.sw++;});['mmc','smc','sw'].forEach(function(k){if(q[k]>cap[k])ok=false;});if(!ok)return;['mmc','smc','sw'].forEach(function(k){cap[k]-=q[k];});s.due=3;s.res=1;s.u.forEach(function(u){kept.push(u.nm);});});if(kept.length)btLog(['ソ連 戦術予備(SSR2): '+kept.join(',')+' はT3に北端から進入']);} /* v1193: S6 SSR2 戦術予備。T1に入らなかった部隊のうち MMC5・SMC1・SW2 まで(スタック単位)をT3へ。東端からの進入は未対応 */
     BT.stacks.forEach(function(s){if(s.side!==att||!(s.n==null||s.n<0)||s.due!==BT.turn)return;
       s.u.slice().forEach(function(u){btRemoveUnit(s,u);log.push(u.nm);});});
     if(log.length)btLog(['進入しなかった部隊を除去: '+log.join(',')]);
@@ -31023,6 +31025,7 @@ function btGoalField(side,G){
 function btMoveSearch(s,mf,side,opt){
   var start=s.n,off=s.off;
   var best={},prev={},q=[];
+  if((start==null||start<0)&&s.due&&s.due>BT.turn)off=null; /* v1193: 進入予定前の盤外スタックは動かない */
   function key(n,m){return n+'|'+m;}
   function push(n,m,dang,pk,road){var k=key(n,m);if(best[k]!=null&&best[k].d<=dang)return;best[k]={n:n,m:m,d:dang,road:road};prev[k]=pk;q.push(k);}
   if(start==null||start<0){
@@ -32029,7 +32032,7 @@ function btSetupHTML(){
   h+='<div style="margin-top:6px">'+btBtn(T('部隊の準備を開く'),'nmSuOpen()',{on:true})+' <span style="color:#8899aa;font-size:11px">'+T(btCfg()?'編成を作って「地図に置く」→ヘクスをタップで、初期配置の軍はその場に配置。盤外から進入する軍の編成は進入のときに盤外のスタックになります':'編成を作って「地図に置く」→ヘクスをタップで、ソ連軍はその場に配置。ドイツ軍の編成は進入のときに盤外のスタックになります')+'</span></div>'; /* v470 */
   var huSide0=btCfg()?(btSetupSides().filter(function(sd){return sd!==BT.app;})[0]||null):(BT.app!=='SOV'?'SOV':null);
   if(huSide0)h+='<div style="margin-top:6px">'+btBtn(T('マップタブの編成で'+BT_SIDE_NAME[huSide0]+'軍を配置'),'BtLoadNmGroups()')+' <span style="color:#8899aa;font-size:11px">'+T('マップタブで地図に置いた編成・車両・砲を、そのヘクスに置く(配置範囲の中だけ・OBの残りの数まで)')+'</span></div>'; /* v465 */
-  if(btCfg()){var hu0=BT.app?btOpp(BT.app):null;btSetupSides().forEach(function(sd){if(hu0&&sd!==hu0)return;var o=btObItems().filter(function(x){return x.side===sd&&btGroupOf(x)==='setup';})[0];h+='<div style="margin-top:4px;color:#8899aa">'+T(BT_SIDE_NAME[sd]+'軍の配置: 下のOB部隊リストから部隊を選び、地図のヘクスをタップ(')+T(btZoneTxt(o))+')</div>';});(btCfg().ent||[]).forEach(function(e){h+='<div style="color:#8899aa;font-size:11px">'+T(BT_SIDE_NAME[e.side]+' '+(e.turn?'T'+e.turn+' ':'')+e.lbl)+'</div>';});}
+  if(btCfg()){var hu0=BT.app?btOpp(BT.app):null;btSetupSides().forEach(function(sd){if(hu0&&sd!==hu0)return;var o=btObItems().filter(function(x){return x.side===sd&&btGroupOf(x)==='setup';})[0];h+='<div style="margin-top:4px;color:#8899aa">'+T(BT_SIDE_NAME[sd]+'軍の配置: 下のOB部隊リストから部隊を選び、地図のヘクスをタップ(')+T(btZoneTxt(o))+')</div>';});(btCfg().ent||[]).forEach(function(e){h+='<div style="color:#8899aa;font-size:11px">'+T(BT_SIDE_NAME[e.side]+' '+(e.turn?'T'+e.turn+' ':'')+e.lbl)+'</div>';});if(btCfg().note)h+='<div style="color:#8899aa;font-size:11px">'+T(btCfg().note)+'</div>';}
   else if(BT.app!=='SOV')h+='<div style="margin-top:4px;color:#8899aa">'+T('ソ連軍の配置: 下のOB部隊リストから部隊を選び、地図のヘクスをタップ(33狙撃軍団はYヘクス列以南、親衛はuZ5から2ヘクス以内)')+'</div>';
   h+='<div style="margin-top:6px">'+btBtn(T('配置完了・ゲーム開始'),'BtStart()',{on:true})+'</div>';
   h+='<div style="margin-top:4px;color:#8899aa;font-size:11px">'+T('この版の範囲: 歩兵・指揮官・SW・戦車・対戦車砲・PSK・DC・煙幕の全フェイズとアプリの判断')+'</div>'; // v284: 古い注記(車両は動かず撃たない)を現状に合わせて修正
