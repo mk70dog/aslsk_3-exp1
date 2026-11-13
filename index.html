@@ -34007,6 +34007,8 @@ function nmRClick(e,lp,full){
   if(!btGraphReady())btToast('マップを準備しています…');
   btEnsureGraph().then(function(){var n=btNodeOf(hx.boardId,hx.col,hx.row);NM_RM_HEX.n=(n==null?-1:n);window.NM_RQ=0; /* v1188(ダルマ指示「左右クリックを同じにする」→両方とも今の左クリックのメニュー): 右クリックの短いメニュー(v1170)はやめる */try{btRMenu(NM_RM_HEX.n,lp);}finally{window.NM_RQ=0;}}).catch(function(){btToast('マップを準備できませんでした');});
 }
+function nmEmptyPlOpen(e){var hx=losHexAtClient(e.clientX,e.clientY);if(!hx)return;NM_FACE=null;NM_SEL_EH=null;try{nmFtSelAt(hx);}catch(x){}NM_RM_HEX=hx;BT_RM_XY={x:e.clientX,y:e.clientY};if(!btGraphReady())btToast('マップを準備しています…');
+  btEnsureGraph().then(function(){var n=btNodeOf(hx.boardId,hx.col,hx.row);NM_RM_HEX.n=(n==null?-1:n);NM_RM_VEH=(typeof NM_PL!=='undefined'&&NM_PL&&NM_PL.sd)||'f';btRMenu(NM_RM_HEX.n);}).catch(function(){});} /* sample-emptytap: 空のヘクスのタップ=配置パネル(ヘクスメニューの配置と同じ nmRmVehItems) */
 function nmRmDone(){BtRmClose();Draw();}
 function nmRmAB(w){
   var H=NM_RM_HEX;if(!H)return;BtRmClose();losSaveMapScroll();
@@ -48032,7 +48034,7 @@ function LosMapClick(ev){
   // 連続タップ(ダブルタップ)した場合のみ、そこを新しいA地点として測定を仕切り直す。
   /* v411(ダルマ指示「マップタブ上で直感的に操作」お任せ): 地点Aを決めていない時、自軍・敵のマーカーを1回タップするとそのヘクスのメニューを開く(右クリック・長押しと同じ)。地点Aがある時は従来どおりB地点 */
   if(NM_AB_ARM){var abY=window.pageYOffset||0;NM_AB_ARM=false;S_LOS.pxA={x:gx,y:gy};S_LOS.pxB=null;S_LOS.result=null;S_LOS._abLastTapPos=null;try{nmFtActFill();}catch(e){}Draw();window.scrollTo(0,abY);return;} /* v482 */
-  if(!S_LOS.abMode&&!S_LOS.pxA&&ev.clientX!=null){var tpH=losHexAtClient(ev.clientX,ev.clientY);if(tpH&&(nmUnitAt(tpH,'f')||nmUnitAt(tpH,'e'))){nmRClick({clientX:ev.clientX,clientY:ev.clientY},false,true);return;}}
+  if(!S_LOS.abMode&&!S_LOS.pxA&&ev.clientX!=null){var tpH=losHexAtClient(ev.clientX,ev.clientY);if(tpH&&(nmUnitAt(tpH,'f')||nmUnitAt(tpH,'e'))){nmRClick({clientX:ev.clientX,clientY:ev.clientY},false,true);return;}if(tpH&&window.NM_EMPTY_PL!==false){nmEmptyPlOpen(ev);return;}} /* sample-emptytap(ダルマ指示「空のヘクスタップでこのパネル表示」): 地点Aが無い時、何も無いヘクスをタップすると配置パネル(部隊・車両・砲・煙幕・残骸・マーク)を開く */
   if(!S_LOS.abMode&&!S_LOS.pxA)return; /* v343(ダルマ指示「A地点を設定後はマップをタップでB地点に設定・別ヘクスをタップでB地点変更・ダブルクリックでA地点変更」): 地点Aがあれば、A▶︎Bを選んでいなくてもタップ=地点B、ダブルタップ=地点Aを置き直す */ /* v340(バグ修正 ダルマ報告「A▶︎Bボタン非選択時にも画面タップでA地点が表示してしまう」): A▶︎Bが選ばれている時だけタップで地点A/Bを置く(右クリックメニューの「ここを地点Aに/Bに」は従来どおり) */
   if(S_LOS._abNoClick&&Date.now()<S_LOS._abNoClick)return; /* v832: A・Bをドラッグした直後のタップは無視 */
   if(S_LOS.pxA&&S_LOS.pxB&&S_LOS.result&&Math.abs(gx-S_LOS.pxB.x)<6&&Math.abs(gy-S_LOS.pxB.y)<6){try{nmIjOpen();}catch(e){}return;} /* v832(ダルマ指示「マップでA B時 使いやすく」1): Bをもう一度タップでスポット判定 */
