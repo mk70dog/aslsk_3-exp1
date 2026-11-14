@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1233(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1234(push 済み)。返事待ちなし。
+- v1234: ダルマ「これも同様にする」(攻撃するスタックを選ぶ画面)。nmAtkGo: pxA=攻撃スタック・pxB=目標→nmIjOpen、J.retAtk={tn,asd}、J.nat=攻撃スタックの国籍・J.pick=nmIjShooters の同じ eh、J.tgt=nmIjTgts().indexOf(teh)(無ければ 'h')。ヘッダーの←は retView/retAtk 共通の nmIjRetView(retAtk なら nmIjClose→A/B を消す→nmAtkAsk(tn,0,asd))。旧来の nmMfOpen/nmVfOpen/nmVmOpen への分岐は失敗時のみ通る。
 - v1233: ダルマ「カウンター選択でスポット判定を表示・カウンターを目標に設定・←でこの画面に戻る」。nmViewSpot(nat,i): pxA=起点・pxB=カウンター→LosRunPixel→nmIjOpen、J.retView={n,vnat}、J.nat=目標の国籍の相手(nmSuSide が違う国)・J.pick をその国の射手、J.tgt=nmIjTgts().indexOf(eh)。nmIjSetupDraw/nmIjDraw のヘッダーに J.retView の時だけ ← (nmIjRetView: nmIjClose→A/B を消す→BtRmShow('view')・vnat を戻す)。判定モードのみ(対戦モードの行は押せない)。
 - v1232: ダルマ「CA変更も表示」(見える範囲の国籍一覧)。nmViewNatList の各行に ca: 判定=nmAtkCA(eh,n,o.n)、対戦=btCA(s)(AFV は tca→vca・砲は vca、btSpinesTo/btCACost)。一覧に橙で「CA変更k(+drm)」。
 - v1231: ダルマ「ポップアップが重ならないように離す」(画像=通知「自軍・敵軍を自動で設定」が攻撃の選択画面に重なる)。nmAtkPlace(q,L,hgt): 目標から70px離し、攻撃するスタックが少ない側(左右)へ、nmPdBounds 内。btToastAvoid(el): nmMvPk/nmRmPop/nmAbBd/btLosCd/btSuPop/nmFtMn/nmIj/.bt-cmdpop と重なれば top:70px→下(bottom:nmsumh+90px)へ(固定配置は offsetParent=null なので getComputedStyle で判定)。
