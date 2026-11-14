@@ -38725,9 +38725,15 @@ function nmAtkWhat(eh){var v=eh.veh?nmAfv(eh.veh):null;if(eh.grp&&!eh.veh&&!eh.g
 function nmAtkList(tn,tsd){var od=tsd==='f'?'e':'f',B=BTG.nodes[tn],out=[];
   nmSideList(od).forEach(function(eh,i){var m=btNodeOf(eh.boardId,eh.col,eh.row);if(m==null||m<0||m===tn)return;var w=nmAtkWhat(eh);if(!w)return;var A=BTG.nodes[m],r=null;
     try{r=losCheckLOSGlobal(A.x,A.y,B.x,B.y,S_LOS.orchardSeason,S_LOS.grainSeason);}catch(e){}
-    out.push({i:i,sd:od,eh:eh,m:m,w:w,d:btDist(m,tn),blk:!!(r&&r.blocked),hd:(r&&r.hindranceDrm)||0});});
+    out.push({i:i,sd:od,eh:eh,m:m,w:w,d:btDist(m,tn),blk:!!(r&&r.blocked),hd:(r&&r.hindranceDrm)||0,ca:nmAtkCA(eh,m,tn)});});
   return out.sort(function(a,b){return (a.blk-b.blk)||(a.d-b.d);});}
 var NM_ATK=null;
+/* v1227: 攻撃する車両・砲の CA 変更(目標が射界の外なら、回すスパイン数とTH DRM)。向きが未設定なら null */
+function nmAtkCA(eh,m,tn){var v=eh.veh?nmAfv(eh.veh):null,g=(!v&&eh.gun)?nmGun(eh.gun):null;if(!v&&!g)return null;
+  var f=v?(eh.tca!=null?eh.tca:eh.facing):eh.facing;if(f==null)return {unk:1};
+  var k=btSpinesTo(nmToBtFace(f,eh.boardId),btAng(m,tn));if(!k)return {k:0};
+  var ty=v?(v.turretType||'NT'):(g.mount360?'T':'NT');return {k:k,drm:btCACost(ty,k,!!BTG.nodes[m].cover)};}
+var NM_ATK_STY=1;
 function nmAtkAsk(tn,ti,asd){var H=nmHexOfNode(tn),E=nmAllAt(H,'e'),F=nmAllAt(H,'f'),tsd=E.length?'e':F.length?'f':null;ti=ti||0;var o=document.getElementById('nmMvPk');if(o)o.remove();
   if(!tsd){btToast('このヘクスに攻撃されるスタック(マーカー)がありません');return;}
   /* v1227(ダルマ指示「このヘクスに攻撃可能 ヘクスをタップしたとき攻撃する国籍を選択」): 攻撃する国籍を選ぶ。asd=攻撃する側(f/e)。目標はその相手側のマーカー */
@@ -38744,7 +38750,7 @@ function nmAtkAsk(tn,ti,asd){var H=nmHexOfNode(tn),E=nmAllAt(H,'e'),F=nmAllAt(H,
        return '<button class="b sm'+(on?' on':'')+'" style="margin:0;flex:1;height:32px;padding:0 6px;font-size:13px;font-weight:700;border-left:4px solid '+NM_SIDE_LBL[sd].col+(ok?'':';opacity:.4')+'" '+(ok?'onclick="event.stopPropagation();nmAtkAsk('+tn+',0,\''+sd+'\')"':'disabled title="'+T('このヘクスに相手側のマーカーがありません')+'"')+'>'+nmIjSdLbl(sd)+'</button>';}).join('')+'</div>'
    +(TL.length>1?'<div style="display:flex;flex-wrap:wrap;gap:4px">'+TL.map(function(e,j){return '<button class="b sm'+(e===teh?' on':'')+'" style="margin:0;height:30px;padding:0 8px;font-size:12px;display:flex;align-items:center;gap:4px" onclick="event.stopPropagation();nmAtkAsk('+tn+','+j+',\''+aSd+'\')">'+T('目標')+(j+1)+': '+nmMfTgtName(e)+'</button>';}).join('')+'</div>':'')
    +(L.length?L.map(function(x,i){var ok=!x.blk;
-     return '<button class="b sm" style="margin:0;min-height:46px;display:flex;align-items:center;justify-content:flex-start;gap:8px;text-align:left;padding:4px 8px;border-left:4px solid '+NM_SIDE_LBL[x.sd].col+(ok?'':';opacity:.45')+'" onclick="event.stopPropagation();'+(ok?'nmAtkGo('+i+')':'')+'">'+nmMfTgtImg(x.eh)+'<span style="display:flex;flex-direction:column;min-width:0;flex:1"><b style="font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+nmIjSdLbl(x.sd,x.eh)+' '+nmMfTgtName(x.eh)+'</b><small style="font-size:11px;color:#9aa6b4">@'+BTG.nodes[x.m].nm+'　'+T('距離')+x.d+'　'+(x.blk?T('LOS遮断'):T('LOS通る')+(x.hd?'・'+T('妨害')+'+'+x.hd:''))+'</small></span><span style="flex:0 0 auto;font-size:11px;font-weight:bold;padding:2px 6px;border-radius:5px;border:1px solid #5a6676;color:#cfd8e3">'+T(x.w.t)+'</span></button>';}).join('')
+     return '<button class="b sm" style="margin:0;min-height:46px;display:flex;align-items:center;justify-content:flex-start;gap:8px;text-align:left;padding:4px 8px;border-left:4px solid '+NM_SIDE_LBL[x.sd].col+(ok?'':';opacity:.45')+'" onclick="event.stopPropagation();'+(ok?'nmAtkGo('+i+')':'')+'">'+nmMfTgtImg(x.eh)+'<span style="display:flex;flex-direction:column;min-width:0;flex:1"><b style="font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+nmIjSdLbl(x.sd,x.eh)+' '+nmMfTgtName(x.eh)+'</b><small style="font-size:11px;color:#9aa6b4">@'+BTG.nodes[x.m].nm+'　'+T('距離')+x.d+'　'+(x.blk?T('LOS遮断'):T('LOS通る')+(x.hd?'・'+T('妨害')+'+'+x.hd:''))+(x.ca&&x.ca.k?'　<b style="color:#ffa040">'+T('CA変更')+x.ca.k+'(+'+x.ca.drm+')</b>':'')+'</small></span><span style="flex:0 0 auto;font-size:11px;font-weight:bold;padding:2px 6px;border-radius:5px;border:1px solid #5a6676;color:#cfd8e3">'+T(x.w.t)+'</span></button>';}).join('')
      :'<div style="font-size:12px;color:#9aa6b4;padding:8px 4px">'+T('このスタックを攻撃可能な相手側のマーカーがありません')+'</div>');
   m.onclick=function(e){e.stopPropagation();};document.body.appendChild(m);
   NM_ATK.open=true;try{var mo=new MutationObserver(function(){if(!document.body.contains(m)){mo.disconnect();if(NM_ATK&&NM_ATK.tn===tn&&!document.getElementById('nmMvPk')){NM_ATK.open=false;Draw();}}});mo.observe(document.body,{childList:true});}catch(e){} /* v1227: 閉じたら地図の線を消す */
@@ -42779,10 +42785,16 @@ function btRmShowSVG(dl){var z='';try{z=nmSuZoneSVG(dl);}catch(e){}var a='';try{
    攻撃できるスタックのヘクスを国籍の色の枠で囲み、目標へLOSの線(緑=妨害なし・黄=妨害あり・赤の点線=見えない)を引く */
 function nmAtkSVG(dl){var A=NM_ATK;if(!A||!A.open||!document.getElementById('nmMvPk')||!BTG||!BTG.nodes[A.tn])return '';var c=btDispPt(A.tn,dl),h='';
   A.L.forEach(function(x,i){var a=btDispPt(x.m,dl),col=x.blk?'#ff5050':(x.hd?'#ffd040':'#40ff60'),sc=NM_SIDE_LBL[x.sd].col,on=A.hi===i;
-    h+='<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="#000" stroke-width="'+(on?9:7)+'" stroke-opacity="0.45" stroke-linecap="round"/>'
+    if(!(!x.blk&&x.ca&&x.ca.k&&NM_ATK_STY===2))h+='<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="#000" stroke-width="'+(on?9:7)+'" stroke-opacity="0.45" stroke-linecap="round"/>'
       +'<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="'+col+'" stroke-width="'+(on?5:3.5)+'" stroke-linecap="round"'+(x.blk?' stroke-dasharray="10 7" stroke-opacity="0.8"':'')+'/>';
-    h+='<polygon points="'+btHexPoly(x.m,dl)+'" fill="'+sc+'" fill-opacity="'+(x.blk?0.06:0.16)+'" stroke="'+sc+'" stroke-width="'+(on?6:4.5)+'"'+(x.blk?' stroke-opacity="0.55" stroke-dasharray="8 5"':'')+'/>';});
-  A.L.forEach(function(x){var a=btDispPt(x.m,dl),t=(x.blk?'✕ 遮断':(x.hd?'妨害+'+x.hd:'通る'))+' '+x.d+'h',fs=13,w=8;for(var k=0;k<t.length;k++)w+=/[\u3000-\u9fff✕]/.test(t[k])?fs:fs*0.62;
+    var caN=!x.blk&&x.ca&&x.ca.k,STY=NM_ATK_STY;
+    if(caN&&STY===1)h+='<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="#ff9020" stroke-width="11" stroke-opacity="0.55" stroke-linecap="round"/><line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="'+col+'" stroke-width="3.5" stroke-linecap="round"/>';
+    if(caN&&STY===2){var dx=c.x-a.x,dy=c.y-a.y,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,bx=c.x-ux*30,by=c.y-uy*30;
+      h+='<line x1="'+a.x+'" y1="'+a.y+'" x2="'+bx+'" y2="'+by+'" stroke="'+col+'" stroke-width="4" stroke-dasharray="14 6"/><polygon points="'+(c.x-ux*14)+','+(c.y-uy*14)+' '+(bx-uy*9)+','+(by+ux*9)+' '+(bx+uy*9)+','+(by-ux*9)+'" fill="#ff9020" stroke="#000" stroke-width="1"/>';}
+    h+='<polygon points="'+btHexPoly(x.m,dl)+'" fill="'+sc+'" fill-opacity="'+(x.blk?0.06:0.16)+'" stroke="'+(caN&&STY===3?'#ff9020':sc)+'" stroke-width="'+(on?6:4.5)+'"'+(x.blk?' stroke-opacity="0.55" stroke-dasharray="8 5"':'')+'/>';
+    if(caN&&STY===3){h+='<polygon points="'+btHexPoly(x.m,dl)+'" fill="none" stroke="#ff9020" stroke-width="2" stroke-dasharray="4 4" transform="translate(0,0)" opacity="0.9"/>'+'<g><rect x="'+(a.x-34)+'" y="'+(a.y-48)+'" width="68" height="20" rx="4" fill="#ff9020" stroke="#000" stroke-width="1.2"/><text x="'+a.x+'" y="'+(a.y-33.5)+'" text-anchor="middle" font-size="12.5" font-weight="900" fill="#111" font-family="AppFont,AppJP,sans-serif">CA'+x.ca.k+' +'+x.ca.drm+'</text></g>';}});
+  A.L.forEach(function(x){if(!x.blk&&x.ca&&x.ca.k&&NM_ATK_STY===2){var a=btDispPt(x.m,dl);h+='<g><circle cx="'+(a.x)+'" cy="'+(a.y-30)+'" r="18" fill="#ff9020" stroke="#000" stroke-width="1.5"/><text x="'+a.x+'" y="'+(a.y-25.5)+'" text-anchor="middle" font-size="12.5" font-weight="900" fill="#111" font-family="AppFont,sans-serif">CA'+x.ca.k+'</text></g>';}});
+  A.L.forEach(function(x){var a=btDispPt(x.m,dl),t=(x.blk?'✕ 遮断':(x.hd?'妨害+'+x.hd:'通る'))+' '+x.d+'h'+(!x.blk&&x.ca&&x.ca.k&&NM_ATK_STY===1?' ・CA+'+x.ca.drm:''),fs=13,w=8;for(var k=0;k<t.length;k++)w+=/[\u3000-\u9fff✕]/.test(t[k])?fs:fs*0.62;
     var px=a.x+(c.x-a.x)*0.42,py=a.y+(c.y-a.y)*0.42,col=x.blk?'#ff6060':(x.hd?'#ffd040':'#60ff80');
     h+='<g><rect x="'+(px-w/2)+'" y="'+(py-11)+'" width="'+w+'" height="22" rx="11" fill="#0a1420" fill-opacity="0.92" stroke="'+col+'" stroke-width="1.5"/><text x="'+px+'" y="'+(py+4.5)+'" text-anchor="middle" font-size="'+fs+'" font-weight="bold" fill="'+col+'" font-family="AppFont,AppJP,sans-serif">'+t+'</text></g>';});
   h+='<polygon points="'+btHexPoly(A.tn,dl)+'" fill="#ff3030" fill-opacity="0.16" stroke="#ff5050" stroke-width="4"/>'+nmFeatMarkSVG('tgt',c,nmNodeOcc(A.tn));
