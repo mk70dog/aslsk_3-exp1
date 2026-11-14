@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1261(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1262(push 済み)。返事待ちなし。
+- v1262: btSpecNum(w,type)(depleteByYear の年/年月キー、シナリオ dt 以前で最新)・btHeatDateOk(独5/42・伊9/42・他1/43)。btAPCRNum→btSpecNum。判定(nmVfBuild VTT)に APDS/HEAT、btOrdEval Case11(APDS)、btTKBasic(APDS=apcr列→空欄AP、HEAT=HEAT_TO_KILL_TABLE)、btVTTOdds/nmVfTH 欠乏(eh.apdsOut/heatOut)、付随攻撃 AP2/APCR・APDS1/HEAT=HEの1列下。未対応: HEATの歩兵(建物内)目標、対戦モードの煙幕・WP・IFE・HEAT・APDS。sample-heatapds。
 - v1261: 動作ログ→システムログ(nmDbgOpen 見出し・メニュー・トースト)。消去ボタン削除。nmDbgText=nmDbgHead(版・シナリオ・T/フェイズ・モード・開いている画面・NM_RM_CUR・画面/UA)+前回+今回(nmDbgPack で同じ行×N・2行繰り返し×N にまとめる、記録自体は保持)。logResult を包み「判定 タブ: 結果」を記録。上限1000件(保存も)。30秒超の停止は「スリープ・画面ロック・アプリ切替の可能性」。
 - v1260: nmRMenuItems の NM_RM_VEH 分岐(配置パネル nmRmVehItems)で NM_RM_CUR=null。前の判定の NM_RM_CUR が残ると rmFull になっていた(v1180 と同類)。ダルマ選択A=横の小さいパネル。
 - v1259: nmRmPaItems の②指揮官の下に「指揮官はPAATCを受けない(3.7)…」。sample-paldr。臨機の白兵戦パネルへの同じ記述は未回答。
