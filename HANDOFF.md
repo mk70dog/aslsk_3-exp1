@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1241(push 済み)。確認待ち: 入れ替えで選択が外れる(S24 tR8 の PaK38→tS10 Sherman の入れ替え)。テストでは再現せず、照合をゆるめた版を出した。ダルマの実機で直っていなければ、その時の A の選び方(+カウンターを選択・仮カウンターか)を聞く。
+- 【2026-11-14 引き継ぎ】main=v1242(push 済み)。返事待ちなし。
+- v1242: ダルマの動作ログ(v1239): A の PaK38 は nmIjSet('place',2)=仮のカウンター(ijTmp)。nmIjSwap→nmIjClose→nmIjTmpClear で消えていた。nmIjSwap で ijTmp を一時的に外して閉じ、開き直す前に ijTmp を戻して ijB を反転。往復で選択が残ることを確認。
 - v1241: nmIjSwap の find(): same→位置+id→id→名前の順。
 - v1240: 見える範囲の番号を nmViewLbl(i)=A,B,C… に。
 - v1239: sample-acq を main に(NM_ACQ_SHOW・nmAcqTog・nmAcqList・nmAcqSVG・nmAcqCardHTML、凡例 nmStLegendHTML の ACQ をボタンに、btToastAvoid に nmAcqCd)。
