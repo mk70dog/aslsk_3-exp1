@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1238(push 済み)。作業中: ダルマ「目標獲得の詳細表示」(画像=左上の ACQ 目標獲得ボタン・地図の ACQ マーカー)。
+- 【2026-11-14 引き継ぎ】main=v1238(push 済み)。返事待ち: 目標獲得の詳細表示=ブランチ sample-acq(凡例の「目標獲得」タップで NM_ACQ_SHOW: nmAcqSVG=獲得した側→目標ヘクスの線・照準・ACQ −1/−2 ラベル、nmAcqCardHTML=左上の一覧カード)。
 - v1238: nmIjSwap の照合を same()(boardId/col/row/veh/gun/grp)に。nmScrollKeep1(一度だけ戻す)を新設し nmAtkAsk の開閉と nmRmShow ラッパーで使う(nmScrollKeep の見張り=1秒は指の地図スクロールを引き戻していた)。nmAtkPlace: 目標(重み4)・攻撃できるスタック(3)・線上の点(1)と重なる数で、右/左/中央×下/中/上の9か所から最小を選ぶ。
 - v1237: sample-swap(nmIjSwap)と sample-viewmark(nmViewMarkSVG・一覧の番号丸)を main に。
 - ダルマ確認(12:20、画像2枚=v1236 の見える範囲カード右下・攻撃の選択画面右中央): 「パネルはこれくらいの位置に表示する」=地図のポップアップは起点/目標と反対側(右寄り)・中央〜下の今の位置を基準にする。
