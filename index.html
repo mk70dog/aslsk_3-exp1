@@ -42561,7 +42561,15 @@ function nmViewCardHTML(o,N){
   h+='<div style="display:flex;align-items:center;gap:8px;padding:5px 6px 5px 10px;background:linear-gradient(90deg,#123a57,#0b2236);border-top:1px solid #2d5a7a;border-bottom:1px solid #2d5a7a"><span style="font:800 11px sans-serif;letter-spacing:2px;color:#66ccff">LOS</span><b style="color:#fff;font-size:14px">'+T('見える範囲')+'　'+N.nm+'</b><span style="flex:1"></span>'
     +'<button onclick="BtRmShowOff()" style="flex:none;width:28px;height:28px;border-radius:50%;border:1px solid #2d5a7a;background:#0a1826;color:#9ab;font-size:14px;cursor:pointer">✕</button></div>';
   if(o.todo)h+='<div style="padding:4px 10px 0;color:#ffd040;font-size:11px">'+T('精密な判定中')+' '+Math.round(100*o.done/Math.max(1,o.tot))+'%</div>';
-  h+='<div style="display:flex;gap:6px;padding:7px 8px">'+tile(c0+c1,'見える','#fff')+tile(c0,'妨害なし','#7dff9a')+tile(c1,'妨害あり','#ffd040')+'</div>';
+  /* v1229(ダルマ指示「見える 妨害あり 妨害なし を 独軍数値 ソ連数値 に変更 独軍選択で詳細表示」): 国籍ごとに、見えるユニット(マーカー)の数。タップでその国籍の一覧 */
+  var VN=nmViewNatList(o),nats=Object.keys(VN);
+  h+='<div style="display:flex;gap:6px;padding:7px 8px">'+nats.map(function(k){var L=VN[k],nh=L.filter(function(x){return x.hd>0;}).length,on=o.vnat===k,c=VN[k].col;
+    return '<button onclick="event.stopPropagation();nmViewNat(\''+k+'\')" style="flex:1;cursor:pointer;font:inherit;background:'+(on?'#16304a':'#0c1b28')+';border:'+(on?'2px solid '+c:'1px solid #213c52')+';border-left:5px solid '+c+';border-radius:7px;padding:3px 6px;text-align:center;color:#d6e4ef">'
+      +'<div style="font-size:12px;font-weight:800;color:'+c+';letter-spacing:1px">'+nmNatLbl(k)+'</div><div style="font:900 22px/1.1 AppFont,AppJP,sans-serif;color:#fff">'+L.length+'</div>'
+      +'<div style="font-size:10px;color:#8fa6b8">'+T('見える')+(nh?'・'+T('妨害あり')+' '+nh:'')+'</div></button>';}).join('')+'</div>';
+  if(o.vnat&&VN[o.vnat]){var LL=VN[o.vnat];h+='<div style="margin:0 8px 6px;border:1px solid #2d5a7a;border-radius:7px;background:#0a1826;max-height:22vh;overflow-y:auto">'
+    +(LL.length?LL.map(function(x){var col=x.hd>0?'#ffd040':'#7dff9a';return '<div style="display:flex;align-items:center;gap:7px;padding:4px 7px;border-bottom:1px solid #16283a">'+(x.img||'')+'<span style="display:flex;flex-direction:column;min-width:0;flex:1"><b style="font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+x.nm+'</b><small style="font-size:10.5px;color:#9ab">@'+x.hex+'　'+T('距離')+x.d+'</small></span><b style="font-size:11.5px;color:'+col+';white-space:nowrap">'+(x.hd>0?T('妨害')+' +'+x.hd:T('妨害なし'))+'</b></div>';}).join('')
+      :'<div style="padding:6px 8px;color:#8899aa;font-size:11.5px">'+T('見えるユニットはありません')+'</div>')+'</div>';}
   h+='<div style="display:flex;justify-content:space-between;padding:0 10px 6px;color:#9fb3c4;font-size:11px"><span>'+dot('#5fd06a')+T('妨害なし')+'</span><span>'+dot('#e8c83a')+T('妨害あり(+数字)')+'</span><span>'+dot('#111',1)+T('見えない')+'</span></div>';
   if(o.bd&&o.bdN!=null&&BTG.nodes[o.bdN]){var B=BTG.nodes[o.bdN],I=nmViewBdCalc(o);if(I){
     var col=I.blocked?'#ff6060':(I.L.length?'#ffd040':'#7dff9a'),bg=I.blocked?'#2a0f12':(I.L.length?'#2a2208':'#0d2a1a'),bc=I.blocked?'#a03a3a':(I.L.length?'#a08a2a':'#2f9e5a');
@@ -42572,6 +42580,16 @@ function nmViewCardHTML(o,N){
     h+='</div>';}}
   h+='<div style="display:flex;align-items:center;gap:8px;padding:0 8px 8px"><button class="b sm'+(o.bd?' on':'')+'" style="margin:0;padding:3px 10px;border-radius:6px;flex:none;white-space:nowrap" onclick="nmViewBdTog()">'+T('内訳')+(o.bd?' ON':'')+'</button><span style="color:#7f93a4;font-size:10.5px;line-height:1.3">'+T(o.bd?'ヘクスをタップで妨害の内訳(起点を変える時はOFF)':'ONでタップしたヘクスの妨害の内訳')+'</span></div>';
   return h+'</div>';}
+/* 見える範囲: 国籍ごとの見えるユニット。判定モード=自軍・敵軍のマーカー、対戦モード=盤上のスタック */
+function nmViewNat(k){var o=BT_RMS;if(!o||o.k!=='view')return;o.vnat=o.vnat===k?null:k;Draw();}
+function nmViewNatList(o){var R={},m=o.m||{};
+  var add=function(nat,col,n,nm,img){if(!nat)return;if(!R[nat])R[nat]=[];R[nat].col=col;if(n==null||n===o.n)return;var v=m[n];if(v==null||v<0)return;R[nat].push({n:n,hex:BTG.nodes[n].nm,d:btDist(o.n,n),hd:v,nm:nm,img:img});};
+  if(btActive()){['GER','SOV'].forEach(function(sd){add(sd,BT_SIDE_COL[sd]);BT.stacks.forEach(function(s){if(s.side!==sd||s.n==null||s.n<0||!s.u.length)return;add(sd,BT_SIDE_COL[sd],s.n,s.u.map(function(u){return u.nm.replace(/\(.*$/,'');}).slice(0,3).join('・')+(s.u.length>3?' 他'+(s.u.length-3):''),'');});});}
+  else{var ns=[];try{ns=nmSuNats();}catch(e){}
+    ['f','e'].forEach(function(sd){var mine=ns.filter(function(k){try{return nmSuSide(k)===sd;}catch(e){return false;}});mine.forEach(function(k){add(k,(UNITS[k]&&UNITS[k].col)||NM_SIDE_LBL[sd].col);});
+      nmSideList(sd).forEach(function(eh){var nat='';try{nat=nmIjEhNat(eh);}catch(e){}nat=nat||mine[0];var n=btNodeOf(eh.boardId,eh.col,eh.row);var img='';try{img=nmMfTgtImg(eh);}catch(e){}var nm='';try{nm=nmMfTgtName(eh);}catch(e){}
+        add(nat,(UNITS[nat]&&UNITS[nat].col)||NM_SIDE_LBL[sd].col,n,nm||T('マーカー'),img);});});}
+  var out={};Object.keys(R).sort(function(a,b){return a==='GER'?-1:b==='GER'?1:0;}).forEach(function(k){R[k].sort(function(a,b){return a.d-b.d;});out[k]=R[k];});return out;}
 function nmViewBdHTML(o){var A=BTG.nodes[o.n],B=BTG.nodes[o.bdN],I=nmViewBdCalc(o);if(!I)return '';
   var h='<div style="margin-top:4px;border-top:1px solid #234;padding-top:3px"><b style="color:#ffd0a0">'+A.nm+' → '+B.nm+'</b> 距離'+btDist(o.n,o.bdN)+'　';
   if(I.blocked)h+='<b style="color:#ff6060">見えない</b>'+(I.why?'(さえぎる: '+I.why+')':'')+'</div>';
