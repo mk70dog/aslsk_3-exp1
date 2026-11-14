@@ -36224,8 +36224,10 @@ function nmRmCvItems(n){var C=NM_CV;if(!C)return nmRMenuItems(n);var R=nmCvCalc(
     if(C.promo)nmPromoRows(it,n,'cv',0,C.promo);}
   if(C.hist&&C.hist.length>(C.res?1:0))it.push({ic:'info',t:'<span style="font-size:11px;color:#8899aa">これまでの攻撃: '+C.hist.slice(0,C.res?-1:C.hist.length).join(' / ')+'</span>'});
   var left=R&&R.its.filter(function(q){var x=q.x;return !x.broken&&!(C.done&&C.done[x.pid])&&(x.kind==='smc'||!(C.pa[x.pid]&&!C.pa[x.pid].ok));}).length;
-  if(C.res&&C.res.res!=='kill'&&left)it.push({ic:'fire',t:'次のユニットの攻撃へ',sub:'車両の反撃のあと、まだ攻撃していないユニットが攻撃します(1ユニット1回)',f:"nmCvNext("+n+")"});
+  if(C.res&&C.res.res!=='kill'&&left)it.push({ic:'fire',t:'次のユニットの攻撃へ',sub:C.react?'まだ攻撃していない歩兵が攻撃します(1ユニット1回)':'車両の反撃のあと、まだ攻撃していないユニットが攻撃します(1ユニット1回)',f:"nmCvNext("+n+")"});
   it.push({sep:1});
+  if(C.react&&C.res){var nx=C.res.res==='kill'?['車両は撃破(残骸)。この車両の移動はここで終わり','#ff6060']:C.res.res==='imm'?['車両は走行不能。このヘクスで止まり、もう動けない','#ffb040']:['車両に効果なし。車両はそのまま移動を続けられる','#9fb2c8'];
+    it.push({ic:'info',t:'<span style="color:#ffd070">'+T('この後は')+'</span>',sub:'① '+T(nx[0])+'<br>② '+T('攻撃した歩兵(と武器)は射撃済み。First Fireの札を置く(3.3.4)')+'<br>③ '+(left&&C.res.res!=='kill'?T('まだ攻撃できる歩兵は上の「次のユニットの攻撃へ」'):T('攻撃できる歩兵はもういない'))+'<br>④ '+T(left&&C.res.res!=='kill'?'攻撃を終えたら✕で閉じて、相手の移動フェイズを続ける':'✕で閉じて、相手の移動フェイズを続ける')});} /* v1258(ダルマ指示「この後は？ 分かりやすく記述を追加」) */
   if(C.react){it.push({ic:'info',t:'車両は反撃しない（臨機の白兵戦）',sub:'車両がこのヘクスの歩兵を撃つ時は機関銃FP×3（TPBF）。移動中の射撃は½、止まっていなければさらに½。BUの車両の乗員は撃たれない'});it.push({ic:'x',t:'閉じる',f:"BtRmClose()"});return it;}
   nmCvCtrItems(it,n,C,sg);
   it.push({ic:'x',t:'閉じる',f:"BtRmClose()"});
