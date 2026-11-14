@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1266(push 済み)。返事待ち: sample-cctile(マルチ判定の白兵戦3タイルを1つに。案A=押すと白兵戦の画面/案B=すぐ下に3つ開く/案C=横2マスの中に3つ。NM_CCX_STY。画像 dev/samples/cctile.png)。
+- 【2026-11-14 引き継ぎ】main=v1267(push 済み)。返事待ち: sample-dcpa(爆薬パネルの車両へ置く時にPAATC。画像 dev/samples/dcpa.png)。
+- v1267: マルチ判定の白兵戦を1タイル(ccx)→nmHqOpen('ccx')で3ボタン。
 - v1266: アプリの煙幕弾・WP(btAISmokeShots、btAIPrepFireの最初)。S24自己対戦でソ連シャーマンが煙幕を張るのを確認(エラー0)。
 - v1265: アプリがIFE(btAIOrdOptions)とsM(btAISmPick)を使う。
 - v1264: 対戦モードの煙幕弾・WP・IFE・HEAT・APDS・sM(btXAmmoBtns/btATTResolve/btFireIFE/btVSmEval/btSmokeFlip)。アプリ側はHEAT・APDSのみ(煙幕弾・WP・sM・IFEは未使用)。
