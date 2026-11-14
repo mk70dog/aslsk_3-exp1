@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1250(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1251(push 済み)。返事待ちなし。
+- v1251: nmHqPickA(判定の編成選択、全判定共通)の行から自軍/敵軍の札を削除し、名前の下に国籍(nmIjSdLbl(c.sd,c.eh)、11px・細字・自軍#d4a65a/敵軍#7ec8e3)。C に eh を保持。sample-pklabel 案B。
 - v1250: 高度優位(SK4 丘、QRDC Case17=VTTにもTEM)。btOrdEval は ha(o.haOv 手動、迫撃砲0)を VTT/ITT 両方に、迫撃砲は TEM を命中に入れず btITTResolve で IFT へ(林−1)。btHaElev(a,t)=目標が高い＋移動中の目標が射手LOSの稜線を越えた直後は無し(nmRtCrestSide)。btVMGEval・歩兵射撃にも。判定: nmHaOf(P,a,t,mtr)、nmElevRowHTML(⑤「高所」行、vf/vm/lw、P.ov.elev)、nmVfAttTem/IFE/CH反転/FFMO に高所。sample-elevrow。
 - v1249: NM_TB_ITEMS に対戦の g:1 項目(bundo/bredo/bab/bside/bdice/brb、ref/card は共通)を追加。NM_TBE_SEL='#nmFtAct>button,#nmFullTabs>button'、nmTbeG で g(1/2)判定。並べ替えは同じバーのボタンの order の位置(slots)だけ入れ替える。しまってあるボタンの欄はモードに合わせて表示。メニューボタン(≡)は対象外。
 - v1248: sample-tbedit を main に(NM_TBE・nmTbeOn/Off・nmTbeDecor・nmTbeHide/Show・nmTbeBarDraw、長押し/ドラッグは document の pointer 捕捉)。
