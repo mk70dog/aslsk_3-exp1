@@ -32361,7 +32361,7 @@ function btCmdMeasure(){
 
 // ---------- v288(ダルマ指示「車両・ユニットの情報と行動のボタンを、車両の移動の枠内に」) ----------
 // ツールバー下の指示カード: 選択中の自軍スタックの車両の行(▲)・歩兵の要約と、行動のボタン(車両を移動・CE・射撃・移動開始・駆け足・突撃移動・前進…)、車両の移動中はその操作
-function btCmdCardOn(s){if(!s||!BT.started||BT.finished||BT.edit)return false;var mine=(!BT.app||s.side!==BT.app);return mine;}
+function btCmdCardOn(s){if(!s||!BT.started||BT.finished||BT.edit)return false;var mine=(!BT.app||s.side!==BT.app);if(!mine)return window.NM_FOE_CARD!==false&&!BT.fire&&!BT.ofire&&!BT.mgfire;return mine;} /* sample-foecard(ダルマ指示「相手のカウンター情報もタップすると自軍と同じように表示」): 相手のスタックも同じカード(見るだけ・ボタンなし) */
 function btInfActHTML(s){
   var ph=btPhId(),att=btSideNow(),h='';
     var fph=btHumanFirePh(s.side);
@@ -32388,7 +32388,8 @@ function btCmdCardHTML(){ // v288(ダルマ指示「なるべく縦幅が大き�
   h='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+(btMapFullOn()?'':btPhStepSpans()+btBtn(T('次へ')+' ▶','BtNext()',{dim:!canNext,st:P}))+(btMapFullOn()?'':btOffInlineHTML())+((hb&&!btMapFullOn())?'':(btMapFullOn()&&!rg?'':'<span style="color:#404858">│</span>')+title)+'</div>'; /* v1219: 全画面では盤外の一覧は上の帯にあるので出さない・見出しを左に */
   if(rg){h+=btRegroupPanelHTML(s);return head0+h+'</div>';} // v290: 編成を変える画面
   // ユニット: 車両は「▲名前 状態」、歩兵・SWはチェック付きの札を横に並べる
-  var chips=[],selIds=(BT.selU&&BT.selU.sid===s.id)?BT.selU.ids:null,canSel=!BT.fire&&!vm;
+  var foe=!!(BT.app&&s.side===BT.app); /* sample-foecard */
+  var chips=[],selIds=(BT.selU&&BT.selU.sid===s.id)?BT.selU.ids:null,canSel=!BT.fire&&!vm&&!foe;
   s.u.forEach(function(u){
     var I=btI(u,s.side),k=I.kind;
     if(k==='afv'&&!btIsWreck(u)){if(vm)return;var v=btAfvData(u.nm);chips.push('<span>▲ '+(vm?'':u.nm+' ')+(v?'<span style="color:#8899aa">MP'+v.mp+' AF'+v.afFront.hull+'/'+v.afSide.hull+'</span> ':'')+'<span style="color:#8899aa">'+btVehStatTxt(u)+'</span></span>');return;}
@@ -32406,7 +32407,7 @@ function btCmdCardHTML(){ // v288(ダルマ指示「なるべく縦幅が大き�
     var row=pcs.map(function(p){
       var u=p.u,k=btI(u,s.side).kind,on=!selIds||selIds.indexOf(u.id)>=0||btIsSWK(k);
       var tg=[];if(u.s==='br')tg.push(btIsSWK(k)?'故障':'混乱');else if(u.s==='pn')tg.push('釘付');if(u.cx)tg.push('CX');if(u.dm)tg.push('DM');if(u.wd)tg.push('負傷');if(u.fire)tg.push('射');if(u.mv)tg.push('移');if(u.adv)tg.push('前');
-      var gv=BT.swGive&&BT.swGive.sid===s.id?BT.swGive:null,canGive=btSWGiveOK(s);
+      var gv=BT.swGive&&BT.swGive.sid===s.id?BT.swGive:null,canGive=!foe&&btSWGiveOK(s);
       var click='';
       if(btIsSWK(k)&&canGive)click=' onclick="BtSWGive(\''+s.id+'\',\''+u.id+'\')"';
       else if(gv&&btIsInfK(k))click=' onclick="BtSWGiveTo(\''+s.id+'\',\''+u.id+'\')"';
@@ -32431,12 +32432,13 @@ function btCmdCardHTML(){ // v288(ダルマ指示「なるべく縦幅が大き�
       h+='<div style="display:flex;gap:'+(st==='plus'?10:5)+'px;flex-wrap:nowrap;overflow-x:auto;margin-top:4px;padding:2px">'+gh.join('')+'</div>';
     }
     if(BT.swGive&&BT.swGive.sid===s.id){var gw=s.u.filter(function(x){return x.id===BT.swGive.uid;})[0];h+='<div style="color:#40e0ff;font-size:11px;margin-top:2px">'+(gw?gw.nm:'SW')+' '+T('を渡す相手(点線の枠)をタップ。もう一度SWをタップで取消')+'</div>';}
-    else if(btSWGiveOK(s)&&s.u.some(function(x){return btIsSWK(btI(x,s.side).kind);}))h+='<div style="color:#667788;font-size:10px;margin-top:1px">'+T('SWのカウンターをタップすると持ち主を替えられます')+'</div>';
+    else if(!foe&&btSWGiveOK(s)&&s.u.some(function(x){return btIsSWK(btI(x,s.side).kind);}))h+='<div style="color:#667788;font-size:10px;margin-top:1px">'+T('SWのカウンターをタップすると持ち主を替えられます')+'</div>';
   }
   else if(chips.length)h+='<div style="display:flex;gap:4px 12px;flex-wrap:wrap;margin-top:3px">'+chips.join('')+'</div>';
   // ボタン: 1つの折り返し行
   var btns='';
-  if(vm)btns=vm.btns;
+  if(foe)btns='<span style="color:#8899aa;font-size:11px">'+T('相手(アプリ)のスタック・見るだけ')+'</span>';
+  else if(vm)btns=vm.btns;
   else{
     s.u.forEach(function(u){if(btI(u,s.side).kind==='afv'&&!btIsWreck(u)){var a=btVehLineHTML(s,u,true,'act');btns+=a.replace(/^<div[^>]*>/,'').replace(/<\/div>$/,'');}});
     var oo=btOrdOtherHTML(s,true);btns+=oo.replace(/^<div[^>]*>/,'').replace(/<\/div>$/,'');
