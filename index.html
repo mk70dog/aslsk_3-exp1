@@ -34086,8 +34086,9 @@ function btRMenuItems(n){
   it.push({ic:'los',t:'このヘクスからLOS(A)',sub:'次に右クリックした地点までを測る',f:"btRmLos("+n+",'a')"});
   if(L)it.push({ic:'x',t:'LOS測定を終わる',f:"BT.losAB=null;BtRmClose();Draw()"});
   it.push({ic:'eye',t:'このヘクスから見える範囲',sub:'LOSの通るヘクスを色分け',f:"BtRmShow('view',"+n+")"}); // v309-1
-  var te=btRmThreatSide(n),mineE=(BT.app&&te===btHuman());
-  it.push({ic:'tgt',t:mineE?'このヘクスを攻撃可能な自軍':'このヘクスを攻撃可能な敵軍',sub:BT_SIDE_NAME[te]+'の部隊(LOS・射程内)',f:"BtRmShow('threat',"+n+")"}); // v309-2
+  /* v1227(ダルマ指示「このヘクスに攻撃可能 ヘクスをタップしたとき攻撃する国籍を選択」): 攻撃する側を国籍で選ぶ(独軍・ソ連の2項目) */
+  var te=btRmThreatSide(n);['GER','SOV'].forEach(function(sd){var mine=BT.app?sd===btHuman():null;
+    it.push({ic:'tgt',t:'このヘクスを攻撃可能な'+BT_SIDE_NAME[sd],sub:(mine===true?'自軍・':mine===false?'敵軍・':'')+'LOS・射程内の部隊'+(sd===te?'(おすすめ)':''),f:"BtRmShow('threat',"+n+",'"+sd+"')"});}); // v309-2
   if(BT_RMS)it.push({ic:'x',t:'表示を消す',sub:btRmShowName(),f:"BtRmShowOff()"});
   it.push({sep:1});
   // スタック
@@ -42493,7 +42494,7 @@ function btTerrJP(t){try{return LOS_TERRAIN_NAME_JP[t]||t;}catch(e){return t;}}
 function BtRmShowOff(){var hadCam=!!(typeof NM_TH_CAM!=='undefined'&&NM_TH_CAM);if(typeof NM_TOOL!=='undefined'&&NM_TOOL==='cost'){NM_TOOL=null;NM_COST_DST=null;NM_COST_S0=null;try{nmFtActFill();}catch(e){}} /* v810 */BT_RMS=null;BtRmClose();if(hadCam)nmCamBack();else Draw();}
 function BtRmShow(k,n,a,b){
   BtRmClose();
-  var o={k:k,n:n,st:btRmStamp(),g:BTG};
+  var o={k:k,n:n,st:btRmStamp(),g:BTG};if(k==='threat'&&(a==='GER'||a==='SOV'))o.a=a; /* v1227: 攻撃する国籍 */
   try{
     if(k==='view')btRmView(o);
     else if(k==='threat')btRmThreat(o);
@@ -42588,7 +42589,7 @@ function btRmThreatSide(n){
   return btOpp(btSideNow());
 }
 function btRmThreat(o){
-  var n=o.n,e=btRmThreatSide(n),T=BTG.nodes[n],out=[],tAfv=null;
+  var n=o.n,e=o.a||btRmThreatSide(n),T=BTG.nodes[n],out=[],tAfv=null;
   btStacksAtN(n).forEach(function(s){if(s.side!==e&&!tAfv)tAfv=btAFVs(s)[0]||null;});
   BT.stacks.forEach(function(s){
     if(s.side!==e||s.n==null||s.n<0||s.mel||s.n===n)return;
