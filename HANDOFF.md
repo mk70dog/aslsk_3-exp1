@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-15 引き継ぎ】main=v1277(push 済み)。返事待ち: sample-btab(対戦モードのA→Bを判定モードと同じに)、sample-cmpct(指示パネルのコンパクト化 案A=高さを中身に/B=要点1行+内訳小/C=1行バー、NM_CMD_STY)。
+- 【2026-11-15 引き継ぎ】main=v1278(push 済み)。返事待ち: sample-btab(対戦モードのA→Bを判定モードと同じに)。
+- v1278: 指示パネルのコンパクト化 案B(NM_CMD_STY='B' 既定、btFirePanelHTML・#btCmd.cmpB)。
 - v1277: クローズアップ(btCamShot)の縮小ループのバグ修正・btCamFreeで左のポップアップを避ける。
 - v1276: シナリオカード#nmScVの背景ドット・枠なし暗色(style#nmScVDot)。
 - v1275: 対戦モードの指示パネル最小化(BT_CMDMIN・BtCmdMin・btCmdMinChip)。
