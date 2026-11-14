@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1234(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1235(push 済み)。返事待ち: 判定パネルの攻撃側・目標の入れ替えサンプル(作成中)。
+- v1235: ダルマ「(攻撃ツールの)この状態でヘクス選択するとマップがスクロールしてしまう」。nmAtkAsk の Draw と閉じた時の Draw、nmRmShow(見える範囲など)を nmScrollKeep で囲む(テスト: scrollTop 250→448 に飛んでいた→250 のまま)。
 - v1234: ダルマ「これも同様にする」(攻撃するスタックを選ぶ画面)。nmAtkGo: pxA=攻撃スタック・pxB=目標→nmIjOpen、J.retAtk={tn,asd}、J.nat=攻撃スタックの国籍・J.pick=nmIjShooters の同じ eh、J.tgt=nmIjTgts().indexOf(teh)(無ければ 'h')。ヘッダーの←は retView/retAtk 共通の nmIjRetView(retAtk なら nmIjClose→A/B を消す→nmAtkAsk(tn,0,asd))。旧来の nmMfOpen/nmVfOpen/nmVmOpen への分岐は失敗時のみ通る。
 - v1233: ダルマ「カウンター選択でスポット判定を表示・カウンターを目標に設定・←でこの画面に戻る」。nmViewSpot(nat,i): pxA=起点・pxB=カウンター→LosRunPixel→nmIjOpen、J.retView={n,vnat}、J.nat=目標の国籍の相手(nmSuSide が違う国)・J.pick をその国の射手、J.tgt=nmIjTgts().indexOf(eh)。nmIjSetupDraw/nmIjDraw のヘッダーに J.retView の時だけ ← (nmIjRetView: nmIjClose→A/B を消す→BtRmShow('view')・vnat を戻す)。判定モードのみ(対戦モードの行は押せない)。
 - v1232: ダルマ「CA変更も表示」(見える範囲の国籍一覧)。nmViewNatList の各行に ca: 判定=nmAtkCA(eh,n,o.n)、対戦=btCA(s)(AFV は tca→vca・砲は vca、btSpinesTo/btCACost)。一覧に橙で「CA変更k(+drm)」。
