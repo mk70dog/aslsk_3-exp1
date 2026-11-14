@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1225(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1226(push 済み)。返事待ちなし。
+- v1226: ダルマ「実施」(対戦モードの見える範囲も戦術カードに)。nmRmPanelHTML は btActive() でも view なら nmViewCardHTML を返す(対戦モードは右下 right:nmtbw+12px・bottom に btfbot を足す=左下の指示カードと重ならない)。btRmShowHTML は view なら ''、開始前の btCmd の空判定も view を除外。nmViewBdTog は ON で NM_TOOL='view'(長押しメニューから出した時もタップで内訳)。
 - v1225: ダルマ「(見える範囲の)表示を小さく わかりやすく カッコよくする サンプルx3」→A/B/C(ブランチ sample-losview)→「B」。nmRmPanelHTML で o.k==='view' は新設 nmViewCardHTML(o,N) を返す(id=nmRmPop のままでドラッグ可。left:78px=方位磁針を避ける・幅300px)。ヘッダー LOS+見える範囲+✕、数字タイル3つ(c0+c1/c0/c1)、凡例、内訳ONでタップ先の結果行(緑=妨害なし/黄=妨害+合計と内訳/赤=見えない+さえぎる)。対戦モードの帯の中の表示(btRmShowHTML)は変更なし。
 - v1224: ダルマ指示「s25 対戦モードに追加」。BT_SCN.S25・BT_SCFG.S25(grp: 独=g1(T1南端から進入)/ソ=setup、zone: ボードvまたはボードuの番号7以下、vic:'n' vicN4 vicSide GER、bl:'vic'=隣り合う建物ヘクスを1棟→F7・K10/L9・L7/M7・N9・P7 の5棟)。新設 vicAfv:2 → btCfgWinner は btMobAfv(独)<2 なら敗北(盤上の !imm のAFV+未進入グループ(BT.entIn に無い)のOB AFV)。btCfgAfvTxt() を勝利条件の表示4か所に追加。SSR radio:{SOV:/^BT-7/} → btRadioOk(s,u): btPhKey ごとにDR1回(u.radK/u.radR)、>8 なら btVMoveCheck でヘクスから出られない・btVehSearch は向き変更のみ(radNo)、btVMoveStart で振る。btInfo0: 「2-3-7[1]」→ UNITS の「2-3-7[1](HS)」を使う、btGunData にある名前は gun(50mm迫撃砲・76.2mm歩兵砲。他シナリオの分類は変化なし)。確認: 自己対戦 S25(T7 独勝利・エラー0)、人間側の通し S25 独/ソ(エラー0)。
 - 【2026-11-13 17:40 引き継ぎ】main=v1223(push 済み)。返事待ちなし。返事待ちなし(✕の動作は「ーと同じく小さくする」で実装、ダルマ未回答)。①アプリの攻め方は v1204 で対応(以下は v1197 時点の記録): 計測(dev/selfplay.js に半ターンごとの攻撃側スタックの建物までの距離・支配数を出す版で確認)では S2独・S6ソとも T2〜3 で建物ヘクスに届いているが支配を取れない(S6 ソ連の白兵戦は6ターンで1回)。重み案A(attUrg0.3・riskDecay0.12・gAdjAtt2・終盤の白兵戦の基準0.33→0.2)を1回ずつ試したが支配数は変わらず→白兵戦に入る判断(btAIPlanMoves0 の ccCap/ev.pKill 付近)を見直す必要あり。v1197 で BT_SCFG[id].aiw(btAIW())の仕組みだけ入れた(値は未設定=動作変化なし)。次の候補: ③S2/S6/S24 のバランス規定 ④iPad実機確認(対戦モードの右のツールバー・LOSの札・最後の記録の帯)。保留は前回どおり(WPのNMC・sM開始時期・ジャンボの「/」・自動同期2台テスト・判定入力の「クリア」・車両の煙幕)。プロジェクトの claude/v1190.patch は既に無い(確認済み)。
