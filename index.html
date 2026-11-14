@@ -33861,16 +33861,7 @@ function btReactionCC(opt,log){
   mv.rolled=true;
 }
 // ---- 特殊弾(APCR、6.2) ----
-function btAPCRNum(w){
-  var sa=null;
-  if(w.kind==='MA'&&w.v&&w.v.ma&&w.v.ma.specialAmmo)sa=w.v.ma.specialAmmo.filter(function(x){return x.type==='APCR';})[0];
-  if(w.kind==='GUN'&&w.gd&&w.gd.ammo)sa=w.gd.ammo.filter(function(x){return x.type==='APCR';})[0];
-  if(!sa)return null;
-  var dep=sa.depleteByYear||sa.deplete;var y=1944;try{y=parseInt(String(btScObj().dt).slice(0,4),10)||1944;}catch(e){}
-  if(typeof dep==='object'){var n=dep[y];if(n==null){var ks=Object.keys(dep).map(Number).filter(function(k){return k<=y;});n=ks.length?dep[Math.max.apply(null,ks)]:null;}return n;}
-  return dep;
-}
-/* v1262: 特殊弾(APCR/APDS/HEAT)の欠乏No.。depleteByYear は "1944" や "1944-09" のキー(シナリオの年月以前で最新)。null=その弾はない(供給前) */
+function btAPCRNum(w){return btSpecNum(w,'APCR');} /* v1262: 年月キー("1944-08")にも対応(旧版は年だけで、M4A3(76)W の 1944/8以降のAPCRが出なかった) */
 function btSpecNum(w,type){var sa=null;
   if(w.kind==='MA'&&w.v&&w.v.ma&&w.v.ma.specialAmmo)sa=w.v.ma.specialAmmo.filter(function(x){return x.type===type;})[0];
   if(!sa&&w.gd&&w.gd.ammo)sa=w.gd.ammo.filter(function(x){return x.type===type;})[0];
