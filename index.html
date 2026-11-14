@@ -30516,7 +30516,7 @@ function btRtpPanelHTML(){ /* v1281 */
   L.forEach(function(x){var on=c&&c.u===x.u;h+=btBtn(BTG.nodes[x.s.n].nm+' '+x.u.nm+(x.must?' ⚠義務':' 任意'),"BtRtpPick('"+x.s.id+"','"+x.u.id+"')",{on:on,sel:on});});
   h+='</div>';
   if(c){var O=btRoutOpts(c.s,c.u),must=btMustRout(c.s,c.u);
-    h+='<div style="font-size:12px;color:#8fa0b3">'+(R.low?'匍匐後退: 光っている隣接ヘクスをタップ(阻止なし・全MF)':((R.path&&R.path.length)?'コース: '+BTG.nodes[c.s.n].nm+'→'+R.path.map(function(n){return BTG.nodes[n].nm;}).join('→')+' … 白い円で次の1歩、隣の緑の円で到着':'行き先の<b style="color:#60e070">緑の円</b>をタップ=最短コース。コースを選ぶ時は<b>白い円</b>を1歩ずつ(数字=MF、★=おすすめ、!=阻止あり)'))+'</div>';
+    h+='<div style="font-size:12px;color:#8fa0b3">'+(R.low?'匍匐後退: 光っている隣接ヘクスをタップ(阻止なし・全MF)':((R.path&&R.path.length)?'コース: '+BTG.nodes[c.s.n].nm+'→'+R.path.map(function(n){return BTG.nodes[n].nm;}).join('→')+' … 白い円で途中のヘクスを追加、緑の円で到着':'行き先の<b style="color:#60e070">緑の円</b>をタップ=最短コース。通りたいヘクスがある時は先に<b>白い円</b>(途中のヘクス)をタップ(数字=MF、★=おすすめ、!=阻止あり)'))+'</div>';
     if(!R.low){O.dests.forEach(function(d){var N=BTG.nodes[d.n];h+='<div style="font-size:12px;padding:2px 0">'+(d.rec?'★ ':'・')+'<b>'+N.nm+'</b> '+N.terr+' '+d.mf+'MF'+(d.intd?' <span style="color:#ff8a80">阻止'+d.intd+'回</span>':'')+'</div>';});
       if(!O.dests.length)h+='<div style="color:#ff8a80;font-size:12px">潰走できるヘクスがありません'+(must?'(おまかせで除去)':'')+'</div>';}
     h+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+(O.low.length?btBtn(R.low?'匍匐後退をやめる':'匍匐後退(1ヘクス)','BtRtpLow()',{on:true,sel:R.low}):'')+((R.path&&R.path.length)?btBtn('コースをやり直す','BtRtpCourseReset()',{on:true}):'')+btBtn('おまかせ','BtRtpAuto()',{on:true})+(must?'':btBtn('留まる','BtRtpStay()',{on:true}))+'</div>';}
@@ -30600,6 +30600,7 @@ function btRoutSearch(s,mfMax,from,seenAt){ /* sample-rtcourse: from=途中の�
       var ic=btInfCost(a,b);if(!ic)return;
       var nd=dist[a]+ic.c;if(nd>mfMax)return;
       if(btEnemyAt(b,side))return;
+      if(from!=null&&(b===s.n||(seenAt&&seenAt.indexOf(b)>=0)))return; /* sample-rtvia: 通ったヘクスへは戻らない */
       // 敵に近づかない(LOS内の敵、またはこの潰走で既に見た敵)
       for(var i=0;i<enemies.length;i++){var e=enemies[i];
         if((seen0.indexOf(e)>=0||btFLOS(a,e.n).ok)&&btDist(b,e.n)<btDist(a,e.n))return;}
@@ -30674,10 +30675,12 @@ function btRtpSteps(c){ /* コースの次の1歩: 規則どおりに進めて�
   var I=btI(c.u,side),mfMax=(I.kind==='smc'&&c.u.wd)?3:6,path=R.path||[],last=path.length?path[path.length-1]:c.s.n,used=0,prev=c.s.n;
   path.forEach(function(n){var ic=btInfCost(prev,n);used+=ic?ic.c:0;prev=n;});
   var sr=btRoutSearch(c.s,mfMax-used,last,path),out=[];
-  BTG.nodes[last].nb.forEach(function(b){if(sr.dist[b]==null||b===c.s.n||path.indexOf(b)>=0)return;
-    if(dset[b]){out.push({n:b,mf:used+sr.dist[b],dest:true});return;}
-    var sr2=btRoutSearch(c.s,mfMax-used-sr.dist[b],b,path.concat([b]));
-    if(Object.keys(sr2.dist).some(function(k){return dset[k]&&+k!==b;}))out.push({n:b,mf:used+sr.dist[b],dest:false});});
+  /* sample-rtvia: 隣だけでなく、届くヘクスならどこでも途中(経由)に選べる。そこまでは最短で進む */
+  var segTo=function(n){var q=[],x=n;while(x!==last&&x!=null){q.unshift(x);x=sr.prev[x];}return q;};
+  Object.keys(sr.dist).map(Number).forEach(function(b){if(b===last||b===c.s.n||path.indexOf(b)>=0)return;var seg=segTo(b);if(seg.some(function(x){return path.indexOf(x)>=0||x===c.s.n;}))return;
+    if(dset[b]){out.push({n:b,mf:used+sr.dist[b],dest:true,seg:seg});return;}
+    var sr2=btRoutSearch(c.s,mfMax-used-sr.dist[b],b,path.concat(seg));
+    if(Object.keys(sr2.dist).some(function(k){return dset[k]&&+k!==b;}))out.push({n:b,mf:used+sr.dist[b],dest:false,seg:seg});});
   return {steps:out,used:used,dests:O.dests};
 }
 function BtRtpCourseReset(){if(BT.rtp){BT.rtp.path=[];Draw();}}
@@ -30711,10 +30714,10 @@ function BtRtpLow(){if(BT.rtp){BT.rtp.low=!BT.rtp.low;Draw();}}
 function btRtpTap(n){var c=btRtpCur();if(!c)return false;var R=BT.rtp,O=btRoutOpts(c.s,c.u),lines=[],must=btMustRout(c.s,c.u);
   if(R.low){if(O.low.indexOf(n)<0){btToast('匍匐後退できるのは光っている隣接ヘクス');return true;}btRoutExec(c.s,c.u,[n],true,must,lines);}
   else{var P=R.path||[],ST=btRtpSteps(c),st=ST.steps.filter(function(x){return x.n===n;})[0];
-    if(st&&!st.dest){R.path=P.concat([n]);btSave();Draw();return true;} /* コースを1歩ずつ */
-    if(st&&st.dest){btRoutExec(c.s,c.u,P.concat([n]),false,must,lines);}
+    if(st&&!st.dest){R.path=P.concat(st.seg);btSave();Draw();return true;} /* 途中のヘクス(経由) */
+    if(st&&st.dest){btRoutExec(c.s,c.u,P.concat(st.seg),false,must,lines);}
     else if(!P.length){var d=O.dests.filter(function(x){return x.n===n;})[0];if(!d){btToast('緑の円(行き先)か、白い円(コースの1歩)をタップ');return true;}btRoutExec(c.s,c.u,d.path,false,must,lines);}
-    else{btToast('白い円(次の1歩)か、隣の行き先をタップ');return true;}}
+    else{btToast('白い円(途中のヘクス)か、緑の円(行き先)をタップ');return true;}}
   btRtpDone(c,lines);return true;}
 function BtRtpAuto(){var c=btRtpCur();if(!c)return;var lines=[],must=btMustRout(c.s,c.u),pl=btRoutPlan(c.s,c.u);
   if(!pl){if(must){btRemoveUnit(c.s,c.u);lines.push(BTG.nodes[c.s.n].nm+' '+c.u.nm+' 潰走不能 → 除去');}else lines.push(c.u.nm+' 留まる');}
