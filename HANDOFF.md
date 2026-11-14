@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1257(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1258(push 済み)。返事待ちなし。
+- v1258: nmRmCvItems の臨機(C.react)で結果後に「この後は」①車両(撃破/走行不能/効果なし)②First Fire札(3.3.4、自動では付けない)③次の歩兵④✕で閉じる。次のユニットの攻撃への sub を臨機用に。sample-cvnext。未対応: 結果の上に次の攻撃者のCCV見出しが出て紛らわしい(提案済み・未回答)。
 - v1257: style#nmThinCss で #btRm/#nmIj/#nmCcSc の全要素 font-weight:400!important(:not(#nmZz1#nmZz2)で詳細度を上げ選択中ボタンも)。sample-ccthin 案B。
 - v1256: nmRmCvItems(臨機の白兵戦 C.react)に PAATC: 行の「🎲 PAATC」で NM_CV.paSel、DR 2〜12(nmCvPa(n,pid,v))と🎲振る(オートダイスONのみ、NM_AD_TWO)。paSel中は攻撃欄を隠す。nmCvPa で paSel=null。臨機時は .nmColBrk で 左=設定・右=ユニット/攻撃。sample-cvpaatc。
 - v1255: nmHqRcStart(臨機の白兵戦タイル)が地図にない時 nmCcScOpen() を歩兵モードで開いていた→ nmCcScOpen('veh')。判定で NM_CVREACT により臨機モード(nmCvOpen react)。
