@@ -38372,6 +38372,8 @@ function nmTvOpen(k){NM_TV=k;var o=document.getElementById('nmTv');if(o)o.remove
   st.textContent=R+'>div{background-color:#1c1f27!important;background-image:radial-gradient(circle,rgba(0,0,0,.667) 1px,rgba(0,0,0,0) 1.35px),radial-gradient(circle at 50% 70%,rgba(255,255,255,.08) 1px,rgba(0,0,0,0) 1.4px)!important;background-size:4px 4px,4px 4px!important;border:1px solid #4a5566!important}'
    +R+'>div>div:first-child{border-bottom:0!important}'
    +B+'{background-color:#14171d!important;border:0!important;border-radius:8px!important;box-shadow:'+SH+'!important}'
+   +[' #nmTvBody div[style*="background: rgb(13, 16, 22)"]',' #nmTvBody div[style*="background:#0d1016"]',' #nmTvBody div[style*="#0a1020"]',' #nmTvBody .card',' #nmTvBody .thc-box'].map(function(x){return R+x;}).join(',')+'{background-color:#14171d!important;background-image:none!important;border:0!important;border-radius:8px!important;box-shadow:'+SH+'!important}' /* 欄(戦場・日付・ターン・勝利条件・対戦結果・ターン表・背景・SSRなど)もボタンと同じ暗い色・枠なし */
+   +R+' #nmTvBody .card div[style*="background: rgb(13, 16, 22)"]{box-shadow:none!important;background-color:#1a1e26!important}' /* カードの中の欄は影なし・少し明るく */
    +R+' .scen-card[style*="c8a032"],'+R+' .kit-grid>button[style*="c8a032"]{background-color:#2a2412!important;box-shadow:inset 0 0 0 2px #c8a032,'+SH+'!important}';
   document.head.appendChild(st);}catch(e){}})();
 /* 中の表・ボタンもパネルと同じ平らなデザインに(タブの見た目はそのまま。パネルの中だけ描いた後に色を置き換える) */
