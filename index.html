@@ -30516,10 +30516,10 @@ function btRtpPanelHTML(){ /* v1281 */
   L.forEach(function(x){var on=c&&c.u===x.u;h+=btBtn(BTG.nodes[x.s.n].nm+' '+x.u.nm+(x.must?' ⚠義務':' 任意'),"BtRtpPick('"+x.s.id+"','"+x.u.id+"')",{on:on,sel:on});});
   h+='</div>';
   if(c){var O=btRoutOpts(c.s,c.u),must=btMustRout(c.s,c.u);
-    h+='<div style="font-size:12px;color:#8fa0b3">'+(R.low?'匍匐後退: 光っている隣接ヘクスをタップ(阻止なし・全MF)':'行き先をマップの<b style="color:#60e070">緑の円</b>でタップ(数字=MF、★=おすすめ、!=阻止あり)')+'</div>';
+    h+='<div style="font-size:12px;color:#8fa0b3">'+(R.low?'匍匐後退: 光っている隣接ヘクスをタップ(阻止なし・全MF)':((R.path&&R.path.length)?'コース: '+BTG.nodes[c.s.n].nm+'→'+R.path.map(function(n){return BTG.nodes[n].nm;}).join('→')+' … 白い円で次の1歩、隣の緑の円で到着':'行き先の<b style="color:#60e070">緑の円</b>をタップ=最短コース。コースを選ぶ時は<b>白い円</b>を1歩ずつ(数字=MF、★=おすすめ、!=阻止あり)'))+'</div>';
     if(!R.low){O.dests.forEach(function(d){var N=BTG.nodes[d.n];h+='<div style="font-size:12px;padding:2px 0">'+(d.rec?'★ ':'・')+'<b>'+N.nm+'</b> '+N.terr+' '+d.mf+'MF'+(d.intd?' <span style="color:#ff8a80">阻止'+d.intd+'回</span>':'')+'</div>';});
       if(!O.dests.length)h+='<div style="color:#ff8a80;font-size:12px">潰走できるヘクスがありません'+(must?'(おまかせで除去)':'')+'</div>';}
-    h+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+(O.low.length?btBtn(R.low?'匍匐後退をやめる':'匍匐後退(1ヘクス)','BtRtpLow()',{on:true,sel:R.low}):'')+btBtn('おまかせ','BtRtpAuto()',{on:true})+(must?'':btBtn('留まる','BtRtpStay()',{on:true}))+'</div>';}
+    h+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+(O.low.length?btBtn(R.low?'匍匐後退をやめる':'匍匐後退(1ヘクス)','BtRtpLow()',{on:true,sel:R.low}):'')+((R.path&&R.path.length)?btBtn('コースをやり直す','BtRtpCourseReset()',{on:true}):'')+btBtn('おまかせ','BtRtpAuto()',{on:true})+(must?'':btBtn('留まる','BtRtpStay()',{on:true}))+'</div>';}
   if(R.res.length){h+='<div style="margin-top:6px;font-size:11.5px;color:#9fb0c3">'+R.res.map(function(t){return '✓ '+t;}).join('<br>')+'</div>';}
   h+='<div style="display:flex;justify-content:flex-end;margin-top:8px">'+btBtn(L.length?'残りはおまかせで潰走終了 ▶':'潰走終了 ▶','BtRtpEnd()',{on:true})+'</div></div>';
   return h;
@@ -30585,10 +30585,11 @@ function btInterdictors(n,side){ // 開豁地nへの潰走を阻止できる敵�
   return who;
 }
 // 潰走の経路探索。戻り値: {dist:{node:cost}, prev:{node:prev}}
-function btRoutSearch(s,mfMax){
-  var side=s.side,n0=s.n;
+function btRoutSearch(s,mfMax,from,seenAt){ /* sample-rtcourse: from=途中のヘクスから探す、seenAt=これまでに通ったヘクス(そこから見た敵には近づけない) */
+  var side=s.side,n0=(from!=null?from:s.n);
   var enemies=BT.stacks.filter(function(e){return e.side!==side&&e.n!=null&&e.n>=0&&btInf(e).length;});
-  var seen0=enemies.filter(function(e){return btFLOS(n0,e.n).ok;});
+  var vis=[s.n].concat(seenAt||[]);
+  var seen0=enemies.filter(function(e){return vis.some(function(v){return btFLOS(v,e.n).ok;});});
   var adj0=enemies.filter(function(e){return btDist(n0,e.n)<=1&&e.n!==n0;});
   var dist={},prev={};dist[n0]=0;
   var q=[n0];
@@ -30668,6 +30669,18 @@ function btRoutOpts(s,u){ /* 規則上の行き先(最寄りの建物・林。�
   var low=[];D.forEach(function(d){var f=d.path[0];if(f!=null&&low.indexOf(f)<0&&!btAdjGOEnemy(f,side)&&btStackOk(f,side,[u]))low.push(f);});
   return {dests:D,low:low,rec:rec};
 }
+function btRtpSteps(c){ /* コースの次の1歩: 規則どおりに進めて、そこから行き先へ届くヘクス */
+  var R=BT.rtp,side=c.s.side,O=btRoutOpts(c.s,c.u),dset={};O.dests.forEach(function(d){dset[d.n]=1;});
+  var I=btI(c.u,side),mfMax=(I.kind==='smc'&&c.u.wd)?3:6,path=R.path||[],last=path.length?path[path.length-1]:c.s.n,used=0,prev=c.s.n;
+  path.forEach(function(n){var ic=btInfCost(prev,n);used+=ic?ic.c:0;prev=n;});
+  var sr=btRoutSearch(c.s,mfMax-used,last,path),out=[];
+  BTG.nodes[last].nb.forEach(function(b){if(sr.dist[b]==null||b===c.s.n||path.indexOf(b)>=0)return;
+    if(dset[b]){out.push({n:b,mf:used+sr.dist[b],dest:true});return;}
+    var sr2=btRoutSearch(c.s,mfMax-used-sr.dist[b],b,path.concat([b]));
+    if(Object.keys(sr2.dist).some(function(k){return dset[k]&&+k!==b;}))out.push({n:b,mf:used+sr.dist[b],dest:false});});
+  return {steps:out,used:used,dests:O.dests};
+}
+function BtRtpCourseReset(){if(BT.rtp){BT.rtp.path=[];Draw();}}
 function btRoutExec(s,u,path,low,must,log){
   var side=s.side;
   var sws=btSWOf(s,u),pp=0;sws.sort(function(a,b){return (btI(a,side).pp||1)-(btI(b,side).pp||1);});
@@ -30691,13 +30704,17 @@ function btRoutPhase(){
 function btRoutFin(log){btMergeAll();btCleanStacks();if(log.length===1)log.push('潰走の対象なし');btLog(log);}
 function btRtpNext(){var R=BT.rtp;if(!R)return null;var L=btRoutList(R.side);return L.length?{sid:L[0].s.id,uid:L[0].u.id}:null;}
 function btRtpCur(){var R=BT.rtp;if(!R||!R.cur)return null;var s=btStackById(R.cur.sid);if(!s)return null;var u=s.u.filter(function(x){return x.id===R.cur.uid;})[0];if(!u)return null;return {s:s,u:u};}
-function btRtpDone(c,lines){var R=BT.rtp;R.log=R.log.concat(lines);R.res.push(lines.join(' / '));c.u._rtd=1;R.cur=btRtpNext2();R.low=false;btSave();Draw();}
+function btRtpDone(c,lines){var R=BT.rtp;R.path=[];R.log=R.log.concat(lines);R.res.push(lines.join(' / '));c.u._rtd=1;R.cur=btRtpNext2();R.low=false;btSave();Draw();}
 function btRtpNext2(){var R=BT.rtp;var L=btRoutList(R.side).filter(function(x){return !x.u._rtd;});return L.length?{sid:L[0].s.id,uid:L[0].u.id}:null;}
-function BtRtpPick(sid,uid){if(BT.rtp){BT.rtp.cur={sid:sid,uid:uid};BT.rtp.low=false;btSave();Draw();}}
+function BtRtpPick(sid,uid){if(BT.rtp){BT.rtp.cur={sid:sid,uid:uid};BT.rtp.low=false;BT.rtp.path=[];btSave();Draw();}}
 function BtRtpLow(){if(BT.rtp){BT.rtp.low=!BT.rtp.low;Draw();}}
 function btRtpTap(n){var c=btRtpCur();if(!c)return false;var R=BT.rtp,O=btRoutOpts(c.s,c.u),lines=[],must=btMustRout(c.s,c.u);
   if(R.low){if(O.low.indexOf(n)<0){btToast('匍匐後退できるのは光っている隣接ヘクス');return true;}btRoutExec(c.s,c.u,[n],true,must,lines);}
-  else{var d=O.dests.filter(function(x){return x.n===n;})[0];if(!d){btToast('潰走できるのは緑の円のヘクス');return true;}btRoutExec(c.s,c.u,d.path,false,must,lines);}
+  else{var P=R.path||[],ST=btRtpSteps(c),st=ST.steps.filter(function(x){return x.n===n;})[0];
+    if(st&&!st.dest){R.path=P.concat([n]);btSave();Draw();return true;} /* コースを1歩ずつ */
+    if(st&&st.dest){btRoutExec(c.s,c.u,P.concat([n]),false,must,lines);}
+    else if(!P.length){var d=O.dests.filter(function(x){return x.n===n;})[0];if(!d){btToast('緑の円(行き先)か、白い円(コースの1歩)をタップ');return true;}btRoutExec(c.s,c.u,d.path,false,must,lines);}
+    else{btToast('白い円(次の1歩)か、隣の行き先をタップ');return true;}}
   btRtpDone(c,lines);return true;}
 function BtRtpAuto(){var c=btRtpCur();if(!c)return;var lines=[],must=btMustRout(c.s,c.u),pl=btRoutPlan(c.s,c.u);
   if(!pl){if(must){btRemoveUnit(c.s,c.u);lines.push(BTG.nodes[c.s.n].nm+' '+c.u.nm+' 潰走不能 → 除去');}else lines.push(c.u.nm+' 留まる');}
@@ -32075,9 +32092,13 @@ function btOverlaySVG(dispLayout){
   /* v1281: 潰走の円はカウンターの上に */
   if(BT.rtp&&btPhId()==='RtPh'){var rc=btRtpCur();if(rc){var RO=btRoutOpts(rc.s,rc.u),sp=btDispPt(rc.s.n,dispLayout);h+='<circle cx="'+sp.x+'" cy="'+sp.y+'" r="26" fill="none" stroke="#ffe040" stroke-width="3" stroke-dasharray="6 4"/>';
     if(BT.rtp.low)RO.low.forEach(function(n){var d=btDispPt(n,dispLayout);h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="15" fill="#60c0ff" fill-opacity="0.85" stroke="#000" stroke-width="1.5"/><text x="'+d.x+'" y="'+(d.y+4)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#000">匍</text>';});
-    else RO.dests.forEach(function(D){var pp=[rc.s.n].concat(D.path).map(function(n){return btDispPt(n,dispLayout);});h+='<polyline points="'+pp.map(function(p){return p.x+','+p.y;}).join(' ')+'" fill="none" stroke="#60e070" stroke-width="3" stroke-opacity="0.7" stroke-dasharray="5 4"/>';
+    else if(BT.rtp.path&&BT.rtp.path.length){var CP=[rc.s.n].concat(BT.rtp.path),cq=CP.map(function(n){return btDispPt(n,dispLayout);});h+='<polyline points="'+cq.map(function(p){return p.x+','+p.y;}).join(' ')+'" fill="none" stroke="#ffffff" stroke-width="4" stroke-opacity="0.85"/>';
+      BT.rtp.path.forEach(function(n){var q=btDispPt(n,dispLayout);if(btInterdictors(n,rc.s.side))h+='<text x="'+q.x+'" y="'+(q.y+6)+'" text-anchor="middle" font-size="18" font-weight="900" fill="#ff5050" stroke="#000" stroke-width="0.8">!</text>';else h+='<circle cx="'+q.x+'" cy="'+q.y+'" r="5" fill="#fff"/>';});
+      var STP=btRtpSteps(rc);STP.steps.forEach(function(x){var d=btDispPt(x.n,dispLayout);var it=btInterdictors(x.n,rc.s.side);h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="15" fill="'+(x.dest?'#60e070':'#ffffff')+'" fill-opacity="0.9" stroke="'+(it?'#ff3030':'#000')+'" stroke-width="'+(it?3:1.5)+'"/><text x="'+d.x+'" y="'+(d.y+5)+'" text-anchor="middle" font-size="13" font-weight="800" fill="#000">'+x.mf+'</text>';});}
+    else{RO.dests.forEach(function(D){var pp=[rc.s.n].concat(D.path).map(function(n){return btDispPt(n,dispLayout);});h+='<polyline points="'+pp.map(function(p){return p.x+','+p.y;}).join(' ')+'" fill="none" stroke="#60e070" stroke-width="3" stroke-opacity="0.7" stroke-dasharray="5 4"/>';
       D.path.forEach(function(n){if(n!==D.n&&btInterdictors(n,rc.s.side)){var q=btDispPt(n,dispLayout);h+='<text x="'+q.x+'" y="'+(q.y+6)+'" text-anchor="middle" font-size="18" font-weight="900" fill="#ff5050" stroke="#000" stroke-width="0.8">!</text>';}});
-      var d=btDispPt(D.n,dispLayout);h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="16" fill="'+(D.rec?'#ffe040':'#60e070')+'" fill-opacity="0.9" stroke="#000" stroke-width="1.5"/><text x="'+d.x+'" y="'+(d.y+5)+'" text-anchor="middle" font-size="13" font-weight="800" fill="#000">'+(D.rec?'★':'')+D.mf+'</text>';});}}
+      var d=btDispPt(D.n,dispLayout);h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="16" fill="'+(D.rec?'#ffe040':'#60e070')+'" fill-opacity="0.9" stroke="#000" stroke-width="1.5"/><text x="'+d.x+'" y="'+(d.y+5)+'" text-anchor="middle" font-size="13" font-weight="800" fill="#000">'+(D.rec?'★':'')+D.mf+'</text>';});
+      var ST0=btRtpSteps(rc);ST0.steps.forEach(function(x){if(x.dest)return;var d=btDispPt(x.n,dispLayout);var it=btInterdictors(x.n,rc.s.side);h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="11" fill="#ffffff" fill-opacity="0.85" stroke="'+(it?'#ff3030':'#000')+'" stroke-width="'+(it?3:1.5)+'"/><text x="'+d.x+'" y="'+(d.y+4)+'" text-anchor="middle" font-size="11" font-weight="800" fill="#000">'+x.mf+'</text>';});}}}
   if(BT.fire&&BT.fire.tgtN!=null){var t=btDispPt(BT.fire.tgtN,dispLayout);h+='<circle cx="'+t.x+'" cy="'+t.y+'" r="24" fill="none" stroke="#ff3030" stroke-width="4"/>';
     BT.fire.parts.forEach(function(p){var s=btStackById(p.sid);if(!s||s.n==null||s.n<0)return;var a=btDispPt(s.n,dispLayout);h+='<line x1="'+a.x+'" y1="'+a.y+'" x2="'+t.x+'" y2="'+t.y+'" stroke="#ff3030" stroke-width="3" stroke-dasharray="8 5"/>';});}
   if(BT.pend==='react'&&BT.reactWho&&BT.mv){ // v322(ダルマ指示「反応の確認のクローズアップ 点線で結ぶ」): 撃てるスタック(選んでいればそのスタックだけ)と移動中のスタックを点線で結ぶ
@@ -32292,7 +32313,7 @@ function btPhaseHelpHTML(){
   var msg={RPh:(BT.app&&BT.rph&&BT.rph.on?'あなたのRPh(回復フェイズ): 一覧から操作して「RPh(回復フェイズ)終了」':'回復は自動で行いました(記録を参照)'),PFPh:who(att)+'の準備射撃: 攻撃するスタックを選んで「射撃」',MPh:who(att)+'の移動: スタックを選んで「移動開始」→進むヘクスをタップ(黄色の円=進入可能・数字=MF)。防御側は移動中の相手を撃てます',
     DFPh:who(btOpp(att))+'の防御射撃: 攻撃するスタックを選んで「射撃」',AFPh:who(att)+'の前進射撃(火力半減): スタックを選んで「射撃」',RtPh:(BT.rtp?'あなたの潰走: 混乱ユニットの行き先(緑の円)をタップ':'潰走は自動で行いました'),APh:who(att)+'の突撃: スタックを選んで「突撃」→隣接ヘクスをタップ(赤=白兵戦)',CCPh:'白兵戦は自動で解決しました'}[ph];
   var waiting=BT.app&&!btHumanActs(ph);
-  return '<div style="margin-top:5px;font-size:12px;color:'+(waiting?'#8899aa':'#ffd060')+'">'+T(msg)+(waiting?' …':'')+'</div>'+(ph==='RPh'?btRphPanelHTML():'')+(ph==='RtPh'?btRtpPanelHTML():'');
+  return '<div style="margin-top:5px;font-size:12px;color:'+(waiting?'#8899aa':'#ffd060')+'">'+T(msg)+(waiting?' …':'')+'</div>'+(ph==='RPh'?btRphPanelHTML():'')/* v1282: 潰走のパネルは btRtpSync で画面に直接(スタック選択中は帯が出ないため) */;
 }
 function btSelPanelHTML(){
   var s=BT.sel?btStackById(BT.sel):null;if(!s)return '';
@@ -32399,7 +32420,9 @@ function btResCntHTML(){var c=btResSum(),ch=function(l,a,b){return '<span style=
 function btResHTML(){var s=BT.sel?btStackById(BT.sel):null;if(!btResOn(s))return '';var c=btResSum(),ch=function(l,a,b){return '<span style="display:inline-block;margin-right:6px;padding:1px 8px;border-radius:9px;border:1px solid '+(a>=b?'#ffd24a':'#4a5566')+';color:'+(a>=b?'#ffd24a':'#e8eef4')+';font-size:12px;font-weight:800">'+l+' '+a+'/'+b+'</span>';};
   if(btMapFullOn())return '<div style="margin-top:4px;border:1px solid #ff9a3d;border-radius:6px;padding:4px 8px;font-size:12px;color:#e8eef4;display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b style="color:#ff9a3d">'+T('戦術予備(SSR2) T3')+'</b>'+btResCntHTML()+btBtn(s.resv?'✓ '+T('T3予備')+' → '+T('T1に入れる'):T('このスタックをT3予備にする'),"BtResTog('"+s.id+"')",{on:!!s.resv,st:';padding:2px 8px'})+'</div>'; /* v1219: 全画面では1行 */
   return '<div style="margin-top:6px;border:1px solid #ff9a3d;border-radius:6px;padding:6px 8px;font-size:12px;color:#e8eef4"><div style="color:#ff9a3d;font-weight:800;margin-bottom:4px">'+T('戦術予備(SSR2)')+' <span style="color:#8899aa;font-weight:400">'+T('T3に北端または東端から進入')+'</span></div><div style="margin-bottom:5px">'+ch('MMC',c.mmc,5)+ch('SMC',c.smc,1)+ch('SW',c.sw,2)+'</div>'+btBtn(s.resv?'✓ '+T('戦術予備(T3)')+' → '+T('T1に入れる'):T('このスタックを戦術予備(T3)にする'),"BtResTog('"+s.id+"')",{on:!!s.resv})+'<div style="color:#8899aa;margin-top:4px">'+T('指定しない場合は、T1に入らなかったスタックを上限まで予備にします')+'</div></div>';}
+function btRtpSync(){var b=document.getElementById('btRtpBox');var h=(BT&&BT.rtp&&btPhId()==='RtPh'&&btActive&&btActive())?btRtpPanelHTML():'';if(!h){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='btRtpBox';document.body.appendChild(b);}b.innerHTML=h;}
 function btCmdHTML(){
+  setTimeout(btRtpSync,0);
   if(!btAvail()||!btActive()||!btGraphReady()){setTimeout(btCmdMeasure,0);return '';}
   if(!BT.started||BT.finished){if(!BT.losAB&&(!btRmLive()||btRmLive().k==='view')){setTimeout(btCmdMeasure,0);return '';}setTimeout(btCmdMeasure,0);return '<div id="btCmd" class="bt-cmd">'+btLosABHTML()+btRmShowHTML()+'</div>';}
   // v286(ダルマ指示): フェイズ表示・説明・選択中スタックは常時表示から外し、帯(btBandHTML)に戻した。ここは測定・反応の確認・射撃・車両の移動だけ
