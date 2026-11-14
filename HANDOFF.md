@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-15 引き継ぎ】main=v1281(push 済み)。返事待ち: sample-terrjp(対戦モードの地形名を日本語に)。
+- 【2026-11-15 引き継ぎ】main=v1281(push 済み)。返事待ち: sample-terrjp(対戦モードの地形名を日本語に)、sample-rtcourse(潰走のコースを選ぶ)。
 - v1281: 自軍の潰走の行き先を選ぶ(BT.rtp・btRoutOpts/btRoutExec/btRoutSide・btRtpPanelHTML・BtRtp*)、アプリ操作中はスタックのパネルを隠す(btCmdHTML の appBusy)。
 - v1280: 対戦モードのA→Bを判定モードと同じに(BtLosAB/btLosABTap/btLosCardSync/btLosABSVG)・相手のスタックもカード表示(btCmdCardOn・foe)。
 - v1279: 発煙手榴弾を分隊ごとに1回(btSmkUnits・u.smkT)。
