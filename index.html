@@ -34195,17 +34195,27 @@ function BtVaslToggle(){BT.vasl=(BT.vasl===false)?true:false;btSave();Draw();}
 
 // ---------- [D7] v284(ダルマ指示「対戦中もA▶︎BでLOS測定、車両の影響も反映」): 対戦中のA▶︎B測定 ----------
 // A▶︎Bを押している間だけ、地図のタップを測定に使う(部隊は動かない)。判定は射撃と同じbtLOS(地形・煙幕・車両/残骸)。
+/* sample-btab(ダルマ指示「対戦モードのABの動作を判定モードと同じにする」全部): A→Bを押す→次のタップで起点A(ボタンは戻る)→そのあとはタップするたびに目標Bが動く。
+   もう一度A→Bを押すと、次のタップで新しいA。✕(札)で終わる。札は判定モードと同じ(⠿で動かせる・A変更・B変更・⇄・✕)。線・妨害の×印も判定モードと同じ */
 function BtLosAB(){
   if(!btGraphReady()){btEnsureGraph().then(function(){Draw();});return;}
-  BT.losAB=BT.losAB?null:{a:null,b:null};
-  Draw();
+  var L=BT.losAB;
+  if(L&&L.rc)L=BT.losAB=null;
+  if(L&&L.arm){if(L.a==null)BT.losAB=null;else L.arm=false;}
+  else if(L)L.arm=true;
+  else BT.losAB={a:null,b:null,arm:true};
+  if(BT.losAB&&BT.losAB.arm)btToast(T('タップで起点A→目標BのLOSを測る'));
+  Draw();try{nmFtActFill();}catch(e){}
 }
+function BtLosABEnd(){BT.losAB=null;Draw();try{nmFtActFill();}catch(e){}}
+function BtLosABMv(k){var L=BT.losAB;if(!L)return;L.mv=(L.mv===k?null:k);L.arm=false;if(L.mv)btToast(T(k==='a'?'タップしたヘクスを起点(A)にする':'タップしたヘクスを目標(B)にする'));Draw();}
 function btLosABTap(n){
   var L=BT.losAB;
-  if(L.a==null||L.b!=null){L.a=n;L.b=null;}
-  else if(n===L.a){L.a=null;}
-  else L.b=n;
-  Draw();
+  if(L.rc){if(L.a==null||L.b!=null){L.a=n;L.b=null;}else if(n===L.a){L.a=null;}else L.b=n;Draw();return;} /* 右クリックは従来どおり */
+  if(L.arm||L.a==null){L.a=n;L.b=null;L.arm=false;L.mv=null;}
+  else if(L.mv==='a'){L.a=n;L.mv=null;}
+  else{L.b=n;L.mv=null;}
+  Draw();try{nmFtActFill();}catch(e){}
 }
 // 判定と内訳
 function btLosABEval(a,b){
@@ -34231,7 +34241,7 @@ function btLosABHTML(){
   var h='<div style="border:1px solid #66ccff;border-radius:4px;padding:5px 7px;margin:0 0 5px;background:#0a1420">';
   h+='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><b style="color:#66ccff;font-size:12px">LOS測定(A▶︎B)</b>';
   h+='<span style="font-size:11px;color:#9ab">'+(L.rc?'右クリック: 1回目=起点(A)、2回目=目標(B)(左クリックは通常の操作)':'地図をタップ: 1回目=起点(A)、2回目=目標(B)(部隊は動きません)')+'</span>';
-  h+=btBtn('測定を終わる','BtLosAB()')+'</div>';
+  h+=btBtn('測定を終わる','BtLosABEnd()')+'</div>';
   var A=L.a!=null?BTG.nodes[L.a]:null,B=L.b!=null?BTG.nodes[L.b]:null;
   h+='<div style="font-size:12px;color:#ccddee;margin-top:3px">A: <b>'+(A?A.nm+' ('+A.terr+(A.elev?' 高度'+A.elev:'')+')':'—')+'</b>　B: <b>'+(B?B.nm+' ('+B.terr+(B.elev?' 高度'+B.elev:'')+')':'—')+'</b></div>';
   if(A&&B){
@@ -34253,17 +34263,19 @@ function btLosABSVG(dispLayout){
   var L=BT.losAB;if(!L||L.a==null)return '';
   var h='',da=btDispPt(L.a,dispLayout);
   if(L.b!=null){
-    var db=btDispPt(L.b,dispLayout),r=btLosABEval(L.a,L.b),col=r.ok?'#40ff60':'#ff4040';
-    h+='<line x1="'+da.x+'" y1="'+da.y+'" x2="'+db.x+'" y2="'+db.y+'" stroke="#000" stroke-width="6" stroke-opacity="0.6"/>';
-    h+='<line x1="'+da.x+'" y1="'+da.y+'" x2="'+db.x+'" y2="'+db.y+'" stroke="'+col+'" stroke-width="3"'+(r.ok?'':' stroke-dasharray="10 6"')+'/>';
-    var H=btVehHindNodes();
-    r.vehHex.forEach(function(nm){var N=BTG.nodes.filter(function(x){return x.nm===nm;})[0];if(!N)return;var d=btDispPt(N.i,dispLayout);
-      h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="24" fill="none" stroke="#ffd040" stroke-width="3" stroke-dasharray="5 4"/>';});
+    var db=btDispPt(L.b,dispLayout),r=btLosABEval(L.a,L.b),r0=btLosABRaw(L.a,L.b);
+    var seg=function(x1,y1,x2,y2,c){return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+c+'" stroke-width="2" stroke-dasharray="6,3" stroke-opacity="0.9"/>';}; /* 判定モードと同じ線(通る=濃い青、遮断点から先=マゼンタ) */
+    if(r0&&!r0.error&&r0.hindranceHexes)r0.hindranceHexes.forEach(function(hh){if(!hh[2])return;var hxy=losCanonicalToDisplay(hh[2][0],hh[2][1],dispLayout);h+=nmHdMarkSVG(hxy.x,hxy.y,nmHdVal(hh));});
+    if(BT.smoke&&L.a!==L.b)btSmokeHexesOnLine(L.a,L.b).forEach(function(n){var sm=BT.smoke[n];if(!sm)return;var d=btDispPt(n,dispLayout);h+=nmHdMarkSVG(d.x,d.y,Math.min(3,sm.v));});
+    r.vehHex.forEach(function(nm){var N=BTG.nodes.filter(function(x){return x.nm===nm;})[0];if(!N)return;var d=btDispPt(N.i,dispLayout);h+=nmHdMarkSVG(d.x,d.y,1);});
+    if(r0&&!r0.error&&r0.blocked&&r0.blockingPx){var bxy=losCanonicalToDisplay(r0.blockingPx[0],r0.blockingPx[1],dispLayout);h+=seg(da.x,da.y,bxy.x,bxy.y,'#1a5cb0')+seg(bxy.x,bxy.y,db.x,db.y,'#ff00ff')+losBlockMarkerSVG(bxy.x,bxy.y,'#ff00ff');}
+    else h+=seg(da.x,da.y,db.x,db.y,r.ok?'#1a5cb0':'#ff00ff');
     h+=nmABMarkSVG(null,db,'B',btLosABOcc(L.b)); /* v350: 通常MAPと同じA/Bマーク(スタックのあるヘクス=角に小さく、空き=中央に双眼鏡・照準) */
   }
   h+=nmABMarkSVG(null,da,'A',btLosABOcc(L.a));
   return h;
 }
+var BT_ABR={};function btLosABRaw(a,b){var k=(BTG&&BTG.sc)+':'+a+'-'+b;if(BT_ABR[k]!==undefined)return BT_ABR[k];var r=null;try{var A=BTG.nodes[a],B=BTG.nodes[b];r=losCheckLOSGlobal(A.x,A.y,B.x,B.y,S_LOS.orchardSeason,S_LOS.grainSeason);}catch(e){r=null;}BT_ABR[k]=r;return r;}
 function btLosABOcc(n){try{return btStacksAtN(n).some(function(s){return s.u&&s.u.length;})||!!(BT.smoke&&BT.smoke[n]);}catch(e){return false;}}
 function btLosABPin(d,t){
   return '<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><circle cx="'+d.x+'" cy="'+d.y+'" r="11" fill="#66ccff" stroke="#000" stroke-width="2"/><text x="'+d.x+'" y="'+(d.y+4)+'" text-anchor="middle" font-size="13" font-weight="bold" fill="#000" font-family="AppFont,AppJP,monospace">'+t+'</text></g>';
@@ -43521,7 +43533,7 @@ function btSideOn(){try{return window.NM_BT_SIDE!==false&&nmTbPos()!=='T';}catch
 function btSideActHTML(){var h='',mv=BT.mv,un=BT.started&&mv&&(mv.veh?btVCanUndo():true),rd=BT.started&&mv&&mv.veh&&btVCanRedo(),nr=(typeof NM_RB!=='undefined'&&NM_RB.items)?NM_RB.items.length:0;
   var b=function(on,dis,ttl,oc,inner,st){return '<button class="fa g'+(on?' on':'')+(dis?' dis':'')+'" title="'+T(ttl)+'" onclick="event.stopPropagation();'+oc+'"'+(st?' style="'+st+'"':'')+'>'+inner+'</button>';};
   h+=b(0,!un,'一つ戻る','btFtUndo();nmFtActFill()','<span style="font-size:15px;line-height:1">↶</span>')+b(0,!rd,'やり直す(車両の移動)','if(btVCanRedo())BtVRedo();nmFtActFill()','<span style="font-size:15px;line-height:1">↷</span>');
-  h+=b(!!BT.losAB,0,'LOS測定(起点A・目標B)','BtLosAB();nmFtActFill()','A→B');
+  h+=b(!!(BT.losAB&&(BT.losAB.arm||BT.losAB.rc)),0,'LOS測定(起点A・目標B)','BtLosAB();nmFtActFill()','A→B');
   h+=b(!!BT.sideView,0,'このヘクスから見える範囲(次にタップしたヘクス)','BT.sideView=!BT.sideView;nmFtActFill()',NM_TOOL_DEF.view[1]);
   h+=b(0,0,'早見表','NM_TVHQ=0;nmTvOpen(\'ref\')','<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 5.5C7 4 10 4.2 12 6c2-1.8 5-2 8-.5V19c-3-1.5-6-1.3-8 .5-2-1.8-5-2-8-.5z"/><path d="M12 6v13.5"/></svg>');
   h+=b(0,0,'シナリオカード','nmScenView()','<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5"/></svg>');
@@ -43539,17 +43551,22 @@ function btSideActHTML(){var h='',mv=BT.mv,un=BT.started&&mv&&(mv.veh?btVCanUndo
 /* sample-btside3(ダルマ指示「A→BでLOSの情報はタスクバーに表示せずに判定モードと同じようにマップ上に表示」): Bのヘクスの横に小さな結果の札(判定モードの #nmAbBd と同じ見た目)。⇄=AとBを入れ替え、✕=測定を終わる */
 function btLosCardSync(on){var el=document.getElementById('btLosCd'),LA=BT&&BT.losAB;
   if(!on||!LA||!btGraphReady()||LA.a==null){if(el)el.remove();return;}
-  if(!el){el=document.createElement('div');el.id='btLosCd';el.onpointerdown=function(e){nmCdDown(e,el);};el.onclick=function(e){e.stopPropagation();};document.body.appendChild(el);el.style.cssText='position:fixed;z-index:9100;background:#141922ee;border:1.5px solid #c040c0;border-radius:10px;padding:6px 8px 6px 10px;color:#e8eef4;font-family:AppFont,AppJP,monospace;font-size:13px;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px #000a';}
-  var bt=function(lb,fn){return '<button onclick="event.stopPropagation();'+fn+'" style="font:inherit;font-weight:900;font-size:13px;padding:5px 9px;border-radius:8px;border:1px solid #4a5262;background:#1b222c;color:#e8eef4">'+lb+'</button>';};
-  var h,n=LA.b!=null?LA.b:LA.a;
-  if(LA.b==null)h='<span style="color:#aab4c0">'+T('目標(B)のヘクスをタップ')+'</span>';
-  else{var r=btLosABEval(LA.a,LA.b),ed=(BTG.nodes[LA.b].elev||0)-(BTG.nodes[LA.a].elev||0);
-    h='<div style="white-space:nowrap"><b style="color:'+(r.ok?'#3ca878':'#ff6060')+'">LOS '+(r.ok?'OK':'NG')+'</b> '+T('距離')+r.dist+'<br><span style="color:#aab4c0">'+(r.ok?T('妨害')+'+'+r.hind+'・'+T('地形')+'+'+r.terr+'・'+T('高低差')+(ed>0?'+':'')+ed:(r.why||''))+'</span></div>'+bt('⇄','var L=BT.losAB;if(L&&L.b!=null){var x=L.a;L.a=L.b;L.b=x;}Draw()');}
-  h+=bt('✕','BtLosAB();try{nmFtActFill();}catch(e){}');
-  if(el.__h!==h){el.__h=h;el.innerHTML=h;}
-  var q=null;try{q=nmClientOfNode(n);}catch(e){}var sw=document.getElementById('losScrollWrap'),wr=sw&&sw.getBoundingClientRect();if(!q||(wr&&(q.x<wr.left||q.x>wr.right||q.y<wr.top||q.y>wr.bottom))){el.style.display='none';return;}el.style.display='flex';
-  var W=el.offsetWidth||180,H=el.offsetHeight||40,x=q.x+30,y=q.y-H/2,R=innerWidth-(nmTbW()||0)-6;
-  if(x+W>R)x=q.x-30-W;x=Math.max(6,Math.min(R-W,x));y=Math.max(40,Math.min(innerHeight-H-40,y));
+  if(!el){el=document.createElement('div');el.id='btLosCd';el.onpointerdown=function(e){nmCdDown(e,el);};el.onclick=function(e){e.stopPropagation();};document.body.appendChild(el);el.style.cssText='position:fixed;z-index:9100;background:#141922ee;border:1.5px solid '+nmAbCol()+';border-radius:10px;padding:5px 7px;box-shadow:0 4px 14px #000a;color:#e8eef4;font-size:12px;line-height:1.3;display:flex;align-items:center;gap:6px;font-family:AppFont,AppJP,monospace';}
+  el.style.borderColor=nmAbCol();
+  var bt=function(lb,fn,on){return '<button onclick="event.stopPropagation();'+fn+'" style="font:inherit;font-weight:900;font-size:13px;padding:5px 9px;border-radius:8px;border:'+(on?'2px solid #fff':'1px solid #4a5262')+';background:'+(on?nmAbCol():'#2a313d')+';color:#e8eef4">'+lb+'</button>';};
+  var sp='<span style="width:1px;height:26px;background:#39414f;margin:0 1px"></span>',h,n=LA.b!=null?LA.b:LA.a;
+  if(LA.b==null)h='<span style="color:#aab4c0;white-space:nowrap">'+T('目標(B)のヘクスをタップ')+'</span>';
+  else{var r=btLosABEval(LA.a,LA.b),ed=(BTG.nodes[LA.b].elev||0)-(BTG.nodes[LA.a].elev||0),tem=BTG.nodes[LA.b].tem;
+    h='<div style="white-space:nowrap"><b style="color:'+(r.ok?'#3ca878':'#ff6060')+'">LOS '+(r.ok?'OK':'NG')+'</b> '+T('距離')+r.dist+'<br><span style="color:#aab4c0">'+T('妨害')+'+'+(r.hind||0)+'・'+T('地形')+(tem==null?'—':tem)+'・'+T('高低差')+(ed>0?'+':'')+ed+'</span></div>';}
+  h+=sp+bt('A'+T('変更'),"BtLosABMv('a')",LA.mv==='a')+(LA.b!=null?bt('B'+T('変更'),"BtLosABMv('b')",LA.mv==='b'):'')+sp+(LA.b!=null?bt('⇄','var L=BT.losAB;if(L&&L.b!=null){var x=L.a;L.a=L.b;L.b=x;}Draw()'):'')+bt('✕','BtLosABEnd()');
+  if(el.__h!==h){el.__h=h;el.innerHTML='<span class="nmAbGrip" style="color:#9aa4b0;font-size:18px;padding:2px 4px;cursor:grab;touch-action:none;user-select:none">⠿</span>'+h;try{nmAbGripBind(el);}catch(e){}}
+  var q=null,qa=null;try{q=nmClientOfNode(n);qa=nmClientOfNode(LA.a);}catch(e){}var sw=document.getElementById('losScrollWrap'),wr=sw&&sw.getBoundingClientRect();if(!q||(wr&&(q.x<wr.left||q.x>wr.right||q.y<wr.top||q.y>wr.bottom))){el.style.display='none';return;}el.style.display='flex';
+  /* 判定モード(nmAbBoard)と同じ置き方: LOS線・印と重ならないよう、Aと反対側(線の延長の外)に置く */
+  var W=el.offsetWidth||180,H=el.offsetHeight||40,R=innerWidth-(nmTbW()||0)-6,Bt=innerHeight-64,T0=50,g=34,bx=q.x,by=q.y,dx=qa?bx-qa.x:1,dy=qa?by-qa.y:0,cand=[];
+  if(Math.abs(dx)>=Math.abs(dy)){cand.push(dx>=0?[bx+g,by-H/2]:[bx-g-W,by-H/2]);cand.push([bx-W/2,dy>=0?by+g:by-g-H]);cand.push([bx-W/2,dy>=0?by-g-H:by+g]);}
+  else{cand.push([bx-W/2,dy>=0?by+g:by-g-H]);cand.push(dx>=0?[bx+g,by-H/2]:[bx-g-W,by-H/2]);cand.push(dx>=0?[bx-g-W,by-H/2]:[bx+g,by-H/2]);}
+  var fit=function(c){return c[0]>=6&&c[0]+W<=R&&c[1]>=T0&&c[1]+H<=Bt;},pk=cand.filter(fit)[0]||cand[0],x=Math.max(6,Math.min(R-W,pk[0])),y=Math.max(T0,Math.min(Bt-H,pk[1]));
+  if(S.nmAbPos){x=Math.max(6,Math.min(innerWidth-W-6,S.nmAbPos.x));y=Math.max(40,Math.min(innerHeight-H-6,S.nmAbPos.y));}
   nmCdApply(el,x,y);}
 function btFullBars(on){
   var de=document.documentElement,t=document.getElementById('btFullTop'),b=document.getElementById('btFullBot');
