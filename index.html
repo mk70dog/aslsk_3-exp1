@@ -38728,15 +38728,21 @@ function nmAtkList(tn,tsd){var od=tsd==='f'?'e':'f',B=BTG.nodes[tn],out=[];
     out.push({i:i,sd:od,eh:eh,m:m,w:w,d:btDist(m,tn),blk:!!(r&&r.blocked),hd:(r&&r.hindranceDrm)||0});});
   return out.sort(function(a,b){return (a.blk-b.blk)||(a.d-b.d);});}
 var NM_ATK=null;
-function nmAtkAsk(tn,ti){var H=nmHexOfNode(tn),E=nmAllAt(H,'e'),F=nmAllAt(H,'f'),tsd=E.length?'e':F.length?'f':null;ti=ti||0;var o=document.getElementById('nmMvPk');if(o)o.remove();
+function nmAtkAsk(tn,ti,asd){var H=nmHexOfNode(tn),E=nmAllAt(H,'e'),F=nmAllAt(H,'f'),tsd=E.length?'e':F.length?'f':null;ti=ti||0;var o=document.getElementById('nmMvPk');if(o)o.remove();
   if(!tsd){btToast('このヘクスに攻撃されるスタック(マーカー)がありません');return;}
-  var TL=tsd==='e'?E:F,teh=TL[ti]||TL[0],L=nmAtkList(tn,tsd);NM_ATK={tn:tn,tsd:tsd,teh:teh,L:L};
+  /* v1227(ダルマ指示「このヘクスに攻撃可能 ヘクスをタップしたとき攻撃する国籍を選択」): 攻撃する国籍を選ぶ。asd=攻撃する側(f/e)。目標はその相手側のマーカー */
+  if(asd==null&&NM_ATK&&NM_ATK.tn===tn&&NM_ATK.asd)asd=NM_ATK.asd;
+  if(asd==='f'||asd==='e'){var want=asd==='f'?'e':'f';if((want==='e'?E:F).length)tsd=want;}
+  var aSd=tsd==='f'?'e':'f';
+  var TL=tsd==='e'?E:F,teh=TL[ti]||TL[0],L=nmAtkList(tn,tsd);NM_ATK={tn:tn,tsd:tsd,teh:teh,L:L,asd:aSd};
   var tt=document.getElementById('btToast');if(tt)tt.style.display='none';var m=document.createElement('div');m.id='nmMvPk';var q=null;try{q=nmClientOfNode(tn);}catch(e){}
-  var hgt=Math.min(innerHeight-120,110+Math.max(1,L.length)*52);
+  var hgt=Math.min(innerHeight-120,150+Math.max(1,L.length)*52);
   m.style.cssText='position:fixed;z-index:9600;left:'+Math.max(8,Math.min(innerWidth-308,(q?q.x:innerWidth/2)+24))+'px;top:'+Math.max(48,Math.min(innerHeight-60-hgt,(q?q.y:innerHeight/3)-30))+'px;width:300px;max-height:'+hgt+'px;overflow:auto;background:#14181f;border:1px solid #4a5566;border-radius:12px;box-shadow:0 12px 40px #000c;padding:8px;display:flex;flex-direction:column;gap:6px;font-family:AppFont,AppJP,monospace;color:#e8eef4';
   var tnm=nmMfTgtName(teh);
   m.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;gap:6px"><span style="display:flex;flex-direction:column;min-width:0"><b style="font-size:13px">'+T('攻撃するスタックを選ぶ')+'</b><small style="font-size:11px;color:#9aa6b4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+T('目標')+': '+nmIjSdLbl(tsd,teh)+' '+tnm+' @'+BTG.nodes[tn].nm+'</small></span><button class="b sm" style="margin:0;height:28px;padding:0 9px;font-size:12px;flex:0 0 auto" onclick="event.stopPropagation();var mm=document.getElementById(\'nmMvPk\');if(mm)mm.remove();">✕ '+T('閉じる')+'</button></div>'
-   +(TL.length>1?'<div style="display:flex;flex-wrap:wrap;gap:4px">'+TL.map(function(e,j){return '<button class="b sm'+(e===teh?' on':'')+'" style="margin:0;height:30px;padding:0 8px;font-size:12px;display:flex;align-items:center;gap:4px" onclick="event.stopPropagation();nmAtkAsk('+tn+','+j+')">'+T('目標')+(j+1)+': '+nmMfTgtName(e)+'</button>';}).join('')+'</div>':'')
+   +'<div style="display:flex;align-items:center;gap:4px"><span style="font-size:11.5px;color:#9aa6b4;white-space:nowrap">'+T('攻撃する国籍')+'</span>'+['f','e'].map(function(sd){var tg=sd==='f'?E:F,ok=tg.length>0,on=sd===aSd;
+       return '<button class="b sm'+(on?' on':'')+'" style="margin:0;flex:1;height:32px;padding:0 6px;font-size:13px;font-weight:700;border-left:4px solid '+NM_SIDE_LBL[sd].col+(ok?'':';opacity:.4')+'" '+(ok?'onclick="event.stopPropagation();nmAtkAsk('+tn+',0,\''+sd+'\')"':'disabled title="'+T('このヘクスに相手側のマーカーがありません')+'"')+'>'+nmIjSdLbl(sd)+'</button>';}).join('')+'</div>'
+   +(TL.length>1?'<div style="display:flex;flex-wrap:wrap;gap:4px">'+TL.map(function(e,j){return '<button class="b sm'+(e===teh?' on':'')+'" style="margin:0;height:30px;padding:0 8px;font-size:12px;display:flex;align-items:center;gap:4px" onclick="event.stopPropagation();nmAtkAsk('+tn+','+j+',\''+aSd+'\')">'+T('目標')+(j+1)+': '+nmMfTgtName(e)+'</button>';}).join('')+'</div>':'')
    +(L.length?L.map(function(x,i){var ok=!x.blk;
      return '<button class="b sm" style="margin:0;min-height:46px;display:flex;align-items:center;justify-content:flex-start;gap:8px;text-align:left;padding:4px 8px;border-left:4px solid '+NM_SIDE_LBL[x.sd].col+(ok?'':';opacity:.45')+'" onclick="event.stopPropagation();'+(ok?'nmAtkGo('+i+')':'')+'">'+nmMfTgtImg(x.eh)+'<span style="display:flex;flex-direction:column;min-width:0;flex:1"><b style="font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+nmIjSdLbl(x.sd,x.eh)+' '+nmMfTgtName(x.eh)+'</b><small style="font-size:11px;color:#9aa6b4">@'+BTG.nodes[x.m].nm+'　'+T('距離')+x.d+'　'+(x.blk?T('LOS遮断'):T('LOS通る')+(x.hd?'・'+T('妨害')+'+'+x.hd:''))+'</small></span><span style="flex:0 0 auto;font-size:11px;font-weight:bold;padding:2px 6px;border-radius:5px;border:1px solid #5a6676;color:#cfd8e3">'+T(x.w.t)+'</span></button>';}).join('')
      :'<div style="font-size:12px;color:#9aa6b4;padding:8px 4px">'+T('このスタックを攻撃可能な相手側のマーカーがありません')+'</div>');
