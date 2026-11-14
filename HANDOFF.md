@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1247(push 済み)。作業中: ツールバーのボタンをドラッグで並べ替え・非表示のサンプル。
+- 【2026-11-14 引き継ぎ】main=v1247(push 済み)。返事待ち: ツールバーの編集=ブランチ sample-tbedit(長押し650ms で NM_TBE 編集モード: ボタンが揺れて右上に赤い−、ドラッグで並べ替え→S.nmTbCfg.order、−で off、下の #nmTbeBar に しまってあるボタン(タップで戻す)・完了。判定モードの右ツールバー #nmFtAct のみ)。
 - v1247: NM_PHU(フェイズ未選択): nmMfOpen/nmVfOpen/nmVmOpen/nmLwOpen を setTimeout(0) で包んで true、フェイズボタンの onclick 先頭で false。true の間はフェイズ行の後に「↑フェイズを選んでください」を出して return it(4か所)。sample-viewelev(nmViewElevTag)を main に。
 - v1246: v850系の戻る/閉じるボタン統一(nmBkU の MutationObserver)の skip に #nmRmPop・#nmAcqCd を追加。
 - v1245: nmRrPick が nmRrGroups の elr/cas も受け付ける。nmRrRallyItems に .nmColBrk(左右の列の分かれ目)。nmIjSwap: ステップ1=nmIjClose/Open をやめて J.a/J.b 等を直接更新、ステップ2=#nmSwCover(暗い幕)→vfStage=0→BtRmClose(先に vfStage=0 にしないと v1037 の後処理で stageBack される)→nmIjClose/Open(仮カウンターは ijTmp を一時的に外して残す)→nmIjStageGo→nmStgHold が消えたら幕を外す。目標獲得カード: 目標の絵、マーカー無しは「ヘクスだけ」+外す(nmAcqDel)、地図に ACQ目標 ラベル。
