@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1253(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1254(push 済み)。返事待ちなし。
+- v1254: nmFtMenuHTML のシステム欄に「⇅ 同期」(nmGsSync、nmGsBtnOn()=判定モードの時だけ)。sample-mmsync 案B。
 - v1253: nmHqPickA の名前を 16px/900 → 13px/400(sample-pklabel 案C)。
 - v1252: nmHqPickA の国籍をカプセルバッジ(11px・細字、背景=色+33、枠=色+99、角丸999px、sample-pklabel 案C)。
 - v1251: nmHqPickA(判定の編成選択、全判定共通)の行から自軍/敵軍の札を削除し、名前の下に国籍(nmIjSdLbl(c.sd,c.eh)、11px・細字・自軍#d4a65a/敵軍#7ec8e3)。C に eh を保持。sample-pklabel 案B。
