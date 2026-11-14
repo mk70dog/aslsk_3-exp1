@@ -32333,7 +32333,8 @@ function btCmdHTML(){
     if(BT.mv.veh&&btReactionCCOptions(btHuman()).length)h+=btBtn(T('反応白兵戦(車両に)'),'BtReactCC()',{warn:true})+' ';
     h+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">'+btBtn(T('続ける'),'BtReactContinue(false)',{on:true})+btBtn(T('このフェイズは撃たない'),'BtReactContinue(true)')+'</div></div>';} // v323: ボタンを横一列
   h+=btFirePanelHTML();
-  var cmdH=btCmdCardHTML(); // v288: 選択中スタックの行動と車両の移動
+  var appBusy=!!(BT.app&&!window.BT_SELFPLAY&&!btHumanActs(btPhId())&&BT.pend!=='react'&&!BT.fire&&!BT.ofire&&!BT.mgfire&&!BT.rtp); /* sample-cmdhide: アプリが操作している間はスタックのパネルを出さない */
+  var cmdH=appBusy?'':btCmdCardHTML(); // v288: 選択中スタックの行動と車両の移動
   h+=cmdH;
   h+=btResHTML(); /* v1212: S6 戦術予備 */
   if(cmdH.indexOf('data-btof')<0){var ofb=btOFirePanelHTML();if(ofb)h+='<div data-btof="1">'+ofb+'</div>';}
