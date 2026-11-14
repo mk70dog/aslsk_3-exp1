@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1267(push 済み)。返事待ち: sample-dcpa(爆薬パネルの車両へ置く時にPAATC。画像 dev/samples/dcpa.png)。
+- 【2026-11-14 引き継ぎ】main=v1268(push 済み)。返事待ち: sample-dcpa(爆薬パネルの車両へ置く時にPAATC。画像 dev/samples/dcpa.png)。
+- v1268: 回復の自己回復不可(3.1e)時のバグ修正(nmRlGo・blk)。
 - v1267: マルチ判定の白兵戦を1タイル(ccx)→nmHqOpen('ccx')で3ボタン。
 - v1266: アプリの煙幕弾・WP(btAISmokeShots、btAIPrepFireの最初)。S24自己対戦でソ連シャーマンが煙幕を張るのを確認(エラー0)。
 - v1265: アプリがIFE(btAIOrdOptions)とsM(btAISmPick)を使う。
