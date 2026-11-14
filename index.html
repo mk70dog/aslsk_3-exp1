@@ -32264,6 +32264,14 @@ function btFirePanelHTML(){ // v324(ダルマ指示「間延びしているの�
     }
   }
   var btns='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:3px">'+rollB+btBtn(T('取消'),'BtFireCancel()',{st:';margin:0'})+'</div>';
+  /* sample-cmpct(ダルマ指示「パネルをコンパクト化 サンプルx3」): B=要点1行+詳細は折りたたみ / C=2段のバー */
+  var CS=window.NM_CMD_STY;
+  if((CS==='B'||CS==='C')&&f.tgtN!=null&&ev&&ev.ok){var d2=btFireDist(ev),pc2=function(x){return Math.round(x/36*100)+'%';},ttl=(btPhId()==='MPh'?['DFF','SFF','FPF'].map(function(p){return btBtn(T({DFF:'臨機',SFF:'再射撃',FPF:'最終防護'}[p]),"BtFirePh('"+p+"')",{on:f.ph===p,st:';padding:1px 6px;margin:0;height:24px'});}).join(''):'<b style="color:#ffd060">'+T(phN[f.ph])+'</b>');
+    var sum='<b>'+BTG.nodes[f.tgtN].nm+'</b> ・ FP'+(Math.round(ev.fp*10)/10)+'→'+T('列')+ev.colLbl+' DRM<b>'+(ev.drm>=0?'+':'')+ev.drm+'</b> ・ <span style="color:#9fe0a8">MC'+pc2(d2.MC)+'</span> PTC'+pc2(d2.PTC)+(d2.K?' K'+pc2(d2.K):'')+(d2.KIA?' KIA'+pc2(d2.KIA):'');
+    var det='<div style="color:#8fa6bd;font-size:11px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+T('目標')+' '+ev.tgtUnits.map(function(u){return u.nm;}).join(',')+' ・ '+ev.drmL.join(' / ')+' ・ '+T('期待損害')+' '+btEV(ev,{mph:btPhId()==='MPh'}).toFixed(2)+'</div><div style="color:#8fa6bd;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+ev.lines.join(' ').replace(/\s+/g,' ')+'</div>';
+    var bt2=rollB.replace(';margin:0',';margin:0;padding:3px 10px')+btBtn(T('取消'),'BtFireCancel()',{st:';margin:0;padding:3px 8px'});
+    if(CS==='B')return '<div style="margin-top:4px;border:1px solid #4a5262;border-radius:6px;padding:4px 7px;font-size:12px;color:#ccddee;line-height:1.35"><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+ttl+'<span style="flex:1 1 auto;min-width:0">'+sum+'</span>'+bt2+'</div>'+(f.err?'<div style="color:#ff8060">'+f.err+'</div>':'')+det+'</div>';
+    return '<div style="margin-top:2px;padding:2px 2px;font-size:12px;color:#ccddee;line-height:1.3;display:flex;gap:6px;align-items:center;flex-wrap:nowrap;white-space:nowrap">'+ttl+'<span style="min-width:0;overflow:hidden;text-overflow:ellipsis">'+sum+'</span>'+bt2+'</div>';}
   if(left||right)h+='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:3px"><div style="flex:1 1 340px;min-width:0">'+left+'</div><div style="flex:1 1 320px;min-width:0;border-left:1px solid #2a3040;padding-left:9px">'+right+btns+'</div></div>';
   else h+=btns;
   return h+'</div>';
@@ -32330,10 +32338,16 @@ function btCmdHTML(){
   /* v1275(ダルマ指示「パネルを最小化して下バーに入れるボタン追加」): 右上の▾で最小化→下のバーに札(タップで戻す) */
   window.__btCmdHas=!!h;if(h){var lb=String(h).replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();BT_CMDMIN_LBL=lb.slice(0,22)+(lb.length>22?'…':'');}
   if(h&&btMapFullOn()&&window.NM_BT_CMDPOP!==false&&BT_CMDMIN)return '';
-  if(h&&btMapFullOn()&&window.NM_BT_CMDPOP!==false)return '<div id="btCmd" class="bt-cmd bt-cmdpop"><div class="btCmdGrip" onpointerdown="btCmdDrag(event)" title="'+T('ドラッグで移動')+'"><span></span></div><button class="btCmdMinB" title="'+T('最小化(下のバーへ)')+'" onclick="event.stopPropagation();BtCmdMin(1)">▾</button>'+h+'<div class="btPopRz" onpointerdown="btCmdResize(event)" title="'+T('ドラッグで大きさを変える')+'"></div></div>'; /* v1219(ダルマ「マップは常に全画面表示で右バー下バーとポップアップでゲームを操作進行する」): 全画面では指示カードを動かせるポップアップに */
+  if(h&&btMapFullOn()&&window.NM_BT_CMDPOP!==false)return '<div id="btCmd" class="bt-cmd bt-cmdpop'+(window.NM_CMD_STY?' cmp'+window.NM_CMD_STY:'')+'"><div class="btCmdGrip" onpointerdown="btCmdDrag(event)" title="'+T('ドラッグで移動')+'"><span></span></div><button class="btCmdMinB" title="'+T('最小化(下のバーへ)')+'" onclick="event.stopPropagation();BtCmdMin(1)">▾</button>'+h+'<div class="btPopRz" onpointerdown="btCmdResize(event)" title="'+T('ドラッグで大きさを変える')+'"></div></div>'; /* v1219(ダルマ「マップは常に全画面表示で右バー下バーとポップアップでゲームを操作進行する」): 全画面では指示カードを動かせるポップアップに */
   return h?'<div id="btCmd" class="bt-cmd">'+h+'</div>':'';
 }
 var BT_CMDMIN=false,BT_CMDMIN_LBL='';
+(function(){try{var st=document.createElement('style');var R='html:root:root:root #main #btCmd.bt-cmdpop';
+  st.textContent=[R+'.cmpA',R+'.cmpB',R+'.cmpC'].join(',')+'{height:auto!important;max-height:70vh!important}'
+   +R+'.cmpA{font-size:11.5px}'+R+'.cmpA > div{margin-top:3px!important;padding:3px 6px!important;line-height:1.3!important}'+R+'.cmpA img{max-height:38px!important;width:auto!important}'
+   +R+'.cmpB img{max-height:34px!important;width:auto!important}'
+   +R+'.cmpC{width:fit-content!important;max-width:min(680px,calc(100vw - 110px))!important;padding-top:14px!important}'+R+'.cmpC > div{margin-top:2px!important;padding:2px 4px!important;border:0!important}'+R+'.cmpC img{max-height:28px!important;width:auto!important}';
+  document.head.appendChild(st);}catch(e){}})();
 function BtCmdMin(on){BT_CMDMIN=!!on;Draw();}
 function btCmdMinChip(){if(!BT_CMDMIN||!window.__btCmdHas)return '';var hot=BT.pend==='react';return '<button class="cd" onclick="event.stopPropagation();BtCmdMin(0)" style="flex:0 0 auto;max-width:42%;flex-direction:row;align-items:center;gap:8px;padding:0 12px;cursor:pointer;font:inherit;color:#e8eef4;border:'+(hot?'1.5px solid #ff9040':'1px solid #c8a032')+';background:#2a2412"><span style="color:#ffd070;font-size:15px">▴</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:bold">'+(BT_CMDMIN_LBL||T('パネル'))+'</span></button>';}
 (function(){try{var st=document.createElement('style');st.textContent='#btCmd .btCmdMinB{position:absolute;top:4px;right:8px;z-index:3;width:34px;height:26px;padding:0;border-radius:8px;border:1px solid #4a5566;background:#14171d;color:#e8eef4;font-size:16px;line-height:1;cursor:pointer;box-shadow:0 3px 0 #0e0e0c}';document.head.appendChild(st);}catch(e){}})();
