@@ -36568,9 +36568,24 @@ function nmDcFoeVehs(){var D=NM_DC,od=D.sd==='f'?'e':'f',o=[];if(D.to!=null&&D.t
   if(!o.length){try{nmSuNats().filter(function(k){return nmSuSide(k)===od;}).forEach(function(k){nmIjVehs(k).forEach(function(q){if(q.kind!=='gun')o.push({src:'sc',id:q.id,nm:q.nm});});});}catch(e){}}return o;}
 function nmDcAutoFace(v){var D=NM_DC;if(!v||v.src!=='map'||D.to==null||D.to<0)return null;try{var ve=v.eh,vca=ve.facing!=null?nmToBtFace(ve.facing,ve.boardId):btFaceToward(btAng(D.to,D.n));return btHitFacing(vca,D.to,D.n);}catch(e){return null;}}
 function nmDcVSel(i){var D=NM_DC,L=nmDcFoeVehs(),v=L[i];if(!v)return;D.vsel=i;D.vid=v.id;var st=(v.eh&&v.eh.st)||{};var af=nmDcAutoFace(v);D.vface=af||D.vface||'side';D.vfAuto=af;D.vmot=st.mv==='mot'||!!st.mv;D.vimm=!!st.imm;D.vce=v.eh?!!v.eh.ce:false;D.pa=null;nmDcpDraw();}
-function nmDcCanPlace(){var D=NM_DC;if(!D)return false;if(D.pf)return false;if(D.tgtK==='veh'){if(D.vid==null)return false;}return true;}
-function nmDcPa(dr){var D=NM_DC,x=nmDcPlacer();if(!x)return;if(!dr){if(!nmAdOn()){btToast(T('出目を選んでください(オートダイスOFF)'));return;}dr=2+Math.floor(Math.random()*6)+Math.floor(Math.random()*6);}
-  var mor=(nmMcUnitMor(x)||{}).mor||7,drm=(D.inx?1:0)+(D.pldr||0),ok=dr+drm<=mor;if(!ok)x.pinned=true;D.pa={dr:dr,drm:drm,mor:mor,ok:ok,by:x.label};try{nmStSave();}catch(e){}
+function nmDcCanPlace(){var D=NM_DC;if(!D)return false;if(D.pf)return false;if(D.tgtK==='veh'){if(D.vid==null)return false;var x=nmDcPlacer();if(!x||!(D.pa&&D.pa.ok&&D.pa.by===x.label))return false;}return true;} /* sample-dcpa: 車両へはPAATCに合格した兵士だけ */
+/* sample-dcpa(ダルマ指示「PAATCを追加するサンプル」): 置く兵士(MMC)のPAATC。DRM=指揮官の修正(同じ編成・統制)+未熟兵/小国+1。DR≦士気で合格、失敗はPIN(3.7) */
+function nmDcPaInfo(){var D=NM_DC,x=nmDcPlacer();if(!x)return null;var L=nmCvLdr(nmGeList(D.slot).items||[],x),mor=(nmMcUnitMor(x)||{}).mor||7,inx=0;try{inx=(D.inx||nmCvPa1(x))?1:0;}catch(e){inx=D.inx?1:0;}return {x:x,L:L,mor:mor,inx:inx,drm:(L?L.c:0)+inx};}
+function nmDcPaHTML(chip){var D=NM_DC,I=nmDcPaInfo(),h='<div style="margin-top:10px;padding-top:8px;border-top:1px dashed #5a4a20">';
+  var prev=D.pa&&!D.pa.ok?'<div style="font-size:12px;color:#ff9a9a;margin-bottom:4px">'+T('前のPAATC')+': '+D.pa.by+' DR'+D.pa.dr+(D.pa.drm?(D.pa.drm>0?'+':'')+D.pa.drm:'')+'='+(D.pa.dr+D.pa.drm)+' &gt; '+T('士気')+D.pa.mor+' → '+T('失敗(PIN)。この兵士は置けない')+'</div>':'';
+  if(!I)return h+prev+'<div style="font-size:13px;color:#ff9a9a">'+T('PAATCを受けられる兵士(統制・PINでない分隊)がいません')+'</div></div>';
+  var tgt=I.mor-I.drm,pc=0;for(var a=1;a<=6;a++)for(var b=1;b<=6;b++)if(a+b<=tgt)pc++;
+  h+='<div style="font-size:13px;color:#ffd070;font-weight:800">PAATC <span style="font-weight:400;color:#8fa6bd;font-size:12px">'+T('(車両に置く前に・3.7)')+'</span></div>'+prev;
+  h+='<div style="font-size:13px;margin-top:3px">'+T('置く兵士')+' <b>'+I.x.label+'</b> '+T('士気')+I.mor+(I.L&&I.L.c?' ・ '+T('指揮官')+' '+I.L.x.label+' '+(I.L.c>0?'+':'')+I.L.c:'')+(I.inx?' ・ '+T('未熟兵')+' +1':'')+'　→　'+T('合格')+': DR ≦ '+tgt+'（'+Math.round(pc/36*100)+'%）</div>';
+  var P=D.pa&&D.pa.by===I.x.label?D.pa:null;
+  if(P&&P.ok)h+='<div style="margin-top:6px;padding:6px 10px;border-radius:8px;background:#10261a;color:#7ee0a0;font-size:14px;font-weight:800">✓ '+T('合格')+'（DR'+P.dr+(P.drm?(P.drm>0?'+':'')+P.drm:'')+'='+(P.dr+P.drm)+' ≦ '+P.mor+'）'+T('— DCを置けます')+'</div>';
+  else{h+='<div style="font-size:12px;color:#8fa6bd;margin-top:6px">'+T('出目(DR)')+'</div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:3px">'+[2,3,4,5,6,7,8,9,10,11,12].map(function(d){return chip(false,'nmDcPa('+d+')',String(d)).replace('padding:0 11px','padding:0 9px').replace('min-height:36px','min-height:34px'+(d+I.drm<=I.mor?';color:#7ee0a0':''));}).join('')+'</div>';
+    if(nmAdOn())h+='<button class="b" style="margin:6px 0 0;min-height:40px;padding:0 16px;font-weight:800;border:1.5px solid #ffd070;color:#ffd070" onclick="nmDcPa(0)">🎲 '+T('PAATCを振る')+'</button>';
+    h+='<div style="font-size:11px;color:#6d7c8e;margin-top:4px">'+T('失敗した兵士はPINになり置けない(次の分隊が受けられる)。指揮官はPAATCを受けない(3.7)')+'</div>';}
+  return h+'</div>';}
+function nmDcPa(dr){var D=NM_DC,I=nmDcPaInfo();if(!I)return;var x=I.x;if(!dr){if(!nmAdOn()){btToast(T('出目を選んでください(オートダイスOFF)'));return;}dr=2+Math.floor(Math.random()*6)+Math.floor(Math.random()*6);}
+  try{nmDcpSnap();}catch(e){}
+  var mor=I.mor,drm=I.drm,ok=dr+drm<=mor;if(!ok)x.pinned=true;D.pa={dr:dr,drm:drm,mor:mor,ok:ok,by:x.label};try{nmStSave();}catch(e){}
   try{logResult(function(){return {tabLbl:'MAP PAATC(DC)',text:x.label+' DR'+dr+(drm?'+'+drm:'')+' 士気'+mor+' → '+(ok?'成功':'失敗(PIN)'),color:ok?'#00aa55':'#cc3333',detail:null};});}catch(e){}nmDcpDraw();}
 function nmDcvHTML(P,box,sg){var V=P.veh,fv=nmAfv(V.id)||{},h='',D=NM_DC,R=D.vr||{};
   var drm=(V.mot?2:0)+(V.ce?1:0)+(V.imm?-2:0)+(V.face==='front'?1:V.face==='rear'?-1:0)+(P.cx?1:0);
@@ -36664,7 +36679,7 @@ function nmDcpDraw(){var D=NM_DC;if(!D){nmDcpClose();return;}var o=document.getE
         h+='<div style="font-size:12px;color:#8fa6bd">'+T(VL.length&&VL[0].src==='map'?'そのヘクスの車両':'シナリオの相手の車両')+'</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">'+VL.map(function(v,i){return chip(D.vsel===i,"nmDcVSel("+i+")",v.nm,'#ffd070');}).join('')+(VL.length?'':'<span style="color:#ff9a9a;font-size:13px">'+T('相手の車両がいません')+'</span>')+'</div>';
         if(D.vid!=null){h+='<div style="font-size:12px;color:#8fa6bd;margin-top:8px">'+T('置く面（DCを置く兵士のいる側。あとで車両が向きを変えても変わらない）')+(D.vfAuto?'<span style="color:#7ec8e3"> · '+T('地図から自動')+': '+T({front:'正面',side:'側面',rear:'背面'}[D.vfAuto])+'</span>':'')+'</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">'+[['front','正面 +1'],['side','側面 ±0'],['rear','背面 −1（TK#+1）']].map(function(f){return chip(D.vface===f[0],"nmDcpSet('vface','"+f[0]+"')",T(f[1]),'#ffd070');}).join('')+'</div>';
           h+='<div style="font-size:12px;color:#8fa6bd;margin-top:8px">'+T('車両の状態（位置DRの修正）')+'</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">'+chip(D.vmot,"nmDcpSet('vmot',"+(!D.vmot)+")",(D.vmot?'✓ ':'□ ')+'Motion/'+T('停止していない')+' +2','#ffd070')+chip(D.vce,"nmDcpSet('vce',"+(!D.vce)+")",(D.vce?'✓ ':'□ ')+'CE +1','#ffd070')+chip(D.vimm,"nmDcpSet('vimm',"+(!D.vimm)+")",(D.vimm?'✓ ':'□ ')+T('走行不能')+' −2','#ffd070')+'</div>';
-          h+='<div style="font-size:12px;color:#8fa6bd;margin-top:10px">'+T('車両に置く前のPAATCは、判定ボードの「PAATC」タイルで先に判定。失敗したMMCは置けない')+'</div>';}
+          h+=nmDcPaHTML(chip);}
         h+='</div>';}}
     h+='<div style="display:flex;gap:8px;margin-top:10px">'+(NM_DCU.length?'<button class="b" style="margin:0;min-height:50px;padding:0 14px;border:1.5px solid #c8a032;background:#2a2412;color:#ffd070;font-weight:800" onclick="nmDcpUndo()">↶ '+T('取り消す')+'</button>':'')+big('nmDcpPlace()',T('ここに置く（移動フェイズ）'),!!sel&&ndc>0&&nmDcCanPlace())+'</div>';
     h+='<div style="margin-top:6px;font-size:11px;color:#6d7c8e">'+T('1つの分隊はDCを2つ使えない。DCを使う分隊はAFPh(前進射撃フェイズ)に自分のFPでも撃てる')+'</div>';
