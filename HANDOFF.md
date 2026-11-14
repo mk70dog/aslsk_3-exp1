@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1245(push 済み)。確認待ち: 入れ替えのちらつき(iPad)。
+- 【2026-11-14 引き継ぎ】main=v1246(push 済み)。返事待ちなし。ダルマのログ(v1245)で入れ替え(ステップ1/2)は動作確認済み。
+- v1246: v850系の戻る/閉じるボタン統一(nmBkU の MutationObserver)の skip に #nmRmPop・#nmAcqCd を追加。
 - v1245: nmRrPick が nmRrGroups の elr/cas も受け付ける。nmRrRallyItems に .nmColBrk(左右の列の分かれ目)。nmIjSwap: ステップ1=nmIjClose/Open をやめて J.a/J.b 等を直接更新、ステップ2=#nmSwCover(暗い幕)→vfStage=0→BtRmClose(先に vfStage=0 にしないと v1037 の後処理で stageBack される)→nmIjClose/Open(仮カウンターは ijTmp を一時的に外して残す)→nmIjStageGo→nmStgHold が消えたら幕を外す。目標獲得カード: 目標の絵、マーカー無しは「ヘクスだけ」+外す(nmAcqDel)、地図に ACQ目標 ラベル。
 - v1244: nmIjSwap: ステップ1/2どちらも #nmIj/#btRm を写し(#nmSwGhost)でかぶせ、animation/transition を一時停止、150ms(ステップ2は450ms)後に写しを外す。
 - v1243: nmIjSwap(st2): #btRm を cloneNode して #btRmGhost(pointer-events none)でかぶせ、#nmIj を visibility hidden にしてから作り直し→nmIjStageGo→450ms 後に外す。v1242 の入れ替えはダルマのログ(v1242)で選択が残ることを確認済み。
