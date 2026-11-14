@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1270(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1270(push 済み)。返事待ち: sample-zone(初期配置の置ける範囲を青くせず地図のまま、まわりだけ暗く。NM_ZONE_PLAIN)。
 - v1270: #nmTv(シナリオ選択など)の背景ドット・ボタンと欄を枠なし暗色(style#nmTvDot)。
 - v1269: 爆薬パネルの車両へ置く時のPAATC(nmDcPaHTML・nmDcPa・nmDcCanPlace)。
 - v1268: 回復の自己回復不可(3.1e)時のバグ修正(nmRlGo・blk)。
