@@ -1,0 +1,15 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1133,height:744},deviceScaleFactor:2});const e=[];p.on('pageerror',x=>e.push(String(x).slice(0,300)));
+const V=process.argv[2]||'0';
+await p.goto('file:///home/claude/aslsk_3-exp1/index.html',{timeout:180000});await p.waitForTimeout(4000);
+await p.evaluate(()=>{S.scen=S.scen||{};S.scen.sel='S24';NAVTAB('scen');NAVTAB('los');try{LOS_PAGE();}catch(x){}});await p.waitForTimeout(3000);
+const css={0:'',1:'#nmCcSc *,#btRm *{font-weight:500!important}',2:'#nmCcSc *,#btRm *{font-weight:400!important}'}[V];
+await p.evaluate(async(css)=>{var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);await btEnsureGraph();S_LOS.pxA=null;S_LOS.friendHexes=[];S_LOS.enemyHexes=[];nmHqRcStart();await new Promise(r=>setTimeout(r,400));
+ nmCcScSet('an','GER');var vs=nmIjVehs(NM_CCS.dn).filter(v=>v.kind==='veh');nmCcScSet('dv',vs[0].id);
+ document.querySelectorAll('div').forEach(d=>{if(/自軍・敵軍を自動|攻撃する歩兵と、入って/.test(d.textContent)&&d.children.length<3)d.remove();});},css);
+await p.waitForTimeout(400);await (await p.$('#nmCcSc .ccBox')).screenshot({path:'/tmp/sc/er/fwA'+V+'.png'});
+await p.evaluate(async()=>{var C=NM_CCS,ob=nmCcScOb('GER');var pick=k=>{var x=ob.find(o=>o.label===k);if(x)nmCcScCnt('a',x.kind+'|'+x.id,1);};pick('4-4-7[2]');pick('5-4-8[E]');pick('9-1');
+ var o=document.getElementById('nmCcSc');[...o.querySelectorAll('button')].find(b=>/判定する/.test(b.textContent)).click();await new Promise(r=>setTimeout(r,900));
+ var R=nmCvCalc();var x=R.its.find(q=>q.x.kind!=='smc').x;NM_CV.paSel=x.pid;nmCvRe(NM_CV.n);await new Promise(r=>setTimeout(r,600));
+ document.querySelectorAll('div').forEach(d=>{if(/自軍・敵軍を自動|攻撃する歩兵と、入って/.test(d.textContent)&&d.children.length<3)d.remove();});});
+await p.waitForTimeout(300);await p.screenshot({path:'/tmp/sc/er/fwB'+V+'.png'});console.log(e);await b.close();})();
