@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1265(push 済み)。返事待ちなし。作業中: アプリの煙幕弾・WP(準備射撃の初め、味方の前進先への敵の射線をふさぐ)。
+- 【2026-11-14 引き継ぎ】main=v1266(push 済み)。返事待ちなし。
+- v1266: アプリの煙幕弾・WP(btAISmokeShots、btAIPrepFireの最初)。S24自己対戦でソ連シャーマンが煙幕を張るのを確認(エラー0)。
 - v1265: アプリがIFE(btAIOrdOptions)とsM(btAISmPick)を使う。
 - v1264: 対戦モードの煙幕弾・WP・IFE・HEAT・APDS・sM(btXAmmoBtns/btATTResolve/btFireIFE/btVSmEval/btSmokeFlip)。アプリ側はHEAT・APDSのみ(煙幕弾・WP・sM・IFEは未使用)。
 - v1263: 爆薬パネル、シナリオのユニットで判定した時はヘクス図を隠し地形ボタンだけ(dcTmp=eh.ccTmp)。
