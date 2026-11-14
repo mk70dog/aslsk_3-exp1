@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1269(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1269(push 済み)。返事待ち: sample-tvdot(シナリオ選択など#nmTvの背景ドット・ボタン枠なし暗め。style#nmTvDot)。
 - v1269: 爆薬パネルの車両へ置く時のPAATC(nmDcPaHTML・nmDcPa・nmDcCanPlace)。
 - v1268: 回復の自己回復不可(3.1e)時のバグ修正(nmRlGo・blk)。
 - v1267: マルチ判定の白兵戦を1タイル(ccx)→nmHqOpen('ccx')で3ボタン。
