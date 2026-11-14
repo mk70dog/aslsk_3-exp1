@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1259(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1260(push 済み)。返事待ちなし。
+- v1260: nmRMenuItems の NM_RM_VEH 分岐(配置パネル nmRmVehItems)で NM_RM_CUR=null。前の判定の NM_RM_CUR が残ると rmFull になっていた(v1180 と同類)。ダルマ選択A=横の小さいパネル。
 - v1259: nmRmPaItems の②指揮官の下に「指揮官はPAATCを受けない(3.7)…」。sample-paldr。臨機の白兵戦パネルへの同じ記述は未回答。
 - v1258: nmRmCvItems の臨機(C.react)で結果後に「この後は」①車両(撃破/走行不能/効果なし)②First Fire札(3.3.4、自動では付けない)③次の歩兵④✕で閉じる。次のユニットの攻撃への sub を臨機用に。sample-cvnext。未対応: 結果の上に次の攻撃者のCCV見出しが出て紛らわしい(提案済み・未回答)。
 - v1257: style#nmThinCss で #btRm/#nmIj/#nmCcSc の全要素 font-weight:400!important(:not(#nmZz1#nmZz2)で詳細度を上げ選択中ボタンも)。sample-ccthin 案B。
