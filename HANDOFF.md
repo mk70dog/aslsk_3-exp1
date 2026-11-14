@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1263(push 済み)。返事待ち: sample-btammo(対戦モードの煙幕弾・WP・IFE・HEAT・APDS・sM。画像 dev/samples/btammo.png。「実施」で main へ取り込み)。
+- 【2026-11-14 引き継ぎ】main=v1264(push 済み)。返事待ちなし。
+- v1264: 対戦モードの煙幕弾・WP・IFE・HEAT・APDS・sM(btXAmmoBtns/btATTResolve/btFireIFE/btVSmEval/btSmokeFlip)。アプリ側はHEAT・APDSのみ(煙幕弾・WP・sM・IFEは未使用)。
 - v1263: 爆薬パネル、シナリオのユニットで判定した時はヘクス図を隠し地形ボタンだけ(dcTmp=eh.ccTmp)。
 - v1262: btSpecNum(w,type)(depleteByYear の年/年月キー、シナリオ dt 以前で最新)・btHeatDateOk(独5/42・伊9/42・他1/43)。btAPCRNum→btSpecNum。判定(nmVfBuild VTT)に APDS/HEAT、btOrdEval Case11(APDS)、btTKBasic(APDS=apcr列→空欄AP、HEAT=HEAT_TO_KILL_TABLE)、btVTTOdds/nmVfTH 欠乏(eh.apdsOut/heatOut)、付随攻撃 AP2/APCR・APDS1/HEAT=HEの1列下。未対応: HEATの歩兵(建物内)目標、対戦モードの煙幕・WP・IFE・HEAT・APDS。sample-heatapds。
 - v1261: 動作ログ→システムログ(nmDbgOpen 見出し・メニュー・トースト)。消去ボタン削除。nmDbgText=nmDbgHead(版・シナリオ・T/フェイズ・モード・開いている画面・NM_RM_CUR・画面/UA)+前回+今回(nmDbgPack で同じ行×N・2行繰り返し×N にまとめる、記録自体は保持)。logResult を包み「判定 タブ: 結果」を記録。上限1000件(保存も)。30秒超の停止は「スリープ・画面ロック・アプリ切替の可能性」。
