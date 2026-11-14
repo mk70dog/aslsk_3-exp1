@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1239(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1240(push 済み)。返事待ちなし。
+- v1240: 見える範囲の番号を nmViewLbl(i)=A,B,C… に。
 - v1239: sample-acq を main に(NM_ACQ_SHOW・nmAcqTog・nmAcqList・nmAcqSVG・nmAcqCardHTML、凡例 nmStLegendHTML の ACQ をボタンに、btToastAvoid に nmAcqCd)。
 - v1238: nmIjSwap の照合を same()(boardId/col/row/veh/gun/grp)に。nmScrollKeep1(一度だけ戻す)を新設し nmAtkAsk の開閉と nmRmShow ラッパーで使う(nmScrollKeep の見張り=1秒は指の地図スクロールを引き戻していた)。nmAtkPlace: 目標(重み4)・攻撃できるスタック(3)・線上の点(1)と重なる数で、右/左/中央×下/中/上の9か所から最小を選ぶ。
 - v1237: sample-swap(nmIjSwap)と sample-viewmark(nmViewMarkSVG・一覧の番号丸)を main に。
