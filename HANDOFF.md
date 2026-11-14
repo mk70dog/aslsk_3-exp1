@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1249(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1250(push 済み)。返事待ちなし。
+- v1250: 高度優位(SK4 丘、QRDC Case17=VTTにもTEM)。btOrdEval は ha(o.haOv 手動、迫撃砲0)を VTT/ITT 両方に、迫撃砲は TEM を命中に入れず btITTResolve で IFT へ(林−1)。btHaElev(a,t)=目標が高い＋移動中の目標が射手LOSの稜線を越えた直後は無し(nmRtCrestSide)。btVMGEval・歩兵射撃にも。判定: nmHaOf(P,a,t,mtr)、nmElevRowHTML(⑤「高所」行、vf/vm/lw、P.ov.elev)、nmVfAttTem/IFE/CH反転/FFMO に高所。sample-elevrow。
 - v1249: NM_TB_ITEMS に対戦の g:1 項目(bundo/bredo/bab/bside/bdice/brb、ref/card は共通)を追加。NM_TBE_SEL='#nmFtAct>button,#nmFullTabs>button'、nmTbeG で g(1/2)判定。並べ替えは同じバーのボタンの order の位置(slots)だけ入れ替える。しまってあるボタンの欄はモードに合わせて表示。メニューボタン(≡)は対象外。
 - v1248: sample-tbedit を main に(NM_TBE・nmTbeOn/Off・nmTbeDecor・nmTbeHide/Show・nmTbeBarDraw、長押し/ドラッグは document の pointer 捕捉)。
 - v1247: NM_PHU(フェイズ未選択): nmMfOpen/nmVfOpen/nmVmOpen/nmLwOpen を setTimeout(0) で包んで true、フェイズボタンの onclick 先頭で false。true の間はフェイズ行の後に「↑フェイズを選んでください」を出して return it(4か所)。sample-viewelev(nmViewElevTag)を main に。
