@@ -32324,9 +32324,16 @@ function btCmdHTML(){
   h+=btResHTML(); /* v1212: S6 戦術予備 */
   if(cmdH.indexOf('data-btof')<0){var ofb=btOFirePanelHTML();if(ofb)h+='<div data-btof="1">'+ofb+'</div>';}
   setTimeout(btCmdMeasure,0);
-  if(h&&btMapFullOn()&&window.NM_BT_CMDPOP!==false)return '<div id="btCmd" class="bt-cmd bt-cmdpop"><div class="btCmdGrip" onpointerdown="btCmdDrag(event)" title="'+T('ドラッグで移動')+'"><span></span></div>'+h+'<div class="btPopRz" onpointerdown="btCmdResize(event)" title="'+T('ドラッグで大きさを変える')+'"></div></div>'; /* v1219(ダルマ「マップは常に全画面表示で右バー下バーとポップアップでゲームを操作進行する」): 全画面では指示カードを動かせるポップアップに */
+  /* sample-cmdmin(ダルマ指示「パネルを最小化して下バーに入れるボタン追加」): 右上の▾で最小化→下のバーに札(タップで戻す) */
+  window.__btCmdHas=!!h;if(h){var lb=String(h).replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();BT_CMDMIN_LBL=lb.slice(0,22)+(lb.length>22?'…':'');}
+  if(h&&btMapFullOn()&&window.NM_BT_CMDPOP!==false&&BT_CMDMIN)return '';
+  if(h&&btMapFullOn()&&window.NM_BT_CMDPOP!==false)return '<div id="btCmd" class="bt-cmd bt-cmdpop"><div class="btCmdGrip" onpointerdown="btCmdDrag(event)" title="'+T('ドラッグで移動')+'"><span></span></div><button class="btCmdMinB" title="'+T('最小化(下のバーへ)')+'" onclick="event.stopPropagation();BtCmdMin(1)">▾</button>'+h+'<div class="btPopRz" onpointerdown="btCmdResize(event)" title="'+T('ドラッグで大きさを変える')+'"></div></div>'; /* v1219(ダルマ「マップは常に全画面表示で右バー下バーとポップアップでゲームを操作進行する」): 全画面では指示カードを動かせるポップアップに */
   return h?'<div id="btCmd" class="bt-cmd">'+h+'</div>':'';
 }
+var BT_CMDMIN=false,BT_CMDMIN_LBL='';
+function BtCmdMin(on){BT_CMDMIN=!!on;Draw();}
+function btCmdMinChip(){if(!BT_CMDMIN||!window.__btCmdHas)return '';var hot=BT.pend==='react';return '<button class="cd" onclick="event.stopPropagation();BtCmdMin(0)" style="flex:0 0 auto;max-width:42%;flex-direction:row;align-items:center;gap:8px;padding:0 12px;cursor:pointer;font:inherit;color:#e8eef4;border:'+(hot?'1.5px solid #ff9040':'1px solid #c8a032')+';background:#2a2412"><span style="color:#ffd070;font-size:15px">▴</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:bold">'+(BT_CMDMIN_LBL||T('パネル'))+'</span></button>';}
+(function(){try{var st=document.createElement('style');st.textContent='#btCmd .btCmdMinB{position:absolute;top:4px;right:8px;z-index:3;width:34px;height:26px;padding:0;border-radius:8px;border:1px solid #4a5566;background:#14171d;color:#e8eef4;font-size:16px;line-height:1;cursor:pointer;box-shadow:0 3px 0 #0e0e0c}';document.head.appendChild(st);}catch(e){}})();
 function btCmdMeasure(){
   try{var de=document.documentElement,tb=document.querySelector('#main .los-tb'),c=document.getElementById('btCmd');
     de.style.setProperty('--lostbh',(tb?tb.offsetHeight:56)+'px');de.style.setProperty('--btcmdh',(c?c.offsetHeight:0)+'px');
@@ -43598,6 +43605,7 @@ function btFullBars(on){
   var bh='<div class="cd" style="flex:0 1 32%">'+c1+'</div><div class="cd" style="flex:0 1 30%">'+c3+'</div><div class="cd" style="flex:1 1 0">'+c2+'</div>';
   var slim=sideOn&&window.NM_BT_SLIM!==false;
   if(slim){var ls2=last?[].concat(last).map(function(x){return String(x).replace(/<[^>]*>/g,'');}).slice(-2).join(' ／ ').replace(/[<>&]/g,''):T('記録はまだありません');bh='<div class="cd" style="flex:1 1 0;flex-direction:row;align-items:center;gap:10px;padding:0 10px"><span class="t2" style="color:#8899aa;flex:0 0 auto">'+T('最後の記録')+'</span><span class="t1" style="font-size:13px;font-weight:bold;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+ls2+'</span></div>';} /* sample-btside3(ダルマ「最後の記録 タスクバーに表示」): 下の帯は最後の記録の1行だけ */
+  bh=btCmdMinChip()+bh; /* sample-cmdmin */
   b.classList.toggle('slim',slim);
   if(bh!==BT_FB_H.b){b.innerHTML=bh;BT_FB_H.b=bh;}
   try{btLosCardSync(sideOn&&slim);}catch(e){console.log('btLosCard',e);}
