@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1243(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1244(push 済み)。確認待ち: 入れ替えでの画面のちらつき(iPad 実機)。
+- v1244: nmIjSwap: ステップ1/2どちらも #nmIj/#btRm を写し(#nmSwGhost)でかぶせ、animation/transition を一時停止、150ms(ステップ2は450ms)後に写しを外す。
 - v1243: nmIjSwap(st2): #btRm を cloneNode して #btRmGhost(pointer-events none)でかぶせ、#nmIj を visibility hidden にしてから作り直し→nmIjStageGo→450ms 後に外す。v1242 の入れ替えはダルマのログ(v1242)で選択が残ることを確認済み。
 - v1242: ダルマの動作ログ(v1239): A の PaK38 は nmIjSet('place',2)=仮のカウンター(ijTmp)。nmIjSwap→nmIjClose→nmIjTmpClear で消えていた。nmIjSwap で ijTmp を一時的に外して閉じ、開き直す前に ijTmp を戻して ijB を反転。往復で選択が残ることを確認。
 - v1241: nmIjSwap の find(): same→位置+id→id→名前の順。
