@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1248(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1249(push 済み)。返事待ちなし。
+- v1249: NM_TB_ITEMS に対戦の g:1 項目(bundo/bredo/bab/bside/bdice/brb、ref/card は共通)を追加。NM_TBE_SEL='#nmFtAct>button,#nmFullTabs>button'、nmTbeG で g(1/2)判定。並べ替えは同じバーのボタンの order の位置(slots)だけ入れ替える。しまってあるボタンの欄はモードに合わせて表示。メニューボタン(≡)は対象外。
 - v1248: sample-tbedit を main に(NM_TBE・nmTbeOn/Off・nmTbeDecor・nmTbeHide/Show・nmTbeBarDraw、長押し/ドラッグは document の pointer 捕捉)。
 - v1247: NM_PHU(フェイズ未選択): nmMfOpen/nmVfOpen/nmVmOpen/nmLwOpen を setTimeout(0) で包んで true、フェイズボタンの onclick 先頭で false。true の間はフェイズ行の後に「↑フェイズを選んでください」を出して return it(4か所)。sample-viewelev(nmViewElevTag)を main に。
 - v1246: v850系の戻る/閉じるボタン統一(nmBkU の MutationObserver)の skip に #nmRmPop・#nmAcqCd を追加。
