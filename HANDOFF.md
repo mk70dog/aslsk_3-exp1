@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1227(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1228(push 済み)。返事待ちなし。
+- v1228: ダルマ報告「国籍がダブっている？」(ヘクスに配置の画面 nmRmVehItems: 側タブ[独][ソ]と国籍タブ[ソ連][独軍]の2段)。側タブの表記を nmIjSdLbl(独軍/ソ連)に、国籍タブは選んでいる側の国籍(mine)が2つ以上の時だけ。NM_PL.nat は mine の中から選ぶ。
 - v1227: ダルマ「このヘクスに攻撃可能 ヘクスをタップしたとき攻撃する国籍を選択」(判定モードのツール「選択したスタックを攻撃」)→「該当カウンターのヘクス枠に色・LOSライン」→「CA変更が必要な場合は表示・LOSラインを変える」→「遮断のLOSはいらない」→色=シアン/オレンジ・CA=案2。nmAtkAsk(tn,ti,asd): 攻撃する国籍ボタン(相手マーカーが無い側は無効)、NM_ATK.open+MutationObserver で閉じたら再描画。nmAtkSVG(btRmShowSVG に追加): 攻撃できるスタックのヘクス枠(国籍色)・LOS線(nmAtkCol, NM_ATK_PALS[2])・ラベル(通る/妨害+n 距離h)、遮断は描かない。nmAtkCA(eh,m,tn): 車両(tca→facing)・砲(facing)の btSpinesTo/btCACost(砲塔種類・林建物×2)、向き未設定は表示なし。NM_ATK_STY=2: CA変更の線は点線+橙の矢印、ヘクス上に CAk バッジ。サンプル: ブランチ sample-atknat。sample-thrnat(対戦モード版)は採用なし。
 - v1226: ダルマ「実施」(対戦モードの見える範囲も戦術カードに)。nmRmPanelHTML は btActive() でも view なら nmViewCardHTML を返す(対戦モードは右下 right:nmtbw+12px・bottom に btfbot を足す=左下の指示カードと重ならない)。btRmShowHTML は view なら ''、開始前の btCmd の空判定も view を除外。nmViewBdTog は ON で NM_TOOL='view'(長押しメニューから出した時もタップで内訳)。
 - v1225: ダルマ「(見える範囲の)表示を小さく わかりやすく カッコよくする サンプルx3」→A/B/C(ブランチ sample-losview)→「B」。nmRmPanelHTML で o.k==='view' は新設 nmViewCardHTML(o,N) を返す(id=nmRmPop のままでドラッグ可。left:78px=方位磁針を避ける・幅300px)。ヘッダー LOS+見える範囲+✕、数字タイル3つ(c0+c1/c0/c1)、凡例、内訳ONでタップ先の結果行(緑=妨害なし/黄=妨害+合計と内訳/赤=見えない+さえぎる)。対戦モードの帯の中の表示(btRmShowHTML)は変更なし。
