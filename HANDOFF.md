@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1255(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1256(push 済み)。返事待ちなし。
+- v1256: nmRmCvItems(臨機の白兵戦 C.react)に PAATC: 行の「🎲 PAATC」で NM_CV.paSel、DR 2〜12(nmCvPa(n,pid,v))と🎲振る(オートダイスONのみ、NM_AD_TWO)。paSel中は攻撃欄を隠す。nmCvPa で paSel=null。臨機時は .nmColBrk で 左=設定・右=ユニット/攻撃。sample-cvpaatc。
 - v1255: nmHqRcStart(臨機の白兵戦タイル)が地図にない時 nmCcScOpen() を歩兵モードで開いていた→ nmCcScOpen('veh')。判定で NM_CVREACT により臨機モード(nmCvOpen react)。
 - v1254: nmFtMenuHTML のシステム欄に「⇅ 同期」(nmGsSync、nmGsBtnOn()=判定モードの時だけ)。sample-mmsync 案B。
 - v1253: nmHqPickA の名前を 16px/900 → 13px/400(sample-pklabel 案C)。
