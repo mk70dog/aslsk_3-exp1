@@ -42784,7 +42784,7 @@ function btRmShowSVG(dl){var z='';try{z=nmSuZoneSVG(dl);}catch(e){}var a='';try{
 /* v1227(ダルマ指示「マップ上の該当するカウンターのヘクス枠線に色がつきlosラインが表示する」): 攻撃するスタックを選ぶ画面を開いている間、
    攻撃できるスタックのヘクスを国籍の色の枠で囲み、目標へLOSの線(緑=妨害なし・黄=妨害あり・赤の点線=見えない)を引く */
 function nmAtkSVG(dl){var A=NM_ATK;if(!A||!A.open||!document.getElementById('nmMvPk')||!BTG||!BTG.nodes[A.tn])return '';var c=btDispPt(A.tn,dl),h='';
-  A.L.forEach(function(x,i){var a=btDispPt(x.m,dl),col=x.blk?'#ff5050':(x.hd?'#ffd040':'#40ff60'),sc=NM_SIDE_LBL[x.sd].col,on=A.hi===i;
+  A.L.forEach(function(x,i){if(x.blk)return; /* ダルマ「遮断のLOSはいらない」: LOSが通らないスタックは地図に出さない(一覧には薄く残る) */var a=btDispPt(x.m,dl),col=x.blk?'#ff5050':(x.hd?'#ffd040':'#40ff60'),sc=NM_SIDE_LBL[x.sd].col,on=A.hi===i;
     if(!(!x.blk&&x.ca&&x.ca.k&&NM_ATK_STY===2))h+='<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="#000" stroke-width="'+(on?9:7)+'" stroke-opacity="0.45" stroke-linecap="round"/>'
       +'<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="'+col+'" stroke-width="'+(on?5:3.5)+'" stroke-linecap="round"'+(x.blk?' stroke-dasharray="10 7" stroke-opacity="0.8"':'')+'/>';
     var caN=!x.blk&&x.ca&&x.ca.k,STY=NM_ATK_STY;
@@ -42794,7 +42794,7 @@ function nmAtkSVG(dl){var A=NM_ATK;if(!A||!A.open||!document.getElementById('nmM
     h+='<polygon points="'+btHexPoly(x.m,dl)+'" fill="'+sc+'" fill-opacity="'+(x.blk?0.06:0.16)+'" stroke="'+(caN&&STY===3?'#ff9020':sc)+'" stroke-width="'+(on?6:4.5)+'"'+(x.blk?' stroke-opacity="0.55" stroke-dasharray="8 5"':'')+'/>';
     if(caN&&STY===3){h+='<polygon points="'+btHexPoly(x.m,dl)+'" fill="none" stroke="#ff9020" stroke-width="2" stroke-dasharray="4 4" transform="translate(0,0)" opacity="0.9"/>'+'<g><rect x="'+(a.x-34)+'" y="'+(a.y-48)+'" width="68" height="20" rx="4" fill="#ff9020" stroke="#000" stroke-width="1.2"/><text x="'+a.x+'" y="'+(a.y-33.5)+'" text-anchor="middle" font-size="12.5" font-weight="900" fill="#111" font-family="AppFont,AppJP,sans-serif">CA'+x.ca.k+' +'+x.ca.drm+'</text></g>';}});
   A.L.forEach(function(x){if(!x.blk&&x.ca&&x.ca.k&&NM_ATK_STY===2){var a=btDispPt(x.m,dl);h+='<g><circle cx="'+(a.x)+'" cy="'+(a.y-30)+'" r="18" fill="#ff9020" stroke="#000" stroke-width="1.5"/><text x="'+a.x+'" y="'+(a.y-25.5)+'" text-anchor="middle" font-size="12.5" font-weight="900" fill="#111" font-family="AppFont,sans-serif">CA'+x.ca.k+'</text></g>';}});
-  A.L.forEach(function(x){var a=btDispPt(x.m,dl),t=(x.blk?'✕ 遮断':(x.hd?'妨害+'+x.hd:'通る'))+' '+x.d+'h'+(!x.blk&&x.ca&&x.ca.k&&NM_ATK_STY===1?' ・CA+'+x.ca.drm:''),fs=13,w=8;for(var k=0;k<t.length;k++)w+=/[\u3000-\u9fff✕]/.test(t[k])?fs:fs*0.62;
+  A.L.forEach(function(x){if(x.blk)return;var a=btDispPt(x.m,dl),t=(x.blk?'✕ 遮断':(x.hd?'妨害+'+x.hd:'通る'))+' '+x.d+'h'+(!x.blk&&x.ca&&x.ca.k&&NM_ATK_STY===1?' ・CA+'+x.ca.drm:''),fs=13,w=8;for(var k=0;k<t.length;k++)w+=/[\u3000-\u9fff✕]/.test(t[k])?fs:fs*0.62;
     var px=a.x+(c.x-a.x)*0.42,py=a.y+(c.y-a.y)*0.42,col=x.blk?'#ff6060':(x.hd?'#ffd040':'#60ff80');
     h+='<g><rect x="'+(px-w/2)+'" y="'+(py-11)+'" width="'+w+'" height="22" rx="11" fill="#0a1420" fill-opacity="0.92" stroke="'+col+'" stroke-width="1.5"/><text x="'+px+'" y="'+(py+4.5)+'" text-anchor="middle" font-size="'+fs+'" font-weight="bold" fill="'+col+'" font-family="AppFont,AppJP,sans-serif">'+t+'</text></g>';});
   h+='<polygon points="'+btHexPoly(A.tn,dl)+'" fill="#ff3030" fill-opacity="0.16" stroke="#ff5050" stroke-width="4"/>'+nmFeatMarkSVG('tgt',c,nmNodeOcc(A.tn));
