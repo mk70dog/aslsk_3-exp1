@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1229(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1230(push 済み)。返事待ちなし。
+- v1230: ダルマ「ヘクス指定に変更」(画像=マーカーの無いヘクスで「攻撃されるスタックがありません」)。nmAtkAsk: マーカーが無くても続ける。asd(攻撃する国籍)→tsd=相手側、既定は前回の asd か 'e' が目標。teh=null の時は目標「ヘクス指定(マーカーなし)」。国籍ボタンは常に押せる。nmAtkGo→判定画面は目標ヘクス(対歩兵ITT)で開くことを確認。
 - v1229: ダルマ「見える 妨害あり 妨害なし を 独軍数値 ソ連数値 に変更 独軍選択で詳細表示」→sample-viewnat→「実施」。nmViewCardHTML の数字タイルを nmViewNatList(o)(国籍→見えるユニット[n,hex,d,hd,nm,img]。判定=friend/enemyHexes を nmIjEhNat(無ければ側の国籍)で分ける、対戦=BT.stacks を side で)に。タップ nmViewNat(k)→o.vnat で一覧。
 - v1228: ダルマ報告「国籍がダブっている？」(ヘクスに配置の画面 nmRmVehItems: 側タブ[独][ソ]と国籍タブ[ソ連][独軍]の2段)。側タブの表記を nmIjSdLbl(独軍/ソ連)に、国籍タブは選んでいる側の国籍(mine)が2つ以上の時だけ。NM_PL.nat は mine の中から選ぶ。
 - v1227: ダルマ「このヘクスに攻撃可能 ヘクスをタップしたとき攻撃する国籍を選択」(判定モードのツール「選択したスタックを攻撃」)→「該当カウンターのヘクス枠に色・LOSライン」→「CA変更が必要な場合は表示・LOSラインを変える」→「遮断のLOSはいらない」→色=シアン/オレンジ・CA=案2。nmAtkAsk(tn,ti,asd): 攻撃する国籍ボタン(相手マーカーが無い側は無効)、NM_ATK.open+MutationObserver で閉じたら再描画。nmAtkSVG(btRmShowSVG に追加): 攻撃できるスタックのヘクス枠(国籍色)・LOS線(nmAtkCol, NM_ATK_PALS[2])・ラベル(通る/妨害+n 距離h)、遮断は描かない。nmAtkCA(eh,m,tn): 車両(tca→facing)・砲(facing)の btSpinesTo/btCACost(砲塔種類・林建物×2)、向き未設定は表示なし。NM_ATK_STY=2: CA変更の線は点線+橙の矢印、ヘクス上に CAk バッジ。サンプル: ブランチ sample-atknat。sample-thrnat(対戦モード版)は採用なし。
