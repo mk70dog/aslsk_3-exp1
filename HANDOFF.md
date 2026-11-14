@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1275(push 済み)。返事待ち: sample-btab(対戦モードのA→Bを判定モードと同じに)。
+- 【2026-11-15 引き継ぎ】main=v1275(push 済み)。返事待ち: sample-btab(対戦モードのA→Bを判定モードと同じに)、sample-scvdot(シナリオカード#nmScVの背景ドット・枠なし暗色。style#nmScVDot)。
 - v1275: 対戦モードの指示パネル最小化(BT_CMDMIN・BtCmdMin・btCmdMinChip)。
 - v1274: 対戦モードの回復パネルを小さくした時のボタンが隠れるバグ修正。
 - v1273: 対戦モードのメニュー(btFtMenuHTML)にシステムログ。
