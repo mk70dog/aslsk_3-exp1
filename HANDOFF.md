@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1232(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1233(push 済み)。返事待ちなし。
+- v1233: ダルマ「カウンター選択でスポット判定を表示・カウンターを目標に設定・←でこの画面に戻る」。nmViewSpot(nat,i): pxA=起点・pxB=カウンター→LosRunPixel→nmIjOpen、J.retView={n,vnat}、J.nat=目標の国籍の相手(nmSuSide が違う国)・J.pick をその国の射手、J.tgt=nmIjTgts().indexOf(eh)。nmIjSetupDraw/nmIjDraw のヘッダーに J.retView の時だけ ← (nmIjRetView: nmIjClose→A/B を消す→BtRmShow('view')・vnat を戻す)。判定モードのみ(対戦モードの行は押せない)。
 - v1232: ダルマ「CA変更も表示」(見える範囲の国籍一覧)。nmViewNatList の各行に ca: 判定=nmAtkCA(eh,n,o.n)、対戦=btCA(s)(AFV は tca→vca・砲は vca、btSpinesTo/btCACost)。一覧に橙で「CA変更k(+drm)」。
 - v1231: ダルマ「ポップアップが重ならないように離す」(画像=通知「自軍・敵軍を自動で設定」が攻撃の選択画面に重なる)。nmAtkPlace(q,L,hgt): 目標から70px離し、攻撃するスタックが少ない側(左右)へ、nmPdBounds 内。btToastAvoid(el): nmMvPk/nmRmPop/nmAbBd/btLosCd/btSuPop/nmFtMn/nmIj/.bt-cmdpop と重なれば top:70px→下(bottom:nmsumh+90px)へ(固定配置は offsetParent=null なので getComputedStyle で判定)。
 - v1230: ダルマ「ヘクス指定に変更」(画像=マーカーの無いヘクスで「攻撃されるスタックがありません」)。nmAtkAsk: マーカーが無くても続ける。asd(攻撃する国籍)→tsd=相手側、既定は前回の asd か 'e' が目標。teh=null の時は目標「ヘクス指定(マーカーなし)」。国籍ボタンは常に押せる。nmAtkGo→判定画面は目標ヘクス(対歩兵ITT)で開くことを確認。
