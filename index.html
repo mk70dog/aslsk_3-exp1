@@ -38747,6 +38747,8 @@ function nmAtkAsk(tn,ti,asd){var H=nmHexOfNode(tn),E=nmAllAt(H,'e'),F=nmAllAt(H,
      return '<button class="b sm" style="margin:0;min-height:46px;display:flex;align-items:center;justify-content:flex-start;gap:8px;text-align:left;padding:4px 8px;border-left:4px solid '+NM_SIDE_LBL[x.sd].col+(ok?'':';opacity:.45')+'" onclick="event.stopPropagation();'+(ok?'nmAtkGo('+i+')':'')+'">'+nmMfTgtImg(x.eh)+'<span style="display:flex;flex-direction:column;min-width:0;flex:1"><b style="font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+nmIjSdLbl(x.sd,x.eh)+' '+nmMfTgtName(x.eh)+'</b><small style="font-size:11px;color:#9aa6b4">@'+BTG.nodes[x.m].nm+'　'+T('距離')+x.d+'　'+(x.blk?T('LOS遮断'):T('LOS通る')+(x.hd?'・'+T('妨害')+'+'+x.hd:''))+'</small></span><span style="flex:0 0 auto;font-size:11px;font-weight:bold;padding:2px 6px;border-radius:5px;border:1px solid #5a6676;color:#cfd8e3">'+T(x.w.t)+'</span></button>';}).join('')
      :'<div style="font-size:12px;color:#9aa6b4;padding:8px 4px">'+T('このスタックを攻撃可能な相手側のマーカーがありません')+'</div>');
   m.onclick=function(e){e.stopPropagation();};document.body.appendChild(m);
+  NM_ATK.open=true;try{var mo=new MutationObserver(function(){if(!document.body.contains(m)){mo.disconnect();if(NM_ATK&&NM_ATK.tn===tn&&!document.getElementById('nmMvPk')){NM_ATK.open=false;Draw();}}});mo.observe(document.body,{childList:true});}catch(e){} /* v1227: 閉じたら地図の線を消す */
+  Draw();
   setTimeout(function(){var f=function(e){var mm=document.getElementById('nmMvPk');if(mm&&!mm.contains(e.target)){mm.remove();document.removeEventListener('pointerdown',f,true);}};document.addEventListener('pointerdown',f,true);},0);}
 function nmAtkGo(i){var A=NM_ATK;if(!A||!A.L[i])return;var x=A.L[i],o=document.getElementById('nmMvPk');if(o)o.remove();var n=x.m,tn=A.tn;
   nmIjMenuAt(n);NM_SEL_EH=x.eh;NM_FT_SEL=x.eh;NM_TGT_EH=A.teh;
@@ -42772,7 +42774,19 @@ function btRmLineB(a,c){return '<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2=
 function btRmPillB(a,c,t){var dx=c.x-a.x,dy=c.y-a.y,L=Math.hypot(dx,dy)||1,nx=-dy/L,ny=dx/L;if(ny>0||(ny===0&&nx<0)){nx=-nx;ny=-ny;} /* 線の上側(画面の上寄り)に出す */
   var x=(a.x+c.x)/2+nx*24,y=(a.y+c.y)/2+ny*24,w=Math.max(46,t.length*8+14);
   return '<g transform="rotate('+(-S_LOS.viewRot)+' '+x+' '+y+')"><rect x="'+(x-w/2)+'" y="'+(y-11)+'" width="'+w+'" height="22" rx="11" fill="#141a22" stroke="#ffd040" stroke-width="1.5"/><text x="'+x+'" y="'+(y+5)+'" text-anchor="middle" font-size="13" font-weight="900" fill="#ffd040" font-family="AppFont,AppJP,monospace">'+t+'</text></g>';}
-function btRmShowSVG(dl){var z='';try{z=nmSuZoneSVG(dl);}catch(e){}return z+btRmShowSVG0(dl);}
+function btRmShowSVG(dl){var z='';try{z=nmSuZoneSVG(dl);}catch(e){}var a='';try{a=nmAtkSVG(dl);}catch(e){}return z+btRmShowSVG0(dl)+a;}
+/* v1227(ダルマ指示「マップ上の該当するカウンターのヘクス枠線に色がつきlosラインが表示する」): 攻撃するスタックを選ぶ画面を開いている間、
+   攻撃できるスタックのヘクスを国籍の色の枠で囲み、目標へLOSの線(緑=妨害なし・黄=妨害あり・赤の点線=見えない)を引く */
+function nmAtkSVG(dl){var A=NM_ATK;if(!A||!A.open||!document.getElementById('nmMvPk')||!BTG||!BTG.nodes[A.tn])return '';var c=btDispPt(A.tn,dl),h='';
+  A.L.forEach(function(x,i){var a=btDispPt(x.m,dl),col=x.blk?'#ff5050':(x.hd?'#ffd040':'#40ff60'),sc=NM_SIDE_LBL[x.sd].col,on=A.hi===i;
+    h+='<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="#000" stroke-width="'+(on?9:7)+'" stroke-opacity="0.45" stroke-linecap="round"/>'
+      +'<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2="'+c.y+'" stroke="'+col+'" stroke-width="'+(on?5:3.5)+'" stroke-linecap="round"'+(x.blk?' stroke-dasharray="10 7" stroke-opacity="0.8"':'')+'/>';
+    h+='<polygon points="'+btHexPoly(x.m,dl)+'" fill="'+sc+'" fill-opacity="'+(x.blk?0.06:0.16)+'" stroke="'+sc+'" stroke-width="'+(on?6:4.5)+'"'+(x.blk?' stroke-opacity="0.55" stroke-dasharray="8 5"':'')+'/>';});
+  A.L.forEach(function(x){var a=btDispPt(x.m,dl),t=(x.blk?'✕ 遮断':(x.hd?'妨害+'+x.hd:'通る'))+' '+x.d+'h',fs=13,w=8;for(var k=0;k<t.length;k++)w+=/[\u3000-\u9fff✕]/.test(t[k])?fs:fs*0.62;
+    var px=a.x+(c.x-a.x)*0.42,py=a.y+(c.y-a.y)*0.42,col=x.blk?'#ff6060':(x.hd?'#ffd040':'#60ff80');
+    h+='<g><rect x="'+(px-w/2)+'" y="'+(py-11)+'" width="'+w+'" height="22" rx="11" fill="#0a1420" fill-opacity="0.92" stroke="'+col+'" stroke-width="1.5"/><text x="'+px+'" y="'+(py+4.5)+'" text-anchor="middle" font-size="'+fs+'" font-weight="bold" fill="'+col+'" font-family="AppFont,AppJP,sans-serif">'+t+'</text></g>';});
+  h+='<polygon points="'+btHexPoly(A.tn,dl)+'" fill="#ff3030" fill-opacity="0.16" stroke="#ff5050" stroke-width="4"/>'+nmFeatMarkSVG('tgt',c,nmNodeOcc(A.tn));
+  return h;}
 function btRmShowSVG0(dl){
   var o=btRmLive();if(!o)return '';var h='',c=btDispPt(o.n,dl);
   if(o.k==='nfire'){ /* v353: ここから撃てる敵 — 起点=双眼鏡、選んだ敵に照準と太い線 */
