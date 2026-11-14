@@ -30517,7 +30517,7 @@ function btRtpPanelHTML(){ /* v1281 */
   h+='</div>';
   if(c){var O=btRoutOpts(c.s,c.u),must=btMustRout(c.s,c.u);
     h+='<div style="font-size:12px;color:#8fa0b3">'+(R.low?'匍匐後退: 光っている隣接ヘクスをタップ(阻止なし・全MF)':'行き先をマップの<b style="color:#60e070">緑の円</b>でタップ(数字=MF、★=おすすめ、!=阻止あり)')+'</div>';
-    if(!R.low){O.dests.forEach(function(d){var N=BTG.nodes[d.n];h+='<div style="font-size:12px;padding:2px 0">'+(d.rec?'★ ':'・')+'<b>'+N.nm+'</b> '+N.terr+' '+d.mf+'MF'+(d.intd?' <span style="color:#ff8a80">阻止'+d.intd+'回</span>':'')+'</div>';});
+    if(!R.low){O.dests.forEach(function(d){var N=BTG.nodes[d.n];h+='<div style="font-size:12px;padding:2px 0">'+(d.rec?'★ ':'・')+'<b>'+N.nm+'</b> '+btTerrJP(N.terr)+' '+d.mf+'MF'+(d.intd?' <span style="color:#ff8a80">阻止'+d.intd+'回</span>':'')+'</div>';});
       if(!O.dests.length)h+='<div style="color:#ff8a80;font-size:12px">潰走できるヘクスがありません'+(must?'(おまかせで除去)':'')+'</div>';}
     h+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+(O.low.length?btBtn(R.low?'匍匐後退をやめる':'匍匐後退(1ヘクス)','BtRtpLow()',{on:true,sel:R.low}):'')+btBtn('おまかせ','BtRtpAuto()',{on:true})+(must?'':btBtn('留まる','BtRtpStay()',{on:true}))+'</div>';}
   if(R.res.length){h+='<div style="margin-top:6px;font-size:11.5px;color:#9fb0c3">'+R.res.map(function(t){return '✓ '+t;}).join('<br>')+'</div>';}
@@ -32298,7 +32298,7 @@ function btSelPanelHTML(){
   var s=BT.sel?btStackById(BT.sel):null;if(!s)return '';
   var col=BT_SIDE_COL[s.side];
   var h='<div style="margin-top:6px;border:1px solid '+col+'88;border-radius:3px;padding:4px 6px">';
-  var where=(s.n!=null&&s.n>=0)?BTG.nodes[s.n].nm+' '+BTG.nodes[s.n].terr+(BTG.nodes[s.n].tem?' TEM+'+BTG.nodes[s.n].tem:''):(T('盤外')+'('+btOffLbl(s)+')');
+  var where=(s.n!=null&&s.n>=0)?BTG.nodes[s.n].nm+' '+btTerrJP(BTG.nodes[s.n].terr)+(BTG.nodes[s.n].tem?' TEM+'+BTG.nodes[s.n].tem:''):(T('盤外')+'('+btOffLbl(s)+')');
   h+='<div style="font-size:12px;color:'+col+';font-weight:bold">'+BT_SIDE_NAME[s.side]+' @ '+where+(s.mel?' <span style="color:#ff6060">混戦中</span>':'')+'</div>';
   var ph=btPhId(),att=btSideNow(),mine=(!BT.app||s.side!==BT.app);
   var canSel=mine&&BT.started&&!BT.fire;
@@ -32467,7 +32467,7 @@ function btCmdCardHTML(){ // v288(ダルマ指示「なるべく縦幅が大き�
   var vm=(mv&&mv.veh&&mv.sid===s.id)?btVMovePanelHTML(true):null;
   var sn=btSideNow(),ph=BT_PHASES[BT.ph],canNext=!(BT.mv&&BT.app&&BT.mv.side===BT.app);
   var vu=vm?btStackById(mv.sid).u[0]:null,vv=vu&&btAfvData(vu.nm);
-  var title=vm?vm.head+' <span style="color:#8899aa">'+(vv?'AF'+vv.afFront.hull+'/'+vv.afSide.hull+' ':'')+btVehStatTxt(vu)+'</span>':'<span style="color:#ffd060;font-weight:bold">'+BT_SIDE_NAME[s.side]+' @ '+((s.n!=null&&s.n>=0)?BTG.nodes[s.n].nm+' '+BTG.nodes[s.n].terr:(T('盤外')+'('+btOffLbl(s)+')'))+'</span>';
+  var title=vm?vm.head+' <span style="color:#8899aa">'+(vv?'AF'+vv.afFront.hull+'/'+vv.afSide.hull+' ':'')+btVehStatTxt(vu)+'</span>':'<span style="color:#ffd060;font-weight:bold">'+BT_SIDE_NAME[s.side]+' @ '+((s.n!=null&&s.n>=0)?BTG.nodes[s.n].nm+' '+btTerrJP(BTG.nodes[s.n].terr):(T('盤外')+'('+btOffLbl(s)+')'))+'</span>';
   var rg=!!(BT.regroup&&btRegroupOK(s)),hb=!rg; // v313: 編成を変える画面以外は、右側に見出しと帯の内容をまとめる
   var head0=h;
   h='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+(btMapFullOn()?'':btPhStepSpans()+btBtn(T('次へ')+' ▶','BtNext()',{dim:!canNext,st:P}))+(btMapFullOn()?'':btOffInlineHTML())+((hb&&!btMapFullOn())?'':(btMapFullOn()&&!rg?'':'<span style="color:#404858">│</span>')+title)+'</div>'; /* v1219: 全画面では盤外の一覧は上の帯にあるので出さない・見出しを左に */
@@ -34358,7 +34358,7 @@ function btLosABHTML(){
   h+='<span style="font-size:11px;color:#9ab">'+(L.rc?'右クリック: 1回目=起点(A)、2回目=目標(B)(左クリックは通常の操作)':'地図をタップ: 1回目=起点(A)、2回目=目標(B)(部隊は動きません)')+'</span>';
   h+=btBtn('測定を終わる','BtLosABEnd()')+'</div>';
   var A=L.a!=null?BTG.nodes[L.a]:null,B=L.b!=null?BTG.nodes[L.b]:null;
-  h+='<div style="font-size:12px;color:#ccddee;margin-top:3px">A: <b>'+(A?A.nm+' ('+A.terr+(A.elev?' 高度'+A.elev:'')+')':'—')+'</b>　B: <b>'+(B?B.nm+' ('+B.terr+(B.elev?' 高度'+B.elev:'')+')':'—')+'</b></div>';
+  h+='<div style="font-size:12px;color:#ccddee;margin-top:3px">A: <b>'+(A?A.nm+' ('+btTerrJP(A.terr)+(A.elev?' 高度'+A.elev:'')+')':'—')+'</b>　B: <b>'+(B?B.nm+' ('+btTerrJP(B.terr)+(B.elev?' 高度'+B.elev:'')+')':'—')+'</b></div>';
   if(A&&B){
     var r=btLosABEval(L.a,L.b);
     h+='<div style="font-size:13px;margin-top:3px"><b style="color:'+(r.ok?'#60e060':'#ff5050')+'">'+(r.ok?'LOSあり':'LOSなし')+'</b>　距離 '+r.dist+'ヘクス';
@@ -43884,7 +43884,7 @@ function btPopUnitHTML(s,u){
 function btStackPopupHTML(n,terr){
   var N=BTG.nodes[n],ss=btStacksAtN(n);
   var h='<div style="background:#0c1018;border:1px solid #c0a030;border-radius:6px;max-width:min(560px,100%);width:100%;max-height:82vh;overflow-y:auto;padding:8px 10px;box-shadow:0 8px 30px rgba(0,0,0,.7)">';
-  h+='<div style="display:flex;align-items:center;gap:8px"><b style="font-size:15px;color:#ffd060">'+N.nm+'</b><span style="font-size:12px;color:#ccddee">'+N.terr+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')+'</span>';
+  h+='<div style="display:flex;align-items:center;gap:8px"><b style="font-size:15px;color:#ffd060">'+N.nm+'</b><span style="font-size:12px;color:#ccddee">'+btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')+(N.elev?' 高度'+N.elev:'')+'</span>';
   h+='<button class="tb-reset" style="'+BT_BS+';margin-left:auto;padding:3px 10px" onclick="BtPopClose()">✕</button></div>';
   var ex=[];
   if(BT.smoke&&BT.smoke[n])ex.push('煙幕 +'+BT.smoke[n].v);
