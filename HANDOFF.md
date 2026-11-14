@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1264(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1265(push 済み)。返事待ちなし。作業中: アプリの煙幕弾・WP(準備射撃の初め、味方の前進先への敵の射線をふさぐ)。
+- v1265: アプリがIFE(btAIOrdOptions)とsM(btAISmPick)を使う。
 - v1264: 対戦モードの煙幕弾・WP・IFE・HEAT・APDS・sM(btXAmmoBtns/btATTResolve/btFireIFE/btVSmEval/btSmokeFlip)。アプリ側はHEAT・APDSのみ(煙幕弾・WP・sM・IFEは未使用)。
 - v1263: 爆薬パネル、シナリオのユニットで判定した時はヘクス図を隠し地形ボタンだけ(dcTmp=eh.ccTmp)。
 - v1262: btSpecNum(w,type)(depleteByYear の年/年月キー、シナリオ dt 以前で最新)・btHeatDateOk(独5/42・伊9/42・他1/43)。btAPCRNum→btSpecNum。判定(nmVfBuild VTT)に APDS/HEAT、btOrdEval Case11(APDS)、btTKBasic(APDS=apcr列→空欄AP、HEAT=HEAT_TO_KILL_TABLE)、btVTTOdds/nmVfTH 欠乏(eh.apdsOut/heatOut)、付随攻撃 AP2/APCR・APDS1/HEAT=HEの1列下。未対応: HEATの歩兵(建物内)目標、対戦モードの煙幕・WP・IFE・HEAT・APDS。sample-heatapds。
