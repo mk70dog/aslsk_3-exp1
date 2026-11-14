@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1230(push 済み)。返事待ちなし。
+- 【2026-11-14 引き継ぎ】main=v1231(push 済み)。返事待ちなし。
+- v1231: ダルマ「ポップアップが重ならないように離す」(画像=通知「自軍・敵軍を自動で設定」が攻撃の選択画面に重なる)。nmAtkPlace(q,L,hgt): 目標から70px離し、攻撃するスタックが少ない側(左右)へ、nmPdBounds 内。btToastAvoid(el): nmMvPk/nmRmPop/nmAbBd/btLosCd/btSuPop/nmFtMn/nmIj/.bt-cmdpop と重なれば top:70px→下(bottom:nmsumh+90px)へ(固定配置は offsetParent=null なので getComputedStyle で判定)。
 - v1230: ダルマ「ヘクス指定に変更」(画像=マーカーの無いヘクスで「攻撃されるスタックがありません」)。nmAtkAsk: マーカーが無くても続ける。asd(攻撃する国籍)→tsd=相手側、既定は前回の asd か 'e' が目標。teh=null の時は目標「ヘクス指定(マーカーなし)」。国籍ボタンは常に押せる。nmAtkGo→判定画面は目標ヘクス(対歩兵ITT)で開くことを確認。
 - v1229: ダルマ「見える 妨害あり 妨害なし を 独軍数値 ソ連数値 に変更 独軍選択で詳細表示」→sample-viewnat→「実施」。nmViewCardHTML の数字タイルを nmViewNatList(o)(国籍→見えるユニット[n,hex,d,hd,nm,img]。判定=friend/enemyHexes を nmIjEhNat(無ければ側の国籍)で分ける、対戦=BT.stacks を side で)に。タップ nmViewNat(k)→o.vnat で一覧。
 - v1228: ダルマ報告「国籍がダブっている？」(ヘクスに配置の画面 nmRmVehItems: 側タブ[独][ソ]と国籍タブ[ソ連][独軍]の2段)。側タブの表記を nmIjSdLbl(独軍/ソ連)に、国籍タブは選んでいる側の国籍(mine)が2つ以上の時だけ。NM_PL.nat は mine の中から選ぶ。
