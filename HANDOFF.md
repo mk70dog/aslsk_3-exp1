@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-14 引き継ぎ】main=v1236(push 済み)。返事待ち: スポット判定の「⇄ 攻撃側と目標を入れ替え」=ブランチ sample-swap(コード入り・未リリース。nmIjSwap: pxA/pxB を入れ替え→nmIjOpen し直し、攻撃側=元の目標の eh・目標=元の攻撃側の eh、判定パネル(vfStage)からなら nmIjStageGo まで。ヘッダーのボタンと判定パネルのメニュー項目)。
+- 【2026-11-14 引き継ぎ】main=v1236(push 済み)。返事待ち: ①見える範囲の一覧と地図を番号で対応(ブランチ sample-viewmark、nmViewMarkSVG・行の番号丸) ②スポット判定の「⇄ 攻撃側と目標を入れ替え」=ブランチ sample-swap(コード入り・未リリース。nmIjSwap: pxA/pxB を入れ替え→nmIjOpen し直し、攻撃側=元の目標の eh・目標=元の攻撃側の eh、判定パネル(vfStage)からなら nmIjStageGo まで。ヘッダーのボタンと判定パネルのメニュー項目)。
 - v1236: ダルマ「重ならないように離して表示する」(見える範囲のカードが起点・ユニットに重なる)。nmViewCardPos(o): 起点の画面位置 nmClientOfNode の左右・上下の反対の角へ(右=right:nmtbw+12px、左=left:78px、上=top:60px、下=bottom)。
 - v1235: ダルマ「(攻撃ツールの)この状態でヘクス選択するとマップがスクロールしてしまう」。nmAtkAsk の Draw と閉じた時の Draw、nmRmShow(見える範囲など)を nmScrollKeep で囲む(テスト: scrollTop 250→448 に飛んでいた→250 のまま)。
 - v1234: ダルマ「これも同様にする」(攻撃するスタックを選ぶ画面)。nmAtkGo: pxA=攻撃スタック・pxB=目標→nmIjOpen、J.retAtk={tn,asd}、J.nat=攻撃スタックの国籍・J.pick=nmIjShooters の同じ eh、J.tgt=nmIjTgts().indexOf(teh)(無ければ 'h')。ヘッダーの←は retView/retAtk 共通の nmIjRetView(retAtk なら nmIjClose→A/B を消す→nmAtkAsk(tn,0,asd))。旧来の nmMfOpen/nmVfOpen/nmVmOpen への分岐は失敗時のみ通る。
