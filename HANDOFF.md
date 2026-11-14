@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-15 引き継ぎ】main=v1278(push 済み)。返事待ち: sample-btab(対戦モードのA→Bを判定モードと同じに)。
+- 【2026-11-15 引き継ぎ】main=v1278(push 済み)。返事待ち: sample-btab(対戦モードのA→Bを判定モードと同じに)、sample-foecard(相手のスタックもタップでカード表示・見るだけ)。
 - v1278: 指示パネルのコンパクト化 案B(NM_CMD_STY='B' 既定、btFirePanelHTML・#btCmd.cmpB)。
 - v1277: クローズアップ(btCamShot)の縮小ループのバグ修正・btCamFreeで左のポップアップを避ける。
 - v1276: シナリオカード#nmScVの背景ドット・枠なし暗色(style#nmScVDot)。
