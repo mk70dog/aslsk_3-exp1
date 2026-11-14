@@ -38028,6 +38028,38 @@ function nmAbGripBind(el){var g=el.querySelector('.nmAbGrip');if(!g||g.__b)retur
 
 
 /* v833(ダルマ指示「表示の設定にツールバーにボタン表示している項目は削除」「ツールバーの設定を追加 並び順 追加削除を設定」) */
+/* sample(ダルマ指示「ツールバー ボタン ドラッグで場所移動と非表示」): ツールバーのボタンを長押し→編集モード。ボタンが揺れて右上に ✕(非表示)。ドラッグで並べ替え、下の「しまってあるボタン」をタップで戻す。「完了」で終了。並びと非表示は S.nmTbCfg(ツールバー表示設定と同じ)に保存 */
+var NM_TBE=false,NM_TBD=null;
+function nmTbeCss(){if(document.getElementById('nmTbeCss'))return;var st=document.createElement('style');st.id='nmTbeCss';
+  st.textContent='@keyframes nmTbWig{0%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}100%{transform:rotate(-2.5deg)}}html.nm-tbe #nmFtAct>button{animation:nmTbWig .28s infinite;position:relative;outline:1.5px dashed #ffd06099;outline-offset:-2px;touch-action:none}'
+   +'html.nm-tbe #nmFtAct>button .nmTbX{position:absolute;top:2px;right:2px;width:18px;height:18px;line-height:18px!important;font-size:14px!important;border-radius:50%;background:#e04848;color:#fff;font:900 12px/20px sans-serif;text-align:center;box-shadow:0 1px 3px #000a;z-index:3}'
+   +'html.nm-tbe #nmFtAct>button.nmTbDrag{opacity:.35}#nmTbGhost{position:fixed;z-index:99999;pointer-events:none;transform:scale(1.15);box-shadow:0 8px 22px #000c;border-radius:10px;outline:2px solid #ffd060;background:#2c3442!important;color:#e8eef4!important;display:flex;align-items:center;justify-content:center;border:0}#nmTbGhost .nmTbX{display:none}'
+   +'#nmTbeBar{position:fixed;z-index:9700;right:calc(var(--nmtbw,64px) + 14px);bottom:calc(var(--nmsumh,0px) + 14px);background:#14181f;border:1px solid #c8a032;border-radius:12px;padding:8px 10px;box-shadow:0 8px 26px #000c;color:#e8eef4;font:13px AppFont,AppJP,sans-serif;max-width:min(560px,80vw)}'
+   +'#nmTbeBar .hd{display:flex;align-items:center;gap:8px;margin-bottom:6px}#nmTbeBar .hd b{color:#ffd060}#nmTbeBar .tray{display:flex;flex-wrap:wrap;gap:6px}#nmTbeBar .tray button{display:inline-flex;align-items:center;gap:4px;height:32px;padding:0 10px;border-radius:8px;border:1px dashed #6a7a8a;background:#1c222c;color:#cfd8e2;font:inherit}#nmTbeBar .done{margin-left:auto;height:34px;padding:0 16px;border-radius:8px;border:0;background:#c8a032;color:#111;font-weight:900}';
+  document.head.appendChild(st);}
+function nmTbeOn(){nmTbeCss();NM_TBE=true;document.documentElement.classList.add('nm-tbe');nmTbeDecor();nmTbeBarDraw();}
+function nmTbeOff(){NM_TBE=false;document.documentElement.classList.remove('nm-tbe');document.querySelectorAll('#nmFtAct .nmTbX').forEach(function(x){x.remove();});var b=document.getElementById('nmTbeBar');if(b)b.remove();}
+function nmTbeId(btn){var oc=btn.getAttribute('onclick')||'';var it=NM_TB_ITEMS.filter(function(x){return x.g===1&&x.m(oc);})[0];return it?it.id:null;}
+function nmTbeDecor(){document.querySelectorAll('#nmFtAct>button').forEach(function(b){if(b.querySelector('.nmTbX'))return;var id=nmTbeId(b);if(!id)return;var x=document.createElement('span');x.className='nmTbX';x.textContent='−';x.addEventListener('pointerdown',function(e){e.preventDefault();e.stopPropagation();nmTbeHide(id);},true);b.appendChild(x);});}
+function nmTbeHide(id){var c=nmTbCfg();c.off[id]=true;S.nmTbCfg=c;try{saveState();}catch(e){}try{nmTbOrdApply();}catch(e){}nmTbeDecor();nmTbeBarDraw();}
+function nmTbeShow(id){var c=nmTbCfg();delete c.off[id];S.nmTbCfg=c;try{saveState();}catch(e){}try{nmTbOrdApply();}catch(e){}nmTbeDecor();nmTbeBarDraw();}
+/* ドラッグで並べ替え・長押しで編集モード */
+(function(){var lp=null,st=null;
+  document.addEventListener('pointerdown',function(e){var b=e.target.closest&&e.target.closest('#nmFtAct>button');if(!b)return;
+    if(NM_TBE){var id=nmTbeId(b);if(!id)return;e.preventDefault();e.stopPropagation();var r=b.getBoundingClientRect(),g=b.cloneNode(true);g.id='nmTbGhost';g.style.left=r.left+'px';g.style.top=r.top+'px';g.style.width=r.width+'px';g.style.height=r.height+'px';document.body.appendChild(g);b.classList.add('nmTbDrag');st={b:b,id:id,g:g,dy:e.clientY-r.top,dx:e.clientX-r.left};return;}
+    clearTimeout(lp);var x0=e.clientX,y0=e.clientY;lp=setTimeout(function(){lp=null;window.NM_TBE_EAT=Date.now()+700;nmTbeOn();},650);
+    var cancel=function(ev){if(ev.type==='pointermove'&&Math.hypot(ev.clientX-x0,ev.clientY-y0)<10)return;clearTimeout(lp);lp=null;document.removeEventListener('pointermove',cancel,true);document.removeEventListener('pointerup',cancel,true);};
+    document.addEventListener('pointermove',cancel,true);document.addEventListener('pointerup',cancel,true);},true);
+  document.addEventListener('click',function(e){if((NM_TBE||(window.NM_TBE_EAT&&Date.now()<window.NM_TBE_EAT))&&e.target.closest&&e.target.closest('#nmFtAct>button')){e.preventDefault();e.stopPropagation();}},true);
+  document.addEventListener('pointermove',function(e){if(!st)return;e.preventDefault();st.g.style.left=(e.clientX-st.dx)+'px';st.g.style.top=(e.clientY-st.dy)+'px';
+    var bs=[].slice.call(document.querySelectorAll('#nmFtAct>button')).filter(function(x){return x!==st.b&&x.offsetParent;});var tgt=null;bs.forEach(function(x){var r=x.getBoundingClientRect();if(e.clientY>r.top&&e.clientY<r.bottom)tgt=x;});
+    if(tgt){var r=tgt.getBoundingClientRect(),after=e.clientY>r.top+r.height/2;tgt.parentNode.insertBefore(st.b,after?tgt.nextSibling:tgt);}},true);
+  document.addEventListener('pointerup',function(){if(!st)return;var c=nmTbCfg(),ids=[].slice.call(document.querySelectorAll('#nmFtAct>button')).map(nmTbeId).filter(Boolean);
+    var rest=c.order.filter(function(id){return ids.indexOf(id)<0;});c.order=ids.concat(rest);S.nmTbCfg=c;try{saveState();}catch(e){}st.g.remove();st.b.classList.remove('nmTbDrag');st=null;try{nmTbOrdApply();}catch(e){}nmTbeDecor();},true);})();
+function nmTbeBarDraw(){var b=document.getElementById('nmTbeBar');if(!NM_TBE){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='nmTbeBar';document.body.appendChild(b);}var c=nmTbCfg();
+  var hid=NM_TB_ITEMS.filter(function(x){return x.g===1&&c.off[x.id];});
+  b.innerHTML='<div class="hd"><b>'+T('ツールバーの編集')+'</b><span style="color:#9fb2c8;font-size:12px">'+T('ドラッグで並べ替え・−でしまう')+'</span><button class="done" onclick="nmTbeOff()">'+T('完了')+'</button></div>'
+    +'<div style="font-size:11.5px;color:#9fb2c8;margin-bottom:4px">'+T('しまってあるボタン(タップで戻す)')+'</div><div class="tray">'+(hid.length?hid.map(function(x){return '<button onclick="nmTbeShow(\''+x.id+'\')">＋ '+T(x.lb)+'</button>';}).join(''):'<span style="color:#7f93a4;font-size:12px">'+T('なし')+'</span>')+'</div>';}
 var NM_TB_ITEMS=[
  {id:'hq',g:1,lb:'マルチ判定',m:function(o){return /nmHqOpen\(/.test(o);}},
  {id:'su',g:1,lb:'部隊の準備',m:function(o){return /nmSuOpen\(/.test(o);}}, /* v1151 */
