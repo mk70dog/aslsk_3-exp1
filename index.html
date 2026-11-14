@@ -41494,6 +41494,7 @@ function nmRmPaItems(n){var P=NM_PA;if(!P)return nmRMenuItems(n);var it=[],ns=nm
   var mm=nmPaMmc(),ld=nmPaLdrs();
   it.push({ic:'sel',t:'<span style="font-size:13px">'+T('① 突入するMMC（タップで追加）')+'</span>'});it.push({row:1,ic:'',t:'',btns:mm.map(function(u,i){return [nmPaCtr('u:'+P.nat+'|'+u.label,u.label,u.red?T(u.red):'',false),"nmPaAdd("+i+")"];})});
   if(ld.length)it.push({row:1,ic:'sel',t:'<span style="font-size:13px">'+T('② 指揮官')+'</span>',btns:[[nmPaCtr('',T('なし'),'',P.ldr==null),"nmPaLdr(-1)"]].concat(ld.map(function(l,i){return [nmPaCtr('u:'+P.nat+'|'+l.label,l.label,T('修正')+' '+sg(l.c),P.ldr===i),"nmPaLdr("+i+")"];}))});
+  it.push({ic:'info',t:'<span style="font-size:12px;color:#9fb2c8">'+T('指揮官はPAATCを受けない(3.7)。一緒にいるMMCのDRに指揮の修正を与える(指揮官自身はヘクスに入らなくてもよい)')+'</span>'}); /* v1259(ダルマ指示「指揮官は PAATC を必要としない 記述を追加」) */
   it.push({html:'<span class="nmColBrk nmPaBrk"></span>'});it.push({sep:1,lbl:T('選択済み')+'（'+P.list.length+'）'}); /* sample-paatc(ダルマ指示「選択候補は左側 選択済みは右側」): ここで左右の列を分ける */
   if(!P.list.length){it.push({ic:'info',t:T('左でMMCを選ぶと、ここに判定が出ます')});return it;}
   it.push({ic:'info',t:'<span style="font-size:12px;color:#9fb2c8">③ '+T('出目をタップで判定（🎲=自動で振る）')+'</span>'});
