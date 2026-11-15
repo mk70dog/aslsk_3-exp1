@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-15 引き継ぎ】main=v1282(push 済み)。返事待ち: sample-btmenu(対戦モードのメニューに全体マップON/OFF・パネルのアイコン標準/スモール、旧タブを消す。sample-mmtog・sample-cmdicon を含む)、sample-fxpop(演出設定を小窓で開く。btmenu込み)。
+- 【2026-11-15 引き継ぎ】main=v1283(push 済み)。返事待ちなし。
+- v1283: 全体マップON/OFF(S.nmMmOff)・パネルのアイコン(S.nmCmdIcon=sm→28px)を対戦メニューと表示の設定に、対戦メニューの旧タブ削除(appMenuHTML noTabs)、演出設定の小窓(BtFxPop/#btFxPop)。
 - v1282: 潰走の途中のヘクスを選ぶ(btRtpSteps・BT.rtp.path・btRoutSearch(s,mf,from,seenAt))、潰走パネルは btRtpSync で body 直下 #btRtpBox、地形名の日本語化(btTerrJP)。
 - v1281: 自軍の潰走の行き先を選ぶ(BT.rtp・btRoutOpts/btRoutExec/btRoutSide・btRtpPanelHTML・BtRtp*)、アプリ操作中はスタックのパネルを隠す(btCmdHTML の appBusy)。
 - v1280: 対戦モードのA→Bを判定モードと同じに(BtLosAB/btLosABTap/btLosCardSync/btLosABSVG)・相手のスタックもカード表示(btCmdCardOn・foe)。
