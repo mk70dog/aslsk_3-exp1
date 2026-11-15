@@ -39569,7 +39569,7 @@ function nmMmFrame(){try{var el=document.getElementById('nmMm'),w=document.getEl
   var bw=el.offsetWidth,bh=el.offsetHeight,bot=Math.min(wr.bottom,innerHeight);el.style.left=Math.max(4,wr.left+8)+'px';el.style.top=Math.max(4,bot-bh-8)+'px';}catch(e){}}
 function nmMmUpdate(){try{
   var el=document.getElementById('nmMm'),w=document.getElementById('losScrollWrap'),m=document.getElementById('losMapWrap');
-  var big=w&&m&&S.tab==='los'&&nmMmZOk()&&((w.scrollWidth>w.clientWidth+3)||(w.scrollHeight>w.clientHeight+3))&&(NM_MM.act||NM_MM.down); /* v585(ダルマ指示「全体マップは2倍以上に拡大した時、ドラッグしてスクロールする時に表示」): 拡大2倍以上で、地図をドラッグ/スクロールしている間だけ出し、止めて2秒で消す */
+  var big=w&&m&&!S.nmMmOff&&S.tab==='los'&&nmMmZOk()&&((w.scrollWidth>w.clientWidth+3)||(w.scrollHeight>w.clientHeight+3))&&(NM_MM.act||NM_MM.down); /* v585(ダルマ指示「全体マップは2倍以上に拡大した時、ドラッグしてスクロールする時に表示」): 拡大2倍以上で、地図をドラッグ/スクロールしている間だけ出し、止めて2秒で消す */
   try{document.documentElement.classList.toggle('nm-mmon',!!big);}catch(e){} /* v733: 全体マップが出ている間は左下の方位マークを隠す */
   if(!big){if(el)el.style.display='none';return;}
   el=nmMmBox();
@@ -40697,7 +40697,7 @@ function nmFtMenuHTML(){var id='nmFtMn',cl=function(fn){return 'event.stopPropag
   var tl=[['A→B '+T('起点Aと目標Bを選んでLOS'),"nmAbArm()"],['🔫 '+T('選択したスタックで攻撃'),"nmToolArm('fire')"],['🎯 '+T('選択したスタックを攻撃'),"nmToolArm('atk')"],['👁 '+T('このヘクスから見える範囲'),"nmToolArm('view')"],['🚶 '+T('このヘクスから移動(MPを数える)'),"nmToolArm('move')"]];
   var vw=[['⟳ '+T('画面を90°回転'),"nmFtRot()",'rot'],['↔ '+T('横幅に合わせる'),"nmFtFit('width')",'fit']].filter(function(x){return !(x[2]&&nmTbShown(x[2]));}).map(function(x){return [x[0],x[1]];}); /* v833: ツールバーに出ているものは除く */
   vw.unshift([T('ツールバー表示設定'),"nmTbCfgOpen()"]); /* v1127: 名称変更・アイコンなし */
-  var set=[['__BOTSEG__',''], /* v1125: 「下を電子パネルにする」「縦幅に合わせる」は非表示(ダルマ指示) */[(S.nmRealOn?'✓ ':'')+T('リアル盤へを表示'),"S.nmRealOn=!S.nmRealOn;try{saveState();}catch(e){}nmRbRender();nmFtActFill()"],[NM_MI.skin+' '+T('スキン')+': '+uiThemeName(),"uiThemePop()"],['▥ '+T('ツールバーの位置')+': '+T(nmTbPosName()),"nmTbPosPop()"],['🎲 '+T('オートダイス')+': '+(nmAdOn()?'ON':'OFF'),"nmAdToggle()"],['🔆 '+T('画面を消さない')+': '+(nmWlOn()?'ON':'OFF'),"nmWlToggle()"],['📝 '+T('システムログ')+'('+NM_DBG.buf.length+')',"nmDbgOpen()"]];
+  var set=[['__BOTSEG__',''],['🗺 '+T('全体マップ')+': '+(S.nmMmOff?'OFF':'ON'),"S.nmMmOff=!S.nmMmOff;try{saveState();}catch(e){}nmMmUpdate();nmFtActFill()"], /* sample-mmtog *//* v1125: 「下を電子パネルにする」「縦幅に合わせる」は非表示(ダルマ指示) */[(S.nmRealOn?'✓ ':'')+T('リアル盤へを表示'),"S.nmRealOn=!S.nmRealOn;try{saveState();}catch(e){}nmRbRender();nmFtActFill()"],[NM_MI.skin+' '+T('スキン')+': '+uiThemeName(),"uiThemePop()"],['▥ '+T('ツールバーの位置')+': '+T(nmTbPosName()),"nmTbPosPop()"],['🎲 '+T('オートダイス')+': '+(nmAdOn()?'ON':'OFF'),"nmAdToggle()"],['🔆 '+T('画面を消さない')+': '+(nmWlOn()?'ON':'OFF'),"nmWlToggle()"],['📝 '+T('システムログ')+'('+NM_DBG.buf.length+')',"nmDbgOpen()"]];
   var by={};main.forEach(function(x){by[x[0]]=x;});var dbg=set.pop(); /* v784(ダルマ指示「メインメニュー わかりやすく整理」): セクション分け・閉じるは最下部 */
   var sc=function(t){return '<div style="display:flex;align-items:center;gap:8px;margin:8px 2px 3px;font-size:12px;font-weight:700;color:#e0b850"><span>'+T(t)+'</span><span style="flex:1;height:1px;background:#39414f"></span></div>';};
   var gr=function(names,cols,extra){var L=names.map(function(n){return by[T(n)]||by[n];}).filter(Boolean).concat(extra||[]);if(!L.length)return '';return '<div style="display:grid;grid-template-columns:repeat('+cols+',1fr);gap:4px">'+L.map(function(x){return bt(x);}).join('')+'</div>';};
