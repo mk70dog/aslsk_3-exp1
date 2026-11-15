@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-15 引き継ぎ】main=v1299(push 済み)。返事待ちなし。
+- 【2026-11-15 引き継ぎ】main=v1300(push 済み)。返事待ちなし。
+- v1300: 射撃・突撃のグレーアウトと理由(btFireNoWhy・btAdvNoWhy・btDimBtn)。
 - v1299: btOffPick は選択を切り替えない・BT_CMDMIN=false(盤外から置けないバグ)。
 - v1298: 盤外の帯のカウンター B=34px(NM_OFFC_SZ で A44/C30重ね)。
 - v1297: 移動できない時のグレーアウト(btMoveNoWhy)。
