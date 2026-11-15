@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-15 引き継ぎ】main=v1284(push 済み)。返事待ち: sample-carmv(突撃移動→警戒移動の表記)、sample-fxcmp(アプリの射撃中パネルを隠す・演出カードのコンパクトA/B/C)、sample-rtldr2(潰走に指揮官の付き添い。sample-rtldr は昔の別物)。
+- 【2026-11-15 引き継ぎ】main=v1284(push 済み)。返事待ち: sample-carmv(突撃移動→警戒移動の表記)、sample-fxcmpb(アプリの射撃中パネルを隠す・演出カードB1/B2/B3。fxcmp込み)、sample-rtldr2(潰走に指揮官の付き添い。sample-rtldr は昔の別物)。
 - v1284: 上の帯に最後の記録・🏠建物の支配/ターン(btFullBars topInfo、下の帯 #btFullBot は非表示・--btfbot=0)、BtTopLog/BtTopVic の小窓、メニューの keep 項目(appMenuHTML x[2]==='keep')。
 - v1283: 全体マップON/OFF(S.nmMmOff)・パネルのアイコン(S.nmCmdIcon=sm→28px)を対戦メニューと表示の設定に、対戦メニューの旧タブ削除(appMenuHTML noTabs)、演出設定の小窓(BtFxPop/#btFxPop)。
 - v1282: 潰走の途中のヘクスを選ぶ(btRtpSteps・BT.rtp.path・btRoutSearch(s,mf,from,seenAt))、潰走パネルは btRtpSync で body 直下 #btRtpBox、地形名の日本語化(btTerrJP)。
