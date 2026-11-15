@@ -32525,6 +32525,7 @@ function btResHTML(){var s=BT.sel?btStackById(BT.sel):null;if(!btResOn(s))return
   return '<div style="margin-top:6px;border:1px solid #ff9a3d;border-radius:6px;padding:6px 8px;font-size:12px;color:#e8eef4"><div style="color:#ff9a3d;font-weight:800;margin-bottom:4px">'+T('戦術予備(SSR2)')+' <span style="color:#8899aa;font-weight:400">'+T('T3に北端または東端から進入')+'</span></div><div style="margin-bottom:5px">'+ch('MMC',c.mmc,5)+ch('SMC',c.smc,1)+ch('SW',c.sw,2)+'</div>'+btBtn(s.resv?'✓ '+T('戦術予備(T3)')+' → '+T('T1に入れる'):T('このスタックを戦術予備(T3)にする'),"BtResTog('"+s.id+"')",{on:!!s.resv})+'<div style="color:#8899aa;margin-top:4px">'+T('指定しない場合は、T1に入らなかったスタックを上限まで予備にします')+'</div></div>';}
 function btRtpSync(){var b=document.getElementById('btRtpBox');var h=(BT&&BT.rtp&&btPhId()==='RtPh'&&btActive&&btActive())?btRtpPanelHTML():'';if(!h){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='btRtpBox';document.body.appendChild(b);}b.innerHTML=h;}
 function btCmdHTML(){
+  if(BT_OFFPOP)setTimeout(btOffPopSync,0); /* sample-offpop */
   if(BT_FXPOP)setTimeout(btFxPopSync,0); /* v1283 */
   setTimeout(btRtpSync,0);
   if(!btAvail()||!btActive()||!btGraphReady()){setTimeout(btCmdMeasure,0);return '';}
@@ -32906,6 +32907,29 @@ function btStackFP(x){
 }
 
 // v312(ダルマ指示「盤外(進入待ち):を移動の右側に表示」): 盤外のスタック(一番上のカウンター・盤端・枚数)を、フェイズと「次のフェイズ」の右に小さく横一列
+/* sample-offpop: 盤外を上のバーの「盤外 n」ボタン→ポップアップ A=入口ごとのカード B=一覧(ユニット・FP) C=左の縦の帯 */
+var BT_OFFPOP=false;
+function btOffList(){return BT.stacks.filter(function(s){return (s.n==null||s.n<0)&&s.u.length&&(!BT.app||s.side!==BT.app);});}
+function btOffBtnHTML(){var L=btOffList();if(!L.length)return '';var hot=btPhId()==='MPh'&&btSideNow()===btHuman();
+  return '<button class="nb'+(hot?' go':'')+'" onclick="BtOffPop()" title="'+T('盤外の部隊')+'">▣ '+T('盤外')+' <span style="margin-left:4px;background:'+(hot?'#ffd060':'#39414f')+';color:'+(hot?'#14171d':'#e8eef4')+';border-radius:8px;padding:0 6px;font-size:11px">'+L.length+'</span></button>';}
+function BtOffPop(on){BT_OFFPOP=(on===undefined)?!BT_OFFPOP:!!on;btOffPopSync();}
+function btOffPick(id){BT_OFFPOP=false;btOffPopSync();BtSelect(id);}
+function btOffCtr(s,sz){var P=btVcPieces(s),out='';P.slice().reverse().forEach(function(pc){if(pc.src)out+='<img src="'+pc.src+'" style="width:'+sz+'px;height:'+sz+'px;border-radius:2px;display:block'+(pc.dim?';opacity:.5':'')+'">';});return out;}
+function btOffPopSync(){var el=document.getElementById('btOffPop');var L=BT_OFFPOP?btOffList():[];if(!L.length){if(el)el.remove();BT_OFFPOP=false;return;}
+  var sty=window.NM_OFF_STY||'A';if(!el){el=document.createElement('div');el.id='btOffPop';document.body.appendChild(el);}
+  var by={};L.forEach(function(s){var k=(btEdgeLbl(s.off)||'?')+(s.off2?'/'+btEdgeLbl(s.off2):'');(by[k]=by[k]||[]).push(s);});
+  var hd='<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px dashed #5d5a3a"><b style="letter-spacing:.15em;color:#e6d38a">'+T('盤外')+'</b><span style="font-size:11px;color:#a59f76">'+L.length+T('スタック')+(btPhId()==='MPh'?' ・ '+T('タップで選んで進入'):'')+'</span><span style="flex:1"></span><button onclick="BtOffPop(false)" style="width:28px;height:28px;border-radius:14px;border:1px solid #5d5a3a;background:transparent;color:#e6d38a;cursor:pointer">✕</button></div>';
+  var h='';
+  if(sty==='A'){h='<div style="position:fixed;inset:0;z-index:9440;background:rgba(5,7,10,.45)" onclick="BtOffPop(false)"></div><div style="position:fixed;z-index:9441;left:50%;top:calc(var(--btftop,44px) + 8px);transform:translateX(-50%);width:min(680px,94vw);max-height:70vh;overflow:auto;background:#16180f;border:1px solid #5d5a3a;border-top:3px solid #c8a032;border-radius:4px;font-family:AppFont,AppJP,monospace;color:#dfe6ee;box-shadow:0 14px 44px #000d">'+hd+'<div style="padding:8px 12px 12px">';
+    Object.keys(by).forEach(function(k){h+='<div style="font-size:11px;letter-spacing:.15em;color:#a59f76;margin:6px 0 4px">▼ '+k+T('から進入')+'</div><div style="display:flex;flex-wrap:wrap;gap:8px">';
+      by[k].forEach(function(s){var fp=btStackFP(s),sel=BT.sel===s.id;h+='<div onclick="btOffPick(\''+s.id+'\')" style="cursor:pointer;border:1px solid '+(sel?'#ffd060':(BT_SIDE_COL[s.side]||'#555'))+';background:rgba(0,0,0,.25);padding:6px;min-width:120px"><div style="display:flex;gap:2px">'+btOffCtr(s,34)+'</div><div style="display:flex;justify-content:space-between;margin-top:4px;font-size:11px"><span style="color:#c9c4a2">'+s.u.length+T('個')+(s.resv?' ・ T3':'')+'</span>'+(fp?'<b style="color:#fff">FP '+fp+'</b>':'')+'</div></div>';});
+      h+='</div>';});h+='</div></div>';}
+  else if(sty==='B'){h='<div style="position:fixed;inset:0;z-index:9440;background:rgba(5,7,10,.35)" onclick="BtOffPop(false)"></div><div style="position:fixed;z-index:9441;right:calc(var(--nmtbw,0px) + 10px);top:calc(var(--btftop,44px) + 8px);width:min(420px,92vw);max-height:76vh;overflow:auto;background:#16180f;border:1px solid #5d5a3a;border-top:3px solid #c8a032;border-radius:4px;font-family:AppFont,AppJP,monospace;color:#dfe6ee;box-shadow:0 14px 44px #000d">'+hd;
+    L.forEach(function(s){var fp=btStackFP(s),sel=BT.sel===s.id;h+='<div onclick="btOffPick(\''+s.id+'\')" style="cursor:pointer;display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid #2a2b20;border-left:3px solid '+(sel?'#ffd060':(BT_SIDE_COL[s.side]||'#555'))+'"><span style="flex:0 0 auto;font-size:11px;color:#a59f76;width:34px">'+(btEdgeLbl(s.off)||'')+'</span><div style="display:flex;gap:2px;flex:1;flex-wrap:wrap">'+btOffCtr(s,28)+'</div><div style="text-align:right;font-size:11px;color:#c9c4a2;white-space:nowrap">'+(fp?'<b style="color:#fff;font-size:13px">FP '+fp+'</b><br>':'')+s.u.length+T('個')+(s.resv?' T3':'')+'</div></div>';});h+='</div>';}
+  else{h='<div style="position:fixed;z-index:9441;left:8px;top:calc(var(--btftop,44px) + 8px);bottom:80px;width:96px;overflow:auto;background:rgba(22,24,15,.95);border:1px solid #5d5a3a;border-top:3px solid #c8a032;border-radius:4px;font-family:AppFont,AppJP,monospace;color:#dfe6ee;padding:6px 6px 8px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><b style="font-size:11px;letter-spacing:.1em;color:#e6d38a">'+T('盤外')+'</b><span onclick="BtOffPop(false)" style="cursor:pointer;color:#e6d38a">✕</span></div>';
+    Object.keys(by).forEach(function(k){h+='<div style="font-size:10px;color:#a59f76;margin:4px 0 2px">'+k+'</div>';by[k].forEach(function(s){var fp=btStackFP(s),sel=BT.sel===s.id,P=btVcPieces(s),top=null;for(var i=P.length-1;i>=0;i--){if(P[i].src){top=P[i];break;}}
+      h+='<div onclick="btOffPick(\''+s.id+'\')" style="cursor:pointer;position:relative;margin:4px auto;width:60px;height:60px;border:1px solid '+(sel?'#ffd060':(BT_SIDE_COL[s.side]||'#555'))+'">'+(top?'<img src="'+top.src+'" style="width:58px;height:58px;display:block">':'')+'<span style="position:absolute;right:-2px;bottom:-2px;background:#000c;color:#fff;font-size:10px;padding:0 3px">'+s.u.length+'</span>'+(fp?'<span style="position:absolute;left:-2px;bottom:-2px;background:#000c;color:#ffd060;font-size:10px;padding:0 3px">'+fp+'</span>':'')+'</div>';});});h+='</div>';}
+  el.innerHTML=h;}
 function btOffInlineHTML(fill){ // fill=帯の行(残りの幅に収め、はみ出す分は横スクロール)
   var offs=BT.stacks.filter(function(s){return (s.n==null||s.n<0)&&s.u.length;});if(!offs.length)return '';
   var h='<span style="display:inline-flex;align-items:center;gap:3px;'+(fill?'flex:1 1 0;min-width:140px':'flex:0 1 auto;min-width:0')+';max-width:100%;overflow-x:auto;flex-wrap:nowrap;padding:2px 3px 3px 0"><span style="font-size:11px;color:#8899aa;white-space:nowrap">'+T('盤外')+':</span>';
@@ -43852,7 +43876,7 @@ function btFullBars(on){
   else{var canNext=!(BT.mv&&BT.app&&BT.mv.side===BT.app);th+=btPhStepSpans()+'<button class="nb go'+(canNext?'':' dim')+'" onclick="BtNext()">'+T('次へ')+' ▶</button>';
     if(BT.app&&btSideNow()===BT.app)th+='<span style="font-size:12px;color:#c8a032;padding:0 4px">'+T('アプリの番')+'</span>';
     th+='<span style="width:6px"></span>'+btFtActHTML();
-    try{var oh=btOffInlineHTML();if(oh)th+='<span style="width:8px"></span>'+oh;}catch(e){} /* v1217(ダルマ「初めの盤外からの進入はどうやる」): 全画面では何も選んでいない時に盤外の部隊を選ぶ入口が無かった→上の帯に盤外のスタックを並べる(タップで選ぶ) */}
+    try{var oh=(window.NM_OFF_STY?btOffBtnHTML():btOffInlineHTML());if(oh)th+='<span style="width:8px"></span>'+oh;}catch(e){} /* v1217(ダルマ「初めの盤外からの進入はどうやる」): 全画面では何も選んでいない時に盤外の部隊を選ぶ入口が無かった→上の帯に盤外のスタックを並べる(タップで選ぶ) */}
   var sideOn=btSideOn();
   if(BT.started&&!sideOn){var mv=BT.mv,un=mv&&(mv.veh?btVCanUndo():true),rd=mv&&mv.veh&&btVCanRedo(),nr=(NM_RB.items||[]).length;
     th+='<span style="width:6px"></span><button class="nb'+(un?'':' dim')+'" title="'+T(mv&&!mv.veh?'移動を取り消す':'一つ戻る(車両の移動)')+'" onclick="btFtUndo()">↶</button><button class="nb'+(rd?'':' dim')+'" title="'+T('やり直す(車両の移動)')+'" onclick="if(btVCanRedo())BtVRedo()">↷</button>'
