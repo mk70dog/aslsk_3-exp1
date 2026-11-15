@@ -32094,7 +32094,9 @@ function btOverlaySVG(dispLayout){
   var byN={};BT.stacks.forEach(function(s){if(s.n==null||s.n<0)return;(byN[s.n]=byN[s.n]||[]).push(s);});
   Object.keys(byN).forEach(function(k){
     var arr=byN[k],d=btDispPt(+k,dispLayout);
-    if(BT.vasl!==false){arr.forEach(function(s,i){h+=btStackVaslSVG(s,d,arr.length>1?i-(arr.length-1)/2:0);});return;} // v284: VASLカウンター表示
+    if(BT_GHOST[k]){var h0=h;h='';} /* sample-ghost: 右クリック「カウンターを透かす」のヘクスはほぼ透明に */
+    var ghEnd=function(){if(BT_GHOST[k]){h=h0+'<g opacity="0.12" style="pointer-events:none">'+h+'</g>';}};
+    if(BT.vasl!==false){arr.forEach(function(s,i){h+=btStackVaslSVG(s,d,arr.length>1?i-(arr.length-1)/2:0);});ghEnd();return;} // v284: VASLカウンター表示
     arr.forEach(function(s,i){
       var off=(arr.length>1)?(i-(arr.length-1)/2)*26:0;
       var col=BT_SIDE_COL[s.side]||'#999',sel=(BT.sel===s.id),mv=(BT.mv&&BT.mv.sid===s.id);
@@ -32106,6 +32108,7 @@ function btOverlaySVG(dispLayout){
       if(g.fl)h+='<text x="'+cx+'" y="'+(cy+hh/2+12)+'" text-anchor="middle" font-size="10" font-weight="bold" fill="#ffd060" stroke="#000" stroke-width="2.5" paint-order="stroke" font-family="AppFont,AppJP,monospace">'+g.fl+'</text>';
       h+='</g>';
     });
+    ghEnd();
   });
   h+=btVehOverlaySVG(dispLayout);
   h+=btSmokeDCOverlaySVG(dispLayout);
@@ -32480,6 +32483,9 @@ function btCmdHTML(){
   return h?'<div id="btCmd" class="bt-cmd">'+h+'</div>':'';
 }
 var BT_CMDMIN=false,BT_CMDMIN_LBL='';
+var BT_GHOST={}; /* sample-ghost */
+function BtGhost(n){if(BT_GHOST[n])delete BT_GHOST[n];else BT_GHOST[n]=1;Draw();}
+function BtGhostClear(){BT_GHOST={};Draw();}
 if(window.NM_CMD_STY==null)window.NM_CMD_STY='B'; /* v1278 */
 (function(){try{var st=document.createElement('style');var R='html:root:root:root #main #btCmd.bt-cmdpop';
   st.textContent=[R+'.cmpA',R+'.cmpB',R+'.cmpC'].join(',')+'{height:auto!important;max-height:70vh!important}'
@@ -34505,6 +34511,8 @@ function btRMenuItems(n){
       if(mu&&mv0&&mv0.turretType&&mv0.turretType!=='NT'){var tng=!!(mu.shock||mu.stun);
         it.push({row:1,ic:'turret',t:'砲塔の方向',btns:[['左へ',"BtRmTurret("+n+",-1)",tng],[mu.tca===mu.vca?'正面':btRmTurretRel(mu),null],['右へ',"BtRmTurret("+n+",1)",tng]]});}
       it.push({ic:'stop',t:'停止して終了',sub:'この車両の移動を終える(MP '+BT.mv.mfUsed+'/'+BT.mv.mfMax+')',f:"BtRmClose();BtVStopEnd()"});} // v312(ダルマ指示「右クリックに車体停止して終了を追加」)
+    it.push({ic:'eye',t:BT_GHOST[n]?'カウンターを元に戻す':'カウンターを透かす',sub:BT_GHOST[n]?'このヘクスのカウンターを普通に表示':'このヘクスのカウンターをほぼ透明にして地形を見る(もう一度で戻す)',f:"BtRmClose();BtGhost("+n+")"}); /* sample-ghost */
+    if(Object.keys(BT_GHOST).length>1||(Object.keys(BT_GHOST).length===1&&!BT_GHOST[n]))it.push({ic:'eye',t:'透かしたカウンターを全部戻す',f:"BtRmClose();BtGhostClear()"});
     it.push({ic:'info',t:'スタックの詳細',sub:here.map(function(s){return BT_SIDE_NAME[s.side]+' '+s.u.length+'個';}).join('・'),f:"BtRmClose();btStackPopup("+n+",true)"});
     here.forEach(function(s){btRmCAUnits(s).forEach(function(u){it.push({ic:'fan',t:'射界を表示',sub:BT_SIDE_NAME[s.side]+' '+u.nm,f:"BtRmShow('ca',"+n+",'"+s.id+"','"+u.id+"')"});});}); // v309-3
     var mine=here.filter(function(s){return !BT.app||s.side!==BT.app;});
