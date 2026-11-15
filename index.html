@@ -32532,7 +32532,7 @@ function btCmdCardHTML(){ // v288(ダルマ指示「なるべく縦幅が大き�
   var vm=(mv&&mv.veh&&mv.sid===s.id)?btVMovePanelHTML(true):null;
   var sn=btSideNow(),ph=BT_PHASES[BT.ph],canNext=!(BT.mv&&BT.app&&BT.mv.side===BT.app);
   var vu=vm?btStackById(mv.sid).u[0]:null,vv=vu&&btAfvData(vu.nm);
-  var title=vm?vm.head+' <span style="color:#8899aa">'+(vv?'AF'+vv.afFront.hull+'/'+vv.afSide.hull+' ':'')+btVehStatTxt(vu)+'</span>':'<span style="color:#ffd060;font-weight:bold">'+BT_SIDE_NAME[s.side]+' @ '+((s.n!=null&&s.n>=0)?BTG.nodes[s.n].nm+' '+btTerrJP(BTG.nodes[s.n].terr):(T('盤外')+'('+btOffLbl(s)+')'))+'</span>';
+  var title=vm?vm.head+' <span style="color:#8899aa">'+(vv?'AF'+vv.afFront.hull+'/'+vv.afSide.hull+' ':'')+btVehStatTxt(vu)+'</span>':'<span style="color:#ffd060;font-weight:bold">'+BT_SIDE_NAME[s.side]+' @ '+((s.n!=null&&s.n>=0)?BTG.nodes[s.n].nm+' '+btTerrJP(BTG.nodes[s.n].terr):(T('盤外')+'('+btOffLbl(s)+')'))+'</span>'+(btStackFP(s)>0?' <span style="display:inline-block;margin-left:8px;padding:0 7px;border:1px solid '+(BT_SIDE_COL[s.side]||'#999')+';border-radius:4px;background:#0f0f0f;color:#fff;font-weight:bold;font-size:12px">'+T('トータルFP')+' '+(Math.round(btStackFP(s)*10)/10)+'</span>':''); /* sample-fpbadge */
   var rg=!!(BT.regroup&&btRegroupOK(s)),hb=!rg; // v313: 編成を変える画面以外は、右側に見出しと帯の内容をまとめる
   var head0=h;
   h='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+(btMapFullOn()?'':btPhStepSpans()+btBtn(T('次へ')+' ▶','BtNext()',{dim:!canNext,st:P}))+(btMapFullOn()?'':btOffInlineHTML())+((hb&&!btMapFullOn())?'':(btMapFullOn()&&!rg?'':'<span style="color:#404858">│</span>')+title)+'</div>'; /* v1219: 全画面では盤外の一覧は上の帯にあるので出さない・見出しを左に */
@@ -32836,7 +32836,7 @@ function btStackFP(x){
   var side=x.side,t=0;
   x.u.forEach(function(u){var I=btI(u,side);
     if(I.kind==='mmc'&&btGO(u))t+=I.fp||0;
-    else if(I.kind==='mg'&&u.s!=='br'){var o=btOwner(x,u);if(!o||btGO(o))t+=I.fp||0;}});
+    else if(I.kind==='mg'&&u.s!=='br'&&!/^FT/.test(u.nm)){var o=btOwner(x,u);if(!o||btGO(o))t+=I.fp||0;}}); /* sample-fpbadge: 火炎放射器(FT)は含めない */
   return t;
 }
 
@@ -34365,6 +34365,8 @@ function btStackVaslSVG(s,d,k){
   if(sel||mv)h+='<path d="'+btVcOutline(x0,y0,SZ,ST,n,4)+'" fill="none" stroke="'+(sel?'#ffe040':'#ffffff')+'" stroke-width="3.5" stroke-linejoin="round"'+(mv?' stroke-dasharray="6 3"':'')+'/>';
   if(extra>0)h+='<rect x="'+(bx+w-14)+'" y="'+(by-4)+'" width="20" height="11" rx="3" fill="#0f0f0f" stroke="#c8a032"/><text x="'+(bx+w-4)+'" y="'+(by+2)+'" text-anchor="middle" dominant-baseline="middle" font-family="AppFont,AppJP,monospace" font-size="8" font-weight="900" fill="#c8a032">+'+extra+'</text>';
   if(BT.app===s.side)h+='<rect x="'+bx+'" y="'+(by-6)+'" width="14" height="10" rx="2" fill="#0f0f0f" stroke="#c8a032" stroke-width="1"/><text x="'+(bx+7)+'" y="'+(by-0.6)+'" text-anchor="middle" dominant-baseline="middle" font-family="AppFont,AppJP,monospace" font-size="7" font-weight="900" fill="#c8a032">AI</text>';
+  var tfp=(window.NM_FP_BADGE!==false)?btStackFP(s):0; /* sample-fpbadge: スタックのトータルFPのバッジ(左下) */
+  if(tfp>0){var tl=String(Math.round(tfp*10)/10),tw=Math.max(18,tl.length*6.5+8);h+='<rect x="'+(x0-5)+'" y="'+(y0+SZ-10)+'" width="'+tw+'" height="13" rx="3" fill="#0f0f0f" stroke="'+col+'" stroke-width="1.2"/><text x="'+(x0-5+tw/2)+'" y="'+(y0+SZ-3.2)+'" text-anchor="middle" dominant-baseline="middle" font-family="AppFont,AppJP,monospace" font-size="10" font-weight="bold" fill="#ffffff">'+tl+'</text>';}
   var M=btVcMarks(s),MS=24;
   M.mk.forEach(function(key,i){var src=btVcImg(BT_VC.mk[key]);if(src)h+='<image href="'+src+'" x="'+(bx+w-2+Math.floor(i/3)*24)+'" y="'+(by+2+(i%3)*24)+'" width="'+MS+'" height="'+MS+'"/>';});
   var ty=y0+SZ+2;M.tags.forEach(function(t,j){var c=nmCtrOf([t[0]])[0],tx=bx+j*21;h+='<g transform="translate('+tx+' '+ty+') scale(.72)">'+nmCtrSVG(c,0,0,26)+'</g>';}); /* v457: CE/UK/BFの文字札をマップタブと同じシステムカウンターに */
