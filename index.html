@@ -3501,7 +3501,7 @@ var SSR_REFLECT={
   S4:{1:'降雪の状態はこのSSR直下の「降雪中」ボタンで切替。降雪中は、射程6ヘクス以上の射撃(射撃・砲撃/戦車・対戦車タブ)に+1の妨害(Hindrance)を自動加算(妨害なのでFFMOは不適用・残留FPも1列低下。射程は射撃タブでは先頭グループの射程)'},
   S9:{1:'射撃タブ: 英軍1st Line MMCの畏縮(Cower)を自動で免除'},
   S10:{3:'マップ: 穀物地形を有効(季節内)にする',4:'回復タブ: 「SSR：ギリシャ軍MMC 混乱士気値+1」ボタンで反映'},
-  S6:{1:'マルチ判定の射撃・残留火力の攻撃: 独軍が撃ち、目標のソ連歩兵が突撃移動(FFNAMなし)の時はFFMO-1を付けない。アプリ対戦モードも同じ',3:'回復タブ: 「SSR：独軍MMC 混乱士気値+1」ボタンで反映'},
+  S6:{1:'マルチ判定の射撃・残留火力の攻撃: 独軍が撃ち、目標のソ連歩兵が警戒移動(FFNAMなし)の時はFFMO-1を付けない。アプリ対戦モードも同じ',3:'回復タブ: 「SSR：独軍MMC 混乱士気値+1」ボタンで反映'},
   S13:{3:'射撃タブ: 英軍・豪軍の1st LineのCowerを自動で免除',4:'マップ: 穀物地形を有効(季節内)にする(日付が4月でも麦畑のヒンドランス・1.5MFを適用)'},
   S24:{1:'移動タブ「煙幕手榴弾」の対象ユニット選択ピッカーで独8-3-8[E]/5-4-8[E]を選択すると、Smoke指数に自動で+2を加算(デジタルパネルの成功dr値・判定結果とも反映)',2:'白兵戦(対車両CC)タブ: S24選択中のみ表示される「SSR：独8-3-8[E]等 CCV+1」ボタンで反映',3:'対象ユニット(6-2-8[E]/3-2-8[E](HS))はELR_MAPに派生先が登録されていないため、通常のクラス低下判定でも既に対象外(該当ユニットなしと表示され実害なし)'},
   S16:{1:'マップ(移動ルート): 昇り降り(高度変更)のたびに追加+1MFを自動加算(舗装道路上を除く。歩兵・車両とも)',2:'マップ(LOS・TEM表示・移動): SSR直下のボタンで選んだ建物(P9またはO6)を要塞化建物(TEM+4)として扱う。選んだヘクスのみ(複数ヘクス建物の他のヘクスは通常表示)'},
@@ -4405,7 +4405,7 @@ var SCN=[
    after:"戦車などの重装備がこの厳寒の中で役に立たなかったため、ダス・ライヒの擲弾兵たちは、東方の突撃部隊と白兵で向き合わなければならなかった。シベリア兵はこうした条件下で優れており、銃撃戦の大半は最終的に白兵と純粋な勇気によって決着した。何度か持ち主が入れ替わった後、12月11日に第9親衛師団がついに完全に勝利を収めたとき、イストラの学校や博物館は燃え上がる廃墟と化していた。まもなくソ連は前進に転じ、凍え敗走する装甲軍団をイストラ川まで押し戻すことになる。1月3日、総統自らが後退を停止せよと命じたが、ロシアの首都はもはや完全に危機を脱していた。", // 2026-09追加: シナリオカードのAFTERMATHの全訳
    vic:"終了時、R2・L6・D3の3棟のうち2棟以上をソ連が支配していれば、ソ連の勝利",
    bal:{us:"SSR3削除",ger:"独8-0→9-1"},
-   ssr:["冬季迷彩により、ソ連歩兵は開豁地ヘクスで突撃移動（Assault Move）を行っても、FFMO（-1 DRM）の適用を受けない","戦術予備隊：最大でMMC5個・SMC1個・SW2個を、T3（第3ターン）に北端または東端のボード端から進入させられる","独軍の全MMCは、混乱時の回復判定の士気値に+1"],
+   ssr:["冬季迷彩により、ソ連歩兵は開豁地ヘクスで警戒移動（Assault Move）を行っても、FFMO（-1 DRM）の適用を受けない","戦術予備隊：最大でMMC5個・SMC1個・SW2個を、T3（第3ターン）に北端または東端のボード端から進入させられる","独軍の全MMCは、混乱時の回復判定の士気値に+1"],
    f:{GER:{elr:4,u:["【初期配置：ヘクス列9以下】4-6-8[E]×9・9-2・8-1・8-0","MMG5-12×1・LMG3-8×3"]},
       SOV:{elr:3,u:["【T1に北端から進入（SSR2の条件を満たせばT3の進入も可）】4-5-8[E]×14","9-1・8-1・8-0・MMG4-10×1・LMG2-6×2・DC30-1×1"]}}},
   {id:"S7",atk:"USA",endsOnFront:true,north:"up",northLos:"down",maps:[{id:"z",dir:"GG0",range:{from:"H",to:"GG"},letterPos:"tr"}],mapNote:"Hヘクス列〜GGヘクス列のみプレイ可能",jp:"フェストゥング・ブレストへの序章",en:"Prelude to Festung Brest",loc:"フランス/プルザネ",dt:"1944/8/26",trn:6, // 2026-07訂正: atk GER→USA(ダルマ指摘、独軍設置先行/米軍先手移動が正) / 2026-08修正(ダルマ指示): north(シナリオタブ用)はupのまま維持し、LOSタブ表示専用にnorthLos:downを追加 / 2026-08修正(ダルマ指摘・原本PDF確認「S7 t6aで終了する」): ターン記録表の最終ターン(6)が対角線二分・赤塗りだったため、endsOnFront:trueを追加(T6a=最終ターンは表のみで終了)。
@@ -8154,7 +8154,7 @@ var I18N_EN={
   "SSR3削除":"Remove SSR3",
   "独8-0→9-1":"German 8-0 → 9-1",
   "冬季迷彩：警戒移動（Careful/Cautious Movement）中のユニットが開豁地にいても、FFMO（-1DRMのボーナス）は適用されない":"Winter Camouflage: FFMO (-1 DRM) does not apply to units in Open Ground using Careful/Cautious Movement",
-  "冬季迷彩により、ソ連歩兵は開豁地ヘクスで突撃移動（Assault Move）を行っても、FFMO（-1 DRM）の適用を受けない":"Winter camouflage: Soviet infantry may Assault Move in Open Ground hexes without the FFMO (-1 DRM) applying",
+  "冬季迷彩により、ソ連歩兵は開豁地ヘクスで警戒移動（Assault Move）を行っても、FFMO（-1 DRM）の適用を受けない":"Winter camouflage: Soviet infantry may Assault Move in Open Ground hexes without the FFMO (-1 DRM) applying",
   "戦術予備隊：最大でMMC5個・SMC1個・SW2個を、T3（第3ターン）に北端または東端のボード端から進入させられる":"Tactical Reserve: up to 5 MMC, 1 SMC, and 2 SW may enter from the north or east board edge on T3",
   "独軍の全MMCは、混乱時の回復判定の士気値に+1（バランス調整のため現在このSSRは削除・未適用）":"All German MMC get +1 to their Broken morale (this SSR has been removed for balance and is not in effect)",
   "独軍の全MMCは、混乱時の回復判定の士気値に+1":"All German MMC get +1 to their Broken morale",
@@ -13468,7 +13468,7 @@ function fireTemEff(f){
   if(f.tgtCrewCE)return Math.max(f.tem||0,fireCrewCeVal(f));
   return f.tem;
 }
-/* v1211(ダルマ「S6 SSR1 冬季迷彩 アプリ対応→実施」): S6 で独軍が撃つ・目標のソ連歩兵が突撃移動(FFNAMなし)なら FFMO を付けない。判定モードの射撃・残留火力の攻撃(アプリ対戦は v1193 の btSsr camo) */
+/* v1211(ダルマ「S6 SSR1 冬季迷彩 アプリ対応→実施」): S6 で独軍が撃つ・目標のソ連歩兵が警戒移動(FFNAMなし)なら FFMO を付けない。判定モードの射撃・残留火力の攻撃(アプリ対戦は v1193 の btSsr camo) */
 function ssrCamoOn(tgtNat,ffnam){return !!(S.scen&&S.scen.sel==='S6'&&tgtNat==='SOV'&&!ffnam);}
 function ssrCamoNoFfmo(f){try{var g=f&&f.grps&&f.grps[0];return !f.tgtCrewCE&&!!g&&g.pickerNat==='GER'&&ssrCamoOn('SOV',f.ffnam);}catch(e){return false;}}
 function fireDRM(f){
@@ -29718,7 +29718,7 @@ var BT_S26_SOV_B={board:'u',center:'Z5',radius:2}; // 6th Guards Tank Army: uZ5�
    ent: 進入 [{id,side,turn,off(地図上の盤端 N/S/E/W),lbl,mpHalf,roll}]
    vic: 'bldgN'(n棟以上) / 'all'(全部)。vicSide: 勝利条件を満たす側。bl: 勝利の建物の作り方
    flip: カードの北が地図の下(S6: 盤zを180°回して置く)→ 盤端の名前を入れ替えて表示
-   ssr: ul(下線士気) bm(混乱面の士気+) smk(煙幕+) ccv(白兵戦CCV+) camo(冬季迷彩: 突撃移動でFFMOなし) */
+   ssr: ul(下線士気) bm(混乱面の士気+) smk(煙幕+) ccv(白兵戦CCV+) camo(冬季迷彩: 警戒移動でFFMOなし) */
 function btHexNum(N){var m=String(N&&N.nm||'').match(/(\d+)$/);return m?+m[1]:null;}
 function btColIdx(L){L=String(L).toUpperCase();var n=L.charCodeAt(0)-65;return L.length>1?26+n:n;}
 var BT_SCFG={
@@ -30251,7 +30251,7 @@ function btMoveStart(sid,uids,opt){
   // SWのうち、所有者が移動しないものは残す
   units=units.filter(function(u){var I=btI(u,s.side);if(btIsInfK(I.kind))return true;if(!btIsSWK(I.kind))return false;return u.own&&movers.some(function(m){return m.id===u.own;});});
   var dt=!!opt.dt,as=!!opt.assault;
-  if(dt&&as)return '駆け足と突撃移動は同時にできません';
+  if(dt&&as)return '駆け足と警戒移動は同時にできません';
   if(dt&&movers.some(function(u){return u.cx||u.wd;}))return 'CX・負傷のユニットは駆け足できません';
   var base=btMMF(s.side,movers);
   var mf=base.mf+(dt?2:0)-btPortageExcess(s.side,units,dt);
@@ -30290,8 +30290,8 @@ function btMoveCheck(to){
   var cap=mv.mfMax+(roadOnly?1:0);
   if(mv.mfUsed+k.c>cap)return {err:'MF不足('+(mv.mfUsed)+'+'+k.c+'>'+cap+')'};
   if(mv.assault){
-    if(mv.path.length>=1)return {err:'突撃移動は1ヘクスまで'};
-    if(mv.mfUsed+k.c>=mv.mfMax)return {err:'突撃移動では全MFを使えません'};
+    if(mv.path.length>=1)return {err:'警戒移動は1ヘクスまで'};
+    if(mv.mfUsed+k.c>=mv.mfMax)return {err:'警戒移動では全MFを使えません'};
   }
   return {c:k.c,road:k.road};
 }
@@ -32338,8 +32338,8 @@ function btSelPanelHTML(){
   if(BT.started&&mine&&!BT.finished&&!BT.edit&&!actCard){
     var fph=btHumanFirePh(s.side);
     if(fph&&!BT.fire&&btInf(s).length)h+=btBtn(T('射撃'),'BtFireStart()',{on:true});
-    if(ph==='MPh'&&s.side===att&&!BT.mv&&btInf(s).length){h+=btBtn(T('移動開始'),'BtMoveStart()',{on:true});h+=btBtn(T('駆け足(+2MF・CX)'),'BtMoveStart({dt:true})');h+=btBtn(T('突撃移動(1ヘクス)'),'BtMoveStart({assault:true})');}
-    if(BT.mv&&!BT.mv.veh&&BT.mv.sid===s.id&&BT.mv.side===s.side){h+='<span style="font-size:12px;color:#ffd060">MF '+BT.mv.mfUsed+'/'+BT.mv.mfMax+(BT.mv.dt?' 駆け足':'')+(BT.mv.assault?' 突撃移動':'')+'</span>';h+=btBtn(T('移動終了'),'BtMoveEnd()',{on:true});h+=btBtn(T('取消'),'BtMoveCancel()');
+    if(ph==='MPh'&&s.side===att&&!BT.mv&&btInf(s).length){h+=btBtn(T('移動開始'),'BtMoveStart()',{on:true});h+=btBtn(T('駆け足(+2MF・CX)'),'BtMoveStart({dt:true})');h+=btBtn(T('警戒移動(1ヘクス)'),'BtMoveStart({assault:true})');}
+    if(BT.mv&&!BT.mv.veh&&BT.mv.sid===s.id&&BT.mv.side===s.side){h+='<span style="font-size:12px;color:#ffd060">MF '+BT.mv.mfUsed+'/'+BT.mv.mfMax+(BT.mv.dt?' 駆け足':'')+(BT.mv.assault?' 警戒移動':'')+'</span>';h+=btBtn(T('移動終了'),'BtMoveEnd()',{on:true});h+=btBtn(T('取消'),'BtMoveCancel()');
       if(btSmkUnits(s).length)h+=btBtn(BT.mvTool==='smoke'?T('発煙先をタップ(自ヘクス1MF/隣接2MF)'):T('発煙手榴弾'),"BtMvTool('smoke')",{on:BT.mvTool==='smoke'});
       if(s.u.some(function(w){return btI(w,s.side).kind==='dc';})&&!BT.mv.dc)h+=btBtn(BT.mvTool==='dc'?T('DCの設置先(隣接)をタップ'):T('DC設置'),"BtMvTool('dc')",{on:BT.mvTool==='dc'});
       if(BT.mv.dc)h+='<span style="font-size:12px;color:#ffa040">DC設置中→'+BTG.nodes[BT.mv.dc.to].nm+'</span>';}
@@ -32480,14 +32480,14 @@ function btCmdMeasure(){
 }
 
 // ---------- v288(ダルマ指示「車両・ユニットの情報と行動のボタンを、車両の移動の枠内に」) ----------
-// ツールバー下の指示カード: 選択中の自軍スタックの車両の行(▲)・歩兵の要約と、行動のボタン(車両を移動・CE・射撃・移動開始・駆け足・突撃移動・前進…)、車両の移動中はその操作
+// ツールバー下の指示カード: 選択中の自軍スタックの車両の行(▲)・歩兵の要約と、行動のボタン(車両を移動・CE・射撃・移動開始・駆け足・警戒移動・前進…)、車両の移動中はその操作
 function btCmdCardOn(s){if(!s||!BT.started||BT.finished||BT.edit)return false;var mine=(!BT.app||s.side!==BT.app);if(!mine)return window.NM_FOE_CARD!==false&&!BT.fire&&!BT.ofire&&!BT.mgfire;return mine;} /* v1280(ダルマ指示「相手のカウンター情報もタップすると自軍と同じように表示」): 相手のスタックも同じカード(見るだけ・ボタンなし) */
 function btInfActHTML(s){
   var ph=btPhId(),att=btSideNow(),h='';
     var fph=btHumanFirePh(s.side);
   if(fph&&!BT.fire&&btInf(s).length&&s.n!=null&&s.n>=0)h+=btBtn(T('射撃'),'BtFireStart()',{on:true}); // v290: 盤外からは撃てない
-  if(ph==='MPh'&&s.side===att&&!BT.mv&&btInf(s).length){h+=btBtn(T('移動開始'),'BtMoveStart()',{on:true});h+=btBtn(T('駆け足(+2MF・CX)'),'BtMoveStart({dt:true})');h+=btBtn(T('突撃移動(1ヘクス)'),'BtMoveStart({assault:true})');}
-  if(BT.mv&&!BT.mv.veh&&BT.mv.sid===s.id&&BT.mv.side===s.side){h+='<span style="font-size:12px;color:#ffd060">MF '+BT.mv.mfUsed+'/'+BT.mv.mfMax+(BT.mv.dt?' 駆け足':'')+(BT.mv.assault?' 突撃移動':'')+'</span>';h+=btBtn(T('移動終了'),'BtMoveEnd()',{on:true});h+=btBtn(T('取消'),'BtMoveCancel()');
+  if(ph==='MPh'&&s.side===att&&!BT.mv&&btInf(s).length){h+=btBtn(T('移動開始'),'BtMoveStart()',{on:true});h+=btBtn(T('駆け足(+2MF・CX)'),'BtMoveStart({dt:true})');h+=btBtn(T('警戒移動(1ヘクス)'),'BtMoveStart({assault:true})');}
+  if(BT.mv&&!BT.mv.veh&&BT.mv.sid===s.id&&BT.mv.side===s.side){h+='<span style="font-size:12px;color:#ffd060">MF '+BT.mv.mfUsed+'/'+BT.mv.mfMax+(BT.mv.dt?' 駆け足':'')+(BT.mv.assault?' 警戒移動':'')+'</span>';h+=btBtn(T('移動終了'),'BtMoveEnd()',{on:true});h+=btBtn(T('取消'),'BtMoveCancel()');
     if(btSmkUnits(s).length)h+=btBtn(BT.mvTool==='smoke'?T('発煙先をタップ(自ヘクス1MF/隣接2MF)'):T('発煙手榴弾'),"BtMvTool('smoke')",{on:BT.mvTool==='smoke'});
     if(s.u.some(function(w){return btI(w,s.side).kind==='dc';})&&!BT.mv.dc)h+=btBtn(BT.mvTool==='dc'?T('DCの設置先(隣接)をタップ'):T('DC設置'),"BtMvTool('dc')",{on:BT.mvTool==='dc'});
     if(BT.mv.dc)h+='<span style="font-size:12px;color:#ffa040">DC設置中→'+BTG.nodes[BT.mv.dc.to].nm+'</span>';}
@@ -35491,7 +35491,7 @@ function nmRmMFireItems(n){
   try{nmMfSwRow(it,n);}catch(e){console.log('mfSw',e);} /* v1040(ダルマ指示「FTを使用するか兵士の火器を使用するかの選択」): 編成のSWごとに使う/使わない */
   if(cur==='dff'){var f9=getFireState()||{},fm=f9.fireMode||null; /* v409: 臨機射撃の設定(射撃タブと共通) */
     it.push({row:1,ic:'move',t:'目標の移動',btns:[[(!f9.ffmo&&!f9.ffnam&&!f9.hazardous?'✓':'')+'なし',"nmMfMove("+n+",'none')"],[(f9.hazardous?'✓':'')+'危険移動−2',"nmMfMove("+n+",'hazardous')"]]});
-    it.push({row:1,ic:'',t:'',btns:[[(f9.ffmo?'✓':'')+'FFMO−1',"nmMfMove("+n+",'ffmo')"],[(f9.ffnam?'✓':'')+'FFNAM−1',"nmMfMove("+n+",'ffnam')"]]});try{var g9=f9.grps&&f9.grps[0];if(S.scen&&S.scen.sel==='S6'&&g9&&g9.pickerNat==='GER')it.push({ic:'info',t:'<span style="font-size:12px;color:#c8b070">S6 SSR1 冬季迷彩: ソ連歩兵が突撃移動(FFNAMなし)の時は、開豁地でもFFMOなし'+(ssrCamoNoFfmo(f9)&&f9.ffmo?'(この射撃に反映)':'')+'</span>'});}catch(e){} /* v1211 */
+    it.push({row:1,ic:'',t:'',btns:[[(f9.ffmo?'✓':'')+'FFMO−1',"nmMfMove("+n+",'ffmo')"],[(f9.ffnam?'✓':'')+'FFNAM−1',"nmMfMove("+n+",'ffnam')"]]});try{var g9=f9.grps&&f9.grps[0];if(S.scen&&S.scen.sel==='S6'&&g9&&g9.pickerNat==='GER')it.push({ic:'info',t:'<span style="font-size:12px;color:#c8b070">S6 SSR1 冬季迷彩: ソ連歩兵が警戒移動(FFNAMなし)の時は、開豁地でもFFMOなし'+(ssrCamoNoFfmo(f9)&&f9.ffmo?'(この射撃に反映)':'')+'</span>'});}catch(e){} /* v1211 */
     it.push({row:1,ic:'fire',t:'射撃モード',btns:[[(!fm?'✓':'')+'通常',"nmMfMode("+n+",null)"],[(fm==='SFF'?'✓':'')+'SFF',"nmMfMode("+n+",'SFF')"],[(fm==='FPF'?'✓':'')+'FPF',"nmMfMode("+n+",'FPF')"]]});
     if(fm)it.push({ic:'info',t:'<span style="font-size:12px;color:#c8a032">'+(fm==='SFF'?'連続臨機射撃(SFF): 隣接か同じヘクスの目標だけ・FPは半分・B#−2':'緊急防御射撃(FPF): 隣接か同じヘクス・FPは半分・撃った側はNMC(士気チェック)・B#−2')+'</span>'});}
   }
@@ -37597,7 +37597,7 @@ function nmRaDo(n,raw){var R=NM_RA,H=nmHexOfNode(R.n),fp=(S_LOS.resid||{})[nmRes
 function nmRmRaItems(n){var R=NM_RA;if(!R)return nmRMenuItems(n);var it=[],H=nmHexOfNode(R.n),fp=(S_LOS.resid||{})[nmResKey(H)]||0,T0=BTG.nodes[R.n],sg=function(v){return (v>=0?'+':'')+v;};
   it.push({ic:'back',t:'← 戻る',sub:'残留火力の攻撃',f:"NM_RA=null;btRmReopen("+n+")"});it.push({sep:1});
   it.push({ic:'fire',t:'<span>残留火力 <b>'+fp+'FP</b>('+IFT_LBL[ci(fp)]+'列) → '+nmGrpLbl(R.slot)+' @'+T0.nm+'</span>',sub:'このヘクスに入った(移動フェイズ)編成への攻撃。DRM=TEM'+(T0.tem?'+'+T0.tem:'0')+'・FFMO−1・FFNAM−1'});
-  if(!R.r){it.push({row:1,ic:'move',t:'目標の移動',btns:[[(R.ffmo?'✓':'')+'FFMO−1',"NM_RA.ffmo=!NM_RA.ffmo;nmRaRe("+n+")"],[(R.ffnam?'✓':'')+'FFNAM−1',"NM_RA.ffnam=!NM_RA.ffnam;nmRaRe("+n+")"]]});if(ssrCamoOn(nmGeList(R.slot).nat,R.ffnam))it.push({ic:'info',t:'<span style="font-size:12px;color:#c8b070">S6 SSR1 冬季迷彩: ソ連歩兵の突撃移動は開豁地でもFFMOなし</span>'});
+  if(!R.r){it.push({row:1,ic:'move',t:'目標の移動',btns:[[(R.ffmo?'✓':'')+'FFMO−1',"NM_RA.ffmo=!NM_RA.ffmo;nmRaRe("+n+")"],[(R.ffnam?'✓':'')+'FFNAM−1',"NM_RA.ffnam=!NM_RA.ffnam;nmRaRe("+n+")"]]});if(ssrCamoOn(nmGeList(R.slot).nat,R.ffnam))it.push({ic:'info',t:'<span style="font-size:12px;color:#c8b070">S6 SSR1 冬季迷彩: ソ連歩兵の警戒移動は開豁地でもFFMOなし</span>'});
     it.push({ic:'fire',t:'DRを振る',f:"nmRaDo("+n+",0)"});[[2,3,4,5,6,7],[8,9,10,11,12]].forEach(function(vs,j){it.push({row:1,cmp:1,ic:j?'':'fire',t:'<span style="font-size:12px;color:#8899aa">'+(j?'':'DR')+'</span>',btns:vs.map(function(v){return [v,"nmRaDo("+n+","+v+")"];})});});return it;}
   var rr=rm(R.r);it.push({ic:'fire',t:'<span>DR'+R.raw+(R.drm?' '+sg(R.drm):'')+' = '+(R.raw+R.drm)+'　<b style="color:'+rr.c+'">'+rr.t+'</b></span>'});
   var te=nmAllAt(H,R.sd).filter(function(e){return e.grp===R.slot;})[0];if(te)nmMcSection(it,n,te,R.r,'ra:'+R.n+':'+R.raw,'nmRaRe');it.push({sep:1});it.push({ic:'x',t:'閉じる',f:"BtRmClose()"});return it;}
@@ -37642,7 +37642,7 @@ function nmRaqDraw(){var R=NM_RAQ;if(!R)return;var o=document.getElementById('nm
   h+=lab('② 目標（そのヘクスに入った・MFを使った部隊）')+row(b(R.tg==='inf',"nmRaqSet('tg','inf')",T('兵士（詳細なし）'),'#6fb8ff')+gs.map(function(k){var nat=nmGeList(k).nat,col=(nat&&UNITS[nat]&&UNITS[nat].col)||'#6fb8ff';return b(R.grp===k,"nmRaqSet('grp','"+k+"')",nmGrpLbl(k),col);}).join('')+b(R.tg==='ce',"nmRaqSet('tg','ce')",T('CE車両(乗員)'),'#6fb8ff'));
   h+=lab('③ 修正')+row((R.tg==='ce'?'<span style="padding:8px 10px;border:1px solid #33404f;border-radius:10px">CE +2 <small style="color:#8fa6bd">('+T('TEMと累積しない')+')</small></span>':step('tem','TEM',-1,5))+step('smk','煙幕',0,4)
     +b(R.ffmo,"nmRaqSet('ffmo',"+(!R.ffmo)+")",(R.ffmo?'✓ ':'')+'FFMO −1','#3ca878')+b(R.ffnam,"nmRaqSet('ffnam',"+(!R.ffnam)+")",(R.ffnam?'✓ ':'')+'FFNAM −1','#3ca878')+(R.tg==='ce'?'':step('ft','FT保有 −',0,3).replace('FT保有 − <b>'+sg(R.ft||0)+'</b>','FT保有 <b>'+(R.ft?'−'+R.ft:'0')+'</b>')));
-  var drm=nmRaqDrm();h+='<div style="margin-top:8px;font-size:12px;color:#8fa6bd">DRM '+T('合計')+' <b style="color:#e8eef4">'+sg(drm)+'</b>'+(R.fp?' ／ '+IFT_LBL[ci(R.fp)]+'FP'+T('列'):'')+' · '+T('FFMOは開けた地形で動いた時、FFNAMは突撃移動でない時')+'</div>';
+  var drm=nmRaqDrm();h+='<div style="margin-top:8px;font-size:12px;color:#8fa6bd">DRM '+T('合計')+' <b style="color:#e8eef4">'+sg(drm)+'</b>'+(R.fp?' ／ '+IFT_LBL[ci(R.fp)]+'FP'+T('列'):'')+' · '+T('FFMOは開けた地形で動いた時、FFNAMは警戒移動でない時')+'</div>';
   if(R.r){var rr=rm(R.r);if(rr.c==='#334455')rr.c='#9fb2c8';h+='<div style="margin-top:12px;padding:10px;border:1px solid #c8a032;border-radius:10px;background:#1a1608"><div style="font-size:15px">DR '+R.raw+' '+sg(R.drm)+' = '+(R.raw+R.drm)+'　→　<b style="color:'+rr.c+';font-size:18px">'+rr.t+'</b></div>'
     +(R.tg==='ce'&&/KIA/.test(R.r)?'<div style="margin-top:4px;font-size:12px;color:#ff9a9a">'+T('CE乗員のKIA → 車両はスタン(7.10)')+'</div>':'')
     +'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">'+(R.r&&R.r!=='—'&&!/^(—|-|NE|影響なし)$/.test(R.r)?'<button class="b sm" style="margin:0;min-height:38px" onclick="nmRaqClose();if(typeof nmIjClose===\'function\'&&NM_IJ)nmIjClose();nmScOpen(\'nmMcpOpen\')">'+T('士気チェックへ')+'</button>':'')+'<button class="b sm" style="margin:0;min-height:38px" onclick="nmRaqSet(\'r\',null);NM_RAQ.r=null;nmRaqDraw()">'+T('もう一度（次のヘクス・MF）')+'</button></div></div>';}
@@ -40733,7 +40733,7 @@ S2:{s:'① 独5-4-8 煙幕+2',v:'終了時 独がF8・L6・O6を全て支配→�
 S3:{s:'① 独 建物2棟を秘密に要塞化(TEM+1)',v:'米が盤zの建物25ヘクス支配で即勝利'},
 S4:{s:'① 降雪(各RPh DR≧10開始・≦3終了、射程6+に+1) ② 米7-4-7 煙幕+2',v:'独が西端から10VP脱出で即勝利'},
 S5:{s:'① 米HS増援数は各RPhのdrで決定',v:'終了時 M5から3ヘクス内の石造建物に統制独MMCなし→米勝利'},
-S6:{s:'① ソ歩兵 突撃移動でFFMOなし ② 予備隊T3進入 ③ 独MMC 回復士気+1',v:'終了時 R2・L6・D3のうち2棟以上ソ支配→ソ勝利'},
+S6:{s:'① ソ歩兵 警戒移動でFFMOなし ② 予備隊T3進入 ③ 独MMC 回復士気+1',v:'終了時 R2・L6・D3のうち2棟以上ソ支配→ソ勝利'},
 S7:{s:'なし',v:'米損害9CVP未満で、石造建物15ヘクス支配 または 石造建物に独MMCなし→米勝利'},
 S8:{s:'なし',v:'米がQ10から分隊1(HS2)+SMC1脱出→米勝利(独HS脱出ごとに+HS1)'},
 S9:{s:'① 英1st Line 畏縮なし ② 他国籍の指揮は+1',v:'終了時 S6から7ヘクス内に統制伊MMCなし→連合勝利'},
@@ -42050,7 +42050,7 @@ function nmRmHqMvItems(n){var P=NM_HQMV;if(!P)return nmRMenuItems(n);var H=nmHex
   var st=nmStOf(eh),cx=!!st.cx;
   var evm=eh.veh&&nmAfv(eh.veh);if(evm&&evm.mp&&!NM_MOVE)it.push({sep:1}),it.push({ic:'move',t:'このカウンターを移動',sub:evm.mp+'MP。1ヘクスずつタップでマーカーが進む',f:"NM_HQMV=null;BtRmClose();nmMvStart("+P.n+",'"+P.sd+"')"});
   if(!eh.veh){it.push({sep:1});it.push({ic:'move',t:'マーカーを動かす',sub:'種類を選ぶと、進むヘクスをタップしてMFを数えながら動かせます'});
-  it.push({row:1,ic:'move',t:'動かし方',btns:[['普通移動',"BtRmClose();NM_HQMV=null;nmMvStartIm("+P.n+",'"+P.sd+"','n')"],['急速移動'+(cx?'×':''),cx?null:"BtRmClose();NM_HQMV=null;nmMvStartIm("+P.n+",'"+P.sd+"','dt')"],['突撃移動',"BtRmClose();NM_HQMV=null;nmMvStartIm("+P.n+",'"+P.sd+"','as')"]]});
+  it.push({row:1,ic:'move',t:'動かし方',btns:[['普通移動',"BtRmClose();NM_HQMV=null;nmMvStartIm("+P.n+",'"+P.sd+"','n')"],['急速移動'+(cx?'×':''),cx?null:"BtRmClose();NM_HQMV=null;nmMvStartIm("+P.n+",'"+P.sd+"','dt')"],['警戒移動',"BtRmClose();NM_HQMV=null;nmMvStartIm("+P.n+",'"+P.sd+"','as')"]]});
   if(cx)it.push({ic:'info',t:'<span style="font-size:12px;color:#ffb040">CXのユニットは急速移動できません(3.3.1)</span>'});}
   if(eh.grp&&!eh.veh){it.push({sep:1});it.push({ic:'smoke',t:'煙幕手榴弾',sub:'自ヘクス1MF・隣2MF、dr≦煙幕指数で成功(CX+1)',f:"NM_HQMV=null;nmSgOpen("+P.n+",'"+P.sd+"')"});}
   var gun=all.filter(function(x){return x.gun&&!x.veh;})[0];
