@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-15 引き継ぎ】main=v1289(push 済み)。返事待ちなし。
+- 【2026-11-15 引き継ぎ】main=v1289(push 済み)。返事待ち: sample-supop(準備パネルのコンパクトA/B/C)。
 - v1289: トータルFPのバッジ(btStackVaslSVG・パネル見出し、btStackFP は FT を除く。NM_FP_BADGE=false で消す)。
 - v1288: 透かしたヘクスの印(ghMk、スタックの上に描く)。
 - v1287: 畏縮の未熟兵2列(ev.cowN)、LLMC の比較を除去直前の士気値(btGroupCheck lost.mor)、右クリックで透かす(BT_GHOST・BtGhost・btLosRTap、NM_RC_GHOST=false で無効)。
