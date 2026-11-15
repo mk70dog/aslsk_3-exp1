@@ -29900,7 +29900,7 @@ function btGroupCheck(s,targets,drm,log,isPTC){
   leaders.forEach(function(L){
     if(isPTC&&L.s!=='ok')return;
     var before=L.s,r=isPTC?btPTC1(s,L,drm,0,log):btMC1(s,L,drm,0,log);
-    if(!alive(L)){lost.push({cmd:btCmdOf(s.side,{nm:L.nm,wd:0}),mor:btInfo(s.side,L.nm).mor});return;}
+    if(!alive(L)){lost.push({cmd:btCmdOf(s.side,{nm:L.nm,wd:0}),mor:btMorale(s.side,{nm:L.nm,s:before,wd:0})}); /* v1287: LLMCは除去された指揮官のその時の士気値(混乱していれば混乱面)より低いユニットだけ */return;}
     if(r==='break'||r==='break+cas')brokeL.push({cmd:btCmdOf(s.side,L),mor:btMorale(s.side,{nm:L.nm,s:'ok',wd:L.wd})});
     if(L.s==='ok'&&before!=='br'&&r==='pass')bestCmd=Math.min(bestCmd,btCmdOf(s.side,L));
   });
@@ -30021,7 +30021,7 @@ function btFireEval(fd){
   var tS=btFireTargetStack(fd);
   if(!tS)return {ok:false,err:'目標に敵ユニットがいません'};
   var T=BTG.nodes[fd.tgtN];
-  var parts=[],lines=[],fp=0,anyMMC=false,mgUsed=[],usedU=[],hindMax=0,minDist=99,fireElevMax=-9,cx=false,errs=[];
+  var parts=[],lines=[],fp=0,anyMMC=false,anyInx=false,mgUsed=[],usedU=[],hindMax=0,minDist=99,fireElevMax=-9,cx=false,errs=[];
   var ldrParts=0,ldrCmdWorst=null,ldrUnits=[],ftFP=0;
   fd.parts.forEach(function(p){
     var s=btStackById(p.sid);if(!s||s.side!==fd.side||s.n==null||s.n<0)return;
@@ -30057,7 +30057,7 @@ function btFireEval(fd){
       var v=I.fp*mult;
       swUsedBy[o.id]=(swUsedBy[o.id]||0)+1;
       if(I.ft){ftFP+=v;swUsedBy[o.id]=9;} /* FTはほかと組まない(分隊は自身の火力で別に撃てる) */contrib+=v;mgUsed.push({sid:s.id,uid:w.id,b:(I.ft&&!/\[E\]/.test(o.nm))?I.b-2:I.b,rof:I.rof,fp:v,owner:o.id,ft:!!I.ft});usedU.push({s:s,u:w});
-      if(oI.kind==='mmc')anyMMC=true;
+      if(oI.kind==='mmc'){anyMMC=true;if(oI.green)anyInx=true;}
       partLines.push(w.nm+(I.cap?'[鹵獲 B#'+I.b+(I.rof?' ROF'+I.rof:' ROFなし')+']':'')+'('+o.nm+') '+I.fp+(nt.length?' '+nt.join(' '):'')+' = '+Math.round(v*100)/100);
       if(oI.kind==='smc')o.__usedSW=true;
     });
@@ -30074,7 +30074,7 @@ function btFireEval(fd){
       if(mode==='half'||mode==='fpf'){mult*=0.5;nt.push(fd.ph==='AF'?'前進射撃×½':'再射撃×½');}
       var v=I.fp*mult;
       if(fd.ph==='AF'&&I.af&&d<=I.rng){v=Math.ceil(v+1);nt.push('突撃射撃+1');}
-      contrib+=v;anyMMC=true;usedU.push({s:s,u:u});
+      contrib+=v;anyMMC=true;if(I.green)anyInx=true;usedU.push({s:s,u:u});
       partLines.push(u.nm+' '+I.fp+(nt.length?' '+nt.join(' '):'')+' = '+Math.round(v*100)/100);
       if(u.cx)cx=true;
     });
@@ -30126,7 +30126,7 @@ function btFireEval(fd){
     }
   }
   var cower=(ldr==null)&&anyMMC;
-  return {ok:true,tS:tS,tgtUnits:tgtUnits,fp:fp,col:col,colLbl:IFT_LBL[col],drm:drm,drmL:drmL,lines:lines,cower:cower,ldr:ldr,ldrUnits:ldrUnits,
+  return {ok:true,tS:tS,tgtUnits:tgtUnits,fp:fp,col:col,colLbl:IFT_LBL[col],drm:drm,drmL:drmL,lines:lines,cower:cower,cowN:(anyInx?2:1),ldr:ldr,ldrUnits:ldrUnits,
     usedU:usedU,mgUsed:mgUsed,minDist:minDist,plusOut:plusOut,ffmo:ffmo,ffnam:ffnam,parts:parts};
 }
 function btFireTargetStack(fd){
@@ -30143,7 +30143,7 @@ function btFireDist(ev){
   var res={KIA:0,K:0,MC:0,PTC:0,none:0,list:[]};
   for(var a=1;a<=6;a++)for(var b=1;b<=6;b++){
     var raw=a+b,mod=raw+ev.drm,col=ev.col;
-    if(ev.cower&&a===b)col=col-1;
+    if(ev.cower&&a===b)col=col-(ev.cowN||1);
     var r=(col<0)?'-':IFT[Math.max(0,Math.min(15,mod))][col];
     res.list.push(r);
     if(/KIA$/.test(r))res.KIA++;else if(/^K/.test(r))res.K++;else if(/MC$/.test(r))res.MC++;else if(r==='PTC')res.PTC++;else res.none++;
@@ -30154,7 +30154,7 @@ function btFireDist(ev){
 function btFireExec(fd,ev){
   var log=[];
   var d1=btDie(),d2=btDie(),raw=d1+d2,mod=raw+ev.drm,col=ev.col,cow=false;
-  if(ev.cower&&d1===d2){col--;cow=true;}
+  if(ev.cower&&d1===d2){col-=(ev.cowN||1);cow=true;} /* v1287: 未熟兵(Conscript)が加わると2列左(ASLSK4 3.2.2) */
   var r=(col<0)?'-':IFT[Math.max(0,Math.min(15,mod))][col];
   var phN={PF:'準備射撃',DFF:'防御射撃(臨機)',SFF:'再射撃',FPF:'最終防護射撃',FF:'防御射撃',AF:'前進射撃'}[fd.ph];
   log.push(BT_SIDE_NAME[fd.side]+' '+phN+' '+ev.parts.map(function(p){return BTG.nodes[p.s.n].nm;}).join('+')+' → '+BTG.nodes[fd.tgtN].nm+
