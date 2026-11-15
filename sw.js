@@ -1,6 +1,6 @@
 // ASL SK Judge Service Worker (オフライン起動用)
 // 更新のたびに APP_VERSION を index.html の APP_VERSION と同じ値に更新すること(古い版が出続けるのを防ぐ)。
-var APP_VERSION='ASLSK3M-v12.506';
+var APP_VERSION='ASLSK3M-v12.507';
 var CACHE='aslsk-'+APP_VERSION;
 var CORE=['./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png','./icon-512m.png'];
 self.addEventListener('install',function(e){
@@ -43,3 +43,4 @@ var APP_VERSION_HIST_v1303="v1303(ダルマ指示「修正実施」): 記録の�
 var APP_VERSION_HIST_v1304="v1304(ダルマ指示「実施」): 回復フェイズ画面を案Aに(回復できる部隊をカード一覧・駒画像・成功率・自己/指揮官の選択肢、SWは下段)。連携射撃パネルをヘクスごとの行(駒画像・FP・指揮官の有無)+合計・指揮官なし警告に変更(btFireCardsHTML)。";
 var APP_VERSION_HIST_v1305="v1305(ダルマ指示「B実施」): 射撃パネルをサンプルB(攻撃のヘクスごとの駒・FP・指揮官★/! ▶ 合計FP→列・DRM ▶ 目標の駒 ▶ 結果の見込みバー の1行)に。通常射撃・連携射撃とも同じ(btFireCardsHTML)。";
 var APP_VERSION_HIST_v1306="v1306(ダルマ指示「連携時も同じようなパネルのサンプル」の確認中に発見): 射撃パネルの指揮官マーク(★/!)が駒の右端からずれる表示を修正。";
+var APP_VERSION_HIST_v1307="v1307(ダルマ指示「3種類画面設定で変更可能にする」): 対戦モードの上バー(フェイズ・手番・次へ・勝利)を下バーに。A=ドック/B=シェブロン/C=2段の3種類+従来の上バーを、メニュー「下バーの形」で切り替え(既定A)。最後の記録の帯は廃止し「履歴」ボタンで戦闘記録を開く。攻撃・移動などの操作ボタンは下バーの上に浮かぶ。";
