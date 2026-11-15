@@ -30522,6 +30522,7 @@ function btRtpPanelHTML(){ /* v1281 */
     h+='<div style="font-size:12px;color:#8fa0b3">'+(R.low?'匍匐後退: 光っている隣接ヘクスをタップ(阻止なし・全MF)':((R.path&&R.path.length)?'コース: '+BTG.nodes[c.s.n].nm+'→'+R.path.map(function(n){return BTG.nodes[n].nm;}).join('→')+' … 白い円で途中のヘクスを追加、緑の円で到着':'行き先の<b style="color:#60e070">緑の円</b>をタップ=最短コース。通りたいヘクスがある時は先に<b>白い円</b>(途中のヘクス)をタップ(数字=MF、★=おすすめ、!=阻止あり)'))+'</div>';
     if(!R.low){O.dests.forEach(function(d){var N=BTG.nodes[d.n];h+='<div style="font-size:12px;padding:2px 0">'+(d.rec?'★ ':'・')+'<b>'+N.nm+'</b> '+btTerrJP(N.terr)+' '+d.mf+'MF'+(d.intd?' <span style="color:#ff8a80">阻止'+d.intd+'回</span>':'')+'</div>';});
       if(!O.dests.length)h+='<div style="color:#ff8a80;font-size:12px">潰走できるヘクスがありません'+(must?'(おまかせで除去)':'')+'</div>';}
+    var LD=btRtpLdrs(c);if(LD.length)h+='<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px;font-size:12px;color:#8fa0b3">'+T('指揮官の付き添い')+':'+LD.map(function(w){var on=R.ldr===w.id;return btBtn((on?'✓ ':'')+w.nm+' '+T('も一緒に潰走'),"BtRtpLdr('"+w.id+"')",{on:true,sel:on});}).join('')+'</div>'+(R.ldr?'<div style="font-size:11px;color:#8fa0b3">'+T('阻止のNMCに指揮修正。失敗すると指揮官は除去')+'</div>':''); /* sample-rtldr */
     h+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+(O.low.length?btBtn(R.low?'匍匐後退をやめる':'匍匐後退(1ヘクス)','BtRtpLow()',{on:true,sel:R.low}):'')+((R.path&&R.path.length)?btBtn('コースをやり直す','BtRtpCourseReset()',{on:true}):'')+btBtn('おまかせ','BtRtpAuto()',{on:true})+(must?'':btBtn('留まる','BtRtpStay()',{on:true}))+'</div>';}
   if(R.res.length){h+='<div style="margin-top:6px;font-size:11.5px;color:#9fb0c3">'+R.res.map(function(t){return '✓ '+t;}).join('<br>')+'</div>';}
   h+='<div style="display:flex;justify-content:flex-end;margin-top:8px">'+btBtn(L.length?'残りはおまかせで潰走終了 ▶':'潰走終了 ▶','BtRtpEnd()',{on:true})+'</div></div>';
@@ -30687,16 +30688,23 @@ function btRtpSteps(c){ /* コースの次の1歩: 規則どおりに進めて�
   return {steps:out,used:used,dests:O.dests};
 }
 function BtRtpCourseReset(){if(BT.rtp){BT.rtp.path=[];Draw();}}
-function btRoutExec(s,u,path,low,must,log){
+function btRtpLdrs(c){return c?btInf(c.s).filter(function(w){return w!==c.u&&btI(w,c.s.side).kind==='smc'&&w.s==='ok'&&!w.cx;}):[];} /* sample-rtldr: 一緒に潰走できる指揮官(統制・非釘付け) */
+function btRtpLdrSel(c){var R=BT.rtp;if(!R||!R.ldr)return null;return btRtpLdrs(c).filter(function(w){return w.id===R.ldr;})[0]||null;}
+function BtRtpLdr(uid){var R=BT.rtp;if(!R)return;R.ldr=(R.ldr===uid)?null:uid;btSave();Draw();}
+function btRoutExec(s,u,path,low,must,log,ldr){
   var side=s.side;
   var sws=btSWOf(s,u),pp=0;sws.sort(function(a,b){return (btI(a,side).pp||1)-(btI(b,side).pp||1);});
   var carry=[];sws.forEach(function(w){var p=btI(w,side).pp||1;if(pp+p<=(btI(u,side).kind==='mmc'?3:1)){pp+=p;carry.push(w);}else{w.own=null;log.push('  '+w.nm+'を放棄');}});
-  var t={id:'s'+(++BT.seq),side:side,n:s.n,boardId:s.boardId,col:s.col,row:s.row,u:[u].concat(carry),mel:false};
+  var lw=[];if(ldr&&s.u.indexOf(ldr)>=0){lw=[ldr].concat(btSWOf(s,ldr));} /* sample-rtldr: 指揮官も一緒に(指揮官の持つSWも) */
+  var t={id:'s'+(++BT.seq),side:side,n:s.n,boardId:s.boardId,col:s.col,row:s.row,u:[u].concat(carry).concat(lw),mel:false};
   s.u=s.u.filter(function(x){return t.u.indexOf(x)<0;});BT.stacks.push(t);
-  log.push(BTG.nodes[s.n].nm+' '+u.nm+(must?'(潰走義務)':'')+' 潰走'+(low?'(匍匐後退)':'')+' → '+path.map(function(n){return BTG.nodes[n].nm;}).join('→'));
+  var ldm=ldr?btCmdOf(side,ldr):0;
+  log.push(BTG.nodes[s.n].nm+' '+u.nm+(must?'(潰走義務)':'')+(ldr?'+'+ldr.nm+'(付き添い)':'')+' 潰走'+(low?'(匍匐後退)':'')+' → '+path.map(function(n){return BTG.nodes[n].nm;}).join('→'));
   for(var i=0;i<path.length;i++){
     btSetPos(t,path[i]);
-    if(!low&&btInterdictors(path[i],side)){var who=btInterdictors(path[i],side);btMC1(t,u,0,0,log,'  阻止('+who+'から)');if(t.u.indexOf(u)<0)break;if(u.s==='pn')break;}
+    if(!low&&btInterdictors(path[i],side)){var who=btInterdictors(path[i],side);var rr=btMC1(t,u,0,ldm,log,'  阻止('+who+'から)');
+      if(ldr&&rr!=='pass'&&t.u.indexOf(ldr)>=0){btRemoveUnit(t,ldr);log.push('  '+ldr.nm+'(付き添いの指揮官) 阻止のNMC失敗で除去');ldr=null;ldm=0;}
+      if(t.u.indexOf(u)<0)break;if(u.s==='pn')break;}
   }
   if(t.u.indexOf(u)>=0&&btAdjGOEnemy(t.n,side)){btRemoveUnit(t,u);log.push('  '+u.nm+' 敵に隣接したまま → 除去');}
 }
@@ -30710,16 +30718,16 @@ function btRoutPhase(){
 function btRoutFin(log){btMergeAll();btCleanStacks();if(log.length===1)log.push('潰走の対象なし');btLog(log);}
 function btRtpNext(){var R=BT.rtp;if(!R)return null;var L=btRoutList(R.side);return L.length?{sid:L[0].s.id,uid:L[0].u.id}:null;}
 function btRtpCur(){var R=BT.rtp;if(!R||!R.cur)return null;var s=btStackById(R.cur.sid);if(!s)return null;var u=s.u.filter(function(x){return x.id===R.cur.uid;})[0];if(!u)return null;return {s:s,u:u};}
-function btRtpDone(c,lines){var R=BT.rtp;R.path=[];R.log=R.log.concat(lines);R.res.push(lines.join(' / '));c.u._rtd=1;R.cur=btRtpNext2();R.low=false;btSave();Draw();}
+function btRtpDone(c,lines){var R=BT.rtp;R.path=[];R.ldr=null;R.log=R.log.concat(lines);R.res.push(lines.join(' / '));c.u._rtd=1;R.cur=btRtpNext2();R.low=false;btSave();Draw();}
 function btRtpNext2(){var R=BT.rtp;var L=btRoutList(R.side).filter(function(x){return !x.u._rtd;});return L.length?{sid:L[0].s.id,uid:L[0].u.id}:null;}
-function BtRtpPick(sid,uid){if(BT.rtp){BT.rtp.cur={sid:sid,uid:uid};BT.rtp.low=false;BT.rtp.path=[];btSave();Draw();}}
+function BtRtpPick(sid,uid){if(BT.rtp){BT.rtp.cur={sid:sid,uid:uid};BT.rtp.low=false;BT.rtp.path=[];BT.rtp.ldr=null;btSave();Draw();}}
 function BtRtpLow(){if(BT.rtp){BT.rtp.low=!BT.rtp.low;Draw();}}
 function btRtpTap(n){var c=btRtpCur();if(!c)return false;var R=BT.rtp,O=btRoutOpts(c.s,c.u),lines=[],must=btMustRout(c.s,c.u);
-  if(R.low){if(O.low.indexOf(n)<0){btToast('匍匐後退できるのは光っている隣接ヘクス');return true;}btRoutExec(c.s,c.u,[n],true,must,lines);}
+  if(R.low){if(O.low.indexOf(n)<0){btToast('匍匐後退できるのは光っている隣接ヘクス');return true;}btRoutExec(c.s,c.u,[n],true,must,lines,btRtpLdrSel(c));}
   else{var P=R.path||[],ST=btRtpSteps(c),st=ST.steps.filter(function(x){return x.n===n;})[0];
     if(st&&!st.dest){R.path=P.concat(st.seg);btSave();Draw();return true;} /* 途中のヘクス(経由) */
-    if(st&&st.dest){btRoutExec(c.s,c.u,P.concat(st.seg),false,must,lines);}
-    else if(!P.length){var d=O.dests.filter(function(x){return x.n===n;})[0];if(!d){btToast('緑の円(行き先)か、白い円(コースの1歩)をタップ');return true;}btRoutExec(c.s,c.u,d.path,false,must,lines);}
+    if(st&&st.dest){btRoutExec(c.s,c.u,P.concat(st.seg),false,must,lines,btRtpLdrSel(c));}
+    else if(!P.length){var d=O.dests.filter(function(x){return x.n===n;})[0];if(!d){btToast('緑の円(行き先)か、白い円(コースの1歩)をタップ');return true;}btRoutExec(c.s,c.u,d.path,false,must,lines,btRtpLdrSel(c));}
     else{btToast('白い円(途中のヘクス)か、緑の円(行き先)をタップ');return true;}}
   btRtpDone(c,lines);return true;}
 function BtRtpAuto(){var c=btRtpCur();if(!c)return;var lines=[],must=btMustRout(c.s,c.u),pl=btRoutPlan(c.s,c.u);
