@@ -1,6 +1,6 @@
 // ASL SK Judge Service Worker (オフライン起動用)
 // 更新のたびに APP_VERSION を index.html の APP_VERSION と同じ値に更新すること(古い版が出続けるのを防ぐ)。
-var APP_VERSION='ASLSK3M-v12.508';
+var APP_VERSION='ASLSK3M-v12.509';
 var CACHE='aslsk-'+APP_VERSION;
 var CORE=['./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png','./icon-512m.png'];
 self.addEventListener('install',function(e){
@@ -45,3 +45,4 @@ var APP_VERSION_HIST_v1305="v1305(ダルマ指示「B実施」): 射撃パネル
 var APP_VERSION_HIST_v1306="v1306(ダルマ指示「連携時も同じようなパネルのサンプル」の確認中に発見): 射撃パネルの指揮官マーク(★/!)が駒の右端からずれる表示を修正。";
 var APP_VERSION_HIST_v1307="v1307(ダルマ指示「3種類画面設定で変更可能にする」): 対戦モードの上バー(フェイズ・手番・次へ・勝利)を下バーに。A=ドック/B=シェブロン/C=2段の3種類+従来の上バーを、メニュー「下バーの形」で切り替え(既定A)。最後の記録の帯は廃止し「履歴」ボタンで戦闘記録を開く。攻撃・移動などの操作ボタンは下バーの上に浮かぶ。";
 var APP_VERSION_HIST_v1308="v1308(ダルマ指示「アプリ対戦モードからシナリオ選択可能に」→実施): 対戦モードの≡メニューに「シナリオ選択」を追加。対戦の途中で別シナリオのAPPを押すと「やめる/先にセーブ/切り替える」の確認を出してから切り替え。";
+var APP_VERSION_HIST_v1309="v1309(ダルマ報告「S25 新しく始めるができない」): 「新しい対戦」と「配置完了・ゲーム開始」(未配置の部隊が残る時)が「もう一度押す」案内のトーストだけで気づけなかった→確認の窓(やめる/最初からやり直す、配置に戻る/このまま開始)に。";
