@@ -34459,6 +34459,7 @@ function btLosABPin(d,t){
 // 右ボタンを押してすぐ離す(ドラッグなし)=LOS測定の地点(1回目A・2回目B・3回目は新しいA、Aをもう一度で取消)。右ボタンのドラッグは従来どおり地図の移動。
 var BT_RCLK=false,BT_RC0=null;
 function btLosRTap(n){
+  if(window.NM_RC_GHOST!==false&&(BT_GHOST[n]||BT.stacks.some(function(x){return x.n===n&&x.u.length;}))){BtGhost(n);return;} /* sample-ghost(ダルマ指示「対戦モードのみ・右クリックでカウンターを透かす」): カウンターのあるヘクスの右クリックは透かす/戻すだけ(メニューは長押し・何もないヘクスの右クリック) */
   if(window.BT_RMENU!==false){btRMenu(n);return;} // v309: 右クリックはメニュー
   if(!BT.losAB)BT.losAB={a:null,b:null,rc:true};
   btLosABTap(n);
