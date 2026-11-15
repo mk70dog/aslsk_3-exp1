@@ -32459,6 +32459,12 @@ function btTopCss(){if(document.getElementById('btTopCss'))return;var st=documen
  ].join('');document.head.appendChild(st);}
 function btTopPop(title,body,icon,cnt){btTopCss();var o=document.getElementById('btTopPop');if(o)o.remove();o=document.createElement('div');o.id='btTopPop';o.className=btTopSty();o.onclick=function(){o.remove();};
   o.innerHTML='<div class="w" onclick="event.stopPropagation()"><div class="hd"><span class="ic">'+(icon||'')+'</span><span class="tt">'+title+'</span>'+(cnt?'<span class="cnt">'+cnt+'</span>':'')+'<span style="flex:1"></span><button class="x" onclick="document.getElementById(\'btTopPop\').remove()">✕</button></div><div class="bd">'+body+'</div></div>';document.body.appendChild(o);}
+/* sample-vicic: 勝利条件のマーク A=旗(目標) B=建物(線画) C=星章 */
+function btVicIc(sz,col){var k=window.NM_VIC_IC||'A',c=col||'currentColor';var P={
+ A:'<path d="M6 21V3.5"/><path d="M6 4h11l-2.5 4 2.5 4H6" fill="'+c+'" fill-opacity=".25"/>',
+ B:'<path d="M3 21h18"/><path d="M5 21V9l7-5 7 5v12"/><path d="M9.5 21v-5h5v5"/><path d="M9 11h2M13 11h2"/>',
+ C:'<path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8-4.3-4.1 5.9-.8z" fill="'+c+'" fill-opacity=".25"/>'}[k];
+ return '<svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" fill="none" stroke="'+c+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block">'+P+'</svg>';}
 function btTopSide(t){var m=String(t).match(/^(独軍|ソ連|米軍|英軍|伊軍|日本軍|仏軍)/);if(!m)return null;var k=Object.keys(BT_SIDE_NAME).filter(function(x){return BT_SIDE_NAME[x]===m[1];})[0];return k||null;}
 function btTopRes(t){if(!/DR\d|TK|命中/.test(t))return '';var m=String(t).match(/→\s*([^→]+)$/);if(!m)return '';var r=m[1].replace(/\s*\[期待.*$/,'').trim();var c=/KIA|除去|撃破/.test(r)?'#ff5050':(/MC|混乱|損耗/.test(r)?'#ffa040':(/PTC|釘付け/.test(r)?'#ffe060':(/成功/.test(r)?'#60e070':'#8fa0b3')));if(r==='-')r='効果なし';return '<span class="rs" style="color:'+c+';border-color:'+c+';background:'+c+'1a">'+r+'</span>';}
 function BtTopLog(){var R=null;try{R=btRecLoad();}catch(e){}var src=(R&&R.log&&R.log.length)?R.log.map(function(x){return {at:x.at,l:x.l};}):(BT.log||[]).map(function(l){return {at:'',l:l};});
@@ -32477,7 +32483,7 @@ function BtTopVic(){var vc=btVicCount(),cf=btCfg(),need=btCfgNeed(),vs=cf?cf.vic
       +'<div class="trn">TURN '+BT.turn+' / '+mx+' ・ '+T('建物')+' '+tot+'</div>'+(bl?'<div class="bl">'+bl+'</div>':'')+'<div class="goal">▶ '+(goal||T('勝利に必要')+' '+need)+'</div>';}
   else{var seg='';btBldgs().forEach(function(b){var c=BT.ctl&&BT.ctl[b.id];seg+='<i style="background:'+(c?BT_SIDE_COL[c]:'#232a35')+'"></i>';});
     h+='<div class="vline"><b style="color:'+G+'">'+vc.ger+'</b>'+T('独軍')+'<b style="color:'+Sv+';margin-left:10px">'+vc.sov+'</b>'+T('ソ連')+'<span style="margin-left:auto">T'+BT.turn+'/'+mx+'</span></div><div class="seg">'+seg+'</div><div class="goal">'+(goal||T('勝利に必要')+' '+need)+'</div>';}
-  btTopPop(T('勝利条件'),h,'🏠',T('建物')+' '+tot);}
+  btTopPop(T('勝利条件'),h,btVicIc(16,'#16180f'),T('建物')+' '+tot);}
 function btLogHTML(){
   var L=BT.log||[];if(!L.length)return '';
   var h='<details'+(BT.logOpen2===true?' open':'')+' ontoggle="BT.logOpen2=this.open;btSave()" style="margin-top:6px"><summary style="font-size:12px;color:#8899aa;cursor:pointer">'+T('戦闘記録')+' ('+L.length+')</summary><div style="max-height:30vh;overflow:auto;font-size:11px;color:#ccddee">';
@@ -43858,7 +43864,7 @@ function btFullBars(on){
   if(topInfo){var L0=(BT.log||[]),la0=L0.length?L0[L0.length-1]:null,lt=la0?[].concat(la0).map(function(x){return String(x).replace(/<[^>]*>/g,'');}).slice(-2).join(' ／ ').replace(/[<>&]/g,''):T('記録はまだありません');
     var vc=null,nd=null;try{vc=btVicCount();nd=btCfgNeed();}catch(e){}
     th+='<span style="width:8px;flex:0 0 auto"></span>'+btCmdMinChip()
-      +(vc?'<span class="tinf" title="'+T('建物の支配')+'" onclick="BtTopVic()" style="flex:0 0 auto;display:flex;align-items:center;gap:5px;height:30px;padding:0 9px;border:1px solid #2c3644;border-radius:6px;background:#141a22;font-size:12.5px;font-weight:800;white-space:nowrap;cursor:pointer">🏠 <span style="color:'+BT_SIDE_COL.GER+'">'+T('独')+vc.ger+'</span><span style="color:'+BT_SIDE_COL.SOV+'">'+T('ソ')+vc.sov+'</span><span style="color:#8899aa">/'+vc.total+'</span><span style="color:#8899aa;font-weight:600">T'+BT.turn+'/'+btMaxTurn()+'</span></span>':'')
+      +(vc?'<span class="tinf" title="'+T('建物の支配')+'" onclick="BtTopVic()" style="flex:0 0 auto;display:flex;align-items:center;gap:5px;height:30px;padding:0 9px;border:1px solid #2c3644;border-radius:6px;background:#141a22;font-size:12.5px;font-weight:800;white-space:nowrap;cursor:pointer"><span style="color:#ffd24a">'+btVicIc(15)+'</span><span style="color:'+BT_SIDE_COL.GER+'">'+T('独')+vc.ger+'</span><span style="color:'+BT_SIDE_COL.SOV+'">'+T('ソ')+vc.sov+'</span><span style="color:#8899aa">/'+vc.total+'</span><span style="color:#8899aa;font-weight:600">T'+BT.turn+'/'+btMaxTurn()+'</span></span>':'')
       +'<span onclick="BtTopLog()" title="'+T('戦闘記録を開く')+'" style="flex:1 1 0;min-width:0;display:flex;align-items:center;gap:8px;height:30px;padding:0 10px;border:1px solid #2c3644;border-radius:6px;background:#141a22;cursor:pointer;overflow:hidden"><span style="flex:0 0 auto;font-size:11.5px;color:#8899aa">'+T('最後の記録')+'</span><span style="flex:1 1 0;min-width:0;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+lt+'</span><span style="flex:0 0 auto;color:#8899aa">▾</span></span>';}
   if(th!==BT_FB_H.t){t.innerHTML=th;BT_FB_H.t=th;appVerFit();}
   // 下: 選択中のスタックと最後の記録
