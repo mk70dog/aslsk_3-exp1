@@ -30567,12 +30567,53 @@ function btRtpPanelHTML(){ /* v1281 */
   h+='<div style="display:flex;justify-content:flex-end;margin-top:8px">'+btBtn(L.length?'残りはおまかせで潰走終了 ▶':'潰走終了 ▶','BtRtpEnd()',{on:true})+'</div></div>';
   return h;
 }
+/* sample-rphcompact(ダルマ「右が欠けている/表示をコンパクトにする サンプル×3」): 回復フェイズ画面のコンパクト版 A=行リスト B=小カード2列 C=下のシート(横スクロール) */
+function btRphWrapPos(sty){var tbw=0,L=false;try{tbw=nmTbW()||0;L=document.documentElement.classList.contains('nm-tbL');}catch(e){}
+  var base='background:#12161c;border:1px solid #4a5568;border-radius:10px;box-shadow:0 10px 40px #000c;font:13px/1.4 AppFont,AppJP,monospace;color:#dfe6ee;z-index:9000;box-sizing:border-box;';
+  var ax=L?'calc(50% + '+(tbw/2)+'px)':'calc(50% - '+(tbw/2)+'px)',wmax='calc(100vw - '+(tbw+16)+'px)';
+  if(sty==='C')return 'position:fixed;'+(L?'left:'+(tbw+8)+'px;right:8px':'left:8px;right:'+(tbw+8)+'px')+';bottom:calc(var(--btfbot,0px) + 8px);max-height:50vh;overflow:auto;padding:8px 10px;'+base;
+  return 'position:fixed;left:'+ax+';top:calc(var(--btftop,0px) + (100vh - var(--btftop,0px) - var(--btfbot,0px))/2);transform:translate(-50%,-50%);width:min('+(sty==='A'?760:940)+'px,'+wmax+');max-height:calc(100vh - var(--btftop,0px) - var(--btfbot,0px) - 16px);overflow:auto;padding:8px 10px;'+base;}
+function btRphCompactHTML(sty,A,man,hu,att,R){
+  var P2=function(t){var c=0,w=[0,0,1,2,3,4,5,6,5,4,3,2,1];for(var d=2;d<=12&&d<=t;d++)c+=w[d];return Math.max(c,1)/36;};
+  var pcol=function(p){return p>=60?'#7fe08a':(p>=35?'#ffd060':'#ff9a80');};
+  var tag=function(t,c){return '<span style="padding:0 5px;border-radius:8px;font-size:10.5px;font-weight:700;background:'+c+'33;border:1px solid '+c+'99;color:'+c+';white-space:nowrap">'+t+'</span>';};
+  var img=function(a,w){var src=null;try{var ps=btVcPieces(a.st);for(var i=0;i<ps.length;i++)if(ps[i].u===a.uu){src=ps[i].src;break;}}catch(e){}return src?'<img src="'+src+'" style="width:'+w+'px;height:'+w+'px;border-radius:3px;display:block;flex:0 0 auto">':'<div style="width:'+w+'px;height:'+w+'px;background:#334;border-radius:3px;flex:0 0 auto"></div>';};
+  var bt=function(lb,fn,on,dim,pd){return '<button class="b sm" style="margin:0;height:28px;padding:0 '+(pd||9)+'px;font-size:12px;white-space:nowrap;'+(on?'border-color:#ffd060;color:#ffd060;font-weight:800;':'')+(dim?'opacity:.45;':'')+'" '+(fn&&!dim?'onclick="'+fn+'"':'')+'>'+lb+'</button>';};
+  var h='<div style="'+btRphWrapPos(sty)+'">';
+  var ttl='RPh 回復 — '+BT_SIDE_NAME[hu]+'('+(att?'攻':'防')+') T'+BT.turn+(BT.half?'後':'前');
+  var seg=bt('アプリが振る','BtRphMode(\'app\')',!man)+bt('自分で振る','BtRphMode(\'man\')',man);
+  var foot=bt('残りは自動','BtRphAuto()')+bt('終了 ▶','BtRphEnd()',true,false,12);
+  h+='<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b style="font-size:14px" title="各ユニットは1回/フェイズ(指揮官の回復は除く)。SWの受け渡しとDMの除去は終了時に自動。">'+ttl+'</b><span style="display:flex;gap:4px">'+seg+'</span><span style="flex:1"></span>'+(sty==='C'?foot:'')+bt('小さくする','BtRphMin()')+'</div>';
+  if(R.ask){var k=R.ask.got.length+1;h+='<div style="border:1px solid #ffd060;border-radius:6px;padding:6px 8px;margin:6px 0;background:#2e2810"><b style="color:#ffd060">'+R.ask.tx+' — '+(R.ask.n===1?'dr':'DR')+'の出目('+k+'/'+R.ask.n+')</b><div style="display:flex;gap:5px;margin-top:5px;flex-wrap:wrap">'+[1,2,3,4,5,6].map(function(i){return bt(''+i,'BtRphDie('+i+')',true,false,14);}).join('')+bt('やめる','BtRphCancel()')+'</div>'+(R.ask.got.length?'<div style="font-size:12px;margin-top:3px">入力済み: '+R.ask.got.join(' , ')+'</div>':'')+'</div>';}
+  var mm=[],cu={};A.forEach(function(a){if(a.g==='e'||a.g==='f'){var id=a.uu.id;if(!cu[id]){cu[id]={uu:a.uu,st:a.st,hx:a.hx,mor:a.mor,o:[]};mm.push(cu[id]);}cu[id].o.push(a);}});
+  var swl=A.filter(function(a){return a.g==='b'||a.g==='c';}),shk=A.filter(function(a){return a.g==='sh';});
+  var opt=function(a,u,on){var p=Math.round(P2(a.mor-a.drm)*100);return '<button class="b sm" style="margin:0;height:28px;padding:0 8px;font-size:12px;white-space:nowrap;'+(on?'border-color:#ffd060;':'')+'" onclick="BtRph(\''+a.k+'\')"><span style="color:#cfd8e3">'+(a.g==='f'?a.lab.replace('が回復',''):'自己')+'</span> <b style="color:'+pcol(p)+'">'+p+'%</b> <span style="color:#ffd060;font-weight:800">DR</span></button>';};
+  var swBtn=function(a){return a.info?'<span style="color:#ff8a80;font-size:11px">修理不可</span>':bt(a.n===1?'dr':'DR','BtRph(\''+a.k+'\')',!a.dis,!!a.dis);};
+  var lab=function(t,c){return '<div style="font-weight:700;color:'+c+';font-size:12px;margin:'+(sty==='C'?'6px 0 3px':'8px 0 3px')+'">'+t+'</div>';};
+  if(sty==='A'){
+    if(mm.length){h+=lab('回復できる部隊('+mm.length+')','#ffd060');mm.forEach(function(c,i){var u=c.uu;
+      h+='<div style="display:flex;align-items:center;gap:8px;padding:4px 6px;margin:3px 0;background:#1b212a;border:'+(i===0?'1.5px solid #ffd060':'1px solid #2f3a48')+';border-radius:6px">'+img(c,30)+'<b style="white-space:nowrap">'+u.nm+'</b><span style="color:#9ab;white-space:nowrap">@'+c.hx+'</span>'+tag('混乱','#ff8040')+(u.dm?tag('DM+4','#ff6a6a'):'')+tag('士気'+c.mor,'#9ab')+'<span style="flex:1"></span>'+c.o.map(function(a,j){return opt(a,u,i===0&&j===0);}).join('')+'</div>';});}
+    if(swl.length){h+=lab('SW・車両(回収・修理)','#8fb8ff')+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'+swl.map(function(a){return '<div style="display:flex;align-items:center;gap:6px;padding:3px 6px;background:#1b212a;border:1px solid #2f3a48;border-radius:6px;'+(a.dis?'opacity:.6':'')+'">'+(a.uu?img(a,26):'')+'<div style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><b>'+a.tx+'</b> <span style="color:#8fa0b3;font-size:11px">'+(a.dis&&!a.info?a.dis:a.sub)+'</span></div>'+swBtn(a)+'</div>';}).join('')+'</div>';}
+  }else if(sty==='B'){
+    if(mm.length){h+=lab('回復できる部隊('+mm.length+')','#ffd060')+'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:6px">'+mm.map(function(c,i){var u=c.uu;return '<div style="padding:5px 7px;background:#1b212a;border:'+(i===0?'1.5px solid #ffd060':'1px solid #2f3a48')+';border-radius:7px"><div style="display:flex;gap:7px;align-items:center">'+img(c,34)+'<div style="flex:1;min-width:0"><b>'+u.nm+'</b> <span style="color:#9ab">@'+c.hx+'</span><div style="display:flex;gap:3px;margin-top:1px;flex-wrap:wrap">'+tag('混乱','#ff8040')+(u.dm?tag('DM+4','#ff6a6a'):'')+tag('士気'+c.mor,'#9ab')+'</div></div></div><div style="display:flex;gap:4px;margin-top:5px;flex-wrap:wrap">'+c.o.map(function(a,j){return opt(a,u,i===0&&j===0);}).join('')+'</div></div>';}).join('')+'</div>';}
+    if(swl.length){h+=lab('SW・車両(回収・修理)','#8fb8ff')+'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:6px">'+swl.map(function(a){return '<div style="display:flex;align-items:center;gap:7px;padding:4px 7px;background:#1b212a;border:1px solid #2f3a48;border-radius:7px;'+(a.dis?'opacity:.6':'')+'">'+(a.uu?img(a,30):'')+'<div style="flex:1;min-width:0"><b style="font-size:12.5px">'+a.tx+'</b><div style="font-size:11px;color:#8fa0b3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(a.dis&&!a.info?'['+a.dis+']':a.sub)+'</div></div>'+swBtn(a)+'</div>';}).join('')+'</div>';}
+  }else{
+    var cards=mm.map(function(c,i){var u=c.uu;return '<div style="flex:0 0 190px;padding:5px 7px;background:#1b212a;border:'+(i===0?'1.5px solid #ffd060':'1px solid #2f3a48')+';border-radius:7px"><div style="display:flex;gap:6px;align-items:center">'+img(c,36)+'<div style="min-width:0"><b style="white-space:nowrap">'+u.nm+'</b><div style="color:#9ab;font-size:11px">@'+c.hx+' '+tag('混乱','#ff8040')+(u.dm?' '+tag('DM+4','#ff6a6a'):'')+'</div></div></div><div style="display:flex;flex-direction:column;gap:3px;margin-top:5px">'+c.o.map(function(a,j){return opt(a,u,i===0&&j===0);}).join('')+'</div></div>';}).join('')
+     +swl.map(function(a){return '<div style="flex:0 0 190px;padding:5px 7px;background:#1b212a;border:1px solid #2f3a48;border-radius:7px;'+(a.dis?'opacity:.6':'')+'"><div style="display:flex;gap:6px;align-items:center">'+(a.uu?img(a,36):'')+'<div style="min-width:0"><b style="font-size:12.5px;white-space:nowrap">'+a.tx+'</b><div style="font-size:11px;color:#8fa0b3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px">'+(a.dis&&!a.info?a.dis:a.sub)+'</div></div></div><div style="margin-top:5px;display:flex;justify-content:flex-end">'+swBtn(a)+'</div></div>';}).join('');
+    h+='<div style="display:flex;gap:6px;overflow-x:auto;padding:6px 0 2px;-webkit-overflow-scrolling:touch">'+cards+'</div>';
+  }
+  shk.forEach(function(a,i){if(!i)h+=lab('ショック回復','#ffd060');h+='<div style="display:flex;align-items:center;gap:8px;padding:3px 6px;background:#1b212a;border-radius:6px;margin:3px 0"><b>'+a.tx+'</b><span style="color:#8fa0b3;font-size:11px;flex:1">'+a.sub+'</span>'+bt('dr','BtRph(\''+a.k+'\')',true)+'</div>';});
+  if(!mm.length&&!swl.length&&!shk.length)h+='<div style="margin:8px 0;color:#8fa0b3">操作できる項目はありません</div>';
+  if(R.res.length)h+='<div style="font-size:11.5px;color:#9fb0c3;margin-top:5px"><span style="color:#7fe08a;font-weight:700">実施済み</span> '+R.res.join(' / ')+'</div>';
+  if(sty!=='C')h+='<div style="display:flex;gap:6px;margin-top:8px;justify-content:flex-end">'+foot+'</div>';
+  return h+'</div>';}
 function btRphPanelHTML(){
   var R=BT.rph;if(!R||!R.on||!BT.app)return '';
   var A=btRphActs(),man=(BT.rphMode==='man');
   var hu=btHuman(),att=(hu===btSideNow());
   var todo=A.filter(function(a){return !a.info;}).length;
   if(R.min){var tbw=0;try{tbw=nmTbW()||0;}catch(e){}return '<div style="position:fixed;right:'+(tbw+10)+'px;bottom:calc(var(--btfbot,0px) + 70px);z-index:9200;display:flex;gap:6px">'+btBtn('RPh(回復フェイズ)を開く('+todo+')','BtRphMin()',{on:true})+btBtn('RPh(回復フェイズ)終了 ▶','BtRphEnd()',{on:true})+'</div>';} /* v1274 バグ修正: 小さくした時のボタンが下の帯・右のツールバーの裏に隠れていた */
+  if(window.NM_RPH_STY&&window.NM_RPH_STY!=='0'&&!R.ask===false||window.NM_RPH_STY&&window.NM_RPH_STY!=='0')return btRphCompactHTML(window.NM_RPH_STY,A,man,hu,att,R);
   var rowC='display:flex;align-items:center;gap:8px;padding:6px 8px;background:#1b212a;border:1px solid #2f3a48;border-radius:6px;margin:4px 0';
   var grp={b:'b) 回収',c:'c) 故障・修理',sh:'ショック回復',e:'e) 自己回復',f:'f) 指揮官による回復'};
   var h='<div style="position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(1010px,97vw);max-height:92vh;overflow:auto;background:#12161c;border:1px solid #4a5568;border-radius:10px;box-shadow:0 10px 40px #000c;font:13px/1.45 AppFont,AppJP,monospace;color:#dfe6ee;z-index:9000;padding:12px 14px">';
