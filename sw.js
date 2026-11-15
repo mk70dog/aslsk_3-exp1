@@ -1,6 +1,6 @@
 // ASL SK Judge Service Worker (オフライン起動用)
 // 更新のたびに APP_VERSION を index.html の APP_VERSION と同じ値に更新すること(古い版が出続けるのを防ぐ)。
-var APP_VERSION='ASLSK3M-v12.516';
+var APP_VERSION='ASLSK3M-v12.517';
 var CACHE='aslsk-'+APP_VERSION;
 var CORE=['./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png','./icon-512m.png'];
 self.addEventListener('install',function(e){
@@ -53,3 +53,4 @@ var APP_VERSION_HIST_v1313="v1313(ダルマ報告「赤枠スペースが空い�
 var APP_VERSION_HIST_v1314="v1314(ダルマ報告「臨機射撃の確認パネルがわかりにくい」→A案): アプリ移動中の確認パネルを、移動中の駒画像+撃てるスタックごとのカード(FP・DRM・効果バー)+FG合算(緑)に。続ける/撃たないは大きなボタン。";
 var APP_VERSION_HIST_v1315="v1315(ダルマ指示「回復 B 実施」): 回復フェイズの画面をコンパクトB(小カード2〜3列・右ツールバーを避けて中央)に。";
 var APP_VERSION_HIST_v1316='ASLSK3M-v12.516';
+var APP_VERSION_HIST_v1317='ASLSK3M-v12.517';
