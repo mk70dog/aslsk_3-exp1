@@ -1,6 +1,6 @@
 // ASL SK Judge Service Worker (オフライン起動用)
 // 更新のたびに APP_VERSION を index.html の APP_VERSION と同じ値に更新すること(古い版が出続けるのを防ぐ)。
-var APP_VERSION='ASLSK3M-v12.513';
+var APP_VERSION='ASLSK3M-v12.514';
 var CACHE='aslsk-'+APP_VERSION;
 var CORE=['./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png','./icon-512m.png'];
 self.addEventListener('install',function(e){
@@ -50,3 +50,4 @@ var APP_VERSION_HIST_v1310="v1310(ダルマ報告「新しく始めても前の�
 var APP_VERSION_HIST_v1311="v1311(ダルマ報告「上の一部が見えない」): 下バーにしたため地図・左上の札がiPadのステータスバーの下に潜って上が切れていた→上にステータスバー分(安全領域)の空きを残す。";
 var APP_VERSION_HIST_v1312="v1312(ダルマ報告「右が欠けている」): 回復フェイズの画面が右のツールバーの下に潜って右端が欠けていた→ツールバーと上下の帯を除いた範囲の中央に置き、幅もその範囲に収める。";
 var APP_VERSION_HIST_v1313="v1313(ダルマ報告「赤枠スペースが空いている」): 下バー時の上の空き(ステータスバー分の余分)と、下バー下側の余白を詰めた。";
+var APP_VERSION_HIST_v1314="v1314(ダルマ報告「臨機射撃の確認パネルがわかりにくい」→A案): アプリ移動中の確認パネルを、移動中の駒画像+撃てるスタックごとのカード(FP・DRM・効果バー)+FG合算(緑)に。続ける/撃たないは大きなボタン。";
