@@ -32093,10 +32093,14 @@ function btOverlaySVG(dispLayout){
   if(BT.advMode){var as=btStackById(BT.advMode.sid);if(as&&as.n!=null&&as.n>=0)BTG.nodes[as.n].nb.forEach(function(n){var c=btAdvanceCheck(as.id,BT.advMode.uids,n);if(c.err)return;var d=btDispPt(n,dispLayout);h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="13" fill="'+(c.cc?'#ff4040':'#ffe040')+'" fill-opacity="0.4" stroke="#fff" stroke-width="2"/>';});}
   // スタック
   var byN={};BT.stacks.forEach(function(s){if(s.n==null||s.n<0)return;(byN[s.n]=byN[s.n]||[]).push(s);});
+  var ghMk='';
   Object.keys(byN).forEach(function(k){
     var arr=byN[k],d=btDispPt(+k,dispLayout);
     if(BT_GHOST[k]){var h0=h;h='';} /* v1287: 右クリック「カウンターを透かす」のヘクスはほぼ透明に */
-    var ghEnd=function(){if(BT_GHOST[k]){h=h0+'<g opacity="0.12" style="pointer-events:none">'+h+'</g>';}};
+    var ghEnd=function(){if(BT_GHOST[k]){h=h0+'<g opacity="0.12" style="pointer-events:none">'+h+'</g>';
+      /* sample-ghostmk: 透かしているヘクスの印(点線の円と目のマーク)。ほかのスタックより上に描く */
+      ghMk+='<g style="pointer-events:none"><circle cx="'+d.x+'" cy="'+d.y+'" r="24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-dasharray="5 4" opacity="0.9"/>'
+      +'<g transform="translate('+(d.x+15)+' '+(d.y-17)+') rotate('+(-S_LOS.viewRot)+')"><circle r="10" fill="#1b2230" stroke="#ffffff" stroke-width="1.5"/><path d="M-6.5 0c2.2-3.6 10.8-3.6 13 0c-2.2 3.6-10.8 3.6-13 0z" fill="none" stroke="#ffffff" stroke-width="1.4"/><circle r="2" fill="#ffffff"/><path d="M-6 5L6 -5" stroke="#ff6060" stroke-width="1.6" stroke-linecap="round"/></g></g>';}};
     if(BT.vasl!==false){arr.forEach(function(s,i){h+=btStackVaslSVG(s,d,arr.length>1?i-(arr.length-1)/2:0);});ghEnd();return;} // v284: VASLカウンター表示
     arr.forEach(function(s,i){
       var off=(arr.length>1)?(i-(arr.length-1)/2)*26:0;
@@ -32112,6 +32116,7 @@ function btOverlaySVG(dispLayout){
     ghEnd();
   });
   h+=btVehOverlaySVG(dispLayout);
+  h+=ghMk; /* sample-ghostmk */
   h+=btSmokeDCOverlaySVG(dispLayout);
   // 射撃の目標
   var ofT=(BT.ofire&&BT.ofire.tgtN!=null)?BT.ofire.tgtN:((BT.mgfire&&BT.mgfire.tgtN!=null)?BT.mgfire.tgtN:null);
