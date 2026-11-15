@@ -32459,7 +32459,7 @@ if(window.NM_CMD_STY==null)window.NM_CMD_STY='B'; /* v1278 */
 (function(){try{var st=document.createElement('style');var R='html:root:root:root #main #btCmd.bt-cmdpop';
   st.textContent=[R+'.cmpA',R+'.cmpB',R+'.cmpC'].join(',')+'{height:auto!important;max-height:70vh!important}'
    +R+'.cmpA{font-size:11.5px}'+R+'.cmpA > div{margin-top:3px!important;padding:3px 6px!important;line-height:1.3!important}'+R+'.cmpA img{max-height:38px!important;width:auto!important}'
-   +R+'.cmpB img{max-height:34px!important;width:auto!important}'
+   +R+'.cmpB img:not(.btCmdIc){max-height:34px!important;width:auto!important}'
    +R+'.cmpC{width:fit-content!important;max-width:min(680px,calc(100vw - 110px))!important;padding-top:14px!important}'+R+'.cmpC > div{margin-top:2px!important;padding:2px 4px!important;border:0!important}'+R+'.cmpC img{max-height:28px!important;width:auto!important}';
   document.head.appendChild(st);}catch(e){}})();
 function BtCmdMin(on){BT_CMDMIN=!!on;Draw();}
@@ -32525,7 +32525,8 @@ function btCmdCardHTML(){ // v288(ダルマ指示「なるべく縦幅が大き�
       else if(gv&&btIsInfK(k))click=' onclick="BtSWGiveTo(\''+s.id+'\',\''+u.id+'\')"';
       else if(canSel&&btIsInfK(k))click=' onclick="BtToggleU(\''+s.id+'\',\''+u.id+'\')"';
       if(gv&&gv.uid===u.id)on=true;
-      var img=p.src?'<img src="'+p.src+'" style="width:40px;height:40px;display:block;border-radius:2px'+(p.dim?';filter:grayscale(.6)':'')+'">':'<div style="width:40px;height:40px;border:1px solid #556;border-radius:2px;font-size:9px;display:flex;align-items:center;justify-content:center;text-align:center">'+u.nm+'</div>';
+      var isz=(S.nmCmdIcon==='sm'?28:40); /* sample-cmdicon: パネルのカウンターの大きさ 標準40/スモール28 */
+      var img=p.src?'<img class="btCmdIc" src="'+p.src+'" style="width:'+isz+'px;height:'+isz+'px;display:block;border-radius:2px'+(p.dim?';filter:grayscale(.6)':'')+'">':'<div style="width:'+isz+'px;height:'+isz+'px;border:1px solid #556;border-radius:2px;font-size:9px;display:flex;align-items:center;justify-content:center;text-align:center">'+u.nm+'</div>';
       var ol=(gv&&gv.uid===u.id)?'2px solid #40e0ff':((gv&&btIsInfK(k)&&btGO(u)&&btI(u,s.side).kind!=='smc'||gv&&btI(u,s.side).kind==='smc'&&btGO(u))?'2px dashed #40e0ff':((on&&click&&btIsInfK(k))?'1px solid #ffd060':'none'));
       return '<div title="'+u.nm+'" style="position:relative;flex:0 0 auto;cursor:'+(click?'pointer':'default')+';opacity:'+(on?1:.35)+';outline:'+ol+';outline-offset:-1px;border-radius:3px"'+click+'>'+img+(tg.length?'<span style="position:absolute;left:0;right:0;bottom:0;background:#000b;color:#ffd060;font-size:9px;line-height:11px;text-align:center">'+tg.join(' ')+'</span>':'')+'</div>';
     });
@@ -39569,7 +39570,7 @@ function nmMmFrame(){try{var el=document.getElementById('nmMm'),w=document.getEl
   var bw=el.offsetWidth,bh=el.offsetHeight,bot=Math.min(wr.bottom,innerHeight);el.style.left=Math.max(4,wr.left+8)+'px';el.style.top=Math.max(4,bot-bh-8)+'px';}catch(e){}}
 function nmMmUpdate(){try{
   var el=document.getElementById('nmMm'),w=document.getElementById('losScrollWrap'),m=document.getElementById('losMapWrap');
-  var big=w&&m&&S.tab==='los'&&nmMmZOk()&&((w.scrollWidth>w.clientWidth+3)||(w.scrollHeight>w.clientHeight+3))&&(NM_MM.act||NM_MM.down); /* v585(ダルマ指示「全体マップは2倍以上に拡大した時、ドラッグしてスクロールする時に表示」): 拡大2倍以上で、地図をドラッグ/スクロールしている間だけ出し、止めて2秒で消す */
+  var big=w&&m&&!S.nmMmOff&&S.tab==='los'&&nmMmZOk()&&((w.scrollWidth>w.clientWidth+3)||(w.scrollHeight>w.clientHeight+3))&&(NM_MM.act||NM_MM.down); /* v585(ダルマ指示「全体マップは2倍以上に拡大した時、ドラッグしてスクロールする時に表示」): 拡大2倍以上で、地図をドラッグ/スクロールしている間だけ出し、止めて2秒で消す */
   try{document.documentElement.classList.toggle('nm-mmon',!!big);}catch(e){} /* v733: 全体マップが出ている間は左下の方位マークを隠す */
   if(!big){if(el)el.style.display='none';return;}
   el=nmMmBox();
@@ -40679,8 +40680,8 @@ document.addEventListener('touchmove',function(ev){if(NM_DRG_ON)ev.preventDefaul
 function nmDrgEnd(ev){var d=NM_DRG_ON;if(!d)return;NM_DRG_ON=null;if(d.mv){var kill=function(e){e.stopPropagation();e.preventDefault();document.removeEventListener('click',kill,true);};document.addEventListener('click',kill,true);setTimeout(function(){document.removeEventListener('click',kill,true);},350);}}
 document.addEventListener('pointerup',nmDrgEnd,true);document.addEventListener('pointercancel',function(){NM_DRG_ON=null;},true);
 try{nmDrgCss();}catch(e){}
-function appMenuHTML(id,first,extra){var b=function(x){return x[0]==='—'?'<div style="height:1px;background:#39414f;margin:2px 0"></div>':'<button class="b sm" style="margin:0;height:34px;text-align:left;padding:0 12px;font-size:14px" onclick="event.stopPropagation();var mm=document.getElementById(\''+id+'\');if(mm)mm.remove();'+x[1].replace(/"/g,'&quot;')+'">'+x[0]+'</button>';};
-  var tabs='<div style="font-size:11px;color:#8899aa;padding:2px 4px">'+T('旧タブ')+'</div><div class="appMnTabs">'+NM_TABS.filter(function(t){return !(id==='nmFtMn'&&t[0]==='scen');}).map(function(t){return b([T(t[1]),"nmRmTabGo('"+t[0]+"')"]);}) /* v535: 上の「シナリオ選択」があるので、タブのシナリオは出さない */.join('')+'</div>';
+function appMenuHTML(id,first,extra,noTabs){var b=function(x){return x[0]==='—'?'<div style="height:1px;background:#39414f;margin:2px 0"></div>':'<button class="b sm" style="margin:0;height:34px;text-align:left;padding:0 12px;font-size:14px" onclick="event.stopPropagation();var mm=document.getElementById(\''+id+'\');if(mm)mm.remove();'+x[1].replace(/"/g,'&quot;')+'">'+x[0]+'</button>';};
+  var tabs=noTabs?'':'<div style="font-size:11px;color:#8899aa;padding:2px 4px">'+T('旧タブ')+'</div><div class="appMnTabs">'+NM_TABS.filter(function(t){return !(id==='nmFtMn'&&t[0]==='scen');}).map(function(t){return b([T(t[1]),"nmRmTabGo('"+t[0]+"')"]);}) /* v535: 上の「シナリオ選択」があるので、タブのシナリオは出さない */.join('')+'</div>';
   var cls='<div style="display:flex;align-items:center;justify-content:space-between;padding:0 2px 2px"><span style="font-size:12px;color:#8899aa;font-weight:700">'+T('メインメニュー')+'</span><button class="b sm" style="margin:0;height:30px;padding:0 10px;font-size:13px" onclick="event.stopPropagation();var mm=document.getElementById(\''+id+'\');if(mm)mm.remove();">✕ '+T('閉じる')+'</button></div>';
   return cls+nmModeSegHTML(id)+(first||[]).map(b).join('')+tabs+(extra||[]).map(b).join('')+b(['—'])+'<button class="b sm" style="margin:0;height:36px;text-align:left;padding:0 12px;font-size:14px;color:#ffd060;border-color:#c8a032" onclick="event.stopPropagation();var mm=document.getElementById(\''+id+'\');if(mm)mm.remove();appForceUpdate()">'+NM_MI.upd+' '+T('アプリ更新')+' <span style="font-size:11px;color:#8899aa">(v'+appVerNum()+')</span></button>';}
 /* v652(ダルマ指示「A実施」): ≡メニューの項目に白の線アイコン */
@@ -40697,7 +40698,7 @@ function nmFtMenuHTML(){var id='nmFtMn',cl=function(fn){return 'event.stopPropag
   var tl=[['A→B '+T('起点Aと目標Bを選んでLOS'),"nmAbArm()"],['🔫 '+T('選択したスタックで攻撃'),"nmToolArm('fire')"],['🎯 '+T('選択したスタックを攻撃'),"nmToolArm('atk')"],['👁 '+T('このヘクスから見える範囲'),"nmToolArm('view')"],['🚶 '+T('このヘクスから移動(MPを数える)'),"nmToolArm('move')"]];
   var vw=[['⟳ '+T('画面を90°回転'),"nmFtRot()",'rot'],['↔ '+T('横幅に合わせる'),"nmFtFit('width')",'fit']].filter(function(x){return !(x[2]&&nmTbShown(x[2]));}).map(function(x){return [x[0],x[1]];}); /* v833: ツールバーに出ているものは除く */
   vw.unshift([T('ツールバー表示設定'),"nmTbCfgOpen()"]); /* v1127: 名称変更・アイコンなし */
-  var set=[['__BOTSEG__',''], /* v1125: 「下を電子パネルにする」「縦幅に合わせる」は非表示(ダルマ指示) */[(S.nmRealOn?'✓ ':'')+T('リアル盤へを表示'),"S.nmRealOn=!S.nmRealOn;try{saveState();}catch(e){}nmRbRender();nmFtActFill()"],[NM_MI.skin+' '+T('スキン')+': '+uiThemeName(),"uiThemePop()"],['▥ '+T('ツールバーの位置')+': '+T(nmTbPosName()),"nmTbPosPop()"],['🎲 '+T('オートダイス')+': '+(nmAdOn()?'ON':'OFF'),"nmAdToggle()"],['🔆 '+T('画面を消さない')+': '+(nmWlOn()?'ON':'OFF'),"nmWlToggle()"],['📝 '+T('システムログ')+'('+NM_DBG.buf.length+')',"nmDbgOpen()"]];
+  var set=[['__BOTSEG__',''],['🗺 '+T('全体マップ')+': '+(S.nmMmOff?'OFF':'ON'),"S.nmMmOff=!S.nmMmOff;try{saveState();}catch(e){}nmMmUpdate();nmFtActFill()"], /* sample-mmtog */['▣ '+T('パネルのアイコン')+': '+(S.nmCmdIcon==='sm'?T('スモール'):T('標準')),"S.nmCmdIcon=(S.nmCmdIcon==='sm'?'':'sm');try{saveState();}catch(e){}Draw();nmFtActFill()"], /* sample-cmdicon *//* v1125: 「下を電子パネルにする」「縦幅に合わせる」は非表示(ダルマ指示) */[(S.nmRealOn?'✓ ':'')+T('リアル盤へを表示'),"S.nmRealOn=!S.nmRealOn;try{saveState();}catch(e){}nmRbRender();nmFtActFill()"],[NM_MI.skin+' '+T('スキン')+': '+uiThemeName(),"uiThemePop()"],['▥ '+T('ツールバーの位置')+': '+T(nmTbPosName()),"nmTbPosPop()"],['🎲 '+T('オートダイス')+': '+(nmAdOn()?'ON':'OFF'),"nmAdToggle()"],['🔆 '+T('画面を消さない')+': '+(nmWlOn()?'ON':'OFF'),"nmWlToggle()"],['📝 '+T('システムログ')+'('+NM_DBG.buf.length+')',"nmDbgOpen()"]];
   var by={};main.forEach(function(x){by[x[0]]=x;});var dbg=set.pop(); /* v784(ダルマ指示「メインメニュー わかりやすく整理」): セクション分け・閉じるは最下部 */
   var sc=function(t){return '<div style="display:flex;align-items:center;gap:8px;margin:8px 2px 3px;font-size:12px;font-weight:700;color:#e0b850"><span>'+T(t)+'</span><span style="flex:1;height:1px;background:#39414f"></span></div>';};
   var gr=function(names,cols,extra){var L=names.map(function(n){return by[T(n)]||by[n];}).filter(Boolean).concat(extra||[]);if(!L.length)return '';return '<div style="display:grid;grid-template-columns:repeat('+cols+',1fr);gap:4px">'+L.map(function(x){return bt(x);}).join('')+'</div>';};
@@ -43668,7 +43669,8 @@ function btFtDice(){var a=1+Math.floor(Math.random()*6),b=1+Math.floor(Math.rand
 function btFtDiceDone(a,b){btLog(['🎲 '+T('手動のDR')+' '+(a+b)+' ('+a+'+'+b+')']);btSave();Draw();}
 function btFtMenuHTML(){
   var it=[[T('新しい対戦(最初からやり直す)'),'BtResetAsk()'],[T('セーブ・ロード'),'BtSvOpen()'],[T('LOS測定(起点A・目標B)'),'BtLosAB()'],[T('記録を書き出す'),'BtRecExport()'],['—'],[(BT.vasl===false?'':'✓ ')+T('VASLカウンター表示'),'BtVaslToggle()'],[(BT.cam===false?'':'✓ ')+T('クローズアップ'),'BtCam()'],[T('演出設定'),'BtFxOpen()'],[(S.nmRealOn?'✓ ':'')+T('リアル盤へを表示'),"S.nmRealOn=!S.nmRealOn;try{saveState();}catch(e){}nmRbRender();Draw()"],[NM_MI.skin+' '+T('スキン')+': '+uiThemeName(),"uiThemePop()"],['📝 '+T('システムログ')+'('+((typeof NM_DBG!=='undefined'&&NM_DBG.buf)?NM_DBG.buf.length:0)+')',"var mm=document.getElementById('nmFtMn');if(mm)mm.remove();nmDbgOpen()"]];/* v1273(ダルマ報告「システムログがない」): 対戦モードのメニューにもシステムログ */ /* v1203(ダルマ指示「全画面を終えるは削除」) */
-  return appMenuHTML('nmFtMn',it,[]);}
+  it.splice(it.length-1,0,['🗺 '+T('全体マップ')+': '+(S.nmMmOff?'OFF':'ON'),"S.nmMmOff=!S.nmMmOff;try{saveState();}catch(e){}nmMmUpdate()"],['▣ '+T('パネルのアイコン')+': '+(S.nmCmdIcon==='sm'?T('スモール'):T('標準')),"S.nmCmdIcon=(S.nmCmdIcon==='sm'?'':'sm');try{saveState();}catch(e){}Draw()"]); /* sample-btmenu: 対戦モードのメニューにも */
+  return appMenuHTML('nmFtMn',it,[],true);} /* sample-btmenu: 対戦モードのメニューは旧タブを出さない */
 function btFtMenu(btn){var m=document.getElementById('nmFtMn');if(m){m.remove();return;}m=document.createElement('div');m.id='nmFtMn';
   var r=btn.getBoundingClientRect();m.style.cssText='position:fixed;z-index:9500;top:'+(r.bottom+4)+'px;left:'+Math.max(6,Math.min(r.left,window.innerWidth-APP_MN_W-10))+'px;background:#1c1f27;border:1px solid #4a5566;border-radius:10px;padding:6px;box-shadow:0 8px 24px #000c;display:flex;flex-direction:column;gap:4px;width:'+APP_MN_W+'px;max-width:94vw;max-height:'+Math.max(160,Math.min(window.innerHeight,(window.visualViewport&&window.visualViewport.height)||1e9)-r.bottom-14)+'px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y'; /* v537(バグ修正 ダルマ報告「メニューがスクロールしない」): iPadでは100vhが見えている高さより大きく、メニューの下が画面の外に出てスクロールできなかった。実際に見えている高さで決める */
   m.innerHTML=btFtMenuHTML();
