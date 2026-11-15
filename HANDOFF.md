@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-15 引き継ぎ】main=v1285(push 済み)。返事待ちなし。
+- 【2026-11-15 引き継ぎ】main=v1285(push 済み)。返事待ち: sample-dmfix(混乱ユニットのDMをルールどおりに)。
 - v1285: 演出カードの既定スタイルB1(NM_FX_STY、#btFx.fxStyB1 のCSS。A/B/C/B2/B3 も残す・''で従来)、アプリの射撃カード中はパネルを隠す(btCmdHTML appBusy に BT_FX_CUR.side===BT.app)、潰走の指揮官の付き添い(BT.rtp.ldr・btRoutExec の ldr)、突撃移動→警戒移動の表記。
 - v1284: 上の帯に最後の記録・🏠建物の支配/ターン(btFullBars topInfo、下の帯 #btFullBot は非表示・--btfbot=0)、BtTopLog/BtTopVic の小窓、メニューの keep 項目(appMenuHTML x[2]==='keep')。
 - v1283: 全体マップON/OFF(S.nmMmOff)・パネルのアイコン(S.nmCmdIcon=sm→28px)を対戦メニューと表示の設定に、対戦メニューの旧タブ削除(appMenuHTML noTabs)、演出設定の小窓(BtFxPop/#btFxPop)。
