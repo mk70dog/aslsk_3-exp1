@@ -1,6 +1,6 @@
 // ASL SK Judge Service Worker (オフライン起動用)
 // 更新のたびに APP_VERSION を index.html の APP_VERSION と同じ値に更新すること(古い版が出続けるのを防ぐ)。
-var APP_VERSION='ASLSK3M-v12.502';
+var APP_VERSION='ASLSK3M-v12.503';
 var CACHE='aslsk-'+APP_VERSION;
 var CORE=['./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png','./icon-512m.png'];
 self.addEventListener('install',function(e){
@@ -38,3 +38,5 @@ self.addEventListener('fetch',function(e){
     }));
   }
 });
+
+var APP_VERSION_HIST_v1303="v1303(ダルマ指示「修正実施」): 記録の書き出し(BtRecExport)の result を btCfgNeed/btCfgWinner に(S6は need=2・勝者はシナリオの勝利条件)。ゲーム終了後の btRecPh は END(スナップショット・nowの表記)。";
