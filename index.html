@@ -32420,10 +32420,63 @@ function btFirePanelHTML(){ // v324(ダルマ指示「間延びしているの�
   return h+'</div>';
 }
 /* v1284: 上の帯の「最後の記録」→戦闘記録の小窓、🏠→建物の支配の小窓 */
-function btTopPop(title,body){var o=document.getElementById('btTopPop');if(o)o.remove();o=document.createElement('div');o.id='btTopPop';o.style.cssText='position:fixed;inset:0;z-index:9450;background:rgba(0,0,0,.45);display:flex;align-items:flex-start;justify-content:center;padding-top:calc(var(--btftop,40px) + 8px)';o.onclick=function(){o.remove();};
-  o.innerHTML='<div onclick="event.stopPropagation()" style="width:min(640px,94vw);max-height:70vh;display:flex;flex-direction:column;background:#12161c;border:1px solid #4a5568;border-radius:12px;padding:10px 12px;box-shadow:0 10px 40px #000c;font:13px/1.45 AppFont,AppJP,monospace;color:#dfe6ee"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><b style="font-size:15px">'+title+'</b><button class="b sm" style="margin:0;height:30px;padding:0 10px" onclick="document.getElementById(\'btTopPop\').remove()">✕</button></div><div style="overflow:auto">'+body+'</div></div>';document.body.appendChild(o);}
-function BtTopLog(){var L=BT.log||[],h='';L.slice().reverse().slice(0,80).forEach(function(blk){h+='<div style="border-top:1px solid #20242c;padding:4px 0">'+[].concat(blk).map(function(x,i){return '<div style="'+(i?'margin-left:12px;color:#9aabbb;font-size:12px':'font-weight:700')+'">'+x+'</div>';}).join('')+'</div>';});btTopPop(T('戦闘記録')+' ('+L.length+')',h||T('記録はまだありません'));}
-function BtTopVic(){var vc=btVicCount(),h='<div>'+T('建物の支配')+': <b style="color:'+BT_SIDE_COL.GER+'">'+T('独軍')+' '+vc.ger+'</b> / <b style="color:'+BT_SIDE_COL.SOV+'">'+T('ソ連')+' '+vc.sov+'</b> / '+T('全')+vc.total+'</div><div style="margin-top:4px">'+T('ターン')+' '+BT.turn+' / '+btMaxTurn()+'</div>';try{var sc=btScObj();if(sc&&sc.vic)h+='<div style="margin-top:8px;color:#ccddee">'+sc.vic+'</div>';}catch(e){}btTopPop(T('勝利条件'),h);}
+/* sample-toppop(ダルマ指示「パネル 見やすく分かりやすくカッコよく サンプル3」): 戦闘記録・勝利条件の小窓 A=カード(タイムライン) B=作戦室(ミリタリー) C=ミニマル。BT_TOPSTY */
+var BT_TOPSTY=null;
+function btTopSty(){return BT_TOPSTY||window.NM_TOP_STY||'A';}
+function btTopCss(){if(document.getElementById('btTopCss'))return;var st=document.createElement('style');st.id='btTopCss';st.textContent=[
+ '#btTopPop{position:fixed;inset:0;z-index:9450;background:rgba(5,7,10,.55);display:flex;align-items:flex-start;justify-content:center;padding-top:calc(var(--btftop,40px) + 8px)}',
+ '#btTopPop .w{display:flex;flex-direction:column;max-height:72vh;font-family:AppFont,AppJP,monospace;color:#dfe6ee;box-shadow:0 14px 44px #000d;overflow:hidden}',
+ '#btTopPop .hd{display:flex;align-items:center;gap:10px}#btTopPop .bd{overflow:auto}',
+ '#btTopPop .x{margin-left:auto;width:30px;height:30px;border-radius:15px;border:1px solid #4a5566;background:transparent;color:#cfd8e2;font-size:15px;cursor:pointer}',
+ /* A */
+ '#btTopPop.A .w{width:min(620px,94vw);background:#11151b;border:1px solid #2f3a48;border-radius:14px}',
+ '#btTopPop.A .hd{padding:12px 16px;background:linear-gradient(90deg,#1b2433,#11151b);border-bottom:1px solid #2a3442}#btTopPop.A .tt{font-size:15px;font-weight:900;letter-spacing:.04em}#btTopPop.A .ic{width:26px;height:26px;border-radius:7px;background:#ffd24a;color:#14171d;display:flex;align-items:center;justify-content:center;font-size:14px}#btTopPop.A .cnt{font-size:11px;color:#8fa0b3}',
+ '#btTopPop.A .bd{padding:6px 14px 12px}',
+ '#btTopPop.A .e{display:grid;grid-template-columns:62px 14px 1fr;gap:0 8px;padding:7px 0}#btTopPop.A .e + .e{border-top:1px solid #1e2632}',
+ '#btTopPop.A .ph{font-size:10.5px;color:#8fa0b3;text-align:right;line-height:1.3;padding-top:2px}#btTopPop.A .dot{width:10px;height:10px;border-radius:5px;margin-top:5px;box-shadow:0 0 0 3px rgba(255,255,255,.04)}',
+ '#btTopPop.A .m{font-size:13px;font-weight:800;line-height:1.4}#btTopPop.A .s{font-size:11.5px;color:#9fb0c3;line-height:1.45;margin-top:2px}',
+ '#btTopPop.A .rs{display:inline-block;margin-left:6px;padding:0 6px;border-radius:4px;font-size:11px;font-weight:900}',
+ '#btTopPop.A .vrow{display:flex;align-items:center;gap:10px;margin:8px 0}#btTopPop.A .vn{font-size:30px;font-weight:900;line-height:1;min-width:34px;text-align:right}#btTopPop.A .vl{font-size:12px;color:#9fb0c3;width:44px}#btTopPop.A .bar{flex:1;height:10px;background:#1c232e;border-radius:5px;overflow:hidden}#btTopPop.A .bar i{display:block;height:100%}',
+ '#btTopPop.A .goal{margin-top:10px;padding:9px 11px;border-left:3px solid #ffd24a;background:#1a1f27;border-radius:0 8px 8px 0;font-size:12.5px;line-height:1.5}',
+ '#btTopPop.A .bl{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}#btTopPop.A .bl span{padding:3px 9px;border-radius:12px;font-size:11.5px;font-weight:800;border:1px solid}',
+ /* B */
+ '#btTopPop.B .w{width:min(640px,94vw);background:#16180f;border:1px solid #5d5a3a;border-top:3px solid #c8a032;border-radius:4px;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0 1px,transparent 1px 3px)}',
+ '#btTopPop.B .hd{padding:10px 14px;border-bottom:1px dashed #5d5a3a}#btTopPop.B .tt{font-size:15px;font-weight:900;letter-spacing:.18em;color:#e6d38a}#btTopPop.B .ic{font-size:11px;font-weight:900;color:#16180f;background:#c8a032;padding:2px 6px;letter-spacing:.1em}#btTopPop.B .cnt{font-size:11px;color:#a59f76}',
+ '#btTopPop.B .bd{padding:4px 14px 12px}#btTopPop.B .e{padding:6px 0 6px 10px;border-left:3px solid #555;margin:6px 0;background:rgba(0,0,0,.18)}',
+ '#btTopPop.B .ph{font-size:10px;color:#a59f76;letter-spacing:.1em}#btTopPop.B .m{font-size:13px;font-weight:800}#btTopPop.B .s{font-size:11.5px;color:#c9c4a2;margin-top:2px;line-height:1.45}#btTopPop.B .dot{display:none}',
+ '#btTopPop.B .rs{display:inline-block;margin-left:6px;padding:0 5px;font-size:10.5px;font-weight:900;border:1px solid}',
+ '#btTopPop.B .vg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}#btTopPop.B .vb{border:1px solid #5d5a3a;padding:8px;text-align:center}#btTopPop.B .vb b{display:block;font-size:34px;line-height:1.05}#btTopPop.B .vb span{font-size:11px;letter-spacing:.15em;color:#a59f76}',
+ '#btTopPop.B .goal{margin-top:10px;padding:8px 10px;border:1px dashed #c8a032;font-size:12.5px;line-height:1.5;color:#e6d38a}#btTopPop.B .trn{margin-top:8px;font-size:12px;letter-spacing:.1em;color:#c9c4a2}',
+ '#btTopPop.B .bl{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}#btTopPop.B .bl span{padding:2px 8px;font-size:11px;font-weight:800;border:1px solid}',
+ /* C */
+ '#btTopPop.C{background:rgba(5,7,10,.3)}#btTopPop.C .w{width:min(500px,92vw);background:rgba(17,21,27,.96);border:1px solid #2a313d;border-radius:10px}',
+ '#btTopPop.C .hd{padding:8px 12px}#btTopPop.C .tt{font-size:13px;font-weight:900}#btTopPop.C .ic{display:none}#btTopPop.C .cnt{font-size:11px;color:#8fa0b3}#btTopPop.C .x{width:26px;height:26px;font-size:13px}',
+ '#btTopPop.C .bd{padding:0 12px 10px}#btTopPop.C .e{padding:5px 0 5px 9px;border-left:2px solid #555;margin:3px 0}#btTopPop.C .ph{display:none}#btTopPop.C .dot{display:none}',
+ '#btTopPop.C .m{font-size:12px;font-weight:700}#btTopPop.C .s{font-size:10.5px;color:#9fb0c3;line-height:1.4}#btTopPop.C .rs{margin-left:5px;font-size:10.5px;font-weight:900}',
+ '#btTopPop.C .vline{display:flex;align-items:baseline;gap:8px;font-size:12px;color:#9fb0c3;margin:4px 0}#btTopPop.C .vline b{font-size:20px}#btTopPop.C .seg{display:flex;gap:3px;margin:6px 0}#btTopPop.C .seg i{flex:1;height:8px;border-radius:2px;background:#232a35}',
+ '#btTopPop.C .goal{font-size:11.5px;color:#cfd8e2;line-height:1.5;margin-top:6px}'
+ ].join('');document.head.appendChild(st);}
+function btTopPop(title,body,icon,cnt){btTopCss();var o=document.getElementById('btTopPop');if(o)o.remove();o=document.createElement('div');o.id='btTopPop';o.className=btTopSty();o.onclick=function(){o.remove();};
+  o.innerHTML='<div class="w" onclick="event.stopPropagation()"><div class="hd"><span class="ic">'+(icon||'')+'</span><span class="tt">'+title+'</span>'+(cnt?'<span class="cnt">'+cnt+'</span>':'')+'<span style="flex:1"></span><button class="x" onclick="document.getElementById(\'btTopPop\').remove()">✕</button></div><div class="bd">'+body+'</div></div>';document.body.appendChild(o);}
+function btTopSide(t){var m=String(t).match(/^(独軍|ソ連|米軍|英軍|伊軍|日本軍|仏軍)/);if(!m)return null;var k=Object.keys(BT_SIDE_NAME).filter(function(x){return BT_SIDE_NAME[x]===m[1];})[0];return k||null;}
+function btTopRes(t){if(!/DR\d|TK|命中/.test(t))return '';var m=String(t).match(/→\s*([^→]+)$/);if(!m)return '';var r=m[1].replace(/\s*\[期待.*$/,'').trim();var c=/KIA|除去|撃破/.test(r)?'#ff5050':(/MC|混乱|損耗/.test(r)?'#ffa040':(/PTC|釘付け/.test(r)?'#ffe060':(/成功/.test(r)?'#60e070':'#8fa0b3')));if(r==='-')r='効果なし';return '<span class="rs" style="color:'+c+';border-color:'+c+';background:'+c+'1a">'+r+'</span>';}
+function BtTopLog(){var R=null;try{R=btRecLoad();}catch(e){}var src=(R&&R.log&&R.log.length)?R.log.map(function(x){return {at:x.at,l:x.l};}):(BT.log||[]).map(function(l){return {at:'',l:l};});
+  var h='';src.slice().reverse().slice(0,80).forEach(function(x){var L=[].concat(x.l),first=String(L[0]).replace(/\s*\[期待[^\]]*\]/,''),sd=btTopSide(first),col=sd?(BT_SIDE_COL[sd]||'#8fa0b3'):'#5a6676';
+    var at=String(x.at||'').replace(/^T(\d+)([AB]) \S+ /,function(a,t,h){return 'T'+t+(h==='A'?'表':'裏')+' ';}).replace(/PFPh/,'準備射撃').replace(/DFPh/,'防御射撃').replace(/AFPh/,'前進射撃').replace(/RtPh/,'潰走').replace(/APh/,'突撃').replace(/CCPh/,'白兵戦').replace(/RPh/,'回復').replace(/MPh/,'移動');
+    h+='<div class="e" style="border-left-color:'+col+'"><div class="ph">'+at.replace(' ','<br>')+'</div><div class="dot" style="background:'+col+'"></div><div><div class="m">'+first.replace(/</g,'&lt;')+btTopRes(first)+'</div>'+(L.length>1?'<div class="s">'+L.slice(1).map(function(t){return String(t).replace(/</g,'&lt;');}).join('<br>')+'</div>':'')+'</div></div>';});
+  btTopPop(T('戦闘記録'),h||T('記録はまだありません'),'≡',src.length+T('件'));}
+function BtTopVic(){var vc=btVicCount(),cf=btCfg(),need=btCfgNeed(),vs=cf?cf.vicSide:'GER',G=BT_SIDE_COL.GER,Sv=BT_SIDE_COL.SOV,tot=vc.total||1,mx=btMaxTurn(),sty=btTopSty();var goal='';try{var sc=btScObj();if(sc&&sc.vic)goal=sc.vic;}catch(e){}
+  var bl='';try{bl=btBldgs().map(function(b){var c=BT.ctl&&BT.ctl[b.id];var col=c?(BT_SIDE_COL[c]||'#8fa0b3'):'#5a6676';return '<span style="color:'+col+';border-color:'+col+'">'+(b.hexes&&b.hexes[0]?String(b.hexes[0]).replace(/^z/,''):b.id)+' '+(c?BT_SIDE_NAME[c]:'—')+'</span>';}).join('');}catch(e){}
+  var h='';
+  if(sty==='A'){h+='<div class="vrow"><span class="vl" style="color:'+G+'">'+T('独軍')+'</span><div class="bar"><i style="width:'+(vc.ger/tot*100)+'%;background:'+G+'"></i></div><span class="vn" style="color:'+G+'">'+vc.ger+'</span></div>'
+      +'<div class="vrow"><span class="vl" style="color:'+Sv+'">'+T('ソ連')+'</span><div class="bar"><i style="width:'+(vc.sov/tot*100)+'%;background:'+Sv+'"></i></div><span class="vn" style="color:'+Sv+'">'+vc.sov+'</span></div>'
+      +'<div class="vrow"><span class="vl">'+T('ターン')+'</span><div class="bar"><i style="width:'+(BT.turn/mx*100)+'%;background:#8fa0b3"></i></div><span class="vn" style="font-size:18px;color:#cfd8e2">'+BT.turn+'<span style="font-size:12px;color:#8fa0b3">/'+mx+'</span></span></div>'
+      +(bl?'<div class="bl">'+bl+'</div>':'')+'<div class="goal"><b style="color:'+(BT_SIDE_COL[vs]||'#ffd24a')+'">'+BT_SIDE_NAME[vs]+T('の勝利')+'</b>: '+(goal||T('勝利に必要')+' '+need)+'</div>';}
+  else if(sty==='B'){h+='<div class="vg"><div class="vb" style="border-color:'+G+'"><span>'+T('独軍')+'</span><b style="color:'+G+'">'+vc.ger+'</b></div><div class="vb" style="border-color:'+Sv+'"><span>'+T('ソ連')+'</span><b style="color:'+Sv+'">'+vc.sov+'</b></div></div>'
+      +'<div class="trn">TURN '+BT.turn+' / '+mx+' ・ '+T('建物')+' '+tot+'</div>'+(bl?'<div class="bl">'+bl+'</div>':'')+'<div class="goal">▶ '+(goal||T('勝利に必要')+' '+need)+'</div>';}
+  else{var seg='';btBldgs().forEach(function(b){var c=BT.ctl&&BT.ctl[b.id];seg+='<i style="background:'+(c?BT_SIDE_COL[c]:'#232a35')+'"></i>';});
+    h+='<div class="vline"><b style="color:'+G+'">'+vc.ger+'</b>'+T('独軍')+'<b style="color:'+Sv+';margin-left:10px">'+vc.sov+'</b>'+T('ソ連')+'<span style="margin-left:auto">T'+BT.turn+'/'+mx+'</span></div><div class="seg">'+seg+'</div><div class="goal">'+(goal||T('勝利に必要')+' '+need)+'</div>';}
+  btTopPop(T('勝利条件'),h,'🏠',T('建物')+' '+tot);}
 function btLogHTML(){
   var L=BT.log||[];if(!L.length)return '';
   var h='<details'+(BT.logOpen2===true?' open':'')+' ontoggle="BT.logOpen2=this.open;btSave()" style="margin-top:6px"><summary style="font-size:12px;color:#8899aa;cursor:pointer">'+T('戦闘記録')+' ('+L.length+')</summary><div style="max-height:30vh;overflow:auto;font-size:11px;color:#ccddee">';
