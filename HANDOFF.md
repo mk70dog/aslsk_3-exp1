@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-15 引き継ぎ】main=v1297(push 済み)。返事待ちなし。
+- 【2026-11-15 引き継ぎ】main=v1297(push 済み)。返事待ち: sample-offsz(盤外の帯のカウンター A/B/C)。
 - v1297: 移動できない時のグレーアウト(btMoveNoWhy)。
 - v1296: 盤外のパネルは A(中央のカード)⇆C(帯)。
 - v1295: 盤外のパネル(btOffBtnHTML・BtOffPop・btOffPopSync、S.nmOffSty=B一覧/C帯、BtOffSty で切替)。移動フェイズ開始で自動で開く(btPhaseEnter MPh)。NM_OFF_STY='' で従来の上のバー。
