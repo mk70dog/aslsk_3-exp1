@@ -32450,7 +32450,7 @@ function btCmdHTML(){
     if(BT.mv.veh&&btReactionCCOptions(btHuman()).length)h+=btBtn(T('反応白兵戦(車両に)'),'BtReactCC()',{warn:true})+' ';
     h+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">'+btBtn(T('続ける'),'BtReactContinue(false)',{on:true})+btBtn(T('このフェイズは撃たない'),'BtReactContinue(true)')+'</div></div>';} // v323: ボタンを横一列
   h+=btFirePanelHTML();
-  var appBusy=!!(BT.app&&!window.BT_SELFPLAY&&!btHumanActs(btPhId())&&BT.pend!=='react'&&!BT.fire&&!BT.ofire&&!BT.mgfire&&!BT.rtp); /* v1281: アプリが操作している間はスタックのパネルを出さない */
+  var appBusy=!!(BT.app&&!window.BT_SELFPLAY&&typeof BT_FX_CUR!=='undefined'&&BT_FX_CUR&&BT_FX_CUR.side===BT.app)||!!(BT.app&&!window.BT_SELFPLAY&&!btHumanActs(btPhId())&&BT.pend!=='react'&&!BT.fire&&!BT.ofire&&!BT.mgfire&&!BT.rtp); /* v1281: アプリが操作している間はスタックのパネルを出さない */
   var cmdH=appBusy?'':btCmdCardHTML(); // v288: 選択中スタックの行動と車両の移動
   h+=cmdH;
   h+=btResHTML(); /* v1212: S6 戦術予備 */
@@ -44213,7 +44213,7 @@ function btFxWrap(name,info){
 var BT_FX_PEND=0;
 function btFxPush(e){BT_FX_Q.push(e);if(!BT_FX_CUR&&!BT_FX_PEND){BT_FX_PEND=1;setTimeout(function(){BT_FX_PEND=0;btFxNext();},30);}} // v320: 射撃の処理と画面の描き直しが終わってから表示(射線・着弾の位置ずれ防止)
 function btFxClear(){BT_FX_Q=[];btFxClose(true);}
-function btFxClose(noNext){BT_FX_T.forEach(clearTimeout);BT_FX_T=[];BT_FX_CUR=null;var el=document.getElementById('btFx');if(el)el.remove();if(!noNext&&BT_FX_Q.length)setTimeout(btFxNext,80);else if(typeof btCamLater==='function'&&BT_CAM.sv)btCamLater(700);}
+function btFxClose(noNext){var wasApp=!!(BT_FX_CUR&&BT&&BT_FX_CUR.side===BT.app);BT_FX_T.forEach(clearTimeout);BT_FX_T=[];BT_FX_CUR=null;if(wasApp&&!(noNext!==true&&BT_FX_Q.length))setTimeout(function(){try{Draw();}catch(e){}},0); /* sample-fxcmp: アプリの射撃のカードを閉じたらパネルを戻す */var el=document.getElementById('btFx');if(el)el.remove();if(!noNext&&BT_FX_Q.length)setTimeout(btFxNext,80);else if(typeof btCamLater==='function'&&BT_CAM.sv)btCamLater(700);}
 function btFxScreenPt(n){
   var g=document.getElementById('btOvG');if(!g||n==null||n<0)return null;
   var d=btDispPt(n,losComputeDisplayLayout());var c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',d.x);c.setAttribute('cy',d.y);c.setAttribute('r',1);g.appendChild(c);
@@ -44280,8 +44280,8 @@ function btFxNext(){
         +(o&&o.x?'<svg viewBox="0 0 52 52" style="position:absolute;inset:0"><path d="M6 6L46 46M46 6L6 46" stroke="#ff3030" stroke-width="6" stroke-linecap="round"/></svg>':'')+'</div>'
         +'<div style="font-size:10px;margin-top:2px;font-weight:bold;color:'+(o?o.c:'#667788')+'">'+(o?o.t:'変化なし')+'</div></div>';});
     c+='</div>';}
-  c+='<div style="text-align:center;font-size:10px;color:#667788;margin-top:6px">'+(BT_FX_Q.length?'(次の射撃 '+BT_FX_Q.length+'件) ':'')+'タップで閉じる</div></div>';
-  var el=document.createElement('div');el.id='btFx';el.className='fxShow'+(short?' fxShort':'')+(cam?' fxCam':'');
+  c+='<div class="fxFoot" style="text-align:center;font-size:10px;color:#667788;margin-top:6px">'+(BT_FX_Q.length?'(次の射撃 '+BT_FX_Q.length+'件) ':'')+'タップで閉じる</div></div>';
+  var el=document.createElement('div');el.id='btFx';el.className='fxShow'+(short?' fxShort':'')+(cam?' fxCam':'')+(window.NM_FX_STY?' fxSty'+window.NM_FX_STY:'');
   el.innerHTML=svg+c;el.onclick=function(){btFxClose();};
   document.body.appendChild(el);
   if(!short){
@@ -44289,6 +44289,7 @@ function btFxNext(){
     BT_FX_T.push(setTimeout(function(){var x=document.getElementById('btFx');if(x)x.classList.add('fxS3');},1250));
   }else el.classList.add('fxS2','fxS3');
   btFxArm(el,fxK0,short?(hurry?1300:1800):(us.length?3800:3000));
+  if(e.side===BT.app)try{Draw();}catch(x){} /* sample-fxcmp: アプリの射撃のカードの間はパネルを隠す */
 }
 (function(){
   if(typeof document==='undefined'||document.getElementById('btFxCss'))return;
@@ -44302,7 +44303,11 @@ function btFxNext(){
    +'#btFx.fxS2 .fxRes{animation:fxPop .35s ease-out}@keyframes fxPop{0%{transform:scale(1.8)}60%{transform:scale(.92)}100%{transform:scale(1)}}'
    +'#btFx.fxS2 .fxBurst{animation:fxBurst .5s ease-out}@keyframes fxBurst{from{transform:scale(.2)}to{transform:scale(1)}}'
    +'#btFx .fxTr{animation:fxTr .6s linear infinite}@keyframes fxTr{to{stroke-dashoffset:-48}}'
-   +'#btFx .fxUnits{opacity:0;transition:opacity .25s}#btFx.fxS3 .fxUnits{opacity:1}';
+   +'#btFx .fxUnits{opacity:0;transition:opacity .25s}#btFx.fxS3 .fxUnits{opacity:1}'
+   /* sample-fxcmp: コンパクト表示 A=画像なし縦 B=画像小・横並び C=帯 */
+   +'#btFx.fxStyA .fxCard,#btFx.fxStyA.fxCam .fxCard{width:min(380px,40vw);padding:8px 12px}#btFx.fxStyA .fxImg{display:none}#btFx.fxStyA .fxRes{font-size:24px!important;margin-top:2px!important}#btFx.fxStyA .fxSub{font-size:10.5px!important}#btFx.fxStyA .fxUnits img,#btFx.fxStyA .fxUnits div[style*="52px"]{width:36px!important;height:36px!important}#btFx.fxStyA .fxUnits > div{width:46px!important}#btFx.fxStyA .fxDie{transform:scale(.75)}'
+   +'#btFx.fxStyB .fxCard,#btFx.fxStyB.fxCam .fxCard{width:min(540px,52vw);padding:8px 12px}#btFx.fxStyB .fxImg{float:left;margin:0 10px 0 0!important}#btFx.fxStyB .fxImg img{height:104px!important}#btFx.fxStyB .fxRes{font-size:24px!important;text-align:left!important;margin-top:4px!important}#btFx.fxStyB .fxSub{text-align:left!important;font-size:10.5px!important}#btFx.fxStyB .fxUnits{clear:both;justify-content:flex-start!important}#btFx.fxStyB .fxUnits img,#btFx.fxStyB .fxUnits div[style*="52px"]{width:34px!important;height:34px!important}#btFx.fxStyB .fxUnits > div{width:44px!important}#btFx.fxStyB .fxDie{transform:scale(.75)}'
+   +'#btFx.fxStyC .fxCard,#btFx.fxStyC.fxCam .fxCard{left:50%!important;right:auto!important;top:calc(var(--btftop,44px) + 8px)!important;bottom:auto!important;transform:translateX(-50%)!important;width:min(760px,80vw);padding:6px 12px;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;animation:none}#btFx.fxStyC .fxCard > div:first-child{grid-column:1/-1}#btFx.fxStyC .fxImg,#btFx.fxStyC .fxSub,#btFx.fxStyC .fxFoot{display:none}#btFx.fxStyC .fxCard > div:last-child{grid-column:1/-1}#btFx.fxStyC .fxCard > div:last-child button{padding:5px 22px!important}#btFx.fxStyC .fxRes{font-size:22px!important;margin:0!important;text-align:right!important}#btFx.fxStyC .fxUnits{grid-column:1/-1;margin-top:4px!important}#btFx.fxStyC .fxUnits img,#btFx.fxStyC .fxUnits div[style*="52px"]{width:30px!important;height:30px!important}#btFx.fxStyC .fxUnits > div{width:40px!important;display:flex;align-items:center;gap:4px;width:auto!important}#btFx.fxStyC .fxDie{transform:scale(.6)}#btFx.fxStyC .fxCard > div:nth-child(2){margin-top:0!important}';
   document.head.appendChild(st);
 })();
 
@@ -44364,7 +44369,7 @@ function btFxResShow(e){
 // 射撃の演出カード・判定のカード(1件)に、撃った側/判定した側の国籍の結果画像(判定タブと同じ3枚)を出す。その国籍の画像がなければ出さない
 function btFxNatImg(side,kind){
   var m=(typeof BADGE_NAT_IMG!=='undefined')&&side&&BADGE_NAT_IMG[side];var b=m&&m[kind];if(!b)return '';
-  return '<div style="margin:2px auto 4px"><img src="data:image/png;base64,'+b+'" style="display:block;margin:0 auto;height:min(180px,24vh);width:auto;max-width:100%;border-radius:5px;border:1px solid #2a3a50"></div>';
+  return '<div class="fxImg" style="margin:2px auto 4px"><img src="data:image/png;base64,'+b+'" style="display:block;margin:0 auto;height:min(180px,24vh);width:auto;max-width:100%;border-radius:5px;border:1px solid #2a3a50"></div>';
 }
 function btFxSideOf(txt,head){ // 「独軍 …」なら独、「uK4 4-4-7 …」ならそのヘクスのユニットの軍
   var t=String(txt||''),h=String(head||'');
