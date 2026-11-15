@@ -29917,9 +29917,15 @@ function btGroupCheck(s,targets,drm,log,isPTC){
   });
 }
 // IFT結果の適用(targets: 影響を受けるユニット。防御側の臨機射撃では移動中のユニットのみ)
+/* v1286(ダルマ指示「ルールどおりに修正」): 混乱ユニットのDM。NMCが出る可能性のあるFP攻撃を受けた時(結果が効果なしでも)・統制状態の敵に隣接された時にDMを付ける */
+var BT_DMQ=null;
+function btDMHit(s,targets,log){var q=BT_DMQ;BT_DMQ=null;if(!q||q.c==null||q.c<0)return;var best=IFT[Math.max(0,Math.min(15,2+(q.d||0)))][q.c];if(!best||best==='-'||best==='PTC')return;
+  targets.forEach(function(u){if(u.s==='br'&&!u.dm&&s.u.indexOf(u)>=0){u.dm=1;log.push('  '+u.nm+'(混乱) 攻撃を受けてDM');}});}
+function btDMAdjAll(){var log=[];BT.stacks.forEach(function(s){if(s.n==null||s.n<0)return;if(!btAdjGOEnemy(s.n,s.side))return;btInf(s).forEach(function(u){if(u.s==='br'&&!u.dm){u.dm=1;log.push(BTG.nodes[s.n].nm+' '+u.nm+'(混乱) 敵に隣接されてDM');}});});if(log.length)btLog(['DM'].concat(log));}
 function btApplyIFT(s,targets,r,log){
   targets=targets.filter(function(u){return btIsInfK(btI(u,s.side).kind)&&s.u.indexOf(u)>=0;});
-  if(!targets.length)return;
+  if(!targets.length){BT_DMQ=null;return;}
+  btDMHit(s,targets,log);
   if(!r||r==='-'){log.push('効果なし');return;}
   if(r==='PTC'){btGroupCheck(s,targets.filter(function(u){return u.s==='ok';}),0,log,true);return;}
   var m;
@@ -30184,7 +30190,7 @@ function btFireExec(fd,ev){
   var targets=ev.tgtUnits.filter(function(u){return tS.u.indexOf(u)>=0||btFindUnit(u.id);});
   // 複数スタック(通常射撃で移動中スタックと同居など)に対応: スタックごとに適用
   var bySt={};targets.forEach(function(u){var f=btFindUnit(u.id);if(!f)return;(bySt[f.s.id]=bySt[f.s.id]||{s:f.s,us:[]}).us.push(u);});
-  Object.keys(bySt).forEach(function(k){btApplyIFT(bySt[k].s,bySt[k].us,r,log);});
+  Object.keys(bySt).forEach(function(k){BT_DMQ={c:col,d:ev.drm};btApplyIFT(bySt[k].s,bySt[k].us,r,log);});
   // 最終防護射撃: 射撃したユニットは元のDR(指揮修正のみ)でNMC
   if(fd.ph==='FPF'){
     ev.usedU.forEach(function(x){var I=btI(x.u,x.s.side);if(!btIsInfK(I.kind)||x.s.u.indexOf(x.u)<0||x.u.s==='br')return;
@@ -30207,7 +30213,7 @@ function btResidAttack(mvS,n,log){
   if(unp&&(!mv.assault||mv.assaultLost)){drm-=1;dl.push('FFNAM-1');}
   var raw=btDie()+btDie(),col=ci(fp),r=IFT[Math.max(0,Math.min(15,raw+drm))][col];
   log.push('残留火力 '+fp+'FP → '+T.nm+' DR'+raw+(drm?((drm>0?'+':'')+drm+'='+(raw+drm)):'')+(dl.length?'('+dl.join(' ')+')':'')+' → '+r);
-  btApplyIFT(mvS,btInf(mvS),r,log);
+  BT_DMQ={c:col,d:drm};btApplyIFT(mvS,btInf(mvS),r,log);
 }
 
 // ---------- [B7] 移動フェイズ ----------
@@ -30907,7 +30913,8 @@ function btPhaseLeave(id){
   if(id==='RtPh'&&BT.rtp)BtRtpEnd(); /* v1281 */
   var att=btSideNow(),def=btOpp(att);
   if(id==='PFPh'){BT.stacks.forEach(function(s){if(s.side!==att)return;s.u.forEach(function(u){if(u.fire==='R')u.fire='P';});});}
-  if(id==='MPh'){if(BT.mv){if(BT.mv.veh)btVMoveEnd();else btMoveEnd();}BT.resid={};BT.pend=null;btSmokeClear('g');}
+  if(id==='MPh'){if(BT.mv){if(BT.mv.veh)btVMoveEnd();else btMoveEnd();}BT.resid={};BT.pend=null;btSmokeClear('g');btDMAdjAll();}
+  if(id==='APh')btDMAdjAll(); /* v1286 */
   if(id==='DFPh'){btClearMarks(def,['F1','F2','R','I']);}
   if(id==='AFPh'){btClearMarks(att,['P','A','R','B','I']);} // v281: 移動射撃(B)の印も前進射撃フェイズの終わりに外す(外し忘れで、移動射撃した車両がその後ずっと撃てなかった)
   if(id==='APh'){ // 進入予定ターンに入らなかった部隊は除去(3.3: 進入ターンの移動・前進フェイズに入らなければ除去。v284で車両も対象)
@@ -33276,7 +33283,7 @@ function btFireIFE(o,ev){
   u.smkOnly=0;if(w.crew)w.crew.fire=w.crew.fire||mk;u.acq=null;
   var bySt={};BT.stacks.forEach(function(t){if(t.n!==T||t.side===w.s.side)return;if(o.ph==='DFF'&&BT.mv&&t.id!==BT.mv.sid)return;bySt[t.id]=t;});
   var tem=BTG.nodes[T].tem||0;
-  Object.keys(bySt).forEach(function(k){var t=bySt[k];btApplyIFT(t,btInf(t),r,log);btAFVs(t).forEach(function(v){if(v.ce)btCrewResult(t,v,IFT[Math.max(0,Math.min(15,fin-tem+Math.max(2,tem)))][ev.col],log);});});
+  Object.keys(bySt).forEach(function(k){var t=bySt[k];BT_DMQ={c:ev.col,d:ev.drm};btApplyIFT(t,btInf(t),r,log);btAFVs(t).forEach(function(v){if(v.ce)btCrewResult(t,v,IFT[Math.max(0,Math.min(15,fin-tem+Math.max(2,tem)))][ev.col],log);});});
   if(o.ph==='DFF'){var res=resTblFp(RES_TBL[ev.col],0);if(res>(BT.resid[T]||0)){BT.resid[T]=res;log.push('  残留火力 '+res+'FP');}}
   btCleanStacks();
   return {log:log,ok:true,hit:true};
@@ -33335,7 +33342,7 @@ function btITTResolve(o,ev,a,b,raw,fin,log){
   log.push('  '+(isCH?'クリティカル(TEM反転) ':'')+fp+'FP(列'+IFT_LBL[col]+') IFT DR'+r2+(drm?drm:'')+' → '+r);
   var bySt={};
   BT.stacks.forEach(function(s){if(s.n!==T||s.side===w.s.side)return;var mv=(o.ph==='DFF'&&BT.mv)?btStackById(BT.mv.sid):null;if(mv&&s!==mv)return;bySt[s.id]=s;});
-  Object.keys(bySt).forEach(function(k){var s=bySt[k];btApplyIFT(s,btInf(s),r,log);btAFVs(s).forEach(function(v){if(v.ce)btCrewResult(s,v,IFT[Math.max(0,Math.min(15,r2+drm+2))][col],log);});});
+  Object.keys(bySt).forEach(function(k){var s=bySt[k];BT_DMQ={c:col,d:drm};btApplyIFT(s,btInf(s),r,log);btAFVs(s).forEach(function(v){if(v.ce)btCrewResult(s,v,IFT[Math.max(0,Math.min(15,r2+drm+2))][col],log);});});
   if(o.ph==='DFF'&&o.ammo==='HE'&&!o.intensive){var res=Math.min(12,Math.floor(fp/2));if(res>0&&res>(BT.resid[T]||0)){BT.resid[T]=res;log.push('  残留火力 '+res+'FP');}}
 }
 // ---- 車載機銃(7.8) ----
@@ -33376,7 +33383,7 @@ function btVMGFire(s,u,tgtN,ph){
   if(raw===12){var k=e.parts[0].replace(/\d+$/,'').toLowerCase();u.mgS[k]='br';log.push('  '+k.toUpperCase()+' 故障');}
   var bySt={};
   BT.stacks.forEach(function(t){if(t.n!==tgtN||t.side===s.side)return;if(ph==='DFF'&&BT.mv&&t.id!==BT.mv.sid)return;bySt[t.id]=t;});
-  Object.keys(bySt).forEach(function(k){var t=bySt[k];btApplyIFT(t,btInf(t),r,log);btAFVs(t).forEach(function(v){if(v.ce)btCrewResult(t,v,IFT[Math.max(0,Math.min(15,raw+e.drm-BTG.nodes[tgtN].tem+Math.max(2,BTG.nodes[tgtN].tem)))][e.col],log);});});
+  Object.keys(bySt).forEach(function(k){var t=bySt[k];BT_DMQ={c:e.col,d:e.drm};btApplyIFT(t,btInf(t),r,log);btAFVs(t).forEach(function(v){if(v.ce)btCrewResult(t,v,IFT[Math.max(0,Math.min(15,raw+e.drm-BTG.nodes[tgtN].tem+Math.max(2,BTG.nodes[tgtN].tem)))][e.col],log);});});
   if(ph==='DFF'){var res=resTblFp(RES_TBL[e.col],0);if(res>(BT.resid[tgtN]||0)){BT.resid[tgtN]=res;log.push('  残留火力 '+res+'FP');}}
   btCleanStacks();
   return {ok:true,log:log};
@@ -34147,7 +34154,7 @@ function btDCResolve(){
     if(raw>=d.x){log.push('DC('+d.by+') → '+T.nm+' 原DR'+raw+'≧X#'+d.x+' 不発');return;}
     var drm=T.tem+(d.cx?1:0),r=IFT[Math.max(0,Math.min(15,raw+drm))][ci(30)];
     log.push('DC('+d.by+') → '+T.nm+' 30FP DR'+raw+(drm?'+'+drm+'='+(raw+drm):'')+' → '+r);
-    BT.stacks.forEach(function(s){if(s.n!==d.n||s.side===att)return;btApplyIFT(s,btInf(s),r,log);btAFVs(s).forEach(function(v){if(v.ce)btCrewResult(s,v,IFT[Math.max(0,Math.min(15,raw+(d.cx?1:0)+Math.max(2,T.tem)))][ci(30)],log);});});
+    BT.stacks.forEach(function(s){if(s.n!==d.n||s.side===att)return;BT_DMQ={c:ci(30),d:drm};btApplyIFT(s,btInf(s),r,log);btAFVs(s).forEach(function(v){if(v.ce)btCrewResult(s,v,IFT[Math.max(0,Math.min(15,raw+(d.cx?1:0)+Math.max(2,T.tem)))][ci(30)],log);});});
   });
   BT.dcs=(BT.dcs||[]).filter(function(d){return d.side!==att;});
   btCleanStacks();
