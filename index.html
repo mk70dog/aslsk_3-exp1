@@ -53192,7 +53192,32 @@ function btSuPopCss(){if(document.getElementById('btSuPopCss'))return;var st=doc
  '#btSuPop .rx{flex:0 0 auto;display:inline-flex;width:34px;height:34px;border-radius:17px;background:#14171d;border:1px solid #4a5566;align-items:center;justify-content:center;color:#e8eef4;font-size:16px;font-weight:900;cursor:pointer;box-shadow:'+SH+'}',
  '#btSuPop .mini{display:flex;align-items:center;gap:8px;background:#1c1f27;border:1px solid #ffd24a;border-radius:18px;padding:5px 12px;box-shadow:0 4px 10px rgba(0,0,0,.6);font-size:13px;font-weight:700;color:#ffd24a;cursor:move;touch-action:none}',
  '#btSuPop .mini .op{color:#e8eef4;cursor:pointer;padding:2px 4px}',
- '#btSuPop details summary{font-size:13px!important;color:#b4c2d0!important}'
+ '#btSuPop details summary{font-size:13px!important;color:#b4c2d0!important}',
+
+ /* sample-supop A: 文字とすき間を小さく */
+ '#btSuPop.stA .pn,#btSuPop.stB .pn,#btSuPop.stC .pn{padding:8px 10px!important}',
+ '#btSuPop.stA .tt,#btSuPop.stB .tt{font-size:13px}#btSuPop.stA .hd span,#btSuPop.stB .hd span{font-size:12px!important}',
+ '#btSuPop.stA .b,#btSuPop.stB .b{font-size:12px;padding:5px 9px;margin:0 3px 4px 0}#btSuPop.stA .b.sm,#btSuPop.stB .b.sm{font-size:11px;padding:4px 8px}',
+ '#btSuPop.stA .b.go,#btSuPop.stB .b.go{font-size:13px;padding:7px 8px}',
+ '#btSuPop.stA .sh,#btSuPop.stB .sh{font-size:12px;margin-bottom:4px}#btSuPop.stA .sn,#btSuPop.stB .sn{width:16px;height:16px;font-size:10px}',
+ '#btSuPop.stA .hint,#btSuPop.stB .hint{font-size:11px;line-height:1.4}#btSuPop.stA .row,#btSuPop.stB .row{font-size:12px;margin:3px 0}',
+ '#btSuPop.stA .vc b,#btSuPop.stB .vc b{font-size:18px}#btSuPop.stA .vc,#btSuPop.stB .vc{font-size:12px}#btSuPop.stA .chip,#btSuPop.stB .chip{font-size:11px;padding:1px 8px}',
+ '#btSuPop.stA .st,#btSuPop.stB .st{padding:6px 8px}#btSuPop.stA .grid,#btSuPop.stB .grid{gap:6px}#btSuPop.stA .rx,#btSuPop.stB .rx{width:28px;height:28px;font-size:13px}',
+ /* B: スタイリッシュ(細い線・フラットなボタン・見出しに下線) */
+ '#btSuPop.stB .pn{background:#12151b!important;border:1px solid #39414f!important;border-radius:12px!important}',
+ '#btSuPop.stB .st{background:transparent;border:0;border-left:2px solid #2e3644;border-radius:0}',
+ '#btSuPop.stB .sh{letter-spacing:.08em;color:#9fb0c3;border-bottom:1px solid #2a313d;padding-bottom:3px}',
+ '#btSuPop.stB .sn{background:transparent;border:1px solid #ffd24a;color:#ffd24a}',
+ '#btSuPop.stB .b{background:transparent;box-shadow:none;border:1px solid #39414f;border-radius:6px}#btSuPop.stB .b.on{border-color:#ffd24a;outline:0;background:rgba(255,210,74,.08)}',
+ '#btSuPop.stB .b.go{background:transparent;border:1px solid #3fbf6a;color:#7fe0a0;box-shadow:none}',
+ '#btSuPop.stB .chip{background:transparent}',
+ /* C: さらに小さく(説明を減らす・最下行の注記なし) */
+ '#btSuPop.stC .tt{font-size:12px}#btSuPop.stC .hd span{font-size:11px!important}',
+ '#btSuPop.stC .b{font-size:11px;padding:4px 7px;margin:0 2px 3px 0;border-radius:6px}#btSuPop.stC .b.sm{font-size:10.5px;padding:3px 6px}',
+ '#btSuPop.stC .b.go{font-size:12px;padding:6px 6px}#btSuPop.stC .sh{font-size:11px;margin-bottom:3px}#btSuPop.stC .sn{width:14px;height:14px;font-size:9px;margin-right:4px}',
+ '#btSuPop.stC .hint{font-size:10px;line-height:1.35}#btSuPop.stC .row{font-size:11px;margin:2px 0;gap:4px}#btSuPop.stC .chip{font-size:10px;padding:0 6px}',
+ '#btSuPop.stC .vc b{font-size:15px}#btSuPop.stC .vc{font-size:11px;margin:0 0 4px}#btSuPop.stC .st{padding:5px 7px}#btSuPop.stC .grid{gap:5px}',
+ '#btSuPop.stC .pn > .hint:last-child{display:none}#btSuPop.stC .rx{width:24px;height:24px;font-size:12px}'
  ].join('\n');document.head.appendChild(st);}
 function btSuB(lbl,f,o){o=o||{};return '<button class="b'+(o.sm?' sm':'')+(o.on?' on':'')+(o.dim?' dim':'')+(o.warn?' warn':'')+(o.go?' go':'')+'" onclick="'+f+'">'+lbl+'</button>';}
 function btSuPopHTML(){
@@ -53235,12 +53260,13 @@ function btSuPopHTML(){
 }
 function btSuPopVW(){var d=document.documentElement;return {W:d.clientWidth||window.innerWidth,H:d.clientHeight||window.innerHeight};}
 function btSuPopPos(el){var p=null;try{p=JSON.parse(localStorage.getItem('btSuPop')||'null');}catch(e){}var V=btSuPopVW(),W=V.W,H=V.H; /* v1203: iPadで拡大中は innerWidth が見えている幅になり、パネルが狭くなっていた→レイアウトの幅で計算 */
-  var w=NM_BT_SUMIN?260:Math.max(560,Math.min(1000,W-80));if(!NM_BT_SUMIN)el.style.width=w+'px';else el.style.width='';
+  var wMax={A:860,B:860,C:760}[window.NM_SU_STY]||1000;var w=NM_BT_SUMIN?260:Math.max(560,Math.min(wMax,W-80)); /* sample-supop */if(!NM_BT_SUMIN)el.style.width=w+'px';else el.style.width='';
   var x=p?p.x:Math.max(10,(W-w)/2),y=p?p.y:(NM_BT_SUMIN?44:Math.max(40,H*0.18));
   x=Math.max(-(el.offsetWidth||w)+120,Math.min(W-120,x));y=Math.max(0,Math.min(H-40,y));el.style.left=x+'px';el.style.top=y+'px';}
 function btSuPopSync(){var el=document.getElementById('btSuPop');
   if(!btSuPopOn()){if(el)el.remove();return;}
   btSuPopCss();if(!el){el=document.createElement('div');el.id='btSuPop';document.body.appendChild(el);btSuDragInit(el);}
+  el.className=window.NM_SU_STY?'st'+window.NM_SU_STY:''; /* sample-supop: コンパクト A/B/C */
   var sc=null;var sb=el.querySelector('details>div');if(sb)sc=sb.scrollTop;
   el.innerHTML=btSuPopHTML()+(NM_BT_SUMIN?'':'<div class="btPopRz" onpointerdown="btSuResize(event)" style="position:absolute;right:6px;bottom:6px;margin:0;float:none"></div>');btSuPopPos(el);try{var Z=JSON.parse(localStorage.getItem('btSuSize')||'null');var pn=el.querySelector('.pn');if(Z&&pn&&!NM_BT_SUMIN){el.style.width=Z.w+'px';pn.style.height=Z.h+'px';pn.style.overflow='auto';pn.style.boxSizing='border-box';}}catch(e){}
   if(sc!=null){var sb2=el.querySelector('details>div');if(sb2)sb2.scrollTop=sc;}}
