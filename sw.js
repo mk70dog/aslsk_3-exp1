@@ -1,6 +1,6 @@
 // ASL SK Judge Service Worker (オフライン起動用)
 // 更新のたびに APP_VERSION を index.html の APP_VERSION と同じ値に更新すること(古い版が出続けるのを防ぐ)。
-var APP_VERSION='ASLSK3M-v12.510';
+var APP_VERSION='ASLSK3M-v12.511';
 var CACHE='aslsk-'+APP_VERSION;
 var CORE=['./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png','./icon-512m.png'];
 self.addEventListener('install',function(e){
@@ -47,3 +47,4 @@ var APP_VERSION_HIST_v1307="v1307(ダルマ指示「3種類画面設定で変更
 var APP_VERSION_HIST_v1308="v1308(ダルマ指示「アプリ対戦モードからシナリオ選択可能に」→実施): 対戦モードの≡メニューに「シナリオ選択」を追加。対戦の途中で別シナリオのAPPを押すと「やめる/先にセーブ/切り替える」の確認を出してから切り替え。";
 var APP_VERSION_HIST_v1309="v1309(ダルマ報告「S25 新しく始めるができない」): 「新しい対戦」と「配置完了・ゲーム開始」(未配置の部隊が残る時)が「もう一度押す」案内のトーストだけで気づけなかった→確認の窓(やめる/最初からやり直す、配置に戻る/このまま開始)に。";
 var APP_VERSION_HIST_v1310="v1310(ダルマ報告「新しく始めても前のカウンターがマップに残っている」): 「新しい対戦」で、対戦の駒だけでなく地図に置いた自軍・敵・残骸・煙幕・マーク(マップクリアと同じ範囲)も一緒に消す。";
+var APP_VERSION_HIST_v1311="v1311(ダルマ報告「上の一部が見えない」): 下バーにしたため地図・左上の札がiPadのステータスバーの下に潜って上が切れていた→上にステータスバー分(安全領域)の空きを残す。";
