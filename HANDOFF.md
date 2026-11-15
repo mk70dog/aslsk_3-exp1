@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-15 引き継ぎ】main=v1290(push 済み)。返事待ち: sample-dropsty(部隊の準備の緑の点線の代わり A〜E)。
+- 【2026-11-15 引き継ぎ】main=v1291(push 済み)。返事待ちなし。
+- v1291: 部隊の準備の #nmSu .u.drop を緑の細い実線+薄い緑の背景に。
 - v1290: 準備パネルの既定スタイルC(#btSuPop.stC、NM_SU_STY。A/B も残す・''で従来)。
 - v1289: トータルFPのバッジ(btStackVaslSVG・パネル見出し、btStackFP は FT を除く。NM_FP_BADGE=false で消す)。
 - v1288: 透かしたヘクスの印(ghMk、スタックの上に描く)。
