@@ -1,6 +1,6 @@
 // ASL SK Judge Service Worker (オフライン起動用)
 // 更新のたびに APP_VERSION を index.html の APP_VERSION と同じ値に更新すること(古い版が出続けるのを防ぐ)。
-var APP_VERSION='ASLSK3M-v12.520';
+var APP_VERSION='ASLSK3M-v12.521';
 var CACHE='aslsk-'+APP_VERSION;
 var CORE=['./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png','./icon-512m.png'];
 self.addEventListener('install',function(e){
@@ -57,3 +57,4 @@ var APP_VERSION_HIST_v1317='ASLSK3M-v12.517';
 var APP_VERSION_HIST_v1318='ASLSK3M-v12.518';
 var APP_VERSION_HIST_v1319='ASLSK3M-v12.519';
 var APP_VERSION_HIST_v1320='ASLSK3M-v12.520';
+var APP_VERSION_HIST_v1321='ASLSK3M-v12.521';
