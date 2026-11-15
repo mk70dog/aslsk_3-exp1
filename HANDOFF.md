@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- 【2026-11-15 引き継ぎ】main=v1294(push 済み)。返事待ち: sample-offpop(盤外をボタン→ポップアップ A/B/C)。
+- 【2026-11-15 引き継ぎ】main=v1295(push 済み)。返事待ちなし。
+- v1295: 盤外のパネル(btOffBtnHTML・BtOffPop・btOffPopSync、S.nmOffSty=B一覧/C帯、BtOffSty で切替)。移動フェイズ開始で自動で開く(btPhaseEnter MPh)。NM_OFF_STY='' で従来の上のバー。
 - v1294: 勝利条件のマーク btVicIc(既定A=旗、NM_VIC_IC で B/C)。
 - v1293: 戦闘記録・勝利条件の小窓 B(btTopPop/btTopCss、BT_TOPSTY・NM_TOP_STY で A/C も可)。記録は BT_REC.log(ターン・フェイズ付き)を使う。
 - v1292: 部隊の準備で盤外から進入する軍(nmSuOffEntry)は「盤外から進入」の札・「完了(盤外から進入)」。
