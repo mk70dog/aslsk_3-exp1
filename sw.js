@@ -1,6 +1,6 @@
 // ASL SK Judge Service Worker (オフライン起動用)
 // 更新のたびに APP_VERSION を index.html の APP_VERSION と同じ値に更新すること(古い版が出続けるのを防ぐ)。
-var APP_VERSION='ASLSK3M-v12.505';
+var APP_VERSION='ASLSK3M-v12.506';
 var CACHE='aslsk-'+APP_VERSION;
 var CORE=['./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png','./icon-512m.png'];
 self.addEventListener('install',function(e){
@@ -42,3 +42,4 @@ self.addEventListener('fetch',function(e){
 var APP_VERSION_HIST_v1303="v1303(ダルマ指示「修正実施」): 記録の書き出し(BtRecExport)の result を btCfgNeed/btCfgWinner に(S6は need=2・勝者はシナリオの勝利条件)。ゲーム終了後の btRecPh は END(スナップショット・nowの表記)。";
 var APP_VERSION_HIST_v1304="v1304(ダルマ指示「実施」): 回復フェイズ画面を案Aに(回復できる部隊をカード一覧・駒画像・成功率・自己/指揮官の選択肢、SWは下段)。連携射撃パネルをヘクスごとの行(駒画像・FP・指揮官の有無)+合計・指揮官なし警告に変更(btFireCardsHTML)。";
 var APP_VERSION_HIST_v1305="v1305(ダルマ指示「B実施」): 射撃パネルをサンプルB(攻撃のヘクスごとの駒・FP・指揮官★/! ▶ 合計FP→列・DRM ▶ 目標の駒 ▶ 結果の見込みバー の1行)に。通常射撃・連携射撃とも同じ(btFireCardsHTML)。";
+var APP_VERSION_HIST_v1306="v1306(ダルマ指示「連携時も同じようなパネルのサンプル」の確認中に発見): 射撃パネルの指揮官マーク(★/!)が駒の右端からずれる表示を修正。";
