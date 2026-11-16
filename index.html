@@ -29778,7 +29778,7 @@ var BT_SCFG={
     zone:function(o,N){if(N.b==='v')return true;if(N.b==='u'){var k=btHexNum(N);return k!=null&&k<=7;}return false;},
     zoneTxt:function(){return 'ボードuの番号7以下のヘクス・ボードv';},
     ent:[{id:'g1',side:'GER',turn:1,off:'S',lbl:'第6装甲師団(南端)'}],
-    vic:'n',vicN:4,vicSide:'GER',vicAfv:2,bl:'vic',ssr:{radio:{SOV:/^BT-7/}},aiw:{holdDef:12,fort:1,ccAfv:6,afvHunt:6},
+    vic:'n',vicN:4,vicSide:'GER',vicAfv:2,bl:'vic',ssr:{radio:{SOV:/^BT-7/}},aiw:{holdDef:12,fort:1,ccAfv:6,afvHunt:6,emptyGo:12},
     fix:{SOV:[['vL7',[/^BT-7/,1],[/^76\.2mm/,1],[/^2-2-8/,1],[/^4-4-7/,2],[/^LMG/,1]],['vM7',[/^4-4-7/,3],[/^8-0/,1],[/^MMG/,1],[/^ATR/,1]],['vP7',[/^KV-2/,1],[/^4-2-6/,2],[/^4-4-7/,1],[/^7-0/,1],[/^LMG/,1],[/^ATR/,1]],['vK8',[/^50mm/,1],[/^4-4-7/,2],[/^2-3-7/,1]]]}, /* v1350(ダルマ「ソ連作戦」): ソ連の配置を固定(KV-2=P7・BT-7と歩兵砲=L7・迫撃砲=K8)、守備側は動かない(fort)。独はKV-2狙い(ccAfv・afvHunt) */ /* v1346(ダルマ「実施」): 自己対戦40戦ずつ 独勝 42%→30%。守備側(ソ連)は1スタックだけの自軍の建物を空けない */
     note:'勝利には独AFV2両以上が走行可能であること。BT-7は無線機なし(各MPhにDR≦8でないとヘクスから出られない)'}
 };
@@ -31597,6 +31597,14 @@ function btAIPlanMoves0(side){
     var inf=btInf(s).filter(function(u){return btCanMove(s,u)&&!btIsGunCrew(s,u);});
     return inf.length>0;
   });
+  // v1350(ダルマ「独のアプリが空き家の建物も取りに行く」): 攻撃側は、敵の健在な部隊も味方もいない未支配の建物ごとに、いちばん近い部隊を1つ割り当て、その建物だけを目標にする(aiw.emptyGo=目標の価値)
+  var asg={},EG=btAIW().emptyGo;
+  if(EG&&btFirst()===side){var used={};
+    btBldgs().forEach(function(B){if(BT.ctl&&BT.ctl[B.id]===side)return;var ns=btBldgNodes(B);
+      if(ns.some(function(n){return BT.stacks.some(function(x){return x.n===n&&btInf(x).some(btGO);});}))return; /* 敵が混乱した部隊だけなら取りに行く */
+      var bs=null,bd=1e9;movers.forEach(function(x){if(used[x.id]||x.n==null||x.n<0)return;if(!btInf(x).some(function(u){return btGO(u)&&btI(u,side).kind==='mmc';}))return;var d=99;ns.forEach(function(n){d=Math.min(d,btDist(n,x.n));});if(d<bd){bd=d;bs=x;}});
+      if(!bs)return;used[bs.id]=1;var g={};ns.forEach(function(n){g[n]=EG;});asg[bs.id]=btGoalField(side,g).map(function(v){return v*W.goal;});
+      if(window.BT_DBG)BT_DBG.push({t:'T'+BT.turn+side+'EMPTY',b:B.id,at:BTG.nodes[bs.n].nm,d:bd});});}
   // 遠い部隊から(前線の部隊は後で、隙間を埋める)
   movers.sort(function(a,b){var fa=(a.n!=null&&a.n>=0)?F[a.n]:-1,fb=(b.n!=null&&b.n>=0)?F[b.n]:-1;return fa-fb;});
   movers.forEach(function(s){
@@ -31605,7 +31613,8 @@ function btAIPlanMoves0(side){
     var hold=btHoldValue(side,s);
     var sv0=0;btInf(s).forEach(function(u){var k=btI(u,side).kind;if(k==='mmc'||k==='smc')sv0+=btUVal(side,u);});
     var rk0=BT_AIW.riskStk?Math.pow(Math.max(1,sv0),BT_AIW.riskStk):1;
-    var base0=here!=null?(F[here]+BTG.nodes[here].tem*0.9-btThreatAt(side,here,false,false)*W.risk*rk0):-99;
+    var Fs=asg[s.id]||F;
+    var base0=here!=null?(Fs[here]+BTG.nodes[here].tem*0.9-btThreatAt(side,here,false,false)*W.risk*rk0):-99;
     var variants=[{uids:allIds,stay:base0+hold}];
     // 建物を保持しつつ前進: 最も弱いMMC(HS優先)を守備に残し、残りが動く
     var mm=s.u.filter(function(u){return allIds.indexOf(u.id)>=0&&btI(u,side).kind==='mmc';});
@@ -31636,7 +31645,7 @@ function btAIPlanMoves0(side){
           if(n===here)return;
           if(dAsl&&(o.dt||e.m>=o.mf||btPathOf(sr,e.k).filter(function(x,ix){return !(ix===0&&x===here);}).length>1))return; // v287: 敵のLOS内では警戒移動(1ヘクス)
           var endTh=btThreatAt(side,n,false,false);
-          var sc=F[n]+N.tem*0.9-(e.d*W.path+endTh*W.risk)*rk-(o.dt?0.4:0);
+          var sc=Fs[n]+N.tem*0.9-(e.d*W.path+endTh*W.risk)*rk-(o.dt?0.4:0);
           if(side==='GER'&&BT_AIW.dAdjB&&N.bldg&&btDocFriendAdjBldg(side,n,s))sc+=BT_AIW.dAdjB; // v287: 味方のいる建物ヘクスに隣接する建物ヘクス(射撃グループ)
           if(ldrOnly)sc+=BT_AIW.ldrRally*btBrokenAt(n,side)-BT_AIW.ldrRally*brHere; // v284(段階4): 単独の指揮官は混乱した味方のいるヘクスへ(回復のため)
           var already=plans.filter(function(p){return p.to===n;}).length;sc-=already*1.5;
