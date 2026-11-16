@@ -11,11 +11,11 @@ const r=await p.evaluate(async()=>{BTG=null;await btEnsureGraph();var d=btNewSta
  var st=BT.stacks.filter(s=>s.side==='SOV').map(s=>BTG.nodes[s.n].nm+':'+s.u.map(u=>u.nm).join('/'));
  var nd=nm=>BTG.nodes.findIndex(N=>N.nm===nm);
  var mv=(re,to)=>{BT.stacks.forEach(s=>{if(s.side!=='SOV')return;var u=s.u.filter(x=>re.test(x.nm));if(!u.length)return;s.u=s.u.filter(x=>u.indexOf(x)<0);BT.stacks.push({id:'x'+Math.random(),side:'SOV',n:nd(to),u:u});});};
- mv(/^KV-2/,'vP1');mv(/76\.2mm|2-2-8/,'vN1');btCleanStacks();var a=BTG.nodes[nd('vP1')],t=BTG.nodes[nd('vP7')],ang=Math.atan2(t.y-a.y,t.x-a.x)*180/Math.PI,f=btFaceToward(ang);BT.stacks.forEach(s=>s.u.forEach(u=>{if(/^KV-2|76\.2mm/.test(u.nm)){u.vca=f;u.tca=f;}}));S_LOS.zoom=1.1;Draw();
+ mv(/^KV-2/,'vP7');mv(/76\.2mm|2-2-8/,'vN7');mv(/^50mm/,'vK8');mv(/^BT-7/,'vL7');btCleanStacks();var a=BTG.nodes[nd('vP7')],t=BTG.nodes[nd('vO9')],ang=Math.atan2(t.y-a.y,t.x-a.x)*180/Math.PI,f=btFaceToward(ang);BT.stacks.forEach(s=>s.u.forEach(u=>{if(/^KV-2|76\.2mm|^BT-7|^50mm/.test(u.nm)){u.vca=f;u.tca=f;}}));S_LOS.zoom=1.1;Draw();
  return {st:BT.stacks.filter(s=>s.side==='SOV').map(s=>BTG.nodes[s.n].nm+':'+s.u.map(u=>u.nm).join('/'))};});
 await p.waitForTimeout(1200);
 await p.evaluate(()=>{[...document.querySelectorAll('div')].filter(d=>getComputedStyle(d).position==='fixed'&&/アプリの軍/.test(d.innerText)&&d.innerText.length<2000).forEach(d=>d.style.display='none');});
 await p.waitForTimeout(500);
-await p.evaluate(()=>{var nd=nm=>BTG.nodes.findIndex(N=>N.nm===nm);var el=document.getElementById('losScrollWrap');el.scrollTop=0;var P=btCamPt(nd('vO3'));if(P)btCamCenter(P,{l:0,r:el.clientWidth,t:0,b:el.clientHeight});el.scrollTop=0;});
+await p.evaluate(()=>{var nd=nm=>BTG.nodes.findIndex(N=>N.nm===nm);var el=document.getElementById('losScrollWrap');el.scrollTop=0;var P=btCamPt(nd('vK8'));if(P)btCamCenter(P,{l:0,r:el.clientWidth,t:0,b:el.clientHeight});});
 await p.waitForTimeout(800);await p.screenshot({path:'/tmp/t/s25a.png'});
 console.log(JSON.stringify(r,null,1));console.log('ERR',e);await b.close();})();
