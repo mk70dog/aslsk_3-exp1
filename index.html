@@ -29778,7 +29778,8 @@ var BT_SCFG={
     zone:function(o,N){if(N.b==='v')return true;if(N.b==='u'){var k=btHexNum(N);return k!=null&&k<=7;}return false;},
     zoneTxt:function(){return 'ボードuの番号7以下のヘクス・ボードv';},
     ent:[{id:'g1',side:'GER',turn:1,off:'S',lbl:'第6装甲師団(南端)'}],
-    vic:'n',vicN:4,vicSide:'GER',vicAfv:2,bl:'vic',ssr:{radio:{SOV:/^BT-7/}},aiw:{holdDef:12}, /* v1346(ダルマ「実施」): 自己対戦40戦ずつ 独勝 42%→30%。守備側(ソ連)は1スタックだけの自軍の建物を空けない */
+    vic:'n',vicN:4,vicSide:'GER',vicAfv:2,bl:'vic',ssr:{radio:{SOV:/^BT-7/}},aiw:{holdDef:12,fort:1,ccAfv:6,afvHunt:6},
+    fix:{SOV:[['vL7',[/^BT-7/,1],[/^76\.2mm/,1],[/^2-2-8/,1],[/^4-4-7/,2],[/^LMG/,1]],['vM7',[/^4-4-7/,3],[/^8-0/,1],[/^MMG/,1],[/^ATR/,1]],['vP7',[/^KV-2/,1],[/^4-2-6/,2],[/^4-4-7/,1],[/^7-0/,1],[/^LMG/,1],[/^ATR/,1]],['vK8',[/^50mm/,1],[/^4-4-7/,2],[/^2-3-7/,1]]]}, /* v1350(ダルマ「ソ連作戦」): ソ連の配置を固定(KV-2=P7・BT-7と歩兵砲=L7・迫撃砲=K8)、守備側は動かない(fort)。独はKV-2狙い(ccAfv・afvHunt) */ /* v1346(ダルマ「実施」): 自己対戦40戦ずつ 独勝 42%→30%。守備側(ソ連)は1スタックだけの自軍の建物を空けない */
     note:'勝利には独AFV2両以上が走行可能であること。BT-7は無線機なし(各MPhにDR≦8でないとヘクスから出られない)'}
 };
 function btCfg(){var id=btScId();return id&&id!=='S26'?BT_SCFG[id]||null:null;}
@@ -31590,6 +31591,7 @@ function btAIPlanMoves0(side){
   var W=btRoleW(side);
   var G=btGoalMap(side),F0=btGoalField(side,G),F=F0.map(function(v){return v*W.goal;});
   var plans=[];
+  if(btAIW().fort&&btFirst()!==side)return plans; /* v1350: 守備側は籠城(動かない) */
   var movers=BT.stacks.filter(function(s){
     if(s.side!==side||s.mel||s.afv)return false;
     var inf=btInf(s).filter(function(u){return btCanMove(s,u)&&!btIsGunCrew(s,u);});
@@ -31673,7 +31675,8 @@ function btAIAdvance(side){
 }
 function btAIAdvance0(side){
   var W=btRoleW(side);
-  var logs=[],G=btGoalMap(side),F=btGoalField(side,G).map(function(v){return v*W.goal;});
+  var logs=[];if(btAIW().fort&&btFirst()!==side)return logs; /* v1350: 籠城 */
+  var G=btGoalMap(side),F=btGoalField(side,G).map(function(v){return v*W.goal;});
   var cand=BT.stacks.filter(function(s){return s.side===side&&!s.mel&&!s.afv&&btInf(s).some(function(u){return u.s==='ok'&&!u.adv&&!btIsGunCrew(s,u);});});
   cand.forEach(function(s){
     if(BT.stacks.indexOf(s)<0)return;
@@ -31898,6 +31901,7 @@ function btAppSetupSOV(){
 /* v1193: アプリの初期配置(S26以外)。守る側=勝利の建物を中心に、攻める側=配置範囲のうち敵側(前線)に近い遮蔽ヘクスへ。1ヘクスにMMC2個まで、指揮官とSWは強い分隊のヘクスへ */
 function btAppSetupGen(side){
   var obs=btObItems().filter(function(o){return o.side===side&&btGroupOf(o)==='setup';});if(!obs.length){BT.setupLog=[];return;}
+  var cF=btCfg();if(cF&&cF.fix&&cF.fix[side]){btAppSetupFix(side,obs,cF.fix[side]);return;}
   var o0=obs[0],log=[],att=(btFirst()===side);
   var zn=BTG.nodes.filter(function(N){return N.cost!=null&&btInZone(o0,N.i)&&!btEnemyAt(N.i,side);});
   var vb=[];btBldgs().forEach(function(bl){btBldgNodes(bl).forEach(function(n){vb.push(n);});});
@@ -31934,6 +31938,15 @@ function btAppSetupGen(side){
   BT.stacks.forEach(function(x){if(x.side===side)btGiveSW(x);});
   btCrewWithGun(side,log);
   BT.setupLog=log;}
+// v1350: 決めた配置(BT_SCFG[id].fix[side] = [[ヘクス名,[名前の正規表現,数],...],...])。車両と砲は南(攻撃側の来る方)へ向ける。残りはヘクスに置かず通常の配置に回さない
+function btAppSetupFix(side,obs,F){
+  var log=[],left={};obs.forEach(function(o){left[o.key]=o.total-btPlacedCount(o.key);});
+  F.forEach(function(row){var n=BTG.nodes.findIndex(function(N){return N.nm===row[0];});if(n<0)return;
+    row.slice(1).forEach(function(it){for(var k=0;k<it[1];k++){var o=obs.filter(function(o){return it[0].test(o.name)&&left[o.key]>0;})[0];if(!o)break;left[o.key]--;var r=btPlace(o,n);
+      var kd=btI(r.u,side).kind;if(kd==='afv'||kd==='gun'){var f=btFaceToward(90);r.u.vca=f;r.u.tca=f;}
+      log.push(o.name+'→'+row[0]);}});});
+  BT.stacks.forEach(function(x){if(x.side===side)btGiveSW(x);});
+  btCrewWithGun(side,log);BT.setupLog=log;}
 function BtAppSetup(){
   if(!btActive()||!BT.app)return;
   btEnsureGraph().then(function(){
@@ -34220,6 +34233,7 @@ function btVehSearch(s,u,mpMax){
 function btAIVehPlan(s){
   var side=s.side,u=btAFVs(s)[0];if(!u)return null;
   var v=btAfvData(u.nm);if(!v||u.imm||u.bog||u.shock||u.stun)return null;
+  if(btAIW().fort&&btFirst()!==side)return null; /* v1350: 籠城(車両も動かない) */
   if(u.recall)return btAIVehRecallPlan(s,u); // v284(7.10): Recallの車両は味方盤端へ退出
   var w=btOrdWeapons(s).filter(function(x){return x.kind==='MA'&&x.u===u;})[0];
   var sr=btVehSearch(s,u,v.mp);
