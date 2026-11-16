@@ -1,6 +1,6 @@
 // ASL SK Judge Service Worker (オフライン起動用)
 // 更新のたびに APP_VERSION を index.html の APP_VERSION と同じ値に更新すること(古い版が出続けるのを防ぐ)。
-var APP_VERSION='ASLSK3M-v12.536';
+var APP_VERSION='ASLSK3M-v12.537';
 var CACHE='aslsk-'+APP_VERSION;
 var CORE=['./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png','./icon-512m.png'];
 self.addEventListener('install',function(e){
@@ -77,3 +77,5 @@ var APP_VERSION_HIST_v1334='v1334(グループ射撃でLOSなしの理由を表�
 var APP_VERSION_HIST_v1335='v1335(S25 2-3-7[1]実カウンター・方位マーク位置)';
 
 var APP_VERSION_HIST_v1336='v1336(ATRを実カウンター表示)';
+
+var APP_VERSION_HIST_v1337='v1337(車両移動パネルの砲塔・CE/BU・形切替、操作バーのドラッグ・格納)';
