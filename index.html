@@ -10958,7 +10958,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.539"; /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.540"; /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1340="v1340(ダルマ「赤枠ヘクスに侵入できない ルール確認」S25 uGG列): 対戦モードの地図データ(btBuildGraph)が盤の短辺の半ヘクス(A・GG列、高度データなし)を除外していた。ASLSK4 1.1「盤端の半ヘクスはヘクスと同じ」に合わせて追加(他の盤と重なるものは除く)";
 var APP_VERSION_HIST_v1339="v1339(ダルマ「回復フェイズのパネル 自分で選択したら表示 自動で表示していない」): パネルが指示パネル(#btCmd)の中にあり、スタック選択中・指示パネルを▾でしまっている時は出なかった→ btRphSync で画面に直接出す(#btRphBox)";
 var APP_VERSION_HIST_v1338="v1338(ダルマ「対戦モードのツールバーに移動を追加」→「どこまで移動できるかを確認するボタン」「判定モードの移動と同じようにヘクスを選択しながら確認」sample rt→実施): ツールバーの移動ボタン(btFtMove)→スタック(選択中/タップ)から隣のヘクスを順にタップ→各ヘクスに合計MF(車両はMP・旋回込み)、緑=届く・黄=駆け足なら・赤=届かない、札に使用/最大・残り・↶一つ戻す・✕終了。通ったヘクスをタップでそこまで戻す。盤外のスタックは進入ヘクスから。実際には動かさない(BT_RT、保存しない)。AI: aiw.holdAtk(攻撃側は取った建物を守り続けない、未設定なら動作変化なし)を追加";
 var APP_VERSION_HIST_v1337="v1337(ダルマ「全て実施」sample-vmpanel・sample-dockdrag): ①車両の移動パネル(btVMovePanelHTML split): 車体↺↻・砲塔↺↻(BtVTurret、MPなし・砲塔のある車両のみ)・BU|CE切替(BtVCE)・停止/停止して終了/Motion終了・↶↷・⋯その他(煙幕展張・盤外へ退出、細は移動射撃も)。右上の「形」横A/縦B/細C(localStorage nmVmShape、#btCmd に vmA/vmB/vmC) ②操作バー btDockCtx: 左端⠿をドラッグで移動(localStorage nmDockPos、BtDockPosReset)・右端▾で下のバーに格納(BT_DOCKMIN、下のバーに「▴操作 N」タップで戻す)";
@@ -29447,6 +29448,7 @@ function btBuildGraph(){
       var el=losHexElevAt(b.id,c,r);
       // v301(ダルマ指摘「このヘクスは数えない?」、ASLSK4 1.1「盤端の半ヘクスはヘクスと同じ」): 長辺の半ヘクス(中心が盤の縁の上)は高度データが無いため除外されていた。他の盤と重ならないものだけ、後で追加する
       if(el==null&&(Math.abs(cen.y-d.gridH)<=1||Math.abs(cen.y)<=1)&&cen.x>1&&cen.x<d.gridW-1){halfQ.push({b:b.id,c:c,r:r,g:g,key:key,cr:cr,inf:inf});continue;}
+      if(el==null&&(Math.abs(cen.x)<=1||Math.abs(cen.x-d.gridW)<=1)&&cen.y>=-1&&cen.y<=d.gridH+1){halfQ.push({b:b.id,c:c,r:r,g:g,key:key,cr:cr,inf:inf});continue;} /* v1340(ダルマ「(S25 uGG列)ヘクスに侵入できない」、ASLSK4 1.1「盤端の半ヘクスはヘクスと同じ」): 短辺(A・GG列)の半ヘクスも入れる */
       if(el==null)continue;
       var i=nodes.length;
       nodes.push({i:i,b:b.id,c:c,r:r,x:g.x,y:g.y,q:cr.q,s:cr.s,nm:btHexName(b.id,c,r),terr:inf.name,elev:el,nb:[]});
