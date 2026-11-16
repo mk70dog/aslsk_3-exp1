@@ -10958,7 +10958,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.547"; /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.548"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1348="v1348(ダルマ「ボグ解消のパネルが表示しない」): フェイズに入った時だけ作っていたため、ロード後や別経路でMPhに入った時に出なかった→MPhの最初(自軍がまだ移動していない間)は常に出す(btBogStart)。車両の指示カードにも「ボグ解消…」ボタン、出せない時は理由(準備射撃した/移動の後)";
 var APP_VERSION_HIST_v1347="v1347(ダルマ「DCと白兵戦のコンビネーション」sample dcafv→「実施」): 対戦モードのDC 対AFV攻撃(ASLSK4 4.3)。敵車両のいるヘクスにDCを置く時に「対AFVで置く(PAATC)/通常で置く」(#btDCAskBox、PAATC成功率・撃破の見込み・置く面のAF)。AFPhに位置DR(Motion+2・CX+1・CE+1・車体正面+1/背面-1・走行不能-2)≦8=TK#16−AF(原DR≧X#不発)、9-11=CE乗員30FP、≧12=非装甲ユニット30FP。向きは置いた時の面で固定。アプリもDCの目標に敵車両を選ぶ(価値3×PAATC×撃破見込み)。aiw.ccAfv(歩兵のいない敵車両ヘクスへの突撃)・aiw.afvHunt(敵車両の隣を目標に)を追加(未設定なら無効)";
 var APP_VERSION_HIST_v1346="v1346(ダルマ「実施」S25 ソ連(守備側)アプリ強化): BT_SCFG.S25.aiw={holdDef:12}(1スタックだけで守っている自軍の建物を空けない)。自己対戦 各40戦 独の勝率 42%→30%";
 var APP_VERSION_HIST_v1345="v1345(ダルマ「実施」): ①対戦モードのボグ解消(ASLSK4 7.6・QRDC BOG REMOVAL): MPhの最初に、PFPhに撃っていない走行可能なボグ車両があれば人間側はパネル(#btBogBox、解消を試みる/しない/すべて/終了・小さくする、ダイス手動なら入力)、アプリ側は自動。色付dr(立往生+1)1-4=解消(始動MP=色付×白、全装軌でなければ×2、Motion、残りMPで移動可=btVMoveStartでmfUsedに反映)/5=立往生/6+=走行不能 ②アプリの突撃・潰走を1つずつ矢印(出発→到着+ラベル)で見せる(BT_ARR/BT_ARRQ、標準1.1秒・短め0.65秒・演出OFFなし、再生中はアプリの進行を止める)";
@@ -33467,16 +33468,19 @@ function btUnbog(s,u,c,w,log){
 function btBogPh(){var att=btSideNow();BT.bogp=null;var L=btBogElig(att);if(!L.length)return;
   if(BT.app&&att===BT.app){var lg=['MPh ボグ解消(アプリ)'];L.forEach(function(x){btUnbog(x.s,x.u,btDie(),btDie(),lg);});btLog(lg);return;}
   BT.bogp={key:btPhKey(),side:att,done:{},min:0};}
+/* v1348(ダルマ「ボグ解消のパネルが表示しない」): フェイズに入る時だけでなく、ロード後・スタック選択中でも MPh の最初(自軍がまだ移動していない間)ならパネルを出す。車両の指示カードにも「ボグ解消…」 */
+function btBogStart(side){if(btPhId()!=='MPh'||BT.mv||BT.bogDone===btPhKey())return false;if(BT.stacks.some(function(s){return s.side===side&&s.u.some(function(u){return u.mvd||u.mvdone||u.mv;});}))return false;return btBogElig(side).length>0;}
+function BtBogOpen(){var att=btSideNow();if(!btBogStart(att))return;BT.bogp={key:btPhKey(),side:att,done:(BT.bogp&&BT.bogp.key===btPhKey()?BT.bogp.done:{}),min:0};btSave();Draw();}
 function BtBog(sid,uid,skip){var P=BT.bogp;if(!P)return;var s=btStackById(sid),u=s&&s.u.filter(function(x){return x.id===uid;})[0];if(!u)return;
   if(skip){P.done[uid]='skip';btSave();Draw();return;}
   var c,w;if(S.btDiceMan){var t=prompt(T('色付drと白drを入力(例: 3 5)'),'');if(t==null)return;var m=String(t).match(/([1-6])\D*([1-6])/);if(!m){btToast(T('1〜6を2つ入力'));return;}c=+m[1];w=+m[2];}else{c=btDie();w=btDie();}
   var lg=[];P.done[uid]=btUnbog(s,u,c,w,lg);btLog(lg);try{btToast(lg[0]);}catch(e){}btSave();Draw();}
 function BtBogAll(){var P=BT.bogp;if(!P)return;btBogElig(P.side).forEach(function(x){if(!P.done[x.u.id])BtBog(x.s.id,x.u.id);});}
-function BtBogEnd(){BT.bogp=null;btSave();Draw();}
+function BtBogEnd(){BT.bogp=null;BT.bogDone=btPhKey();btSave();Draw();}
 function BtBogMin(){if(BT.bogp){BT.bogp.min=BT.bogp.min?0:1;Draw();}}
 function btBogPanelHTML(){var P=BT.bogp;if(!P||P.key!==btPhKey()||btPhId()!=='MPh'||BT.mv)return '';
   var L=btBogElig(P.side).filter(function(x){return !P.done[x.u.id];});
-  if(!L.length){BT.bogp=null;return '';}
+  if(!L.length){BT.bogp=null;BT.bogDone=btPhKey();return '';}
   var B=function(t,fn,on){return btBtn(T(t),fn,{on:!!on,st:';padding:3px 12px'});};
   if(P.min){var tbw=0;try{tbw=nmTbW()||0;}catch(e){}return '<div style="position:fixed;right:'+(tbw+10)+'px;bottom:calc(var(--btfbot,0px) + 70px);z-index:9200">'+B('ボグ解消を開く('+L.length+')','BtBogMin()',1)+'</div>';}
   var pr=function(m){var d=m?1:0,u=0,mi=0;for(var c=1;c<=6;c++){var f=c+d;if(f<=4)u++;else if(f===5)mi++;}return [Math.round(u/6*100),Math.round(mi/6*100),100-Math.round(u/6*100)-Math.round(mi/6*100)];};
@@ -33489,7 +33493,7 @@ function btBogPanelHTML(){var P=BT.bogp;if(!P||P.key!==btPhKey()||btPhId()!=='MP
       +B('DR '+T('解消を試みる'),"BtBog('"+x.s.id+"','"+u.id+"')",1)+B('しない',"BtBog('"+x.s.id+"','"+u.id+"',1)")+'</div>';});
   h+='<div style="display:flex;gap:6px;justify-content:flex-end;margin-top:8px">'+B('すべて試みる','BtBogAll()')+B('終了 ▶','BtBogEnd()',1)+'</div></div>';
   return h;}
-function btBogSync(){var b=document.getElementById('btBogBox');var h='';try{h=(BT&&BT.bogp&&btActive&&btActive()&&!BT.finished)?btBogPanelHTML():'';}catch(e){}if(!h){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='btBogBox';b.onclick=function(e){e.stopPropagation();};document.body.appendChild(b);}if(b.__h!==h){b.__h=h;b.innerHTML=h;}}
+function btBogSync(){try{if(BT&&!BT.bogp&&BT.started&&!BT.finished&&btActive()&&(!BT.app||btSideNow()!==BT.app)&&btBogStart(btSideNow()))BT.bogp={key:btPhKey(),side:btSideNow(),done:{},min:0};}catch(e){}var b=document.getElementById('btBogBox');var h='';try{h=(BT&&BT.bogp&&btActive&&btActive()&&!BT.finished)?btBogPanelHTML():'';}catch(e){}if(!h){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='btBogBox';b.onclick=function(e){e.stopPropagation();};document.body.appendChild(b);}if(b.__h!==h){b.__h=h;b.innerHTML=h;}}
 function btVMoveStart(sid,uid){
   if(btPhId()!=='MPh'||BT.mv)return 'MPh(移動フェイズ)中のみ・同時に1つ';
   var s=btStackById(sid);if(!s)return '?';
@@ -34350,6 +34354,7 @@ function btVehLineHTML(s,u,mine,mode){ // v288: mode 'info'=行だけ、'act'=�
     else if(w&&btOrdCanIF(w,fph)){h+=btBtn('集中射撃: 対車両',"BtOFire('"+s.id+"','"+u.id+"','VTT','AP',null,1)",{sel:btWSel(u.id,'VTT','AP',1),st:';padding:2px 6px'});h+=btBtn('集中射撃: 歩兵(HE)',"BtOFire('"+s.id+"','"+u.id+"','ITT','HE',null,1)",{sel:btWSel(u.id,'ITT','HE',1),st:';padding:2px 6px'});} // v284(3.2.4)
     if(btMGBtnOK(s,u,fph))h+=btBtn('機銃',"BtMGFire('"+s.id+"','"+u.id+"')",{sel:btMGSel(u.id),st:';padding:2px 6px'}); // v319: 防御射撃(臨機)では移動中の相手を撃てる時だけ
   }
+  if(ph==='MPh'&&s.side===att&&!BT.mv&&!BT.edit&&u.bog&&!u.imm){var bk=btBogStart(s.side);h+=bk?btBtn(T('ボグ解消')+'…','BtBogOpen()',{on:true,st:';padding:2px 6px'}):'<span style="font-size:11px;color:#8899aa">'+T(u.fire==='P'||u.fire==='R'?'ボグ解消は準備射撃した車両は不可':'ボグ解消はMPhの最初だけ(移動した後は不可)')+'</span>';} /* v1348 */
   if(ph==='MPh'&&s.side===att&&!BT.mv&&!BT.edit){ // v321(ダルマ指示「車両を移動ボタンは不要に」): 進めるヘクスの円をタップで移動開始。盤上なら旋回ボタンでも開始
     if(btVQuickOK(s,u)){if(s.n!=null&&s.n>=0)h+=btBtn('左へ旋回',"BtVQuick('"+s.id+"','"+u.id+"','pivot',-1)",{st:';padding:2px 6px'})+btBtn('右へ旋回',"BtVQuick('"+s.id+"','"+u.id+"','pivot',1)",{st:';padding:2px 6px'});}
     else h+=btBtn('車両を移動',"BtVMove('"+s.id+"','"+u.id+"')",{on:true,st:';padding:2px 6px'});

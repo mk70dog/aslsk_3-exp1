@@ -1,6 +1,6 @@
 // ASL SK Judge Service Worker (オフライン起動用)
 // 更新のたびに APP_VERSION を index.html の APP_VERSION と同じ値に更新すること(古い版が出続けるのを防ぐ)。
-var APP_VERSION='ASLSK3M-v12.547';
+var APP_VERSION='ASLSK3M-v12.548';
 var CACHE='aslsk-'+APP_VERSION;
 var CORE=['./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png','./icon-512m.png'];
 self.addEventListener('install',function(e){
@@ -99,3 +99,5 @@ var APP_VERSION_HIST_v1345='v1345(ボグ解消・突撃/潰走の矢印)';
 var APP_VERSION_HIST_v1346='v1346(S25 ソ連アプリ強化)';
 
 var APP_VERSION_HIST_v1347='v1347(DC 対AFV)';
+
+var APP_VERSION_HIST_v1348='v1348(ボグ解消パネルの表示条件)';
