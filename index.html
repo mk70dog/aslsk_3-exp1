@@ -10958,7 +10958,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.537"; /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.538"; /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1338="v1338(ダルマ「対戦モードのツールバーに移動を追加」→「どこまで移動できるかを確認するボタン」「判定モードの移動と同じようにヘクスを選択しながら確認」sample rt→実施): ツールバーの移動ボタン(btFtMove)→スタック(選択中/タップ)から隣のヘクスを順にタップ→各ヘクスに合計MF(車両はMP・旋回込み)、緑=届く・黄=駆け足なら・赤=届かない、札に使用/最大・残り・↶一つ戻す・✕終了。通ったヘクスをタップでそこまで戻す。盤外のスタックは進入ヘクスから。実際には動かさない(BT_RT、保存しない)。AI: aiw.holdAtk(攻撃側は取った建物を守り続けない、未設定なら動作変化なし)を追加";
 var APP_VERSION_HIST_v1337="v1337(ダルマ「全て実施」sample-vmpanel・sample-dockdrag): ①車両の移動パネル(btVMovePanelHTML split): 車体↺↻・砲塔↺↻(BtVTurret、MPなし・砲塔のある車両のみ)・BU|CE切替(BtVCE)・停止/停止して終了/Motion終了・↶↷・⋯その他(煙幕展張・盤外へ退出、細は移動射撃も)。右上の「形」横A/縦B/細C(localStorage nmVmShape、#btCmd に vmA/vmB/vmC) ②操作バー btDockCtx: 左端⠿をドラッグで移動(localStorage nmDockPos、BtDockPosReset)・右端▾で下のバーに格納(BT_DOCKMIN、下のバーに「▴操作 N」タップで戻す)";
 var APP_VERSION_HIST_v1336="v1336(ダルマ「ATRもカウンター表示」: 対戦モードの地図でATRを実カウンター画像に(ソ連 u_ru_ruATR・独 ge_geATR・波/連合中小国 u_al_alATR))";
 var APP_VERSION_HIST_v1335="v1335(ダルマ指摘: ①S25 ソ連 2-3-7[1] が対戦モードの地図で文字の札になっていた→シナリオ表記が(HS)なしでも(HS)の実カウンター画像を使う(btVcUnitImg) ②全画面の方位マークが下のバーに半分隠れていた→下のバーの上端を測って --btcompb で配置、射撃などのパネルより下の重なり順)";
@@ -31496,6 +31497,7 @@ function btGoalMap(side){
     }else{
       // 自軍の建物: 脅威があれば守備(建物ヘクスに価値)
       var threat=BT.stacks.some(function(s){return s.side===en&&s.n!=null&&s.n>=0&&btInf(s).some(btGO)&&ns.some(function(n){return btDist(n,s.n)<=5;});});
+      if(btAIW().holdAtk!=null&&btFirst()===side){var near2=BT.stacks.some(function(s){return s.side===en&&s.n!=null&&s.n>=0&&btInf(s).some(btGO)&&ns.some(function(n){return btDist(n,s.n)<=2;});});threat=near2;} /* v1338 */
       if(threat&&friendIn.length<2)ns.forEach(function(n){G[n]=Math.max(G[n]||0,friendIn.indexOf(n)>=0?4:7);});
       else ns.forEach(function(n){G[n]=Math.max(G[n]||0,friendIn.indexOf(n)>=0?3:2);});
       if(enemyIn.length)enemyIn.forEach(function(en0){BTG.nodes[en0].nb.forEach(function(m){if(btEnemyAt(m,side))return;G[m]=Math.max(G[m]||0,6+(btInCover(m)?2:0));});});
@@ -31584,7 +31586,7 @@ function btAIPlanMoves0(side){
     var variants=[{uids:allIds,stay:base0+hold}];
     // 建物を保持しつつ前進: 最も弱いMMC(HS優先)を守備に残し、残りが動く
     var mm=s.u.filter(function(u){return allIds.indexOf(u.id)>=0&&btI(u,side).kind==='mmc';});
-    if(here!=null&&hold>=5&&mm.length>=2){
+    if(here!=null&&(hold>=5||(btAIW().holdAtk!=null&&btFirst()===side&&BTG.nodes[here].bldg&&BT.ctl&&BT.ctl[BTG.nodes[here].bldg]===side&&!btHoldOthers(side,s)))&&mm.length>=2){ /* v1338: 攻撃側は1個を残して先へ */
       var g=mm.slice().sort(function(a,b){return btUVal(side,a)-btUVal(side,b);})[0];
       variants.push({uids:allIds.filter(function(id){return id!==g.id;}),stay:base0+0.5,keep:g.nm});
     }
@@ -31773,6 +31775,7 @@ function btAIPrepFire(side){
 }
 function btBrokenAt(n,side){var c=0;BT.stacks.forEach(function(x){if(x.n===n&&x.side===side)c+=btInf(x).filter(function(u){return u.s==='br'&&btI(u,side).kind==='mmc';}).length;});return c;}
 // 建物を保持する価値: その建物で最後の統制状態の歩兵なら、離れると支配を失う危険があるので大きく評価する
+function btHoldOthers(side,s){var N=BTG.nodes[s.n];if(!N||!N.bldg)return 0;var bl=btBldgs().filter(function(b){return b.id===N.bldg;})[0];if(!bl)return 0;var ns=btBldgNodes(bl),o=0;BT.stacks.forEach(function(x){if(x===s||x.side!==side||ns.indexOf(x.n)<0)return;o+=btInf(x).filter(function(u){return btGO(u)&&btI(u,side).kind==='mmc';}).length;});return o;}
 function btHoldValue(side,s){
   if(s.n==null||s.n<0)return 0;
   var N=BTG.nodes[s.n];if(!N.bldg)return 0;
@@ -31782,6 +31785,9 @@ function btHoldValue(side,s){
   var enemyIn=BT.stacks.some(function(x){return x.side!==side&&ns.indexOf(x.n)>=0&&btInf(x).length;});
   var threat=BT.stacks.some(function(x){return x.side!==side&&x.n!=null&&x.n>=0&&btInf(x).some(btGO)&&ns.some(function(n){return btDist(n,x.n)<=4;});});
   var mine=BT.ctl&&BT.ctl[bl.id]===side;
+  var AWh=btAIW();if(mine&&!enemyIn&&AWh.holdAtk!=null&&btFirst()===side){ /* v1338(S25 自己対戦の分析): 攻撃側は取った建物を守り続けて次の建物へ行かなかった。建物の支配は敵が入るまで続くので、近く(2ヘクス以内)に敵がいなければ先へ進む */
+    var near=BT.stacks.some(function(x){return x.side!==side&&x.n!=null&&x.n>=0&&btInf(x).some(btGO)&&ns.some(function(n){return btDist(n,x.n)<=2;});});
+    if(!others)return near?AWh.holdAtk*2:AWh.holdAtk;return near?1:0.3;}
   if(mine||enemyIn){if(!others)return threat?7:5;return threat?2:1;}
   return 3; // 敵の建物に足場がある
 }
@@ -32281,6 +32287,7 @@ function btMapTap(boardId,col,row){
   if(!btGraphReady()){btEnsureGraph().then(function(){Draw();});return;}
   var n=btNodeOf(boardId,col,row);if(n==null)return;
   if(btLPTap(n))return; // v286: 長押しでスタックの詳細
+  if(BT_RT||BT_RTARM){btRtTap(n);return;} /* v1338 */
   if(BT.sideView){BT.sideView=false;try{nmFtActFill();}catch(e){}BtRmShow('view',n);return;} /* sample-btside: ツールバーの「見える範囲」→タップしたヘクスから */
   if(BT_RCLK){btLosRTap(n);return;} // v307: 右クリックでLOS
   if(BT.losAB&&!BT.losAB.rc){btLosABTap(n);return;} // v284: A▶︎B測定中は測定だけ(右クリックで始めた測定は、左クリックは通常の操作)
@@ -39004,6 +39011,7 @@ var NM_TB_ITEMS=[
  {id:'old',g:1,lb:'旧タブ',m:function(o){return /nmOldTabPop/.test(o);}},
  /* v1249(ダルマ指示「対戦モードのツールバーと、下の拡大・縮小などのボタン実施」): 対戦モードの右ツールバーのボタン */
  {id:'bundo',g:1,lb:'戻す ↶(対戦)',m:function(o){return /btFtUndo\(/.test(o);}},{id:'bredo',g:1,lb:'進む ↷(対戦)',m:function(o){return /btVCanRedo\(/.test(o);}},
+ {id:'bmove',g:1,lb:'移動(対戦)',m:function(o){return /btFtMove\(/.test(o);}},
  {id:'bab',g:1,lb:'A→B(対戦)',m:function(o){return /BtLosAB\(/.test(o);}},{id:'bside',g:1,lb:'横から見る(対戦)',m:function(o){return /BT\.sideView=/.test(o);}},
  {id:'bdice',g:1,lb:'ダイス 🎲(対戦)',m:function(o){return /btFtDice\(/.test(o);}},{id:'brb',g:1,lb:'盤外 ▣(対戦)',m:function(o){return /nmFtRb\(/.test(o);}},
  /* v1317(ダルマ指示「他に表示すると便利そうなボタン→全て追加」): 対戦モードの追加ボタン(既定は非表示。≡メニュー「ツールバー表示設定」か長押しで出す) */
@@ -43947,7 +43955,8 @@ function btRmLineB(a,c){return '<line x1="'+a.x+'" y1="'+a.y+'" x2="'+c.x+'" y2=
 function btRmPillB(a,c,t){var dx=c.x-a.x,dy=c.y-a.y,L=Math.hypot(dx,dy)||1,nx=-dy/L,ny=dx/L;if(ny>0||(ny===0&&nx<0)){nx=-nx;ny=-ny;} /* 線の上側(画面の上寄り)に出す */
   var x=(a.x+c.x)/2+nx*24,y=(a.y+c.y)/2+ny*24,w=Math.max(46,t.length*8+14);
   return '<g transform="rotate('+(-S_LOS.viewRot)+' '+x+' '+y+')"><rect x="'+(x-w/2)+'" y="'+(y-11)+'" width="'+w+'" height="22" rx="11" fill="#141a22" stroke="#ffd040" stroke-width="1.5"/><text x="'+x+'" y="'+(y+5)+'" text-anchor="middle" font-size="13" font-weight="900" fill="#ffd040" font-family="AppFont,AppJP,monospace">'+t+'</text></g>';}
-function btRmShowSVG(dl){var z='';try{z=nmSuZoneSVG(dl);}catch(e){}var a='';try{a=nmAtkSVG(dl);}catch(e){}var vm='';try{vm=nmViewMarkSVG(dl);}catch(e){}var aq='';try{aq=nmAcqSVG(dl);}catch(e){}return z+btRmShowSVG0(dl)+a+vm+aq;}
+function btRmShowSVG(dl){var rt='';try{rt=btRtSVG(dl);}catch(e){}return btRmShowSVG1(dl)+rt;}
+function btRmShowSVG1(dl){var z='';try{z=nmSuZoneSVG(dl);}catch(e){}var a='';try{a=nmAtkSVG(dl);}catch(e){}var vm='';try{vm=nmViewMarkSVG(dl);}catch(e){}var aq='';try{aq=nmAcqSVG(dl);}catch(e){}return z+btRmShowSVG0(dl)+a+vm+aq;}
 /* v1227(ダルマ指示「マップ上の該当するカウンターのヘクス枠線に色がつきlosラインが表示する」): 攻撃するスタックを選ぶ画面を開いている間、
    攻撃できるスタックのヘクスを国籍の色の枠で囲み、目標へLOSの線(緑=妨害なし・黄=妨害あり・赤の点線=見えない)を引く */
 function nmAtkSVG(dl){var A=NM_ATK;if(!A||!A.open||!document.getElementById('nmMvPk')||!BTG||!BTG.nodes[A.tn])return '';var c=btDispPt(A.tn,dl),h='';
@@ -44189,6 +44198,55 @@ function btFtActHTML(){var ph=btPhId(),mv=BT.mv,hu=!BT.app||btSideNow()!==BT.app
   if(ph==='MPh')return hu?b('移動','➜','btFtDo(\'move\')')+b('駆け足','»','btFtDo(\'dt\')'):'';
   if(ph==='APh')return hu?b('突撃','➜','btFtDo(\'adv\')'):'';
   return h;}
+/* v1338: 移動の確認(判定モードの「移動」と同じく、ヘクスを順にタップして合計MF/MPを数える。実際には動かさない) */
+var BT_RT=null,BT_RTARM=false;
+function btFtMove(){if(BT_RT||BT_RTARM){btRtEnd();return;}var s=BT.sel&&btStackById(BT.sel);if(s&&btRtStart(s))return;BT_RTARM=true;btToast(T('確認するスタックをタップ'));Draw();}
+function btRtEnd(){BT_RT=null;BT_RTARM=false;var c=document.getElementById('btRtCd');if(c)c.remove();Draw();try{nmFtActFill();}catch(e){}}
+function btRtStart(s){
+  var inf=btInf(s).filter(function(u){return btGO(u)&&u.s!=='br';}),R={sid:s.id,side:s.side,off:!(s.n!=null&&s.n>=0)};
+  if(inf.length){var units=inf.slice();s.u.forEach(function(w){if(w.own&&inf.some(function(m){return m.id===w.own;}))units.push(w);});
+    R.veh=false;R.max=btMMF(s.side,inf).mf-btPortageExcess(s.side,units,false);R.cx=inf.some(function(u){return u.cx||u.wd;});var cn={},od=[];inf.forEach(function(u){var k=u.nm.replace(/\[.*$/,'');if(!cn[k]){cn[k]=0;od.push(k);}cn[k]++;});R.nm=od.map(function(k){return k+(cn[k]>1?'×'+cn[k]:'');}).join('・');}
+  else{var u=btAFVs(s).filter(function(x){return !x.imm&&!x.bog;})[0];if(!u){btToast(T('動けるユニットがいません'));return false;}var v=btAfvData(u.nm);if(!v)return false;
+    R.veh=true;R.uid=u.id;R.max=v.mp;R.nm=u.nm;}
+  var f0=R.veh?(R.off?btFaceToward(s.off==='N'?90:(s.off==='S'?270:(s.off==='E'?180:0))):btStackById(s.id).u.filter(function(x){return x.id===R.uid;})[0].vca):0;
+  R.st=R.off?[]:[{n:s.n,c:R.veh?(btRtU(R).mot?0:1):0,f:f0}];R.f0=f0;
+  BT_RT=R;BT_RTARM=false;BT.sel=s.id;Draw();try{nmFtActFill();}catch(e){}return true;}
+function btRtU(R){var s=btStackById(R.sid);return s&&s.u.filter(function(x){return x.id===R.uid;})[0];}
+function btRtStep(R,a,f,b,c0){ // a(またはnull=盤外)からbへ。戻り値 {c,f} または {err}
+  var s=btStackById(R.sid);if(!s)return {err:'スタックがありません'};
+  if(!R.veh){if(btEnemyAt(b,R.side))return {err:'敵のいるヘクスには移動では入れません(突撃フェイズに)'};
+    if(a==null){var N=BTG.nodes[b];if(N.cost==null)return {err:'進入できない地形'};return {c:c0+N.cost,f:0};}
+    var ic=btInfCost(b,a);if(!ic)return {err:'進入できない地形'};return {c:c0+ic.c,f:0};}
+  var u=btRtU(R);if(!u)return {err:'車両がいません'};u.__side=R.side;
+  if(a==null){var N2=BTG.nodes[b];var mc=losVehicleMoveCostForInfo({name:N2.terr},false,!!u.ce);if(mc.cost==null)return {err:'進入できない地形'};return {c:c0+mc.cost,f:f};}
+  var tc=BTG.nodes[a].cover?2:1,best=null;
+  for(var d=0;d<=3;d++){[1,-1].forEach(function(dd){if(d===0&&dd<0)return;var nf=((f+dd*d)%6+6)%6;if(btVcaHexes(a,nf).indexOf(b)<0)return;var vc=btVCost(u,a,b,Math.max(0,R.max-c0-d*tc));if(vc.err){if(!best)best={err:vc.err};return;}var cc=c0+d*tc+vc.c;if(!best||best.err||cc<best.c)best={c:cc,f:nf,turn:d};});}
+  return best||{err:'進入できません'};}
+function btRtTap(n){
+  if(BT_RTARM&&!BT_RT){var here=btStacksAtN(n).filter(function(x){return btInf(x).length||btAFVs(x).length;});var hs=here.filter(function(x){return !BT.app||x.side!==BT.app;})[0]||here[0];if(!hs){btToast(T('スタックのあるヘクスをタップ'));return;}btRtStart(hs);return;}
+  var R=BT_RT;if(!R)return;
+  for(var i=0;i<R.st.length;i++)if(R.st[i].n===n){R.st=R.st.slice(0,i+1);Draw();return;}
+  var L=R.st[R.st.length-1];
+  if(!L){var s=btStackById(R.sid);if(!s||btRmEntry(s).indexOf(n)<0){btToast(T('最初は盤端の進入ヘクスをタップ'));return;}var r0=btRtStep(R,null,R.f0,n,0);if(r0.err){btToast(T(r0.err));return;}R.st.push({n:n,c:r0.c,f:r0.f});Draw();return;}
+  if(BTG.nodes[L.n].nb.indexOf(n)<0){btToast(T('隣のヘクスをタップ(通ったヘクスをタップでそこまで戻す)'));return;}
+  var r=btRtStep(R,L.n,L.f,n,L.c);if(r.err){btToast(T(r.err));return;}R.st.push({n:n,c:r.c,f:r.f});Draw();}
+function btRtUndo(){if(BT_RT&&BT_RT.st.length>(BT_RT.off?0:1)){BT_RT.st.pop();Draw();}}
+function btRtCol(R,c){return c<=R.max?'#40ff70':((!R.veh&&!R.cx&&c<=R.max+2)?'#ffd040':'#ff5050');}
+function btRtSVG(dl){var R=BT_RT;if(!R||!btGraphReady())return '';var s=btStackById(R.sid);if(!s){BT_RT=null;return '';}
+  var h='',pts=R.st.map(function(x){return btDispPt(x.n,dl);});
+  if(pts.length>1){var pl=pts.map(function(p){return p.x+','+p.y;}).join(' ');h+='<polyline points="'+pl+'" fill="none" stroke="#000" stroke-width="9" stroke-opacity=".5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="'+pl+'" fill="none" stroke="#40e0ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>';}
+  R.st.forEach(function(x,i){if(i===0&&!R.off)return;var c=btRtCol(R,x.c),p=pts[i];h+='<polygon points="'+btHexPoly(x.n,dl,1)+'" fill="'+c+'" fill-opacity="0.22" stroke="'+c+'" stroke-width="2"/><g transform="rotate('+(-S_LOS.viewRot)+' '+p.x+' '+p.y+')"><circle cx="'+p.x+'" cy="'+p.y+'" r="15" fill="#101418" stroke="'+c+'" stroke-width="3"/><text x="'+p.x+'" y="'+(p.y+5)+'" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">'+x.c+'</text></g>';});
+  setTimeout(btRtCardSync,0);return h;}
+function btRtCardSync(){var R=BT_RT,el=document.getElementById('btRtCd');if(!R){if(el)el.remove();return;}
+  if(!el){el=document.createElement('div');el.id='btRtCd';el.onclick=function(e){e.stopPropagation();};el.onpointerdown=function(e){e.stopPropagation();};el.onmousedown=function(e){e.stopPropagation();};el.ontouchstart=function(e){e.stopPropagation();};document.body.appendChild(el);}
+  var L=R.st[R.st.length-1],used=L?L.c:0,u=R.veh?'MP':'MF',col=btRtCol(R,used);
+  el.innerHTML='<div style="font-weight:bold;color:#40e0ff">'+T('移動の確認(実際には動かない)')+'</div><div>'+R.nm+'　<b style="font-size:16px;color:'+col+'">'+used+'</b> / '+R.max+' '+u+'　'+T('残り')+' '+Math.max(0,R.max-used)+(!R.veh&&!R.cx?' <span style="color:#9ab">('+T('駆け足')+' +2)</span>':'')+'</div><div style="color:#9ab;font-size:11px">'+T(L?'次のヘクスをタップで延長・通ったヘクスをタップでそこまで戻す':'盤端の進入ヘクスをタップ')+'</div><div style="display:flex;gap:6px;margin-top:4px"><button class="tb-reset" onclick="btRtUndo()" style="border:1px solid #3e4756;border-radius:7px;padding:3px 10px;background:#232a35;color:#e8eef4;font:inherit">↶ '+T('一つ戻す')+'</button><button class="tb-reset" onclick="btRtEnd()" style="border:1px solid #3e4756;border-radius:7px;padding:3px 10px;background:#232a35;color:#e8eef4;font:inherit">✕ '+T('終了')+'</button></div>';
+  el.style.cssText='position:fixed;z-index:9100;background:#141922ee;border:1.5px solid #40e0ff;color:#e8eef4;font:13px AppFont,AppJP,sans-serif;padding:6px 10px;border-radius:10px;box-shadow:0 6px 18px #000a;white-space:nowrap';
+  /* 経路の上に重ならないよう、地図の上端の中央に置く(最後のヘクスが上側なら下端へ) */
+  var w=el.offsetWidth||300,hh=el.offsetHeight||90,P=R.st.map(function(x){return btFxScreenPt(x.n);}).filter(Boolean);
+  var C=[[innerWidth/2-w/2,10],[70,60],[innerWidth-w-80,10],[innerWidth/2-w/2,innerHeight/2-hh/2]],pk=C[0];
+  for(var i=0;i<C.length;i++){var c=C[i],hit=P.some(function(p){return p.x>c[0]-25&&p.x<c[0]+w+25&&p.y>c[1]-25&&p.y<c[1]+hh+25;});if(!hit){pk=c;break;}}
+  el.style.left=Math.max(8,pk[0])+'px';el.style.top=Math.max(8,pk[1])+'px';}
 function btFtDo(k){var s=BT.sel&&btStackById(BT.sel);if(!s||s.n==null){btToast('スタックをタップしてから押してください');return;}
   if(k==='fire'){BtFireStart();return;}
   if(k==='adv'){BtAdvStart();return;}
@@ -44233,6 +44291,7 @@ function btSideOn(){try{return window.NM_BT_SIDE!==false&&nmTbPos()!=='T';}catch
 function btSideActHTML(){var h='',mv=BT.mv,un=BT.started&&mv&&(mv.veh?btVCanUndo():true),rd=BT.started&&mv&&mv.veh&&btVCanRedo(),nr=(typeof NM_RB!=='undefined'&&NM_RB.items)?NM_RB.items.length:0;
   var b=function(on,dis,ttl,oc,inner,st){return '<button class="fa g'+(on?' on':'')+(dis?' dis':'')+'" title="'+T(ttl)+'" onclick="event.stopPropagation();'+oc+'"'+(st?' style="'+st+'"':'')+'>'+inner+'</button>';};
   h+=b(0,!un,'一つ戻る','btFtUndo();nmFtActFill()','<span style="font-size:15px;line-height:1">↶</span>')+b(0,!rd,'やり直す(車両の移動)','if(btVCanRedo())BtVRedo();nmFtActFill()','<span style="font-size:15px;line-height:1">↷</span>');
+  if(BT.started)h+=b(!!(BT_RT||BT_RTARM),0,'移動の確認(どこまで動けるか・実際には動かない)','btFtMove();nmFtActFill()',NM_TOOL_DEF.move[1]); /* v1338(ダルマ「対戦モードのツールバーに移動を追加」→「どこまで移動できるかを確認」sample rt→実施) */
   h+=b(!!(BT.losAB&&(BT.losAB.arm||BT.losAB.rc)),0,'LOS測定(起点A・目標B)','BtLosAB();nmFtActFill()','A→B');
   h+=b(!!BT.sideView,0,'このヘクスから見える範囲(次にタップしたヘクス)','BT.sideView=!BT.sideView;nmFtActFill()',NM_TOOL_DEF.view[1]);
   h+=b(0,0,'早見表','NM_TVHQ=0;nmTvOpen(\'ref\')','<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 5.5C7 4 10 4.2 12 6c2-1.8 5-2 8-.5V19c-3-1.5-6-1.3-8 .5-2-1.8-5-2-8-.5z"/><path d="M12 6v13.5"/></svg>');
