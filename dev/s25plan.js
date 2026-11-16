@@ -1,0 +1,21 @@
+// S25 ソ連作戦のサンプル: 配置を出して盤面を撮る
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1180,height:820}});const e=[];p.on('pageerror',x=>e.push(String(x).slice(0,300)));
+await p.goto('file:///home/claude/aslsk_3-exp1/index.html',{timeout:180000});await p.waitForTimeout(4000);
+await p.evaluate(()=>{S.scen=S.scen||{};S.scen.sel='S25';NAVTAB('scen');NAVTAB('los');try{LOS_PAGE();}catch(x){}});await p.waitForTimeout(3000);
+const r=await p.evaluate(async()=>{BTG=null;await btEnsureGraph();var d=btNewState();for(var k in d)BT[k]=d[k];BT.on=true;BT.sc=btScId();btInitCtl();
+ btSetupSides().forEach(function(sd){btAppSetupGen(sd);});
+ var info=BTG.nodes.filter(N=>/^[uv](P1|N1|P2|N2)$/.test(N.nm)).map(N=>({nm:N.nm,y:Math.round(N.y),x:Math.round(N.x),cost:N.cost,tem:N.tem,bldg:!!N.bldgT,cover:!!N.cover,zone:btInZone(btObItems().filter(o=>o.side==='SOV'&&btGroupOf(o)==='setup')[0],N.i)}));
+ var ys=BTG.nodes.filter(N=>N.b==='u').map(N=>N.y),yv=BTG.nodes.filter(N=>N.b==='v').map(N=>N.y);
+ var ob=btObItems().filter(o=>o.side==='SOV').map(o=>o.name+'×'+o.total+'('+btCat(o.name,'SOV')+')');
+ var st=BT.stacks.filter(s=>s.side==='SOV').map(s=>BTG.nodes[s.n].nm+':'+s.u.map(u=>u.nm).join('/'));
+ var nd=nm=>BTG.nodes.findIndex(N=>N.nm===nm);
+ var mv=(re,to)=>{BT.stacks.forEach(s=>{if(s.side!=='SOV')return;var u=s.u.filter(x=>re.test(x.nm));if(!u.length)return;s.u=s.u.filter(x=>u.indexOf(x)<0);BT.stacks.push({id:'x'+Math.random(),side:'SOV',n:nd(to),u:u});});};
+ mv(/^KV-2/,'vP1');mv(/76\.2mm|2-2-8/,'vN1');btCleanStacks();var a=BTG.nodes[nd('vP1')],t=BTG.nodes[nd('vP7')],ang=Math.atan2(t.y-a.y,t.x-a.x)*180/Math.PI,f=btFaceToward(ang);BT.stacks.forEach(s=>s.u.forEach(u=>{if(/^KV-2|76\.2mm/.test(u.nm)){u.vca=f;u.tca=f;}}));S_LOS.zoom=1.1;Draw();
+ return {st:BT.stacks.filter(s=>s.side==='SOV').map(s=>BTG.nodes[s.n].nm+':'+s.u.map(u=>u.nm).join('/'))};});
+await p.waitForTimeout(1200);
+await p.evaluate(()=>{[...document.querySelectorAll('div')].filter(d=>getComputedStyle(d).position==='fixed'&&/アプリの軍/.test(d.innerText)&&d.innerText.length<2000).forEach(d=>d.style.display='none');});
+await p.waitForTimeout(500);
+await p.evaluate(()=>{var nd=nm=>BTG.nodes.findIndex(N=>N.nm===nm);var el=document.getElementById('losScrollWrap');el.scrollTop=0;var P=btCamPt(nd('vO3'));if(P)btCamCenter(P,{l:0,r:el.clientWidth,t:0,b:el.clientHeight});el.scrollTop=0;});
+await p.waitForTimeout(800);await p.screenshot({path:'/tmp/t/s25a.png'});
+console.log(JSON.stringify(r,null,1));console.log('ERR',e);await b.close();})();
