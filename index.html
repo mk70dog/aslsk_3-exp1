@@ -32397,6 +32397,13 @@ function btOverlaySVG(dispLayout){
   h+=btRmShowSVG(dispLayout); // v309: 右クリックメニューの表示(見える範囲・撃てる部隊・射界・移動コスト)
   if(BT.rmHex!=null){var rmd=btDispPt(BT.rmHex,dispLayout);h+='<circle id="btRmHexC" cx="'+rmd.x+'" cy="'+rmd.y+'" r="28" fill="#ffffff" fill-opacity="0.15" stroke="#ffffff" stroke-width="3"/>';} // v309: 右クリックしたヘクス
   h+=btLosABSVG(dispLayout); // v284: A▶︎B測定の線
+  if(window.BT_ARR&&BT_ARR.pts&&BT_ARR.pts.length>1){ /* v1331: アプリの突撃・潰走の矢印(出発→到着) */
+    var ad=BT_ARR.pts.map(function(n){return btDispPt(n,dispLayout);}),ac=BT_SIDE_COL[BT_ARR.side]||'#ffd060',aL=ad[ad.length-1],aP=ad[ad.length-2],ang=Math.atan2(aL.y-aP.y,aL.x-aP.x),hl=22,hw=0.5;
+    var tipx=aL.x-Math.cos(ang)*14,tipy=aL.y-Math.sin(ang)*14;
+    h+='<g style="pointer-events:none"><polyline points="'+ad.map(function(q){return q.x+','+q.y;}).join(' ')+'" fill="none" stroke="#000" stroke-width="10" stroke-opacity="0.45" stroke-linecap="round" stroke-linejoin="round"/><polyline points="'+ad.map(function(q){return q.x+','+q.y;}).join(' ')+'" fill="none" stroke="'+ac+'" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 0"/>'
+      +'<polygon points="'+tipx+','+tipy+' '+(tipx-Math.cos(ang-hw)*hl)+','+(tipy-Math.sin(ang-hw)*hl)+' '+(tipx-Math.cos(ang+hw)*hl)+','+(tipy-Math.sin(ang+hw)*hl)+'" fill="'+ac+'" stroke="#000" stroke-width="2" stroke-linejoin="round"/>'
+      +(BT_ARR.lbl?'<text x="'+(ad[0].x)+'" y="'+(ad[0].y-24)+'" text-anchor="middle" font-size="17" font-weight="900" fill="#fff" stroke="#000" stroke-width="4" paint-order="stroke" font-family="AppFont,AppJP,monospace" transform="rotate('+(-S_LOS.viewRot)+' '+ad[0].x+' '+(ad[0].y-24)+')">'+BT_ARR.lbl+'</text>':'')+'</g>';
+  }
   return '<g id="btOvG">'+h+'</g>'; // v305: 演出の座標用
 
 }
