@@ -10958,7 +10958,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.546"; /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.547"; /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1347="v1347(ダルマ「DCと白兵戦のコンビネーション」sample dcafv→「実施」): 対戦モードのDC 対AFV攻撃(ASLSK4 4.3)。敵車両のいるヘクスにDCを置く時に「対AFVで置く(PAATC)/通常で置く」(#btDCAskBox、PAATC成功率・撃破の見込み・置く面のAF)。AFPhに位置DR(Motion+2・CX+1・CE+1・車体正面+1/背面-1・走行不能-2)≦8=TK#16−AF(原DR≧X#不発)、9-11=CE乗員30FP、≧12=非装甲ユニット30FP。向きは置いた時の面で固定。アプリもDCの目標に敵車両を選ぶ(価値3×PAATC×撃破見込み)。aiw.ccAfv(歩兵のいない敵車両ヘクスへの突撃)・aiw.afvHunt(敵車両の隣を目標に)を追加(未設定なら無効)";
 var APP_VERSION_HIST_v1346="v1346(ダルマ「実施」S25 ソ連(守備側)アプリ強化): BT_SCFG.S25.aiw={holdDef:12}(1スタックだけで守っている自軍の建物を空けない)。自己対戦 各40戦 独の勝率 42%→30%";
 var APP_VERSION_HIST_v1345="v1345(ダルマ「実施」): ①対戦モードのボグ解消(ASLSK4 7.6・QRDC BOG REMOVAL): MPhの最初に、PFPhに撃っていない走行可能なボグ車両があれば人間側はパネル(#btBogBox、解消を試みる/しない/すべて/終了・小さくする、ダイス手動なら入力)、アプリ側は自動。色付dr(立往生+1)1-4=解消(始動MP=色付×白、全装軌でなければ×2、Motion、残りMPで移動可=btVMoveStartでmfUsedに反映)/5=立往生/6+=走行不能 ②アプリの突撃・潰走を1つずつ矢印(出発→到着+ラベル)で見せる(BT_ARR/BT_ARRQ、標準1.1秒・短め0.65秒・演出OFFなし、再生中はアプリの進行を止める)";
 var APP_VERSION_HIST_v1344="v1344(ダルマ「アプリ対応 メインメニューを整理する」→C案(タブ): 対戦モードの≡メニューを ゲーム/プレイ/表示/その他 のタブに(BT_MNTAB)。リアル盤への重複・LOS測定(ツールバーA→Bと同じ)を整理、ON/OFFは右端。「赤枠 青枠 入れ替え」: 下バーを 勝利・履歴(左) → 国籍・現フェイズ(次フェイズの左) → 次フェイズ の並びに)";
@@ -31520,6 +31521,7 @@ function btGoalMap(side){
       if(enemyIn.length)enemyIn.forEach(function(en0){BTG.nodes[en0].nb.forEach(function(m){if(btEnemyAt(m,side))return;G[m]=Math.max(G[m]||0,6+(btInCover(m)?2:0));});});
     }
   });
+  var AH=btAIW().afvHunt;if(AH&&btFirst()===side)BT.stacks.forEach(function(e){if(e.side===side||e.n==null||e.n<0||btInf(e).length)return;if(!btAFVs(e).some(function(u){return !u.imm&&!btIsWreck(u);}))return;BTG.nodes[e.n].nb.forEach(function(m){if(btEnemyAt(m,side))return;G[m]=Math.max(G[m]||0,AH+(btInCover(m)?1:0));});}); /* v1347: 敵車両(歩兵なし)の隣へ(DC・白兵戦) */
   btFocusGoal(side,G); // v296: 作戦の層(狙う建物)
   return G;
 }
@@ -31684,7 +31686,14 @@ function btAIAdvance0(side){
       var N=BTG.nodes[to],sc;
       if(c.cc){
         var def=[];BT.stacks.forEach(function(e){if(e.n===to&&e.side!==side)def=def.concat(btInf(e));});
-        if(!def.length)return;
+        if(!def.length){ /* v1347: 歩兵のいない敵車両のヘクスへ突撃(PAATC→対車両白兵戦) */
+          var ev=btEnemyAFVsAt(to,side).filter(function(x){return !x.u.imm;});if(!ev.length||!btAIW().ccAfv)return;
+          var mm=c.inf.filter(function(u){return btI(u,side).kind==='mmc';});if(!mm.length)return;
+          var Ld=c.inf.filter(function(u){return btI(u,side).kind==='smc'&&u.s==='ok';})[0],grp=mm.slice(0,1).concat(Ld?[Ld]:[]),ccv=btCCV(side,grp),drm=(Ld?btCmdOf(side,Ld):0)+(grp.some(function(u){return u.cx;})?1:0)+(ev[0].u.mot?2:0)+(ev[0].u.ce?-1:0);
+          var pk=0;for(var r=2;r<=12;r++)if(r+drm<ccv)pk+=BT_P2[r];var pp=mm[0].paatc?1:btPAATCp(s,mm[0]);
+          sc=stay+btAIW().ccAfv*pp*pk-btThreatAt(side,to,false,true)*W.risk*0.3;
+          if(window.BT_DBG)BT_DBG.push({t:'T'+BT.turn+side+'CCAFV',to:N.nm,pp:+pp.toFixed(2),pk:+pk.toFixed(2),sc:+sc.toFixed(2),stay:+stay.toFixed(2)});
+          if(!best||sc>best.sc)best={to:to,sc:sc,cc:true};return;}
         var atk=c.inf;var ev=btCCEval(side,atk,def,btOpp(side));
         // 敵ヘクスが建物なら支配の価値
         sc=F[to]+ev.val*6+(N.bldg?3:0);
@@ -32056,7 +32065,7 @@ function btAppMoveTick(){
     var p=BT.amPlan,s=btStackById(BT.mv.sid);
     if(p&&s&&p.i>=p.path.length&&!p.dcTried&&!BT_AIW.noDC&&btInf(s).some(function(u){return u.s==='ok';})){
       p.dcTried=1;var dco=btAIDCChoice(s);
-      if(dco){var dr=btDCPlace(dco.n);if(typeof dr!=='string'){dr[0]+='  [期待損害 '+dco.val.toFixed(2)+']';btLog(dr);if(BT.mv&&btHumanCanReact())BT.pend='react';btSave();Draw();if(!BT.pend)btKick(BT.fastApp?60:450);return false;}}
+      if(dco){var dr=btDCPlace(dco.n,dco.afv||null);if(typeof dr!=='string'){dr[0]+='  [期待損害 '+dco.val.toFixed(2)+']';btLog(dr);if(BT.mv&&btHumanCanReact())BT.pend='react';btSave();Draw();if(!BT.pend)btKick(BT.fastApp?60:450);return false;}}
     }
     if(!p||!s||p.i>=p.path.length||!btInf(s).some(function(u){return u.s==='ok';})){btMoveEnd();BT.amPlan=null;btSave();Draw();btKick(250);return false;}
     var to=p.path[p.i];
@@ -32919,7 +32928,7 @@ function btReactPanelHTML(sty,ms,rw,fg){
 function btCmdHTML(){
   if(BT_OFFPOP)setTimeout(btOffPopSync,0); /* v1295 */
   if(BT_FXPOP)setTimeout(btFxPopSync,0); /* v1283 */
-  setTimeout(btRtpSync,0);setTimeout(btCcSync,0);setTimeout(btRphSync,0);setTimeout(btBogSync,0); /* v1302 */
+  setTimeout(btRtpSync,0);setTimeout(btCcSync,0);setTimeout(btRphSync,0);setTimeout(btBogSync,0);setTimeout(btDCAskSync,0); /* v1302 */
   if(!btAvail()||!btActive()||!btGraphReady()){setTimeout(btCmdMeasure,0);return '';}
   if(!BT.started||BT.finished){if(!BT.losAB&&(!btRmLive()||btRmLive().k==='view')){setTimeout(btCmdMeasure,0);return '';}setTimeout(btCmdMeasure,0);return '<div id="btCmd" class="bt-cmd">'+btLosABHTML()+btRmShowHTML()+'</div>';}
   // v286(ダルマ指示): フェイズ表示・説明・選択中スタックは常時表示から外し、帯(btBandHTML)に戻した。ここは測定・反応の確認・射撃・車両の移動だけ
@@ -34498,9 +34507,22 @@ function btVSmTap(n){BT.vsm.tgtN=n;btSave();Draw();}
 function BtVSmCancel(){BT.vsm=null;btSave();Draw();}
 function BtVSmRoll(){var lg=[];var e=btVehSmoke(lg,'sM',BT.vsm&&BT.vsm.tgtN);if(e){btToast(e);return;}BT.vsm=null;btVAfterStep(lg);}
 // 歩兵の移動中のツール(発煙手榴弾・DC)
+function BtDCAsk(mode,vid){var A=BT.dcAsk;BT.dcAsk=null;if(!A||!mode){btSave();Draw();return;}var r=btDCPlace(A.n,mode==='afv'?vid:null);if(typeof r==='string'){btToast(r);btSave();Draw();return;}btLog(r);btAfterHit();if(BT.mv&&BT.app&&BT.app!==BT.mv.side)btAIReactDFF(BT.app).forEach(btLog);btUpdateCtl();btSave();Draw();}
+function btDCAskHTML(){var A=BT.dcAsk,mv=BT.mv;if(!A||!mv||mv.veh){if(A)BT.dcAsk=null;return '';}var s=btStackById(mv.sid);if(!s)return '';
+  var dc=s.u.filter(function(w){return btI(w,s.side).kind==='dc';})[0],o=dc&&btOwner(s,dc);if(!o)return '';
+  var L=btEnemyAFVsAt(A.n,s.side),pp=o.paatc?1:btPAATCp(s,o),B=function(t,fn,on){return btBtn(T(t),fn,{on:!!on,st:';padding:4px 12px'});};
+  var h='<div style="position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(380px,calc(100vw - 90px));z-index:9800;background:#12161ef2;border:1px solid #ff9020;border-radius:12px;box-shadow:0 8px 24px #000c;color:#e8eef4;font:13px AppFont,AppJP,sans-serif;padding:10px 12px">';
+  h+='<div style="font-weight:900;color:#ff9020;font-size:15px">'+T('DC設置')+' → '+BTG.nodes[A.n].nm+'</div><div style="color:#9ab;font-size:11.5px;margin:2px 0 6px">'+T('設置')+': '+o.nm+(o.cx?' (CX)':'')+'</div>';
+  L.forEach(function(x){var v=x.u,vd=btAfvData(v.nm),face=btDCFace(v,A.n,s.n),fl={front:'前面',side:'側面',rear:'背面'}[face],kp=btDCAfvP(o,v,face,o.cx);
+    h+='<div style="border:1px solid #2f3a48;border-radius:8px;padding:6px 8px;background:#1b212a;margin-bottom:6px"><b>'+T('対AFV攻撃')+': '+v.nm+'</b> <span style="color:#9ab;font-size:11.5px">'+T('置く面')+': '+T('車体')+T(fl)+'(AF'+afvGetAF(vd,face,'hull')+')</span>'
+      +'<div style="font-size:12px;margin:3px 0">PAATC '+(o.paatc?T('済'):T('成功')+' <b style="color:#7fe08a">'+Math.round(pp*100)+'%</b>')+'　'+T('撃破の見込み')+' '+T('約')+'<b style="color:#7fe08a">'+Math.round(pp*kp*100)+'%</b></div>'+B('対AFVで置く(PAATC)',"BtDCAsk('afv','"+v.id+"')",1)+'</div>';});
+  h+='<div style="border:1px solid #2f3a48;border-radius:8px;padding:6px 8px;background:#1b212a"><b>'+T('歩兵への攻撃')+'</b> <span style="color:#9ab;font-size:11.5px">'+T('AFPhに30FP(車両はCE乗員のみ)')+'</span><div style="margin-top:4px">'+B('通常で置く',"BtDCAsk('norm')")+'</div></div>';
+  h+='<div style="text-align:right;margin-top:6px">'+B('やめる','BtDCAsk()')+'</div></div>';return h;}
+function btDCAskSync(){var b=document.getElementById('btDCAskBox'),h='';try{h=(BT&&BT.dcAsk&&btActive&&btActive())?btDCAskHTML():'';}catch(e){}if(!h){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='btDCAskBox';b.onclick=function(e){e.stopPropagation();};document.body.appendChild(b);}if(b.__h!==h){b.__h=h;b.innerHTML=h;}}
 function BtMvTool(t){BT.mvTool=(BT.mvTool===t)?null:t;btSave();Draw();}
 function btMvToolTap(n){
   var t=BT.mvTool;BT.mvTool=null;
+  if(t==='dc'&&btEnemyAFVsAt(n,(BT.mv&&BT.mv.side)||btSideNow()).length){BT.dcAsk={n:n};btSave();Draw();return;} /* v1347 */
   var r=(t==='smoke')?btSmokeGrenade(n):btDCPlace(n);
   if(typeof r==='string'){btToast(r);btSave();Draw();return;}
   btLog(r);btAfterHit();
@@ -34703,7 +34725,7 @@ function btVehSmoke(log,ty,tgt){
 }
 // ---- DC(爆薬、4.3) ----
 // 移動中のスタックのDC所有ユニットが、隣接ヘクスへ設置(そのヘクスへ入るのに要するMFを自ヘクスで消費)。臨機射撃を生き延びれば前進射撃フェイズに30FPで攻撃
-function btDCPlace(to){
+function btDCPlace(to,afv){
   var mv=BT.mv;if(!mv||mv.veh)return '移動中の歩兵のみ';
   var s=btStackById(mv.sid);if(!s||s.n==null||s.n<0)return '盤上でのみ';
   if(BTG.nodes[s.n].nb.indexOf(to)<0)return '隣接ヘクスのみ';
@@ -34711,20 +34733,49 @@ function btDCPlace(to){
   var o=btOwner(s,dc);if(!o||o.s!=='ok'||btI(o,s.side).kind!=='mmc')return 'DCを持つ分隊が統制状態・非釘付けではありません';
   var ic=btInfCost(s.n,to);if(!ic)return '設置先が進入不可の地形';
   var cap=mv.mfMax+(mv.road?1:0);if(mv.mfUsed+ic.c>cap)return 'MF不足(設置に'+ic.c+'MF)';
+  var pl=[];
+  if(afv){var ev=btEnemyAFVsAt(to,s.side).filter(function(x){return x.u.id===afv;})[0];if(!ev)return '目標の車両がいません';
+    if(!o.paatc){pl.push(BT_SIDE_NAME[s.side]+' DCで対AFV攻撃: PAATC');if(!btPAATC(s,o,pl)){btLog(pl);return 'PAATCに失敗(釘付け)。DCは置けません';}o.paatc=1;}}
   mv.mfUsed+=ic.c;mv.hereSpent+=ic.c;mv.firedHere={};
   mv.dc={uid:o.id,dcid:dc.id,to:to,cx:!!o.cx,elite:/\[E\]/.test(o.nm)};
-  return [BT_SIDE_NAME[s.side]+' '+o.nm+' DCを'+BTG.nodes[to].nm+'へ設置中('+ic.c+'MF)。臨機射撃を受けても統制・非釘付けなら設置成功'];
+  if(afv){var ev2=btEnemyAFVsAt(to,s.side).filter(function(x){return x.u.id===afv;})[0];mv.dc.afv={vid:afv,face:btDCFace(ev2.u,to,s.n),nm:ev2.u.nm};}
+  return pl.concat([BT_SIDE_NAME[s.side]+' '+o.nm+' DCを'+BTG.nodes[to].nm+(afv?'の'+mv.dc.afv.nm+'('+{front:'前面',side:'側面',rear:'背面'}[mv.dc.afv.face]+')へ対AFVで':'へ')+'設置中('+ic.c+'MF)。臨機射撃を受けても統制・非釘付けなら設置成功']);
 }
 function btDCConfirm(log){ // 移動終了時(またはスタック離脱時): 設置したユニットが統制・非釘付けなら有効
   var mv=BT.mv;if(!mv||!mv.dc)return;
   var f=btFindUnit(mv.dc.uid),d=btFindUnit(mv.dc.dcid);
-  if(f&&d&&f.u.s==='ok'){BT.dcs=BT.dcs||[];BT.dcs.push({n:mv.dc.to,side:f.s.side,cx:mv.dc.cx,x:(mv.dc.elite?12:10)-((d.u.capFrom&&d.u.capFrom!==f.s.side)?2:0),by:f.u.nm});btRemoveUnit(d.s,d.u);log.push('  DC設置成功('+BTG.nodes[mv.dc.to].nm+')。AFPh(前進射撃フェイズ)に爆発');}
+  if(f&&d&&f.u.s==='ok'){BT.dcs=BT.dcs||[];BT.dcs.push({n:mv.dc.to,side:f.s.side,cx:mv.dc.cx,x:(mv.dc.elite?12:10)-((d.u.capFrom&&d.u.capFrom!==f.s.side)?2:0),by:f.u.nm,afv:mv.dc.afv||null});btRemoveUnit(d.s,d.u);log.push('  DC設置成功('+BTG.nodes[mv.dc.to].nm+(mv.dc.afv?'・対AFV':'')+')。AFPh(前進射撃フェイズ)に爆発');}
   else log.push('  DC設置失敗(設置ユニットが混乱・釘付け・除去)');
   mv.dc=null;
 }
+/* v1347(ダルマ「DCと白兵戦のコンビネーション」sample dcafv→実施): 対戦モードのDC 対AFV攻撃(ASLSK4 4.3・QRDC DC PLACEMENT vs AFV)。
+   設置前に宣言+PAATC。AFPhに位置DR(Motion+2・設置ユニットCX+1・CE+1・車体正面から+1・背面から-1・走行不能-2)。
+   ≦8=HE TK表 TK#16−AF(新DR、原DR≧X#で不発) / 9-11=CE乗員に30FP / ≧12=非装甲ユニットのみに面攻撃。命中部位: 色付dr<白dr=砲塔。向きは置いた面で固定 */
+function btEnemyAFVsAt(n,side){var L=[];BT.stacks.forEach(function(s){if(s.n!==n||s.side===side)return;s.u.forEach(function(u){if(btIsAFV(s.side,u)&&!btIsWreck(u))L.push({s:s,u:u});});});return L;}
+function btPAATCp(s,u){var mor=btMorale(s.side,u),L=btInf(s).filter(function(x){return btI(x,s.side).kind==='smc'&&x.s==='ok'&&x!==u;}).sort(function(a,b){return btCmdOf(s.side,a)-btCmdOf(s.side,b);})[0],d=L?btCmdOf(s.side,L):0,p=0;for(var r=2;r<=12;r++)if(r+d<=mor)p+=BT_P2[r];return p;}
+function btDCAfvP(o,v,face,cx){ // 撃破の見込み(位置DR≦8 かつ TK)
+  var vd=btAfvData(v.nm),drm=(v.mot?2:0)+(cx?1:0)+(v.ce?1:0)+(face==='front'?1:(face==='rear'?-1:0))+(v.imm?-2:0),x=/\[E\]/.test(o.nm)?12:10,p=0;
+  for(var c=1;c<=6;c++)for(var w=1;w<=6;w++){if(c+w+drm>8)continue;var loc=c<w?'turret':'hull',af=afvGetAF(vd,face,loc),fin=gunTkFinal(16,false,face==='rear',af).final,pk=0;for(var r=2;r<=12;r++){if(r>=x)continue;if(r<fin)pk+=BT_P2[r];}p+=pk/36;}
+  return p;}
+function btDCFace(v,to,from){return btHitFacing(v.vca,to,from);}
+function btDCAfvResolve(d,log){
+  var tg=null;BT.stacks.forEach(function(s){if(s.n!==d.n)return;s.u.forEach(function(u){if(u.id===d.afv.vid&&!btIsWreck(u))tg={s:s,u:u};});});
+  var T=BTG.nodes[d.n];
+  if(!tg){log.push('DC('+d.by+') → '+T.nm+' 目標の車両がいない → 通常の爆発');return false;}
+  var v=tg.u,vd=btAfvData(v.nm),c=btDie(),w=btDie(),raw=c+w,face=d.afv.face,drm=(v.mot?2:0)+(d.cx?1:0)+(v.ce?1:0)+(face==='front'?1:(face==='rear'?-1:0))+(v.imm?-2:0),mod=raw+drm,loc=c<w?'turret':'hull';
+  var fl={front:'前面',side:'側面',rear:'背面'}[face],hd='DC('+d.by+') → '+T.nm+' '+v.nm+' 対AFV 位置DR'+raw+(drm?(drm>0?'+':'')+drm+'='+mod:'');
+  if(mod<=8){var af=afvGetAF(vd,face,loc),fin=gunTkFinal(16,false,face==='rear',af).final,r=btDie()+btDie(),res='効果なし',wr=false;
+    if(r>=d.x){log.push(hd+' → AF使用('+({turret:'砲塔',hull:'車体'}[loc])+'・'+fl+' AF'+af+') TK DR'+r+'≧X#'+d.x+' 不発');return true;}
+    if(r<fin){wr=true;res='撃破';}else if(r===fin){if(loc==='hull'){v.imm=1;res='走行不能';}else{v.shock='S';v.ce=0;res='ショック';}}else if(r===fin+1){if(loc==='turret'){v.shock='S';v.ce=0;res='ショック';}else{v.imm=1;res='走行不能';}}
+    log.push(hd+' → '+({turret:'砲塔',hull:'車体'}[loc])+'・'+fl+' AF'+af+' TK#16−'+af+'='+fin+' TK DR'+r+' → '+res);
+    if(wr)btWreck(tg.s,v,log);return true;}
+  if(mod<=11){log.push(hd+' → CE乗員のみ(30FP)');if(v.ce){var r2=btDie()+btDie();btCrewResult(tg.s,v,IFT[Math.max(0,Math.min(15,r2+(d.cx?1:0)+Math.max(2,T.tem)))][ci(30)],log);}else log.push('  BUなので効果なし');return true;}
+  log.push(hd+' → 非装甲ユニットへの面攻撃');var r3=btDie()+btDie(),dr3=T.tem+(d.cx?1:0),rr=IFT[Math.max(0,Math.min(15,r3+dr3))][ci(30)];log.push('  30FP DR'+r3+(dr3?'+'+dr3:'')+' → '+rr);
+  BT.stacks.forEach(function(s){if(s.n!==d.n||s.side===d.side)return;BT_DMQ={c:ci(30),d:dr3};btApplyIFT(s,btInf(s),rr,log);});return true;}
 function btDCResolve(){
   var att=btSideNow(),log=[];
   (BT.dcs||[]).filter(function(d){return d.side===att;}).forEach(function(d){
+    if(d.afv&&btDCAfvResolve(d,log))return;
     var T=BTG.nodes[d.n],raw=btDie()+btDie();
     if(raw>=d.x){log.push('DC('+d.by+') → '+T.nm+' 原DR'+raw+'≧X#'+d.x+' 不発');return;}
     var drm=T.tem+(d.cx?1:0),r=IFT[Math.max(0,Math.min(15,raw+drm))][ci(30)];
@@ -34787,6 +34838,8 @@ function btAIDCChoice(s){
   var o=btOwner(s,dc);if(!o||o.s!=='ok')return null;
   var mv=BT.mv,left=mv.mfMax+(mv.road?1:0)-mv.mfUsed,best=null;
   BTG.nodes[s.n].nb.forEach(function(n){
+    var icA=btInfCost(s.n,n);if(icA&&icA.c<=left)btEnemyAFVsAt(n,s.side).forEach(function(x){if(x.u.imm&&!btAfvData(x.u.nm))return;var face=btDCFace(x.u,n,s.n),va=(x.u.imm?1.5:3)*(o.paatc?1:btPAATCp(s,o))*btDCAfvP(o,x.u,face,o.cx)*0.75; /* v1347: 対AFV(車両の価値3、走行不能1.5) */
+      if(!best||va>best.val)best={n:n,val:va,afv:x.u.id};});
     var t=BT.stacks.filter(function(x){return x.n===n&&x.side!==s.side&&btInf(x).length;})[0];if(!t)return;
     var ic=btInfCost(s.n,n);if(!ic||ic.c>left)return;
     var T=BTG.nodes[n],drm=T.tem+(o.cx?1:0),col=ci(30),x=/\[E\]/.test(o.nm)?12:10,v=0,cache={};
