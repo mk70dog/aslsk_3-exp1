@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1302</title>
+<title>ASL SKシリーズv1349</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1302">
+<meta property="og:title" content="ASL SKシリーズv1349">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10958,7 +10958,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.548"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.549"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1349="v1349(ダルマ「ボグ解消 オートダイスが表示しない」): ボグ解消のdrにダイスのアニメーションと結果カード(btFxResScan にボグ解消)、パネルを演出カードの下(z-index 9200)";
 var APP_VERSION_HIST_v1348="v1348(ダルマ「ボグ解消のパネルが表示しない」): フェイズに入った時だけ作っていたため、ロード後や別経路でMPhに入った時に出なかった→MPhの最初(自軍がまだ移動していない間)は常に出す(btBogStart)。車両の指示カードにも「ボグ解消…」ボタン、出せない時は理由(準備射撃した/移動の後)";
 var APP_VERSION_HIST_v1347="v1347(ダルマ「DCと白兵戦のコンビネーション」sample dcafv→「実施」): 対戦モードのDC 対AFV攻撃(ASLSK4 4.3)。敵車両のいるヘクスにDCを置く時に「対AFVで置く(PAATC)/通常で置く」(#btDCAskBox、PAATC成功率・撃破の見込み・置く面のAF)。AFPhに位置DR(Motion+2・CX+1・CE+1・車体正面+1/背面-1・走行不能-2)≦8=TK#16−AF(原DR≧X#不発)、9-11=CE乗員30FP、≧12=非装甲ユニット30FP。向きは置いた時の面で固定。アプリもDCの目標に敵車両を選ぶ(価値3×PAATC×撃破見込み)。aiw.ccAfv(歩兵のいない敵車両ヘクスへの突撃)・aiw.afvHunt(敵車両の隣を目標に)を追加(未設定なら無効)";
 var APP_VERSION_HIST_v1346="v1346(ダルマ「実施」S25 ソ連(守備側)アプリ強化): BT_SCFG.S25.aiw={holdDef:12}(1スタックだけで守っている自軍の建物を空けない)。自己対戦 各40戦 独の勝率 42%→30%";
@@ -33484,7 +33485,7 @@ function btBogPanelHTML(){var P=BT.bogp;if(!P||P.key!==btPhKey()||btPhId()!=='MP
   var B=function(t,fn,on){return btBtn(T(t),fn,{on:!!on,st:';padding:3px 12px'});};
   if(P.min){var tbw=0;try{tbw=nmTbW()||0;}catch(e){}return '<div style="position:fixed;right:'+(tbw+10)+'px;bottom:calc(var(--btfbot,0px) + 70px);z-index:9200">'+B('ボグ解消を開く('+L.length+')','BtBogMin()',1)+'</div>';}
   var pr=function(m){var d=m?1:0,u=0,mi=0;for(var c=1;c<=6;c++){var f=c+d;if(f<=4)u++;else if(f===5)mi++;}return [Math.round(u/6*100),Math.round(mi/6*100),100-Math.round(u/6*100)-Math.round(mi/6*100)];};
-  var h='<div style="position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(640px,calc(100vw - 90px));z-index:9800;background:#12161ef2;border:1px solid #3a4250;border-radius:12px;box-shadow:0 8px 24px #000c;color:#e8eef4;font:13px AppFont,AppJP,sans-serif;padding:10px 12px">';
+  var h='<div style="position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(640px,calc(100vw - 90px));z-index:9200;background:#12161ef2;border:1px solid #3a4250;border-radius:12px;box-shadow:0 8px 24px #000c;color:#e8eef4;font:13px AppFont,AppJP,sans-serif;padding:10px 12px">';
   h+='<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b style="color:#ffd060;font-size:15px">MPh '+T('ボグ解消')+' — '+BT_SIDE_NAME[P.side]+'</b><span style="color:#9ab;font-size:12px">'+T('移動フェイズの最初だけ(準備射撃で撃った車両は不可)')+'</span><span style="margin-left:auto">'+B('小さくする','BtBogMin()')+'</span></div>';
   L.forEach(function(x){var u=x.u,im=btVcUnitImg(x.s.side,u),p=pr(u.mired),v=btAfvData(u.nm),wh=!!(v&&typeof losIsWheeledVehicle==='function'&&losIsWheeledVehicle(v.id));
     h+='<div style="display:flex;align-items:center;gap:10px;padding:7px 9px;border:1px solid #2f3a48;border-radius:8px;background:#1b212a;margin-top:6px">'+(im&&im.src?'<img src="'+im.src+'" style="width:44px;height:44px;border-radius:3px">':'')+'<div style="flex:1;min-width:0"><b>'+u.nm+'</b> <span style="color:#9ab">@'+BTG.nodes[x.s.n].nm+'</span> <span style="padding:1px 7px;border-radius:9px;font-size:11px;background:#c8a03233;border:1px solid #c8a032;color:#ffd060">'+T('ボグ')+(u.mired?'・'+T('立往生')+'(+1)':'')+'</span>'
@@ -45163,6 +45164,7 @@ function btFxResScan(lines){
     else if(/失速DR/.test(t))add('始動',false,t,'失速');
     else if(/機械的信頼性DR/.test(t))add('始動',false,t,'走行不能');
     else if(m=t.match(/ボグ判定.*→ (ボグ|通過)/))add('ボグ判定',m[1]==='通過',t,m[1]==='通過'?'通過':'ボグ');
+    else if(m=t.match(/ボグ解消 .*→ (解消|立往生|走行不能)/))add('ボグ解消',m[1]==='解消',t,m[1]); // v1349: ボグ解消もダイスとカード
     else if(/DC設置成功/.test(t))add('DC設置',true);
     else if(/DC設置失敗/.test(t))add('DC設置',false);
     else if(m=t.match(/^PAATC .*→ (成功|釘付け)/))add('PAATC',m[1]==='成功',t,m[1]);
