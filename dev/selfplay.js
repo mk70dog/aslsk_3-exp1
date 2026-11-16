@@ -5,6 +5,7 @@ const sc=process.argv[2]||'S6',maxMin=+(process.argv[3]||8),shot=process.argv[4]
 p.on('console',m=>{const t=m.text();if(/Error|error|undefined/.test(t)&&!/favicon/.test(t))e.push('console:'+t.slice(0,200));});
 await p.goto('file:///home/claude/aslsk_3-exp1/index.html',{timeout:180000});await p.waitForTimeout(4000);
 await p.evaluate((sc)=>{S.scen=S.scen||{};S.scen.sel=sc;NAVTAB('scen');NAVTAB('los');try{LOS_PAGE();}catch(x){}},sc);await p.waitForTimeout(3000);
+await p.evaluate((w)=>{if(w){var c=BT_SCFG[btScId()];c.aiw=Object.assign({},c.aiw||{},JSON.parse(w));}},process.env.AIW||'');
 const r0=await p.evaluate(async()=>{BTG=null;await btEnsureGraph();
   window.BT_SELFPLAY=true;var d=btNewState();for(var k in d)BT[k]=d[k];BT.on=true;BT.sc=btScId();BT.fastApp=true;BT.cam=false;btInitCtl();
   if(btScId()==='S26'){btAppSetupSOV();BT.gerPlan={t1:'g2',t2:'g1'};}else btSetupSides().forEach(function(sd){btAppSetupGen(sd);});
@@ -24,6 +25,6 @@ while(Date.now()-t0<maxMin*60000){await p.waitForTimeout(3000);
 }
 function BT_ALIVE_CHECK(){return 1;}
 const fin=await p.evaluate(()=>{var vc=btVicCount();return {fin:BT.finished,turn:BT.turn,vc:vc,win:BT.finished?btCfgWinner():null,ger:BT.stacks.filter(s=>s.side==='GER').reduce((a,s)=>a+s.u.length,0),sov:BT.stacks.filter(s=>s.side==='SOV').reduce((a,s)=>a+s.u.length,0),log:(BT.log||[]).slice(-12).map(x=>String(x.t||x).slice(0,150))};});
-console.log(JSON.stringify(fin,null,1));require('fs').writeFileSync('/tmp/w/log_'+sc+'.txt',(await p.evaluate(()=>(BT.log||[]).map(x=>String(x.t||x)).join('\n'))));
+console.log(JSON.stringify(fin,null,1));try{require('fs').appendFileSync('/tmp/w/res_'+(process.env.CFG||'x')+'.txt',JSON.stringify({win:fin.win,turn:fin.turn,vc:fin.vc,ger:fin.ger,sov:fin.sov,err:e.length})+'\n');}catch(x){}require('fs').writeFileSync('/tmp/w/log_'+sc+'_'+(process.env.TAG||'x')+'.txt',(await p.evaluate(()=>(BT.log||[]).map(x=>String(x.t||x)).join('\n'))));
 if(shot){await p.evaluate(()=>{BT.app=null;Draw();});await p.waitForTimeout(1500);await p.screenshot({path:shot});}
 console.log('ERRORS',e.length,JSON.stringify(e.slice(0,15)));await b.close();})();
