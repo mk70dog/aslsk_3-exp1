@@ -18,9 +18,10 @@ const r0=await p.evaluate(async()=>{BTG=null;await btEnsureGraph();
 console.log(JSON.stringify(r0));
 const t0=Date.now();let last='';
 while(Date.now()-t0<maxMin*60000){await p.waitForTimeout(3000);
- const st=await p.evaluate(()=>({t:BT.turn,h:BT.half,ph:btPhId(),fin:BT.finished,ticks:window.__ticks,mv:!!BT.mv,pend:BT.pend,n:BT.stacks.length}));
+ const st=await p.evaluate(()=>({sd:BT.started?btSideNow():'',t:BT.turn,h:BT.half,ph:btPhId(),fin:BT.finished,ticks:window.__ticks,mv:!!BT.mv,pend:BT.pend,n:BT.stacks.length}));
  const k=JSON.stringify(st);if(k!==last){last=k;console.log(k);}
  if(st.fin)break;
+ if(process.env.STOP&&(st.t+st.sd)===process.env.STOP){await p.evaluate(()=>{BT_SELFPLAY_STOP=1;BT.app=null;});if(shot){await p.evaluate((c)=>{BT.cam=false;S_LOS.zoom=0.8;Draw();var nd=BTG.nodes.findIndex(N=>N.nm===c);var el=document.getElementById('losScrollWrap');var P=btCamPt(nd);if(P)btCamCenter(P,{l:0,r:el.clientWidth,t:0,b:el.clientHeight});},process.env.CAM||'vM8');await p.waitForTimeout(1500);await p.screenshot({path:shot});}console.log('STOP');await b.close();process.exit(0);} // v1352: STOP=2GER で止めて撮る
  if(!BT_ALIVE_CHECK(st))0;
  await p.evaluate(()=>{if(!BT_TICK)btKick(50);});
 }

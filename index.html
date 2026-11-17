@@ -29774,7 +29774,8 @@ var BT_SCFG={
   S24:{grp:function(o){if(o.side==='SOV')return 'e1';return ['setup','g1','g3'][o.gi]||'setup';},
     zone:function(){return true;},zoneTxt:function(){return '任意';},
     ent:[{id:'e1',side:'SOV',turn:1,off:'W',lbl:'第3親衛戦車軍団(西端)'},{id:'g1',side:'GER',turn:1,off:'E',mpHalf:true,lbl:'第505重戦車大隊・第5装甲師団(東端・MP半分使用済み)'},{id:'g3',side:'GER',turn:3,off:'E',lbl:'第5装甲師団工兵大隊(東端)'}],
-    vic:'all',vicSide:'SOV',bl:'v-JQ',ssr:{ul:{SOV:/^(6-2-8|3-2-8)/},smk:{GER:/^(8-3-8|5-4-8)/},ccv:{GER:/^(8-3-8|3-3-8|5-4-8|2-3-8)/}}},
+    vic:'all',vicSide:'SOV',bl:'v-JQ',ssr:{ul:{SOV:/^(6-2-8|3-2-8)/},smk:{GER:/^(8-3-8|5-4-8)/},ccv:{GER:/^(8-3-8|3-3-8|5-4-8|2-3-8)/}},
+    aiw:{hideFrom:/ティーガー/,hideW:3,goalHex:['vP7','vN9'],goalV:14}}, /* v1352(ダルマ「両方同時に実施」): ソ連のシャーマンはティーガーから見えるヘクスを避けて進む(hideFrom・hideW)・ソ連の兵は東側の P7・N9 を先に取って固める(goalHex・goalV) */
   /* v1224: S25 Early Battles。ソ連=ボードuの番号7以下/ボードvに設置、独=T1に南端から進入。勝利: 独がボードvの建物4棟以上を支配し、独AFV2両以上が走行可能。SSR: BT-7(無線機なし)は各MPhにDR≦8でないとヘクスから出られない */
   S25:{grp:function(o){return o.side==='GER'?'g1':'setup';},
     zone:function(o,N){if(N.b==='v')return true;if(N.b==='u'){var k=btHexNum(N);return k!=null&&k<=7;}return false;},
@@ -31527,6 +31528,7 @@ function btGoalMap(side){
     }
   });
   var AH=btAIW().afvHunt;if(AH&&btFirst()===side)BT.stacks.forEach(function(e){if(e.side===side||e.n==null||e.n<0||btInf(e).length)return;if(!btAFVs(e).some(function(u){return !u.imm&&!btIsWreck(u);}))return;BTG.nodes[e.n].nb.forEach(function(m){if(btEnemyAt(m,side))return;G[m]=Math.max(G[m]||0,AH+(btInCover(m)?1:0));});}); /* v1347: 敵車両(歩兵なし)の隣へ(DC・白兵戦) */
+  var GH=btAIW().goalHex;if(GH&&btFirst()===side){var gv=btAIW().goalV||12;GH.forEach(function(nm){var n=BTG.nodes.findIndex(function(N){return N.nm===nm;});if(n<0)return;if(btEnemyAt(n,side))BTG.nodes[n].nb.forEach(function(m){if(!btEnemyAt(m,side))G[m]=Math.max(G[m]||0,gv-2);});else G[n]=Math.max(G[n]||0,gv);});} /* v1352: 先に取って固める建物ヘクス */
   btFocusGoal(side,G); // v296: 作戦の層(狙う建物)
   return G;
 }
@@ -34267,8 +34269,14 @@ function btAIVehPlan(s){
   cand=cand.map(function(n){var dmin=99;BT.stacks.forEach(function(e){if(e.side!==side&&e.n!=null&&e.n>=0)dmin=Math.min(dmin,btDist(n,e.n));});return {n:n,d:dmin};}).filter(function(x){return x.d>=2&&x.d<=14;});
   cand.sort(function(a,b){return a.d-b.d;});
   if(cand.length>70){var step=cand.length/70;cand=cand.filter(function(x,i){return Math.floor(i/step)!==Math.floor((i-1)/step)||i===0;});}
+  // v1352: 見られたくない敵車両(aiw.hideFrom)から見えるヘクスで止まる・通るほど点数を下げる(建物や林の陰を通って進む)
+  var HF=btAIW().hideFrom,HW=btAIW().hideW||3,hsrc=[],hseen={};
+  if(HF)BT.stacks.forEach(function(e){if(e.side===side||e.n==null||e.n<0)return;if(btAFVs(e).some(function(x){return HF.test(x.nm)&&!btIsWreck(x)&&!x.imm;}))hsrc.push(e.n);});
+  function seenBy(n){if(hseen[n]!=null)return hseen[n];var v=0;hsrc.forEach(function(a){if(btLOS(a,n,true).ok)v=1;});return hseen[n]=v;}
+  function hidePen(n){if(!hsrc.length)return 0;var k=nodes[n],p=0,c=0;while(k!=null){var m=Math.floor(k/8);if(m!==here){p+=seenBy(m);c++;}k=sr.prev[k];}return HW*(seenBy(n)*2+(c?p/c:0));}
   var bestP=null;
-  cand.forEach(function(c){var r=score(c.n);if(!bestP||r.sc>bestP.sc)bestP={n:c.n,sc:r.sc,f:r.f,off:r.off,dng:r.dng};});
+  cand.forEach(function(c){var r=score(c.n);r.sc-=hidePen(c.n);if(!bestP||r.sc>bestP.sc)bestP={n:c.n,sc:r.sc,f:r.f,off:r.off,dng:r.dng};});
+  if(hsrc.length&&here!=null)stay.sc-=HW*2*seenBy(here);
   if(window.BT_DBG)BT_DBG.push({t:'T'+BT.turn+side+'VEH',u:u.nm,at:here!=null?BTG.nodes[here].nm:'off',stay:stay.sc&&+stay.sc.toFixed(2),best:bestP&&{to:BTG.nodes[bestP.n].nm,sc:+bestP.sc.toFixed(2),off:+bestP.off.toFixed(2),dng:+bestP.dng.toFixed(2)}});
   if(!bestP)return here==null?null:{stay:true,face:stay.f};
   if(here==null){var kk=nodes[bestP.n],st=[];while(kk!=null){st.unshift(kk);kk=sr.prev[kk];}return {to:bestP.n,face:bestP.f,steps:st,offStart:true};}
