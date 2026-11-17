@@ -15,6 +15,6 @@ const r=await p.evaluate(async()=>{BTG=null;await btEnsureGraph();var d=btNewSta
 await p.waitForTimeout(1200);
 await p.evaluate(()=>{[...document.querySelectorAll('div')].filter(d=>getComputedStyle(d).position==='fixed'&&/アプリの軍/.test(d.innerText)&&d.innerText.length<2000).forEach(d=>d.style.display='none');});
 await p.waitForTimeout(500);
-await p.evaluate(()=>{var nd=nm=>BTG.nodes.findIndex(N=>N.nm===nm);var el=document.getElementById('losScrollWrap');el.scrollTop=0;var P=btCamPt(nd('vK8'));if(P)btCamCenter(P,{l:0,r:el.clientWidth,t:0,b:el.clientHeight});});
+await p.evaluate(()=>{var nd=nm=>BTG.nodes.findIndex(N=>N.nm===nm);var el=document.getElementById('losScrollWrap');el.scrollTop=0;var P=btCamPt(nd('vJ8'));if(P)btCamCenter(P,{l:0,r:el.clientWidth,t:0,b:el.clientHeight});});
 await p.waitForTimeout(800);await p.screenshot({path:'/tmp/t/s25a.png'});
 console.log(JSON.stringify(r,null,1));console.log('ERR',e);await b.close();})();
