@@ -50569,7 +50569,7 @@ function LOS_PAGE(){
     var imgSrc=LOS_BOARD_IMAGES[b.id];
     if(S_LOS.ssr==='GrainToMarsh'&&b.id==='y')imgSrc=LOS_BOARD_Y_MARSH_IMG;
     if(S_LOS.ssr==='WoodsOrchardToStoneRubble'&&b.id==='z')imgSrc=LOS_BOARD_Z_RUBBLE_IMG;
-    if(S_LOS.ssr==='Snow'&&b.id==='y')imgSrc=LOS_BOARD_Y_SNOW_IMG;
+    if(S_LOS.ssr==='Snow'&&b.id==='y'&&((typeof btActive==='function'&&btActive())?!!BT.snow:!!S.scenSnow))imgSrc=LOS_BOARD_Y_SNOW_IMG; /* v1352(ダルマ「降るまえから雪のマップ」): S4 の雪のマップは降雪中だけ(対戦モードは BT.snow、ほかは「降雪中」の切り替え) */
     if(S_LOS.ssr==='WoodsToOrchard'&&b.id==='w')imgSrc=LOS_BOARD_W_ORCHARD_IMG;
     if(S_LOS.ssr==='WoodsToOrchard'&&b.id==='x')imgSrc=LOS_BOARD_X_ORCHARD_IMG;
     var pl=dispLayout.per[bi];
