@@ -29782,7 +29782,8 @@ var BT_SCFG={
     zoneTxt:function(){return 'ボードyのヘクス番号4以上';},
     ent:[{id:'g1',side:'GER',turn:1,off:'S',lbl:'第26国民擲弾兵師団 第77連隊第II大隊(東端)'}],
     vic:'exit',vicSide:'GER',exitVP:10,exitEdge:'N',bl:'vic',ssr:{smk:{SOV:/^7-4-7/},snow:1},
-    fix:{SOV:[['yQ6',[/^10-2/,1],[/^HMG/,1],[/^7-4-7/,1]],['yV6',[/^6-6-7/,1],[/^8-1/,1],[/^MMG/,1]],['yN5',[/^7-4-7/,1],[/^FT/,1]],['yK4',[/^6-6-6/,1],[/^8-0/,1],[/^MMG/,1]],['yW6',[/^6-6-6/,1]],['yM4',[/^5-4-6/,1]],['yI4',[/^5-4-6/,1]],['yL7',[/^5-4-6/,1],[/^FT/,1]]]}},
+    fix:{SOV:[['yQ6',[/^10-2/,1],[/^HMG/,1],[/^7-4-7/,1]],['yU6',[/^6-6-7/,1],[/^8-1/,1],[/^MMG/,1]],['yN6',[/^7-4-7/,1],[/^FT/,1]],['yK6',[/^6-6-6/,1],[/^8-0/,1],[/^MMG/,1]],['yW6',[/^6-6-6/,1]],['yM6',[/^5-4-6/,1]],['yL7',[/^5-4-6/,1],[/^FT/,1]],['yR7',[/^5-4-6/,1]]]},
+    aiw:{exitDef:1}}, /* v1352(ダルマ「前で撃って徐々に下がって出口付近で待ち伏せ」): 米は前(ヘクス番号6〜7)に置き、独の先頭より2列西に下がり続け、最後は出口(列1〜3)で待ち伏せ */
   /* v1224: S25 Early Battles。ソ連=ボードuの番号7以下/ボードvに設置、独=T1に南端から進入。勝利: 独がボードvの建物4棟以上を支配し、独AFV2両以上が走行可能。SSR: BT-7(無線機なし)は各MPhにDR≦8でないとヘクスから出られない */
   S25:{grp:function(o){return o.side==='GER'?'g1':'setup';},
     zone:function(o,N){if(N.b==='v')return true;if(N.b==='u'){var k=btHexNum(N);return k!=null&&k<=7;}return false;},
@@ -31536,7 +31537,16 @@ function btPBreakFP(fp,drm){
 }
 // 目標ヘクスの価値 G[n](side視点)
 function btGoalMap(side){
-  var cGX=btCfg();if(cGX&&cGX.vic==='exit'&&cGX.vicSide===side){var GX={},EN=btExitNodes();Object.keys(EN).forEach(function(n){GX[n]=btAIW().exitG||12;});return GX;} /* v1352: S4 攻撃側の目標は退出できる盤端 */
+  var cGX=btCfg();
+  if(cGX&&cGX.vic==='exit'&&cGX.vicSide!==side&&btAIW().exitDef){ /* v1352: 退出を防ぐ側(S4 米)。独の先頭(いちばん出口に近い)より2列出口側の帯で待ち、下がり続けて最後は出口の手前で待ち伏せ */
+    var EX=btExitNodes(),GD={},en2=btOpp(side),gmin=99;
+    BT.stacks.forEach(function(x){if(x.side!==en2||x.n==null||x.n<0||!btInf(x).length)return;var k=btHexNum(BTG.nodes[x.n]);if(k!=null)gmin=Math.min(gmin,k);});
+    var tr=gmin>=99?6:Math.max(2,gmin-2);var cols='IJKLMNOPQRSTUVWXY';
+    BTG.nodes.forEach(function(N,i){var m=N.nm.match(/^[a-z]+([A-Z]+)(\d+)$/);if(!m||cols.indexOf(m[1])<0||m[1].length>1)return;var k=+m[2];
+      if(k>=tr-1&&k<=tr&&!btEnemyAt(i,side))GD[i]=Math.max(GD[i]||0,8+(N.tem||0));
+      else if(k>=1&&k<=3&&!btEnemyAt(i,side))GD[i]=Math.max(GD[i]||0,4+(N.tem||0));});
+    return GD;}
+  if(cGX&&cGX.vic==='exit'&&cGX.vicSide===side){var GX={},EN=btExitNodes();Object.keys(EN).forEach(function(n){GX[n]=btAIW().exitG||12;});return GX;} /* v1352: S4 攻撃側の目標は退出できる盤端 */
   var G={},bl=btBldgs(),en=btOpp(side);
   var turnsLeft=btMaxTurn()-BT.turn+(btSideNow()===side?1:0);
   bl.forEach(function(B){
@@ -32121,6 +32131,7 @@ function btAppMoveTick(){
       else{btVMoveEnd();BT.amV=null;if(lg.length)btLog(lg);btSave();Draw();btKick(250);return false;}
     }
     if(lg.length)btLog(lg);btAfterHit();
+    if(window.BT_SELFPLAY&&BT.mv&&!BT.finished)btAIReactDFF(btOpp(app)).forEach(btLog); /* v1352: 自己対戦の臨機射撃(車両) */
     if(BT.mv&&btHumanCanReact())BT.pend='react';
     btSave();Draw();if(!BT.pend)btKick(BT.fastApp?60:450);
     return false;
@@ -32145,6 +32156,7 @@ function btAppMoveTick(){
     var r=btMoveStep(to);
     if(typeof r==='string'){btMoveEnd();BT.amPlan=null;btSave();Draw();btKick(250);return false;}
     btLog(r);btAfterHit();
+    if(window.BT_SELFPLAY&&BT.mv&&!BT.finished)btAIReactDFF(btOpp(app)).forEach(btLog); /* v1352: 自己対戦では防御側のアプリも臨機射撃をする(これまでは人間の防御側だけだった) */
     if(BT.mv&&btHumanCanReact())BT.pend='react';
     btSave();Draw();
     if(!BT.pend)btKick(BT.fastApp?60:450);
