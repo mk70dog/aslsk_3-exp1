@@ -29394,7 +29394,7 @@ var BT_SIDE_NAME={GER:'独軍',SOV:'ソ連'};
 var BT_KEY='aslsk_bt_v2',BT_KEY_OLD='aslsk_bt_v1';
 function btNewState(){
   return {v:2,on:false,sc:null,app:null,turn:1,half:0,ph:0,stacks:[],sel:null,seq:0,useq:0,placing:null,open:false,
-    log:[],ctl:null,setupDone:false,gerPlan:null,finished:false,bal:'',edit:false,exitVP:{},exited:[],snow:false, /* v1352: S4 退出VP・降雪 */
+    log:[],ctl:null,setupDone:false,gerPlan:null,finished:false,bal:'',edit:false,exitVP:{},exited:[],snow:false,winShown:false, /* v1352: S4 退出VP・降雪 */
     mv:null,fire:null,resid:{},rp:{},ent:{},pend:null,auto:true,ccDone:false,rtDone:false,
     started:false,fastApp:false,logOpen:true,logOpen2:false,ccAmb:{},aiDone:null,amq:null,amPlan:null,selU:null,advMode:null,skipReact:false,setupLog:null,ofire:null,mgfire:null,amV:null,smoke:{},dcs:[],mvTool:null,ccq:null};
 }
@@ -30339,7 +30339,8 @@ function btCanMove(s,u){
   if(s.mel)return false;
   return u.s==='ok'&&!(u.fire==='P'||u.fire==='R')&&!u.mv;
 }
-function btMoveStart(sid,uids,opt){
+function btMoveStart(sid0,uids0,opt0){if(BT.finished)return T('ゲームは終了しています');return btMoveStart0.apply(this,arguments);} /* v1361: 終了後は動かせない */
+function btMoveStart0(sid,uids,opt){
   opt=opt||{};
   if(btPhId()!=='MPh'||BT.mv)return 'MPh(移動フェイズ)中のみ・同時に1スタック';
   var s=btStackById(sid);if(!s)return 'スタックがありません';
@@ -32282,6 +32283,7 @@ function BtToggle(){
 function BtSetApp(v){if(BT.started)return;BT.app=(v==='GER'||v==='SOV')?v:null;BT.setupDone=false;if(BT.app==='GER')BT.gerPlan=null;btSave();Draw();}
 function BtArm(key){try{var o0=btObItems().filter(function(x){return x.key===key;})[0];if(o0&&BT.app&&o0.side===BT.app&&!BT.edit){btToast('アプリの軍の部隊は置けません');return;}}catch(e){}BT.placing=(BT.placing===key)?null:key;BT.sel=null;btSave();Draw();}
 function BtNext(){
+  if(BT.finished){btToast(T('ゲームは終了しています'));try{btWinModal(true);}catch(e){}return;} /* v1361(ダルマ「勝利がわかりにくい」): 終了後はフェイズを進めない */
   btPeClose();BT.dicePend=null;BT.__rollOK=false;try{btDiceGateSync();}catch(e){}
   if(BT.mv){if(btHuman()===BT.mv.side||!BT.app){if(BT.mv.veh)btVMoveEnd();else btMoveEnd();}else return;}
   BT.ofire=null;BT.mgfire=null;
@@ -33581,7 +33583,8 @@ function btBogPanelHTML(){var P=BT.bogp;if(!P||P.key!==btPhKey()||btPhId()!=='MP
   h+='<div style="display:flex;gap:6px;justify-content:flex-end;margin-top:8px">'+B('すべて試みる','BtBogAll()')+B('終了 ▶','BtBogEnd()',1)+'</div></div>';
   return h;}
 function btBogSync(){try{if(BT&&!BT.bogp&&BT.started&&!BT.finished&&btActive()&&(!BT.app||btSideNow()!==BT.app)&&btBogStart(btSideNow()))BT.bogp={key:btPhKey(),side:btSideNow(),done:{},min:0};}catch(e){}var b=document.getElementById('btBogBox');var h='';try{h=(BT&&BT.bogp&&btActive&&btActive()&&!BT.finished)?btBogPanelHTML():'';}catch(e){}if(!h){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='btBogBox';b.onclick=function(e){e.stopPropagation();};document.body.appendChild(b);}if(b.__h!==h){b.__h=h;b.innerHTML=h;}}
-function btVMoveStart(sid,uid){
+function btVMoveStart(){if(BT.finished)return T('ゲームは終了しています');return btVMoveStart0.apply(this,arguments);}
+function btVMoveStart0(sid,uid){
   if(btPhId()!=='MPh'||BT.mv)return 'MPh(移動フェイズ)中のみ・同時に1つ';
   var s=btStackById(sid);if(!s)return '?';
   if(s.side!==btSideNow())return 'ATTACKER側のみ';
@@ -44619,9 +44622,30 @@ function btDockHTML(sty){ /* v1343(ダルマ「タスクバーの中央に表示
      +'<div '+nOC+' style="'+btn+box3+'padding:3px 14px 3px 6px;background:'+G+';border:0;box-shadow:0 0 12px #ffd06066;color:#1b1500;'+dim+'"><span style="display:inline-flex;width:32px;height:32px;border-radius:50%;background:#1b1500;color:'+gold+';align-items:center;justify-content:center;font-size:16px">▶</span><div><div style="font-weight:900;font-size:18px;line-height:1">'+nxN+'</div><div style="font-size:10px;font-weight:700;opacity:.75">'+T('次フェイズ')+'・'+nxW+'</div></div></div>';
   }
   var m=h.match(/\u0001([\s\S]*?)\u0002/),cen=m?m[1]:'',rest=h.replace(/\u0001[\s\S]*?\u0002/,''),ni=rest.lastIndexOf('<div '+nOC);if(ni<0)ni=rest.length;
+  if(BT.finished){var wv=null;try{wv=btCfgWinner();}catch(e){}var wc=wv?(BT_SIDE_COL[wv]||gold):gold; /* v1361(ダルマ「勝利がわかりにくい」): 終了後は、フェイズの札を勝敗に、次フェイズを「結果を見る」に */
+    cen='<div onclick="event.stopPropagation();btWinModal(true)" style="'+btn+'display:flex;align-items:center;gap:10px;padding:3px 16px;border-radius:12px;background:linear-gradient('+wc+'55,#0d131c);border:2px solid '+gold+';height:44px;box-shadow:0 0 14px #ffd06077"><span style="font-size:22px">🏆</span><div><div style="font-weight:900;font-size:19px;color:#fff;line-height:1.05">'+(wv?T(BT_SIDE_NAME[wv]+'の勝利'):T('ゲーム終了'))+'</div><div style="font-size:11px;color:#ffe9a8">'+T('ゲーム終了')+'・'+btWinReason(true)+'</div></div></div>';
+    rest=rest.slice(0,ni)+'<div onclick="event.stopPropagation();BtResetAsk()" style="'+btn+'display:flex;align-items:center;gap:8px;padding:3px 14px;border-radius:12px;background:#0d131c;border:'+BD+';height:40px;color:'+gold+';font-weight:900;font-size:15px">⟲ '+T('新しい対戦')+'</div>';ni=rest.length;
+    if(!BT.winShown)setTimeout(function(){try{btWinModal(false);}catch(e){}},300);}
   h='<div style="flex:0 0 auto;display:flex;align-items:center;gap:10px">'+rest.slice(0,ni)+'</div><div style="flex:1;min-width:0;display:flex;justify-content:flex-end;align-items:center">'+cen+'</div>'+rest.slice(ni);
   return h;}
 var BT_DOCKMIN=false;
+/* v1361(ダルマ「勝利がわかりにくい」): 勝敗の理由と、終了の瞬間に出す結果の窓 */
+function btWinReason(short){var c=btCfg(),vc=null,wv=null;try{vc=btVicCount();wv=btCfgWinner();}catch(e){}if(!vc)return '';
+  if(vc.exit)return vc.ger>=vc.total?(short?T('盤外へ')+vc.ger+'VP退出':T('独軍が西端から盤外へ合計')+vc.ger+'VP'+T('を退出(')+vc.total+'VP'+T('以上で即勝利)')):(short?T('退出')+vc.ger+'/'+vc.total+'VP':T('独軍の退出は')+vc.ger+'VP'+T('で')+vc.total+'VP'+T('に届かず、最終ターン終了'));
+  return (short?'':T('最終ターン終了。'))+T('建物')+' '+T('独')+vc.ger+' / '+T(String(BT_SIDE_NAME.SOV).charAt(0))+vc.sov+(short?'':' ('+T('勝利に必要')+' '+vc.total+')')+(btCfgAfvTxt?btCfgAfvTxt():'');}
+function btWinModal(force){if(!BT.finished)return;if(!force&&BT.winShown)return;BT.winShown=true;try{btSave();}catch(e){}var o=document.getElementById('btWinM');if(o)o.remove();
+  var wv=null;try{wv=btCfgWinner();}catch(e){}var wc=wv?(BT_SIDE_COL[wv]||'#ffd060'):'#ffd060';
+  var d=document.createElement('div');d.id='btWinM';d.style.cssText='position:fixed;inset:0;z-index:9850;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center';d.onclick=function(e){if(e.target===d)d.remove();};
+  d.innerHTML='<div style="min-width:min(460px,calc(100vw - 40px));max-width:calc(100vw - 40px);background:linear-gradient(#161d29,#0b0f16);border:2px solid #ffd060;border-radius:16px;box-shadow:0 0 30px #ffd06066;padding:22px 26px;color:#e8eef4;font-family:AppFont,AppJP,sans-serif;text-align:center">'
+   +'<div style="font-size:13px;color:#9ab;letter-spacing:.2em">'+T('ゲーム終了')+'・'+btScId()+'</div>'
+   +'<div style="font-size:44px;line-height:1.2;margin:6px 0">🏆</div>'
+   +'<div style="font-size:30px;font-weight:900;color:'+wc+';text-shadow:0 0 12px '+wc+'88">'+(wv?T(BT_SIDE_NAME[wv]+'の勝利'):T('引き分け'))+'</div>'
+   +'<div style="margin:12px 0 18px;font-size:15px;color:#ffe9a8">'+btWinReason(false)+'</div>'
+   +'<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'
+   +'<button onclick="document.getElementById(\'btWinM\').remove();BtTopLog()" style="font:inherit;font-weight:800;padding:8px 16px;border-radius:10px;border:1px solid #39414f;background:#1c2633;color:#e8eef4">📜 '+T('戦闘記録')+'</button>'
+   +'<button onclick="document.getElementById(\'btWinM\').remove();BtResetAsk()" style="font:inherit;font-weight:800;padding:8px 16px;border-radius:10px;border:1px solid #c8a032;background:#2a2410;color:#ffd060">⟲ '+T('新しい対戦')+'</button>'
+   +'<button onclick="document.getElementById(\'btWinM\').remove()" style="font:inherit;font-weight:800;padding:8px 16px;border-radius:10px;border:1px solid #39414f;background:#1c2633;color:#e8eef4">'+T('閉じる')+'</button>'
+   +'</div></div>';document.body.appendChild(d);}
 function BtDockMin(on){BT_DOCKMIN=!!on;Draw();}
 function btDockChip(){var n=window.__btDockN||0;return '<button onclick="event.stopPropagation();BtDockMin(0)" title="'+T('操作バーを出す')+'" style="flex:0 0 auto;display:flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:10px;border:1px solid #c8a032;background:#2a2412;color:#ffd070;font:bold 14px inherit;cursor:pointer;white-space:nowrap;box-shadow:0 0 10px #ffd06044">▴ '+T('操作')+(n?' <span style="background:#ffd060;color:#14171d;border-radius:8px;padding:0 6px;font-size:11px">'+n+'</span>':'')+'</button>';}
 function btDockPosGet(){try{var v=JSON.parse(localStorage.getItem('nmDockPos')||'null');if(v&&isFinite(v.x)&&isFinite(v.y))return v;}catch(e){}return null;}
@@ -44672,7 +44696,7 @@ function btFullBars(on){
     try{var oh=(window.NM_OFF_STY!==''?btOffBtnHTML():btOffInlineHTML());if(oh)th+='<span style="width:8px"></span>'+oh;}catch(e){} /* v1217(ダルマ「初めの盤外からの進入はどうやる」): 全画面では何も選んでいない時に盤外の部隊を選ぶ入口が無かった→上の帯に盤外のスタックを並べる(タップで選ぶ) */}
   var sideOn=btSideOn();
   var wantDock=!!(sideOn&&BT.started&&btBarSty()!=='0'&&window.NM_BT_SLIM!==false&&window.NM_BT_TOPINFO!==false),ctx='';
-  if(wantDock){if(!BT.finished)th='';try{ctx=btFtActHTML();}catch(e){}if(BT.app&&btSideNow()===BT.app)ctx+='<span style="font-size:12px;color:#c8a032;padding:0 4px">'+T('アプリの番')+'</span>';try{var oh2=(window.NM_OFF_STY!==''?btOffBtnHTML():btOffInlineHTML());if(oh2)ctx+=oh2;}catch(e){}ctx+=btCmdMinChip();window.__btDockN=(ctx.match(/<button/g)||[]).length;if(ctx)ctx='<span class="btDkGrip" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" onpointerdown="btDockDrag(event)" title="'+T('ドラッグで移動')+'">⠿</span>'+ctx+'<button class="nb btDkMin" title="'+T('しまう(下のバーへ)')+'" onclick="event.stopPropagation();BtDockMin(1)">▾</button>';if(BT_DOCKMIN)ctx='';} /* v1307 */ /* v1337(ダルマ「ドラッグで移動可能にする タスクバーに格納可能にする」sample-dockdrag→実施) */
+  if(wantDock){if(!BT.finished)th='';try{ctx=BT.finished?'':btFtActHTML();}catch(e){}if(BT.app&&btSideNow()===BT.app&&!BT.finished)ctx+='<span style="font-size:12px;color:#c8a032;padding:0 4px">'+T('アプリの番')+'</span>';try{var oh2=(window.NM_OFF_STY!==''?btOffBtnHTML():btOffInlineHTML());if(oh2)ctx+=oh2;}catch(e){}ctx+=btCmdMinChip();window.__btDockN=(ctx.match(/<button/g)||[]).length;if(ctx)ctx='<span class="btDkGrip" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" onpointerdown="btDockDrag(event)" title="'+T('ドラッグで移動')+'">⠿</span>'+ctx+'<button class="nb btDkMin" title="'+T('しまう(下のバーへ)')+'" onclick="event.stopPropagation();BtDockMin(1)">▾</button>';if(BT_DOCKMIN)ctx='';} /* v1307 */ /* v1337(ダルマ「ドラッグで移動可能にする タスクバーに格納可能にする」sample-dockdrag→実施) */
   if(BT.started&&!sideOn){var mv=BT.mv,un=mv&&(mv.veh?btVCanUndo():true),rd=mv&&mv.veh&&btVCanRedo(),nr=(NM_RB.items||[]).length;
     th+='<span style="width:6px"></span><button class="nb'+(un?'':' dim')+'" title="'+T(mv&&!mv.veh?'移動を取り消す':'一つ戻る(車両の移動)')+'" onclick="btFtUndo()">↶</button><button class="nb'+(rd?'':' dim')+'" title="'+T('やり直す(車両の移動)')+'" onclick="if(btVCanRedo())BtVRedo()">↷</button>'
       +'<button class="nb" onclick="btFtDice()">🎲 DR</button><button class="nb'+(nr?'':' dim')+'" title="'+T('リアル盤へ')+'" onclick="nmFtRb()">▣'+(nr?' <span style="background:#c8a032;color:#111;border-radius:8px;padding:0 5px;font-size:11px;margin-left:3px">'+nr+'</span>':'')+'</button>';}
