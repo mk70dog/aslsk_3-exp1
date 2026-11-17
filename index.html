@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1354</title>
+<title>ASL SKシリーズv1355</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1354">
+<meta property="og:title" content="ASL SKシリーズv1355">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10958,7 +10958,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.554"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.555"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1355="v1355(ダルマ「ルール通りに実施」監査A): 迫撃砲の地域目標(ATT)の命中で車両を解決(SK4 7.11: 口径の火力の半分でIFT、全AF≦4は-1・全AF≧8は+1・OT-1、KIAで撃破、K/#かその1つ上で砲塔ならショック・車体なら走行不能)。アプリは車両だけのヘクスにも迫撃砲を撃つ(見込みも7.11)。迫撃砲の見込みに TEM を入れた";
 var APP_VERSION_HIST_v1354="v1354(ダルマ「他にも問題ないか徹底的に調べる」監査): ①自己対戦の回復フェイズ(両軍とも1回ずつ自動。片方だけ・同じユニットが2回だった) ②自己対戦のボグ解消を両軍アプリで ③迫撃砲は車両目標(VTT)で撃てない(SK4 3.2.4 迫撃砲はATTのみ) ④自己対戦の行動集計(dev/selfplay.js AUD=1)";
 var APP_VERSION_HIST_v1353="v1353(ダルマ「1 実施」): 自己対戦では防御側のアプリも臨機射撃をする(これまでは人間が防御側のときだけ。人間との対戦の動きは変わらない)";
 var APP_VERSION_HIST_v1352="v1352(ダルマ「S4 降るまえから雪のマップになっている」): S4 の盤yの雪の画像は降雪中だけ(シナリオの「降雪中」の切り替え、対戦モードでは降雪判定の結果)";
@@ -33911,6 +33912,18 @@ function btCrewResult(s,u,r,log){
     else log.push('    乗員MC '+fin+' 成功');return;}
   if(r==='PTC'){var p=btDie()+btDie();if(p>8){u.ce=0;log.push('    乗員PTC '+p+' → BU');}}
 }
+/* 監査(2026-11-17 ダルマ「ルール通りに実施」): SK4 7.11 地域目標(ATT)の命中で車両へ。その砲の口径の火力の半分で IFT(全ユニット同じ効果DR)。TEM・全AF≦4は-1・全AF≧8は+1・OTは-1(7.13)。最終がKIA→撃破。K/#か、K/#より1大きい最終DR→砲塔の命中ならショック、車体なら走行不能(命中箇所: 原TH DRの色付きdr≧白dr なら車体)。戻り値 true=車両に解決済み(乗員の付随攻撃はしない) */
+function btATTvsAFV(s,v,fp,r2,drm,a,b,log){
+  var d=btAfvData(v.nm);if(!d)return false;var afs=[d.afFront&&d.afFront.hull,d.afFront&&d.afFront.turret,d.afSide&&d.afSide.hull,d.afSide&&d.afSide.turret].filter(function(x){return x!=null;});
+  var dm=drm,dl=[];if(drm)dl.push('TEM'+(drm>0?'+':'')+drm);
+  if(afs.length&&afs.every(function(x){return x<=4;})){dm-=1;dl.push('全AF≦4 -1');}else if(afs.length&&afs.every(function(x){return x>=8;})){dm+=1;dl.push('全AF≧8 +1');}
+  if(d.ot){dm-=1;dl.push('OT -1');}
+  var fp2=fp/2,col2=ci(fp2),fd=Math.max(0,Math.min(15,r2+dm)),res=IFT[fd][col2],prev=IFT[Math.max(0,fd-1)][col2],hull=(a>=b);
+  var t='  '+v.nm+' に地域目標の命中(7.11): '+fp2+'FP(列'+IFT_LBL[col2]+') DR'+r2+(dl.length?' ['+dl.join(' ')+']':'')+'='+fd+' → '+res;
+  if(/KIA/.test(res)){log.push(t+' → 撃破');btWreck(s,v,log);return true;}
+  if(/^K/.test(res)||/^K/.test(prev)){if(hull){v.imm=1;log.push(t+' → 車体の命中 → 走行不能');}else{v.shock='S';v.ce=0;log.push(t+' → 砲塔の命中 → ショック');}return true;}
+  log.push(t+' → 効果なし');return false;
+}
 function btITTResolve(o,ev,a,b,raw,fin,log){
   var w=o.w,T=o.tgtN,TN=BTG.nodes[T];
   var isCH=(ev.ch!=null&&fin<=ev.ch);
@@ -33924,7 +33937,7 @@ function btITTResolve(o,ev,a,b,raw,fin,log){
   log.push('  '+(isCH?'クリティカル(TEM反転) ':'')+fp+'FP(列'+IFT_LBL[col]+') IFT DR'+r2+(drm?drm:'')+' → '+r);
   var bySt={};
   BT.stacks.forEach(function(s){if(s.n!==T||s.side===w.s.side)return;var mv=(o.ph==='DFF'&&BT.mv)?btStackById(BT.mv.sid):null;if(mv&&s!==mv)return;bySt[s.id]=s;});
-  Object.keys(bySt).forEach(function(k){var s=bySt[k];BT_DMQ={c:col,d:drm};btApplyIFT(s,btInf(s),r,log);btAFVs(s).forEach(function(v){if(v.ce)btCrewResult(s,v,IFT[Math.max(0,Math.min(15,r2+drm+2))][col],log);});});
+  Object.keys(bySt).forEach(function(k){var s=bySt[k];BT_DMQ={c:col,d:drm};btApplyIFT(s,btInf(s),r,log);btAFVs(s).forEach(function(v){if(ev.mtr&&!btIsWreck(v)){var ok711=btATTvsAFV(s,v,fp,r2,drm,a,b,log);if(ok711)return;}if(v.ce)btCrewResult(s,v,IFT[Math.max(0,Math.min(15,r2+drm+2))][col],log);});});
   if(o.ph==='DFF'&&o.ammo==='HE'&&!o.intensive){var res=Math.min(12,Math.floor(fp/2));if(res>0&&res>(BT.resid[T]||0)){BT.resid[T]=res;log.push('  残留火力 '+res+'FP');}}
 }
 // ---- 車載機銃(7.8) ----
@@ -34053,10 +34066,14 @@ function btITTValue(o,ev,tS,ctx){
   var fpN,fpC;
   if(w.kind==='GUN'){var he=(w.gd.ammo||[]).filter(function(x){return x.type==='HE';})[0];fpN=(he&&he.ittFp)||w.gd.ittFP||0;fpC=(he&&he.chFp)||fpN*2;}
   else{var hx=VEH_MA_HE_FP_BY_CAL[w.gd.cal]||{itt:12,ch:24};fpN=hx.itt;fpC=hx.ch;}
-  var targets=btInf(tS);if(!targets.length)return 0;
+  var vAfv=0;if(ev.mtr){var tem0=/Woods|Forest|林|森/.test(TN.terr||'')?-1:(TN.tem||0);btAFVs(tS).forEach(function(v){if(btIsWreck(v))return;var d=btAfvData(v.nm);if(!d)return;var afs=[d.afFront&&d.afFront.hull,d.afFront&&d.afFront.turret,d.afSide&&d.afSide.hull,d.afSide&&d.afSide.turret].filter(function(x){return x!=null;});
+    var dm=tem0+((afs.length&&afs.every(function(x){return x<=4;}))?-1:((afs.length&&afs.every(function(x){return x>=8;}))?1:0))+(d.ot?-1:0),col=ci(fpN/2),pk=0,ps=0;
+    for(var r=2;r<=12;r++){var fd=Math.max(0,Math.min(15,r+dm)),res=IFT[fd][col],pr=IFT[Math.max(0,fd-1)][col];if(/KIA/.test(res))pk+=BT_P2[r];else if(/^K/.test(res)||/^K/.test(pr))ps+=BT_P2[r];}
+    vAfv+=ev.pHit*(pk+ps*0.4)*btVehVal(v)*(BT_AIW.tgtM||1);});} /* 監査: 迫撃砲の地域目標で車両(7.11)の見込み */
+  var targets=btInf(tS);if(!targets.length)return vAfv;
   function lossAt(fp,drm){var col=ci(fp),t=0,cache={};for(var r=2;r<=12;r++){var res=IFT[Math.max(0,Math.min(15,r+drm))][col];if(cache[res]==null)cache[res]=btExpLossRes(tS.side,targets,res,ctx);t+=BT_P2[r]*cache[res];}return t;}
   var pN=ev.pHit-ev.pCH;
-  return pN*lossAt(fpN,0)+ev.pCH*lossAt(fpC,-Math.max(0,TN.tem));
+  return pN*lossAt(fpN,ev.mtr?(/Woods|Forest|林|森/.test(TN.terr||'')?-1:(TN.tem||0)):0)+ev.pCH*lossAt(fpC,-Math.max(0,TN.tem))+vAfv; /* 監査: 迫撃砲は TEM を IFT へ(見込みにも) */
 }
 function btVTTValue(o,ev){var od=btVTTOdds(o,ev);return (od.kill+od.imm*0.35+od.shock*0.45)*btVehVal(o.tgt)*(BT_AIW.tgtM||1);}
 // 射撃候補(車両主砲・砲・PSK・車載機銃)
@@ -34088,7 +34105,8 @@ function btAIOrdOptions(side,ph,targetsN,ctx,filterStack){
             });
           });
           // 歩兵目標(HE)
-          if(w.kind!=='PSK'&&btInf(t).length&&!(w.kind==='MA'&&btDocVV(side))){
+          var isMtW=!!(w.gd&&w.gd.thType==='area'&&w.gd.attBands); /* 監査: 迫撃砲は車両だけのヘクスも地域目標で撃てる(7.11) */
+          if(w.kind!=='PSK'&&(btInf(t).length||(isMtW&&btAFVs(t).some(function(v){return !btIsWreck(v);})))&&!(w.kind==='MA'&&btDocVV(side))){
             var o2={w:w,tgtN:tn,mode:'ITT',ammo:'HE',ph:ph,fast:true,intensive:isIF};
             var ev2=btOrdEval(o2);if(ev2.ok){var v2=btITTValue(o2,ev2,t,ctx)*ifK;if(v2>0.01)res.push({type:'ord',o:o2,ev:ev2,val:v2});}
             if(!isIF&&w.gd&&w.gd.ife>0){ /* v1265: IFE(6.8)も候補に。見込みの損害×(1−故障の確率) */
