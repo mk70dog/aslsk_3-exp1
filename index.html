@@ -45738,7 +45738,9 @@ function btAppBtnHTML(id,tile){
 (function(){
   if(typeof window==='undefined')return;
   function wrap(){var f=window.ASL_SK3_EX_CARD_BTN;if(typeof f!=='function'||f.__app)return false;
-    var w=function(id,tile){return btAppBtnHTML(id,tile)+f.apply(this,arguments);};w.__app=1;window.ASL_SK3_EX_CARD_BTN=w;return true;}
+    var w=function(id,tile){var ap=btAppBtnHTML(id,tile),og=f.apply(this,arguments);if(!ap)return og; /* v1369(ダルマ「APP ORIG ボタンスペースを縮める」): 2つを1つの箱にまとめ、間を6pxに */
+      ap=ap.replace('position:absolute;right:78px;bottom:6px;','');og=String(og).replace('position:absolute;right:6px;bottom:6px;','');
+      return '<span class="aslBtnPair" style="'+(tile?'position:absolute;right:6px;bottom:6px;':'margin-left:auto;')+'display:inline-flex;gap:6px;align-items:center;flex-shrink:0">'+ap+og+'</span>';};w.__app=1;window.ASL_SK3_EX_CARD_BTN=w;return true;}
   if(!wrap())window.addEventListener('load',function(){if(wrap()&&typeof Draw==='function')Draw();});
 })();
 
