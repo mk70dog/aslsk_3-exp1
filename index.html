@@ -29394,7 +29394,7 @@ function losEnemyFacingCovers(eh,origin,target){
 //       [C]アプリの判断(各フェイズの行動) / [D]画面(帯・地図の表示・タップ操作)
 // 規則の根拠: ASLSK4 Rules(2021、SK1〜3の規則書より優先と明記)。S26のSSRとOBはSCNのデータに従う。
 // 未対応(段階3c以降): AFV(移動・主砲・機銃・対戦車)、砲、PSK、煙幕、狙撃兵、英雄・指揮官誕生。
-var BT_SCN={S26:1,S2:1,S6:1,S24:1,S25:1,S4:1}; /* v1224: S25 追加 */ /* v1352: S4 追加 */ /* v1193(ダルマ「S2 S6 S24 を実施」): S2・S6・S24 も対戦モードに。シナリオごとの違いは BT_SCFG */
+var BT_SCN={S26:1,S2:1,S6:1,S24:1,S25:1,S4:1,S14:1,S15:1}; /* v1368: S14・S15 */ /* v1224: S25 追加 */ /* v1352: S4 追加 */ /* v1193(ダルマ「S2 S6 S24 を実施」): S2・S6・S24 も対戦モードに。シナリオごとの違いは BT_SCFG */
 var BT_PHASES=[['RPh','回復'],['PFPh','準備射撃'],['MPh','移動'],['DFPh','防御射撃'],['AFPh','前進射撃'],['RtPh','潰走'],['APh','突撃'],['CCPh','白兵戦']];
 var BT_SIDE_COL={GER:'#7f9bb8',SOV:'#c0583a'};
 var BT_SIDE_NAME={GER:'独軍',SOV:'ソ連'};
@@ -29424,7 +29424,7 @@ function btScId(){try{return (S.scen&&S.scen.sel)||null;}catch(e){return null;}}
 function btScObj(){var id=btScId();if(!id)return null;return SCN.filter(function(x){return x.id===id;})[0]||null;}
 function btAvail(){var id=btScId();return !!(id&&BT_SCN[id]);}
 function btActive(){return !!(BT.on&&btAvail()&&BT.sc===btScId());}
-function btFirst(){var sc=btScObj();return (sc&&sc.atk)||'GER';}
+function btFirst(){var sc=btScObj();var a=(sc&&sc.atk)||'GER';if(a!=='GER'&&a!=='SOV'){var c0=sc&&BT_SCFG[sc.id];if(c0&&c0.natB===a)return 'SOV';}return a;} /* v1368: 2つ目の軍(米)が先攻(S14) */
 function btSecond(){return btFirst()==='GER'?'SOV':'GER';}
 function btSideNow(){return BT.half===0?btFirst():btSecond();} // そのプレイヤーターンのATTACKER
 function btOpp(sd){return sd==='GER'?'SOV':'GER';}
@@ -29800,6 +29800,26 @@ var BT_SCFG={
     vic:'exit',vicSide:'GER',exitVP:10,exitEdge:'N',bl:'vic',ssr:{smk:{SOV:/^7-4-7/},snow:1},
     fix:{SOV:[['yQ6',[/^10-2/,1],[/^HMG/,1],[/^7-4-7/,1]],['yU6',[/^6-6-7/,1],[/^8-1/,1],[/^MMG/,1]],['yN6',[/^7-4-7/,1],[/^FT/,1]],['yK6',[/^6-6-6/,1],[/^8-0/,1],[/^MMG/,1]],['yW6',[/^6-6-6/,1]],['yM6',[/^5-4-6/,1]],['yL7',[/^5-4-6/,1],[/^FT/,1]],['yR7',[/^5-4-6/,1]]]},
     aiw:{exitDef:1}}, /* v1352(ダルマ「前で撃って徐々に下がって出口付近で待ち伏せ」): 米は前(ヘクス番号6〜7)に置き、独の先頭より2列西に下がり続け、最後は出口(列1〜3)で待ち伏せ */
+  /* v1368(ダルマ「s14 s15 アプリ対戦対応実施」): S14 88s at Zon。米(natB)=T1以降に北端E10〜H10から・T2以降にM10〜P10から進入(遅らせてもよい)。独=ボードwのヘクス番号7以下(A〜P列)に設置。勝利: 米が南端F0〜L0から7VP以上を退出した時点で即勝利(分隊2・HS1・-2指揮官3・-1指揮官2・ほかの指揮官1) */
+  S14:{natB:'USA',nameB:'米軍',colB:'#8a9a3c',edgeLbl:{N:'南端',S:'北端',E:'東端',W:'西端'},
+    grp:function(o){return o.side==='GER'?'setup':(o.gi===1?'e2':'e1');},
+    zone:function(o,N){if(N.b!=='w')return false;var k=btHexNum(N);return k!=null&&k<=7;},
+    zoneTxt:function(){return 'ボードwのヘクス番号7以下(A〜P列)';},
+    ent:[{id:'e1',side:'SOV',turn:1,off:'S',board:'w',hexes:['E10','F10','G10','H10'],onAfter:1,lbl:'第506落下傘歩兵連隊 第1大隊(北端E10〜H10・T1以降)'},{id:'e2',side:'SOV',turn:2,off:'S',board:'w',hexes:['M10','N10','O10','P10'],onAfter:1,lbl:'第2大隊(北端M10〜P10・T2以降)'}],
+    vic:'exit',vicSide:'SOV',exitVP:7,exitEdge:'N',bl:'vic',
+    fix:{GER:[['wG7',[/^4-6-7/,1],[/^LMG/,1],[/^7-0/,1]],['wM7',[/^4-4-7/,1],[/^LMG/,1],[/^7-0/,1]],['wI3',[/^4-6-7/,1],[/^8-1/,1]],['wJ3',[/^4-4-7/,1]],['wL2',[/^4-4-7/,1]],['wG2',[/^4-4-7/,1]],['wN2',[/^2-3-7/,1]],['wH5',[/^88mm/,1],[/^2-2-8/,1]],['wJ4',[/^88mm/,1],[/^2-2-8/,1]]]},
+    aiw:{exitDef:1,exitCols:'DEFGHIJKLMN'}},
+  /* v1368: S15 Hammer to the Teeth。米=L列より西(1ヘクスにMMC1つまで)、T3に西端から増援。独=K列より東の高度1の地形。独が先攻。勝利: 終了時、S6から2ヘクス以内の建物ヘクスに統制状態の米MMCが1つもいなければ独の勝利 */
+  S15:{natB:'USA',nameB:'米軍',colB:'#8a9a3c',edgeLbl:{N:'南端',S:'北端',E:'東端',W:'西端'},
+    grp:function(o){return (o.side==='SOV'&&o.gi===1)?'e3':'setup';},
+    zone:function(o,N){if(N.b!=='w')return false;var ci=btColIdx(N.nm.replace(/^w/,'').replace(/\d+$/,''));return o.side==='SOV'?ci<=btColIdx('L'):(ci>=btColIdx('K')&&N.elev>=1);},
+    zoneTxt:function(o){return o.side==='SOV'?'L列より西(L列を含む)・1ヘクスにMMC1つまで':'K列より東(K列を含む)の高度1の地形';},
+    oneMMC:{SOV:1},
+    ent:[{id:'e3',side:'SOV',turn:3,off:'W',lbl:'第81工兵大隊B中隊(西端・T3)'}],
+    vic:'clear',vicSide:'GER',bl:'near',blNear:{board:'w',hex:'S6',r:2},clearTxt:'S6から2ヘクス以内の建物のうち、統制状態の米MMCが',
+    fix:{SOV:[['wL5',[/^5-4-6/,1],[/^8-1/,1],[/^MMG/,1]],['wL4',[/^5-4-6/,1],[/^8-0/,1],[/^MMG/,1]],['wK5',[/^5-4-6/,1],[/^7-0/,1]],['wL2',[/^5-4-6/,1],[/^BAZ/,1]],['wJ3',[/^5-4-6/,1]],['wI3',[/^3-4-6/,1]],['wL8',[/^3-4-6/,1]],['wK9',[/^3-4-6/,1]],['wK7',[/^57mm/,1],[/^2-2-7/,1]],['wL6',[/^57mm/,1],[/^2-2-7/,1]]],
+      GER:[['wU5',[/^4-6-7/,2]],['wP4',[/^4-6-7/,1],[/^HMG/,1],[/^9-1/,1]],['wQ4',[/^4-4-7/,2],[/^MMG/,1],[/^8-1/,1]],['wW6',[/^4-4-7/,2],[/^LMG/,1]],['wY5',[/^4-4-7/,1],[/^LMG/,1]],['wP5',[/^4-6-7/,1]],['wQ5',[/^4-4-7/,1]],['wV5',[/^4-6-7/,1],[/^LMG/,1],[/^8-0/,1]],['wV4',[/^4-4-7/,1],[/^PSK/,1]],['wAA6',[/^4-4-7/,1]],['wZ6',[/^MTR81/,1],[/^2-2-8/,1]]]},
+    aiw:{holdDef:8}},
   /* v1224: S25 Early Battles。ソ連=ボードuの番号7以下/ボードvに設置、独=T1に南端から進入。勝利: 独がボードvの建物4棟以上を支配し、独AFV2両以上が走行可能。SSR: BT-7(無線機なし)は各MPhにDR≦8でないとヘクスから出られない */
   S25:{grp:function(o){return o.side==='GER'?'g1':'setup';},
     zone:function(o,N){if(N.b==='v')return true;if(N.b==='u'){var k=btHexNum(N);return k!=null&&k<=7;}return false;},
@@ -29828,6 +29848,7 @@ function btCfgBldgs(){var c=btCfg();if(!c||!BTG)return [];
   if(c.bl==='vic'){var vh=[].concat(sc.vicHexes||[]);var ns=[];vh.forEach(function(v){v.hexes.forEach(function(h){var cr=losHexNameToColRow(h),i=btNodeOf(v.board,cr.col,cr.row);if(i!=null&&ns.indexOf(i)<0)ns.push(i);});});
     var seen={};ns.forEach(function(i){if(seen[i])return;var grp=[],q=[i];seen[i]=1;while(q.length){var k=q.shift();grp.push(k);BTG.nodes[k].nb.forEach(function(m){if(!seen[m]&&ns.indexOf(m)>=0){seen[m]=1;q.push(m);}});}
       L.push({id:L.length+1,board:BTG.nodes[grp[0]].b,hexes:grp.map(function(k){return BTG.nodes[k].nm.replace(/^[a-z]+/,'');}),_n:grp,_sc:BTG});});}
+  else if(c.bl==='near'){var Z=c.blNear,zc=losHexNameToColRow(Z.hex),zi=btNodeOf(Z.board,zc.col,zc.row);if(zi!=null)BTG.nodes.forEach(function(N){if(N.b===Z.board&&N.bldgT&&btDist(N.i,zi)<=Z.r)L.push({id:L.length+1,board:N.b,hexes:[N.nm.replace(/^[a-z]+/,'')],_n:[N.i],_sc:BTG});});} /* v1368(S15): S6から2ヘクス以内の建物ヘクスを1ヘクスずつ */
   else if(c.bl==='v-JQ'){BTG.nodes.forEach(function(N){if(N.b==='v'&&N.bldgT&&N.c>=btColIdx('J')&&N.c<=btColIdx('Q'))L.push({id:L.length+1,board:'v',hexes:[N.nm.replace(/^v/,'')],_n:[N.i],_sc:BTG});});}
   L.forEach(function(B){B.type=BTG.nodes[B._n[0]].terr==='Stone Building'?'stone':'wood';B.nm=BTG.nodes[B._n[0]].nm;});
   BT_BLC={g:BTG,sc:btScId(),L:L};return L;}
@@ -29835,7 +29856,7 @@ function btCfgBldgs(){var c=btCfg();if(!c||!BTG)return [];
 var BT_EXN=null;
 function btExitNodes(){var c=btCfg();if(!c||c.vic!=='exit')return {};var key=btScId()+'|'+BTG.nodes.length;if(BT_EXN&&BT_EXN.key===key)return BT_EXN.m;var sc=btScObj(),vh=sc&&sc.vicHexes,m={};
   if(vh)BTG.nodes.forEach(function(N,i){if(N.b===vh.board&&N['e'+c.exitEdge]&&vh.hexes.indexOf(N.nm.slice(N.b.length))>=0)m[i]=1;});BT_EXN={key:key,m:m};return m;}
-function btExitVPOf(side,u){var I=btI(u,side);if(I.kind==='mmc')return (I.hs||I.crew)?1:2;if(I.kind==='smc')return (I.cmd!=null&&I.cmd<=-1)?2:1;return 0;}
+function btExitVPOf(side,u){var I=btI(u,side);if(I.kind==='mmc')return (I.hs||I.crew)?1:2;if(I.kind==='smc'){var cm=(I.cmd!=null)?I.cmd:btCmdOf(side,u);return cm<=-2?3:(cm<=-1?2:1);}return 0;} /* v1368: -2指揮官=3VP(S14) */
 function btIExitOK(){var c=btCfg(),mv=BT.mv;if(!c||c.vic!=='exit'||!mv||mv.veh||mv.side!==c.vicSide)return false;var s=btStackById(mv.sid);if(!s||s.n==null||s.n<0||!btExitNodes()[s.n])return false;
   if(mv.mfUsed+1>mv.mfMax+(mv.road?1:0))return false;return btInf(s).some(function(u){return u.s==='ok';});}
 function btIExit(lg){if(!btIExitOK())return '盤外へ退出できません(退出できる盤端のヘクスで、1MF残っている健在なユニットのみ)';
@@ -29853,7 +29874,7 @@ function btIExitBtn(){return btIExitOK()?btBtn(T('盤外へ退出(1MF)'),'BtIExi
 function btSnowRoll(att){var c=btCfg();if(!c||!c.ssr||!c.ssr.snow)return;var d1=btDie(),d2=btDie(),dr=d1+d2,was=!!BT.snow;
   if(dr>=10)BT.snow=true;else if(was&&dr<=3)BT.snow=false;
   btLog(['RPh 降雪判定(SSR1) '+BT_SIDE_NAME[att]+' DR'+dr+'('+d1+'+'+d2+') → '+(BT.snow?(was?'降雪が続く':'降雪が始まる'):(was?'降雪が止む':'降雪なし'))+(BT.snow?'(射程6ヘクス以上の射撃に+1)':'')]);}
-function btCfgNeed(){var c=btCfg();if(!c)return btNeedVic();if(c.vic==='exit')return c.exitVP;return c.vic==='n'?c.vicN:btBldgs().length;}
+function btCfgNeed(){var c=btCfg();if(!c)return btNeedVic();if(c.vic==='exit')return c.exitVP;if(c.vic==='clear')return btBldgs().length;return c.vic==='n'?c.vicN:btBldgs().length;}
 function btCfgWinner(){var c=btCfg(),vc=btVicCount();if(!c)return vc.ger>=btNeedVic()?'GER':'SOV';var n=c.vicSide==='GER'?vc.ger:vc.sov;if(c.vicAfv&&btMobAfv(c.vicSide)<c.vicAfv)return btOpp(c.vicSide);return n>=btCfgNeed()?c.vicSide:btOpp(c.vicSide);}
 /* v1224(S25): 走行可能なAFVの数(盤上・盤外の未進入を含む。走行不能・退出・残骸は数えない) */
 function btMobAfv(side){var n=0;(BT.stacks||[]).forEach(function(s){if(s.side!==side)return;s.u.forEach(function(u){if(btInfo(side,u.nm).kind==='afv'&&!u.imm)n++;});});
@@ -29865,6 +29886,11 @@ function btRadioOk(s,u){if(!btSsr('radio',s.side,u.nm)||s.n==null||s.n<0)return 
   if(u.radK!==k){u.radK=k;var a=btDie(),b=btDie();u.radR=a+b;btLog([BT_SIDE_NAME[s.side]+' '+u.nm+' 無線機なし(SSR): DR '+a+'+'+b+'='+(a+b)+(a+b<=8?' → 移動できる':' → このMPhはヘクスから出られない(向きの変更のみ)')]);}
   return u.radR<=8;}
 // 盤端の名前(カードの方角)。S6 は盤を180°回して置くので地図の南=カードの北
+/* v1368(S14): 進入できるヘクスの範囲(BT_SCFG.ent[].hexes)。スタックの軍・盤端・進入ターン(due)で進入の指定を探す */
+function btEntHexSet(s){var c=btCfg();if(!c||!c.ent||!s)return null;var L=c.ent.filter(function(e){return e.hexes&&e.side===s.side&&e.off===s.off&&(s.due==null||e.turn===s.due);});if(!L.length)return null;
+  var m={};L.forEach(function(e){e.hexes.forEach(function(h){var cr=losHexNameToColRow(h),i=btNodeOf(e.board,cr.col,cr.row);if(i!=null)m[i]=1;});});return m;}
+function btEntHit(s,N){if(!btEdgeHit(s.off,s.off2,N))return false;var H=btEntHexSet(s);return !H||!!H[N.i];}
+function btEntOf(s){var c=btCfg();if(!c||!c.ent||!s)return null;return c.ent.filter(function(e){return e.side===s.side&&e.off===s.off&&e.turn===s.due;})[0]||null;}
 function btEdgeHit(off,off2,N){return (off==='E'&&N.eE)||(off==='W'&&N.eW)||(off==='N'&&N.eN)||(off==='S'&&N.eS)||(off2==='E'&&N.eE)||(off2==='W'&&N.eW)||(off2==='N'&&N.eN)||(off2==='S'&&N.eS);} /* v1197: 進入できる盤端が2つのスタック(S6 戦術予備: off=北端, off2=東端) */
 function btOffLbl(s){var m=btEdgeLblMap();return (m[s.off]||'')+(s.off2?'/'+(m[s.off2]||''):'');}
 function btEdgeLbl(e){var c=btCfg(),m={E:'東端',W:'西端',N:'北端',S:'南端'};if(c&&c.edgeLbl)return c.edgeLbl[e]||'';if(c&&c.flip)m={E:'西端',W:'東端',N:'南端',S:'北端'};return m[e]||'';}
@@ -29904,7 +29930,9 @@ function btUpdateCtl(){
     ['GER','SOV'].forEach(function(sd){if(st[sd].ok&&!st[btOpp(sd)].any)BT.ctl[bl.id]=sd;});
   });
 }
-function btVicCount(){var cX=btCfg();if(cX&&cX.vic==='exit'){var ev=(BT.exitVP||{});return {ger:ev.GER||0,sov:ev.SOV||0,total:cX.exitVP,exit:true};} /* v1352: S4 退出VP */
+function btVicCount(){var cX=btCfg();if(cX&&cX.vic==='exit'){var ev=(BT.exitVP||{});return {ger:ev.GER||0,sov:ev.SOV||0,total:cX.exitVP,exit:true,xs:cX.vicSide,xv:ev[cX.vicSide]||0,xl:T(String(BT_SIDE_NAME[cX.vicSide]).charAt(0))};}
+  if(cX&&cX.vic==='clear'){var en=btOpp(cX.vicSide),g0=0,s0=0;btBldgs().forEach(function(bl){var occ=btBldgNodes(bl).some(function(n){return BT.stacks.some(function(x){return x.side===en&&x.n===n&&btInf(x).some(function(u){return btI(u,en).kind==='mmc'&&btGO(u);});});});if(occ)s0++;else g0++;});
+    var r0={ger:0,sov:0,total:btBldgs().length,clear:true};r0[cX.vicSide==='GER'?'ger':'sov']=g0;r0[cX.vicSide==='GER'?'sov':'ger']=s0;return r0;} /* v1368(S15): 一掃=敵の統制状態のMMCがいない建物の数 */ /* v1352: S4 退出VP */
   var g=0,s=0;btBldgs().forEach(function(bl){if(BT.ctl&&BT.ctl[bl.id]==='GER')g++;else if(BT.ctl&&BT.ctl[bl.id]==='SOV')s++;});return {ger:g,sov:s,total:btBldgs().length};}
 // ---------- [B4] OB ----------
 function btObItems(){
@@ -30397,7 +30425,7 @@ function btMoveStart0(sid,uids,opt){
   var snap=JSON.stringify({stacks:BT.stacks,seq:BT.seq,resid:BT.resid});
   var mvS;
   if(units.length===s.u.length){mvS=s;}
-  else{mvS={id:'s'+(++BT.seq),side:s.side,n:s.n,boardId:s.boardId,col:s.col,row:s.row,off:s.off,off2:s.off2,u:units,mel:false};s.u=s.u.filter(function(u){return units.indexOf(u)<0;});BT.stacks.push(mvS);}
+  else{mvS={id:'s'+(++BT.seq),side:s.side,n:s.n,boardId:s.boardId,col:s.col,row:s.row,off:s.off,off2:s.off2,due:s.due,u:units,mel:false};s.u=s.u.filter(function(u){return units.indexOf(u)<0;});BT.stacks.push(mvS);}
   if(dt)movers.forEach(function(u){u.cx=1;});
   BT.mv={sid:mvS.id,side:s.side,start:s.n,path:[],mfMax:mf,mfUsed:0,road:true,dt:dt,assault:as,assaultLost:false,hereN:s.n,hereSpent:0,firedHere:{},snap:snap,rolled:false,resAt:{}};
   BT.sel=mvS.id;
@@ -30409,7 +30437,7 @@ function btMoveCostTo(to){ // 現在の移動スタックから隣接ヘクスto
   var T=BTG.nodes[to];
   var c,road=false;
   if(s.n==null||s.n<0){
-    var ok=btEdgeHit(s.off,s.off2,T);
+    var ok=btEntHit(s,T);
     if(!ok)return {err:'進入は'+btOffLbl(s)+'のヘクスから'};
     if(T.cost==null)return {err:'進入不可の地形'};
     c=T.cost;
@@ -31042,7 +31070,7 @@ function btAdvanceCheck(sid,uids,to){
   if(!inf.length)return {err:'突撃できる歩兵がいません'};
   for(var i=0;i<inf.length;i++){var u=inf[i];if(u.s!=='ok'||u.adv||s.mel)return {err:u.nm+'は突撃できません'};}
   var T=BTG.nodes[to],cost;
-  if(s.n==null||s.n<0){var ok=btEdgeHit(s.off,s.off2,T);if(!ok)return {err:'進入は指定の盤端から'};cost=T.cost;}
+  if(s.n==null||s.n<0){var ok=btEntHit(s,T);if(!ok)return {err:'進入は指定の盤端・ヘクスから'};cost=T.cost;}
   else{if(BTG.nodes[s.n].nb.indexOf(to)<0)return {err:'隣接ヘクスのみ'};var ic=btInfCost(s.n,to);if(!ic)return {err:'進入不可'};cost=ic.c;}
   if(cost==null)return {err:'進入不可'};
   var mf=btMMF(s.side,inf).mf-btPortageExcess(s.side,units,inf.some(function(u){return u.cx;}));
@@ -31272,7 +31300,7 @@ function btPhaseLeave(id){
   if(id==='APh'){ // 進入予定ターンに入らなかった部隊は除去(3.3: 進入ターンの移動・前進フェイズに入らなければ除去。v284で車両も対象)
     var log=[];
     if(btScId()==='S6'&&att==='SOV'&&BT.turn===1){var cap={mmc:5,smc:1,sw:2},kept=[];var anyF=BT.stacks.some(function(s){return s.resv&&s.side==='SOV'&&(s.n==null||s.n<0)&&s.due===1;});BT.stacks.forEach(function(s){if(s.side!=='SOV'||!(s.n==null||s.n<0)||s.due!==1)return;if(anyF&&!s.resv)return; /* v1212: 人間が指定したスタックだけ */var ok=true;var q={mmc:0,smc:0,sw:0};s.u.forEach(function(u){var k=btI(u,'SOV').kind;if(k==='mmc')q.mmc++;else if(k==='smc')q.smc++;else if(btIsSWK(k))q.sw++;});['mmc','smc','sw'].forEach(function(k){if(q[k]>cap[k])ok=false;});if(!ok)return;['mmc','smc','sw'].forEach(function(k){cap[k]-=q[k];});s.due=3;s.res=1;s.off2='W';s.u.forEach(function(u){kept.push(u.nm);});});if(kept.length)btLog(['ソ連 戦術予備(SSR2): '+kept.join(',')+' はT3に北端または東端から進入']);} /* v1193: S6 SSR2 戦術予備。T1に入らなかった部隊のうち MMC5・SMC1・SW2 まで(スタック単位)をT3へ。東端(地図の西端 off2='W')からも進入可(v1197) */
-    BT.stacks.forEach(function(s){if(s.side!==att||!(s.n==null||s.n<0)||s.due!==BT.turn)return;
+    BT.stacks.forEach(function(s){if(s.side!==att||!(s.n==null||s.n<0)||s.due!==BT.turn)return;var eo=btEntOf(s);if(eo&&eo.onAfter)return; /* v1368: 「T○以降に進入」は除去しない */
       s.u.slice().forEach(function(u){btRemoveUnit(s,u);log.push(u.nm);});});
     if(log.length)btLog(['進入しなかった部隊を除去: '+log.join(',')]);
     btCleanStacks();
@@ -31614,7 +31642,7 @@ function btGoalMap(side){
   if(cGX&&cGX.vic==='exit'&&cGX.vicSide!==side&&btAIW().exitDef){ /* v1352: 退出を防ぐ側(S4 米)。独の先頭(いちばん出口に近い)より2列出口側の帯で待ち、下がり続けて最後は出口の手前で待ち伏せ */
     var EX=btExitNodes(),GD={},en2=btOpp(side),gmin=99;
     BT.stacks.forEach(function(x){if(x.side!==en2||x.n==null||x.n<0||!btInf(x).length)return;var k=btHexNum(BTG.nodes[x.n]);if(k!=null)gmin=Math.min(gmin,k);});
-    var tr=gmin>=99?6:Math.max(2,gmin-2);var cols='IJKLMNOPQRSTUVWXY';
+    var tr=gmin>=99?6:Math.max(2,gmin-2);var cols=btAIW().exitCols||'IJKLMNOPQRSTUVWXY'; /* v1368: 守る列をシナリオごとに(S14=D〜N) */
     BTG.nodes.forEach(function(N,i){var m=N.nm.match(/^[a-z]+([A-Z]+)(\d+)$/);if(!m||cols.indexOf(m[1])<0||m[1].length>1)return;var k=+m[2];
       if(k>=tr-1&&k<=tr&&!btEnemyAt(i,side))GD[i]=Math.max(GD[i]||0,8+(N.tem||0));
       else if(k>=1&&k<=3&&!btEnemyAt(i,side))GD[i]=Math.max(GD[i]||0,4+(N.tem||0));});
@@ -31670,7 +31698,7 @@ function btMoveSearch(s,mf,side,opt){
   function key(n,m){return n+'|'+m;}
   function push(n,m,dang,pk,road){var k=key(n,m);if(best[k]!=null&&best[k].d<=dang)return;best[k]={n:n,m:m,d:dang,road:road};prev[k]=pk;q.push(k);}
   if(start==null||start<0){
-    BTG.nodes.forEach(function(N){var ok=btEdgeHit(off,off2,N);if(!ok||N.cost==null||N.cost>mf)return;if(btEnemyAt(N.i,side))return;if(btDocNoOG(side,N.i))return;
+    var EH=btEntHexSet(s);BTG.nodes.forEach(function(N){var ok=btEdgeHit(off,off2,N)&&(!EH||EH[N.i]);if(!ok||N.cost==null||N.cost>mf)return;if(btEnemyAt(N.i,side))return;if(btDocNoOG(side,N.i))return;
       push(N.i,N.cost,btThreatAt(side,N.i,true,true)*N.cost,null,false);});
   }else push(start,0,0,null,true);
   while(q.length){
@@ -31761,7 +31789,7 @@ function btAIPlanMoves0(side){
       if(!units.some(function(u){return u.cx||u.wd;}))opts.push({dt:true,mf:base.mf+2-btPortageExcess(side,units,true)});
       opts.forEach(function(o){
         if(o.mf<=0)return;
-        var sr=btMoveSearch({n:s.n,off:s.off,u:units},o.mf,side);
+        var sr=btMoveSearch({n:s.n,off:s.off,off2:s.off2,due:s.due,side:s.side,u:units},o.mf,side);
         Object.keys(sr.ends).forEach(function(nk){
           var e=sr.ends[nk],n=e.n,N=BTG.nodes[n];
           if(n===here)return;
@@ -31814,7 +31842,7 @@ function btAIAdvance0(side){
     if(BT.stacks.indexOf(s)<0)return;
     var uids=btInf(s).filter(function(u){return u.s==='ok'&&!u.adv&&!btIsGunCrew(s,u);}).map(function(u){return u.id;}); // v299: 砲の乗員は残る
     var here=(s.n!=null&&s.n>=0)?s.n:null;
-    var nbs=here!=null?BTG.nodes[here].nb:BTG.nodes.filter(function(N){return btEdgeHit(s.off,s.off2,N);}).map(function(N){return N.i;});
+    var nbs=here!=null?BTG.nodes[here].nb:BTG.nodes.filter(function(N){return btEntHit(s,N);}).map(function(N){return N.i;});
     var best=null,stay=here!=null?(F[here]+BTG.nodes[here].tem*0.9-btThreatAt(side,here,false,true)*W.risk+btHoldValue(side,s)):-99;
     nbs.forEach(function(to){
       var c=btAdvanceCheck(s.id,uids,to);
@@ -32500,6 +32528,7 @@ function btMapTap(boardId,col,row){
     if(!o){BT.placing=null;return;}
     if(btPlacedCount(o.key)>=o.total){BT.placing=null;btSave();Draw();return;}
     if(btEnemyAt(n,o.side)){btToast('敵のいるヘクスには置けません');return;}
+    var c1=btCfg();if(c1&&c1.oneMMC&&c1.oneMMC[o.side]&&btGroupOf(o)==='setup'&&btInfo(o.side,o.name).kind==='mmc'&&BT.stacks.some(function(x){return x.side===o.side&&x.n===n&&btInf(x).some(function(u){return btI(u,o.side).kind==='mmc';});})){btToast('このシナリオは1ヘクスにMMC1つまで');return;} /* v1368(S15) */
     if(!BT.edit&&btSetupSides().indexOf(o.side)>=0&&!btInZone(o,n)){btToast('配置範囲外です('+btZoneTxt(o)+')');return;} /* v1193: 配置する軍・範囲はシナリオごと */
     var r=btPlace(o,n);btGiveSW(r.s);BT.sel=r.s.id;
     if(btPlacedCount(o.key)>=o.total)BT.placing=null;
@@ -32569,7 +32598,7 @@ function btOverlaySVG(dispLayout){
     var pts=[];if(BT.mv.start!=null&&BT.mv.start>=0)pts.push(BT.mv.start);pts=pts.concat(BT.mv.path);
     if(pts.length>1){var dd=pts.map(function(n){return btDispPt(n,dispLayout);});h+='<polyline points="'+dd.map(function(p){return p.x+','+p.y;}).join(' ')+'" fill="none" stroke="'+BT_SIDE_COL[BT.mv.side]+'" stroke-width="5" stroke-opacity="0.75" stroke-dasharray="10 6"/>';}
     if(mvS&&(btHuman()===BT.mv.side||!BT.app)){
-      var cand=(mvS.n!=null&&mvS.n>=0)?BTG.nodes[mvS.n].nb:BTG.nodes.filter(function(N){return btEdgeHit(mvS.off,mvS.off2,N);}).map(function(N){return N.i;});
+      var cand=(mvS.n!=null&&mvS.n>=0)?BTG.nodes[mvS.n].nb:BTG.nodes.filter(function(N){return btEntHit(mvS,N);}).map(function(N){return N.i;});
       cand.forEach(function(n){var c=BT.mv.veh?btVMoveCheck(n):btMoveCheck(n);if(c.err)return;/* v321: 車両の移動中は車両の規則(VCA内・MP)で円を出す */var d=btDispPt(n,dispLayout),hf=BTG.nodes[n].half,rr=hf?(window.BT_HALFR||13):13,fs=hf?Math.round(rr*1.1):14;
         h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><circle cx="'+d.x+'" cy="'+d.y+'" r="'+rr+'" fill="#ffe040" fill-opacity="0.85" stroke="#000" stroke-opacity="0.6" stroke-width="1.5"/><text x="'+d.x+'" y="'+(d.y+fs*0.36)+'" text-anchor="middle" font-size="'+fs+'" font-weight="bold" fill="#000" font-family="AppFont,AppJP,monospace">'+c.c+'</text></g>';}) // v302: 数字を読みやすく(円を濃く・文字を大きく);
     }
@@ -33556,8 +33585,9 @@ function btAfvData(name){
   var best=null;AFV_DATA.forEach(function(v){if(String(name).indexOf(v.lbl)===0&&(!best||v.lbl.length>best.lbl.length))best=v;});
   return best;
 }
+var BT_GUN_ALIAS={'88mm FlaK(AA)':'8.8cm FlaK18 AA','57mm AT Gun':'57mm AT砲','MTR81*[2-80]':'8cm GrW34迫撃砲'}; /* v1368: S14・S15 のOB名 */
 function btGunData(name){
-  var best=null;GUN_DATA.forEach(function(g){if(String(name).indexOf(g.lbl)===0&&(!best||g.lbl.length>best.lbl.length))best=g;});
+  var best=null;for(var ak in BT_GUN_ALIAS){if(String(name).indexOf(ak)===0){name=BT_GUN_ALIAS[ak];break;}}GUN_DATA.forEach(function(g){if(String(name).indexOf(g.lbl)===0&&(!best||g.lbl.length>best.lbl.length))best=g;});
   return best;
 }
 function btIsAFV(side,u){return btInfo(side,u.nm).kind==='afv';}
@@ -33717,7 +33747,7 @@ function btVMoveCheck(to){
   var startCost=mv.started?0:1;
   var c;
   if(s.n==null||s.n<0){
-    var T=BTG.nodes[to];var ok=btEdgeHit(s.off,s.off2,T);
+    var T=BTG.nodes[to];var ok=btEntHit(s,T);
     if(!ok)return {err:'指定の盤端のヘクスから進入'};
     c=btVCost(u,to,to,mv.mfMax-mv.mfUsed);if(c.err)return c;
     var mc=losVehicleMoveCostForInfo({name:T.terr},false,!!u.ce);c={c:(mc.cost==null?Math.ceil(btAfvData(u.nm).mp/2):mc.cost),bog:c.bog,road:false};
@@ -35177,6 +35207,7 @@ function btVcImg(rel){return rel&&BT_VC.imgs[rel]||null;}
 function btVcUnitImg(side,u){ // 戻り値 {src,dim}
   var I=btI(u,side),k=I.kind;var sideI=side;side=btNat(side); /* v1352: 画像は国籍で引く */
   if(k==='mmc'||k==='smc'){var nmV=u.nm;if(!BT_VC.map[side+'|'+nmV]&&!VASL_CTR_MAP['u:'+side+'|'+nmV]&&!/\(HS\)$/.test(nmV)&&(BT_VC.map[side+'|'+nmV+'(HS)']||VASL_CTR_MAP['u:'+side+'|'+nmV+'(HS)']))nmV=nmV+'(HS)'; /* v1335(ダルマ「S25 実カウンターで表示していない」): シナリオの表記が(HS)なしの半個分隊(S25の2-3-7[1])も実カウンター画像に */var m=BT_VC.map[side+'|'+nmV];if(!m){var gk=VASL_CTR_MAP['u:'+side+'|'+nmV],gs=gk&&VASL_CTR_IMG[gk];return gs?{src:gs,dim:u.s==='br'}:null;} /* v1193: S26以外のユニットはマップタブと同じカウンター画像(混乱面は暗く) */if(u.s==='br')return m[1]&&btVcImg(m[1])?{src:btVcImg(m[1])}:{src:btVcImg(m[0]),dim:true};return {src:btVcImg(m[0])};}
+  if(k==='latw'){var bz=String(u.nm).match(/^BAZ(4\d)/);if(bz&&VASL_CTR_IMG['am_amBAZ'+bz[1]])return {src:VASL_CTR_IMG['am_amBAZ'+bz[1]],dim:u.s==='br'};} /* v1368: 米バズーカの実カウンター */
   if(btIsSWK(k)){var nat=u.capFrom?btNat(u.capFrom):side;var t=k==='mg'?(I.type||'LMG'):(k==='dc'?'DC':(/^PSK/.test(u.nm)?'PSK':null));var r=t&&BT_VC.sw[nat]&&BT_VC.sw[nat][t];if(!r&&t){var vk={USA:{HMG:/8-16/.test(u.nm)?'u_am_amHMG50':null,MMG:'u_am_amMMG',FT:'u_am_amFT',DC:'u_am_amDC'}}[nat],vs=vk&&vk[t]&&VASL_CTR_IMG[vk[t]];if(vs)return {src:vs,dim:u.s==='br'};} /* v1359(ダルマ「S4 米SWカウンターが実カウンターで表示していない」): 米軍のSW(.50cal HMG・MMG・FT・DC)をVASLの実カウンターで */if(!r&&/^ATR/.test(u.nm)){var ak={SOV:'u_ru_ruATR',GER:'ge_geATR',POL:'u_al_alATR',ALM:'u_al_alATR'}[nat],as=ak&&VASL_CTR_IMG[ak];if(as)return {src:as,dim:u.s==='br'};} /* v1336(ダルマ「ATRもカウンター表示」) */if(!r){var gk2=VASL_CTR_MAP['u:'+nat+'|'+u.nm],gs2=gk2&&VASL_CTR_IMG[gk2];return gs2?{src:gs2,dim:u.s==='br'}:null;}return {src:btVcImg(r),dim:u.s==='br'};}
   if(k==='afv'||k==='wreck'){var nm=k==='wreck'?u.nm.replace(/^残骸\(|\)$/g,''):u.nm;var v=btAfvData(nm);var key=v&&VASL_CTR_MAP[v.id];var src=key&&VASL_CTR_IMG[key];return src?{src:src,dim:k==='wreck'}:null;}
   if(k==='gun'){var g=btGunData(u.nm);var key2=g&&VASL_CTR_MAP[g.id];var src2=key2&&VASL_CTR_IMG[key2];return src2?{src:src2,dim:u.s==='br'}:null;}
@@ -44742,14 +44773,14 @@ function btDockHTML(sty){ /* v1343(ダルマ「タスクバーの中央に表示
   if(sty==='A'){ // T1: 暗い箱+金の枠
     var box='display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:12px;background:#0d131c;border:'+BD+';height:38px;box-sizing:border-box;white-space:nowrap;';
     h=C('<div style="'+box+'">'+ic(badge,col)+'<span style="font-weight:900;font-size:17px;color:'+col+'">'+nm+'</span><span style="color:#556">｜</span><span style="font-weight:900;font-size:17px;color:'+gold+'">'+phN+T('フェイズ')+'</span><span style="font-size:10.5px;color:#9ab;line-height:1.1">'+phC+' '+phI+'<br>'+tt+'</span></div>')
-     +chip+(vc?'<div '+vOC+' style="'+btn+box+'"><span style="font-size:11px;color:#9ab">'+T('勝利')+'</span><b style="color:'+gc+';font-size:15px">'+T('独')+' '+vc.ger+(vc.exit?'VP':'')+'</b>'+(vc.exit?'':'<span style="color:#556">｜</span><b style="color:'+sc+';font-size:15px">'+T(String(BT_SIDE_NAME.SOV).charAt(0))+' '+vc.sov+'</b>')+'<span style="font-size:11px;color:#9ab">/'+vc.total+(vc.exit?'VP':'')+'</span></div>':'')
+     +chip+(vc?'<div '+vOC+' style="'+btn+box+'"><span style="font-size:11px;color:#9ab">'+T('勝利')+'</span><b style="color:'+gc+';font-size:15px">'+(vc.exit?vc.xl:T('独'))+' '+(vc.exit?vc.xv:vc.ger)+(vc.exit?'VP':'')+'</b>'+(vc.exit?'':'<span style="color:#556">｜</span><b style="color:'+sc+';font-size:15px">'+T(String(BT_SIDE_NAME.SOV).charAt(0))+' '+vc.sov+'</b>')+'<span style="font-size:11px;color:#9ab">/'+vc.total+(vc.exit?'VP':'')+'</span></div>':'')
      +'<div '+hOC+' style="'+btn+box+'color:'+gold+';font-weight:900;font-size:14px">📜 '+T('履歴')+'</div>'
      +'<div '+nOC+' style="'+btn+box+'border:2px solid '+gold+';height:40px;box-shadow:0 0 12px #ffd06055;'+dim+'"><span style="color:'+gold+';font-size:18px">▶</span><span style="font-weight:900;font-size:16px;color:'+gold+'">'+nxN+'</span><span style="color:#556">｜</span><span style="font-weight:900;font-size:13px;color:'+nxC+'">'+nxW+'</span><span style="font-size:10px;color:#9ab;line-height:1.1">'+T('次')+'<br>'+T('フェイズ')+'</span></div>';
   }else if(sty==='B'){ // T2: 色ブロックの組み合わせ
     var pair='display:flex;align-items:stretch;border-radius:12px;overflow:hidden;border:'+BD+';box-sizing:border-box;white-space:nowrap;';
     var natBg=function(c){return 'background:linear-gradient('+c+'aa,#141c28);';};
     h=C('<div style="'+pair+'height:40px"><div style="'+natBg(col)+'padding:0 12px;display:flex;flex-direction:column;justify-content:center;align-items:center"><span style="font-weight:900;font-size:15px;color:#fff">'+nm+T('の番')+'</span><span style="font-size:10px;color:#dfe8f4;opacity:.8">'+tt+'</span></div><div style="background:'+G+';padding:0 14px;display:flex;flex-direction:column;justify-content:center;color:#1b1500"><span style="font-weight:900;font-size:17px">'+phN+T('フェイズ')+'</span><span style="font-size:10px;font-weight:700;opacity:.7">'+phC+' '+phI+'</span></div></div>')
-     +chip+(vc?'<div '+vOC+' style="'+btn+pair+'height:38px"><div style="background:#1c2633;padding:0 8px;display:flex;align-items:center;font-size:11px;color:#9ab">'+T('勝利')+'</div><div style="'+natBg(gc)+'padding:0 10px;display:flex;align-items:center;font-weight:900;font-size:15px;color:#fff">'+T('独')+' '+vc.ger+(vc.exit?'VP<span style="font-size:10px;opacity:.7;margin-left:3px">/'+vc.total+'VP</span>':'')+'</div>'+(vc.exit?'':'<div style="'+natBg(sc)+'padding:0 10px;display:flex;align-items:center;font-weight:900;font-size:15px;color:#fff">'+T(String(BT_SIDE_NAME.SOV).charAt(0))+' '+vc.sov+'<span style="font-size:10px;opacity:.7;margin-left:3px">/'+vc.total+'</span></div>')+'</div>':'')
+     +chip+(vc?'<div '+vOC+' style="'+btn+pair+'height:38px"><div style="background:#1c2633;padding:0 8px;display:flex;align-items:center;font-size:11px;color:#9ab">'+T('勝利')+'</div><div style="'+natBg(gc)+'padding:0 10px;display:flex;align-items:center;font-weight:900;font-size:15px;color:#fff">'+(vc.exit?vc.xl:T('独'))+' '+(vc.exit?vc.xv:vc.ger)+(vc.exit?'VP<span style="font-size:10px;opacity:.7;margin-left:3px">/'+vc.total+'VP</span>':'')+'</div>'+(vc.exit?'':'<div style="'+natBg(sc)+'padding:0 10px;display:flex;align-items:center;font-weight:900;font-size:15px;color:#fff">'+T(String(BT_SIDE_NAME.SOV).charAt(0))+' '+vc.sov+'<span style="font-size:10px;opacity:.7;margin-left:3px">/'+vc.total+'</span></div>')+'</div>':'')
      +'<div '+hOC+' style="'+btn+pair+'height:38px"><div style="background:#1c2633;padding:0 8px;display:flex;align-items:center">📜</div><div style="background:#2a2f3a;padding:0 10px;display:flex;align-items:center;font-weight:900;font-size:14px;color:#e8eef4">'+T('履歴')+'</div></div>'
      +'<div '+nOC+' style="'+btn+pair+'height:40px;box-shadow:0 0 12px #ffd06055;'+dim+'"><div style="'+natBg(nxC)+'padding:0 10px;display:flex;flex-direction:column;justify-content:center;align-items:center"><span style="font-weight:900;font-size:13px;color:#fff">'+nxW+'</span><span style="font-size:9px;color:#dfe8f4;opacity:.8">'+T('次フェイズ')+'</span></div><div style="background:'+G+';padding:0 12px;display:flex;align-items:center;gap:6px;color:#1b1500"><span style="font-size:18px">▶</span><span style="font-weight:900;font-size:16px">'+nxN+'</span></div></div>';
   }else{ // T3: 丸アイコン+大きな文字+小さな説明
@@ -44769,7 +44800,8 @@ function btDockHTML(sty){ /* v1343(ダルマ「タスクバーの中央に表示
 var BT_DOCKMIN=false;
 /* v1361(ダルマ「勝利がわかりにくい」): 勝敗の理由と、終了の瞬間に出す結果の窓 */
 function btWinReason(short){var c=btCfg(),vc=null,wv=null;try{vc=btVicCount();wv=btCfgWinner();}catch(e){}if(!vc)return '';
-  if(vc.exit)return vc.ger>=vc.total?(short?T('盤外へ')+vc.ger+'VP退出':T('独軍が西端から盤外へ合計')+vc.ger+'VP'+T('を退出(')+vc.total+'VP'+T('以上で即勝利)')):(short?T('退出')+vc.ger+'/'+vc.total+'VP':T('独軍の退出は')+vc.ger+'VP'+T('で')+vc.total+'VP'+T('に届かず、最終ターン終了'));
+  if(vc.exit){var xn=T(BT_SIDE_NAME[vc.xs]),xe=T(btEdgeLbl(c.exitEdge));return vc.xv>=vc.total?(short?T('盤外へ')+vc.xv+'VP退出':xn+T('が')+xe+T('から盤外へ合計')+vc.xv+'VP'+T('を退出(')+vc.total+'VP'+T('以上で即勝利)')):(short?T('退出')+vc.xv+'/'+vc.total+'VP':xn+T('の退出は')+vc.xv+'VP'+T('で')+vc.total+'VP'+T('に届かず、最終ターン終了'));} /* v1368: 退出する軍・盤端をシナリオから */
+  if(vc.clear){var cs=c.vicSide,cn=btOpp(cs),left=cs==='GER'?vc.sov:vc.ger;return (short?'':T('最終ターン終了。'))+c.clearTxt+' '+T(BT_SIDE_NAME[cn])+T('が残る建物')+' '+left+(short?'':' ('+(left?T(BT_SIDE_NAME[cn])+T('の勝利'):T(BT_SIDE_NAME[cs])+T('の勝利'))+')');} /* v1368(S15) */
   return (short?'':T('最終ターン終了。'))+T('建物')+' '+T('独')+vc.ger+' / '+T(String(BT_SIDE_NAME.SOV).charAt(0))+vc.sov+(short?'':' ('+T('勝利に必要')+' '+vc.total+')')+(btCfgAfvTxt?btCfgAfvTxt():'');}
 function btWinModal(force){if(!BT.finished)return;if(!force&&BT.winShown)return;BT.winShown=true;try{btSave();}catch(e){}var o=document.getElementById('btWinM');if(o)o.remove();
   var wv=null;try{wv=btCfgWinner();}catch(e){}var wc=wv?(BT_SIDE_COL[wv]||'#ffd060'):'#ffd060';
@@ -44827,7 +44859,7 @@ function btFullBars(on){
   // 上: フェイズ
   var th='';
   if(!BT.started)th+='<span style="font-size:14px;font-weight:900;color:#ffd060;padding:0 6px">'+T('準備(初期配置)')+'</span>'+(window.NM_BT_SUPOP===false?'<button class="nb go" onclick="BtMapFull(null)">'+T('配置の画面へ')+' ▸</button>':''); /* v466 / v1216(ダルマ「実施」): 準備のポップアップがある時は「配置の画面へ」を出さない(開くのは左上の札の▸開く) */
-  else if(BT.finished){var wv=null,vc0=null;try{wv=btCfgWinner();vc0=btVicCount();}catch(e){}th+='<span style="font-size:14px;font-weight:900;color:#ffd060;padding:0 6px">'+T('ゲーム終了')+(wv?' — '+T(BT_SIDE_NAME[wv]+'の勝利'):'')+'</span>'+(vc0?'<span style="font-size:12px;color:#c8d4e0">'+(vc0.exit?T('盤外へ退出')+' '+T('独軍')+' '+vc0.ger+'VP / '+vc0.total+'VP':T('建物の支配')+' '+T('独軍')+vc0.ger+' / '+T(BT_SIDE_NAME.SOV)+vc0.sov+btCfgAfvTxt())+'</span>':'')+'<button class="nb" style="margin-left:8px" onclick="BtResetAsk()">'+T('新しい対戦')+'</button>';} /* v1220: 全画面の終了表示に勝敗・支配・新しい対戦 */
+  else if(BT.finished){var wv=null,vc0=null;try{wv=btCfgWinner();vc0=btVicCount();}catch(e){}th+='<span style="font-size:14px;font-weight:900;color:#ffd060;padding:0 6px">'+T('ゲーム終了')+(wv?' — '+T(BT_SIDE_NAME[wv]+'の勝利'):'')+'</span>'+(vc0?'<span style="font-size:12px;color:#c8d4e0">'+(vc0.exit?T('盤外へ退出')+' '+T(BT_SIDE_NAME[vc0.xs]||'独軍')+' '+vc0.xv+'VP / '+vc0.total+'VP':T('建物の支配')+' '+T('独軍')+vc0.ger+' / '+T(BT_SIDE_NAME.SOV)+vc0.sov+btCfgAfvTxt())+'</span>':'')+'<button class="nb" style="margin-left:8px" onclick="BtResetAsk()">'+T('新しい対戦')+'</button>';} /* v1220: 全画面の終了表示に勝敗・支配・新しい対戦 */
   else{var canNext=!(BT.mv&&BT.app&&BT.mv.side===BT.app);th+=btPhStepSpans()+'<button class="nb go'+(canNext?'':' dim')+'" onclick="BtNext()">'+T('次へ')+' ▶</button>';
     if(BT.app&&btSideNow()===BT.app)th+='<span style="font-size:12px;color:#c8a032;padding:0 4px">'+T('アプリの番')+'</span>';
     th+='<span style="width:6px"></span>'+btFtActHTML();
@@ -44846,7 +44878,7 @@ function btFullBars(on){
   if(topInfo&&!wantDock){var L0=(BT.log||[]),la0=L0.length?L0[L0.length-1]:null,lt=la0?[].concat(la0).map(function(x){return String(x).replace(/<[^>]*>/g,'');}).slice(-2).join(' ／ ').replace(/[<>&]/g,''):T('記録はまだありません');
     var vc=null,nd=null;try{vc=btVicCount();nd=btCfgNeed();}catch(e){}
     th+='<span style="width:8px;flex:0 0 auto"></span>'+btCmdMinChip()
-      +(vc?'<span class="tinf" title="'+T('建物の支配')+'" onclick="BtTopVic()" style="flex:0 0 auto;display:flex;align-items:center;gap:5px;height:30px;padding:0 9px;border:1px solid #2c3644;border-radius:6px;background:#141a22;font-size:12.5px;font-weight:800;white-space:nowrap;cursor:pointer"><span style="color:#ffd24a">'+btVicIc(15)+'</span><span style="color:'+BT_SIDE_COL.GER+'">'+T('独')+vc.ger+(vc.exit?'VP':'')+'</span>'+(vc.exit?'':'<span style="color:'+BT_SIDE_COL.SOV+'">'+T(String(BT_SIDE_NAME.SOV).charAt(0))+vc.sov+'</span>')+'<span style="color:#8899aa">/'+vc.total+(vc.exit?'VP':'')+'</span><span style="color:#8899aa;font-weight:600">T'+BT.turn+'/'+btMaxTurn()+'</span></span>':'')
+      +(vc?'<span class="tinf" title="'+T('建物の支配')+'" onclick="BtTopVic()" style="flex:0 0 auto;display:flex;align-items:center;gap:5px;height:30px;padding:0 9px;border:1px solid #2c3644;border-radius:6px;background:#141a22;font-size:12.5px;font-weight:800;white-space:nowrap;cursor:pointer"><span style="color:#ffd24a">'+btVicIc(15)+'</span><span style="color:'+BT_SIDE_COL.GER+'">'+(vc.exit?vc.xl:T('独'))+(vc.exit?vc.xv:vc.ger)+(vc.exit?'VP':'')+'</span>'+(vc.exit?'':'<span style="color:'+BT_SIDE_COL.SOV+'">'+T(String(BT_SIDE_NAME.SOV).charAt(0))+vc.sov+'</span>')+'<span style="color:#8899aa">/'+vc.total+(vc.exit?'VP':'')+'</span><span style="color:#8899aa;font-weight:600">T'+BT.turn+'/'+btMaxTurn()+'</span></span>':'')
       +'<span onclick="BtTopLog()" title="'+T('戦闘記録を開く')+'" style="flex:1 1 0;min-width:0;display:flex;align-items:center;gap:8px;height:30px;padding:0 10px;border:1px solid #2c3644;border-radius:6px;background:#141a22;cursor:pointer;overflow:hidden"><span style="flex:0 0 auto;font-size:11.5px;color:#8899aa">'+T('最後の記録')+'</span><span style="flex:1 1 0;min-width:0;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+lt+'</span><span style="flex:0 0 auto;color:#8899aa">▾</span></span>';}
   if(th!==BT_FB_H.t||t.__fbh!==th){t.innerHTML=th;BT_FB_H.t=th;t.__fbh=th;appVerFit();} /* v1322(ダルマ報告「上バー バグ」): 下バーの形を切り替えた直後、キャッシュ(BT_FB_H)が空に戻るため、上の帯に前の中身が残っていた→実際の中身と比べて更新 */
   t.style.display='';t.classList.toggle('dkSp',wantDock); /* v1311(ダルマ報告「上の一部が見えない」): 下バーの時も上に、iPadのステータスバー分(安全領域)だけの空きを残す。地図・左上の札がステータスバーの下に隠れていた */
