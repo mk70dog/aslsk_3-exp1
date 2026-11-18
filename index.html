@@ -29795,7 +29795,7 @@ var BT_SCFG={
     ent:[{id:'g1',side:'GER',turn:1,off:'S',lbl:'第26国民擲弾兵師団 第77連隊第II大隊(東端)'}],
     vic:'exit',vicSide:'GER',exitVP:10,exitEdge:'N',bl:'vic',ssr:{smk:{SOV:/^7-4-7/},snow:1},
     fix:{SOV:[['yQ6',[/^10-2/,1],[/^HMG/,1],[/^7-4-7/,1]],['yU6',[/^6-6-7/,1],[/^8-1/,1],[/^MMG/,1]],['yN6',[/^7-4-7/,1],[/^FT/,1]],['yK6',[/^6-6-6/,1],[/^8-0/,1],[/^MMG/,1]],['yW6',[/^6-6-6/,1]],['yM6',[/^5-4-6/,1]],['yL7',[/^5-4-6/,1],[/^FT/,1]],['yR7',[/^5-4-6/,1]]]},
-    aiw:{exitDef:1}}, /* v1352(ダルマ「前で撃って徐々に下がって出口付近で待ち伏せ」): 米は前(ヘクス番号6〜7)に置き、独の先頭より2列西に下がり続け、最後は出口(列1〜3)で待ち伏せ */
+    aiw:{exitDef:1,exitPost:{yQ6:'yI2',yU6:'yJ1',yN6:'yH3',yK6:'yL3',yW6:'yU3',yM6:'yP1',yL7:'yK2',yR7:'yZ1'},postTurn:4}}, /* v1364(ダルマ「s4 回す」): 米は撃ちながら下がり、I1の南の角(I2・J1・K2・H3・L3)と東の見張り(P1・U3・Z1)の持ち場へ。v1352(ダルマ「前で撃って徐々に下がって出口付近で待ち伏せ」): 米は前(ヘクス番号6〜7)に置き、独の先頭より2列西に下がり続け、最後は出口(列1〜3)で待ち伏せ */
   /* v1224: S25 Early Battles。ソ連=ボードuの番号7以下/ボードvに設置、独=T1に南端から進入。勝利: 独がボードvの建物4棟以上を支配し、独AFV2両以上が走行可能。SSR: BT-7(無線機なし)は各MPhにDR≦8でないとヘクスから出られない */
   S25:{grp:function(o){return o.side==='GER'?'g1':'setup';},
     zone:function(o,N){if(N.b==='v')return true;if(N.b==='u'){var k=btHexNum(N);return k!=null&&k<=7;}return false;},
@@ -31708,6 +31708,10 @@ function btAIPlanMoves0(side){
     var sv0=0;btInf(s).forEach(function(u){var k=btI(u,side).kind;if(k==='mmc'||k==='smc')sv0+=btUVal(side,u);});
     var rk0=BT_AIW.riskStk?Math.pow(Math.max(1,sv0),BT_AIW.riskStk):1;
     var Fs=asg[s.id]||F;
+    /* v1364(S4 米の作戦): 持ち場のあるスタックは、独の先頭が近づく(帯が持ち場の行+3以内)まで帯で撃ちながら下がり、その後は持ち場へ行って動かない */
+    if(s.post!=null&&btAIW().exitPost){var PR=btHexNum(BTG.nodes[s.post]),gm=99;BT.stacks.forEach(function(x){if(x.side===side||x.n==null||x.n<0||!btInf(x).length)return;var k=btHexNum(BTG.nodes[x.n]);if(k!=null)gm=Math.min(gm,k);});
+      var trP=gm>=99?6:Math.max(2,gm-2);
+      if(trP<=PR+3||BT.turn>=(btAIW().postTurn||4)){if(here===s.post){return;}var gp={};gp[s.post]=20;if(!btEnemyAt(s.post,side))Fs=btGoalField(side,gp).map(function(v){return v*W.goal;});}}
     var base0=here!=null?(Fs[here]+BTG.nodes[here].tem*0.9-btThreatAt(side,here,false,false)*W.risk*rk0):-99;
     var variants=[{uids:allIds,stay:base0+hold}];
     // 建物を保持しつつ前進: 最も弱いMMC(HS優先)を守備に残し、残りが動く
@@ -32050,6 +32054,7 @@ function btAppSetupFix(side,obs,F){
       var kd=btI(r.u,side).kind;if(kd==='afv'||kd==='gun'){var f=btFaceToward(90);r.u.vca=f;r.u.tca=f;}
       log.push(o.name+'→'+row[0]);}});});
   BT.stacks.forEach(function(x){if(x.side===side)btGiveSW(x);});
+  var EP=btAIW().exitPost;if(EP){BT.stacks.forEach(function(x){if(x.side!==side||x.n==null||x.n<0)return;var to=EP[BTG.nodes[x.n].nm];if(!to)return;var m=BTG.nodes.findIndex(function(N){return N.nm===to;});if(m>=0)x.post=m;});} /* v1364: S4 米の持ち場(下がりきった後のヘクス) */
   btCrewWithGun(side,log);BT.setupLog=log;}
 function BtAppSetup(){
   if(!btActive()||!BT.app)return;
