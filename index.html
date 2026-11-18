@@ -45740,7 +45740,7 @@ function btAppBtnHTML(id,tile){
   function wrap(){var f=window.ASL_SK3_EX_CARD_BTN;if(typeof f!=='function'||f.__app)return false;
     var w=function(id,tile){var ap=btAppBtnHTML(id,tile),og=f.apply(this,arguments);if(!ap)return og; /* v1369(ダルマ「APP ORIG ボタンスペースを縮める」): 2つを1つの箱にまとめ、間を6pxに */
       ap=ap.replace('position:absolute;right:78px;bottom:6px;','');og=String(og).replace('position:absolute;right:6px;bottom:6px;','');
-      var sty=window.NM_APPBTN_STY||'B',gap={A:2,B:0,C:2}[sty];if(gap==null)gap=6;
+      var sty=window.NM_APPBTN_STY||'C',gap={A:2,B:0,C:2}[sty];if(gap==null)gap=6;
       return '<span class="aslBtnPair aslBtnPair'+sty+'" style="'+(tile?'position:absolute;right:6px;bottom:6px;':'margin-left:auto;')+'display:inline-flex;gap:'+gap+'px;align-items:center;flex-shrink:0">'+ap+og+'</span>';};w.__app=1;
     try{var st=document.createElement('style');st.textContent= /* A=間2px / B=くっつけて1つの横長ボタン(間に仕切り線) / C=ボタン自体を小さく(左右の余白を詰める)+間2px */
       'html:root #nmTvBody .aslBtnPairB .aslAppBtn{border-top-right-radius:0!important;border-bottom-right-radius:0!important;border-right:1px solid #050506!important}'
