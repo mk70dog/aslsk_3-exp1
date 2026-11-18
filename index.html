@@ -29399,7 +29399,7 @@ function losEnemyFacingCovers(eh,origin,target){
 //       [C]アプリの判断(各フェイズの行動) / [D]画面(帯・地図の表示・タップ操作)
 // 規則の根拠: ASLSK4 Rules(2021、SK1〜3の規則書より優先と明記)。S26のSSRとOBはSCNのデータに従う。
 // 未対応(段階3c以降): AFV(移動・主砲・機銃・対戦車)、砲、PSK、煙幕、狙撃兵、英雄・指揮官誕生。
-var BT_SCN={S26:1,S2:1,S6:1,S24:1,S25:1,S4:1,S14:1,S15:1,S51:1,S43:1}; /* v1372: S43 */ /* v1370: S51 */ /* v1368: S14・S15 */ /* v1224: S25 追加 */ /* v1352: S4 追加 */ /* v1193(ダルマ「S2 S6 S24 を実施」): S2・S6・S24 も対戦モードに。シナリオごとの違いは BT_SCFG */
+var BT_SCN={S26:1,S2:1,S6:1,S24:1,S25:1,S4:1,S14:1,S15:1,S51:1,S43:1,S45:1}; /* v1373: S45 */ /* v1372: S43 */ /* v1370: S51 */ /* v1368: S14・S15 */ /* v1224: S25 追加 */ /* v1352: S4 追加 */ /* v1193(ダルマ「S2 S6 S24 を実施」): S2・S6・S24 も対戦モードに。シナリオごとの違いは BT_SCFG */
 var BT_PHASES=[['RPh','回復'],['PFPh','準備射撃'],['MPh','移動'],['DFPh','防御射撃'],['AFPh','前進射撃'],['RtPh','潰走'],['APh','突撃'],['CCPh','白兵戦']];
 var BT_SIDE_COL={GER:'#7f9bb8',SOV:'#c0583a'};
 var BT_SIDE_NAME={GER:'独軍',SOV:'ソ連'};
@@ -29676,6 +29676,7 @@ function btInfo0(side,name){
   if(/^PSK|^PF\b|^BAZ|^PIAT|^ATR/.test(name))return {kind:'latw',pp:/PSK/.test(name)?2:1,val:0.3};
   if(/PTP|対戦車砲|砲\b|Gun/.test(name)&&!/\d-\d-\d/.test(name))return {kind:'gun',val:0.8};
   if(/T-34|IS-2|パンター|ティーガー|IV号|PzKpfw|KT|Panther|Tiger/.test(name)||((typeof btAfvData==='function')&&btAfvData(name))){var av=(typeof btAfvData==='function')?btAfvData(name):null; /* v1193: 車両データにあれば車両(シャーマンIII・III号N) */return {kind:'afv',val:(av&&BT_VAL_AFV[av.id])||2.5};}
+  var gL=btGunData(name);if(gL&&gL.gsType==='MTR'&&(gL.cal||99)<=60)return {kind:'lmtr',pp:gL.pp||1,val:0.5}; /* v1373: 軽迫撃砲(60mm以下)は SW(4.5)。分隊/HS が撃つ */
   if(btGunData(name))return {kind:'gun',val:0.8}; /* v1224: 迫撃砲・歩兵砲(S25)も砲として扱う */
   return {kind:'other',val:0.1};
 }
@@ -29689,8 +29690,8 @@ function btI(u,side){
   return btInfo(side,u.nm);
 }
 function btIsInfK(k){return k==='mmc'||k==='smc';}
-function btIsSWK(k){return k==='mg'||k==='dc'||k==='latw';}
-function btMkUnit(key,name,side){var u={id:'u'+(++BT.useq),k:key,nm:name,s:'ok',dm:0,wd:0,fire:'',mv:0,cx:0,own:null};var K=side?btInfo(side,name).kind:null;if(K==='afv'||K==='gun')btVInit(u,side,btFaceToward(side==='SOV'?0:180));return u;}
+function btIsSWK(k){return k==='mg'||k==='dc'||k==='latw'||k==='lmtr';}
+function btMkUnit(key,name,side){var u={id:'u'+(++BT.useq),k:key,nm:name,s:'ok',dm:0,wd:0,fire:'',mv:0,cx:0,own:null};var K=side?btInfo(side,name).kind:null;if(K==='afv'||K==='gun'||K==='lmtr')btVInit(u,side,btFaceToward(side==='SOV'?0:180));return u;}
 // ---------- [B2] スタック ----------
 function btStacksAtN(n){return BT.stacks.filter(function(s){return s.n===n;});}
 function btStackSideAt(n,side){return BT.stacks.filter(function(s){return s.n===n&&s.side===side&&!(BT.mv&&BT.mv.sid===s.id);})[0]||null;}
@@ -29817,6 +29818,17 @@ var BT_SCFG={
     fix:{GER:[['sH4',[/^5-4-8/,1],[/^9-1/,1],[/^HMG/,1]],['sK4',[/^4-4-7/,1]],['sP5',[/^5-4-8/,1],[/^8-1/,1],[/^MMG/,1]],['sN7',[/^5-4-8/,1],[/^LMG/,1]],['sP8',[/^4-4-7/,1]],['sK7',[/^4-4-7/,1],[/^8-0/,1]],['sJ9',[/^5-4-8/,1],[/^LMG/,1]],['sM9',[/^4-4-7/,1]],['rP5',[/^5-4-8/,1],[/^7-0/,1]],['sF6',[/^4-4-7/,1]]],
       SOV:[['sR7',[/^6-6-7/,2],[/^9-1/,1],[/^MMG/,1]],['sS7',[/^6-6-7/,2],[/^8-1/,1],[/^MMG/,1]],['sR8',[/^6-6-6/,2],[/^8-1/,1],[/^MMG/,1]],['sR9',[/^6-6-6/,2],[/^DC/,1]],['sT6',[/^6-6-6/,2]],['sU6',[/^6-6-6/,2],[/^7-0/,1],[/^DC/,1]],['sV6',[/^6-6-6/,2]],['sT7',[/^6-6-6/,1]]]},
     aiw:{fort:1,postMode:'fall',postTurn:1,posts:{GER:{sP5:'rP4',sK4:'rQ6'}},entPost:{e3:'rO4'}}}, /* v1371(ダルマ「A+B」): sP5・sK4 は T1 から rP5 の隣の遮蔽へ、T3 増援は rO4 へ。ほかは籠城 */
+  /* v1373(ダルマ「全て本体に入れてから調整」): S45 Contested Settlement。盤q の K〜GG列。スロバキア軍(1つ目の軍 natA='SLO'、内部は 'GER')=盤上に設置(SSR2: 分隊は CC列とその北に置けない)、
+     波軍(natB='POL'、内部は 'SOV')=T1 北端から進入・T2 増援は西端か東端の、先に記録した1ヘクスから2ヘクス以内(SSR1)。波軍が先攻。勝利: 終了時、波軍が複数ヘクスの建物を1つ以上支配 */
+  S45:{natA:'SLO',nameA:'スロバキア軍',colA:'#4a72c9',natB:'POL',nameB:'波軍',colB:'#c94f4f',
+    grp:function(o){return o.side==='GER'?'setup':(o.gi===1?'e2':'e1');},
+    zone:function(o,N){if(N.b!=='q')return false;var m=N.nm.match(/^q([A-Z]+)(\d+)$/);if(!m)return false;if(btColIdx(m[1])>=btColIdx('CC')&&!/\(HS\)|乗員/.test(o.name)&&btInfo('GER',o.name).kind==='mmc')return false;return true;},
+    zoneTxt:function(){return '盤q のK〜GG列(分隊は CC列とその北に置けない・そこに置ける HS は4個まで)';},
+    ent:[{id:'e1',side:'SOV',turn:1,off:'N',lbl:'波軍(T1 北端)'},{id:'e2',side:'SOV',turn:2,off:'E',pick:{def:'qQ10',r:2},board:'q',lbl:'波軍増援(T2 西端か東端、記録したヘクスから2ヘクス以内)'}],
+    vic:'n',vicN:1,vicSide:'SOV',bl:'vic',
+    fix:{GER:[['qQ5',[/^4-4-7/,1],[/^8-1/,1],[/^MMG/,1]],['qR5',[/^4-4-7/,1],[/^LMG/,1]],['qQ6',[/^2-4-7/,1]],['qP7',[/^4-4-7/,1],[/^MMG/,1],[/^7-0/,1]],['qO7',[/^2-4-7/,1]],
+      ['qR2',[/^4-4-7/,1],[/^LMG/,1]],['qR1',[/^2-4-7/,1]],['qS9',[/^4-4-7/,1],[/^7-0/,1]],['qR9',[/^2-4-7/,1]],['qT6',[/^4-4-7/,1]],['qT3',[/^2-4-7/,1]],['qT8',[/^2-4-7/,1]],['qN6',[/^81mm/,1],[/^2-2-7/,1]]]},
+    aiw:{fort:1}},
   /* v1372(ダルマ「全て本体に入れてから調整」): S43 Clearing Carentan。盤z の A〜P列。独=ヘクス番号7以下に先に設置、米=8以上、米が先攻。
      SSR1: 独は建物ヘクスの MMC 2個(同じヘクスの SMC・SW も)を隠蔽設置(HIP)。SSR2: 独は事前に2ヘクスを登録、最大3回 PFPh/DFPh の最初に砲撃(着弾ヘクスと周り6ヘクスに IFT 16FP の迫撃砲攻撃)。
      勝利: 終了時、D〜J列・ヘクス番号5以下の建物(vicHexes 18ヘクス)を米が全部支配 */
@@ -29858,9 +29870,9 @@ var BT_SCFG={
     fix:{SOV:[['vL7',[/^BT-7/,1],[/^4-4-7/,3],[/^ATR/,2]],['vM7',[/^KV-2/,1],[/^4-4-7/,3],[/^MMG/,1],[/^LMG/,2],[/^8-0/,1]],['vP7',[/^76\.2mm/,1],[/^2-2-8/,1],[/^4-2-6/,2]],['vF7',[/^4-4-7/,2],[/^7-0/,1]],['vG7',[/^50mm/,1],[/^2-3-7/,1]]]}, /* v1351(ダルマ「main に入れる」): ソ連=配置固定 L7:BT-7・4-4-7×3・ATR×2 / M7:KV-2・4-4-7×3・MMG・LMG×2・8-0 / P7:歩兵砲・乗員・4-2-6×2 / F7:4-4-7×2・7-0 / G7:迫撃砲・2-3-7、守備側は動かない(fort)。独=KV-2狙い(ccAfv・afvHunt)・空き家の建物を取る(emptyGo)。自己対戦50戦 独勝56% */ /* v1346(ダルマ「実施」): 自己対戦40戦ずつ 独勝 42%→30%。守備側(ソ連)は1スタックだけの自軍の建物を空けない */
     note:'勝利には独AFV2両以上が走行可能であること。BT-7は無線機なし(各MPhにDR≦8でないとヘクスから出られない)'}
 };
-function btCfg(){var id=btScId();var c=id&&id!=='S26'?BT_SCFG[id]||null:null;var nb=c&&c.natB;BT_SIDE_NAME.SOV=nb?(c.nameB||nb):'ソ連';BT_SIDE_COL.SOV=nb&&c.colB?c.colB:'#c0583a';return c;}
+function btCfg(){var id=btScId();var c=id&&id!=='S26'?BT_SCFG[id]||null:null;var nb=c&&c.natB;BT_SIDE_NAME.SOV=nb?(c.nameB||nb):'ソ連';BT_SIDE_COL.SOV=nb&&c.colB?c.colB:'#c0583a';var na=c&&c.natA;BT_SIDE_NAME.GER=na?(c.nameA||na):'独軍';BT_SIDE_COL.GER=na&&c.colA?c.colA:'#7f9bb8';return c;}
 /* v1352(S4): 対戦モードの2つ目の軍(内部の札は 'SOV')の国籍。BT_SCFG[id].natB(例 'USA')があればユニットの性能・カウンター画像・名前をその国籍で引く */
-function btNat(side){if(side!=='SOV')return side;var id=btScId();var c=id&&id!=='S26'?BT_SCFG[id]:null;return (c&&c.natB)||'SOV';}
+function btNat(side){var id=btScId();var c=id&&id!=='S26'?BT_SCFG[id]:null;if(side==='GER')return (c&&c.natA)||'GER';if(side!=='SOV')return side;return (c&&c.natB)||'SOV';} /* v1373: 1つ目の軍の国籍 natA(S45 スロバキア) */
 function btSsr(k,side,name){var c=btCfg(),r=c&&c.ssr&&c.ssr[k];if(!r)return null;if(k==='camo')return r===side;var v=r[side];if(v==null)return null;if(v instanceof RegExp)return v.test(name)?1:null;return v;}
 // S2: A9-K4-P4 のヘクスグレイン。戻り値 >0=南 <0=北 0=線の上(どちらも置けない)
 var BT_S2L=null;
@@ -30020,6 +30032,7 @@ function BtHipToggle(){var s=BT.sel&&btStackById(BT.sel);var c=btCfg();if(!s||!c
   var m=btInf(s).filter(function(u){return btI(u,s.side).kind==='mmc';}).length;if(!m){btToast('MMC のいるスタックだけ');return;}
   if(btHipCount(s.side)+m>c.hip.max){btToast('隠蔽できる MMC は'+c.hip.max+'個まで');return;}s.hip=1;btSave();Draw();}
 function btHipSetupHTML(btnFn){var c=btCfg();if(!c)return '';var hu=BT.app?btOpp(BT.app):null,h='';
+  (c.ent||[]).forEach(function(e){if(!e.pick||(hu&&hu!==e.side))return;h+='<div style="margin-top:4px">'+btnFn(T('増援の進入ヘクスを記録'),"BtEntPickStart('"+e.id+"')")+' <span style="color:#8899aa;font-size:11px">'+T('T'+e.turn+' 西端か東端・2ヘクス以内')+': '+((BT.entPick&&BT.entPick[e.id])||e.pick.def).replace(/^[a-z]/,'')+(BT.entPickMode?' '+T('(盤端のヘクスをタップ)'):'')+'</span></div>';});
   if(c.hip&&(!hu||hu===c.hip.side)){h+='<div style="margin-top:4px">'+btnFn(T('選んだスタックを隠蔽/解除'),'BtHipToggle()')+' <span style="color:#8899aa;font-size:11px">'+T('建物ヘクスの MMC '+c.hip.max+'個まで(同じヘクスの SMC・SW も)')+' '+btHipCount(c.hip.side)+'/'+c.hip.max+'</span></div>';}
   if(c.art&&(!hu||hu===c.art.side)){var R=(BT.artReg||c.art.reg).map(function(h0){return h0.replace(/^[a-z]/,'');}).join('・');h+='<div style="margin-top:4px">'+btnFn(T('砲撃の登録ヘクスを選ぶ'),'BtArtRegStart()')+' <span style="color:#8899aa;font-size:11px">'+T('登録')+': '+R+(BT.artPick?' '+T('(地図のヘクスをタップ、あと')+(2-BT.artPick.length)+')':'')+'</span></div>';}
   return h;}
@@ -30052,6 +30065,11 @@ function btArtPhase(id,att){var c=btCfg();if(!c||!c.art||(BT.artUsed||0)>=c.art.
   if(!((id==='PFPh'&&att===sd)||(id==='DFPh'&&att!==sd)))return;
   if(!window.BT_SELFPLAY&&BT.app&&btHuman()===sd){btArtAsk();return;}
   var lg=[];btArtAI(lg);if(lg.length)btLog(lg);}
+function btEntPickFix(){var c=btCfg();if(!c||!c.ent||!BTG)return;c.ent.forEach(function(e){if(!e.pick)return;var nm=(BT.entPick&&BT.entPick[e.id])||e.pick.def,n=BTG.nodes.findIndex(function(N){return N.nm===nm;});if(n<0)return;var N=BTG.nodes[n];e.off=N.eE?'E':N.eW?'W':N.eN?'N':'S';
+  e.hexes=BTG.nodes.filter(function(M){return btOnEdge(M.i,e.off)&&btDist(M.i,n)<=e.pick.r;}).map(function(M){return M.nm.replace(/^[a-z]+/,'');});});} /* v1373(S45 SSR1): 記録したヘクスから進入の盤端と範囲を決める */
+function BtEntPickStart(id){BT.entPickMode=id;btToast('増援の進入ヘクス(西端か東端)をタップ');Draw();}
+function btEntPickTap(n){var id=BT.entPickMode;BT.entPickMode=null;var N=BTG.nodes[n];var c=btCfg(),e=c.ent.filter(function(x){return x.id===id;})[0];if(!e||!(N.eE||N.eW)){btToast('西端か東端のヘクスを選んでください');Draw();return;}
+  BT.entPick=BT.entPick||{};BT.entPick[id]=N.nm;btEntPickFix();BT.stacks.forEach(function(x){if(x.side===e.side&&x.due===e.turn&&(x.n==null||x.n<0))x.off=e.off;});btToast('記録: '+N.nm);btSave();Draw();}
 function btEntHexSet(s){var c=btCfg();if(!c||!c.ent||!s)return null;var L=c.ent.filter(function(e){return e.hexes&&e.side===s.side&&e.off===s.off&&(s.due==null||e.turn===s.due);});if(!L.length)return null;
   var m={};L.forEach(function(e){e.hexes.forEach(function(h){var cr=losHexNameToColRow(h),i=btNodeOf(e.board,cr.col,cr.row);if(i!=null)m[i]=1;});});return m;}
 function btEntHit(s,N){if(!btEdgeHit(s.off,s.off2,N))return false;var H=btEntHexSet(s);return !H||!!H[N.i];}
@@ -30079,7 +30097,7 @@ function btCfgWrecks(){var c=btCfg();if(!c||!c.wrecks)return;c.wrecks.forEach(fu
   if(BT.stacks.some(function(x){return x.n===n&&x.u.some(btIsWreck);}))return;BT.stacks.push({id:'s'+(++BT.seq),side:'SOV',n:n,u:[{id:'u'+(++BT.seq),nm:'残骸(M4A1)',s:'ok',wreck:1}],mel:false,wreckOnly:1});});}
 function btInitCtl(){
   BT.ctl={};
-  if(btCfg()){btCfgInitCtl();btCfgWrecks();return;} /* v1193 */
+  if(btCfg()){try{btEntPickFix();}catch(e){}btCfgInitCtl();btCfgWrecks();return;} /* v1193 */
   btBldgs().forEach(function(bl){
     var allIn=bl.hexes.every(function(h){var c=losHexNameToColRow(h);return BT_S26_SOV_A.boards.indexOf(bl.board)>=0&&c.col<=BT_S26_SOV_A.maxCol;});
     BT.ctl[bl.id]=allIn?'SOV':null; // 初期配置範囲内の建物は開始時にソ連の支配
@@ -32711,6 +32729,7 @@ function btMapTap0(boardId,col,row){
   if(btLPTap(n))return; // v286: 長押しでスタックの詳細
   if(BT.pfMode){btPFTap(n);return;} /* v1371 */
   if(BT.artPick){btArtRegTap(n);return;} /* v1372 */
+  if(BT.entPickMode){btEntPickTap(n);return;} /* v1373 */
   if(BT_RT||BT_RTARM){btRtTap(n);return;} /* v1338 */
   if(BT.sideView){BT.sideView=false;try{nmFtActFill();}catch(e){}BtRmShow('view',n);return;} /* sample-btside: ツールバーの「見える範囲」→タップしたヘクスから */
   if(BT_RCLK){btLosRTap(n);return;} // v307: 右クリックでLOS
@@ -33795,7 +33814,7 @@ function btAfvData(name){
   var best=null;AFV_DATA.forEach(function(v){if(String(name).indexOf(v.lbl)===0&&(!best||v.lbl.length>best.lbl.length))best=v;});
   return best;
 }
-var BT_GUN_ALIAS={'88mm FlaK(AA)':'8.8cm FlaK18 AA','57mm AT Gun':'57mm AT砲','MTR81*[2-80]':'8cm GrW34迫撃砲'}; /* v1368: S14・S15 のOB名 */
+var BT_GUN_ALIAS={'81mm迫撃砲vz.36':'80mm迫撃砲vz.36','46mm迫撃砲(':'46mm迫撃砲wz.36','88mm FlaK(AA)':'8.8cm FlaK18 AA','57mm AT Gun':'57mm AT砲','MTR81*[2-80]':'8cm GrW34迫撃砲'}; /* v1368: S14・S15 のOB名 */
 function btGunData(name){
   var best=null;for(var ak in BT_GUN_ALIAS){if(String(name).indexOf(ak)===0){name=BT_GUN_ALIAS[ak];break;}}GUN_DATA.forEach(function(g){if(String(name).indexOf(g.lbl)===0&&(!best||g.lbl.length>best.lbl.length))best=g;});
   return best;
@@ -34008,6 +34027,7 @@ function btOrdWeapons(s){
     var I=btI(u,s.side);
     if(I.kind==='afv'&&!btIsWreck(u)){var v=btAfvData(u.nm);if(v&&v.ma&&u.maS==='ok'){var gd=afvToGunData(v);if(gd)out.push({kind:'MA',s:s,u:u,v:v,gd:gd});}}
     if(I.kind==='gun'){var g=btGunData(u.nm);var crew=s.u.filter(function(x){return x.id===u.own&&btGO(x);})[0]||btInf(s).filter(function(x){return btGO(x)&&btI(x,s.side).kind==='mmc';})[0];if(g&&crew&&u.s!=='br')out.push({kind:'GUN',s:s,u:u,gd:g,crew:crew});}
+    if(I.kind==='lmtr'&&u.s!=='br'){var gL=btGunData(u.nm),oL=btOwner(s,u);if(!(oL&&btGO(oL)&&btI(oL,s.side).kind==='mmc'))oL=btInf(s).filter(function(x){return btGO(x)&&btI(x,s.side).kind==='mmc'&&!(x.fire&&x.fire!=='R');})[0];if(gL&&oL){if(u.vca==null)btVInit(u,s.side,btFaceToward(s.side==='SOV'?0:180));out.push({kind:'GUN',s:s,u:u,gd:Object.assign({},gL,{mount360:true}),crew:oL,lmtr:1});}} /* v1373: 軽迫撃砲(SW) */
     if(/^PSK/.test(u.nm)&&u.s!=='br'){var o=btOwner(s,u);if(o&&btGO(o)&&btI(o,s.side).kind==='mmc')out.push({kind:'PSK',s:s,u:u,crew:o,lw:LATW_DATA.filter(function(l){return l.id==='psk';})[0]});}
   });
   return out;
