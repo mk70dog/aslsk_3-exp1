@@ -29807,8 +29807,8 @@ var BT_SCFG={
     zoneTxt:function(){return 'ボードwのヘクス番号7以下(A〜P列)';},
     ent:[{id:'e1',side:'SOV',turn:1,off:'S',board:'w',hexes:['E10','F10','G10','H10'],onAfter:1,lbl:'第506落下傘歩兵連隊 第1大隊(北端E10〜H10・T1以降)'},{id:'e2',side:'SOV',turn:2,off:'S',board:'w',hexes:['M10','N10','O10','P10'],onAfter:1,lbl:'第2大隊(北端M10〜P10・T2以降)'}],
     vic:'exit',vicSide:'SOV',exitVP:7,exitEdge:'N',bl:'vic',
-    fix:{GER:[['wG7',[/^4-6-7/,1],[/^LMG/,1],[/^7-0/,1]],['wM7',[/^4-4-7/,1],[/^LMG/,1],[/^7-0/,1]],['wI3',[/^4-6-7/,1],[/^8-1/,1]],['wJ3',[/^4-4-7/,1]],['wL2',[/^4-4-7/,1]],['wG2',[/^4-4-7/,1]],['wN2',[/^2-3-7/,1]],['wH5',[/^88mm/,1],[/^2-2-8/,1]],['wJ4',[/^88mm/,1],[/^2-2-8/,1]]]},
-    aiw:{exitDef:1,exitCols:'DEFGHIJKLMN'}},
+    fix:{GER:[['wG7',[/^4-6-7/,1],[/^LMG/,1],[/^7-0/,1]],['wM7',[/^4-4-7/,1],[/^LMG/,1],[/^7-0/,1]],['wI3',[/^4-6-7/,1],[/^8-1/,1]],['wJ3',[/^4-4-7/,1]],['wL2',[/^4-4-7/,1]],['wG2',[/^4-4-7/,1]],['wL0',[/^2-3-7/,1]],['wH5',[/^88mm/,1],[/^2-2-8/,1]],['wJ4',[/^88mm/,1],[/^2-2-8/,1]]]},
+    aiw:{fort:1,postMode:'fall',posts:{GER:{wG7:'wI3',wM7:'wL2'}},postNear:2,postTurn:3}}, /* v1368(ダルマ「実施」): 出口の建物に籠城、前の G7・M7 だけ米が2ヘクス以内かT3で I3・L2 へ下がる。東の出口のため HS を L0(林)へ */
   /* v1368: S15 Hammer to the Teeth。米=L列より西(1ヘクスにMMC1つまで)、T3に西端から増援。独=K列より東の高度1の地形。独が先攻。勝利: 終了時、S6から2ヘクス以内の建物ヘクスに統制状態の米MMCが1つもいなければ独の勝利 */
   S15:{natB:'USA',nameB:'米軍',colB:'#8a9a3c',edgeLbl:{N:'南端',S:'北端',E:'東端',W:'西端'},
     grp:function(o){return (o.side==='SOV'&&o.gi===1)?'e3':'setup';},
@@ -29819,7 +29819,7 @@ var BT_SCFG={
     vic:'clear',vicSide:'GER',bl:'near',blNear:{board:'w',hex:'S6',r:2},clearTxt:'S6から2ヘクス以内の建物のうち、統制状態の米MMCが',
     fix:{SOV:[['wL5',[/^5-4-6/,1],[/^8-1/,1],[/^MMG/,1]],['wL4',[/^5-4-6/,1],[/^8-0/,1],[/^MMG/,1]],['wK5',[/^5-4-6/,1],[/^7-0/,1]],['wL2',[/^5-4-6/,1],[/^BAZ/,1]],['wJ3',[/^5-4-6/,1]],['wI3',[/^3-4-6/,1]],['wL8',[/^3-4-6/,1]],['wK9',[/^3-4-6/,1]],['wK7',[/^57mm/,1],[/^2-2-7/,1]],['wL6',[/^57mm/,1],[/^2-2-7/,1]]],
       GER:[['wU5',[/^4-6-7/,2]],['wP4',[/^4-6-7/,1],[/^HMG/,1],[/^9-1/,1]],['wQ4',[/^4-4-7/,2],[/^MMG/,1],[/^8-1/,1]],['wW6',[/^4-4-7/,2],[/^LMG/,1]],['wY5',[/^4-4-7/,1],[/^LMG/,1]],['wP5',[/^4-6-7/,1]],['wQ5',[/^4-4-7/,1]],['wV5',[/^4-6-7/,1],[/^LMG/,1],[/^8-0/,1]],['wV4',[/^4-4-7/,1],[/^PSK/,1]],['wAA6',[/^4-4-7/,1]],['wZ6',[/^MTR81/,1],[/^2-2-8/,1]]]},
-    aiw:{holdDef:8}},
+    aiw:{holdDef:8,postMode:'town',townTurn:5,posts:{SOV:{wK5:'wQ6',wL2:'wS4',wJ3:'wR5',wL8:'wS8',wK9:'wU7'}},entPost:{e3:'wS8'}}}, /* v1368(ダルマ「実施」): 町へ行く5部隊はT4まで手前(2〜3ヘクスの遮蔽)で待ち、T5から建物へ(敵がいれば空いている建物へ)。T3の増援はS8へ */
   /* v1224: S25 Early Battles。ソ連=ボードuの番号7以下/ボードvに設置、独=T1に南端から進入。勝利: 独がボードvの建物4棟以上を支配し、独AFV2両以上が走行可能。SSR: BT-7(無線機なし)は各MPhにDR≦8でないとヘクスから出られない */
   S25:{grp:function(o){return o.side==='GER'?'g1':'setup';},
     zone:function(o,N){if(N.b==='v')return true;if(N.b==='u'){var k=btHexNum(N);return k!=null&&k<=7;}return false;},
@@ -31365,7 +31365,7 @@ function btReinforce(){
     if(nmMade.length)log.push(BT_SIDE_NAME[att]+' マップタブの編成'+nmMade.join('・')+'のとおりに盤外のスタックを組みました');
     if(att!==BT.app&&!window.BT_SELFPLAY&&inf.u.length){inf.pool=true;BT.stacks.push(inf);BT.sel=inf.id;BT.selU=null;BT.regroup={sid:inf.id,pick:null};}
     else if(att!==BT.app&&!window.BT_SELFPLAY&&nmMade.length){}
-    else btSplitEntry(inf).forEach(function(s){BT.stacks.push(s);});
+    else btSplitEntry(inf).forEach(function(s){var EP=btAIW().entPost;if(EP&&EP[d.grp]){var m=BTG.nodes.findIndex(function(N){return N.nm===EP[d.grp];});if(m>=0){s.post=m;s.u.forEach(function(u){u.post=m;});}}BT.stacks.push(s);}); /* v1368: 増援の持ち場 */
     afv.u.forEach(function(u){BT.stacks.push({id:'s'+(++BT.seq),side:att,n:-1,off:d.off,due:BT.turn,u:[u],mel:false,afv:true});});
     log.push(BT_SIDE_NAME[att]+' 増援: '+(d.e?d.e.lbl:{g1:'group1(東端)',g2:'group2(西端)',sovT1:'第71重戦車連隊(北端)'}[d.grp])+' が盤外に待機'+(inf.pool?'(未編成。スタックを組んでください)':''));
   });
@@ -31735,14 +31735,27 @@ function btRoleW(side){ // シナリオの攻撃側は危険を受け入れ、�
   var rk=A.attRisk;if(att&&A.riskDecay)rk*=Math.max(A.riskMin||0.4,1-A.riskDecay*Math.max(0,BT.turn-1)); // v299(段階4): 攻撃側はターンが進むほど危険を受け入れる
   return att?{risk:rk,path:A.attPath,goal:urg}:{risk:A.defRisk,path:A.defPath,goal:1};
 }
+/* v1368: 持ち場のあるスタックの目標。mode 'fall'=敵が postNear 以内に来るか postTurn 以降に持ち場へ下がる / 'town'=townTurn までは持ち場の手前(2〜3ヘクス・遮蔽)で待ち、以降は持ち場(敵がいれば空いている勝利の建物)へ */
+function btStackPost(s){if(s.post!=null)return s.post;var u=s.u.filter(function(x){return x.post!=null;})[0];return u?u.post:null;}
+function btPostGoal(side,s){var A=btAIW();var P=btStackPost(s);if(P==null||s.n==null)return null;var en=btOpp(side);
+  var near=99;if(s.n>=0)BT.stacks.forEach(function(x){if(x.side===en&&x.n!=null&&x.n>=0&&btInf(x).some(btGO))near=Math.min(near,btDist(x.n,s.n));});
+  if(A.postMode==='fall'){if(s.n===P)return {hold:true};if(near<=(A.postNear||2)||BT.turn>=(A.postTurn||3)){var g={};g[P]=20;return {g:g};}return {hold:true};}
+  if(A.postMode==='town'){var late=BT.turn>=(A.townTurn||5),g2={};
+    var tgt=P;if(late&&btEnemyAt(P,side)){var bl=[];btBldgs().forEach(function(b){btBldgNodes(b).forEach(function(n){if(!btEnemyAt(n,side))bl.push(n);});});bl.sort(function(a,b){return btDist(a,s.n>=0?s.n:a)-btDist(b,s.n>=0?s.n:b);});if(bl.length)tgt=bl[0];}
+    if(late){if(s.n===tgt)return {hold:true};if(btEnemyAt(tgt,side)){BTG.nodes[tgt].nb.forEach(function(m){if(!btEnemyAt(m,side))g2[m]=16+(BTG.nodes[m].tem||0);});if(s.n>=0&&g2[s.n])return {hold:true};return {g:g2,rush:true};} /* 敵がいれば隣まで行き、突撃フェイズに白兵戦 */g2[tgt]=20;return {g:g2,rush:true};}
+    var st=0;BTG.nodes.forEach(function(N){var d=btDist(N.i,P);if(d>=2&&d<=3&&N.cover&&!btEnemyAt(N.i,side)){g2[N.i]=12+(N.tem||0);st++;}});
+    if(s.n>=0&&g2[s.n])return {hold:true};return st?{g:g2}:null;}
+  return null;}
 function btAIPlanMoves0(side){
   var W=btRoleW(side);
   var G=btGoalMap(side),F0=btGoalField(side,G),F=F0.map(function(v){return v*W.goal;});
   var plans=[];
-  if(btAIW().fort&&btFirst()!==side)return plans; /* v1351: 守備側は籠城(動かない) */
+  var fortOnlyPost=btAIW().fort&&btFirst()!==side&&btAIW().postMode; /* v1368: 籠城でも持ち場へ下がる部隊だけは動く */
+  if(btAIW().fort&&btFirst()!==side&&!fortOnlyPost)return plans; /* v1351: 守備側は籠城(動かない) */
   var movers=BT.stacks.filter(function(s){
     if(s.side!==side||s.mel||s.afv)return false;
     var inf=btInf(s).filter(function(u){return btCanMove(s,u)&&!btIsGunCrew(s,u);});
+    if(fortOnlyPost&&btStackPost(s)==null)return false;
     return inf.length>0;
   });
   // v1351(ダルマ「独のアプリが空き家の建物も取りに行く」): 攻撃側は、敵の健在な部隊も味方もいない未支配の建物ごとに、いちばん近い部隊を1つ割り当て、その建物だけを目標にする(aiw.emptyGo=目標の価値)
@@ -31764,6 +31777,7 @@ function btAIPlanMoves0(side){
     var sv0=0;btInf(s).forEach(function(u){var k=btI(u,side).kind;if(k==='mmc'||k==='smc')sv0+=btUVal(side,u);});
     var rk0=BT_AIW.riskStk?Math.pow(Math.max(1,sv0),BT_AIW.riskStk):1;
     var Fs=asg[s.id]||F;
+    var rushMul=1;if(btStackPost(s)!=null&&btAIW().postMode){var PG=btPostGoal(side,s);if(PG&&PG.hold)return;if(PG&&PG.g)Fs=btGoalField(side,PG.g).map(function(v){return v*W.goal;});if(PG&&PG.rush)rushMul=0.3;} /* v1368: 終盤の町への突入は危険を軽く見る */
     var base0=here!=null?(Fs[here]+BTG.nodes[here].tem*0.9-btThreatAt(side,here,false,false)*W.risk*rk0):-99;
     var variants=[{uids:allIds,stay:base0+hold}];
     // 建物を保持しつつ前進: 最も弱いMMC(HS優先)を守備に残し、残りが動く
@@ -31795,7 +31809,7 @@ function btAIPlanMoves0(side){
           if(n===here)return;
           if(dAsl&&(o.dt||e.m>=o.mf||btPathOf(sr,e.k).filter(function(x,ix){return !(ix===0&&x===here);}).length>1))return; // v287: 敵のLOS内では警戒移動(1ヘクス)
           var endTh=btThreatAt(side,n,false,false);
-          var sc=Fs[n]+N.tem*0.9-(e.d*W.path+endTh*W.risk)*rk-(o.dt?0.4:0);
+          var sc=Fs[n]+N.tem*0.9-(e.d*W.path+endTh*W.risk)*rk*rushMul-(o.dt?0.4:0);
           if(side==='GER'&&BT_AIW.dAdjB&&N.bldg&&btDocFriendAdjBldg(side,n,s))sc+=BT_AIW.dAdjB; // v287: 味方のいる建物ヘクスに隣接する建物ヘクス(射撃グループ)
           if(ldrOnly)sc+=BT_AIW.ldrRally*btBrokenAt(n,side)-BT_AIW.ldrRally*brHere; // v284(段階4): 単独の指揮官は混乱した味方のいるヘクスへ(回復のため)
           if(EXN&&EXN[n])sc+=(e.m+1<=o.mf)?(btAIW().exitNowB||4):0; /* v1352: 退出できるヘクスに1MF残して着けば、このターンに退出 */
@@ -32106,6 +32120,7 @@ function btAppSetupFix(side,obs,F){
       var kd=btI(r.u,side).kind;if(kd==='afv'||kd==='gun'){var f=btFaceToward(90);r.u.vca=f;r.u.tca=f;}
       log.push(o.name+'→'+row[0]);}});});
   BT.stacks.forEach(function(x){if(x.side===side)btGiveSW(x);});
+  var PO=btAIW().posts;if(PO&&PO[side]){BT.stacks.forEach(function(x){if(x.side!==side||x.n==null||x.n<0)return;var to=PO[side][BTG.nodes[x.n].nm];if(!to)return;var m=BTG.nodes.findIndex(function(N){return N.nm===to;});if(m>=0){x.post=m;x.u.forEach(function(u){if(btIsInfK(btI(u,side).kind))u.post=m;});}});} /* v1368: 持ち場(ユニットにも付ける=スタックがまとまっても消えない)(S14 独の前の部隊・S15 米の町へ行く部隊) */
   btCrewWithGun(side,log);BT.setupLog=log;}
 function BtAppSetup(){
   if(!btActive()||!BT.app)return;
