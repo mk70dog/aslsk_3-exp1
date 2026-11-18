@@ -29408,7 +29408,7 @@ function losEnemyFacingCovers(eh,origin,target){
 //       [C]アプリの判断(各フェイズの行動) / [D]画面(帯・地図の表示・タップ操作)
 // 規則の根拠: ASLSK4 Rules(2021、SK1〜3の規則書より優先と明記)。S26のSSRとOBはSCNのデータに従う。
 // 未対応(段階3c以降): AFV(移動・主砲・機銃・対戦車)、砲、PSK、煙幕、狙撃兵、英雄・指揮官誕生。
-var BT_SCN={S26:1,S2:1,S6:1,S24:1,S25:1,S4:1,S14:1,S15:1,S51:1,S43:1,S45:1}; /* v1373: S45 */ /* v1372: S43 */ /* v1370: S51 */ /* v1368: S14・S15 */ /* v1224: S25 追加 */ /* v1352: S4 追加 */ /* v1193(ダルマ「S2 S6 S24 を実施」): S2・S6・S24 も対戦モードに。シナリオごとの違いは BT_SCFG */
+var BT_SCN={S26:1,S2:1,S6:1,S24:1,S25:1,S4:1,S14:1,S15:1,S51:1,S43:1,S45:1,S42:1}; /* v1375: S42 */ /* v1373: S45 */ /* v1372: S43 */ /* v1370: S51 */ /* v1368: S14・S15 */ /* v1224: S25 追加 */ /* v1352: S4 追加 */ /* v1193(ダルマ「S2 S6 S24 を実施」): S2・S6・S24 も対戦モードに。シナリオごとの違いは BT_SCFG */
 var BT_PHASES=[['RPh','回復'],['PFPh','準備射撃'],['MPh','移動'],['DFPh','防御射撃'],['AFPh','前進射撃'],['RtPh','潰走'],['APh','突撃'],['CCPh','白兵戦']];
 var BT_SIDE_COL={GER:'#7f9bb8',SOV:'#c0583a'};
 var BT_SIDE_NAME={GER:'独軍',SOV:'ソ連'};
@@ -29522,7 +29522,9 @@ function btBuildGraph(){
   var minX=Math.min.apply(null,xs),maxX=Math.max.apply(null,xs),minY=Math.min.apply(null,ys),maxY=Math.max.apply(null,ys);
   nodes.forEach(function(n){n.eW=n.edge&&n.x<minX+LOS_GEO_HEX_H*0.8;n.eE=n.edge&&n.x>maxX-LOS_GEO_HEX_H*0.8;n.eN=n.edge&&n.y<minY+LOS_GEO_HEX_W*0.9;n.eS=n.edge&&n.y>maxY-LOS_GEO_HEX_W*0.9;});
   BTG={nodes:nodes,byKey:byKey,byQS:byQS,sc:sc,rot:rot,ox:ox,oy:oy,losC:{},roadC:{},px:null};
+  try{var cH=btCfg();BTG.hedgeOn=!!(cH&&cH.hedge);}catch(e){}
   btBuildPixelMaps();
+  try{btBuildHedges();}catch(e){}
   BTG.ms=Date.now()-t0;
   return BTG;
 }
@@ -29550,6 +29552,7 @@ function btBuildPixelMaps(){
     else if(nm==='Orchard')c=orch?3:0; // 3=果樹園(季節中: 同一高度では妨害、異なる高度では障害)
     else if(nm==='Grain')c=grain?1:0;
     else if(nm==='Brush')c=1;
+    else if(nm==='Hedge'&&BTG.hedgeOn)c=4; /* v1375(S42): 生垣(ヘクス辺)。btFLOS で射撃側/目標のヘクス辺なら無視 */
     cls[k]=c;
     var e=losElevAtGlobal(Math.floor(x),Math.floor(y));elev[k]=(e==null)?0:e;
   }
@@ -29579,6 +29582,7 @@ function btFLOS(a,b){
       if(ce>lo){ok=false;break;} // 丘(より高い地形)
       if(ce===lo){
         if(cl===2){ok=false;break;}
+        if(cl===4){if(btHedge(n,a)||btHedge(n,b))continue;ok=false;break;} /* v1375: 生垣 */
         if(cl===1||cl===3){if(!hindSet[n]){hindSet[n]=1;nh++;}}
       }
     }else{
@@ -29607,6 +29611,7 @@ function btInfCost(a,b){
   var c=B.cost,road=false;
   if(btRoadSide(a,b)){c=1;road=true;}
   if(B.elev>A.elev)c*=2;
+  if(BTG.hedge&&btHedge(a,b)){var cHg=btCfg();c+=(cHg&&cHg.hedge?cHg.hedge.mf:1);road=false;} /* v1375: 生垣を越える */
   if(BT.smoke&&BT.smoke[b])c+=1; // 煙幕ヘクスへの進入は+1MF(1.2.5)
   return {c:c,road:road};
 }
@@ -29827,6 +29832,17 @@ var BT_SCFG={
     fix:{GER:[['sH4',[/^5-4-8/,1],[/^9-1/,1],[/^HMG/,1]],['sK4',[/^4-4-7/,1]],['sP5',[/^5-4-8/,1],[/^8-1/,1],[/^MMG/,1]],['sN7',[/^5-4-8/,1],[/^LMG/,1]],['sP8',[/^4-4-7/,1]],['sK7',[/^4-4-7/,1],[/^8-0/,1]],['sJ9',[/^5-4-8/,1],[/^LMG/,1]],['sM9',[/^4-4-7/,1]],['rP5',[/^5-4-8/,1],[/^7-0/,1]],['sF6',[/^4-4-7/,1]]],
       SOV:[['sR7',[/^6-6-7/,2],[/^9-1/,1],[/^MMG/,1]],['sS7',[/^6-6-7/,2],[/^8-1/,1],[/^MMG/,1]],['sR8',[/^6-6-6/,2],[/^8-1/,1],[/^MMG/,1]],['sR9',[/^6-6-6/,2],[/^DC/,1]],['sT6',[/^6-6-6/,2]],['sU6',[/^6-6-6/,2],[/^7-0/,1],[/^DC/,1]],['sV6',[/^6-6-6/,2]],['sT7',[/^6-6-6/,1]]]},
     aiw:{fort:1,postMode:'fall',postTurn:1,posts:{GER:{sP5:'rP4',sK4:'rQ6'}},entPost:{e3:'rO4'}}}, /* v1371(ダルマ「A+B」): sP5・sK4 は T1 から rP5 の隣の遮蔽へ、T3 増援は rO4 へ。ほかは籠城 */
+  /* v1375(ダルマ「全て本体に入れてから調整」): S42 One More Hedgerow。盤p の A〜L列。独=E〜L列に先に設置(全 MMC を建物・麦畑・果樹園に隠蔽設置できる SSR2)、米=T1 西端から進入、米が先攻。
+     SSR1: 生垣のヘクス辺は TEM+2・越えるのに 2+COT。勝利: 終了時、米が G5・J5・J7 を支配 */
+  S42:{natB:'USA',nameB:'米軍',colB:'#8a9a3c',
+    grp:function(o){return o.side==='GER'?'setup':'e1';},
+    zone:function(o,N){if(N.b!=='p')return false;var m=N.nm.match(/^p([A-Z]+)(\d+)$/);return !!m&&m[1].length===1&&m[1]>='E'&&m[1]<='L';},
+    zoneTxt:function(){return '盤p のE〜L列(建物・麦畑・果樹園の MMC は隠蔽設置できる)';},
+    ent:[{id:'e1',side:'SOV',turn:1,off:'W',lbl:'第116歩兵連隊第1大隊(T1 西端)'}],
+    vic:'all',vicSide:'SOV',bl:'vic',hedge:{tem:2,mf:2},
+    hip:{side:'GER',max:99,ok:function(N){return !!N.bldgT||N.terr==='Grain'||N.terr==='Orchard';}},
+    fix:{GER:[['pG5',[/^4-6-7/,1],[/^8-1/,1],[/^HMG/,1],'hip'],['pJ5',[/^2-4-7/,1],[/^MMG/,1],[/^8-0/,1],'hip'],['pJ7',[/^2-4-7/,1],[/^LMG/,1],'hip'],['pF3',[/^2-4-7/,1],[/^LMG/,1],'hip'],['pF8',[/^2-4-7/,1],'hip'],['pH2',[/^2-3-7/,1],'hip'],['pE7',[/^2-3-7/,1],'hip']]},
+    aiw:{fort:1}},
   /* v1373(ダルマ「全て本体に入れてから調整」): S45 Contested Settlement。盤q の K〜GG列。スロバキア軍(1つ目の軍 natA='SLO'、内部は 'GER')=盤上に設置(SSR2: 分隊は CC列とその北に置けない)、
      波軍(natB='POL'、内部は 'SOV')=T1 北端から進入・T2 増援は西端か東端の、先に記録した1ヘクスから2ヘクス以内(SSR1)。波軍が先攻。勝利: 終了時、波軍が複数ヘクスの建物を1つ以上支配 */
   S45:{natA:'SLO',nameA:'スロバキア軍',colA:'#4a72c9',natB:'POL',nameB:'波軍',colB:'#c94f4f',
@@ -30038,11 +30054,12 @@ function btHipCount(side){var n=0;BT.stacks.forEach(function(s){if(s.hip&&s.side
 function BtHipToggle(){var s=BT.sel&&btStackById(BT.sel);var c=btCfg();if(!s||!c||!c.hip||s.side!==c.hip.side||s.n==null||s.n<0){btToast('隠蔽できるスタックを選んでください');return;}
   if(s.hip){s.hip=0;btSave();Draw();return;}
   if(c.hip.bldg&&!BTG.nodes[s.n].bldgT){btToast('隠蔽は建物ヘクスだけ');return;}
+  if(c.hip.ok&&!c.hip.ok(BTG.nodes[s.n])){btToast('隠蔽は建物・麦畑・果樹園だけ');return;}
   var m=btInf(s).filter(function(u){return btI(u,s.side).kind==='mmc';}).length;if(!m){btToast('MMC のいるスタックだけ');return;}
   if(btHipCount(s.side)+m>c.hip.max){btToast('隠蔽できる MMC は'+c.hip.max+'個まで');return;}s.hip=1;btSave();Draw();}
 function btHipSetupHTML(btnFn){var c=btCfg();if(!c)return '';var hu=BT.app?btOpp(BT.app):null,h='';
   (c.ent||[]).forEach(function(e){if(!e.pick||(hu&&hu!==e.side))return;h+='<div style="margin-top:4px">'+btnFn(T('増援の進入ヘクスを記録'),"BtEntPickStart('"+e.id+"')")+' <span style="color:#8899aa;font-size:11px">'+T('T'+e.turn+' 西端か東端・2ヘクス以内')+': '+((BT.entPick&&BT.entPick[e.id])||e.pick.def).replace(/^[a-z]/,'')+(BT.entPickMode?' '+T('(盤端のヘクスをタップ)'):'')+'</span></div>';});
-  if(c.hip&&(!hu||hu===c.hip.side)){h+='<div style="margin-top:4px">'+btnFn(T('選んだスタックを隠蔽/解除'),'BtHipToggle()')+' <span style="color:#8899aa;font-size:11px">'+T('建物ヘクスの MMC '+c.hip.max+'個まで(同じヘクスの SMC・SW も)')+' '+btHipCount(c.hip.side)+'/'+c.hip.max+'</span></div>';}
+  if(c.hip&&(!hu||hu===c.hip.side)){h+='<div style="margin-top:4px">'+btnFn(T('選んだスタックを隠蔽/解除'),'BtHipToggle()')+' <span style="color:#8899aa;font-size:11px">'+T((c.hip.ok?'建物・麦畑・果樹園の MMC(同じヘクスの SMC・SW も)':'建物ヘクスの MMC '+c.hip.max+'個まで(同じヘクスの SMC・SW も)'))+' '+btHipCount(c.hip.side)+'/'+c.hip.max+'</span></div>';}
   if(c.art&&(!hu||hu===c.art.side)){var R=(BT.artReg||c.art.reg).map(function(h0){return h0.replace(/^[a-z]/,'');}).join('・');h+='<div style="margin-top:4px">'+btnFn(T('砲撃の登録ヘクスを選ぶ'),'BtArtRegStart()')+' <span style="color:#8899aa;font-size:11px">'+T('登録')+': '+R+(BT.artPick?' '+T('(地図のヘクスをタップ、あと')+(2-BT.artPick.length)+')':'')+'</span></div>';}
   return h;}
 /* ===== v1372(S43 SSR2): 独の事前登録の砲撃。登録2ヘクス、最大3回、独の PFPh か DFPh の最初に呼ぶ。色dr 1〜4=その場、5〜6=白dr の方向へ1ヘクス(1=ヘクス番号の側の辺、時計回り)。
@@ -30079,6 +30096,21 @@ function btEntPickFix(){var c=btCfg();if(!c||!c.ent||!BTG)return;c.ent.forEach(f
 function BtEntPickStart(id){BT.entPickMode=id;btToast('増援の進入ヘクス(西端か東端)をタップ');Draw();}
 function btEntPickTap(n){var id=BT.entPickMode;BT.entPickMode=null;var N=BTG.nodes[n];var c=btCfg(),e=c.ent.filter(function(x){return x.id===id;})[0];if(!e||!(N.eE||N.eW)){btToast('西端か東端のヘクスを選んでください');Draw();return;}
   BT.entPick=BT.entPick||{};BT.entPick[id]=N.nm;btEntPickFix();BT.stacks.forEach(function(x){if(x.side===e.side&&x.due===e.turn&&(x.n==null||x.n<0))x.off=e.off;});btToast('記録: '+N.nm);btSave();Draw();}
+
+/* ===== v1375(S42 SSR1): 生垣のヘクス辺。盤の地形(コード73)を2ヘクスの境目で調べて BTG.hedge に。越えるのは +2MF(2+COT)、TEM+2(迫撃砲・DC は無し)、
+   LOS: 生垣は障害。ただし射撃側か目標のヘクス辺の生垣は越えて見える ===== */
+function btBuildHedges(){BTG.hedge={};if(!BTG.hedgeOn)return;BTG.nodes.forEach(function(N){N.nb.forEach(function(m){if(m<N.i)return;var M=BTG.nodes[m];if(M.b!==N.b)return;
+  var a=losHexNameToColRow(N.nm.replace(/^[a-z]+/,'')),c=losHexNameToColRow(M.nm.replace(/^[a-z]+/,''));var p0=losHexCenterPx(a.col,a.row),p1=losHexCenterPx(c.col,c.row);
+  var mx=(p0.x+p1.x)/2,my=(p0.y+p1.y)/2,dx=p1.x-p0.x,dy=p1.y-p0.y,L=Math.hypot(dx,dy),px=-dy/L,py=dx/L,k=0,tot=0;
+  for(var t=-0.25;t<=0.2501;t+=0.05){for(var q=-0.04;q<=0.0401;q+=0.04){var x=Math.round(mx+px*t*L+dx*q),y=Math.round(my+py*t*L+dy*q);tot++;if(losTerrainCodeAt(N.b,x,y)===73)k++;}}
+  if(k/tot>=0.3){BTG.hedge[N.i+','+m]=1;BTG.hedge[m+','+N.i]=1;}});});}
+function btHedge(a,b){return !!(BTG&&BTG.hedge&&BTG.hedge[a+','+b]);}
+/* 目標のヘクスへ LOS が入るヘクス辺が生垣なら TEM(SSR で+2)。隣接なら射撃側との境目 */
+function btHedgeTEM(fromN,toN){var c=btCfg();if(!c||!c.hedge||!BTG.hedge||fromN==null||toN==null||fromN===toN)return 0;var T0=BTG.nodes[toN];
+  if(T0.nb.indexOf(fromN)>=0)return btHedge(fromN,toN)?c.hedge.tem:0;
+  var F=BTG.nodes[fromN],ang=Math.atan2(F.y-T0.y,F.x-T0.x),best=[],bd=9;
+  T0.nb.forEach(function(m){var M=BTG.nodes[m];var a=Math.atan2(M.y-T0.y,M.x-T0.x);var d=Math.abs(((a-ang+3*Math.PI)%(2*Math.PI))-Math.PI);if(d<bd-0.05){bd=d;best=[m];}else if(Math.abs(d-bd)<=0.05)best.push(m);});
+  return best.some(function(m){return btHedge(m,toN);})?c.hedge.tem:0;}
 function btEntHexSet(s){var c=btCfg();if(!c||!c.ent||!s)return null;var L=c.ent.filter(function(e){return e.hexes&&e.side===s.side&&e.off===s.off&&(s.due==null||e.turn===s.due);});if(!L.length)return null;
   var m={};L.forEach(function(e){e.hexes.forEach(function(h){var cr=losHexNameToColRow(h),i=btNodeOf(e.board,cr.col,cr.row);if(i!=null)m[i]=1;});});return m;}
 function btEntHit(s,N){if(!btEdgeHit(s.off,s.off2,N))return false;var H=btEntHexSet(s);return !H||!!H[N.i];}
@@ -30274,6 +30306,7 @@ function btPreciseLOS(a,b){
   var r=losCheckLOSGlobal(A.x,A.y,B.x,B.y,S_LOS.orchardSeason,S_LOS.grainSeason);
   if(!r||r.error)return {ok:false,hind:0,err:(r&&r.error)||'?'};
   var o={ok:!r.blocked,hind:r.hindranceDrm||0,why:r.blockingTerrain||''};
+  if(r.blocked&&/Hedge/.test(o.why||'')&&BTG.hedgeOn){var f0=btFLOS(a,b);o={ok:f0.ok,hind:f0.hind,why:f0.ok?'':'生垣'};} /* v1375: 生垣は btFLOS(射撃側・目標のヘクス辺は越えて見える) */
   BT_PLOS[key]=o;return o;
 }
 function btLOS(a,b,fast){
@@ -30437,11 +30470,12 @@ function btFireEval(fd){
   var drm=0,drmL=[],plusOut=0;
   var tgtUnits=btFireTargets(fd,tS);
   var tem=T.tem;
+  try{var hgT=0;parts.forEach(function(q){hgT=Math.max(hgT,btHedgeTEM(q.s.n,fd.tgtN));});if(hgT>tem)tem=hgT;var hgOn=hgT>0&&hgT>=T.tem;}catch(e){} /* v1375: 生垣のTEM(建物などと重ねない・良い方) */
   var afvCover=(tem<=0)&&BT.stacks.some(function(x){return x.n===fd.tgtN&&x.u.some(function(u){var k=btInfo(x.side,u.nm).kind;return (k==='wreck'||(k==='afv'&&x.side===tS.side&&!u.mvd&&!u.mot));});});
   if(afvCover){tem=1;}
   var height=(tem<=0&&T.elev>fireElevMax&&parts.every(function(q){return btHaElev(q.s.n,fd.tgtN);})); /* v1250: 稜線を越えて上がった直後は無し */
   if(ftOnly){tem=0;height=false;drmL.push('FT:TEM・指揮なし');}
-  if(tem){drm+=tem;drmL.push('TEM+'+tem+'('+(afvCover?'車両/残骸':btTerrJP(T.terr))+')');}
+  if(tem){drm+=tem;drmL.push('TEM+'+tem+'('+(afvCover?'車両/残骸':(typeof hgOn!=='undefined'&&hgOn?'生垣':btTerrJP(T.terr)))+')');}
   if(height){drm+=1;drmL.push('高所+1');}
   if(hindMax){drm+=hindMax;plusOut+=hindMax;drmL.push('妨害+'+hindMax);}
   var ldr=(!ftOnly&&ldrParts===parts.length&&ldrCmdWorst!=null)?ldrCmdWorst:null;
@@ -31279,7 +31313,7 @@ function btAdvanceCheck(sid,uids,to){
   return {units:units,inf:inf,needCX:needCX,cc:btEnemyAt(to,s.side)};
 }
 function btAdvance(sid,uids,to){
-  try{var aH=btStackById(sid),hS2=aH&&btHipAt(to,aH.side);if(hS2){btHipReveal(hS2,'突撃で進入');BT.ccHipAmb=BT.ccHipAmb||{};BT.ccHipAmb[to]=hS2.side;}}catch(e){} /* v1372: HIP→白兵戦・隠蔽側の不意打ち−2 */
+  try{var aH=btStackById(sid),hS2=aH&&btHipAt(to,aH.side);if(hS2){btHipReveal(hS2,'突撃で進入');if(BTG.nodes[to].bldgT){BT.ccHipAmb=BT.ccHipAmb||{};BT.ccHipAmb[to]=hS2.side;}}}catch(e){} /* v1372: HIP→白兵戦・隠蔽側の不意打ち−2 */
   try{var aS0=btStackById(sid);if(aS0&&btArrOn(aS0.side)&&aS0.n!=null&&aS0.n>=0&&to!=null){var aU=aS0.u.filter(function(x){return uids.indexOf(x.id)>=0;});btArrPush({side:aS0.side,pts:[aS0.n,to],lbl:T(btEnemyAt(to,aS0.side)?'突撃(白兵戦)':'突撃')+(aU[0]?' '+aU[0].nm.replace(/\[.*$/,''):'')});}}catch(e){}
   var c=btAdvanceCheck(sid,uids,to);if(c.err)return c.err;
   var s=btStackById(sid);
