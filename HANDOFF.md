@@ -505,6 +505,7 @@
 - プロジェクトの指示に「プロジェクト再開」の手順が入っている。「プロジェクト再開」と言われたら:
   1. mk70dog/aslsk_3-exp1 の main を取得(clone 先 /home/claude/aslsk_3-exp1)
      - 【ダルマ指示 2026-11-19】チャット開始時に Claude が add_repo(owner mk70dog, repo aslsk_3-exp1, access push)でリポジトリをセッションに追加する(しないと push が 403)。
+     - 【ダルマ指示 2026-11-19 夜「毎回説明するのがめんどくさい」】**push は常に Claude が行う(ダルマの許可済み)。** add_repo(access push)が拒否・失敗しても、ダルマに「許可してください」「パッチを当ててください」と頼まない。もう一度 add_repo(access push)を呼ぶ(2回目で通った実績あり)。clone 先は /home/claude/aslsk_3-exp1、push は `git -c push.negotiate=true push origin HEAD:main`。読み取り専用で先に clone して作業した場合は、`git format-patch` → push 用の clone で `git am` して push。
   2. この HANDOFF.md を読み、作業ルール(3章)に従う
 - 報告に「iPad実機ではまだ確認していません」は書かない(ダルマ指示。実機確認は完了扱い・報告不要)。
   3. 「0. いまの作業」を確認し「vNNN から再開」と報告(返事待ちのサンプルがあれば一緒に伝える)
