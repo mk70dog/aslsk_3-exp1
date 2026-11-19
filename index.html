@@ -4856,6 +4856,8 @@ var SCN=[
    // 全AFV/砲(M4A3(76)W・M4A3(105)・M10(57mm)・ヤクトパンター(88LL))は既存AFV_DATA/GUN_DATAと完全一致、新規登録不要。
   },
   {id:"S51",atk:"USA",north:"up",
+   // ダルマ指示「s51 勝利条件ヘクスにマーキング 他のシナリオと同様に」: 勝利条件「sH4 か rP5 を米の統制ユニットで占領」の2ヘクス。
+   vicHexes:[{board:"r",hexes:["P5"]},{board:"s",hexes:["H4"]}],
    maps:[{id:"r",axis:"v",letterPos:"tl",rot:90,letterRot:0,losPos:{col:0,row:0}},{id:"s",axis:"v",letterPos:"br",rot:270,letterRot:180,losPos:{col:645/1800,row:0}}],
    mapNote:"盤面r+s、2枚とも縦置きで隙間なく左右に隣接(r=左、s=右)、ヘクス列制限なし(両盤とも全域使用)、北は上方向。LOSタブも利用可能(2枚組み合わせシナリオ)。", // 2026-09新規追加(ダルマ提供シナリオPDF ASL_SK_S51.pdfより実装、S51「若さの参戦」)
    jp:"若さの参戦",en:"Enter the Young",loc:"メロデ、独軍",dt:"1944/11/29",trn:6,
