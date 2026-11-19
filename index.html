@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1380</title>
+<title>ASL SKシリーズv1381</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1380">
+<meta property="og:title" content="ASL SKシリーズv1381">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10967,7 +10967,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.580"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.581"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1381="v1381(ダルマ報告「ボタンを消せない」画像=ツールバーの編集): −を押しても、先に動く長押し・ドラッグの捕捉がドラッグを始めて−の処理まで届いていなかった→−はそこで消す。しまってあるボタンの欄が「(対戦)」の名前で分けていて v1379 で崩れていた(判定モードに対戦のボタン)→ NM_TB_MD(nmTbInMode)で分ける";
 var APP_VERSION_HIST_v1380="v1380(ダルマ報告「フォントサイズを大きくするとパネルの上が表示しない」): 文字の大きさ(CSS zoom)の中では vh/vw が倍率で割られずパネルが画面より高くなっていた。標準以外のとき、倍率がかかる要素のスタイルシートとインライン style の vh/vw を calc(値 / 倍率) に置き換え(nmFzVhAll、標準で元に戻す)";
 var APP_VERSION_HIST_v1379="v1379(ダルマ指示「ツールバーの設定 判定モード時は判定モードの項目のみ・対戦モード時は対戦モードの項目のみ・共通はどちらでも」→サンプル→「実施」): ツールバーの設定をモード別に表示(NM_TB_MD・nmTbInMode)、名前の「(対戦)」を削除";
 var APP_VERSION_HIST_v1378="v1378(ダルマ指示「アプリに反映する」): S51 独アプリの作戦=rQ6 に 9-1+HMG・MMG と 5-4-8×2(T1 に集合)、sK2 に 8-1+LMG×2 と 5-4-8・4-4-7、砦 rP5・sH4 は 5-4-8+指揮官(自己対戦8戦 独5・米3)。持ち場のオブジェクト形式・作戦の試し用の avoidFrom/occOnly";
@@ -39670,6 +39671,7 @@ function nmTbeShow(id){var c=nmTbCfg();delete c.off[id];S.nmTbCfg=c;try{saveStat
 /* ドラッグで並べ替え・長押しで編集モード */
 (function(){var lp=null,st=null;
   document.addEventListener('pointerdown',function(e){var b=e.target.closest&&e.target.closest(NM_TBE_SEL);if(!b)return;
+    if(NM_TBE&&e.target.closest('.nmTbX')){e.preventDefault();e.stopPropagation();var hid=nmTbeId(b);if(hid)nmTbeHide(hid);return;} /* ダルマ報告「ボタンを消せない」: この捕捉が先に動いてドラッグを始め、−の処理まで届いていなかった */
     if(NM_TBE){var id=nmTbeId(b);if(!id)return;e.preventDefault();e.stopPropagation();var r=b.getBoundingClientRect(),g=b.cloneNode(true);g.id='nmTbGhost';g.style.left=r.left+'px';g.style.top=r.top+'px';g.style.width=r.width+'px';g.style.height=r.height+'px';document.body.appendChild(g);b.classList.add('nmTbDrag');st={b:b,id:id,g:g,dy:e.clientY-r.top,dx:e.clientX-r.left};return;}
     clearTimeout(lp);var x0=e.clientX,y0=e.clientY;lp=setTimeout(function(){lp=null;window.NM_TBE_EAT=Date.now()+700;nmTbeOn();},650);
     var cancel=function(ev){if(ev.type==='pointermove'&&Math.hypot(ev.clientX-x0,ev.clientY-y0)<10)return;clearTimeout(lp);lp=null;document.removeEventListener('pointermove',cancel,true);document.removeEventListener('pointerup',cancel,true);};
@@ -39681,7 +39683,7 @@ function nmTbeShow(id){var c=nmTbCfg();delete c.off[id];S.nmTbCfg=c;try{saveStat
   document.addEventListener('pointerup',function(){if(!st)return;var c=nmTbCfg(),ids=[].slice.call(st.b.parentNode.querySelectorAll(':scope>button')).map(nmTbeId).filter(Boolean);
     /* 同じ並びの中だけ入れ替える(もう一方のモード・もう一方のバーのボタンの位置はそのまま) */var slots=[];c.order.forEach(function(id,i){if(ids.indexOf(id)>=0)slots.push(i);});var o2=c.order.slice();slots.forEach(function(si,k){o2[si]=ids[k];});c.order=o2;S.nmTbCfg=c;try{saveState();}catch(e){}st.g.remove();st.b.classList.remove('nmTbDrag');st=null;try{nmTbOrdApply();}catch(e){}nmTbeDecor();},true);})();
 function nmTbeBarDraw(){var b=document.getElementById('nmTbeBar');if(!NM_TBE){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='nmTbeBar';document.body.appendChild(b);}var c=nmTbCfg();
-  var bt=false;try{bt=btActive();}catch(e){}var hid=NM_TB_ITEMS.filter(function(x){return c.off[x.id]&&(x.g===2||(bt?/^b/.test(x.id)&&/\(対戦\)/.test(x.lb)||x.id==='ref'||x.id==='card':!/\(対戦\)/.test(x.lb)));});
+  var bt=false;try{bt=btActive();}catch(e){}var hid=NM_TB_ITEMS.filter(function(x){return c.off[x.id]&&(x.g===2||nmTbInMode(x.id));}); /* v1379 で名前の「(対戦)」を消したので、モードの判定は NM_TB_MD で */
   b.innerHTML='<div class="hd"><b>'+T('ツールバーの編集')+'</b><span style="color:#9fb2c8;font-size:12px">'+T('ドラッグで並べ替え・−でしまう')+'</span><button class="done" onclick="nmTbeOff()">'+T('完了')+'</button></div>'
     +'<div style="font-size:11.5px;color:#9fb2c8;margin-bottom:4px">'+T('しまってあるボタン(タップで戻す)')+'</div><div class="tray">'+(hid.length?hid.map(function(x){return '<button onclick="nmTbeShow(\''+x.id+'\')">＋ '+T(x.lb)+'</button>';}).join(''):'<span style="color:#7f93a4;font-size:12px">'+T('なし')+'</span>')+'</div>';}
 var NM_TB_ITEMS=[
@@ -39711,7 +39713,7 @@ var NM_TB_ITEMS=[
 var NM_TB_DEFOFF=['bcam','bctr','bsv','bmm','bfx','bvic'];
 /* ダルマ指示「ツールバーの設定 判定モード時は判定モードの項目のみ・対戦モード時は対戦モードの項目のみ・共通の項目はどちらでも」: 各モードのツールバーに実在するボタンで分類(j=判定のみ、b=対戦のみ、無し=共通) */
 var NM_TB_MD={hq:'j',su:'j',undo:'j',redo:'j',ab:'j',view:'j',gs:'j',fire:'j',atk:'j',move:'j',old:'j',bundo:'b',bredo:'b',bmove:'b',bab:'b',bside:'b',bdice:'b',bcam:'b',bctr:'b',bsv:'b',bmm:'b',bfx:'b',bvic:'b'};
-function nmTbInMode(id){var m=NM_TB_MD[id];if(!m)return true;var bt=!!(window.BT&&BT.on);return m==='b'?bt:!bt;}
+function nmTbInMode(id){var m=NM_TB_MD[id];if(!m)return true;var bt=false;try{bt=btActive();}catch(e){bt=!!(window.BT&&BT.on);}return m==='b'?bt:!bt;}
 function nmTbCfg(){var c=S.nmTbCfg;if(!c||!c.order){c={order:NM_TB_ITEMS.map(function(x){return x.id;}),off:{}};NM_TB_DEFOFF.forEach(function(i){c.off[i]=true;});}NM_TB_ITEMS.forEach(function(x){if(c.order.indexOf(x.id)<0){if(NM_TB_DEFOFF.indexOf(x.id)>=0){c.off=c.off||{};c.off[x.id]=true;}var hi=(x.id==='undo'||x.id==='redo'||x.id==='su')?c.order.indexOf(x.id==='undo'?'hq':x.id==='su'?'hq':'undo'):-1;if(hi>=0)c.order.splice(hi+1,0,x.id);else c.order.push(x.id);}});c.off=c.off||{};return c;}
 function nmTbShown(id){var c=nmTbCfg(),it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0];if(!it||c.off[id])return false;if(it.g===2)return true;var el=document.getElementById('nmFtAct');if(!el)return false;return [].slice.call(el.querySelectorAll('button')).some(function(b){return it.m(b.getAttribute('onclick')||'')&&b.style.display!=='none';});}
 function nmTbOrdApply(){var c=nmTbCfg();[['nmFtAct',1],['nmFullTabs',2]].forEach(function(P){var el=document.getElementById(P[0]);if(!el)return;var bs=[].slice.call(el.querySelectorAll(':scope > button'));var got=[];
