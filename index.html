@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1385</title>
+<title>ASL SKシリーズv1386</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1385">
+<meta property="og:title" content="ASL SKシリーズv1386">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10967,7 +10967,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.585"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.586"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1386="v1386(ダルマ「ドイツの配置する場所の指示はあっているか 4ヘクスしか明るくない」): 部隊の準備の「地図に置く」で明るくする範囲を、OB の文の読み取り(道路の境目なしで全体・T3 増援は「T3」をヘクスと誤読して rT3・sT3・sQ10・sI10 の4つ)から、対戦モードでは置くときの判定(シナリオ設定の zone)に";
 var APP_VERSION_HIST_v1385="v1385(ダルマ報告「s51 ドイツ初期配置の指示がおかしい」): 部隊の準備で、T3 増援(降下猟兵)の編成にも「地図に置く」が出ていた→増援のグループの編成は「盤外から進入」(nmSuSlotOff)。SSR1(独MMC 隣接・同ヘクス不可)が編成の配置(btSuPlaceAt)で効いていなかった→ MMC 2つ以上の編成・隣に MMC がいるヘクスは置けない。自動振り分けも初期配置の編成は MMC 1つずつ(nmSuMmcCap)";
 var APP_VERSION_HIST_v1384="v1384(ダルマ報告「メニューがはみ出して表示」画像=大以上の対戦の準備): 倍率(zoom)のかかったパネルの位置・幅を画面の px(getBoundingClientRect・innerWidth)のまま style に入れていて倍率分ずれていた→ nmFzK で割る(対戦/判定のメインメニュー btFtMenu・nmFtMenu・nmTbSide・大きさ変更、準備のポップアップ btSuPopVW・ドラッグ・大きさ変更)";
 var APP_VERSION_HIST_v1383="v1383(ダルマ報告「上下が切れている」画像=文字の大きさ 大以上の部隊の準備): 後から足されたスタイル(#nmSu .bx の max-height:92vh)が倍率で割った上書き #nmFzVh より後ろにあり効いていなかった→ #nmFzVh を常にスタイルの最後へ";
@@ -38414,7 +38415,8 @@ function nmZoneParse0(t0){var t=String(t0||'').replace(/～/g,'〜').replace(/[�
   if(!PF.length)return null;
   return {f:function(i){return PF.some(function(f){return f(i);});},part:part};}
 /* 編成の置ける範囲(グループの見出しから) */
-function nmSuZoneOf(k){var nat=NM_SU&&NM_SU.nat;if(!nat)return null;var g=nmSuSlotGrp(k,nat);if(g==null||g<0)return null;var gr=nmSuObG(nat).filter(function(x){return x.i===g;})[0];if(!gr||!gr.gl)return null;return nmZoneParse(gr.gl);}
+function nmSuZoneOf(k){var nat=NM_SU&&NM_SU.nat;if(!nat)return null;var g=nmSuSlotGrp(k,nat);if(g==null||g<0)return null;
+  try{if(typeof btActive==='function'&&btActive()&&btCfg()){var sd=['GER','SOV'].filter(function(x){return x===nat||btNat(x)===nat;})[0],o=btObItems().filter(function(x){return x.side===sd&&x.gi===g;})[0];if(o&&btGroupOf(o)==='setup')return {f:function(i){return btInZone(o,i);}};if(o)return null;}}catch(e){} /* ダルマ「ドイツの配置する場所の指示はあっているか」: 対戦モードは文の読み取り(道路の境目が無く全体・T3 の「T3」をヘクスと誤読)ではなく、置くときの判定(btInZone=シナリオ設定の zone)をそのまま表示 */var gr=nmSuObG(nat).filter(function(x){return x.i===g;})[0];if(!gr||!gr.gl)return null;return nmZoneParse(gr.gl);}
 /* v1271(ダルマ指示「配置可能エリアはそのままのマップで表示」): 置けるヘクスは青くせず地図のまま(まわりを暗くするだけ) */
 var NM_ZONE_PLAIN=true;
 function nmSuZoneSVG(dl){var P=NM_SUPL;if(!P||!btGraphReady())return '';var z=nmSuZoneOf(P.slot);if(!z)return '';var hole='',blue='';try{nmAnimCss();}catch(e){}
