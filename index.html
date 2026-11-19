@@ -32221,6 +32221,7 @@ function btAIPrepFire(side){
     if(!s)return false;
     var adj=BT.stacks.some(function(e){return e.side!==side&&e.n!=null&&e.n>=0&&btInf(e).length&&btDist(e.n,s.n)<=1;});
     if(adj)return true;
+    var PU=s.u.filter(function(x){return x.pst;})[0];if(PU&&PU.pst.st===2&&PU.pst.fall.indexOf(s.n)<0)return false; /* S51 rY2: 建物へ入る番は準備射撃をしない(撃つと移動できない) */
     if(gain[s.id]==null)return true;            // 動く予定がない
     var bestEV=0;btEnemyNodes(side).forEach(function(tn){var fd={side:side,ph:'PF',parts:[{sid:s.id,uids:s.u.map(function(u){return u.id;})}],tgtN:tn,fast:true};var ev=btFireEval(fd);if(ev.ok)bestEV=Math.max(bestEV,btEV(ev,{pf:true}));});
     return bestEV*6>gain[s.id]*urgency;          // 期待損害0.5≒移動の価値3
