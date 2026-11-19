@@ -29831,9 +29831,9 @@ var BT_SCFG={
     noAdjMMC:{GER:1},wrecks:['sS5','sAA2'],pf:{side:'GER',rng:2,max:19},preBomb:{vs:'GER',def:'sNOP'}, /* v1371: PF=独の分隊13×1.5=19発・射程2(1944/11) / 事前砲爆撃 */
     ent:[{id:'e3',side:'GER',turn:3,off:'E',board:'s',hexes:['sP10','sQ10','sR10','sH10','sI10','sJ10'],lbl:'降下猟兵(T3、sQ10 か sI10 の上/隣から)'}],
     vic:'occ',vicSide:'SOV',occHexes:['sH4','rP5'],
-    fix:{GER:[['sH4',[/^5-4-8/,1],[/^9-1/,1],[/^HMG/,1]],['sK4',[/^4-4-7/,1]],['sP5',[/^5-4-8/,1],[/^8-1/,1],[/^MMG/,1]],['sN7',[/^5-4-8/,1],[/^LMG/,1]],['sP8',[/^4-4-7/,1]],['sK7',[/^4-4-7/,1],[/^8-0/,1]],['sJ9',[/^5-4-8/,1],[/^LMG/,1]],['sM9',[/^4-4-7/,1]],['rP5',[/^5-4-8/,1],[/^7-0/,1]],['sF6',[/^4-4-7/,1]]],
+    fix:{GER:[['rP5',[/^5-4-8/,1],[/^7-0/,1]],['rN5',[/^5-4-8/,1],[/^8-1/,1],[/^MMG/,1]],['rR4',[/^5-4-8/,1],[/^LMG/,1]],['rP7',[/^4-4-7/,1]],['sH4',[/^5-4-8/,1],[/^9-1/,1],[/^HMG/,1]],['sK4',[/^4-4-7/,1]],['sF6',[/^4-4-7/,1]],['sI2',[/^5-4-8/,1],[/^LMG/,1]],['sJ6',[/^4-4-7/,1],[/^8-0/,1]],['sN7',[/^4-4-7/,1]]],
       SOV:[['sR7',[/^6-6-7/,2],[/^9-1/,1],[/^MMG/,1]],['sS7',[/^6-6-7/,2],[/^8-1/,1],[/^MMG/,1]],['sR8',[/^6-6-6/,2],[/^8-1/,1],[/^MMG/,1]],['sR9',[/^6-6-6/,2],[/^DC/,1]],['sT6',[/^6-6-6/,2]],['sU6',[/^6-6-6/,2],[/^7-0/,1],[/^DC/,1]],['sV6',[/^6-6-6/,2]],['sT7',[/^6-6-6/,1]]]},
-    aiw:{fort:1,postMode:'fall',postTurn:1,posts:{GER:{sP5:'rP4',sK4:'rQ6'}},entPost:{e3:'rO4'}}}, /* v1371(ダルマ「A+B」): sP5・sK4 は T1 から rP5 の隣の遮蔽へ、T3 増援は rO4 へ。ほかは籠城 */
+    aiw:{fort:1,entPost:{e3:'rO4'}}}, /* v1376(ダルマ「極端な作戦を3回」): 独は2つの砦(rP5 の周り4部隊・sH4 の周り5部隊)に籠城、T3 増援は rO4 へ */
   /* v1375(ダルマ「全て本体に入れてから調整」): S42 One More Hedgerow。盤p の A〜L列。独=E〜L列に先に設置(全 MMC を建物・麦畑・果樹園に隠蔽設置できる SSR2)、米=T1 西端から進入、米が先攻。
      SSR1: 生垣のヘクス辺は TEM+2・越えるのに 2+COT。勝利: 終了時、米が G5・J5・J7 を支配 */
   S42:{natB:'USA',nameB:'米軍',colB:'#8a9a3c',
@@ -30025,7 +30025,7 @@ function btPFTap(n){var M=BT.pfMode;BT.pfMode=null;var s=btStackById(M.sid);if(!
    失敗=釘付け、失敗で色ダイ5〜6=混乱+DM、成功でも色ダイ5〜6=CX。地域 'sNOP'=盤s のN・O・P列 / 'r12'=盤r の A〜P列の1・2列 ===== */
 function btPreBombIn(n,area){var N=BTG.nodes[n];var m=N.nm.match(/^([a-z])([A-Z]+)(\d+)$/);if(!m)return false;
   if(area==='sNOP')return m[1]==='s'&&/^(N|O|P)$/.test(m[2]);if(area==='r12')return m[1]==='r'&&btColIdx(m[2])<=btColIdx('P')&&(+m[3]===1||+m[3]===2);return false;}
-function btPreBombRun(){var c=btCfg();if(!c||!c.preBomb||BT.preBombDone)return;BT.preBombDone=1;var area=BT.preBomb||c.preBomb.def;var vs=c.preBomb.vs,log=[T('事前砲爆撃')+'('+(area==='sNOP'?'盤s のN〜P列':'盤r のA〜P列の1・2列')+')'];
+function btPreBombRun(){var c=btCfg();if(!c||!c.preBomb||BT.preBombDone)return;BT.preBombDone=1;var area=BT.preBomb;if(!area){var cnt=function(ar){var k=0;BT.stacks.forEach(function(x){if(x.side===c.preBomb.vs&&x.n!=null&&x.n>=0&&btPreBombIn(x.n,ar))k+=btInf(x).length;});return k;};area=cnt('r12')>cnt('sNOP')?'r12':'sNOP';} /* v1376: アプリは独の多い地域 */var vs=c.preBomb.vs,log=[T('事前砲爆撃')+'('+(area==='sNOP'?'盤s のN〜P列':'盤r のA〜P列の1・2列')+')'];
   BT.stacks.forEach(function(s){if(s.side!==vs||s.n==null||s.n<0||!btPreBombIn(s.n,area))return;
     var L=btInf(s).filter(function(x){return btI(x,vs).kind==='smc'&&btGO(x);}).sort(function(a,b){return btCmdOf(vs,a)-btCmdOf(vs,b);})[0],ld=L?btCmdOf(vs,L):0;
     btInf(s).forEach(function(u){var d1=btDie(),d2=btDie(),fin=d1+d2+(u===L?0:ld),mor=btMorale(vs,u),ok=fin<=mor;
