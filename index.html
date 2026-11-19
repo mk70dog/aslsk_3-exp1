@@ -31886,7 +31886,7 @@ function btGoalMap(side){
       else if(k>=1&&k<=3&&!btEnemyAt(i,side))GD[i]=Math.max(GD[i]||0,4+(N.tem||0));});
     return GD;}
   if(cGX&&cGX.vic==='occ'){ /* v1371: S51 指定ヘクスの占拠。攻撃側=そのヘクス(敵がいれば隣の遮蔽)、守る側=そのヘクスと隣の遮蔽 */
-    var GO={},OH=(cGX.occHexes||[]).map(function(h){return BTG.nodes.findIndex(function(N){return N.nm===h;});}).filter(function(n){return n>=0;});
+    var GO={},OH=((cGX.vicSide===side&&btAIW().occOnly)||cGX.occHexes||[]).map(function(h){return BTG.nodes.findIndex(function(N){return N.nm===h;});}).filter(function(n){return n>=0;});
     OH.forEach(function(o){var eIn=btEnemyAt(o,side);
       if(cGX.vicSide===side){if(!eIn)GO[o]=14;BTG.nodes[o].nb.forEach(function(m){if(btEnemyAt(m,side))return;GO[m]=Math.max(GO[m]||0,(eIn?9:7)+(btInCover(m)?2:0));});
         BTG.nodes.forEach(function(N,i){var d=btDist(i,o);if(d>=2&&d<=3&&!btEnemyAt(i,side)&&btInCover(i))GO[i]=Math.max(GO[i]||0,5);});}
@@ -31928,10 +31928,12 @@ function btGoalField(side,G){
   if(!keys.length)return F;
   // 多始点の幅優先(移動コスト)
   var dist=new Float32Array(BTG.nodes.length);for(var i=0;i<dist.length;i++)dist[i]=1e9;
+  var AV=null,AW=btAIW();if(AW.avoidFrom&&btFirst()===side){var en=btOpp(side),src=[];AW.avoidFrom.forEach(function(h){var n=BTG.nodes.findIndex(function(N){return N.nm===h;});if(n>=0&&BT.stacks.some(function(x){return x.side===en&&x.n===n&&btInf(x).some(btGO);}))src.push(n);});
+    if(src.length){var ck=src.join(',');window.BT_AVC=window.BT_AVC||{};AV=BT_AVC[ck];if(!AV){AV=new Uint8Array(BTG.nodes.length);for(var v=0;v<AV.length;v++){if(src.some(function(n){return n===v||(btDist(n,v)<=(AW.avoidRng||16)&&btLOS(n,v,false).ok);}))AV[v]=1;}BT_AVC[ck]=AV;}}} /* 米の作戦(S51 案2): 指定ヘクスの敵から見えるヘクスを避けて進む(経路コスト+avoidC・目標値-avoidP) */
   var q=[];keys.forEach(function(k){dist[k]=BT_AIW.fieldG?Math.min(0,-(G[k]-9)/0.75):0;q.push(k);}); // fieldG: 目標の価値の差を誘導にも反映
   while(q.length){q.sort(function(a,b){return dist[a]-dist[b];});var a=q.shift();
-    BTG.nodes[a].nb.forEach(function(b){var ic=btInfCost(b,a);if(!ic)return;var nd=dist[a]+ic.c;if(nd<dist[b]){dist[b]=nd;q.push(b);}});}
-  for(var j=0;j<F.length;j++){var g=G[j]||0;F[j]=Math.max(g,dist[j]>=1e9?0:Math.max(0,9-0.75*dist[j]));}
+    BTG.nodes[a].nb.forEach(function(b){var ic=btInfCost(b,a);if(!ic)return;var nd=dist[a]+ic.c+(AV&&AV[b]?(AW.avoidC||2):0);if(nd<dist[b]){dist[b]=nd;q.push(b);}});}
+  for(var j=0;j<F.length;j++){var g=G[j]||0;F[j]=Math.max(g,dist[j]>=1e9?0:Math.max(0,9-0.75*dist[j]));if(AV&&AV[j])F[j]-=(AW.avoidP||3);}
   return F;
 }
 // ---------- [C4] 移動の判断 ----------
