@@ -29834,9 +29834,9 @@ var BT_SCFG={
     noAdjMMC:{GER:1},wrecks:['sS5','sAA2'],pf:{side:'GER',rng:2,max:19},preBomb:{vs:'GER',def:'sNOP'}, /* v1371: PF=独の分隊13×1.5=19発・射程2(1944/11) / 事前砲爆撃 */
     ent:[{id:'e3',side:'GER',turn:3,off:'E',board:'s',hexes:['sP10','sQ10','sR10','sH10','sI10','sJ10'],lbl:'降下猟兵(T3、sQ10 か sI10 の上/隣から)'}],
     vic:'occ',vicSide:'SOV',occHexes:['sH4','rP5'],
-    fix:{GER:[['sH4',[/^5-4-8/,1],[/^9-1/,1],[/^HMG/,1]],['sK4',[/^4-4-7/,1]],['sP5',[/^5-4-8/,1],[/^8-1/,1],[/^MMG/,1]],['sN7',[/^5-4-8/,1],[/^LMG/,1]],['sP8',[/^4-4-7/,1]],['sK7',[/^4-4-7/,1],[/^8-0/,1]],['sJ9',[/^5-4-8/,1],[/^LMG/,1]],['sM9',[/^4-4-7/,1]],['rP5',[/^5-4-8/,1],[/^7-0/,1]],['sF6',[/^4-4-7/,1]]],
+    fix:{GER:[['rQ6',[/^9-1/,1],[/^HMG/,1],[/^MMG/,1]],['rR4',[/^5-4-8/,1]],['rS6',[/^5-4-8/,1]],['sK2',[/^8-1/,1],[/^LMG/,2]],['sI2',[/^5-4-8/,1]],['sK4',[/^4-4-7/,1]],['rP5',[/^5-4-8/,1],[/^7-0/,1]],['sH4',[/^5-4-8/,1],[/^8-0/,1]],['rP7',[/^4-4-7/,1]],['sJ6',[/^4-4-7/,1]],['sF6',[/^4-4-7/,1]],['sN7',[/^4-4-7/,1]]],
       SOV:[['sR7',[/^6-6-7/,2],[/^9-1/,1],[/^MMG/,1]],['sS7',[/^6-6-7/,2],[/^8-1/,1],[/^MMG/,1]],['sR8',[/^6-6-6/,2],[/^8-1/,1],[/^MMG/,1]],['sR9',[/^6-6-6/,2],[/^DC/,1]],['sT6',[/^6-6-6/,2]],['sU6',[/^6-6-6/,2],[/^7-0/,1],[/^DC/,1]],['sV6',[/^6-6-6/,2]],['sT7',[/^6-6-6/,1]]]},
-    aiw:{fort:1,postMode:'fall',postTurn:1,posts:{GER:{sP5:'rP4',sK4:'rQ6'}},entPost:{e3:'rO4'}}}, /* v1371(ダルマ「A+B」): sP5・sK4 は T1 から rP5 の隣の遮蔽へ、T3 増援は rO4 へ。ほかは籠城 */
+    aiw:{fort:1,entPost:{e3:'rO4'},postMode:'fall',postTurn:1,posts:{GER:{rR4:'rQ6',rS6:'rQ6',sI2:'sK2',sK4:'sK2'}}}}, /* 16:30 ダルマ「実施」: 5-4-8 を1つずつ砦へ戻す(rQ6=5-4-8×2、sK2=5-4-8+4-4-7、rP5・sH4=5-4-8+指揮官)。 ダルマ指示(16:18)「rQ6 に HMG・MMG、sK2 に LMG×2。rQ6 は指揮官とMGだけ置き分隊は T1 に集める。rY2 はなし。rQ6=5-4-8×3+9-1、sK2=5-4-8×2・4-4-7+8-1」: 砦は残りの 4-4-7+指揮官。 前の案: ダルマ指示「rY2 に HMG・MMG・LMG・9-1・5-4-8×3、米が rY2 を撃てる距離(6)に来たら rX1 か rZ1 の都合の良い方へ」: SSR1(独MMC隣接・同ヘクス不可)のため 5-4-8 2つは rX3・rZ3 に置き T1 に rY2 へ集合。 v1376(ダルマ「極端な作戦を3回」): 独は2つの砦(rP5 の周り4部隊・sH4 の周り5部隊)に籠城、T3 増援は rO4 へ */
   /* v1375(ダルマ「全て本体に入れてから調整」): S42 One More Hedgerow。盤p の A〜L列。独=E〜L列に先に設置(全 MMC を建物・麦畑・果樹園に隠蔽設置できる SSR2)、米=T1 西端から進入、米が先攻。
      SSR1: 生垣のヘクス辺は TEM+2・越えるのに 2+COT。勝利: 終了時、米が G5・J5・J7 を支配 */
   S42:{natB:'USA',nameB:'米軍',colB:'#8a9a3c',
@@ -30028,7 +30028,7 @@ function btPFTap(n){var M=BT.pfMode;BT.pfMode=null;var s=btStackById(M.sid);if(!
    失敗=釘付け、失敗で色ダイ5〜6=混乱+DM、成功でも色ダイ5〜6=CX。地域 'sNOP'=盤s のN・O・P列 / 'r12'=盤r の A〜P列の1・2列 ===== */
 function btPreBombIn(n,area){var N=BTG.nodes[n];var m=N.nm.match(/^([a-z])([A-Z]+)(\d+)$/);if(!m)return false;
   if(area==='sNOP')return m[1]==='s'&&/^(N|O|P)$/.test(m[2]);if(area==='r12')return m[1]==='r'&&btColIdx(m[2])<=btColIdx('P')&&(+m[3]===1||+m[3]===2);return false;}
-function btPreBombRun(){var c=btCfg();if(!c||!c.preBomb||BT.preBombDone)return;BT.preBombDone=1;var area=BT.preBomb||c.preBomb.def;var vs=c.preBomb.vs,log=[T('事前砲爆撃')+'('+(area==='sNOP'?'盤s のN〜P列':'盤r のA〜P列の1・2列')+')'];
+function btPreBombRun(){var c=btCfg();if(!c||!c.preBomb||BT.preBombDone)return;BT.preBombDone=1;var area=BT.preBomb;if(!area){var cnt=function(ar){var k=0;BT.stacks.forEach(function(x){if(x.side===c.preBomb.vs&&x.n!=null&&x.n>=0&&btPreBombIn(x.n,ar))k+=btInf(x).length;});return k;};area=cnt('r12')>cnt('sNOP')?'r12':'sNOP';} /* v1376: アプリは独の多い地域 */var vs=c.preBomb.vs,log=[T('事前砲爆撃')+'('+(area==='sNOP'?'盤s のN〜P列':'盤r のA〜P列の1・2列')+')'];
   BT.stacks.forEach(function(s){if(s.side!==vs||s.n==null||s.n<0||!btPreBombIn(s.n,area))return;
     var L=btInf(s).filter(function(x){return btI(x,vs).kind==='smc'&&btGO(x);}).sort(function(a,b){return btCmdOf(vs,a)-btCmdOf(vs,b);})[0],ld=L?btCmdOf(vs,L):0;
     btInf(s).forEach(function(u){var d1=btDie(),d2=btDie(),fin=d1+d2+(u===L?0:ld),mor=btMorale(vs,u),ok=fin<=mor;
@@ -31889,7 +31889,7 @@ function btGoalMap(side){
       else if(k>=1&&k<=3&&!btEnemyAt(i,side))GD[i]=Math.max(GD[i]||0,4+(N.tem||0));});
     return GD;}
   if(cGX&&cGX.vic==='occ'){ /* v1371: S51 指定ヘクスの占拠。攻撃側=そのヘクス(敵がいれば隣の遮蔽)、守る側=そのヘクスと隣の遮蔽 */
-    var GO={},OH=(cGX.occHexes||[]).map(function(h){return BTG.nodes.findIndex(function(N){return N.nm===h;});}).filter(function(n){return n>=0;});
+    var GO={},OH=((cGX.vicSide===side&&btAIW().occOnly)||cGX.occHexes||[]).map(function(h){return BTG.nodes.findIndex(function(N){return N.nm===h;});}).filter(function(n){return n>=0;});
     OH.forEach(function(o){var eIn=btEnemyAt(o,side);
       if(cGX.vicSide===side){if(!eIn)GO[o]=14;BTG.nodes[o].nb.forEach(function(m){if(btEnemyAt(m,side))return;GO[m]=Math.max(GO[m]||0,(eIn?9:7)+(btInCover(m)?2:0));});
         BTG.nodes.forEach(function(N,i){var d=btDist(i,o);if(d>=2&&d<=3&&!btEnemyAt(i,side)&&btInCover(i))GO[i]=Math.max(GO[i]||0,5);});}
@@ -31931,10 +31931,12 @@ function btGoalField(side,G){
   if(!keys.length)return F;
   // 多始点の幅優先(移動コスト)
   var dist=new Float32Array(BTG.nodes.length);for(var i=0;i<dist.length;i++)dist[i]=1e9;
+  var AV=null,AW=btAIW();if(AW.avoidFrom&&btFirst()===side){var en=btOpp(side),src=[];AW.avoidFrom.forEach(function(h){var n=BTG.nodes.findIndex(function(N){return N.nm===h;});if(n>=0&&BT.stacks.some(function(x){return x.side===en&&x.n===n&&btInf(x).some(btGO);}))src.push(n);});
+    if(src.length){var ck=src.join(',');window.BT_AVC=window.BT_AVC||{};AV=BT_AVC[ck];if(!AV){AV=new Uint8Array(BTG.nodes.length);for(var v=0;v<AV.length;v++){if(src.some(function(n){return n===v||(btDist(n,v)<=(AW.avoidRng||16)&&btLOS(n,v,false).ok);}))AV[v]=1;}BT_AVC[ck]=AV;}}} /* 米の作戦(S51 案2): 指定ヘクスの敵から見えるヘクスを避けて進む(経路コスト+avoidC・目標値-avoidP) */
   var q=[];keys.forEach(function(k){dist[k]=BT_AIW.fieldG?Math.min(0,-(G[k]-9)/0.75):0;q.push(k);}); // fieldG: 目標の価値の差を誘導にも反映
   while(q.length){q.sort(function(a,b){return dist[a]-dist[b];});var a=q.shift();
-    BTG.nodes[a].nb.forEach(function(b){var ic=btInfCost(b,a);if(!ic)return;var nd=dist[a]+ic.c;if(nd<dist[b]){dist[b]=nd;q.push(b);}});}
-  for(var j=0;j<F.length;j++){var g=G[j]||0;F[j]=Math.max(g,dist[j]>=1e9?0:Math.max(0,9-0.75*dist[j]));}
+    BTG.nodes[a].nb.forEach(function(b){var ic=btInfCost(b,a);if(!ic)return;var nd=dist[a]+ic.c+(AV&&AV[b]?(AW.avoidC||2):0);if(nd<dist[b]){dist[b]=nd;q.push(b);}});}
+  for(var j=0;j<F.length;j++){var g=G[j]||0;F[j]=Math.max(g,dist[j]>=1e9?0:Math.max(0,9-0.75*dist[j]));if(AV&&AV[j])F[j]-=(AW.avoidP||3);}
   return F;
 }
 // ---------- [C4] 移動の判断 ----------
@@ -31987,6 +31989,10 @@ function btRoleW(side){ // シナリオの攻撃側は危険を受け入れ、�
 function btStackPost(s){if(s.post!=null)return s.post;var u=s.u.filter(function(x){return x.post!=null;})[0];return u?u.post:null;}
 function btPostGoal(side,s){var A=btAIW();var P=btStackPost(s);if(P==null||s.n==null)return null;var en=btOpp(side);
   var near=99;if(s.n>=0)BT.stacks.forEach(function(x){if(x.side===en&&x.n!=null&&x.n>=0&&btInf(x).some(btGO))near=Math.min(near,btDist(x.n,s.n));});
+  var PU=s.u.filter(function(x){return x.pst;})[0];if(PU){var Q=PU.pst; /* ダルマ指示(S51 rY2): 集合地 go へ集まり、敵の歩兵が near 以内(los なら go へLOSが通る)に来たら fall の建物のうち都合の良い方へ入る */
+    if(Q.st===1&&BT.stacks.some(function(x){return x.side===en&&x.n!=null&&x.n>=0&&btInf(x).some(btGO)&&btDist(x.n,Q.go)<=Q.near&&(!Q.los||btLOS(x.n,Q.go,false).ok);}))Q.st=2;
+    if(Q.st===1){if(s.n===Q.go)return {hold:true};var g0={};g0[Q.go]=20;return {g:g0};}
+    if(Q.fall.indexOf(s.n)>=0)return {hold:true};var g1={},any=0;Q.fall.forEach(function(f){if(btEnemyAt(f,side))return;var th=0;BT.stacks.forEach(function(x){if(x.side===en&&x.n!=null&&x.n>=0&&btInf(x).some(btGO)&&btDist(x.n,f)<=6&&btLOS(x.n,f,false).ok)th++;});g1[f]=20+(BTG.nodes[f].tem||0)-2*th;any=1;});return any?{g:g1}:null;}
   if(A.postMode==='fall'){if(s.n===P)return {hold:true};if(near<=(A.postNear||2)||BT.turn>=(A.postTurn||3)){var g={};g[P]=20;return {g:g};}return {hold:true};}
   if(A.postMode==='town'){var late=BT.turn>=(A.townTurn||5),g2={};
     var tgt=P;if(late&&btEnemyAt(P,side)){var bl=[];btBldgs().forEach(function(b){btBldgNodes(b).forEach(function(n){if(!btEnemyAt(n,side))bl.push(n);});});bl.sort(function(a,b){return btDist(a,s.n>=0?s.n:a)-btDist(b,s.n>=0?s.n:b);});if(bl.length)tgt=bl[0];}
@@ -32220,6 +32226,7 @@ function btAIPrepFire(side){
     if(!s)return false;
     var adj=BT.stacks.some(function(e){return e.side!==side&&e.n!=null&&e.n>=0&&btInf(e).length&&btDist(e.n,s.n)<=1;});
     if(adj)return true;
+    var PU=s.u.filter(function(x){return x.pst;})[0];if(PU&&PU.pst.st===2&&PU.pst.fall.indexOf(s.n)<0)return false; /* S51 rY2: 建物へ入る番は準備射撃をしない(撃つと移動できない) */
     if(gain[s.id]==null)return true;            // 動く予定がない
     var bestEV=0;btEnemyNodes(side).forEach(function(tn){var fd={side:side,ph:'PF',parts:[{sid:s.id,uids:s.u.map(function(u){return u.id;})}],tgtN:tn,fast:true};var ev=btFireEval(fd);if(ev.ok)bestEV=Math.max(bestEV,btEV(ev,{pf:true}));});
     return bestEV*6>gain[s.id]*urgency;          // 期待損害0.5≒移動の価値3
@@ -32371,7 +32378,7 @@ function btAppSetupFix(side,obs,F){
       log.push(o.name+'→'+row[0]);}});});
   BT.stacks.forEach(function(x){if(x.side===side)btGiveSW(x);});
   F.forEach(function(row){if(row.indexOf('hip')<0)return;var n=BTG.nodes.findIndex(function(N){return N.nm===row[0];});BT.stacks.forEach(function(x){if(x.side===side&&x.n===n)x.hip=1;});}); /* v1372: HIP */
-  var PO=btAIW().posts;if(PO&&PO[side]){BT.stacks.forEach(function(x){if(x.side!==side||x.n==null||x.n<0)return;var to=PO[side][BTG.nodes[x.n].nm];if(!to)return;var m=BTG.nodes.findIndex(function(N){return N.nm===to;});if(m>=0){x.post=m;x.u.forEach(function(u){if(btIsInfK(btI(u,side).kind))u.post=m;});}});} /* v1368: 持ち場(ユニットにも付ける=スタックがまとまっても消えない)(S14 独の前の部隊・S15 米の町へ行く部隊) */
+  var PO=btAIW().posts;if(PO&&PO[side]){BT.stacks.forEach(function(x){if(x.side!==side||x.n==null||x.n<0)return;var to=PO[side][BTG.nodes[x.n].nm];if(!to)return;var nI=function(h){return BTG.nodes.findIndex(function(N){return N.nm===h;});};var pst=null;if(typeof to==='object'){pst={go:nI(to.go),fall:(to.fall||[]).map(nI).filter(function(k){return k>=0;}),near:to.near||6,los:!!to.los,st:1};to=to.go;}var m=nI(to);if(m>=0){x.post=m;x.u.forEach(function(u){if(btIsInfK(btI(u,side).kind)){u.post=m;if(pst)u.pst=pst;}});}});} /* v1368: 持ち場(ユニットにも付ける=スタックがまとまっても消えない)(S14 独の前の部隊・S15 米の町へ行く部隊) */
   btCrewWithGun(side,log);BT.setupLog=log;}
 function BtAppSetup(){
   if(!btActive()||!BT.app)return;
