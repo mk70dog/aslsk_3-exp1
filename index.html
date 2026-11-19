@@ -39699,6 +39699,9 @@ var NM_TB_ITEMS=[
  {id:'fit',g:2,lb:'横幅に合わせる ↔',m:function(o){return o.indexOf("nmFtFit('width')")>=0;}},
  {id:'rot',g:2,lb:'地図を90°回転 ⟳',m:function(o){return /nmFtRot\(\)/.test(o);}}];
 var NM_TB_DEFOFF=['bcam','bctr','bsv','bmm','bfx','bvic'];
+/* ダルマ指示「ツールバーの設定 判定モード時は判定モードの項目のみ・対戦モード時は対戦モードの項目のみ・共通の項目はどちらでも」: 各モードのツールバーに実在するボタンで分類(j=判定のみ、b=対戦のみ、無し=共通) */
+var NM_TB_MD={hq:'j',su:'j',undo:'j',redo:'j',ab:'j',view:'j',gs:'j',fire:'j',atk:'j',move:'j',old:'j',bundo:'b',bredo:'b',bmove:'b',bab:'b',bside:'b',bdice:'b',bcam:'b',bctr:'b',bsv:'b',bmm:'b',bfx:'b',bvic:'b'};
+function nmTbInMode(id){var m=NM_TB_MD[id];if(!m)return true;var bt=!!(window.BT&&BT.on);return m==='b'?bt:!bt;}
 function nmTbCfg(){var c=S.nmTbCfg;if(!c||!c.order){c={order:NM_TB_ITEMS.map(function(x){return x.id;}),off:{}};NM_TB_DEFOFF.forEach(function(i){c.off[i]=true;});}NM_TB_ITEMS.forEach(function(x){if(c.order.indexOf(x.id)<0){if(NM_TB_DEFOFF.indexOf(x.id)>=0){c.off=c.off||{};c.off[x.id]=true;}var hi=(x.id==='undo'||x.id==='redo'||x.id==='su')?c.order.indexOf(x.id==='undo'?'hq':x.id==='su'?'hq':'undo'):-1;if(hi>=0)c.order.splice(hi+1,0,x.id);else c.order.push(x.id);}});c.off=c.off||{};return c;}
 function nmTbShown(id){var c=nmTbCfg(),it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0];if(!it||c.off[id])return false;if(it.g===2)return true;var el=document.getElementById('nmFtAct');if(!el)return false;return [].slice.call(el.querySelectorAll('button')).some(function(b){return it.m(b.getAttribute('onclick')||'')&&b.style.display!=='none';});}
 function nmTbOrdApply(){var c=nmTbCfg();[['nmFtAct',1],['nmFullTabs',2]].forEach(function(P){var el=document.getElementById(P[0]);if(!el)return;var bs=[].slice.call(el.querySelectorAll(':scope > button'));var got=[];
@@ -39711,7 +39714,7 @@ function nmTbCfgDraw(){var el=document.getElementById('nmTbCfgP');if(!el)return;
     return '<div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #263040"><span style="flex:1;font-size:14px;font-weight:700;color:'+(on?'#e8eef4':'#6d7c8e')+'">'+T(it.lb)+'</span>'
       +'<button onclick="event.stopPropagation();nmTbCfgSet(\''+id+'\',\'tog\')" style="font:inherit;font-weight:900;width:64px;height:34px;border-radius:8px;border:0;background:'+(on?'#ffb020':'#2a313d')+';color:'+(on?'#111':'#9fb2c8')+'">'+(on?T('表示'):T('非表示'))+'</button>'
       +B('↑',"nmTbCfgSet('"+id+"','up')",i===0)+B('↓',"nmTbCfgSet('"+id+"','dn')",i===arr.length-1)+'</div>';};
-  var g1=c.order.filter(function(id){var it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0];return it&&it.g===1;}),g2=c.order.filter(function(id){var it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0];return it&&it.g===2;});
+  var g1=c.order.filter(function(id){var it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0];return it&&it.g===1&&nmTbInMode(id);}),g2=c.order.filter(function(id){var it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0];return it&&it.g===2&&nmTbInMode(id);});
   var h='<div onclick="event.stopPropagation()" style="background:#1b2028;border:2px solid #7ec8e3;border-radius:14px;padding:12px 14px;width:min(420px,94vw);max-height:88vh;overflow:auto;color:#e8eef4"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:16px;color:#7ec8e3">🧰 '+T('ツールバーの設定')+'</b><button class="b sm" style="margin:0;height:30px;padding:0 10px" onclick="event.stopPropagation();document.getElementById(\'nmTbCfgP\').remove()">✕ '+T('閉じる')+'</button></div>'
     +'<div style="font-size:12px;color:#8fa6bd;margin:4px 0 6px">'+T('↑↓で並び順、表示/非表示で出す・出さないを決めます。≡(メインメニュー)はいつも一番上です')+'</div>'
     +'<div style="font-size:12px;font-weight:700;color:#e0b850;margin-top:6px">'+T('操作のボタン')+'</div>'+g1.map(row).join('')
@@ -39720,7 +39723,7 @@ function nmTbCfgDraw(){var el=document.getElementById('nmTbCfgP');if(!el)return;
   el.innerHTML=h;if(_sc0&&el.firstElementChild)el.firstElementChild.scrollTop=_sc0;}
 function nmTbCfgSet(id,op){var c=nmTbCfg();if(op==='reset'){c={order:NM_TB_ITEMS.map(function(x){return x.id;}),off:{}};try{NM_TB_DEFOFF.forEach(function(i){c.off[i]=true;});}catch(e){}}
   else if(op==='tog'){c.off[id]=!c.off[id];}
-  else{var it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0],grp=c.order.filter(function(k){var t=NM_TB_ITEMS.filter(function(x){return x.id===k;})[0];return t&&t.g===it.g;}),i=grp.indexOf(id),j=op==='up'?i-1:i+1;if(j<0||j>=grp.length)return;var a=c.order.indexOf(grp[i]),b=c.order.indexOf(grp[j]);c.order[a]=grp[j];c.order[b]=grp[i];}
+  else{var it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0],grp=c.order.filter(function(k){var t=NM_TB_ITEMS.filter(function(x){return x.id===k;})[0];return t&&t.g===it.g&&nmTbInMode(k);}),i=grp.indexOf(id),j=op==='up'?i-1:i+1;if(j<0||j>=grp.length)return;var a=c.order.indexOf(grp[i]),b=c.order.indexOf(grp[j]);c.order[a]=grp[j];c.order[b]=grp[i];}
   S.nmTbCfg=c;try{saveState();}catch(e){}try{nmFtActFill();}catch(e){}nmTbCfgDraw();}
 function nmOldTabPop(btn){var id='nmOtPop',old=document.getElementById(id);if(old){old.remove();return;}var el=document.createElement('div');el.id=id;
   var r=btn.getBoundingClientRect();el.style.cssText='position:fixed;z-index:9300;background:#141922f4;border:1.5px solid #4a5566;border-radius:12px;padding:8px;box-shadow:0 8px 24px #000c;display:grid;grid-template-columns:1fr 1fr;gap:6px;width:300px';
