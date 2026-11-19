@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1381</title>
+<title>ASL SKシリーズv1382</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1381">
+<meta property="og:title" content="ASL SKシリーズv1382">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10967,7 +10967,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.581"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.582"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1382="v1382(ダルマ報告「マルチ判定パネルを動かすと化ける」): 文字の大きさが標準以外のとき、vh/vw の割り算 calc(94vw / 1.15) をブラウザが 81.7vw にまとめてしまい、style が変わるたび(パネルを動かす等)に割り直して幅が縮んでいた→倍率を変数 --nmfz にして calc(94vw / var(--nmfz))";
 var APP_VERSION_HIST_v1381="v1381(ダルマ報告「ボタンを消せない」画像=ツールバーの編集): −を押しても、先に動く長押し・ドラッグの捕捉がドラッグを始めて−の処理まで届いていなかった→−はそこで消す。しまってあるボタンの欄が「(対戦)」の名前で分けていて v1379 で崩れていた(判定モードに対戦のボタン)→ NM_TB_MD(nmTbInMode)で分ける";
 var APP_VERSION_HIST_v1380="v1380(ダルマ報告「フォントサイズを大きくするとパネルの上が表示しない」): 文字の大きさ(CSS zoom)の中では vh/vw が倍率で割られずパネルが画面より高くなっていた。標準以外のとき、倍率がかかる要素のスタイルシートとインライン style の vh/vw を calc(値 / 倍率) に置き換え(nmFzVhAll、標準で元に戻す)";
 var APP_VERSION_HIST_v1379="v1379(ダルマ指示「ツールバーの設定 判定モード時は判定モードの項目のみ・対戦モード時は対戦モードの項目のみ・共通はどちらでも」→サンプル→「実施」): ツールバーの設定をモード別に表示(NM_TB_MD・nmTbInMode)、名前の「(対戦)」を削除";
@@ -42041,13 +42042,13 @@ function nmScnTxtPop(kind){var c=curScen();if(!c)return;var o=document.getElemen
 function nmBotSet(w,k){if(w==='L')S.nmBotL=k;else if(w==='M')S.nmBotM=k;else S.nmBotR=k;try{saveState();}catch(e){}try{nmFtBotFill();}catch(e){}var m=document.getElementById('nmFtMn');if(m){var b=document.getElementById('nmFtMenuB');m.remove();if(b){nmFtMenu(b);var d=document.querySelector('#nmFtMn details:last-of-type');try{[...document.querySelectorAll('#nmFtMn details')].forEach(function(x){if(/表示の設定/.test(x.querySelector('summary').textContent))x.open=true;});}catch(e){}}}}
 /* v1376(ダルマ「画面の設定にフォントサイズの変更」→画面全体): 文字の大きさ=画面全体の倍率(CSS zoom)。S.nmFz = s/m/l/xl */
 var NM_FZ={s:0.9,m:1,l:1.15,xl:1.3};
-function nmFzApply(){try{var f=NM_FZ[S.nmFz||'m']||1,de=document.documentElement;de.style.zoom='';window.NM_FZF=f; /* 地図(losMapWrap)はタップ位置の計算が狂わないよう倍率をかけず、地図の外(メニュー・パネル・ポップアップ・帯)だけ */
+function nmFzApply(){try{var f=NM_FZ[S.nmFz||'m']||1,de=document.documentElement;de.style.zoom='';window.NM_FZF=f;de.style.setProperty('--nmfz',String(f)); /* 地図(losMapWrap)はタップ位置の計算が狂わないよう倍率をかけず、地図の外(メニュー・パネル・ポップアップ・帯)だけ */
   var st=document.getElementById('nmFzSt');if(!st){st=document.createElement('style');st.id='nmFzSt';document.head.appendChild(st);}
   st.textContent=f===1?'':'body > :not(#main):not(script), #main > :not(:has(#losScrollWrap)):not(#losScrollWrap), #main :has(> #losScrollWrap) > :not(#losScrollWrap), #main :has(#losScrollWrap):not(:has(> #losScrollWrap)) > :not(:has(#losScrollWrap)):not(#losScrollWrap){zoom:'+f+'}';;try{nmFzVhAll();}catch(e){}}catch(e){}}
 /* ダルマ報告「フォントサイズを大きくするとパネルの上が表示しない」: CSS zoom の中では vh/vw が倍率で割られないため、100vh の高さのパネルが画面より大きくなり上がはみ出していた。
    文字の大きさが標準以外のとき、スタイルシートとインライン style の vh/vw/vmin/vmax を calc(値 / 倍率) に置き換える(標準に戻すと元に戻す)。 */
-var NM_FZ_RE=/(-?\d*\.?\d+)(vh|vw|vmin|vmax|dvh|svh|lvh)(?! \/)/g,NM_FZ_UN=/calc\((-?\d*\.?\d+)(vh|vw|vmin|vmax|dvh|svh|lvh) \/ [\d.]+\)/g;
-function nmFzVal(v,f){v=String(v).replace(NM_FZ_UN,'$1$2');return f===1?v:v.replace(NM_FZ_RE,function(m,n,u){return 'calc('+n+u+' / '+f+')';});}
+var NM_FZ_RE=/(-?\d*\.?\d+)(vh|vw|vmin|vmax|dvh|svh|lvh)(?! \/)/g,NM_FZ_UN=/calc\((-?\d*\.?\d+)(vh|vw|vmin|vmax|dvh|svh|lvh) \/ (?:[\d.]+|var\(--nmfz\))\)/g;
+function nmFzVal(v,f){v=String(v).replace(NM_FZ_UN,'$1$2');return f===1?v:v.replace(NM_FZ_RE,function(m,n,u){return 'calc('+n+u+' / var(--nmfz))';});} /* ダルマ報告「マルチ判定パネルを動かすと化ける」: calc(94vw / 1.15) はブラウザが 81.7391vw にまとめてしまい、style が変わるたびに割り直して幅が縮んでいた→倍率は変数 --nmfz(まとめられない) */
 function nmFzIsZ(el){var de=document.documentElement;if(!el||el===de||el===document.body)return false;var m=document.getElementById('main');if(el===m)return false;var w=document.getElementById('losScrollWrap');if(w&&(el.contains(w)||w.contains(el)))return false;return true;} /* 文字の倍率(zoom)がかかる要素か */
 function nmFzEl(el,f){var st=el.getAttribute&&el.getAttribute('style');if(!st||(f!==1&&!nmFzIsZ(el))||!/\d(vh|vw|vmin|vmax|dvh|svh|lvh)/.test(st))return;var nv=nmFzVal(st,f);if(nv!==st)el.setAttribute('style',nv);}
 function nmFzSheet(f){var out=[];var walk=function(rules,wrap){[].slice.call(rules||[]).forEach(function(r){try{if(r.cssRules&&r.media){walk(r.cssRules,'@media '+r.media.mediaText);return;}if(!r.style||!r.selectorText)return;var t=r.style.cssText;if(!/\d(vh|vw|vmin|vmax|dvh|svh|lvh)/.test(t))return;try{var ms=document.querySelectorAll(r.selectorText);if([].some.call(ms,function(e){return !nmFzIsZ(e);}))return;}catch(e){return;}var d=[];for(var i=0;i<r.style.length;i++){var k=r.style[i],v=r.style.getPropertyValue(k);if(/\d(vh|vw|vmin|vmax|dvh|svh|lvh)/.test(v))d.push(k+':'+nmFzVal(v,f)+(r.style.getPropertyPriority(k)?'!important':''));}if(d.length){var x=r.selectorText+'{'+d.join(';')+'}';out.push(wrap?wrap+'{'+x+'}':x);}}catch(e){}});};
