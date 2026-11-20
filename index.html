@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1415</title>
+<title>ASL SKシリーズv1416</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1415">
+<meta property="og:title" content="ASL SKシリーズv1416">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.615"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.616"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1416="v1416(ドラッグ中の地図の自動スクロールを端に入ってから0.3秒後に";
 var APP_VERSION_HIST_v1415="v1415(保存の容量不足で開き直すと前の状態に戻る問題(空けて再保存・記録)";
 var APP_VERSION_HIST_v1414="v1414(スポット判定: Aにいる部隊の国を攻撃側に(ABが逆になる修正)";
 var APP_VERSION_HIST_v1413="v1413(ヘクスメニュー: 編成の編集を回復の上へ";
@@ -36532,7 +36533,8 @@ function nmDragAutoScrollStep(){
   function sp(d){return Math.round(4+18*Math.max(0,Math.min(1,(Z-d)/Z)));}
   if(D.ly<top+Z)dy=-sp(D.ly-top);else if(D.ly>bot-Z)dy=sp(bot-D.ly);
   if(D.lx<lef+Z)dx=-sp(D.lx-lef);else if(D.lx>rig-Z)dx=sp(rig-D.lx);
-  if(!dx&&!dy)return;
+  /* v1416(ダルマ報告「スタックをドラッグするとマップが勝手にスクロールする」): 端の近くでつかむと、動かす前から端の帯(56px)に入っていて即スクロールしていた → 一度帯の外に出てから帯に入った時だけ・帯に0.3秒とどまってからスクロール */
+  if(!dx&&!dy){D.asOut=1;D.asIn=0;return;}if(!D.asOut)return;if(!D.asIn)D.asIn=Date.now();if(Date.now()-D.asIn<300){nmDragAutoScrollKick();return;}
   var l0=el.scrollLeft,t0=el.scrollTop;el.scrollLeft+=dx;el.scrollTop+=dy;
   if(el.scrollLeft===l0&&el.scrollTop===t0)return; /* もう端まで来ている */
   try{S_LOS.scrollLeft=el.scrollLeft;S_LOS.scrollTop=el.scrollTop;}catch(e){}
