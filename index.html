@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1439</title>
+<title>ASL SKシリーズv1440</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1439">
+<meta property="og:title" content="ASL SKシリーズv1440">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.639"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.640"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1440="v1440(MC・PTCパネルを回復パネルと同じ形に";
 var APP_VERSION_HIST_v1439="v1439(部隊メニューに回復を常に表示(この部隊の回復パネル)";
 var APP_VERSION_HIST_v1438="v1438(白兵戦の戻るを一つ前へ・MC PTCを置いていない時と同じパネルに統一";
 var APP_VERSION_HIST_v1437="v1437(判定ボードの回復は配置・部隊登録に関係なく置いていない時と同じパネル";
@@ -42123,7 +42124,7 @@ function nmHqOpen(gi){NM_HQPK_FN=null;NM_HQGI=(gi==='ccx')?gi:null;var o=documen
     var TL={fire:['!fire','射撃(A→B)','','fire','射撃 A→B'],bog:['&bog','ボグ判定','','move'] /* v1436(ダルマ指示「部隊登録・地図に配置してあっても画面を変えない」まずボグ判定のみ): 置いていない時と同じパネルをいつも開く */,manh:['&manh','人力移動','','move'],gun:['@nmHqGunOpen','砲撃','','fire'],ftab:['&raq','残留火力','','fire'],react:['&react','車両が入ってきた','','cc','臨機の白兵戦<br>（動く車両）'],latw:['@nmLwOpen','軽対戦車兵器','','fire'] /* v971(ダルマ指示「軽対戦車兵器にタイル名を変更」) */,dc:['@nmDcOpen','爆薬','','fire'],afv:['@nmHqAfvOpen','装甲戦闘車両','','afv','車両 AFV'],move:['@nmHqMvOpen','移動','','move'],mc:['&mcp','MC・PTC','','mc'] /* v1438(ダルマ「パネルの統一 mc ptcも実施」) */,rout:['@nmRtOpen','潰走・阻止','','mc'],cc:['@nmHqCcOpen','白兵戦','','cc','白兵戦<br>（歩兵どうし）'],ccx:['&ccx','白兵戦','','cc','白兵戦'],ccv:['&ccv','車両への白兵戦','','cc','白兵戦<br>（車両を攻撃）'],rally:['&rally','回復','','rally'] /* v1437(ダルマ「回復も実施」): 配置・部隊登録に関係なく置いていない時と同じパネル */,repair:['@nmRpOpen','修理','','rally'],pa:['&pa','PAATC','','cc','PAATC<br>（歩兵が車両へ）'],ve:['&ve','車両の突入','','move','車両が目標のAFVへ<br>（停止できる？）'],ref:['%ref','早見表','','ref'],unit:['%unit','ユニット','','ref'],scen:['%scen','シナリオ','','ref']};
     /* v760(ダルマ指示「判定ボード内を使いやすく整理」): 射撃/移動・士気・近接/調べるの3区分・1画面。金枠=今のフェイズでよく使う */
     var ph=(S.turn&&S.turn.phase)||'',REC={rph:['rally','repair','mc'],pfph:['fire','gun','afv','latw','dc'],mph:['move','bog','manh','fire','afv'],dfph:['fire','gun','afv','latw','ftab'],afph:['fire','dc','ftab'],rtph:['rout','mc'],aph:['ccx','mc'],ccph:['ccx']}[ph]||[];
-    var tile=function(k){var t=TL[k],rec=REC.indexOf(k)>=0,oc=t[0]==='&ccx'?"nmHqOpen('ccx')":t[0]==='&pa'?"nmHqClose();nmPaOpen()":t[0]==='&ve'?"nmHqClose();nmVeOpen()":t[0]==='&ccv'?"nmHqClose();nmCcScOpen('veh')":t[0]==='&mcp'?"nmHqClose();NM_HQFROM=1;nmScOpen('nmMcpOpen')":t[0]==='&rally'?"nmHqClose();NM_HQFROM=1;nmRrOpen('rally')":t[0]==='&bog'?"nmHqClose();NM_HQFROM=1;nmScOpen('nmHqBogOpen')":t[0]==='&manh'?"nmHqClose();nmMh2Open()":t[0]==='&raq'?"nmHqClose();NM_PBACK='nmHqBk()';nmRaqOpen()":t[0]==='&react'?"nmHqClose();nmHqRcStart()":t[0].charAt(0)==='%'?"nmHqClose();NM_TVHQ=1;nmTvOpen('"+t[0].slice(1)+"')":t[0].charAt(0)==='@'?"nmHqAtA('"+t[0].slice(1)+"')":t[0]==='!qk'?"nmHqOpen('qk')":t[0].charAt(0)==='!'?'nmHqFire()':"nmHqClose();nmRmTabGo('"+t[0]+"')";return '<button class="b" style="margin:0;height:54px;min-height:0;padding:2px 3px;line-height:1.15;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;font-size:12px;'+((rec&&!nmHqLite())?'border:2px solid #c8a032;background:#2a2412':'')+'" onclick="'+esc(oc)+'">'+nmHqIc(t[3],16)+'<span>'+(t[4]||t[1])+'</span></button>';};
+    var tile=function(k){var t=TL[k],rec=REC.indexOf(k)>=0,oc=t[0]==='&ccx'?"nmHqOpen('ccx')":t[0]==='&pa'?"nmHqClose();nmPaOpen()":t[0]==='&ve'?"nmHqClose();nmVeOpen()":t[0]==='&ccv'?"nmHqClose();nmCcScOpen('veh')":t[0]==='&mcp'?"nmHqClose();NM_HQFROM=1;nmRrOpen('mc')":t[0]==='&rally'?"nmHqClose();NM_HQFROM=1;nmRrOpen('rally')":t[0]==='&bog'?"nmHqClose();NM_HQFROM=1;nmScOpen('nmHqBogOpen')":t[0]==='&manh'?"nmHqClose();nmMh2Open()":t[0]==='&raq'?"nmHqClose();NM_PBACK='nmHqBk()';nmRaqOpen()":t[0]==='&react'?"nmHqClose();nmHqRcStart()":t[0].charAt(0)==='%'?"nmHqClose();NM_TVHQ=1;nmTvOpen('"+t[0].slice(1)+"')":t[0].charAt(0)==='@'?"nmHqAtA('"+t[0].slice(1)+"')":t[0]==='!qk'?"nmHqOpen('qk')":t[0].charAt(0)==='!'?'nmHqFire()':"nmHqClose();nmRmTabGo('"+t[0]+"')";return '<button class="b" style="margin:0;height:54px;min-height:0;padding:2px 3px;line-height:1.15;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;font-size:12px;'+((rec&&!nmHqLite())?'border:2px solid #c8a032;background:#2a2412':'')+'" onclick="'+esc(oc)+'">'+nmHqIc(t[3],16)+'<span>'+(t[4]||t[1])+'</span></button>';};
     /* sample(ダルマ指示「ボタンから文字がはみ出している サンプルx3」): window.__hqSty A=高さを文字に合わせる B=アイコンを左・文字を右 C=2行の時は文字とアイコンを小さく */
     (function(){var st=window.__hqSty==null?'C':window.__hqSty;if(!st)return; /* v974: 既定=案C(ダルマ「c」) */var t0=tile;tile=function(k){var h=t0(k),two=/<br>/.test((TL[k]||[])[4]||'');
       if(st==='A')return h.replace('height:54px;min-height:0;padding:2px 3px','height:auto;min-height:54px;padding:6px 3px');
@@ -43420,13 +43421,13 @@ var NM_RR=null;
 function nmRpOpen(n,sd){nmRvOpen(n,sd);}
 function nmRrOpen(kind){nmCcScClear();try{nmHqClose();}catch(e){}var ns=nmSuNats();if(!ns.length){btToast(T('シナリオを選んでください'));return;}var c=curScen(),nat=nmMjLast(ns)||((c&&c.atk&&ns.indexOf(c.atk)>=0)?c.atk:ns[0]),n=null;
   try{var an=S_LOS.pxA?nmNodeOfPx(S_LOS.pxA):null;if(an!=null&&an>=0)n=an;}catch(e){}if(n==null)n=0;var H=nmHexOfNode(n);if(!H){btToast('マップを準備しています…');return;}
-  NM_RR={kind:kind,nat:nat,n:n};NM_HQFROM=1;NM_RM_HEX=H;BT_RM_XY={x:innerWidth/2,y:innerHeight/3};NM_CCS={open:1};NM_PBACK='nmHqBk()';if(kind==='rally')nmRrRally(nat);else nmRrRepair(nat,null);}
+  NM_RR={kind:kind,nat:nat,n:n};NM_HQFROM=1;NM_RM_HEX=H;BT_RM_XY={x:innerWidth/2,y:innerHeight/3};NM_CCS={open:1};NM_PBACK='nmHqBk()';if(kind==='rally')nmRrRally(nat);else if(kind==='mc')nmRrMc(nat);else nmRrRepair(nat,null);}
 function nmRrRally(nat){var Q=NM_RR;if(!Q)return;var sc=S.scen&&S.scen.sel;if(!sc)return;Q.nat=nat;Q.sel=null;Q.ldr=null;Q.mode='ldr';var dm=!!(NM_RL&&NM_RL.dm);if(!S.savedGroups)S.savedGroups={};if(!S.savedGroups[sc])S.savedGroups[sc]={};delete S.savedGroups[sc]['_T'];nmGeSaved('_T',nat);
   NM_RL={n:Q.n,sd:nmSuSide(nat),slot:'_T',dm:dm,mode:{},res:{}};NM_RV=null;var G0=nmRrGroups(nat),f0=G0.base[0]||G0.elr[0]||G0.cas[0];if(f0){nmRrPick('mmc',f0);return;}NM_RM_SUB='rally';btRmReopen(Q.n);}
 function nmRrRepair(nat,v){var Q=NM_RR;if(!Q)return;if(!v){try{v=nmIjVehs(nat)[0]||null;}catch(e){}}/* 開いた時・国籍切替時は先頭の車両・砲を選ぶ(v928) */Q.nat=nat;Q.v=v||null;var H=nmHexOfNode(Q.n),sd=nmSuSide(nat);nmCcScClear();NM_CCS={open:1};
   if(v){var e={boardId:H.boardId,col:H.col,row:H.row,st:{},ijTmp:1,ccTmp:1};if(v.kind==='gun')e.gun=v.id;else e.veh=v.id;nmSideList(sd).push(e);NM_SEL_EH=e;}
   NM_RL=null;NM_RV={n:Q.n,sd:sd};NM_RM_SUB='rv';btRmReopen(Q.n);}
-function nmRrNat(k){var Q=NM_RR;if(!Q)return;nmMjSave(k);if(Q.kind==='rally')nmRrRally(k);else nmRrRepair(k,null);}
+function nmRrNat(k){var Q=NM_RR;if(!Q)return;nmMjSave(k);if(Q.kind==='mc'){nmRrMc(k);return;}if(Q.kind==='rally')nmRrRally(k);else nmRrRepair(k,null);}
 function nmRrVeh(i){var Q=NM_RR;if(!Q)return;var vs=nmIjVehs(Q.nat),v=vs[i];if(!v)return;if(Q.v&&Q.v.id===v.id)return;nmRrRepair(Q.nat,v);}
 function nmRrUnits(nat){return nmSuOb(nat).filter(function(x){return x.kind==='mmc'||x.kind==='smc';});}
 function nmRrCnt(i,d,brk){var Q=NM_RR,R=NM_RL;if(!Q||!R||R.slot!=='_T')return;var u=nmRrUnits(Q.nat)[i];if(!u)return;var its=nmGeList('_T').items,want=(u.kind==='smc')?!!brk:true;
@@ -43843,6 +43844,33 @@ function nmRmMcpItems(n){var P=NM_MCP;if(!P)return nmRMenuItems(n);var L=NM_SIDE
       var tx=P.r==='PTC'?(brk?T('混乱中なので効果なし'):T('原DR')+a+T('以下で影響なし')+'　'+(a+1)+T('以上で釘付け')):T('原DR')+(a-1)+T('以下で合格')+'　'+a+T('で釘付け')+'　'+(a+1)+T('以上で')+(brk?T('損耗'):T('混乱'));
       x.sub=(x.sub?x.sub+'　':'')+'<span style="color:#ffd070">'+tx+'</span>';}}}
   }catch(e){console.log('mcp items',e);}return it;};})();
+/* v1440(ダルマ指示「mc ptcのパネルを回復パネルと同じようにする」→実施): 左=① 国籍 ② シナリオのユニット(分隊・クラス低下・半減・指揮官から1つ)、右=③ チェックの種類 ④ ユニット ⑤ ダイス。仮の編成'_T'で既存のMC・PTCパネル(nmRmMcpItems)を使う */
+function nmRrMc(nat){var Q=NM_RR;if(!Q)return;var sc=S.scen&&S.scen.sel;if(!sc)return;Q.nat=nat;Q.sel=null;Q.mcLdr=null;var r0=NM_MCP&&NM_MCP.slot==='_T'?NM_MCP.r:null;
+  NM_MCP={n:Q.n,sd:nmSuSide(nat),slot:'_T',r:r0};NM_MC=null;NM_RL=null;NM_RV=null;var G0=nmRrGroups(nat),f0=G0.base[0]||G0.elr[0]||G0.cas[0];if(f0){nmRrMcPick('mmc',f0);return;}
+  if(!S.savedGroups)S.savedGroups={};if(!S.savedGroups[sc])S.savedGroups[sc]={};delete S.savedGroups[sc]['_T'];nmGeSaved('_T',nat);NM_RM_SUB='mcp';btRmReopen(Q.n);}
+function nmRrMcLdr(l){var Q=NM_RR;if(!Q||!Q.sel)return;Q.mcLdr=l||null;nmRrMcPick(Q.sel.kind,Q.sel.label);}
+function nmRrMcPick(kind,label){var Q=NM_RR;if(!Q)return;var sc=S.scen&&S.scen.sel;if(!sc)return;Q.sel={kind:kind,label:label};var sd=nmSuSide(Q.nat);
+  try{nmCcScClear();}catch(x){}NM_CCS={open:1};
+  if(!S.savedGroups)S.savedGroups={};if(!S.savedGroups[sc])S.savedGroups[sc]={};delete S.savedGroups[sc]['_T'];nmGeSaved('_T',Q.nat);nmGeAddCore('_T',Q.nat,kind,label);if(kind!=='smc'&&Q.mcLdr&&Q.mcLdr!==label)nmGeAddCore('_T',Q.nat,'smc',Q.mcLdr);try{nmGeSync('_T');}catch(e){}
+  try{var H=nmHexOfNode(Q.n),e={boardId:H.boardId,col:H.col,row:H.row,grp:'_T',st:{},ijTmp:1,ccTmp:1};nmSideList(sd).push(e);NM_SEL_EH=e;}catch(x){console.log('rrMc tmp',x);}
+  if(!NM_MCP)NM_MCP={n:Q.n,sd:sd,slot:'_T',r:null};NM_MCP.sd=sd;NM_MC=null;NM_RM_SUB='mcp';btRmReopen(Q.n);}
+(function(){var oM=nmRmMcpItems;nmRmMcpItems=function(n){var it=oM.apply(this,arguments);var Q=NM_RR,P=NM_MCP;if(!Q||Q.kind!=='mc'||!P||P.slot!=='_T')return it;
+  try{var ns=nmSuNats(),G=nmRrGroups(Q.nat),h=[];
+    h.push({ic:'back',t:T('← 戻る'),sub:T('MC・PTC'),f:"NM_RR=null;NM_MCP=null;NM_MC=null;btRmReopen("+n+")"});h.push({sep:1});
+    h.push({row:1,ic:'sel',t:T('① 国籍'),btns:ns.map(function(k){return [(Q.nat===k?'✓':'')+nmNatLbl(k),"nmRrNat('"+k+"')"];})});h.push({sep:1});
+    h.push({ic:'info',t:'<span style="font-size:12px;color:#9ab">'+T('② チェックするユニット(シナリオの駒。タップで選ぶ)')+'</span>'});
+    var pk=function(kind,l){var uid=nmCtrUid(Q.nat,l),c=nmCtrChip(uid,28),co=nmCoBtn(uid,'');return [(Q.sel&&Q.sel.label===l?'✓':'')+(co||(c?'<span style="display:inline-flex;align-items:center;gap:6px">'+c+'<span>'+l+'</span></span>':l)),"nmRrMcPick('"+kind+"','"+l.replace(/'/g,"\\'")+"')"];};
+    try{nmRrUnitCss();}catch(e){}
+    [['分隊',G.base],['クラス低下',G.elr],['半減',G.cas]].forEach(function(r){if(r[1].length)h.push({row:1,ic:'',t:'<span class="rrU" style="font-size:12px;color:#9fb2c8">'+T(r[0])+'</span>',btns:r[1].map(function(l){return pk('mmc',l);})});});
+    var sm=nmRrUnits(Q.nat).filter(function(u){return u.kind==='smc';});if(sm.length)h.push({row:1,ic:'',t:'<span class="rrU" style="font-size:12px;color:#9fb2c8">'+T('指揮官')+'</span>',btns:sm.map(function(u){return pk('smc',u.label);})});
+    h.push({sep:1});h.push({ic:'',t:'<span class="nmColBrk"></span>'});
+    if(Q.sel&&Q.sel.kind!=='smc'){var lds=sm.filter(function(u){return u.label!==Q.sel.label;});h.push({row:1,ic:'sel',t:T('③ 同じヘクスの指揮官'),btns:[[(Q.mcLdr?'':'✓')+T('なし'),"nmRrMcLdr('')"]].concat(lds.map(function(u){var uid2=nmCtrUid(Q.nat,u.label),co2=nmCoBtn(uid2,'');return [(Q.mcLdr===u.label?'✓':'')+(co2||u.label),"nmRrMcLdr('"+u.label+"')"];}))});h.push({sep:1});}
+    var rest=it.filter(function(x,i){if(!x)return false;if(x.ic==='back')return false;if(i===1&&x.sep)return false;if(x.ic==='sel'&&typeof x.t==='string'&&/MC・PTC<\/span>$|士気チェック<\/span>$/.test(x.t))return false;if(x.ic==='x'&&x.t==='閉じる')return false;return true;});
+    var rn=function(v){return typeof v==='string'?v.replace(/>①</g,'>③<').replace(/>②</g,'>④<').replace(/>③</g,'>⑤<'):v;};
+    rest.forEach(function(x){if(typeof x.t==='string'){var t=x.t;t=t.replace(/>③</g,'>⑥<').replace(/>②</g,'>⑤<').replace(/>①</g,'>④<');x.t=t;}});
+    while(rest.length&&rest[0].sep)rest.shift();
+    rest.forEach(function(x){if(typeof x.t==='string'&&x.t.indexOf('部隊_T')>=0){x.t=x.t.replace(/部隊_T\([^)]*\)/,(Q.sel&&Q.sel.label)||'');x.sub='';}});
+    return h.concat(rest);}catch(e){console.log('rrMc',e);return it;}};})();
 function nmRmRallyItems(n){var R=NM_RL;if(!R)return nmRMenuItems(n);var d=nmGeList(R.slot),its=d.items,L=NM_SIDE_LBL[R.sd],it=[],sg=function(v){return (v>=0?'+':'')+v;},N=BTG.nodes[R.n];
   var RRm=!!(NM_RR&&NM_RR.kind==='rally'&&R.slot==='_T');
   if(RRm)return nmRrRallyItems(n); /* v922(ダルマ指示「回復が使いにくい・わかりにくい」→流れOK・ユニットは1つずつ) */
