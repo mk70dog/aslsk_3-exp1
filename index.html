@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1402</title>
+<title>ASL SKシリーズv1403</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1402">
+<meta property="og:title" content="ASL SKシリーズv1403">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.602"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.603"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1403="v1403(白兵戦の判定ボタンがオートダイスOFFで隠れていた修正";
 var APP_VERSION_HIST_v1402="v1402(ダルマ報告「B地点の地形が反映されていない」S27 uP3→uN4 石造建物が TEM 自動(0)): 地図の判定パネル(歩兵の射撃)でフェイズを変えると FIREsub が旧射撃タブの決まりで TEM・妨害・高低差・LOS妨害内訳を初期値に戻していた。nmMfPh で目標がある時は losAutoApplyToAllTabs で A→B の LOS 結果を入れ直す";
 var APP_VERSION_HIST_v1401="v1401(ダルマ報告「AB判定のバーが表示しない」「スポット判定の目標Bが英軍になる」+システムログ): ①自動同期の受信(約20秒ごと)が、ステップ2で隠れているスポット判定まで nmIjDraw→nmIjGo(true) でやり直し、ステップ2のパネルを閉じて『隠れたスポット判定』が残っていた。nmAbBoard はそれでバーを隠していた→同期は見えているスポット判定だけ描き直す・バーは見えている #nmIj の時だけ隠す ②nmIjEhNat: 国籍が複数の車両・砲(75/27=ITA/GBR)は先頭(ITA)ではなくシナリオに出る国(複数なら置いた側の国)。S27 で英軍の 75/27 を A に置くと目標 B が英軍になっていた";
 var APP_VERSION_HIST_v1400="v1400(ダルマ「早見表に追加」→サンプル sample-refatr→「実施」): 早見表 兵士→カウンターに 対戦車ライフル ATR(独軍)の表・裏(裏はダルマ提供の実物写真)。表左上の B・E は通し番号の文字なので説明しない(ダルマ回答)";
@@ -37694,6 +37695,9 @@ function nmCcaAdd(sd){var Z=nmCcAtkInit();if(!Z)return;nmCcpSnap();Z.A[sd].push(
 function nmCcaDel(sd,j){var Z=nmCcAtkInit();if(!Z)return;nmCcpSnap();Z.A[sd].splice(j,1);if(!j)NM_CC[sd]=0;NM_CC.applied=false;nmCcpDraw();}
 function nmCcaClear(){if(!NM_CC)return;nmCcpSnap();NM_CC.atk=null;NM_CC.f=0;NM_CC.e=0;nmCcAtkInit(true);if(NM_CC.a1done&&NM_CC.amb)NM_CC.atk[NM_CC.amb]=[];NM_CC.applied=false;nmCcpDraw();}
 function nmCcaSimple(){if(!NM_CC)return;nmCcpSnap();NM_CC.atk=null;NM_CC.f=0;NM_CC.e=0;nmCcAtkInit(true,true);if(NM_CC.a1done&&NM_CC.amb)NM_CC.atk[NM_CC.amb]=[];NM_CC.applied=false;nmCcpDraw();}
+/* v1403(ダルマ「判定ボタンがない」): 白兵戦マルチ攻撃の判定ボタンが文字「振る」でオートダイス札(.nmAdB)が付き、オートダイスOFFで隠れていた → OFF時は「攻撃Nを判定する」(DR未選択なら案内のみ・振らない) */
+function nmCcpGo(sd){var k='cc'+sd;if(!NM_DSV[k]&&!nmAdOn()){try{btToast(T('先にDRを選んでください'));}catch(e){}return;}nmCcpDr(sd,nmDsTake(k));}
+function nmCcaGo(sd,j,key){var v=NM_DSV[key]||0;if(!v&&!nmAdOn()){try{btToast(T('先にDRを選んでください'));}catch(e){}return;}nmCcaDrSet(sd,j,nmDsTake(key));}
 function nmCcaDrSet(sd,j,v){var Z=nmCcAtkInit();if(!Z||!Z.A[sd][j])return;nmCcpSnap();var d=v||(2+Math.floor(Math.random()*6)+Math.floor(Math.random()*6));Z.A[sd][j].dr=d;if(j===0)NM_CC[sd]=d;NM_CC.applied=false;nmCcpDraw();}
 function nmCcaCas(sd,j,i){var Z=nmCcAtkInit();if(!Z||!Z.A[sd][j])return;Z.A[sd][j].cas=(Z.A[sd][j].cas===i)?null:i;nmCcpDraw();}
 /* sample(ダルマ指示「実カウンターを表示する」): 白兵戦の攻撃する組・目標の組のボタンにVASL実カウンター(無ければ文字) */
@@ -39158,7 +39162,7 @@ function nmCcaHTML(Z,lbl,chip,sg){var C=NM_CC,out='';
       if(r){x+='<div style="margin-top:8px;padding:8px;border-radius:8px;background:#1a1608;border:1px solid #c8a032;font-size:15px">DR '+raw+(c.drm?' '+sg(c.drm):'')+' = '+r.fin+' → <b style="color:'+(r.res==='none'?'#9fb2c8':'#ff8a7a')+';font-size:18px">'+({elim:T('目標を全員除去'),cas:T('目標の1ユニット損耗'),none:T('効果なし')}[r.res])+'</b>'+(raw===2&&k.a.some(function(i){return IA[i].x.kind!=='smc';})?'<div style="font-size:12px;color:#ffd070">'+T('原DR2：反映後に指揮官誕生の判定')+'</div>':'')+'</div>';
         if(r.res==='cas'&&k.t.length>1)x+='<div style="margin-top:6px;font-size:12px;color:#8fa6bd">'+T('損耗させるユニット（選ばなければランダム）')+'</div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:3px">'+k.t.map(function(i,m){return chip(k.cas===m,"nmCcaCas('"+sd+"',"+j+","+m+")",nmCcaLbl(ID[i].x));}).join('')+'</div>';}
       x+='<div style="display:flex;gap:3px;margin-top:8px">'+[2,3,4,5,6,7,8,9,10,11,12].map(function(v){return '<button class="b sm" style="margin:0;height:34px;flex:1 0 26px;min-width:0;padding:0 2px;'+(raw===v?'border:2px solid #ffd070!important;color:#ffd070!important':'')+'" onclick="nmDsHPick(this,\''+key+'\','+v+')">'+v+'</button>';}).join('')+'</div>';
-      x+='<button class="b" style="margin:6px 0 0;width:100%;min-height:40px;font-weight:800" data-dsk="'+key+'" onclick="nmCcaDrSet(\''+sd+'\','+j+',nmDsTake(\''+key+'\'))">🎲 '+me+T('の')+T('攻撃')+(j+1)+T('のDRを振る')+' / '+T('判定する')+'</button></div>';});
+      x+='<button class="b" style="margin:6px 0 0;width:100%;min-height:40px;font-weight:800" data-dsk="'+key+'" onclick="nmCcaGo(\''+sd+'\','+j+',\''+key+'\')">'+(nmAdOn()?'🎲 '+me+T('の')+T('攻撃')+(j+1)+T('のDRを振る')+' / '+T('判定する'):'✅ '+me+T('の')+T('攻撃')+(j+1)+T('を判定する'))+'</button></div>';});
     x+='<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:4px;align-items:center">'+chip(false,"nmCcaAdd('"+sd+"')",'＋ '+T('攻撃を追加'))+chip(!!(C.cx||{})[sd],"nmCcpCx('"+sd+"')",((C.cx||{})[sd]?'✓ ':'□ ')+me+T('がCX（攻撃+1・受ける−1）'))+'</div></div>';
     out+=x;});
   return out;}
@@ -39201,7 +39205,7 @@ function nmCcpDraw(){var C=NM_CC;if(!C){nmCcpClose();return;}var o=document.getE
     if(r){x+='<div style="margin-top:8px;padding:8px;border-radius:8px;background:#1a1608;border:1px solid #c8a032;font-size:15px">DR '+raw+(c.drm?' '+sg(c.drm):'')+' = '+r.fin+' → <b style="color:'+(r.res==='none'?'#9fb2c8':'#ff8a7a')+';font-size:18px">'+({elim:op+T(' 全員除去'),cas:op+T('の1ユニット損耗'),none:T('効果なし')}[r.res])+'</b>'+(raw===2?'<div style="font-size:12px;color:#ffd070">'+T('原DR2：反映後に指揮官誕生の判定')+'</div>':'')+'</div>';
       if(r.res==='cas'){var its=nmCCIts(Q).map(function(q){return q.x;}),dsd=sd==='f'?'e':'f';if(!C.cas)C.cas={};x+='<div style="margin-top:6px;font-size:12px;color:#8fa6bd">'+T('損耗させるユニット（選ばなければランダム）')+'</div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:3px">'+its.map(function(u,i){return chip(C.cas[dsd]===i,"NM_CC.cas['"+dsd+"']="+i+";nmCcpDraw()",u.label.replace(/\[.*$/,''));}).join('')+'</div>';}}
     x+='<div style="display:flex;gap:3px;margin-top:8px">'+[2,3,4,5,6,7,8,9,10,11,12].map(function(v){return '<button class="b sm" style="margin:0;height:34px;flex:1 0 26px;min-width:0;padding:0 2px;'+(raw===v?'border:2px solid #ffd070!important;color:#ffd070!important':'')+'" onclick="nmDsHPick(this,\'cc'+sd+'\','+v+')">'+v+'</button>';}).join('')+'</div>';
-    x+='<button class="b" style="margin:6px 0 0;width:100%;min-height:40px;font-weight:800" data-dsk="cc'+sd+'" onclick="nmCcpDr(\''+sd+'\',nmDsTake(\'cc'+sd+'\'))">🎲 '+me+T('のDRを振る')+' / '+T('判定する')+'</button>';
+    x+='<button class="b" style="margin:6px 0 0;width:100%;min-height:40px;font-weight:800" data-dsk="cc'+sd+'" onclick="nmCcpGo(\''+sd+'\')">'+(nmAdOn()?'🎲 '+me+T('のDRを振る')+' / '+T('判定する'):'✅ '+me+T('のDRで判定する'))+'</button>';
     return x+'</div>';};
   h+='<div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">'+nmCcaHTML(Z,lbl,chip,sg)+'</div><div style="margin-top:8px">'+chip(false,'nmCcaSimple()','⟲ '+T('かんたん: 全員で1つの攻撃にまとめる'))+'<span style="font-size:11px;color:#8fa6bd;margin-left:6px">'+T('ルール：1ユニットは1回だけ攻撃・攻撃される。未指定のユニットは攻撃しない')+'</span></div>';
   h+='<div style="display:flex;gap:8px;margin-top:12px">'+undo+(seq?big('nmCcpApply()',C.a1done?(ready?T('後攻の結果を反映'):T('後攻のDRが出たら反映できます')):(ready?T('先攻の結果を反映 → 後攻の攻撃へ'):T('先攻のDRが出たら反映できます')),ready):big('nmCcpApply()',ready?T('結果を反映（同時）'):T('両方のDRが出たら反映できます'),ready))+'</div>';
