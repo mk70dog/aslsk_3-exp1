@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-20 いまの作業=v1429 から再開、返事待ちなし。】** v1429(ダルマ「A: 赤い丸に白い字」): nmGrpBadge('num') で編成名が「相手〜」なら「相手」を取り、赤丸(#c62828・白ふち)に白字。味方は黒丸のまま。
+- **【2026-11-20 いまの作業=v1430 から再開。返事待ち: 車両の状態ボタンに「UK」を足すか(足すならサンプルから)。】** v1430(ダルマ「1でシナリオユニットを上にする」): nmHqPickA の選択画面。並び=シナリオのユニット(カウンター一覧)→黄色ボタン→地図上の編成→地図でタップ(window.NM_PK_SMP 既定'A')。地図上の編成(歩兵の編成)は nmPkCtrBtn の案1(編成マーク(相手は赤丸)＋カウンター横並び6枚まで＋ヘクス、window.NM_PK_CTR 既定1)。車両・砲の項目は今まで通り。サンプル撮影 /tmp/fz/pkc.js・pkf.js。
+- **【v1429】** v1429(ダルマ「A: 赤い丸に白い字」): nmGrpBadge('num') で編成名が「相手〜」なら「相手」を取り、赤丸(#c62828・白ふち)に白字。味方は黒丸のまま。
 - **【v1428】** v1428(ダルマ「なぜ効果なし？」ATR→Mk VIB 砲塔・側面 TK#7-AF1=6 DR6): nmLwEff の車両で DR=最終TK# かつ砲塔が「効果なし」になっていた→自動ショック(7.10)。nmAfvEffApply で ショック/走行不能 の札も付ける。確認: /tmp/fz/atrv2.js。smoke 0。
   - (前の記録)**【2026-11-20 いまの作業=v1427 から再開、返事待ちなし。】** v1427(ダルマ報告+ログ: S27 部隊C(9-1・4-6-8×3・ATR 1-12(独)×2 をSW atr_sw_ge として持つ)で Mk VIB を撃てない。スポット判定は歩兵の射撃だけ・「BU: 影響なし」): ATRが LATW(latw)でなく SW(sw)に入っていると軽対戦車兵器に出なかった。兵器ID「sw:SWのuid」(nmLwAtrW: LATW atr/atr_pol の性能+SWT の名前・B#・国籍、sov=atr_sw_so)を nmLwMgList に追加(atrSw)。A=射撃するもの「ATR 1-12(独) で車両を撃つ」・B=歩兵の射撃パネル「〜で車両を撃つ(軽対戦車兵器)」・C=軽対戦車兵器の一覧(SWのATRがあれば一覧だけの atr は出さない)。故障は nmUstSwTog。ATRは前進射撃・PIN でも撃てる(DRM)、持ち主混乱は不可。ソ連ATRは TK のソ連行(tkSov)。確認: /tmp/fz/atrv.js。smoke 0。
   - (前の記録)**【2026-11-20 いまの作業=v1426 から再開、返事待ちなし。】** v1426(ダルマ「修正実施」=v1425の未対応2点): 主兵装の機関銃(nmVmMaMg: ma なしの車両の cmg→bmg。Mk VIB・マチルダI・L3/35・OA vz30)で車両を撃つ時、nmVmMaTh で命中判定(VTT MG行 nmMgVttTH)→TK の2段階に。命中DRM=TEM・高所・妨害・目標サイズ・移動目標・射程1-2(Case25)・BU+1・CA変更(林建物×2)・前進射撃/移動射撃・SSR。不可=通常射程外(CMG12/BMG8)・Motion。nmVmJudge: V.res.th(赤白で砲塔/車体)→TKダイス c1c2(2 TK DRは c3c4も)→judgeAFVEffects('MG')、よい方(撃破>スタン>なし)を nmAfvEffApply。AFV_DATA に tk2(Mk VIB ["12.7","MG"]・L3/35 ["MG","MG"])。mgAtrOrdnanceTK に "12.7" 行(7/6/6/5/5)。スポット判定の判定ボタン(nmIjRoll)・オートダイスOFF(nmAdIjNeed)もTK段に対応。歩兵MG(LW)にも Case25。確認: /tmp/fz/vmth.js(MkVIB→L3/35: TH10 DRM+5 命中・TK1 12.7列5 DR8 効果なし/TK2 MG列4 DR3 撃破→TK2を使う)。smoke 0。
