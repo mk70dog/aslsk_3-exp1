@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1435 から再開。返事待ち: ブランチ sample-pkall(判定ボードの判定は地図・部隊登録に関係なく常に選択画面を出す＋選択画面から開いた判定の ← は選択画面へ。PAATC・車両の突入・車両への白兵戦・人力移動も選択画面経由)。「実施」で main に入れて v1436。】** v1435(ダルマ指示「マルチ判定内判定 ← マルチ判定パネルに戻るのでなく、一つ前のパネルに戻る」): 選択画面(nmHqPickA)から地図の編成(nmHqSetA)・シナリオのユニット(nmHqScPick)で開いた判定は NM_HQPK_FN に fn を覚え、NM_HQBack(判定パネルの ← 戻る)は判定ボードでなく nmHqPickA(fn) を開く。nmHqOpen で NM_HQPK_FN をクリア。確認: /tmp/fz/hqbk.js(MC・PTC/回復: ← で選択画面へ)。
+- **【2026-11-21 いまの作業=v1436 から再開、返事待ちなし。v1436: 判定ボードの「ボグ判定」は、地図に配置・部隊登録があっても、置いていない時と同じパネル(nmScOpen('nmHqBogOpen'))を直接開く(ダルマ「まずボグ判定のみ」。意図が合えば他の判定も同じにする予定)。sample-pkall(常に選択画面)は取りやめ
 - **【v1434】** v1434(ダルマ指示「編成マークの横の +1 +3 は消去」): 地図の編成マーク(nmGrpBadge)に渡す more を0に(残骸の WRECK +N はそのまま)。
 - **【v1433】** v1433(ダルマ報告「ドラッグした瞬間に画面が飛ぶ」+ログ 22:35 ドラッグ2回・置き直しの記録なし): nmDragMove のドラッグ開始で呼ぶ Draw() が losRestoreMapScroll で古い S_LOS.scrollLeft/Top に戻していた(v1177 と同じ型)。開始時に losSaveMapScroll() してから Draw。
 - **【v1432】** v1432(ダルマ報告「指揮官が除去のはずがされない」+ログ: 相手Eの9-1を負傷dr6で除去→8秒後の自動同期(nmGsSync)が相手の編成を相手のiPadの内容で丸ごと置き換えて9-1が戻った。ダルマ選択「A」): 受信した相手の編成の中身(nmGsGrpCore=pickerNat・pickerItems・sw・swOwner・latw)を S.nmOppRcv[sc] に覚え、送る時に今の中身と違えば S.nmOppEd に {at,sig} で記録して payload.edits に載せる(nmGsScanEdits)。相手のiPadは edits を自分の編成に反映(nmGsApplyEdit、射撃タブで開いている編成も更新)して S.nmEdAck に at を記録し payload.ack で返す。こちらは ack>=at になるまで、その相手の編成を受信で上書きしない。確認: /tmp/fz/gs2.js(2台をまねたテスト: 除去・混乱→相手に反映→ack→相手の回復が戻ってくる)。smoke 0。
