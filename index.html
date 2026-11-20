@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1414</title>
+<title>ASL SKシリーズv1415</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1414">
+<meta property="og:title" content="ASL SKシリーズv1415">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.614"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.615"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1415="v1415(保存の容量不足で開き直すと前の状態に戻る問題(空けて再保存・記録)";
 var APP_VERSION_HIST_v1414="v1414(スポット判定: Aにいる部隊の国を攻撃側に(ABが逆になる修正)";
 var APP_VERSION_HIST_v1413="v1413(ヘクスメニュー: 編成の編集を回復の上へ";
 var APP_VERSION_HIST_v1412="v1412(マップ同期でカウンターの位置を置き換えない";
@@ -12182,9 +12183,24 @@ function saveState(){if(typeof nmFaceSync==='function')nmFaceSync();
       wreckVeh:S_LOS.wreckVeh||{}, /* v343: 残骸の車両 */
       buildingMarks:S_LOS.buildingMarks||{},route:S_LOS.route||null,resid:S_LOS.resid||{} /* v407(ダルマ指示「消えないようにする」): マークと移動も開き直しで残す */
     }});
-    localStorage.setItem('aslsk_state_v1', JSON.stringify(toSave));
+    nmStateSaveLS(JSON.stringify(toSave));
   }catch(e){}
 }
+/* v1415(ダルマ報告「また場所が変わっている なんとかして」: 開き直すとターン・マップが前の状態に戻る): 保存(localStorage)が容量いっぱいで失敗しても黙って無視され、開き直すと最後に保存できた古い状態が読まれていた。
+   マップのバックアップ(aslsk_map_backup)は空きがある限り増える作りで、容量を使い切ることがある。→保存に失敗したら、バックアップ→シナリオ別マップ(今のシナリオ以外)→システムログの順に減らして保存し直す。それでも失敗なら記録と通知 */
+var NM_SAVE_ST={ok:true,at:0,fail:0,warned:0,freed:''};
+function nmStateSaveLS(j){var tryS=function(){try{localStorage.setItem('aslsk_state_v1',j);return true;}catch(e){NM_SAVE_ST.err=(e&&e.name)||String(e);return false;}};
+  if(tryS()){NM_SAVE_ST.ok=true;NM_SAVE_ST.at=Date.now();return true;}
+  var fr=[],get=function(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}},put=function(k,v){try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,JSON.stringify(v));}catch(e){try{localStorage.removeItem(k);}catch(x){}}};
+  var steps=[function(){var L=get(NM_BK_KEY);if(L&&L.length>3){put(NM_BK_KEY,L.slice(0,3));fr.push('バックアップ'+L.length+'→3');return true;}return false;},
+    function(){var St=get(NM_SC_KEY),sc=S.scen&&S.scen.sel;if(St){var ks=Object.keys(St).filter(function(k){return k!==sc;});if(ks.length){ks.forEach(function(k){delete St[k];});put(NM_SC_KEY,St);fr.push('他のシナリオのマップ'+ks.length);return true;}}return false;},
+    function(){var L=get(NM_DBG_KEY);if(L&&L.length>200){put(NM_DBG_KEY,L.slice(-200));fr.push('ログ'+L.length+'→200');return true;}return false;},
+    function(){if(localStorage.getItem(NM_BK_KEY)!=null){put(NM_BK_KEY,null);fr.push('バックアップ全部');return true;}return false;}];
+  for(var i=0;i<steps.length;i++){if(steps[i]()&&tryS()){NM_SAVE_ST.ok=true;NM_SAVE_ST.at=Date.now();NM_SAVE_ST.freed=fr.join('・');try{nmDbg('保存の容量不足→空けて保存しました: '+NM_SAVE_ST.freed+' (状態'+Math.round(j.length/1024)+'KB)');}catch(e){}return true;}}
+  NM_SAVE_ST.ok=false;NM_SAVE_ST.fail++;try{if(NM_SAVE_ST.fail===1||NM_SAVE_ST.fail%20===0)nmDbg('保存に失敗('+NM_SAVE_ST.err+') 状態'+Math.round(j.length/1024)+'KB・使用'+nmLsKB()+'KB');}catch(e){}
+  if(!NM_SAVE_ST.warned){NM_SAVE_ST.warned=1;try{btToast('⚠ '+T('保存できません(端末の保存容量が足りません)。開き直すと前の状態に戻ります'));}catch(e){}}return false;}
+function nmLsKB(){var n=0;try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);n+=k.length+(localStorage.getItem(k)||'').length;}}catch(e){}return Math.round(n*2/1024);}
+function nmLsTop(){var o=[];try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);o.push([k,(localStorage.getItem(k)||'').length]);}}catch(e){}o.sort(function(a,b){return b[1]-a[1];});return o.slice(0,5).map(function(x){return x[0]+' '+Math.round(x[1]*2/1024)+'KB';}).join('・');}
 function loadState(){
   try{
     var raw=localStorage.getItem('aslsk_state_v1');
@@ -38369,6 +38385,7 @@ function nmDbgHead(){var a=[];try{a.push('版: '+(typeof APP_VERSION!=='undefine
   try{a.push('ターン/フェイズ: '+(S.turn?'T'+S.turn.cur+(S.turn.half?'裏':'表')+' '+(S.turn.phase||''):'-'));}catch(e){}
   try{a.push('モード: '+nmModeNow()+'　オートダイス: '+(nmAdOn()?'ON':'OFF'));}catch(e){}
   try{var op=['btRm','nmIj','nmHq','nmHqPk','nmCcSc','nmRmPop','nmMvPk','nmFtMn'].filter(function(id){return document.getElementById(id);});a.push('開いている画面: '+(op.join(',')||'なし')+(typeof NM_RM_CUR!=='undefined'&&NM_RM_CUR?' (NM_RM_CUR='+NM_RM_CUR+')':''));}catch(e){}
+  try{a.push('保存: '+(NM_SAVE_ST.ok?'OK':'失敗×'+NM_SAVE_ST.fail+'('+(NM_SAVE_ST.err||'')+')')+(NM_SAVE_ST.at?' 最後 '+new Date(NM_SAVE_ST.at).toTimeString().slice(0,8):'')+'　使用 '+nmLsKB()+'KB　大きい順: '+nmLsTop());}catch(e){}
   try{a.push('画面: '+innerWidth+'×'+innerHeight+'　'+navigator.userAgent.replace(/^.*?\(([^)]*)\).*$/,'$1'));}catch(e){}
   return '===== 状態('+new Date().toLocaleString()+') =====\n'+a.join('\n')+'\n';}
 function nmDbgText(){var p=NM_DBG.prev||[];return nmDbgHead()+(p.length?'\n===== 前回(開き直す前)の記録 '+p.length+'件 =====\n'+nmDbgPack(p).join('\n')+'\n':'')+'\n===== 今回の記録 '+NM_DBG.buf.length+'件(いちばん下が最新) =====\n'+nmDbgPack(NM_DBG.buf).join('\n');}
