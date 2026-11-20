@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1441</title>
+<title>ASL SKシリーズv1442</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1441">
+<meta property="og:title" content="ASL SKシリーズv1442">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.641"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.642"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1442="v1442(判定ボードの回復は手番(ターン表)を反映させない";
 var APP_VERSION_HIST_v1441="v1441(地図全画面で右のすき間に下の画面が透ける問題を修正";
 var APP_VERSION_HIST_v1440="v1440(MC・PTCパネルを回復パネルと同じ形に";
 var APP_VERSION_HIST_v1439="v1439(部隊メニューに回復を常に表示(この部隊の回復パネル)";
@@ -43581,7 +43582,7 @@ function nmRlPick(n,pid){NM_RL.pick=pid;NM_RM_SUB='rally';btRmReopen(n);} /* v74
 function nmRlCalc(x,items,mode){var u=nmRlUnit(x),bm=(u.bm!=null?u.bm:u.mor)-((x.kind==='smc'&&x.wounded)?1:0)+(NM_RL.comm&&x.kind!=='smc'?1:0)+(NM_RL.ssrBm&&x.kind!=='smc'?1:0),N=BTG.nodes[NM_RL.n],ter=(NM_RR&&NM_RR.kind==='rally'&&NM_RL.slot==='_T')?(NM_RR.ter?-1:0):((N&&N.tem>0)?-1:0),L=nmRlLdr(items),drm=0,dl=[];
   if(mode==='ldr'&&L&&L.x!==x){drm+=L.c;dl.push('指揮官'+(L.c>=0?'+':'')+L.c);}else{drm+=1;dl.push('自己回復+1');}
   if(ter){drm+=ter;dl.push('地形-1');}if(NM_RL.dm&&!NM_RL.comm){drm+=4;dl.push('DM+4');}if(NM_RL.comm)dl.push('政治委員: 混乱士気+1・DMなし');if(NM_RL.ssrBm)dl.push('SSR: 混乱士気+1');return {bm:bm,drm:drm,dl:dl,ldr:L};}
-function nmRlSelfOk(x){var u=nmRlUnit(x);if(x.kind==='smc'||u.sr)return {ok:true};var side=rallyMmcSelfSideOk({rlPickNat:x.nat});if(!side)return {ok:false,why:'手番でない側の□印のないMMCは自己回復できません(3.1e)'};
+function nmRlSelfOk(x){var u=nmRlUnit(x);if(x.kind==='smc'||u.sr)return {ok:true};if(NM_RR&&NM_RR.kind==='rally'&&NM_RL&&NM_RL.slot==='_T')return {ok:true}; /* v1442(ダルマ指示「ターン表を反映させない」): 判定ボードの回復(シナリオのユニット)は手番・使用済みを見ない */var side=rallyMmcSelfSideOk({rlPickNat:x.nat});if(!side)return {ok:false,why:'手番でない側の□印のないMMCは自己回復できません(3.1e)'};
   if(S.rally&&S.rally.mmcSelfRallyUsed)return {ok:false,why:'□印のないMMCの自己回復はこのプレイヤーターンに使用済み(1個まで)'};return {ok:true,lim:true};}
 function nmRlDo(n,pid,dr){var R=NM_RL,its=nmGeList(R.slot).items,x=its.filter(function(q){return q.pid===pid;})[0];if(!x)return;var mode=R.mode[pid]||(nmRlLdr(its)&&x.kind!=='smc'?'ldr':'self');
   if(mode==='self'){var so=nmRlSelfOk(x);if(!so.ok){btToast(so.why);return;}if(so.lim){if(!S.rally)S.rally=deepCopy(INIT_RALLY);S.rally.mmcSelfRallyUsed=true;}}
