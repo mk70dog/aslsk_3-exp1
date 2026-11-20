@@ -1,8 +1,9 @@
-# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-20 / v1399)
+# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-20 / v1400)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-20 朝 いまの作業=v1399 から再開。返事待ち: 早見表に独軍 ATR を追加するサンプル(sample-refatr)】** (75/27 の「E」・ATR の「B」はカウンターの通し番号の文字なので説明不要=ダルマ回答) v1399(ダルマ報告「S27 ドイツ軍 atr カウンターがソ連のカウンターになっている」): OB の独軍「ATR」がソ連の SW atr_sw_so になっていた(画像がソ連・nat 不一致で射撃タブでは鹵獲扱い)。SWT に atr_sw_ge(nat GER・性能同じ)、VASL_CTR_MAP 'u:SW|atr_sw_ge'→ge_geATR、OB の対応付け(3277付近・38240付近)を独→atr_sw_ge。LATW の atr は nmLwCtrId(atr+GER→atr_ge)・nmSuSwImg(kind,id,px,nat) で国籍の画像。確認: S27 の独 OB = sw:atr_sw_ge・画像=独・自軍扱い、smoke 0。
+- **【2026-11-20 朝 いまの作業=v1400 から再開、返事待ちなし。】** v1400(ダルマ「実施」=sample-refatr): REF_CTR_SETS.inf に 対戦車ライフル ATR(表=VASL ge_geATR、裏=写真 REF_CTR_BK.atrgeb)。smoke 0。
+  - (前の記録)**【v1399】** (75/27 の「E」・ATR の「B」はカウンターの通し番号の文字なので説明不要=ダルマ回答) v1399(ダルマ報告「S27 ドイツ軍 atr カウンターがソ連のカウンターになっている」): OB の独軍「ATR」がソ連の SW atr_sw_so になっていた(画像がソ連・nat 不一致で射撃タブでは鹵獲扱い)。SWT に atr_sw_ge(nat GER・性能同じ)、VASL_CTR_MAP 'u:SW|atr_sw_ge'→ge_geATR、OB の対応付け(3277付近・38240付近)を独→atr_sw_ge。LATW の atr は nmLwCtrId(atr+GER→atr_ge)・nmSuSwImg(kind,id,px,nat) で国籍の画像。確認: S27 の独 OB = sw:atr_sw_ge・画像=独・自軍扱い、smoke 0。
   - (前の記録)**【v1398 から再開】** 返事待ち: 75/27 の「E」。 v1398(ダルマ「早見表 追加」+実物カウンター写真2枚→サンプル sample-ref7527→「修正と実施」): ①REF_CTR_SETS.gun に Cannone da 75/27(表=VASL it_gun_itAR75s_n9、裏=写真を切り抜いた REF_CTR_BK.it7527b)。②GUN_DATA g_75cannone_it の HEAT: deplete 2→6・availFrom '1942-09'(EXP#1 Italian Ordnance Notes「HEAT becomes available September 1942—as signified by the superscript S2+」)。btSpecNum で 1942/8=なし・1942/9=6・S27(1941/5/25)=なし を確認、smoke 0。その前の確認: S27 SSR3(NZ 乗員は 75/27 の鹵獲ペナルティなし)は対応済み(砲の nat が ITA/GBR のため nmGunPen で cap=false。S27 は対戦モード対象外)。
   - (前の記録)**【v1397 から再開、返事待ちなし】** v1397(ダルマ「実施」=S45 SSR2「(and any SMC/SW stacked with them)」): CC列とその北の指揮官・SW は、そのヘクスに HS がいるか、HS を含む編成で置くときだけ(btHsCapSolo・btGrpHasHs・btHsSoloMsg、1つずつ・編成・判定モードから写すの3経路)。乗員は今までどおり制限なし(原文は分隊と HS だけ)。確認: 実際の配置の操作(btMapTap0)で 8-1・LMG だけ CC3=不可→2-4-7 を置いた後は可、Q5 は可、smoke 0。
   - (前の記録)v1396: A→B の右クリック。 v1396(ダルマ「A→B 測定時に別のヘクスを右クリックで a のヘクスを変更にできる?」→案(B は残す・A・B のヘクス自体と A 無しはメニュー・長押しは変えない)→「実施」): nmAbRMoveA(右クリックの pointerup、判定モードだけ。対戦モードの BT.losAB は対象外)。確認: S24 で A・B を置いて別ヘクスを右クリック→A が移り距離4→2 で再計算、座標は同じ場所の左クリックの A と一致、B のヘクスの右クリック・A 無しはメニュー、smoke 0。
