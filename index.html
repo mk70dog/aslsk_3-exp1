@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1403</title>
+<title>ASL SKシリーズv1404</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1403">
+<meta property="og:title" content="ASL SKシリーズv1404">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.603"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.604"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1404="v1404(車両への白兵戦: オートダイスOFFで出目未選択なら判定しない";
 var APP_VERSION_HIST_v1403="v1403(白兵戦の判定ボタンがオートダイスOFFで隠れていた修正";
 var APP_VERSION_HIST_v1402="v1402(ダルマ報告「B地点の地形が反映されていない」S27 uP3→uN4 石造建物が TEM 自動(0)): 地図の判定パネル(歩兵の射撃)でフェイズを変えると FIREsub が旧射撃タブの決まりで TEM・妨害・高低差・LOS妨害内訳を初期値に戻していた。nmMfPh で目標がある時は losAutoApplyToAllTabs で A→B の LOS 結果を入れ直す";
 var APP_VERSION_HIST_v1401="v1401(ダルマ報告「AB判定のバーが表示しない」「スポット判定の目標Bが英軍になる」+システムログ): ①自動同期の受信(約20秒ごと)が、ステップ2で隠れているスポット判定まで nmIjDraw→nmIjGo(true) でやり直し、ステップ2のパネルを閉じて『隠れたスポット判定』が残っていた。nmAbBoard はそれでバーを隠していた→同期は見えているスポット判定だけ描き直す・バーは見えている #nmIj の時だけ隠す ②nmIjEhNat: 国籍が複数の車両・砲(75/27=ITA/GBR)は先頭(ITA)ではなくシナリオに出る国(複数なら置いた側の国)。S27 で英軍の 75/27 を A に置くと目標 B が英軍になっていた";
@@ -37696,8 +37697,10 @@ function nmCcaDel(sd,j){var Z=nmCcAtkInit();if(!Z)return;nmCcpSnap();Z.A[sd].spl
 function nmCcaClear(){if(!NM_CC)return;nmCcpSnap();NM_CC.atk=null;NM_CC.f=0;NM_CC.e=0;nmCcAtkInit(true);if(NM_CC.a1done&&NM_CC.amb)NM_CC.atk[NM_CC.amb]=[];NM_CC.applied=false;nmCcpDraw();}
 function nmCcaSimple(){if(!NM_CC)return;nmCcpSnap();NM_CC.atk=null;NM_CC.f=0;NM_CC.e=0;nmCcAtkInit(true,true);if(NM_CC.a1done&&NM_CC.amb)NM_CC.atk[NM_CC.amb]=[];NM_CC.applied=false;nmCcpDraw();}
 /* v1403(ダルマ「判定ボタンがない」): 白兵戦マルチ攻撃の判定ボタンが文字「振る」でオートダイス札(.nmAdB)が付き、オートダイスOFFで隠れていた → OFF時は「攻撃Nを判定する」(DR未選択なら案内のみ・振らない) */
-function nmCcpGo(sd){var k='cc'+sd;if(!NM_DSV[k]&&!nmAdOn()){try{btToast(T('先にDRを選んでください'));}catch(e){}return;}nmCcpDr(sd,nmDsTake(k));}
-function nmCcaGo(sd,j,key){var v=NM_DSV[key]||0;if(!v&&!nmAdOn()){try{btToast(T('先にDRを選んでください'));}catch(e){}return;}nmCcaDrSet(sd,j,nmDsTake(key));}
+function nmCcpGo(sd){var k='cc'+sd;if(!NM_DSV[k]&&!nmAdOn()){try{btToast(T('出目を選んでください(オートダイスOFF)'));}catch(e){}return;}nmCcpDr(sd,nmDsTake(k));}
+/* v1404: 車両への白兵戦の「攻撃を判定」も、オートダイスOFFでDR未選択なら振らずに案内 */
+function nmCvAtkGo(n){if(!NM_DSV['cvatk']&&!nmAdOn()){try{btToast(T('出目を選んでください(オートダイスOFF)'));}catch(e){}return;}nmCvAtk(n,nmDsTake('cvatk'));}
+function nmCcaGo(sd,j,key){var v=NM_DSV[key]||0;if(!v&&!nmAdOn()){try{btToast(T('出目を選んでください(オートダイスOFF)'));}catch(e){}return;}nmCcaDrSet(sd,j,nmDsTake(key));}
 function nmCcaDrSet(sd,j,v){var Z=nmCcAtkInit();if(!Z||!Z.A[sd][j])return;nmCcpSnap();var d=v||(2+Math.floor(Math.random()*6)+Math.floor(Math.random()*6));Z.A[sd][j].dr=d;if(j===0)NM_CC[sd]=d;NM_CC.applied=false;nmCcpDraw();}
 function nmCcaCas(sd,j,i){var Z=nmCcAtkInit();if(!Z||!Z.A[sd][j])return;Z.A[sd][j].cas=(Z.A[sd][j].cas===i)?null:i;nmCcpDraw();}
 /* sample(ダルマ指示「実カウンターを表示する」): 白兵戦の攻撃する組・目標の組のボタンにVASL実カウンター(無ければ文字) */
@@ -37845,7 +37848,7 @@ function nmRmCvItems(n){var C=NM_CV;if(!C)return nmRMenuItems(n);var R=nmCvCalc(
     it.push({ic:'fire',t:'<span>'+R.atk.map(function(x){return x.label;}).join('+')+'　CCV <b>'+R.ccv+'</b>'+(R.ssr24?'<small style="color:#3ca878">(SSR2+1)</small>':'')+(R.drm?'　DRM <b>'+sg(R.drm)+'</b>':'')+'</span>',sub:(R.dl.length?R.dl.join(' ')+'　':'')+'DR'+(R.ccv-R.drm-1)+'以下で撃破・'+(R.ccv-R.drm)+'で走行不能'});
     if(!C.res){var kd=R.ccv-R.drm-1; /* sample: 出目ごとに 撃破/走行不能/なし を出し、選んで「攻撃を判定」 */
       it.push({row:1,ic:'fire',t:'<span style="font-size:12px;color:#8899aa">DR</span>',btns:[2,3,4,5,6,7,8,9,10,11,12].map(function(v){var r=v<=kd?['撃破','#ff7070']:v===kd+1?['走行不能','#ffb040']:['なし','#8899aa'];return ['<b>'+v+'</b><small style="display:block;font-size:9px;line-height:1;color:'+r[1]+'">'+T(r[0])+'</small>',"nmDsHPick(this,'cvatk',"+v+")"];})});
-      it.push({row:1,ic:'',t:'',btns:[['🎲 '+T('攻撃を判定'),"nmCvAtk("+n+",nmDsTake('cvatk'))"]]});}}
+      it.push({row:1,ic:'',t:'',btns:[['🎲 '+T('攻撃を判定'),"nmCvAtkGo("+n+")"]]});}}
   else if(!C.res&&C.paSel==null)it.push({ic:'info',t:'攻撃できるユニットがいません',sub:'MMCはPAATCに成功すると攻撃できます'});
   if(C.res){it.push({ic:'tgt',t:'<span>DR'+C.raw+(C.res.drm?' '+sg(C.res.drm):'')+' = '+C.res.fin+(C.res.d3?'　'+T('原DR2 → 3つ目のdr')+' '+C.res.d3:'')+'　<b style="color:'+(C.res.res==='none'?'#8899aa':'#ff4040')+'">'+C.res.vn+' '+(C.res.res==='kill'?'撃破 '+nmWreckTxt(C.wrAns).replace(/^✓ 目標/,'→ '):({imm:'走行不能',none:'効果なし'}[C.res.res]))+'</b></span>',sub:'CCV'+C.res.ccv});
     if(C.cas12)it.push({ic:'info',t:'<span style="color:#ff8060">原DR12: 車両の操作班の反撃で攻撃したユニットが損耗</span>',sub:C.cas12});
