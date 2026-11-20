@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1438</title>
+<title>ASL SKシリーズv1439</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1438">
+<meta property="og:title" content="ASL SKシリーズv1439">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.638"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.639"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1439="v1439(部隊メニューに回復を常に表示(この部隊の回復パネル)";
 var APP_VERSION_HIST_v1438="v1438(白兵戦の戻るを一つ前へ・MC PTCを置いていない時と同じパネルに統一";
 var APP_VERSION_HIST_v1437="v1437(判定ボードの回復は配置・部隊登録に関係なく置いていない時と同じパネル";
 var APP_VERSION_HIST_v1436="v1436(判定ボードのボグ判定は地図・部隊登録に関係なく置いていない時と同じパネル";
@@ -36356,7 +36357,7 @@ function nmUnitMenu(it,H,n,sd){
     {var stc=nmStOf(eh);if(stc.cx||stc.imv)it.push({row:1,ic:'move',t:'<span>状態'+(stc.imv&&stc.mv?'　<span style="font-size:12px;color:#ffd060">この手番: '+nmImName(stc.imv)+'</span>':'')+'</span>',btns:[[(stc.cx?'✓':'')+'CX',"nmStTog("+n+",'"+sd+"','cx')"]]});} /* v525: 急速移動でCX */
     if(!NM_MOVE){it.push({ic:'move',t:'このカウンターを移動',sub:'種類を選ぶと開始。1ヘクスずつタップでマーカーが進む(MFを数える)。「ここで止まる」で確定'});it.push({row:1,ic:'',t:'',btns:NM_IM_OPT.map(function(o){return [o[1],"nmMvStartIm("+n+",'"+sd+"','"+o[0]+"')"];})});} /* v450 / v525: 移動・警戒移動・急速移動 */
     it.push({ic:'hex',t:nmGrpLbl(eh.grp)+'を編集',sub:'ユニットを加える・外す(射撃タブの編成'+eh.grp+'も同じ内容になる)',f:"nmGeOpen("+n+",'"+sd+"','"+eh.grp+"')"}); /* v1413(ダルマ指示「〜を編集を回復の上に表示」) */
-    var nbk=nmGeList(eh.grp).items.filter(function(x){return x.broken;}).length;if(nbk)it.push({ic:'sel',t:'回復(混乱'+nbk+')',sub:'混乱しているユニットの回復。指揮官回復・自己回復をダイスで',f:"nmRlOpen("+n+",'"+sd+"')"}); /* v416 */
+    var nbk=nmGeList(eh.grp).items.filter(function(x){return x.broken;}).length;it.push({ic:'sel',t:nbk?'回復(混乱'+nbk+')':'回復',sub:nbk?'混乱しているユニットの回復。指揮官回復・自己回復をダイスで':'混乱しているユニットはいません(この部隊の回復パネル)',f:"nmRlOpen("+n+",'"+sd+"')"}); /* v416 → v1439(ダルマ「回復を追加」→ rlm2_1): 混乱がなくても出す。開くのはこの部隊の回復パネル */
     if(nbk)it.push({ic:'move',t:'潰走(混乱'+nbk+')',sub:'混乱したユニットを林・建物へ(6MF)。潰走義務・阻止の士気チェック・潰走できない時の除去',f:"nmRtmStartAt("+n+",'"+sd+"')"}); /* v430 → v947: 地図表示で */
     var hasDc=!!eh.dcPlaced;try{hasDc=hasDc||nmSuDcList(eh.grp).length>0;}catch(e){hasDc=true;}if(hasDc)it.push({ic:'fire',t:eh.dcPlaced?'爆薬(DC)を爆発させる → '+BTG.nodes[eh.dcPlaced.n].nm:'爆薬(DC)を配置',sub:eh.dcPlaced?'AFPh(前進射撃フェイズ): X#未満で30FP(TEM)':'隣接ヘクスへ設置(DCを持つ統制状態の分隊)',f:"nmDcOpen("+n+",'"+sd+"')"}); /* v430 */
     nmSxRow(it,n,sd,eh); /* v434 */
