@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1423</title>
+<title>ASL SKシリーズv1424</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1423">
+<meta property="og:title" content="ASL SKシリーズv1424">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.623"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.624"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1424="v1424(v1424: 主砲・車載機関銃とも、スポット判定中に地図で砲塔・車体を回してもCA変更DRMを加算。機関銃もCAの外を撃ったらカウンターを目標へ回す。ROF/次の射撃では回した向きが基準";
 var APP_VERSION_HIST_v1423="v1423(車載機関銃の向き変更DRM(砲塔T+1/ST+2・車体NT+3、2本目+1、林建物x2)";
 var APP_VERSION_HIST_v1422="v1422(MkVIBのROF1・sD6、車載機関銃のROF、早見表にMkVIB";
 var APP_VERSION_HIST_v1421="v1421(ROF射撃のモードが残り次の射撃がFP0になる問題";
@@ -36914,10 +36915,21 @@ function nmVmTog(n,k){var V=NM_VM;V.use[k]=!(V.use[k]!==false);V.res=null;nmVmRe
 /* v1423: スポット判定を開いた時の車両の向きを覚える。判定中に「地図で方向を変更」で砲塔・車体を目標に向けても、撃つ前に向きを変えた扱い(DRM)にする */
 function nmVmFace0(eh){try{var L=NM_IJ&&NM_IJ.face0;if(!L)return null;for(var i=0;i<L.length;i++)if(L[i].eh===eh)return L[i];}catch(e){}return null;}
 (function(){var o=window.nmIjOpen;if(typeof o!=='function'||o.__f0)return;window.nmIjOpen=function(){var r=o.apply(this,arguments);try{if(NM_IJ&&!NM_IJ.face0){var L=[];[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(A){A.forEach(function(e){if(e&&e.veh)L.push({eh:e,facing:e.facing,tca:e.tca});});});NM_IJ.face0=L;}}catch(e){}return r;};window.nmIjOpen.__f0=1;})();
+/* v1424(ダルマ「実施」): 主砲も同じ。向きの基準=スポット判定を開いた時の向き(向き未設定だった時は今の向き)。1発撃ったら(ROF・別の目標で次を撃つ時)今の向きを新しい基準にする */
+function nmFace0B(eh){var f0=nmVmFace0(eh);return {facing:(f0&&f0.facing!=null)?f0.facing:eh.facing,tca:(f0&&f0.facing!=null)?f0.tca:eh.tca};}
+function nmFace0Upd(eh){try{if(!eh||!NM_IJ||!NM_IJ.face0)return;var f0=nmVmFace0(eh);if(!f0){f0={eh:eh};NM_IJ.face0.push(f0);}f0.facing=eh.facing;f0.tca=eh.tca;}catch(e){}}
+function nmVmNewShot(){try{var V=NM_VM;if(V&&V.res)nmFace0Upd(nmVmEh());}catch(e){}}
+(function(){var o=window.nmVfSet;if(typeof o!=='function'||o.__f0)return;window.nmVfSet=function(n,k,v){try{var V=NM_VF;if(V&&V.res&&((k==='a'&&!v)||k==='tgt'))nmFace0Upd(nmVfEh());}catch(e){}return o.apply(this,arguments);};window.nmVfSet.__f0=1;})();
+(function(){var o=window.nmVmSet;if(typeof o!=='function'||o.__f0)return;window.nmVmSet=function(n,k,v){if(k==='tgt')nmVmNewShot();return o.apply(this,arguments);};window.nmVmSet.__f0=1;})();
+/* v1424: 車載機関銃でCAの外を撃ったら、撃った後にカウンターの砲塔(BMG・砲塔なしは車体)を目標の方へ回す */
+function nmVmTurnToTgt(C){try{var V=NM_VM,eh=C&&C.eh;if(!eh||V.tgt==null)return '';var on=C.mgs.filter(function(x){return x.on&&x.ca;});if(!on.length)return '';
+  var hull=on.some(function(x){return !x.caTur;}),rmg=!hull&&on.every(function(x){return x.k==='rmg';}),na=btFaceToward(btAng(V.from,V.tgt)),f=nmFromBtFace(na,eh.boardId),fr=nmFromBtFace((na+3)%6,eh.boardId);if(f==null)return '';
+  var tur=nmAfvTurret(C.v);if(hull){var d=(eh.tca!=null&&eh.facing!=null)?((eh.tca-eh.facing+6)%6):0;eh.facing=f;if(tur)eh.tca=(f+d)%6;}else eh.tca=rmg?fr:f;
+  try{nmStSave();}catch(e){}try{saveState();}catch(e){}try{Draw();}catch(e){}return hull?'車体を目標の方へ回しました(CA変更)':'砲塔を目標の方へ回しました(CA変更)';}catch(e){console.log('vmTurn',e);return '';}}
 function nmVmCaHex(f,ang){for(var k=0;k<=3;k++){if(btInArc((f+k)%6,ang)||btInArc(((f-k)%6+6)%6,ang))return k;}return 3;}
 function nmVmCalc(){var V=NM_VM,eh=nmVmEh();if(!eh||!eh.veh)return null;var v=nmAfv(eh.veh);if(!v)return null;var r={v:v,eh:eh,mgs:[],fp:0,drm:0,dl:[],notes:[],err:null};
   var gd=null;try{gd=afvToGunData(v);}catch(e){}var tt=v.turretType||null,ot=!!v.ot,ms=eh.mgSt||{};
-  var f0=nmVmFace0(eh),efa=f0?f0.facing:eh.facing,eta=f0?f0.tca:eh.tca;
+  var F0=nmFace0B(eh),efa=F0.facing,eta=F0.tca;
   var toward=V.tgt!=null?btFaceToward(btAng(V.from,V.tgt)):0,vca=efa!=null?nmToBtFace(efa,eh.boardId):toward,tca=eta!=null?nmToBtFace(eta,eh.boardId):vca,ang=V.tgt!=null?btAng(V.from,V.tgt):null,rng=V.tgt!=null?btDist(V.from,V.tgt):null;
   nmVmKeys(v).forEach(function(k){var x={k:k,base:v.mg[k],ok:true,why:''};
     if(ms[k]==='mal'){x.ok=false;x.why='故障中';}else if(ms[k]==='X'){x.ok=false;x.why='使用不可';}
@@ -36945,19 +36957,19 @@ function nmVmJudge(n){var V=NM_VM,C=nmVmCalc();if(!C||C.err||!V.a||!V.b)return;
   if(C.vt){var raw2=V.a+V.b,loc=V.a<V.b?'turret':'hull',face=btHitFacing(loc==='turret'?C.tu.tca:C.tu.vca,V.tgt,V.from),af=afvGetAF(btAfvData(C.tu.nm),face,loc),tk=gunTkFinal(C.tk0,false,face==='rear',af).final,ef=judgeAFVEffects(loc==='turret'?'TURRET':'HULL','MG',raw2,tk);
     var mal2=[];if(raw2===12){if(!C.eh.mgSt)C.eh.mgSt={};C.mgs.forEach(function(x){if(x.on){C.eh.mgSt[x.k]='mal';mal2.push(x.k.toUpperCase());}});}
     nmBkSnap('車載機銃→車両');var ap=nmAfvEffApply(C.te,V.sd==='f'?'e':'f',ef.result,n);
-    V.res={vt:1,raw:raw2,loc:loc,face:face,af:af,tk:tk,ef:ef,ap:ap,mal:mal2,snap:{te:C.te,rng:C.rng,vt:C.vt,tk0:C.tk0,tu:C.tu}};nmStFired(C.eh,({PF:'準備',DFF:'臨機',FF:'防御',AF:'前進射'})[V.ph]);
+    V.res={vt:1,raw:raw2,loc:loc,face:face,af:af,tk:tk,ef:ef,ap:ap,mal:mal2,snap:{te:C.te,rng:C.rng,vt:C.vt,tk0:C.tk0,tu:C.tu}};V.res.turn=nmVmTurnToTgt(C);nmStFired(C.eh,({PF:'準備',DFF:'臨機',FF:'防御',AF:'前進射'})[V.ph]);
     try{logResult(function(){return {tabLbl:'MAP 車載機銃→車両',text:nmAfvName(C.v)+'→'+nmAfvName(C.vt)+' TK#'+tk+' DR'+raw2+' → '+AFV_EFFECT_INFO[ef.result].lbl,color:AFV_EFFECT_INFO[ef.result].color,detail:null};});}catch(e){}
     nmStSave();nmVmRe(n);return;}
   var raw=V.a+V.b,fin=raw+C.drm,it=iftR(C.fp,fin);if(iftSubOne(C.fp))it=iftNoColNE();
   var mal=[];if(raw===12){if(!C.eh.mgSt)C.eh.mgSt={};C.mgs.forEach(function(x){if(x.on){C.eh.mgSt[x.k]='mal';mal.push(x.k.toUpperCase());}});}
-  V.res={raw:raw,fin:fin,r:it.r,col:it.col,mal:mal,snap:{fp:C.fp,drm:C.drm,dl:C.dl,notes:C.notes,te:C.te,rng:C.rng,crewTe:C.crewTe||null}};nmStFired(C.eh,({PF:'準備',DFF:'臨機',FF:'防御',AF:'前進射'})[V.ph]);
+  V.res={raw:raw,fin:fin,r:it.r,col:it.col,mal:mal,snap:{fp:C.fp,drm:C.drm,dl:C.dl,notes:C.notes,te:C.te,rng:C.rng,crewTe:C.crewTe||null}};V.res.turn=nmVmTurnToTgt(C);nmStFired(C.eh,({PF:'準備',DFF:'臨機',FF:'防御',AF:'前進射'})[V.ph]);
   try{logResult(function(){return {tabLbl:'MAP 車載機銃',text:nmAfvName(C.v)+'→'+BTG.nodes[V.tgt].nm+' FP'+C.fp+' DR'+raw+(C.drm?(C.drm>0?'+':'')+C.drm:'')+'='+fin+' → '+it.r+(mal.length?' '+mal.join('・')+'故障':''),color:'#c8a032',detail:null};});}catch(e){}
   nmStSave();nmVmRe(n);}
 /* v1422: 車載機関銃の ROF(AFV_DATA の mgRof。例 MkVIB の *CMG □1)。色ダイス(赤)≦ROF なら同じフェイズにもう一度(前進射撃は不可・原DR12の故障も不可) 1.2.4.1 */
 function nmVmRof(C){var v=C&&C.v,R=(v&&v.mgRof)||{},best=0;(C&&C.mgs||[]).forEach(function(x){if(x.on&&R[x.k])best=Math.max(best,R[x.k]);});return best;}
 function nmVmRofRow(it,n,C,R){var V=NM_VM,rof=nmVmRof(C);if(!rof)return;if(V.ph==='AF'){it.push({ic:'info',t:'<span style="font-size:12px;color:#8899aa">ROF'+rof+': '+T('前進射撃ではROFは使えません')+'</span>'});return;}
   var ok=V.a<=rof&&!(R.mal&&R.mal.length);
-  it.push({ic:'fire',t:ok?'<span style="color:#3ca878">ROF'+rof+' '+T('維持')+'（'+T('赤')+V.a+'≦'+rof+'）</span>　'+T('同じフェイズにもう一度撃てる'):'<span style="color:#8899aa">ROF'+rof+' '+T('切れ')+'（'+T('赤')+V.a+'）</span>',sub:ok?T('機関銃でもう一度撃つ(目標は選び直せる)'):'',f:ok?"NM_VM.res=null;NM_VM.a=0;NM_VM.b=0;nmVmRe("+n+")":''});}
+  it.push({ic:'fire',t:ok?'<span style="color:#3ca878">ROF'+rof+' '+T('維持')+'（'+T('赤')+V.a+'≦'+rof+'）</span>　'+T('同じフェイズにもう一度撃てる'):'<span style="color:#8899aa">ROF'+rof+' '+T('切れ')+'（'+T('赤')+V.a+'）</span>',sub:ok?T('機関銃でもう一度撃つ(目標は選び直せる)'):'',f:ok?"nmVmNewShot();NM_VM.res=null;NM_VM.a=0;NM_VM.b=0;nmVmRe("+n+")":''});}
 function nmRmVmItems(n){var V=NM_VM;if(!V)return nmRMenuItems(n);var C=nmVmCalc();if(C&&V.res&&V.res.snap){C=Object.assign({},C,V.res.snap);C.err=null;}var L=NM_SIDE_LBL[V.sd],it=[],sg=function(v){return (v>=0?'+':'')+v;};
   it.push(V.tgt!=null?{ic:'back',t:'← 目標の選択に戻る',sub:'ほかの目標を選び直す',f:"nmVmSet("+n+",'tgt',null)"}:{ic:'back',t:'← 戻る',sub:'メニューに戻る',f:"NM_VM=null;btRmReopen("+n+")"});it.push({sep:1});
   if(!C){it.push({ic:'info',t:'車両のデータがありません'});return it;}
@@ -36982,6 +36994,7 @@ function nmRmVmItems(n){var V=NM_VM;if(!V)return nmRMenuItems(n);var C=nmVmCalc(
     var EI=AFV_EFFECT_INFO[R2.ef.result];it.push({sep:1});
     it.push({ic:'fire',t:'<span>'+diceEmojiStr(V.a,V.b)+'　DR'+R2.raw+'　TK#'+C.tk0+(R2.face==='rear'?'+1':'')+'−AF'+R2.af+'='+R2.tk+'　<b style="color:'+EI.color+'">'+EI.lbl+'</b></span>',sub:(R2.loc==='turret'?'砲塔':'車体')+'・'+({front:'前面',side:'側面',rear:'背面'}[R2.face])+(R2.ap?'　→ '+R2.ap:'')});
     if(R2.mal.length)it.push({ic:'info',t:'<span style="color:#ffb040">原DR12: '+R2.mal.join('・')+' 故障</span>'});
+    if(R2.turn)it.push({ic:'rot',t:'<span style="color:#c8a032;font-size:12.5px">'+R2.turn+'</span>'});
     try{nmVmRofRow(it,n,C,R2);}catch(e){}
     it.push({sep:1});it.push({row:1,ic:'fire',t:'次',btns:[['別の目標',"nmVmSet("+n+",'tgt',null)"],['閉じる',"BtRmClose()"]]});return it;}
   var col=IFT_LBL[ci(C.fp)];
@@ -36993,6 +37006,7 @@ function nmRmVmItems(n){var V=NM_VM;if(!V)return nmRMenuItems(n);var C=nmVmCalc(
   var rr=rm(R.r);it.push({sep:1});
   it.push({ic:'fire',t:'<span>'+diceEmojiStr(V.a,V.b)+'　'+R.raw+(C.drm?' '+sg(C.drm):'')+' = '+R.fin+'　<b style="color:'+rr.c+'">'+rr.t+'</b></span>',sub:'FP'+C.fp+'・'+(R.col||'-')+'列'});
   if(R.mal.length)it.push({ic:'info',t:'<span style="color:#ffb040">原DR12: '+R.mal.join('・')+' 故障</span>',sub:'車両のヘクスメニューで修理(dr1)'});
+  if(R.turn)it.push({ic:'rot',t:'<span style="color:#c8a032;font-size:12.5px">'+R.turn+'</span>'});
   try{nmVmRofRow(it,n,C,R);}catch(e){}
   if(C.crewTe||(R.snap&&R.snap.crewTe)){var ct=C.crewTe||R.snap.crewTe;V._crewTe=ct;V._crewR=R.r;nmCrewSection(it,n,'vm',ct,R.r,'CE乗員');}else nmMcSection(it,n,C.te,R.r,'vm:'+V.tgt+':'+V.a+':'+V.b,'nmVmRe'); /* v518 */
   it.push({sep:1});it.push({row:1,ic:'fire',t:'次',btns:[['振り直す',"NM_VM.res=null;NM_VM.a=1+Math.floor(Math.random()*6);NM_VM.b=1+Math.floor(Math.random()*6);nmVmJudge("+n+")"],['別の目標',"nmVmSet("+n+",'tgt',null)"],['閉じる',"BtRmClose()"]]});
@@ -37007,7 +37021,8 @@ function nmVfBuild(){ /* nmShotCalcと同じ攻撃する側・目標の組み立
   var V=NM_VF,eh=nmVfEh();if(!eh)return null;var sn=V.from,n=V.tgt;
   var v=eh.veh?nmAfv(eh.veh):null,g=(!v&&eh.gun)?nmGun(eh.gun):null;if(!v&&!g)return null;
   var gd=v?(v.ma?afvToGunData(v):null):g;if(!gd)return null;
-  var toward=n!=null?btFaceToward(btAng(sn,n)):0,vca=eh.facing!=null?nmToBtFace(eh.facing,eh.boardId):toward,tca=eh.tca!=null?nmToBtFace(eh.tca,eh.boardId):vca;
+  var F0=nmFace0B(eh),efa=F0.facing,eta=F0.tca; /* v1424: スポット判定の前の向き(判定中に地図で回してもCA変更DRM) */
+  var toward=n!=null?btFaceToward(btAng(sn,n)):0,vca=efa!=null?nmToBtFace(efa,eh.boardId):toward,tca=eta!=null?nmToBtFace(eta,eh.boardId):vca;
   var nat=(v||g).nat.split('/')[0],w=v?{kind:'MA',s:{id:'nmE',n:sn,side:nat,u:[]},u:{id:'nmE',nm:v.lbl,vca:vca,tca:tca,ce:!!V.ce,maS:'ok'},v:v,gd:gd}
     :{kind:'GUN',s:{id:'nmE',n:sn,side:nat,u:[]},u:{id:'nmE',nm:nmGunName(g),vca:vca},gd:g,crew:{id:'nmC',nm:''}};
   if(v)nmMvToU(w.u,eh); /* v406 */
@@ -43122,7 +43137,7 @@ function nmElevRowHTML(k,P,ov,row,mtr){try{var a=k==='lw'?P.n:P.from,A=BTG.nodes
 (function(){try{var st=document.createElement('style');st.id='nmThinCss';st.textContent='#btRm *:not(#nmZz1#nmZz2),#nmIj *:not(#nmZz1#nmZz2),#nmCcSc *:not(#nmZz1#nmZz2){font-weight:400!important}'; /* :not(#a#b)で詳細度を上げ、選択中ボタン等の太字指定(!important)にも勝つ */(document.head||document.documentElement).appendChild(st);}catch(e){}})();
 function nmVfClrRes(){var V=NM_VF;if(!V)return;V.a=0;V.b=0;V.res=null;V.c1=0;V.c2=0;V.res2=null;}
 function nmIjRoll(){var J=NM_IJ;if(!J)return;nmIjUndoSnap();if(!nmAdOn()){var nd=nmAdIjNeed();if(nd){btToast(nd);return;}}var a=J.a,m=J.pmode;J.prepped=0;try{if(J.nv&&NM_VF){var V=NM_VF;if(V.res&&nmIjNvKilled()){btToast('目標は撃破済み。③で別の目標を選んでください');return;}var R1=V.res,O1=V.res2;if(R1&&R1.hit&&!R1.ife&&!R1.smk&&!O1){if(V.c1&&V.c2)nmVfEff(a);else nmVfRoll(a,'eff');return;} /* v698: 1段階ずつ(命中→TK/効果→NTC) */
-      if(R1&&O1&&O1.ntc&&!V.ntc&&!nmIjNvKilled()){nmIjNvNtc();return;}var c1k=V.c1,c2k=V.c2;if(V.res)nmVfSet(a,'a',0);else{V.keepC=1;}if(V.a&&V.b)nmVfTH(a);else nmVfRoll(a,'th');V.keepC=0;}else if(m==='mf'){var f0=getFireState();if(f0&&f0.rd&&f0.wd&&!f0.res)nmMfJudge(a);else nmMfRoll(a);}else if(m==='vf'){nmVfRoll(a,'th');}else if(m==='vm'){if(NM_VM.res||!(NM_VM.a&&NM_VM.b)){NM_VM.a=1+Math.floor(Math.random()*6);NM_VM.b=1+Math.floor(Math.random()*6);}NM_VM.res=null;nmVmJudge(a);}else if(m==='lw'){if(NM_LW.res||!(NM_LW.a&&NM_LW.b)){NM_LW.a=1+Math.floor(Math.random()*6);NM_LW.b=1+Math.floor(Math.random()*6);}NM_LW.res=null;nmLwTH(a);}}catch(e){console.log('ijRoll',e);}setTimeout(function(){var r=document.getElementById('ijRes');var nr=r&&r.querySelector('.nvRes');if(nr&&r.scrollHeight>r.clientHeight+2){r.scrollTop=Math.max(0,nr.offsetTop-r.offsetTop-6);}else if(nr&&nr.scrollIntoView)nr.scrollIntoView({block:'nearest'});},80);}
+      if(R1&&O1&&O1.ntc&&!V.ntc&&!nmIjNvKilled()){nmIjNvNtc();return;}var c1k=V.c1,c2k=V.c2;if(V.res)nmVfSet(a,'a',0);else{V.keepC=1;}if(V.a&&V.b)nmVfTH(a);else nmVfRoll(a,'th');V.keepC=0;}else if(m==='mf'){var f0=getFireState();if(f0&&f0.rd&&f0.wd&&!f0.res)nmMfJudge(a);else nmMfRoll(a);}else if(m==='vf'){nmVfRoll(a,'th');}else if(m==='vm'){if(NM_VM.res)nmVmNewShot();if(NM_VM.res||!(NM_VM.a&&NM_VM.b)){NM_VM.a=1+Math.floor(Math.random()*6);NM_VM.b=1+Math.floor(Math.random()*6);}NM_VM.res=null;nmVmJudge(a);}else if(m==='lw'){if(NM_LW.res||!(NM_LW.a&&NM_LW.b)){NM_LW.a=1+Math.floor(Math.random()*6);NM_LW.b=1+Math.floor(Math.random()*6);}NM_LW.res=null;nmLwTH(a);}}catch(e){console.log('ijRoll',e);}setTimeout(function(){var r=document.getElementById('ijRes');var nr=r&&r.querySelector('.nvRes');if(nr&&r.scrollHeight>r.clientHeight+2){r.scrollTop=Math.max(0,nr.offsetTop-r.offsetTop-6);}else if(nr&&nr.scrollIntoView)nr.scrollIntoView({block:'nearest'});},80);}
 
 /* v814(ダルマ指示「オートダイスありなし設定を追加 メインメニュー」→A): ON=今と同じ(入力しなければ自動で振る)。OFF=アプリは振らない。出目を入れるまで判定しない。
    メニューの「〜を振る」は、出目を入れる小窓を出してからその目で実行(Math.randomをその目に置き換えて実行)。入力欄がある一括振り(全員のMC・射撃の振り直し)は隠す */
