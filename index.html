@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1400</title>
+<title>ASL SKシリーズv1401</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1400">
+<meta property="og:title" content="ASL SKシリーズv1401">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.600"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.601"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1401="v1401(ダルマ報告「AB判定のバーが表示しない」「スポット判定の目標Bが英軍になる」+システムログ): ①自動同期の受信(約20秒ごと)が、ステップ2で隠れているスポット判定まで nmIjDraw→nmIjGo(true) でやり直し、ステップ2のパネルを閉じて『隠れたスポット判定』が残っていた。nmAbBoard はそれでバーを隠していた→同期は見えているスポット判定だけ描き直す・バーは見えている #nmIj の時だけ隠す ②nmIjEhNat: 国籍が複数の車両・砲(75/27=ITA/GBR)は先頭(ITA)ではなくシナリオに出る国(複数なら置いた側の国)。S27 で英軍の 75/27 を A に置くと目標 B が英軍になっていた";
 var APP_VERSION_HIST_v1400="v1400(ダルマ「早見表に追加」→サンプル sample-refatr→「実施」): 早見表 兵士→カウンターに 対戦車ライフル ATR(独軍)の表・裏(裏はダルマ提供の実物写真)。表左上の B・E は通し番号の文字なので説明しない(ダルマ回答)";
 var APP_VERSION_HIST_v1399="v1399(ダルマ報告「S27 ドイツ軍 atr カウンターがソ連のカウンターになっている」+実物の独軍 ATR 写真): 原因=OB の独軍「ATR」をソ連の SW atr_sw_so に対応させていた(画像がソ連・射撃タブでは国籍が合わず鹵獲扱い)。独軍の SW atr_sw_ge(性能同じ・nat GER・画像 ge_geATR)を追加し、OB の対応付け2か所を独→atr_sw_ge に。LATW の atr も独軍なら独の画像(nmLwCtrId・nmSuSwImg に nat)";
 var APP_VERSION_HIST_v1398="v1398(ダルマ「早見表 追加」→サンプル sample-ref7527→「修正と実施」): ①早見表 砲→カウンターに Cannone da 75/27 の表・裏(裏はダルマ提供の実物写真)。②データ修正: 75/27 の HEAT を欠乏No.2→6、1942年9月から(availFrom)。「H6^S2+」の S2+ の 2 を欠乏No.と誤読していた。S27(1941/5)では HEAT なし";
@@ -39561,7 +39562,7 @@ function nmGsSync(o){o=o||{};var Q=!!o.auto,sc=S.scen&&S.scen.sel;if(!sc){if(!Q)
       if(P.turn&&(P.turn.at||0)>(S.nmAsTurnAt||0)){var t=P.turn;if(!S.turn)S.turn={cur:1,half:0,ended:false,phase:'rph'};S.turn.cur=t.cur;S.turn.half=t.half;S.turn.phase=t.phase;S.turn.ended=!!t.ended;S.nmAsTurnAt=t.at;try{syncAutoSideFromHalf();}catch(e){}try{renderPhaseTracker();}catch(e){}got.push(nmAsTurnLbl(t));turn=t;}
       if(P.pf&&(P.pf.at||0)>(S.nmAsPfAt||0)){S.pfTracker=S.pfTracker||{};S.pfTracker.used=P.pf.used||0;S.nmAsPfAt=P.pf.at;var L=null;try{L=nmPfLimit();}catch(e){}got.push('PF 残り'+(L?(L.limit-(P.pf.used||0))+'/'+L.limit:'?'));pf=P.pf;}
       NM_GS.ts=nmAsTurnSig();NM_GS.ps=nmAsPfSig();
-      if(got.length||!Q){NM_GS.at=Date.now();try{saveState();}catch(e){}try{Draw();}catch(e){}try{nmIjDraw();}catch(e){}try{nmFtBotFill();}catch(e){}try{if(NM_SU)nmSuDraw();}catch(e){}}}
+      if(got.length||!Q){NM_GS.at=Date.now();try{saveState();}catch(e){}try{Draw();}catch(e){}try{var ijE=document.getElementById('nmIj');if(NM_IJ&&!NM_IJ.vfStage&&ijE&&ijE.style.display!=='none')nmIjDraw();}catch(e){}try{nmFtBotFill();}catch(e){}try{if(NM_SU)nmSuDraw();}catch(e){}}} /* ダルマ報告「AB判定のバーが表示しない」+ログ: 自動同期の受信のたびに、ステップ2で隠れているスポット判定まで描き直して判定の準備(nmIjGo)をやり直し、ステップ2のパネルを閉じて隠れたスポット判定が残っていた。見えている時だけ描き直す */
     var fin=function(){NM_GS.busy=false;NM_GS.sig=JSON.stringify([sc,own,turn,pf,mapSnap]);
       if(Q){if(got.some(function(x){return /^ターン/.test(x);}))nmGsDone('相手('+opN+')から受信: '+got.join('・'));else if(got.length)nmGsMark(got);else nmGsBtnSt('');return;} /* v1158(sample): 自動同期の受信は、ターンが変わった時だけ通知。編成・PFだけなら通知せず、⇅同期の点を橙にして知らせる(押すと内容) */
       if(!P){nmGsDone('このiPad('+me+'): '+nOwn+'編成を送りました。相手('+opN+')のiPadでまだ同期していません。相手が⇅同期を押したあと、もう一度押してください');return;}
@@ -39684,7 +39685,7 @@ function nmCdDown(e,el){e.stopPropagation();if(e.target&&e.target.closest&&e.tar
   window.addEventListener('pointermove',m);window.addEventListener('pointerup',u);window.addEventListener('pointercancel',u);}
 function nmCdApply(el,x,y){var kz=nmFzK(),O=nmCdOff(el.id),W=document.documentElement.clientWidth,H=document.documentElement.clientHeight,w=(el.offsetWidth||160)*kz,h=(el.offsetHeight||40)*kz;x=Math.max(0,Math.min(W-w,x+O.x));y=Math.max(0,Math.min(H-h,y+O.y));el.style.left=Math.round(x/kz)+'px';el.style.top=Math.round(y/kz)+'px'; /* x,y は画面の px */el.style.cursor='move';el.style.touchAction='none';}
 function nmAbBoard(){var el=document.getElementById('nmAbBd'),r=S_LOS.result,mk=document.getElementById('abMkB');if(!S_LOS.pxA||!S_LOS.pxB)NM_ABBD_X=null; /* v1160: A/Bを解除したら「×で閉じた」記録も消す(消さないと、同じA・Bを選び直してもバーが出ない) */
-  var hide=!S_LOS.pxA||!S_LOS.pxB||!r||r.error||!mk||NM_ABD&&NM_ABD.on||NM_MOVE||S_LOS.routeMode||document.getElementById('nmIj')||document.getElementById('btRm')||document.getElementById('nmHq')||(S.nmAbBdOff)||(window.NM_ABBD_X&&NM_ABBD_X===JSON.stringify([S_LOS.pxA,S_LOS.pxB]));
+  var hide=!S_LOS.pxA||!S_LOS.pxB||!r||r.error||!mk||NM_ABD&&NM_ABD.on||NM_MOVE||S_LOS.routeMode||(function(){var e=document.getElementById('nmIj');return !!(e&&e.style.display!=='none');})()||document.getElementById('btRm')||document.getElementById('nmHq')||(S.nmAbBdOff)||(window.NM_ABBD_X&&NM_ABBD_X===JSON.stringify([S_LOS.pxA,S_LOS.pxB]));
   if(hide){if(el)el.remove();return;}
   var q=mk.getBoundingClientRect();if(!q.width){if(el)el.remove();return;}
   var sn=0;try{sn=scenSnowHind(r.range);}catch(e){}var fail=r.blocked||(r.hindranceDrm+sn>=6),ed=(r.elevB||0)-(r.elevA||0);
@@ -42212,7 +42213,7 @@ function nmIjPhFix(sh){var J=NM_IJ;if(!J)return;var o=(J.pick!=null&&sh[J.pick])
   if(J.phAuto&&S.turn&&S.turn.phase==='mph'&&o){var pn=null;try{pn=nmPhaseSideNat();}catch(e){}var mine=pn&&nmIjEhNat(o.eh)===pn;J.ph=(mine&&veh)?'bff':'dff';}
   if(J.ph==='bff'&&!veh)J.ph=(S.turn&&S.turn.phase==='mph')?'dff':'pfph';return veh;}
 function nmIjNodes(){if(!S_LOS.pxA||!S_LOS.pxB||!btGraphReady())return null;var a=nmNodeOfPx(S_LOS.pxA),b=nmNodeOfPx(S_LOS.pxB);return a==null||b==null?null:{a:a,b:b};}
-function nmIjEhNat(eh){try{if(eh.veh)return (nmAfv(eh.veh).nat||'').split('/')[0];if(eh.gun)return (nmGun(eh.gun).nat||'').split('/')[0];if(eh.grp)return nmGeList(eh.grp).nat||'';}catch(x){}return '';}
+function nmIjEhNat(eh){try{if(eh.veh||eh.gun){var L=((eh.veh?nmAfv(eh.veh):nmGun(eh.gun)).nat||'').split('/');if(L.length>1){var sc=[];try{sc=nmSuNats()||[];}catch(x){}var inS=L.filter(function(k){return sc.indexOf(k)>=0;});if(inS.length>1){var sd=nmIjEhSd(eh),m=inS.filter(function(k){return nmSuSide(k)===sd;});if(m.length)return m[0];}if(inS.length)return inS[0];}return L[0];}if(eh.grp)return nmGeList(eh.grp).nat||'';}catch(x){}return '';} /* ダルマ報告(S27 スポット判定で英軍の 75/27 を A に置くと目標 B の国が英軍になる): 国籍が複数(75/27=ITA/GBR)の車両・砲は、先頭ではなくシナリオに出る国(複数なら置いた側の国)にする */
 function nmIjSdLbl(sd,eh){var n=eh?nmIjEhNat(eh):'';if(!n){var ns=nmSuNats().filter(function(k){return nmSuSide(k)===sd;});n=ns[0]||'';}return n?nmNatLbl(n):NM_SIDE_LBL[sd].nm;}
 function nmIjShooters(nA){var H=nmHexOfNode(nA),out=[];if(!H)return out;
   ['f','e'].forEach(function(sd){nmAllAt(H,sd).forEach(function(eh){var nm=nmRbName(eh),v=eh.veh?nmAfv(eh.veh):null;
