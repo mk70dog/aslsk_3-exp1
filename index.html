@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1434</title>
+<title>ASL SKシリーズv1435</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1434">
+<meta property="og:title" content="ASL SKシリーズv1435">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.634"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.635"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1435="v1435(v1435: 判定ボードで編成の選択画面から開いた判定の「← 戻る」を、判定ボードでなく選択画面に戻るように";
 var APP_VERSION_HIST_v1434="v1434(v1434: 地図の編成マークの横の「+N」(表示しきれない枚数)を消去";
 var APP_VERSION_HIST_v1433="v1433(v1433: カウンターをドラッグし始めた瞬間に地図が古い位置へ飛ぶのを修正(開始時に今のスクロール位置を保存してから描き直す)";
 var APP_VERSION_HIST_v1432="v1432(v1432: 編成同期で、こちらが相手の編成に出した判定結果(除去・混乱・PINなど)を相手のiPadに送って反映。相手が反映するまで受信で元に戻さない";
@@ -41628,7 +41629,7 @@ function nmHqScPick(i,fn){var u=NM_SCU[i];if(!u)return;NM_RR=null;NM_HQFROM=1;va
   var n0=0;try{var an=S_LOS.pxA?nmNodeOfPx(S_LOS.pxA):null;if(an!=null&&an>=0)n0=an;}catch(e){}nmHqClose();
   if(fn==='nmRlOpen'){NM_RL={n:n0,sd:u.sd,slot:'_T',dm:false,mode:{},res:{}};NM_RM_SUB='rally';}
   else{NM_MCP={n:n0,sd:u.sd,slot:'_T',r:null};NM_MC=null;NM_RM_SUB='mcp';}
-  btRmReopen(n0);}
+  nmHqPkBack(fn);btRmReopen(n0);} /* v1435: ← は選択画面へ */
 /* sample(ダルマ指示「マルチ判定で砲撃などを選んで地図に該当するカウンターがない時の表示 使いやすくしたい」→ 3つとも):
    ① シナリオのユニットを選んで「地図に置く」→ ヘックスをタップ → 置いてそのまま判定へ
    ② 「置かずに判定」→ 同じく置くが仮のマーカー(判定を閉じると消える)
@@ -42092,7 +42093,10 @@ function nmCcScGo(){var C=NM_CCS;if(!C)return;NM_CCCARRY=null;NM_MIX=null;var o=
   window.NM_CC_ATK=C.an;window.__ccFromSc=1;try{if(C.dv)nmCvOpen(n,asd);else{NM_PBACK='nmCcScOpen()';nmCCOpen(n);}}finally{window.__ccFromSc=0;}}
 (function(){['nmCCOpen','nmCvOpen'].forEach(function(f){var o=window[f];if(typeof o!=='function')return;window[f]=function(){if(!window.__ccFromSc)window.NM_CC_ATK=null;return o.apply(this,arguments);};});})(); /* v1190: シナリオのユニット以外から開いた白兵戦は手番の側を攻撃側にする */
 (function(){var oc=window.BtRmClose;if(typeof oc!=='function')return;window.BtRmClose=function(){var r=oc.apply(this,arguments);if(NM_CCS&&NM_CCS.open)setTimeout(function(){if(!document.getElementById('btRm')&&NM_CCS&&NM_CCS.open&&!(typeof nmRtmActive==='function'&&nmRtmActive())){NM_CCS=null;nmCcScClear();}},400); /* v942: 潰走・阻止の地図中は一時ユニットを消さない */return r;};})();
-function nmHqSetA(n,fn){var A=BTG.nodes[n];if(!A)return;S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB=null;S_LOS.result=null;try{Draw();}catch(e){}nmHqAtA(fn);}
+/* v1435(ダルマ指示「マルチ判定内判定 ← マルチ判定パネルに戻るのでなく、一つ前のパネルに戻る」): 編成の選択画面(nmHqPk)から開いた判定の「← 戻る」は、判定ボードでなく選択画面へ */
+var NM_HQPK_FN=null; /* 判定ボードの「← 戻る」(NM_HQBack)の戻り先: 選択画面から開いた時はその選択画面 */
+function nmHqPkBack(fn){NM_HQPK_FN=fn;}
+function nmHqSetA(n,fn){var A=BTG.nodes[n];if(!A)return;S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB=null;S_LOS.result=null;try{Draw();}catch(e){}nmHqAtA(fn);if(!document.getElementById('nmHqPk'))nmHqPkBack(fn);}
 function nmHqAtA(fn){if(fn==='nmRtOpen'){nmHqClose();nmRtChoose();return;} /* v1417: 地図を選ぶ */ /* v949: マルチ判定の潰走は常に自軍・敵軍のない地図だけ(編成の選択も出さない) */nmHqClose();NM_HQFROM=1;if(!btGraphReady()){btToast('マップを準備しています…');return;}
   var an=S_LOS.pxA?nmNodeOfPx(S_LOS.pxA):null;if(an==null||an<0){nmHqPickA(fn);return;} /* v740(ダルマ報告「HQ判定 回復など選択してもこの表示」): 地点Aが無い時は、地図上の編成から選ぶ */
   var H=nmHexOfNode(an),sd=null;if(fn==='nmRpOpen'){['f','e'].forEach(function(x){if(sd)return;if(nmAllAt(H,x).some(function(e){return e.veh||e.gun;}))sd=x;});if(sd){nmRvOpen(an,sd);return;}nmHqPickA(fn);return;}if(fn==='nmHqGunOpen'||fn==='nmHqAfvOpen'||fn==='nmHqBogOpen'||fn==='nmHqMhOpen'){var gk=(fn==='nmHqGunOpen'||fn==='nmHqMhOpen');['f','e'].forEach(function(x){if(sd)return;if(nmAllAt(H,x).some(function(e){return gk?(e.gun&&!e.veh):(e.veh&&!e.gun);}))sd=x;});if(sd){window[fn](an,sd);return;}nmHqPickA(fn);return;}
@@ -42100,7 +42104,7 @@ function nmHqAtA(fn){if(fn==='nmRtOpen'){nmHqClose();nmRtChoose();return;} /* v1
   if(!sd){nmHqPickA(fn);return;} /* v757(ダルマ報告「回復など選択時にカウンターのメニューが出る」): 地点Aに歩兵が居ない時は、メニューを開かず編成・ユニットの選択へ */
   if(fn==='nmRtOpen'){nmRtmStartAt(an,sd);return;} /* v948: マルチ判定の潰走は地図に編成がある時も地図表示だけ(旧一覧パネルを出さない) */
   try{window[fn](an,sd);}catch(e){console.log('hqAtA',e);}}
-function nmHqOpen(gi){var o=document.getElementById('nmHq');if(o)o.remove();var m=document.createElement('div');m.id='nmHq';
+function nmHqOpen(gi){NM_HQPK_FN=null;var o=document.getElementById('nmHq');if(o)o.remove();var m=document.createElement('div');m.id='nmHq';
   m.style.cssText='position:fixed;z-index:9450;left:8px;top:64px;width:min(480px,94vw);background:radial-gradient(circle,#000000aa .9px,transparent 1.25px) 0 0/4px 4px,radial-gradient(circle at 50% 70%,#ffffff10 .9px,transparent 1.3px) 0 0/4px 4px,linear-gradient(#1a212e,#121823);border:1px solid #4a5566;border-radius:14px;padding:10px;box-shadow:0 10px 36px #000d;font-family:AppFont,AppJP,monospace;color:#e8eef4';
   var r=S_LOS.result,ab,esc=function(f){return String(f).replace(/&/g,'&amp;').replace(/"/g,'&quot;');};
   if(r&&r.dataReady){var sn=0;try{sn=scenSnowHind(r.range);}catch(x){}var fail=r.blocked||(r.hindranceDrm+sn>=6),ed=r.elevB-r.elevA;
@@ -44676,7 +44680,7 @@ function nmBackAll(it){try{ /* v772: 全パネル 左上=「← 戻る」/右上
   if(!has&&!(it[0]&&it[0].back2))it.push({sep:1}),it.push({ic:'x',t:'閉じる',f:"BtRmClose()"});
 }catch(e){}}
 function nmHqBackIns(it){try{if(!NM_HQFROM||!it||!it[0]||it[0].ic!=='back'||it[0].keepBack||/判定ボード/.test(it[0].t||''))return;if(it[0].back2)return;it[0]={ic:'',back2:1,t:'← 戻る',sub:it[0].sub,f:"NM_HQBack()"}; /* v765: 「← 戻る」は出さず、ボードに戻るだけにする */}catch(e){}}
-function NM_HQBack(){NM_HQFROM=0;['NM_RL','NM_RT','NM_DC','NM_HQMV','NM_RV','NM_MCP','NM_MC','NM_BG'].forEach(function(k){try{window[k]=null;}catch(e){}});try{NM_RM_SUB=null;}catch(e){}BtRmClose();try{nmHqOpen();}catch(e){}}
+function NM_HQBack(){var pkf=NM_HQPK_FN;NM_HQPK_FN=null;if(pkf){NM_HQFROM=0;['NM_RL','NM_RT','NM_DC','NM_HQMV','NM_RV','NM_MCP','NM_MC','NM_BG'].forEach(function(k){try{window[k]=null;}catch(e){}});try{NM_RM_SUB=null;}catch(e){}BtRmClose();try{S_LOS.pxA=null;nmHqPickA(pkf);}catch(e){}return;} /* v1435 */NM_HQFROM=0;['NM_RL','NM_RT','NM_DC','NM_HQMV','NM_RV','NM_MCP','NM_MC','NM_BG'].forEach(function(k){try{window[k]=null;}catch(e){}});try{NM_RM_SUB=null;}catch(e){}BtRmClose();try{nmHqOpen();}catch(e){}}
 function BtRmClose(){if(!NM_IN_RM){NM_HQFROM=0;NM_RV=null;}var el=document.getElementById('btRm');if(el)el.remove();if(BT&&BT.rmHex!=null){var keep=nmScrollKeep();BT.rmHex=null;Draw();keep();}}
 
 /* sample(ダルマ指示「残留と獲得はチェックボックスを追加してチェックを入れないと閉じたり戻ったりできなくする」):
