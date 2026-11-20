@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1420</title>
+<title>ASL SKシリーズv1421</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1420">
+<meta property="og:title" content="ASL SKシリーズv1421">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.620"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.621"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1421="v1421(ROF射撃のモードが残り次の射撃がFP0になる問題";
 var APP_VERSION_HIST_v1420="v1420(起動直後のd.gridWエラーを防ぐ";
 var APP_VERSION_HIST_v1419="v1419(射撃グループの計算内容をシステムログに記録(FP調査)";
 var APP_VERSION_HIST_v1418="v1418(PINの指揮官は指揮修正を使えない(1.2.1)";
@@ -36757,7 +36758,7 @@ function nmMfSwUse(n,uid){var G=nmMfSwGrp();if(!G)return;var f=G.f,g=G.g,on=g.sw
   if(!g.sw.some(function(u){return /^ft241_/.test(u);})){try{fgRecomputeFromPicker(g);}catch(e){}}
   var f2=getFireState();if(f2)f2.res=null;try{NM_MF.reDice=0;}catch(e){}try{Draw();}catch(e){}nmMfReopen(n);}
 function nmMfReopen(n){NM_RM_SUB='mfire';btRmReopen(n);}
-function nmMfEnsureGrp(){var M=NM_MF;if(!M)return;if(S.fireSub==null)S.fireSub='pfph';var f=getFireState(),g=f&&f.grps&&f.grps[0];if(g&&g.activeGroupSlot!==M.slot)FgSelectGroupSlot(g.id,M.slot);nmMfFtInit();}
+function nmMfEnsureGrp(){var M=NM_MF;if(!M)return;if(S.fireSub==null)S.fireSub='pfph';var f=getFireState(),g=f&&f.grps&&f.grps[0];if(!M.rof&&f&&f.grps)f.grps.forEach(function(x){if(x.rofMode){x.rofMode=false;if(x.activeGroupSlot)x.activeGroupSlot=null;}}); /* v1421(ダルマ報告「FP0になる」): 「ROFで機関銃だけもう一度撃つ」の rofMode(分隊のFP0・ROFのSWだけ)が射撃の状態に残り、次の別の射撃もFP0になっていた→ROF射撃中以外は解除して編成を読み直す */if(g&&g.activeGroupSlot!==M.slot)FgSelectGroupSlot(g.id,M.slot);nmMfFtInit();}
 function nmMfFtInit(){var M=NM_MF;if(!M||!M.slot)return;var f=getFireState(),g=f&&f.grps&&f.grps[0];
   /* v1201(ダルマ指示「FTと機関銃を両方持つ編成は最初をFTを使わないに」): 開いた最初だけ、FTと他のSWがあればFTを外して分隊+SWで撃つ形にする(FTはマルチ判定の「使うSW」で選ぶ) */
   if(g&&g.activeGroupSlot===M.slot&&!M.ftInit){M.ftInit=1;var all=(nmGeList(M.slot).sw||[]).slice(),ft=all.filter(function(u){return /^ft241_/.test(u);});if(ft.length&&all.length>ft.length&&g.sw.some(function(u){return /^ft241_/.test(u);})){var sc=S.scen&&S.scen.sel,pre=((S.savedGroups&&sc&&S.savedGroups[sc])||{})[M.slot]||{};g.sw=all.filter(function(u){return !/^ft241_/.test(u);});g.swOwner=g.swOwner||{};g.sw.forEach(function(u){if((pre.swOwner||{})[u]!=null)g.swOwner[u]=pre.swOwner[u];});ft.forEach(function(u){delete g.swOwner[u];});g.mfOff=ft;try{fgRecomputeFromPicker(g);}catch(e){}}}}
@@ -36887,7 +36888,7 @@ function nmMfFpfSection(it,n,f,R){var M=NM_MF,L=nmMfFpfRes(f,R);if(!L.length)ret
 function nmMfFpfApply(n){var M=NM_MF,f=getFireState(),R=f&&f.res;if(!M||!R)return;var its=nmGeList(M.slot).items||[];try{nmBkSnap('FPFのNMC');}catch(e){}nmMfFpfRes(f,R).forEach(function(o){var x=its[o.i];if(!x)return;if(o.st==='pin')x.pinned=true;else if(o.st==='brk'||o.st==='auto'){x.broken=true;x.pinned=false;}});M.fpfDone=1;try{nmStSave(M.slot);}catch(e){}try{saveState();}catch(e){}nmMfReopen(n);}
 function nmMfRofAgain(n){var f=getFireState(),R=f&&f.res;if(!R)return;var ok={};(R.swr||[]).forEach(function(w){if(w.ro==='維持成功'&&w.uid)ok[w.uid]=1;});if(!Object.keys(ok).length)return;
   f.grps=f.grps.filter(function(g){return (g.sw||[]).some(function(u){return ok[u];});}).map(function(g){g.sw=g.sw.filter(function(u){return ok[u];});g.rofMode=true;return g;});
-  f.res=null;f.rd=0;f.wd=0;if(NM_MF){NM_MF.reDice=0;NM_MF.edit=0;}try{Draw();}catch(e){}nmMfReopen(n);btToast('ROF射撃: ダイスを入れるか「判定する」');}
+  f.res=null;f.rd=0;f.wd=0;if(NM_MF){NM_MF.reDice=0;NM_MF.edit=0;NM_MF.rof=1;}try{Draw();}catch(e){}nmMfReopen(n);btToast('ROF射撃: ダイスを入れるか「判定する」');}
 function nmTemOfNode(tn){var N=BTG.nodes[tn];return N?(btTerrJP(N.terr)+(N.tem?' TEM+'+N.tem:'')):'';}
 /* v404(ダルマ指示「車両・砲からの射撃も構築」): 車両の主砲・砲から相手側マーカーへ。計算は対戦モードと同じ(btOrdEval: 命中TH#とDRM、命中後は車両=TK#(btTKBasic/gunTkFinal/AF)、それ以外=HE/APのIFT)。
    ダイスは振る・目を入れるの両方。結果は表示とログのみ(マーカーへは反映しない) */
