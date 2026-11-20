@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1418</title>
+<title>ASL SKシリーズv1419</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1418">
+<meta property="og:title" content="ASL SKシリーズv1419">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.618"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.619"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1419="v1419(射撃グループの計算内容をシステムログに記録(FP調査)";
 var APP_VERSION_HIST_v1418="v1418(PINの指揮官は指揮修正を使えない(1.2.1)";
 var APP_VERSION_HIST_v1417="v1417(マルチ判定の潰走でマップのカウンターを使う選択(案A+B)";
 var APP_VERSION_HIST_v1416="v1416(ドラッグ中の地図の自動スクロールを端に入ってから0.3秒後に";
@@ -42341,7 +42342,8 @@ function nmFgApply(){var f=null;try{f=getFireState();}catch(e){}if(!f||!f.grps)r
   want.forEach(function(w){if(f.grps.some(function(g){return g.nmFg&&g.activeGroupSlot===w.s;}))return;var id=f.nid++;f.grps.push({id:id,ut:"squad",st:"good",fp:0,fpNoAF:0,af:false,afCapable:null,greenClass:null,elite:null,binocular:false,sh:"normal",sw:[],rofMode:false,swLong:{},ldrWith:false,range:w.r,pickerItems:[],swOwner:{},swExcluded:{},activeGroupSlot:w.s,latw:[],nmFg:1});try{FgSelectGroupSlot(id,w.s);}catch(e){}var g=f.grps.filter(function(x){return x.id===id;})[0];if(g){g.range=w.r;g.sw=(g.sw||[]).filter(function(u){return !/^ft241_/.test(u);});}chg=true;});
   var h0=(S_LOS.result&&S_LOS.result.hindranceDrm)||0,hx=0;want.forEach(function(w){hx=Math.max(hx,w.h-h0);});var nh=want.length?Math.max(0,hx):0;if((f.nmFgHind||0)!==nh){f.nmFgHind=nh;chg=true;}
   if(want.length){if(!f.multiHexLdr)f.multiHexLdr={on:false,hexes:[]};if(!f.multiHexLdr.on||!f.nmFgLdr){f.multiHexLdr.on=true;f.nmFgLdr=1;chg=true;}}else if(f.nmFgLdr){f.multiHexLdr.on=false;f.nmFgLdr=0;chg=true;}
-  if(chg||had!==!!want.length){try{fgSyncLdrFromPickers(f);}catch(e){}try{clearFireRes(f);}catch(e){f.res=null;}}}
+  if(chg||had!==!!want.length){try{fgSyncLdrFromPickers(f);}catch(e){}try{clearFireRes(f);}catch(e){f.res=null;}}
+  try{if(want.length||had){var m2=swMap(),au=f.swMode!=="tenkey",sig=f.grps.map(function(g){return (g.activeGroupSlot||'?')+(g.nmFg?'+':'')+' r'+g.range+' st'+g.st+' n'+(g.pickerItems||[]).length+' sw'+(g.sw||[]).length+' fp'+gEffFp(g,f.ph,m2,f.exFire,f.ldrPresent,au);}).join(' / ')+' | 計'+totalFP(f,f.ph)+' ph'+f.ph+' mode'+(f.fireMode||'')+' hip'+(f.tgtHIP?1:0);if(sig!==window.__nmFgSig){window.__nmFgSig=sig;nmDbg('射撃グループ: '+sig);}}}catch(e){}}
 (function(){if(window.__nmFgW)return;window.__nmFgW=1;
   var oH=fireHindTotal;fireHindTotal=function(f){var v=oH.apply(this,arguments);try{if(f&&f.nmFgHind&&f.grps&&f.grps.some(function(g){return g.nmFg;}))v+=f.nmFgHind;}catch(e){}return v;};
   var oA=losAutoApplyToAllTabs;losAutoApplyToAllTabs=function(){var r=oA.apply(this,arguments);try{nmFgRecalc();nmFgApply();}catch(e){console.log('fg',e);}return r;};
