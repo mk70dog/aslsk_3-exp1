@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1416</title>
+<title>ASL SKシリーズv1417</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1416">
+<meta property="og:title" content="ASL SKシリーズv1417">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.616"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.617"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1417="v1417(マルチ判定の潰走でマップのカウンターを使う選択(案A+B)";
 var APP_VERSION_HIST_v1416="v1416(ドラッグ中の地図の自動スクロールを端に入ってから0.3秒後に";
 var APP_VERSION_HIST_v1415="v1415(保存の容量不足で開き直すと前の状態に戻る問題(空けて再保存・記録)";
 var APP_VERSION_HIST_v1414="v1414(スポット判定: Aにいる部隊の国を攻撃側に(ABが逆になる修正)";
@@ -41648,6 +41649,18 @@ function nmCcCarryGo(){var K=NM_CCCARRY;if(!K||!NM_CCS)return;var o=document.get
 
 /* v934/v935(ダルマ指示「潰走ボタン選択でマップを表示(カウンター非表示)・潰走ユニットのヘクス・敵ユニットのヘクスを全て・潰走できるヘクス以外をグレー・阻止が可能なヘクスにマーク」「LOS妨害マーカーも追加可能に」):
    マルチ判定の潰走・阻止。潰走を選ぶとすぐ地図。①潰走ユニットのヘクス ②敵のヘクス(射程4の歩兵として計算)とLOS妨害マーカー(BT.smoke を一時的に使う。終了で元に戻す) →決定→ユニット選択→判定する→③潰走先(番号のヘクスをタップかパネルの一覧) */
+/* v1417(ダルマ「マルチ判定 潰走 マップのカウンターを使用する選択を追加」案A+B): A=マルチ判定の「潰走・阻止」で「マップのカウンターを使う/カウンターなしの地図(今まで)」を選ぶ。B=潰走の帯に「マップのカウンター」切替(ONで地図のカウンターを出し、混乱スタックをタップ→nmRtmStartAt=ヘクスメニューの潰走と同じ) */
+function nmRtmHideCtr(){return nmRtmActive()&&!(NM_RTM&&NM_RTM.useMap&&NM_RTM.step===1);}
+function nmRtBrokenStacks(){var o=[];['f','e'].forEach(function(sd){(nmSideList(sd)||[]).forEach(function(e){if(!e||!e.grp||e.veh||e.gun||e.ijTmp)return;var nb=(nmGeList(e.grp).items||[]).filter(function(x){return x.broken;}).length;if(!nb)return;var n=null;try{n=btNodeOf(e.boardId,e.col,e.row);}catch(x){}if(n==null||n<0)return;o.push({sd:sd,n:n,grp:e.grp,nb:nb,hex:e.boardId+losHexNameFromColRow(e.col,e.row)});});});return o;}
+function nmRtmUseMap(){var M=NM_RTM;if(!M||M.step!==1)return;M.useMap=!M.useMap;try{Draw();}catch(e){}nmRtmBanner();}
+function nmRtChooseClose(){var e=document.getElementById('nmRtCh');if(e)e.remove();}
+function nmRtChoose(){nmRtChooseClose();var L=nmRtBrokenStacks(),el=document.createElement('div');el.id='nmRtCh';el.style.cssText='position:fixed;inset:0;z-index:2147482500;background:#0007;display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,sans-serif';el.onclick=function(e){if(e.target===el)nmRtChooseClose();};
+  var B=function(on,t,sub,f,extra){return '<button onclick="'+f+'" style="display:block;width:100%;text-align:left;margin:8px 0;padding:12px 14px;border-radius:12px;cursor:pointer;font-family:inherit;border:1.5px solid '+(on?'#4fc27a':'#4a5568')+';background:'+(on?'#13261b':'#141820')+';color:#e8eef4"><b style="font-size:17px">'+t+'</b><div style="font-size:12px;color:#9fb0c4;margin-top:3px">'+sub+'</div>'+(extra||'')+'</button>';};
+  var lst=L.length?'<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">'+L.map(function(q){return '<span onclick="event.stopPropagation();nmRtChooseClose();nmRtmStartAt('+q.n+',\''+q.sd+'\')" style="padding:5px 10px;border-radius:8px;background:#2a8a4c;color:#fff;font-size:13px;font-weight:800;cursor:pointer">'+nmGrpLbl(q.grp)+' '+q.hex+' '+T('混乱')+q.nb+'</span>';}).join('')+'</div>':'<div style="font-size:12px;color:#ff9a9a;margin-top:4px">'+T('地図に混乱しているスタックがありません')+'</div>';
+  el.innerHTML='<div onclick="event.stopPropagation()" style="width:min(520px,94vw);background:#1b222c;border:1px solid #7ec8e3;border-radius:16px;padding:14px 16px;box-shadow:0 10px 40px #000;color:#e8eef4"><div style="display:flex;align-items:center"><b style="font-size:18px">'+T('潰走・阻止')+' — '+T('どの地図で？')+'</b><button onclick="nmRtChooseClose()" style="margin-left:auto;background:none;border:0;color:#cfd6df;font-size:22px;cursor:pointer">✕</button></div>'
+    +B(1,T('マップのカウンターを使う'),T('混乱しているスタックをタップ(または下から選ぶ)→そのユニットで潰走。敵のヘクスも地図のまま'),"nmRtChooseClose();nmRtmStart();if(NM_RTM){NM_RTM.useMap=1;try{Draw();}catch(e){}nmRtmBanner();}",lst)
+    +B(0,T('カウンターなしの地図で(今まで)'),T('潰走するヘクス・敵のヘクスを地図でタップして決める'),"nmRtChooseClose();nmRtmStart()")+'</div>';
+  document.body.appendChild(el);}
 var NM_RTM=null;
 function nmRtmMkRestore(){var M=NM_RTM;if(!M||!M.mkO)return;Object.keys(M.mkO).forEach(function(k){try{if(M.mkO[k]===undefined)delete BT.smoke[k];else BT.smoke[k]=M.mkO[k];}catch(e){}});M.mkO={};M.mk={};}
 function nmRtmActive(){var M=NM_RTM;if(!M)return false;if(M.step===3&&(!NM_RT||NM_RT.done)){nmRtmEnd(true);return false;}if(M.step==='u'&&!NM_SC){M.step=2;nmRtmBanner();}return true;}
@@ -41755,7 +41768,7 @@ function nmRtmPen(){var M=NM_RTM,p=document.getElementById('nmRtmPen');if(!M||M.
   p.innerHTML=h;document.body.appendChild(p);nmRtmDrag(p,'nmRtmPenPos');}
 function nmRtmBanner(){var M=NM_RTM;if(!M)return;var b=document.getElementById('nmRtmBn');if(M.step==='u'){if(b)b.remove();return;}if(!b){b=document.createElement('div');b.id='nmRtmBn';b.setAttribute('style','position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:9400;width:max-content;max-width:94vw;background:#0e1620ee;border:1px solid #4a5566;border-radius:10px;padding:5px 10px;color:#dfe8f0;font:13px/1.7 AppFont,AppJP,monospace;box-shadow:0 6px 20px #000b;touch-action:none');document.body.appendChild(b);nmRtmDrag(b,'nmRtmPos');}
   var bt=function(t,f,pri){return '<button class="b sm" style="margin:0;height:34px;padding:0 12px;font-weight:800'+(pri?';background:#e0a830;color:#111;border-color:#e0a830':'')+'" onclick="'+f+'">'+T(t)+'</button>';},h='',nk=Object.keys(M.mk||{}).length;
-  if(M.step===1)h='<div style="display:flex;align-items:center;gap:8px">'+nmRtmNatBtn()+'<b style="flex:1;color:#ffd040">'+T('潰走・阻止')+' ① '+T('潰走するユニットのヘクスをタップ')+'</b>'+bt('中止','nmRtmCancel()')+'</div>';
+  if(M.step===1)h='<div style="display:flex;align-items:center;gap:8px">'+(M.useMap?'':nmRtmNatBtn())+'<b style="flex:1;color:#ffd040">'+T('潰走・阻止')+' ① '+T(M.useMap?'混乱している自軍・敵軍のスタックをタップ':'潰走するユニットのヘクスをタップ')+'</b><button class="b sm" style="margin:0;height:34px;padding:0 12px;font-weight:800;'+(M.useMap?'background:#2a8a4c;color:#fff;border-color:#78e6a0':'')+'" onclick="nmRtmUseMap()">'+(M.useMap?'✓ ':'')+T('マップのカウンター')+'</button>'+bt('中止','nmRtmCancel()')+'</div>'+(M.useMap?'<div style="font-size:11px;color:#9ab">'+T('地図の自軍・敵軍の配置のままで潰走・阻止を判定します')+(nmRtBrokenStacks().length?'':'　<span style="color:#ff9a9a">'+T('混乱しているスタックがありません')+'</span>')+'</div>':'');
   else if(M.step===2)h='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><b style="flex:1;color:#ff9a30;min-width:160px">'+T('潰走・阻止')+' ② '+T(M.mode==='k'?'LOS妨害マーカー':'敵ユニット')+'</b>'+bt((M.mode!=='k'?'✓':'')+'敵('+M.E.length+')',"nmRtmMode('e')",M.mode!=='k')+bt((M.mode==='k'?'✓':'')+'LOS妨害('+nk+')',"nmRtmMode('k')",M.mode==='k')+bt('やり直し','nmRtmReset()')+bt('決定','nmRtmDecide()',1)+'</div><div style="font-size:11px;color:#9ab">'+T(M.mode==='k'?'妨害のあるヘクスをタップ(煙幕・残骸など)。もう一度タップで外す。妨害が1つでもあれば阻止されません':'敵のヘクスをすべてタップ。もう一度タップで外す(射程4の歩兵として計算)')+'</div>';
   else{var nm=function(i){return BTG.nodes[i].nm;},pk=M.pick,md=M.mode||'e',bs=function(t,f,pri){return '<button class="b sm" style="margin:0;height:28px;padding:0 9px;font-size:12px;font-weight:800'+(pri?';background:#e0a830;color:#111;border-color:#e0a830':'')+'" onclick="'+f+'">'+T(t)+'</button>';};
     h='<div style="display:flex;align-items:center;gap:5px"><span style="color:#678;font-size:16px;cursor:move;padding:0 2px" title="'+T('ドラッグで移動')+'">⠿</span><b style="color:#ffd040;font-size:13px;margin-right:4px">'+T('潰走')+'</b>'+nmRtmNatBtn()+bs((md==='e'?'✓':'')+T('敵')+M.E.length,"nmRtmMode('e')",md==='e')+bs((md==='k'?'✓':'')+T('妨害')+nk,"nmRtmMode('k')",md==='k')+bs((md==='r'?'✓':'')+T('経路'),"nmRtmMode('r')",md==='r')+(M.real?'':'<button class="b sm" style="margin:0;height:28px;padding:0 9px;font-size:12px;font-weight:800;'+(pk&&pk.inter&&pk.inter.length?'background:#c03030;color:#fff;border-color:#ff6060':'')+'" onclick="nmRtmIntOpen()">⚠'+T('阻止')+(pk&&pk.inter&&pk.inter.length?pk.inter.length:'')+'</button>')+(pk&&pk.man?bs('1つ戻す','nmRtmManBack()'):'')+bs('やり直し','nmRtmReset()')+bs('終了','nmRtmCancel()')+'</div>';
@@ -41888,6 +41901,7 @@ function nmRtmTap(cx,cy){if(!nmRtmActive())return false;var M=NM_RTM,H=losHexAtC
   if(M.step===3&&M.mode==='r'){if(!NM_RT||NM_RT.done)return false;var C=nmRtCalc(),k=-1,li=-1;C.plans.forEach(function(P,i){if(P.to===n)k=i;});C.low.forEach(function(P,i){if(P.to===n)li=i;});
     if(k>=0||li>=0){var P=k>=0?C.plans[k]:C.low[li];M.pick={no:k>=0?k+1:0,to:P.to,path:P.path,low:!!P.low,inter:P.low?[]:nmRtPathInter(P.path,C.E)};try{Draw();}catch(x){}nmRtmBanner();return true;} /* v939: 潰走だけ(NMCなし) */var sr=nmRtSearch(NM_RT.n,C.E,C.mf);if(n!=null&&n!==NM_RT.n&&sr.dist[n]!=null){var pa=[],c=n;while(c!==NM_RT.n&&c!=null){pa.unshift(c);c=sr.prev[c];}M.pick={no:0,to:n,path:pa,low:false,inter:nmRtPathInter(pa,C.E)};try{Draw();}catch(x){}nmRtmBanner();return true;} /* v940: 水色のヘクスならどこでも経路を表示 */btToast(T('水色のヘクスをタップしてください'));return true;}
   if(n==null||n<0){btToast(T('地図の外です'));return true;}
+  if(M.step===1&&M.useMap){var bk=nmRtBrokenStacks().filter(function(q){return q.n===n;}),pick=bk.filter(function(q){return q.sd===M.sd;})[0]||bk[0];if(pick){nmRtmStartAt(pick.n,pick.sd);}else btToast(T('このヘクスに混乱しているユニットがいません'));return true;} /* v1417 */
   if(M.step===1){M.n=n;M.H=H;M.step=2;M.mode='e';nmRtmDecide();return true;} /* v942: すぐ地図に結果(決定なし) */
   if(M.mode==='k'){BT.smoke=BT.smoke||{};if(M.mkO[n]===undefined&&!(n in M.mkO))M.mkO[n]=BT.smoke[n];var v=M.mk[n]?2:1;if(v>1){delete M.mk[n];if(M.mkO[n]===undefined)delete BT.smoke[n];else BT.smoke[n]=M.mkO[n];}else{M.mk[n]=v;BT.smoke[n]={v:v,k:'m',side:M.sd};}M.cache=null;M.pick=null;try{Draw();}catch(x){}nmRtmBanner();return true;}
   if(n===M.n){btToast(T('潰走するユニットのヘクスです'));return true;}
@@ -41962,7 +41976,7 @@ function nmCcScGo(){var C=NM_CCS;if(!C)return;NM_CCCARRY=null;NM_MIX=null;var o=
 (function(){['nmCCOpen','nmCvOpen'].forEach(function(f){var o=window[f];if(typeof o!=='function')return;window[f]=function(){if(!window.__ccFromSc)window.NM_CC_ATK=null;return o.apply(this,arguments);};});})(); /* v1190: シナリオのユニット以外から開いた白兵戦は手番の側を攻撃側にする */
 (function(){var oc=window.BtRmClose;if(typeof oc!=='function')return;window.BtRmClose=function(){var r=oc.apply(this,arguments);if(NM_CCS&&NM_CCS.open)setTimeout(function(){if(!document.getElementById('btRm')&&NM_CCS&&NM_CCS.open&&!(typeof nmRtmActive==='function'&&nmRtmActive())){NM_CCS=null;nmCcScClear();}},400); /* v942: 潰走・阻止の地図中は一時ユニットを消さない */return r;};})();
 function nmHqSetA(n,fn){var A=BTG.nodes[n];if(!A)return;S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB=null;S_LOS.result=null;try{Draw();}catch(e){}nmHqAtA(fn);}
-function nmHqAtA(fn){if(fn==='nmRtOpen'){nmHqClose();nmRtmStart();return;} /* v949: マルチ判定の潰走は常に自軍・敵軍のない地図だけ(編成の選択も出さない) */nmHqClose();NM_HQFROM=1;if(!btGraphReady()){btToast('マップを準備しています…');return;}
+function nmHqAtA(fn){if(fn==='nmRtOpen'){nmHqClose();nmRtChoose();return;} /* v1417: 地図を選ぶ */ /* v949: マルチ判定の潰走は常に自軍・敵軍のない地図だけ(編成の選択も出さない) */nmHqClose();NM_HQFROM=1;if(!btGraphReady()){btToast('マップを準備しています…');return;}
   var an=S_LOS.pxA?nmNodeOfPx(S_LOS.pxA):null;if(an==null||an<0){nmHqPickA(fn);return;} /* v740(ダルマ報告「HQ判定 回復など選択してもこの表示」): 地点Aが無い時は、地図上の編成から選ぶ */
   var H=nmHexOfNode(an),sd=null;if(fn==='nmRpOpen'){['f','e'].forEach(function(x){if(sd)return;if(nmAllAt(H,x).some(function(e){return e.veh||e.gun;}))sd=x;});if(sd){nmRvOpen(an,sd);return;}nmHqPickA(fn);return;}if(fn==='nmHqGunOpen'||fn==='nmHqAfvOpen'||fn==='nmHqBogOpen'||fn==='nmHqMhOpen'){var gk=(fn==='nmHqGunOpen'||fn==='nmHqMhOpen');['f','e'].forEach(function(x){if(sd)return;if(nmAllAt(H,x).some(function(e){return gk?(e.gun&&!e.veh):(e.veh&&!e.gun);}))sd=x;});if(sd){window[fn](an,sd);return;}nmHqPickA(fn);return;}
   ['f','e'].forEach(function(x){if(sd)return;var u=nmUnitAt(H,x);if(u&&((u.grp&&!u.veh&&!u.gun)||(fn==='nmHqMvOpen'&&u.veh&&!u.gun)))sd=x;});
@@ -46339,7 +46353,7 @@ function nmPlainMarkSVG(sd,d,eh){
   return h+'</g>';
 }
 function nmFriendOverlaySVG(dl){ /* v345: 自軍のカウンター(青の枠)。車両未定は「自軍」の札 */
-  var h='';(nmRtmActive()?[]:(S_LOS.friendHexes||[])).forEach(function(eh){var g=losColRowToGlobalCanon(eh.boardId,eh.col,eh.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);
+  var h='';(nmRtmHideCtr()?[]:(S_LOS.friendHexes||[])).forEach(function(eh){var g=losColRowToGlobalCanon(eh.boardId,eh.col,eh.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);
     if(NM_DRAG&&NM_DRAG.moving&&!NM_DRAG.mv&&NM_DRAG.ref===eh)return;
     if(nmUnitAt(eh,'e'))d={x:d.x-8,y:d.y-8}; /* 同じヘクスに敵もいる時は少しずらす */
     var so=nmStackOff(eh,'f');d={x:d.x+so.dx,y:d.y+so.dy}; /* v419 */
@@ -46421,7 +46435,7 @@ function losEnemyHexOverlaySVG(dispLayout){
   // 登録ヘクスのマーカー(常時表示)
   // 2026-08修正(ダルマ指示): 「OPPS」文字ラベルを削除し、画像のみの表示にする。
   var eiw=48,eih=48;
-  (nmRtmActive()?[]:S_LOS.enemyHexes).forEach(function(eh,idx){
+  (nmRtmHideCtr()?[]:S_LOS.enemyHexes).forEach(function(eh,idx){
     var g=losColRowToGlobalCanon(eh.boardId,eh.col,eh.row);
     if(!g)return;
     var d=losCanonicalToDisplay(g.x,g.y,dispLayout);
