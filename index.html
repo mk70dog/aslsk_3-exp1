@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1407</title>
+<title>ASL SKシリーズv1408</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1407">
+<meta property="og:title" content="ASL SKシリーズv1408">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.607"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.608"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1408="v1408(使うSWに射撃グループの別ヘクスのSWも表示";
 var APP_VERSION_HIST_v1407="v1407(複数ヘクスの射撃グループ(地図の＋隣・スポット判定)";
 var APP_VERSION_HIST_v1406="v1406(ユニットの状態: 選択画面の札と長押し・判定パネルの一覧表";
 var APP_VERSION_HIST_v1405="v1405(配置パネル: 配置済みを暗く＋✓配置済み";
@@ -36710,11 +36711,16 @@ function nmMfBack(n){NM_MF=null;btRmReopen(n);}
 function nmMfSwGrp(){var M=NM_MF;if(!M)return null;var f=getFireState(),g=f&&f.grps&&f.grps[0];if(!g||g.activeGroupSlot!==M.slot)return null;var sc=S.scen&&S.scen.sel,pre=((S.savedGroups&&sc&&S.savedGroups[sc])||{})[M.slot]||{};return {f:f,g:g,pre:pre,all:(pre.sw||[]).slice()};}
 function nmIjPfIdx(){try{var J=NM_IJ;if(!J||J.pick==null)return null;var o=nmIjShooters(J.a)[J.pick];return (o&&o.pfIdx!=null)?o.pfIdx:null;}catch(e){return null;}}
 function nmIjPfSwitch(toPf){var J=NM_IJ;if(!J||J.pick==null)return;var sh=nmIjShooters(J.a),o=sh[J.pick];if(!o)return;var to=toPf?o.pfIdx:(o.mode==='lw'?o.mfIdx:null);if(to==null)return;nmIjStageBack();J.pick=to;J.ea=0;nmIjStageGo();} /* v1095: 2画面目の使うSWでPFと通常射撃を切り替え */
-function nmMfSwRow(it,n){var G=nmMfSwGrp();var pfI=nmIjPfIdx();if((!G||!G.all.length)&&pfI==null)return;if(!G)G={all:[],g:{sw:[]},pre:{}};var g=G.g,ftOn=g.sw.some(function(u){return /^ft241_/.test(u);}),nm=[];
+function nmMfSwRow(it,n){var G=nmMfSwGrp();var pfI=nmIjPfIdx();var FGS=nmMfFgSwBtns(n);if((!G||!G.all.length)&&pfI==null&&!FGS.bt.length)return;if(!G)G={all:[],g:{sw:[]},pre:{}};var g=G.g,ftOn=g.sw.some(function(u){return /^ft241_/.test(u);}),nm=[];
   var bt=G.all.map(function(u){var on=g.sw.indexOf(u)>=0,b=nmGeSwBase(u),t=SWT.filter(function(w){return w.id===b.id;})[0],lb=t?String(t.lbl||t.id).replace(/\s+\d+-\d+$/,''):b.id;if(on)nm.push(lb);return [(on?'✓':'')+'<span style="display:inline-flex;align-items:center;gap:6px">'+nmSuSwImg('sw',b.id,30)+lb+(on?'':'<small style="color:#8fa6bd"> '+T('使わない')+'</small>')+'</span>',"nmMfSwUse("+n+",'"+u.replace(/'/g,"\\'")+"')"];});
   if(pfI!=null)bt.push(['<span style="display:inline-flex;align-items:center;gap:6px">'+(vaslCtrHTML('pf30',30,'')||'')+'PF(1発)<small style="color:#8fa6bd"> '+T('PFで撃つ')+'</small></span>',"nmIjPfSwitch(1)"]);
+  bt=bt.concat(FGS.bt);nm=nm.concat(FGS.nm);
   it.push({row:1,ic:'sel',t:T('使うSW'),btns:bt});
   it.push({ic:'info',t:'<span style="font-size:12px;color:#c8b070">'+T('この射撃')+': '+(ftOn?T('FTだけで撃つ(分隊のFPも他のSWも使わない)'):T('分隊')+(nm.length?' + '+nm.join(' + '):'')+T('のFPで判定'))+'</span>'});}
+/* v1408(ダルマ「使うSWにスタック中の全てを表示させる」): 射撃グループで加えた別ヘクスの編成のSWも「使うSW」に出して使う/使わないを切り替える(FTは射撃グループに入れない 3.2.2) */
+function nmMfFgSwBtns(n){var o={bt:[],nm:[]};try{var f=getFireState(),sc=S.scen&&S.scen.sel;(f&&f.grps||[]).forEach(function(g){if(!g.nmFg)return;var pre=((S.savedGroups&&sc&&S.savedGroups[sc])||{})[g.activeGroupSlot]||{};(pre.sw||[]).forEach(function(u){if(/^ft241_/.test(u))return;var on=(g.sw||[]).indexOf(u)>=0,b=nmGeSwBase(u),t=SWT.filter(function(w){return w.id===b.id;})[0],lb=t?String(t.lbl||t.id).replace(/\s+\d+-\d+$/,''):b.id;if(on)o.nm.push(lb+'('+nmGrpLbl(g.activeGroupSlot)+')');
+  o.bt.push([(on?'✓':'')+'<span style="display:inline-flex;align-items:center;gap:6px">'+nmSuSwImg('sw',b.id,30)+lb+'<small style="color:#8fa6bd"> '+nmGrpLbl(g.activeGroupSlot)+(on?'':'・'+T('使わない'))+'</small></span>',"nmMfFgSwUse("+n+","+g.id+",'"+u.replace(/'/g,"\\'")+"')"]);});});}catch(e){console.log('fgsw',e);}return o;}
+function nmMfFgSwUse(n,gid,uid){var f=getFireState(),g=(f&&f.grps||[]).filter(function(x){return x.id===gid;})[0];if(!g)return;var sc=S.scen&&S.scen.sel,pre=((S.savedGroups&&sc&&S.savedGroups[sc])||{})[g.activeGroupSlot]||{};g.sw=g.sw||[];var k=g.sw.indexOf(uid);if(k>=0){g.sw.splice(k,1);if(g.swOwner)delete g.swOwner[uid];}else{g.sw.push(uid);g.swOwner=g.swOwner||{};if((pre.swOwner||{})[uid]!=null)g.swOwner[uid]=pre.swOwner[uid];}try{fgRecomputeFromPicker(g);}catch(e){}try{clearFireRes(f);}catch(e){f.res=null;}nmMfReopen(n);}
 function nmMfSwUse(n,uid){var G=nmMfSwGrp();if(!G)return;var f=G.f,g=G.g,on=g.sw.indexOf(uid)>=0,isFt=/^ft241_/.test(uid),own=(G.pre.swOwner||{})[uid];
   if(on){if(isFt){g.sw=G.all.filter(function(u){return !/^ft241_/.test(u);});g.swOwner=g.swOwner||{};g.sw.forEach(function(u){if((G.pre.swOwner||{})[u]!=null)g.swOwner[u]=G.pre.swOwner[u];});}else{g.sw=g.sw.filter(function(u){return u!==uid;});if(g.swOwner)delete g.swOwner[uid];}}
   else{FtogSW(g.id,uid);g=getFireState().grps.filter(function(x){return x.id===g.id;})[0]||g;if(g.sw.indexOf(uid)>=0&&own!=null){g.swOwner=g.swOwner||{};g.swOwner[uid]=own;}}
@@ -42291,7 +42297,7 @@ function nmFgApply(){var f=null;try{f=getFireState();}catch(e){}if(!f||!f.grps)r
   try{if(M&&M.slot&&M.from!=null){var A=nmFgHx(S_LOS.pxA),Hf=nmHexOfNode(M.from),g0=f.grps[0];if(A&&Hf&&nmFgSame(A,Hf)&&g0&&g0.activeGroupSlot===M.slot&&!(g0.sw||[]).some(function(u){return /^ft241_/.test(u);}))nmFgOk().forEach(function(e){e.slots.forEach(function(s){if(s!==M.slot&&!want.some(function(w){return w.s===s;}))want.push({s:s,r:e.los.range,h:e.los.hind});});});}}catch(e){}
   var had=f.grps.some(function(g){return g.nmFg;}),chg=false;
   f.grps=f.grps.filter(function(g){if(!g.nmFg)return true;var w=want.filter(function(x){return x.s===g.activeGroupSlot;})[0];if(!w){chg=true;return false;}if(g.range!==w.r){g.range=w.r;chg=true;}return true;});
-  want.forEach(function(w){if(f.grps.some(function(g){return g.nmFg&&g.activeGroupSlot===w.s;}))return;var id=f.nid++;f.grps.push({id:id,ut:"squad",st:"good",fp:0,fpNoAF:0,af:false,afCapable:null,greenClass:null,elite:null,binocular:false,sh:"normal",sw:[],rofMode:false,swLong:{},ldrWith:false,range:w.r,pickerItems:[],swOwner:{},swExcluded:{},activeGroupSlot:w.s,latw:[],nmFg:1});try{FgSelectGroupSlot(id,w.s);}catch(e){}var g=f.grps.filter(function(x){return x.id===id;})[0];if(g)g.range=w.r;chg=true;});
+  want.forEach(function(w){if(f.grps.some(function(g){return g.nmFg&&g.activeGroupSlot===w.s;}))return;var id=f.nid++;f.grps.push({id:id,ut:"squad",st:"good",fp:0,fpNoAF:0,af:false,afCapable:null,greenClass:null,elite:null,binocular:false,sh:"normal",sw:[],rofMode:false,swLong:{},ldrWith:false,range:w.r,pickerItems:[],swOwner:{},swExcluded:{},activeGroupSlot:w.s,latw:[],nmFg:1});try{FgSelectGroupSlot(id,w.s);}catch(e){}var g=f.grps.filter(function(x){return x.id===id;})[0];if(g){g.range=w.r;g.sw=(g.sw||[]).filter(function(u){return !/^ft241_/.test(u);});}chg=true;});
   var h0=(S_LOS.result&&S_LOS.result.hindranceDrm)||0,hx=0;want.forEach(function(w){hx=Math.max(hx,w.h-h0);});var nh=want.length?Math.max(0,hx):0;if((f.nmFgHind||0)!==nh){f.nmFgHind=nh;chg=true;}
   if(want.length){if(!f.multiHexLdr)f.multiHexLdr={on:false,hexes:[]};if(!f.multiHexLdr.on||!f.nmFgLdr){f.multiHexLdr.on=true;f.nmFgLdr=1;chg=true;}}else if(f.nmFgLdr){f.multiHexLdr.on=false;f.nmFgLdr=0;chg=true;}
   if(chg||had!==!!want.length){try{fgSyncLdrFromPickers(f);}catch(e){}try{clearFireRes(f);}catch(e){f.res=null;}}}
