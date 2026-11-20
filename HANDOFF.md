@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-20 いまの作業=v1432 から再開、返事待ちなし。】** v1432(ダルマ報告「指揮官が除去のはずがされない」+ログ: 相手Eの9-1を負傷dr6で除去→8秒後の自動同期(nmGsSync)が相手の編成を相手のiPadの内容で丸ごと置き換えて9-1が戻った。ダルマ選択「A」): 受信した相手の編成の中身(nmGsGrpCore=pickerNat・pickerItems・sw・swOwner・latw)を S.nmOppRcv[sc] に覚え、送る時に今の中身と違えば S.nmOppEd に {at,sig} で記録して payload.edits に載せる(nmGsScanEdits)。相手のiPadは edits を自分の編成に反映(nmGsApplyEdit、射撃タブで開いている編成も更新)して S.nmEdAck に at を記録し payload.ack で返す。こちらは ack>=at になるまで、その相手の編成を受信で上書きしない。確認: /tmp/fz/gs2.js(2台をまねたテスト: 除去・混乱→相手に反映→ack→相手の回復が戻ってくる)。smoke 0。
+- **【2026-11-20 いまの作業=v1433 から再開、返事待ちなし。】** v1433(ダルマ報告「ドラッグした瞬間に画面が飛ぶ」+ログ 22:35 ドラッグ2回・置き直しの記録なし): nmDragMove のドラッグ開始で呼ぶ Draw() が losRestoreMapScroll で古い S_LOS.scrollLeft/Top に戻していた(v1177 と同じ型)。開始時に losSaveMapScroll() してから Draw。
+- **【v1432】** v1432(ダルマ報告「指揮官が除去のはずがされない」+ログ: 相手Eの9-1を負傷dr6で除去→8秒後の自動同期(nmGsSync)が相手の編成を相手のiPadの内容で丸ごと置き換えて9-1が戻った。ダルマ選択「A」): 受信した相手の編成の中身(nmGsGrpCore=pickerNat・pickerItems・sw・swOwner・latw)を S.nmOppRcv[sc] に覚え、送る時に今の中身と違えば S.nmOppEd に {at,sig} で記録して payload.edits に載せる(nmGsScanEdits)。相手のiPadは edits を自分の編成に反映(nmGsApplyEdit、射撃タブで開いている編成も更新)して S.nmEdAck に at を記録し payload.ack で返す。こちらは ack>=at になるまで、その相手の編成を受信で上書きしない。確認: /tmp/fz/gs2.js(2台をまねたテスト: 除去・混乱→相手に反映→ack→相手の回復が戻ってくる)。smoke 0。
 - **【v1431】** v1431(ダルマ「UKを足す」): 車両のヘクスメニュー 状態(続き) に UK(st.uk)。nmStTog: UK を付けるとショックを外す・ショックを付けると UK を外す、どちらも BU(eh.ce=false)。確認: /tmp/fz/uk.js。
 - **【v1430】** v1430(ダルマ「1でシナリオユニットを上にする」): nmHqPickA の選択画面。並び=シナリオのユニット(カウンター一覧)→黄色ボタン→地図上の編成→地図でタップ(window.NM_PK_SMP 既定'A')。地図上の編成(歩兵の編成)は nmPkCtrBtn の案1(編成マーク(相手は赤丸)＋カウンター横並び6枚まで＋ヘクス、window.NM_PK_CTR 既定1)。車両・砲の項目は今まで通り。サンプル撮影 /tmp/fz/pkc.js・pkf.js。
 - **【v1429】** v1429(ダルマ「A: 赤い丸に白い字」): nmGrpBadge('num') で編成名が「相手〜」なら「相手」を取り、赤丸(#c62828・白ふち)に白字。味方は黒丸のまま。
