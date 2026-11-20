@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1417</title>
+<title>ASL SKシリーズv1418</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1417">
+<meta property="og:title" content="ASL SKシリーズv1418">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.617"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.618"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1418="v1418(PINの指揮官は指揮修正を使えない(1.2.1)";
 var APP_VERSION_HIST_v1417="v1417(マルチ判定の潰走でマップのカウンターを使う選択(案A+B)";
 var APP_VERSION_HIST_v1416="v1416(ドラッグ中の地図の自動スクロールを端に入ってから0.3秒後に";
 var APP_VERSION_HIST_v1415="v1415(保存の容量不足で開き直すと前の状態に戻る問題(空けて再保存・記録)";
@@ -17150,14 +17151,14 @@ function FgDeleteGroupSlot(slot){
 // 「⚀⚀ゾロ目(指揮官なし)畏縮」が指揮官選択中にも誤って表示・発動する不具合があった。
 // いずれかのグループのピッカーでSMCが選択されていれば、そのSMCの指揮能力値(cmd)をLeader DRMへ自動反映する。
 // 手動でLeader DRMを変更した後の値を上書きしないよう、SMCピッカー選択が見つかった場合のみ設定する(見つからない場合は既存値を保持)。
-function fgSyncLdrFromPickers(f){
+function fgSyncLdrFromPickers(f){ /* v1418(ダルマ「pinの指揮官のダイス修正は適用される？」): ルール1.2.1「混乱していない・PINでない指揮官だけ指揮修正を使える」→PINの指揮官も除く */
   if(f.multiHexLdr&&f.multiHexLdr.on&&f.swMode!=="tenkey"){
     // 複数ヘクスFG＋オートモード：各グループ(=ヘクス)ごとにSMCピッカー選択の有無を判定し、全ヘクスに指揮官がいる場合のみ
     // 最も劣る(数値が最大)の指揮能力値をFG全体のLeader DRMへ自動反映する。手動(tenkey)モードでは手入力を保持するためスキップ。
     var autoHexes=f.grps.map(function(g){
       // 2026-08修正(ダルマ指摘バグ「指揮官混乱チェックしてもldrが反映しない」): 混乱状態の
       // SMCは統制状態でないため指揮官DRMの元にできない。混乱でないSMCのみを対象とする。
-      var smcItem=(g.pickerItems||[]).filter(function(it){return it.kind==='smc'&&!it.broken;})[0];
+      var smcItem=(g.pickerItems||[]).filter(function(it){return it.kind==='smc'&&!it.broken&&!it.pinned;})[0];
       if(!smcItem)return {present:false,ldr:0};
       var d=UNITS[smcItem.nat];
       var u=d&&d.smc&&d.smc.filter(function(x){return x.lbl===smcItem.label;})[0];
@@ -17172,7 +17173,7 @@ function fgSyncLdrFromPickers(f){
   // そのまま使っていたため、劣る指揮官が先に並ぶと不利な修正値になっていた。最も有利(数値が最小)な指揮官の値を採用する。
   var foundCmd=null;
   f.grps.forEach(function(g){
-    (g.pickerItems||[]).filter(function(it){return it.kind==='smc'&&!it.broken;}).forEach(function(smcItem){
+    (g.pickerItems||[]).filter(function(it){return it.kind==='smc'&&!it.broken&&!it.pinned;}).forEach(function(smcItem){
       var d=UNITS[smcItem.nat];
       var u=d&&d.smc&&d.smc.filter(function(x){return x.lbl===smcItem.label;})[0];
       if(!u||typeof u.cmd!=='number')return;
