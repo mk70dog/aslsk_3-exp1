@@ -1,8 +1,9 @@
-# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1454)
+# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1455)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1454 から再開。返事待ちなし】**
+- **【2026-11-21 いまの作業=v1455 から再開。返事待ちなし】**
+  - v1455(ダルマ指示「射撃タブで開くを消去」画像=スポット判定の歩兵の射撃): 項目の it.push({ic:'tabs',t:'射撃タブで開く'…}) を削除。確認: 判定パネルに文字列なし、smoke 0。
   - v1454(ダルマ指示「スタックを長押ししてドラッグした時はメニューを表示しない」画像=判定モードで長押し→メニューが開いたままドラッグ): nmDragMove の動き始め(8px)で BT_LP.eat かつ #btRm があれば BtRmClose。確認 /tmp/s/lp.js(CDP タッチ: 長押しだけ=メニュー残る、長押し→ドラッグ=メニュー閉じて置き直し)、smoke 0。
   - v1453(報告「選択するとパネル画面が揺れる」=空ヘクスの配置パネル): btRmReopen で開き直すと nmMarkScan(MutationObserver の setTimeout 0)が後から「← 戻る」行を隠すため、一瞬 60px 高く出てから縮んでいた。btRmReopen の btRMenu 直後に nmMarkScan() を同期で呼ぶ。確認: /tmp/sc/pl5.js(高さの跳ね無し)。
   - v1452: 地図のドラッグで向きを変えない(nmDragStart の nmAimPick を NM_AIM_DRAG===true の時だけ)。方向の設定(nmRmSetFace/F・nmRmSetTca/F)の前に losSaveMapScroll。

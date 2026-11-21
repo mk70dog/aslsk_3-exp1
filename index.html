@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1454</title>
+<title>ASL SKシリーズv1455</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1454">
+<meta property="og:title" content="ASL SKシリーズv1455">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.654"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.655"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1455="v1455(ダルマ指示「射撃タブで開くを消去」): スポット判定(歩兵の射撃)の項目から「射撃タブで開く」を外す";
 var APP_VERSION_HIST_v1454="v1454(ダルマ指示「スタックを長押ししてドラッグした時はメニューを表示しない」): 長押し(0.5秒)で開いたメニューは、そのまま指を動かしてドラッグを始めたら閉じる(nmDragMove の動き始め)";
 var APP_VERSION_HIST_v1453="v1453(--help";
 var APP_VERSION_HIST_v1452="v1452(地図の矢印をドラッグして向きを変える操作をなくす(方向パネルの矢印ボタンだけ)。方向を変えた時に地図の位置が古い位置へ戻らないように)";
@@ -36905,7 +36906,7 @@ function nmRmMFireItems(n){
   try{var usA=nmUstSum(M.slot),usB=(tgtEh&&tgtEh.grp&&!tgtEh.veh&&!tgtEh.gun)?nmUstSum(tgtEh.grp):'';it.push({ic:'sel',t:'<span>'+T('ユニットの状態')+(usA||usB?'　<span style="color:#ff8080;font-size:13px">'+[usA?T('攻撃側')+' '+usA:'',usB?T('目標')+' '+usB:''].filter(Boolean).join(' / ')+'</span>':'')+'</span>',sub:T('攻撃側・目標の 混乱・PIN・CX・負傷 を一覧で見る・変える'),f:"nmUstOpen("+n+")"});}catch(e){} /* v1406 */
   if(f){it.push({row:1,ic:'sel',t:'<span style="font-size:13px">攻撃する側・目標</span>',btns:[[(f.cx?'✓':'')+'攻撃する側CX+1',"nmMfFlag("+n+",'cx')"],[(f.tgtIsGun?'✓':'')+'目標は砲',"nmMfFlag("+n+",'gun')"],[(f.tgtCrewCE?'✓':'')+'目標は車両の乗員(CE)',"nmMfFlag("+n+",'ce')"]]});
     if(!f.tgtIsGun){var ftN=nmTgtFtCount(tgtEh),fc=f.ftTargetCarrier;it.push({row:1,ic:'sel',t:'<span style="font-size:13px">目標のFT保有<br><small style="color:'+(ftN?'#ff9a6a':'#8fa6bd')+'">'+(ftN==null?'編成なし(確認して選ぶ)':ftN?'編成にFT '+ftN+'つ':'編成にFTなし')+'</small></span>',btns:[[(fc===0?'✓':'')+'保有なし',"nmMfFtc("+n+",0)"],[(fc===1?'✓':'')+'1保有 −1',"nmMfFtc("+n+",1)"],[(fc===2?'✓':'')+'2保有 −2',"nmMfFtc("+n+",2)"]]});}} /* v441 / v817: FT保有は 保有なし/1/2 で選ぶ。目標の編成のFT数を表示 */
-  it.push({ic:'tabs',t:'射撃タブで開く',sub:'同じ射撃を射撃タブの画面で見る',f:"nmIjLeave();BtRmClose();NAVTAB('fire')"});
+  /* ダルマ指示「射撃タブで開くを消去」: スポット判定の項目から外す */
   return it;
 }
 /* v797(ダルマ指示「SWのROF 故障の数値を表示する」): 歩兵の射撃で、編成が使うSWごとに ROF(赤がROF以下でもう一度)と故障B#(原DRがB#以上で故障)・除去X#を出す。SFF/FPFのB#−2、未熟兵のB#−1、鹵獲も反映 */
