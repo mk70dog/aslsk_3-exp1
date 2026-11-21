@@ -1,8 +1,9 @@
-# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1467)
+# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1468)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1467 から再開】** 作業中: 車両の射撃パネルの「命中TH# … DRM内訳」を見やすく(サンプル作成中)。
+- **【2026-11-21 いまの作業=v1468 から再開。返事待ちなし】**
+  - v1468(ダルマ「(車両の射撃の命中TH#まわりを)見やすくする サンプル」→sample-vfth 案A/B/C→「AC もう少しコンパクトに」→A2/C2→「案A コンパクト」): nmVfDrmWhy(DRM 項目の理由)・nmVfThHTML('A2',…) で車両の射撃(nmVf の撃つ前)の命中TH# 項目の t と sub を置き換え。スポット判定2画面目の nvSum(31793638 付近)は対象外。サンプルと画素一致、smoke 0。
   - v1467(ダルマ「TEM,妨害などDRMの詳細を表示 サンプル」→sample-drmdet 案A 表/B 札/C 式→「B」): nmDrmDetRows/nmFpDet/nmDrmDetHTML(…,'B')。歩兵の射撃の FP→列 DRM の項目の sub を置き換え(TEM=btTerrJP(目標)+ヘクス、妨害=btLosABRaw の hindranceHexes、指揮官・CX・FFMO・FFNAM・危険移動・SSR。FP 内訳の合計>FP なら「長射程(距離N)の分隊は半分」)。サンプルと画素一致、smoke 0。
   - v1466(ダルマ「0.8pxに統一する」): NM_LINE_W 0.5→0.8。smoke 0。
   - v1465(ダルマ「選択枠線の太さが太く 外側の枠線はかなり細い(0.5px)」iPad v1464): nmLineW は :root×60 だけで、#nmIj .ijB.on などの ID 付き !important に負けていた(選んでいるボタン・編成の枠が 1px のまま)→ セレクタに :not(#_nmLw)×8 を足す。確認: 一時的に 3px にして全部 3px になること(旧は ijB.on が 1px)。注意: Chrome は 1px 未満の枠を 1px に丸めて計算値を返すので、0.5px かどうかは Chrome では測れない(iPad Safari で確認)。smoke 0。 返事待ち: iPad で 0.5px の枠線を見て、1px にするか(NM_LINE_W を変えるだけ)。
