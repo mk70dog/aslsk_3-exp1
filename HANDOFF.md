@@ -1,8 +1,9 @@
-# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1463)
+# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1464)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1463 から再開。返事待ちなし】**
+- **【2026-11-21 いまの作業=v1464 から再開】** 返事待ち: iPad で 0.5px の枠線を見て、1px にするか(NM_LINE_W を変えるだけ)。
+  - v1464(ダルマ「枠線の太さは?」→sample-yborder スポット判定の枠 1/0.7/0.5px→「全てのパネルの枠線を0.5pxに」→確認「画面のすべての枠線」→4画面のサンプル(違いがわかりにくい)→「0.5pxにして1.0pxにするのは大変?」→「実施」): var NM_LINE_W=0.5 と style#nmLineW(:root×60 の *,*::before,*::after に border-width・outline-width を !important)。v1462/1463 の nmYbThin もこれで上書きされる。SVG の stroke は対象外。サンプルと画素一致、smoke 0。
   - v1463(ダルマ「ダイス選択だけ太く見える」iPad v1462): .rmB.on.rmDie は border 1px + outline 1px(offset -1px)。Chrome では重なって 1px だが iPad Safari で太く見えた→ nmYbThin に .rmB.on.rmDie{outline:0}。Chrome で 1px のまま確認、smoke 0。**iPad で直ったかは未確認**。
   - v1462(ダルマ「イエロー枠線を細くする サンプルx3」→sample-yborder 案A 1.5px/B 1px/C 1px+光→「B」): style#nmYbThin(#btRm .rmB.on の outline 1px・offset -1px、.rmSum の border 1px。元の nmRmBtnOnCss は :root×14 なので :root×40 で上書き)。サンプルと画素一致、smoke 0。
   - v1461(「さらに細く」の返事の代わりにダルマ「少し小さくする サンプル」→sample-thinfont smaller.png 案A/B/C→「b」): nmScnTxtPop の見出し 19→17px、SSR 本文 15→13px、勝利条件本文 16.5→14.5px。サンプルと画素一致、smoke 0。(さらに細い字の案は取りやめ扱い)
