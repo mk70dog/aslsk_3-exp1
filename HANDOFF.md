@@ -1,8 +1,9 @@
-# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-20 / v1402)
+# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1454)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1453 から再開。返事待ちなし】**
+- **【2026-11-21 いまの作業=v1454 から再開。返事待ちなし】**
+  - v1454(ダルマ指示「スタックを長押ししてドラッグした時はメニューを表示しない」画像=判定モードで長押し→メニューが開いたままドラッグ): nmDragMove の動き始め(8px)で BT_LP.eat かつ #btRm があれば BtRmClose。確認 /tmp/s/lp.js(CDP タッチ: 長押しだけ=メニュー残る、長押し→ドラッグ=メニュー閉じて置き直し)、smoke 0。
   - v1453(報告「選択するとパネル画面が揺れる」=空ヘクスの配置パネル): btRmReopen で開き直すと nmMarkScan(MutationObserver の setTimeout 0)が後から「← 戻る」行を隠すため、一瞬 60px 高く出てから縮んでいた。btRmReopen の btRMenu 直後に nmMarkScan() を同期で呼ぶ。確認: /tmp/sc/pl5.js(高さの跳ね無し)。
   - v1452: 地図のドラッグで向きを変えない(nmDragStart の nmAimPick を NM_AIM_DRAG===true の時だけ)。方向の設定(nmRmSetFace/F・nmRmSetTca/F)の前に losSaveMapScroll。
   - v1451: 判定ボードの選択画面は案1 手順カード(nmHqPkUi(1)、NM_PKUI で2/3、0で従来)。
