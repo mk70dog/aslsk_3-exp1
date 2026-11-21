@@ -1,8 +1,9 @@
-# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1465)
+# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1466)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1465 から再開】**
+- **【2026-11-21 いまの作業=v1466 から再開。返事待ちなし】**
+  - v1466(ダルマ「0.8pxに統一する」): NM_LINE_W 0.5→0.8。smoke 0。
   - v1465(ダルマ「選択枠線の太さが太く 外側の枠線はかなり細い(0.5px)」iPad v1464): nmLineW は :root×60 だけで、#nmIj .ijB.on などの ID 付き !important に負けていた(選んでいるボタン・編成の枠が 1px のまま)→ セレクタに :not(#_nmLw)×8 を足す。確認: 一時的に 3px にして全部 3px になること(旧は ijB.on が 1px)。注意: Chrome は 1px 未満の枠を 1px に丸めて計算値を返すので、0.5px かどうかは Chrome では測れない(iPad Safari で確認)。smoke 0。 返事待ち: iPad で 0.5px の枠線を見て、1px にするか(NM_LINE_W を変えるだけ)。
   - v1464(ダルマ「枠線の太さは?」→sample-yborder スポット判定の枠 1/0.7/0.5px→「全てのパネルの枠線を0.5pxに」→確認「画面のすべての枠線」→4画面のサンプル(違いがわかりにくい)→「0.5pxにして1.0pxにするのは大変?」→「実施」): var NM_LINE_W=0.5 と style#nmLineW(:root×60 の *,*::before,*::after に border-width・outline-width を !important)。v1462/1463 の nmYbThin もこれで上書きされる。SVG の stroke は対象外。サンプルと画素一致、smoke 0。
   - v1463(ダルマ「ダイス選択だけ太く見える」iPad v1462): .rmB.on.rmDie は border 1px + outline 1px(offset -1px)。Chrome では重なって 1px だが iPad Safari で太く見えた→ nmYbThin に .rmB.on.rmDie{outline:0}。Chrome で 1px のまま確認、smoke 0。**iPad で直ったかは未確認**。
