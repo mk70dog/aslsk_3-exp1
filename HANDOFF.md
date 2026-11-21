@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1451 から再開。返事待ちなし】**
+- **【2026-11-21 いまの作業=v1452 から再開。返事待ちなし】**
+  - v1452: 地図のドラッグで向きを変えない(nmDragStart の nmAimPick を NM_AIM_DRAG===true の時だけ)。方向の設定(nmRmSetFace/F・nmRmSetTca/F)の前に losSaveMapScroll。
   - v1451: 判定ボードの選択画面は案1 手順カード(nmHqPkUi(1)、NM_PKUI で2/3、0で従来)。
   - v1450: 残留火力の③修正に地図でヘクスを選ぶ(NM_RAQ_TAP・nmRaqTapArm・nmRaqTapAt)。
   - v1449: 判定ボードの選択画面「地図でタップして選ぶ」を修正(NM_HQ_TAPFN・nmHqTapArm・nmHqTapAt、LosMapClick の最初で拾う)。
