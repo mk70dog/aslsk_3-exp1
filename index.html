@@ -41750,7 +41750,30 @@ function nmHqPickA(fn){if(fn==='nmRtOpen'){try{nmHqClose();}catch(e){}nmRtmStart
       if(smp==='B')return btH.replace('margin:10px 0 0','margin:2px 0 4px')+mapH+scH;
       return mapH+scH+btH;})()
     +'<button class="b sm" style="margin:10px 0 0;width:100%;height:38px" onclick="nmHqTapArm(\''+fn+'\')">'+T('地図でタップして選ぶ')+'</button></div>';
+  if(window.NM_PKUI)m.innerHTML=nmHqPkUi(window.NM_PKUI,fn,C,SU,bt); /* sample-pkui */
   document.body.appendChild(m);}
+/* sample-pkui(ダルマ「パネルをわかりやすく変更 サンプル3」): 1=手順カード 2=左右の枠 3=タブ */
+var NM_PKUI_TAB=0;
+function nmHqPkUi(k,fn,C,SU,bt){var t=T(NM_HQ_LBL[fn]||'判定'),BG='radial-gradient(circle,#000000aa .9px,transparent 1.25px) 0 0/4px 4px,linear-gradient(#1a212e,#121823)';
+  var scF=NM_SC_FN[fn]?"document.getElementById('nmHqPk').remove();nmScOpen('"+fn+"')":(fn==='nmHqCcOpen'?"document.getElementById('nmHqPk').remove();nmCcScOpen()":'');
+  var tapF="nmHqTapArm('"+fn+"')";
+  var hdr='<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><button class="nmRnd" onclick="document.getElementById(\'nmHqPk\').remove();NM_HQPK_FN=null;nmHqBk()"><span>←</span></button><b style="flex:1;font-size:18px;color:#7ec8e3">'+t+'</b><button class="nmRnd" onclick="document.getElementById(\'nmHqPk\').remove()"><span>✕</span></button></div>';
+  var list=C.length?'<div style="display:flex;flex-direction:column;gap:6px">'+C.map(bt).join('')+'</div>':'<div style="font-size:12px;color:#8fa6bd">'+T('地図に編成がありません')+'</div>';
+  var scH=nmHqScHtml(SU,fn);
+  var big=function(ic,tt,sub,f,col){return '<button class="b" style="margin:0;width:100%;min-height:64px;display:flex;align-items:center;gap:12px;text-align:left;padding:8px 14px;border-color:'+(col||'#39414f')+'" onclick="'+f+'"><span style="font-size:24px;width:30px;text-align:center">'+ic+'</span><span style="flex:1"><b style="display:block;font-size:15px;color:'+(col||'#e8eef4')+'">'+tt+'</b><span style="font-size:11.5px;color:#8fa6bd">'+sub+'</span></span><span style="color:#8fa6bd">›</span></button>';};
+  var wrap=function(w,body){return '<div style="width:'+w+';max-height:86vh;overflow:auto;background:'+BG+';border:1px solid #4a5566;border-radius:14px;padding:12px 14px;color:#e8eef4;box-shadow:0 10px 40px #000" onclick="event.stopPropagation()">'+hdr+body+'</div>';};
+  if(k==1){var sec=function(no,tt){return '<div style="display:flex;align-items:center;gap:8px;margin:12px 0 6px"><span style="width:22px;height:22px;border-radius:11px;background:#ffd24a;color:#14171d;font-weight:900;display:inline-flex;align-items:center;justify-content:center;font-size:12px">'+no+'</span><b style="font-size:14px">'+tt+'</b></div>';};
+    return wrap('min(480px,94vw)','<div style="font-size:13px;color:#cfd8e2">'+T('どのユニットで判定しますか？')+'</div>'
+      +sec('A',T('地図に置いた編成から選ぶ'))+list+'<div style="margin-top:6px">'+big('👆',T('地図でタップして選ぶ'),T('次にタップしたヘクスの編成で判定'),tapF)+'</div>'
+      +(scF?sec('B',T('地図に置かずに判定'))+big('📋',T('シナリオのユニットで判定'),T('カウンターを選んで判定(地図に置かない)'),scF,'#ffd060'):'')+(scH?scH:''));}
+  if(k==2){var fr=function(tt,body){return '<div style="flex:1;min-width:0;border:1.5px solid #3e4a5c;border-radius:12px;padding:10px;background:#171b22"><div style="font-weight:900;color:#ffd060;margin-bottom:8px">'+tt+'</div>'+body+'</div>';};
+    return wrap('min(820px,95vw)','<div style="display:flex;gap:12px;align-items:stretch">'
+      +fr('① '+T('地図の編成'),list+'<button class="b sm" style="margin:8px 0 0;width:100%;height:40px" onclick="'+tapF+'">👆 '+T('地図でタップして選ぶ')+'</button>')
+      +(scF||scH?fr('② '+T('地図に置かない'),'<div style="font-size:12px;color:#9ab;margin-bottom:8px">'+T('シナリオのカウンターを選んで判定')+'</div>'+(scF?'<button class="b" style="margin:0;width:100%;min-height:46px;color:#ffd060;border-color:#c8a032;font-weight:900" onclick="'+scF+'">📋 '+T('シナリオのユニットで判定')+'</button>':'')+scH):'')+'</div>');}
+  var tabs=[[T('地図の編成'),C.length]];if(scF||scH)tabs.push([T('シナリオのユニット'),null]);var tb=Math.min(NM_PKUI_TAB,tabs.length-1);
+  var seg='<div style="display:flex;border:1px solid #39414f;border-radius:10px;overflow:hidden;margin:4px 0 10px">'+tabs.map(function(x,i){var on=i===tb;return '<button class="b sm" style="margin:0;flex:1;height:40px;border-radius:0;border:0;font-weight:'+(on?900:600)+';'+(on?'background:#e0a830!important;color:#111!important':'background:#151a22!important;color:#cfd8e2')+'" onclick="NM_PKUI_TAB='+i+';nmHqPickA(\''+fn+'\')">'+x[0]+(x[1]!=null?' ('+x[1]+')':'')+'</button>';}).join('')+'</div>';
+  var body=tb===0?list+'<button class="b sm" style="margin:10px 0 0;width:100%;height:40px" onclick="'+tapF+'">👆 '+T('地図でタップして選ぶ')+'</button>':(scF?'<button class="b" style="margin:0 0 8px;width:100%;min-height:46px;color:#ffd060;border-color:#c8a032;font-weight:900" onclick="'+scF+'">📋 '+T('シナリオのユニットで判定(地図に置かない)')+'</button>':'')+scH;
+  return wrap('min(460px,94vw)',seg+body);}
 /* v806(ダルマ指示「判定ボード 近接戦闘 マップ上にカウンターがない状態でも選択中のシナリオに登場するユニットや車両を選択して判定可能にする」):
    攻撃側(国籍・ユニットの数)と防御側(ユニットの数 または 車両1両)を選び、判定のための仮のマーカー(地図に描かない)を1つのヘクスに置いて、白兵戦(CC)・対車両の白兵戦(CCV)パネルを開く。パネルを閉じたら消す */
 var NM_CCS=null;
