@@ -1,8 +1,9 @@
-# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1458)
+# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1459)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1458 から再開。返事待ちなし】**
+- **【2026-11-21 いまの作業=v1459 から再開。返事待ちなし】**
+  - v1459(ダルマ「フォントを細くする」→sample-thinfont(本文を DemiLight/Light/Thin、見出しを中太/普通/Light。AppJP は Noto の普通・中太・太字の3つだけで、より細い字は約1MB増)→「見出し 本文 フォント普通にする」→「実施」): nmScnTxtPop の見出し font-weight 900→400、勝利条件の本文 600→400(SSR の本文は元から 400)。サンプルと画素一致、smoke 0。
   - v1458(ダルマ指示「ドラッグでの移動をなしにする」→確認で「部隊の準備のドラッグ」): nmSu の pointerdown を window.NM_SU_DRAG が true の時だけ(既定 なし)。案内の「ドラッグで好きな編成/ユニットへ」「(ここへドラッグでも作れる)」「ドラッグで渡す」を削除。地図のスタックのドラッグはそのまま。確認 /tmp/s/dd.js、smoke 0。
   - v1457(ダルマ指示「超過できないようにする」「部隊の順番自動化 指揮官 クラス 順」画像=部隊の準備で部隊C 分隊4/3): nmSuOverAdd(btSqEq で分隊>3・指揮官>4 なら断ってトースト)を nmSuAddU・nmSuDrop(OB から/編成間の移動)に。nmSuSortSlot/nmSuSortKey(指揮官=士気の高い順→修正の良い順、MMC=分隊→半個分隊・乗員、クラス E,1,2,G,C)を nmSuDraw の最初で各編成に(手で並べ替えても自動で戻る)。確認 /tmp/s/srt2.js、smoke 0。
   - v1456(ダルマ報告「射撃で目標車両の方向を決定したら終了してしまった」システムログ=nmVfFaceMap→方向→「完了 マップに戻る」btRmDo→BtRmClose): 方向メニューの「完了」2か所(砲の操作員選択後・通常)は NM_IJFM の時だけ _doneF だった→ NM_VF&&NM_VF_FROM!=null でも _doneF(nmVfRe で射撃の判定へ)、表示「判定に戻る」。確認 /tmp/s/vf.js、smoke 0。
