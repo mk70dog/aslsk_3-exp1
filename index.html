@@ -36225,7 +36225,7 @@ function nmRmXFold(n){try{localStorage.setItem('nmRmXOpen',nmRmXOpen()?'0':'1');
 var NM_RM_IMV=null;
 function nmRmBuildB(n,U,X2){
   var H=NM_RM_HEX;if(!H||nmAllAt(H,'f').length+nmAllAt(H,'e').length!==1)return null;
-  var head=null,atk=null,mv=null,face=null,del=null,hexIt=[],rest=[],imv=[],mvInf=false,ST=function(x,r){return typeof x.f==='string'&&r.test(x.f);};
+  var head=null,atk=null,mv=null,face=null,del=null,edt=null,hexIt=[],rest=[],imv=[],mvInf=false,ST=function(x,r){return typeof x.f==='string'&&r.test(x.f);};
   U.forEach(function(x,i){
     if(x.sep||x.html||x.arr){rest.push(x);return;}
     if(!head&&i===0&&ST(x,/^nmRmVehOpen\(/)){head=x;return;}
@@ -36235,6 +36235,7 @@ function nmRmBuildB(n,U,X2){
     if(!atk&&ST(x,/^(nmVfOpen|nmMfOpen)\(/)){atk=x;return;}
     if(!mv&&!x.f&&/このカウンターを移動/.test(x.t||'')){mvInf=true;imv.push(x);return;}
     if(mvInf&&x.row&&x.btns&&x.btns.some(function(b){return /nmMvStartIm\(/.test(String(b[1]));})){imv.push(x);mvInf=false;return;}
+    if(!edt&&window.NM_EDTILE&&x.f&&/を編集$/.test(String(x.t||'').replace(/<[^>]*>/g,''))){edt=x;return;}
     if(/ヘクスにカウンターを配置|白兵戦|退出/.test(x.t||'')){hexIt.push(x);return;}
     rest.push(x);});
   if(!head)return null;
@@ -36243,6 +36244,7 @@ function nmRmBuildB(n,U,X2){
   function tl(ic,t,f,red){T.push({ic:ic,t:t,f:f,red:red});}
   if(atk)tl('fire','攻撃',atk.f);
   if(mv)tl('move','移動',mv.f);else if(imv.length){NM_RM_IMV=imv;tl('move','移動',"NM_RM_SUB='imv';btRmReopen("+n+")");}
+  if(edt)tl('sel','編成',edt.f);
   if(face)tl('rot','方向',face.f);
   if(del)tl('x','消去',del.f,1);
   if(T.length<2)return null;
