@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1445</title>
+<title>ASL SKシリーズv1446</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1445">
+<meta property="og:title" content="ASL SKシリーズv1446">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.645"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.646"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1446="v1446(潰走の地図はデフォルトを経路に";
 var APP_VERSION_HIST_v1445="v1445(白兵戦3種のトップパネルを同じデザインに・クラス低下欄の国籍色修正";
 var APP_VERSION_HIST_v1444="v1444(白兵戦(歩兵どうし)のパネル: 最初に開く・地図で選ぶ・カウンターの大きさ・左右の枠・10-2表示";
 var APP_VERSION_HIST_v1443="v1443(MC・PTCで指揮官の下に分隊の行も表示";
@@ -42046,13 +42047,13 @@ function nmRtmTap(cx,cy){if(!nmRtmActive())return false;var M=NM_RTM,H=losHexAtC
   if(idx>=0){M.sel=(M.sel===n&&document.getElementById('nmRtmEd'))?null:n;try{Draw();}catch(x){}nmRtmBanner();return true;} /* v950: 敵をタップ=設定を開く/閉じる(消すは設定の『消す』) */ /* v945: 別の敵をタップ=選ぶ、選んでいる敵をもう一度=消す */
   if(idx>=0){var j=L.indexOf(M.E[idx].e);if(j>=0)L.splice(j,1);M.E.splice(idx,1);M.sel=null;}else{var en={boardId:H.boardId,col:H.col,row:H.row,st:{},ijTmp:1,ccTmp:1,rtRng:4};L.push(en);M.E.push({n:n,e:en});M.sel=n;}
   M.cache=null;M.pick=null;try{Draw();}catch(x){}nmRtmBanner();return true;}
-function nmRtmStartAt(n,sd){var eh=nmUnitAt(nmHexOfNode(n),sd);if(!eh||!eh.grp)return;try{BtRmClose();}catch(e){}nmRtmStart();var M=NM_RTM;if(!M)return;var d=nmGeList(eh.grp);M.nat=d.nat||M.nat;M.sd=sd;M.n=n;M.H=nmHexOfNode(n);M.step=3;M.real=1;M.mode='e';NM_RT={n:n,sd:sd,slot:eh.grp,done:null};NM_CCS={open:1};try{Draw();}catch(e){}nmRtmBanner();}
-function nmRtmReset(){var M=NM_RTM;if(!M)return;if(M.real){nmRtmMkRestore();nmCcScClear();M.E=[];M.mk={};M.mode='e';M.pick=null;M.sel=null;nmRtmBanner();try{Draw();}catch(e){}return;} /* v947: 地図のユニットからの時は逃はそのまま */nmRtmMkRestore();nmCcScClear();NM_RT=null;M.step=1;M.n=null;M.H=null;M.E=[];M.mode='e';M.cache=null;M.pick=null;M.sel=null;nmRtmBanner();try{Draw();}catch(e){}}
+function nmRtmStartAt(n,sd){var eh=nmUnitAt(nmHexOfNode(n),sd);if(!eh||!eh.grp)return;try{BtRmClose();}catch(e){}nmRtmStart();var M=NM_RTM;if(!M)return;var d=nmGeList(eh.grp);M.nat=d.nat||M.nat;M.sd=sd;M.n=n;M.H=nmHexOfNode(n);M.step=3;M.real=1;M.mode='r';NM_RT={n:n,sd:sd,slot:eh.grp,done:null};NM_CCS={open:1};try{Draw();}catch(e){}nmRtmBanner();}
+function nmRtmReset(){var M=NM_RTM;if(!M)return;if(M.real){nmRtmMkRestore();nmCcScClear();M.E=[];M.mk={};M.mode='r';M.pick=null;M.sel=null;nmRtmBanner();try{Draw();}catch(e){}return;} /* v947: 地図のユニットからの時は逃はそのまま */nmRtmMkRestore();nmCcScClear();NM_RT=null;M.step=1;M.n=null;M.H=null;M.E=[];M.mode='e';M.cache=null;M.pick=null;M.sel=null;nmRtmBanner();try{Draw();}catch(e){}}
 function nmRtmCancel(){var re=NM_RTM&&NM_RTM.real;nmRtmEnd(true);nmCcScClear();NM_RT=null;if(!re){try{nmHqOpen();}catch(e){}}else{try{Draw();}catch(e){}}}
 function nmRtmBack(){nmRtmEnd(true);NM_RT=null;nmCcScClear();nmRtmStart();}
 function nmRtmDecide(){var M=NM_RTM;if(!M||M.step!==2)return;M.step='u';nmRtmBanner();var it=nmSuOb(M.nat).filter(function(x){return x.kind==='mmc';})[0]||nmSuOb(M.nat)[0],cs={};if(it)cs[it.kind+'|'+it.id]=1;nmRtmFinish({fn:'nmRtOpen',nat:M.nat,cs:cs,v:null,brk:true,mal:true}); /* v938: 決定でユニット選択を出さず地図の結果へ(先頭の分隊1個・混乱で計算) */}
 function nmRtmFinish(C){var M=NM_RTM;if(!M||M.step!=='u'){nmRtmStart();return;}if(nmSuSide(C.nat)!==M.sd){btToast(T('国籍が違います。潰走するのは手番側のユニットです'));return;}
-  var o=document.getElementById('nmCcSc');if(o)o.remove();var e=nmRtmMake(C,M.H,M.sd);if(!e){return;}nmSideList(M.sd).push(e);M.C=C;M.step=3;M.cache=null;NM_SC=null;NM_CCS={open:1};
+  var o=document.getElementById('nmCcSc');if(o)o.remove();var e=nmRtmMake(C,M.H,M.sd);if(!e){return;}nmSideList(M.sd).push(e);M.C=C;M.step=3;M.mode='r';M.cache=null;NM_SC=null;NM_CCS={open:1}; /* v1446(ダルマ「デフォルトを経路にする」) */
   var H=nmHexOfNode(M.n);if(!H){btToast('マップを準備しています…');return;}NM_RM_HEX=H;BT_RM_XY={x:innerWidth/2,y:innerHeight/3};NM_HQFROM=1;NM_PBACK='nmRtmBack()';nmRtmBanner();window.nmRtOpen(M.n,M.sd);try{var rm=document.getElementById('btRm');if(rm)rm.remove();}catch(x){} /* v939: 一覧パネルは出さない(地図だけ) */try{Draw();}catch(x){}}
 function nmRtmEnat(){var M=NM_RTM,r=null;try{var ns=nmSuNats();r=ns.filter(function(k){return k!==M.nat&&nmFoeNat(M.nat,k);})[0]||ns.filter(function(k){return k!==M.nat;})[0];}catch(e){}return r||M.nat;}
 function nmRtmCtrId(kind,nat){var P={g:{GER:'g_75pak40_ge',SOV:'g_57zis2_so',USA:'g_57at_us',GBR:'g_57oqf6pdr_gb',ITA:'g_75cannone_it',POL:'g_46wz36_pl'}},id=null;if(kind==='g'){id=P.g[nat]||'g_45at';}else{try{var u=nmSuOb(nat).filter(function(x){return x.kind==='mmc';})[0];if(u)id='u:'+nat+'|'+u.label;}catch(e){}}return(id&&VASL_CTR_MAP[id]&&VASL_CTR_IMG[VASL_CTR_MAP[id]])?id:null;}
