@@ -36787,6 +36787,31 @@ setTimeout(function(){['nmMfOpen','nmVfOpen','nmVmOpen','nmLwOpen'].forEach(func
 function nmIftTblHTML(fp,drm){try{var c=ci(fp),rows=[];for(var d=2;d<=12;d++){var f=d+(drm||0),ix=f<=0?0:(f>=15?15:f);rows.push({d:d,r:IFT[ix][c]});}
   var col=function(r){r=String(r||'');return /KIA/.test(r)?'#ff5a5a':/^K/.test(r)?'#ff9a40':/MC/.test(r)?'#ffd24a':/PTC/.test(r)?'#8fb0d0':'#5a6474';},lb=function(r){r=String(r||'');return r==='-'||r===''?'—':r;};
   return '<div style="width:100%"><div style="font-size:11px;color:#8899aa;margin-bottom:4px">'+IFT_LBL[c]+'列'+(drm?'・DRM'+(drm>0?'+':'')+drm+' 込み':'')+'(2D6の出目→結果)</div><div style="display:grid;grid-template-columns:repeat(11,1fr);gap:3px">'+rows.map(function(x){var c0=col(x.r);return '<div style="text-align:center;background:'+c0+'2e;border:1px solid '+c0+'88;border-radius:5px;padding:3px 0"><div style="font-size:11px;color:#c9d6e4">'+x.d+'</div><div style="font-size:12px;font-weight:800;color:'+c0+'">'+lb(x.r)+'</div></div>';}).join('')+'</div></div>';}catch(e){return '';}}
+/* sample-drmdet(ダルマ「TEM,妨害などDRMの詳細を表示 サンプル」) */
+function nmDrmDetRows(M,f,fp){var R=[],sg=function(v){return (v>=0?'+':'')+v;};try{
+  var N=BTG.nodes[M.tgt],tem=fireTemEff(f),ov=M.ov||{};
+  if(tem)R.push({k:'TEM',v:tem,why:(ov.tem!=null?'手で設定':(N?btTerrJP(N.terr)+' @'+N.nm:''))+(f.tgtCrewCE?'(車両の乗員CE)':'')});
+  var hd=fireHindTotal(f);if(hd){var L=null;try{L=btLosABRaw(M.from,M.tgt);}catch(e){}var hh=(L&&L.hindranceHexes||[]).map(function(x){return String(x[0]).replace(/^(\w)盤 /,function(a,b){return b.toLowerCase();})+' '+btTerrJP(x[1]);});R.push({k:'妨害',v:hd,why:ov.hind!=null?'手で設定':(hh.length?hh.join('・'):'地形・煙など')});}
+  var ld=fireEffLdr(f);if(ld)R.push({k:'指揮官',v:ld,why:'指揮官の修正'+(fireWoundedLdrPenalty(f)?'(負傷+1込み)':'')});
+  if(f.cx)R.push({k:'CX',v:1,why:'攻撃側が疲労(CX)'});
+  if(f.ffmo&&!f.tgtCrewCE&&!fireHeightAdvActive(f)&&hd<=0&&!ssrCamoNoFfmo(f))R.push({k:'FFMO',v:-1,why:'開けた地形を移動中'});
+  if(f.ffnam)R.push({k:'FFNAM',v:-1,why:'警戒移動でない移動'});
+  if(f.hazardous)R.push({k:'危険移動',v:-2,why:''});
+  var sd=scenShotDrm(fireShotRange(f),fireShotPh());if(sd)R.push({k:'SSR',v:sd,why:'シナリオ特別ルール'});
+}catch(e){}return R;}
+function nmFpDet(M,fp){var b=nmMfFpBreak(M.slot)||'',m=b.match(/=\s*(\d+)\s*$/),raw=m?+m[1]:null;return {b:b,raw:raw,half:raw!=null&&raw>fp,d:btDist(M.from,M.tgt)};}
+function nmDrmDetHTML(M,f,fp,drm,col,sty){var R=nmDrmDetRows(M,f,fp),F=nmFpDet(M,fp),sg=function(v){return (v>=0?'+':'')+v;},C=function(v){return v>0?'#ffb070':'#7fd6a0';};
+  var fpNote=F.half?'長射程(距離'+F.d+')の分隊は半分: '+F.raw+'→'+fp:'';
+  if(sty==='A'){var h='<div style="display:grid;grid-template-columns:auto auto 1fr;gap:3px 10px;align-items:baseline;margin-top:6px;font-size:13px">';
+    R.forEach(function(r){h+='<span style="color:#c9d6e4">'+r.k+'</span><b style="color:'+C(r.v)+';text-align:right">'+sg(r.v)+'</b><span style="color:#8899aa;font-size:12px">'+r.why+'</span>';});
+    if(!R.length)h+='<span style="color:#8899aa;grid-column:1/4">DRMなし</span>';
+    h+='<span style="color:#e8eef4;border-top:1px solid #3a4352;padding-top:2px">合計</span><b style="color:#ffd24a;text-align:right;border-top:1px solid #3a4352;padding-top:2px">'+sg(drm)+'</b><span style="border-top:1px solid #3a4352"></span></div>';
+    h+='<div style="font-size:12px;color:#8899aa;margin-top:6px">FP: '+F.b+(fpNote?'<br><span style="color:#ffd070">'+fpNote+'</span>':'')+'</div>';return h;}
+  if(sty==='B'){var ch=R.map(function(r){return '<span style="display:inline-flex;flex-direction:column;background:#11151b;border:1px solid '+C(r.v)+'66;border-radius:8px;padding:3px 10px;margin:0 6px 6px 0"><span style="font-size:13px"><span style="color:#c9d6e4">'+r.k+'</span> <b style="color:'+C(r.v)+'">'+sg(r.v)+'</b></span><span style="font-size:11px;color:#8899aa">'+r.why+'</span></span>';}).join('');
+    return '<div style="margin-top:6px">'+(ch||'<span style="color:#8899aa;font-size:12px">DRMなし</span>')+'</div><div style="font-size:12px;color:#8899aa">FP: '+F.b+(fpNote?'<br><span style="color:#ffd070">'+fpNote+'</span>':'')+'</div>';}
+  var eq='DRM <b style="color:#ffd24a">'+sg(drm)+'</b> = '+(R.length?R.map(function(r){return r.k+'<b style="color:'+C(r.v)+'">'+sg(r.v)+'</b><span style="color:#8899aa;font-size:11.5px">('+r.why+')</span>';}).join(' + '):'なし');
+  var fe='FP <b style="color:#ffd24a">'+fp+'</b> = '+(F.half?'<span style="color:#ffd070">分隊は半分(距離'+F.d+')</span> ':'')+F.b.replace(/\s*=\s*\d+\s*$/,'')+(F.half?' → '+F.raw+'→'+fp:'');
+  return '<div style="font-size:13px;line-height:1.7;margin-top:6px;color:#c9d6e4">'+eq+'<br>'+fe+'</div>';}
 function nmMfOpen(n,sd,slot){var tph=S.turn&&NM_PH_FIRE[S.turn.phase];if(tph&&S.fireSub!==tph){try{FIREsub(tph);}catch(e){}}NM_MF={sd:sd,slot:slot,from:n,tgt:null};try{nmMfFtInit();}catch(e){}NM_RM_SUB='mfire';btRmReopen(n);}
 function nmMfBack(n){NM_MF=null;btRmReopen(n);}
 /* v1040: 歩兵の射撃(スポット判定2画面目・地図の射撃)で、編成が持つSWを使う/使わないを選ぶ。FTは単独(分隊のFPも他のSWも使わない)・FTを外すと他のSWが戻る(射撃タブの FtogSW と同じ決まり) */
@@ -36891,7 +36916,7 @@ function nmRmMFireItems(n){
   var col=IFT_LBL[ci(fp)];
   var parts=[];try{var pt=[['TEM',fireTemEff(f)],['指揮官',fireEffLdr(f)],['妨害',fireHindTotal(f)],['CX',f.cx?1:0],['FFMO',(f.ffmo&&!f.tgtCrewCE&&!fireHeightAdvActive(f)&&fireHindTotal(f)<=0&&!ssrCamoNoFfmo(f))?-1:0],['FFNAM',f.ffnam?-1:0],['危険移動',f.hazardous?-2:0],['SSR',scenShotDrm(fireShotRange(f),fireShotPh())]];pt.forEach(function(x){if(x[1])parts.push(x[0]+sg(x[1]));});if(f.ffmo&&ssrCamoNoFfmo(f))parts.push('FFMOなし(冬季迷彩 SSR1)');}catch(e){}
   if(done){it.pop();it.push({ic:'tgt',img:tgtEh?nmMfTgtImg(tgtEh):'',t:'<span>'+(tgtEh?nmMfTgtName(tgtEh):'')+' @'+BTG.nodes[M.tgt].nm+'　FP'+fp+'・'+col+'列・DRM'+sg(drm)+'</span>',sub:'距離'+btDist(M.from,M.tgt)+(parts.length?'　'+parts.join(' '):'')+(nmMfFpBreak(M.slot)?'　FP内訳: '+nmMfFpBreak(M.slot):'')});}
-  else it.push({ic:'fire',t:'<span>FP <b>'+fp+'</b>　→　<b>'+col+'</b>列　DRM <b>'+sg(drm)+'</b></span>',sub:(parts.length?'DRM内訳: '+parts.join(' ')+'　':'')+(nmMfFpBreak(M.slot)?'FP内訳: '+nmMfFpBreak(M.slot)+'　':'')+'射撃タブ('+(ph||'-')+')と同じ計算'});if(!done){var _li=it[it.length-1];if(_li)_li.sub=(_li.sub||'')+'<div style="margin-top:8px">'+nmIftTblHTML(fp,drm)+'</div>';}
+  else it.push({ic:'fire',t:'<span>FP <b>'+fp+'</b>　→　<b>'+col+'</b>列　DRM <b>'+sg(drm)+'</b></span>',sub:(parts.length?'DRM内訳: '+parts.join(' ')+'　':'')+(nmMfFpBreak(M.slot)?'FP内訳: '+nmMfFpBreak(M.slot)+'　':'')+'射撃タブ('+(ph||'-')+')と同じ計算'});if(!done&&window.NM_DRMDET){var _ld=it[it.length-1];if(_ld)_ld.sub=nmDrmDetHTML(M,f,fp,drm,col,window.NM_DRMDET);}if(!done){var _li=it[it.length-1];if(_li)_li.sub=(_li.sub||'')+'<div style="margin-top:8px">'+nmIftTblHTML(fp,drm)+'</div>';}
   /* v403(ダルマ指示「消す」): 条件の札(fireDetailLines)は内訳と重複・ボタンに見えるため出さない */
   if(f&&f.res&&f.res.ift){var R=f.res,rr=rm(R.ift.r);
     it.push({sep:1});
