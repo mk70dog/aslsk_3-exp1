@@ -39265,7 +39265,7 @@ var NM_MH=null;
 function nmMhOpen(n,sd){NM_MH={n:n,sd:sd,mmc:false,xs:0,xh:0,res:null};NM_RM_SUB='mh';btRmReopen(n);}
 function nmMhRe(n){NM_RM_SUB='mh';btRmReopen(n);}
 function nmMhCost(a,b){var ic=btInfCost(a,b);if(!ic)return null;var N=BTG.nodes[b];return {mf:(ic.road?1:ic.c)*2,tem:N.tem||0,road:!!ic.road,bld:N.cover==='bldg'};}
-function nmMhDo(n,b){var M=NM_MH,eh=nmUnitAt(nmHexOfNode(M.n),M.sd),g=eh&&nmGun(eh.gun);if(!g)return;var c=nmMhCost(M.n,b);if(!c)return;var dr=2+Math.floor(Math.random()*6)+Math.floor(Math.random()*6);
+function nmMhDo(n,b){var M=NM_MH,eh=nmUnitAt(nmHexOfNode(M.n),M.sd),g=eh&&nmGun(eh.gun);if(!g)return;var c=nmMhCost(M.n,b);if(!c)return;var dr=(M.rd&&M.wd)?M.rd+M.wd:2+Math.floor(Math.random()*6)+Math.floor(Math.random()*6);M.rd=0;M.wd=0; /* v1483(ダルマ「ダイス入力を追加」): 赤・白の目を入れていればその目 */
   var drm=c.mf+c.tem+(c.road?-2:0)+(M.mmc?-1:0)+Math.max(-4,-2*M.xs-M.xh),fin=dr+drm,mn=g.m||0,t=fin<mn?'ok':fin===mn?'stop':'fail';nmBkSnap('人力移動');
   if(t!=='fail'){var H=nmHexOfNode(b);eh.boardId=H.boardId;eh.col=H.col;eh.row=H.row;}
   M.res={dr:dr,drm:drm,fin:fin,mn:mn,t:t,to:BTG.nodes[b].nm};try{logResult(function(){return {tabLbl:'MAP 人力移動',text:nmGunName(g)+'→'+BTG.nodes[b].nm+' DR'+dr+'+'+drm+'='+fin+' M#'+mn+' → '+({ok:'成功',stop:'進入して停止',fail:'失敗'}[t]),color:t==='fail'?'#cc3333':'#00aa55',detail:null};});}catch(e){}
@@ -39277,6 +39277,8 @@ function nmRmMhItems(n){var M=NM_MH;if(!M)return nmRMenuItems(n);var eh=nmUnitAt
   if(M.res){var R=M.res;it.push({ic:'move',t:'<span>'+R.to+'へ DR'+R.dr+'+'+R.drm+'='+R.fin+'　<b style="color:'+(R.t==='fail'?'#ff6060':'#3ca878')+'">'+({ok:'成功(MFが残れば続けて可)',stop:'進入して停止',fail:'失敗(このターンは動けない)'}[R.t])+'</b></span>'});}
   it.push({row:1,ic:'sel',t:'動かす',btns:[[(M.mmc?'':'✓')+'乗員',"NM_MH.mmc=false;nmMhRe("+n+")"],[(M.mmc?'✓':'')+'分隊−1',"NM_MH.mmc=true;nmMhRe("+n+")"]]});
   it.push({row:1,ic:'',t:'<span style="font-size:12px">追加</span>',btns:[['分隊'+M.xs,"NM_MH.xs=(NM_MH.xs+1)%3;nmMhRe("+n+")"],['半分隊'+M.xh,"NM_MH.xh=(NM_MH.xh+1)%3;nmMhRe("+n+")"]]});
+  [['rd','赤','#ff6060'],['wd','白','#e8eef4']].forEach(function(x){var cv=M[x[0]]||0;it.push({row:1,cmp:1,ic:'fire',t:'<span style="color:'+x[2]+'">'+x[1]+'</span>',btns:[1,2,3,4,5,6].map(function(v){return [(cv===v?'✓':'')+v,"NM_MH."+x[0]+"=(NM_MH."+x[0]+"==="+v+"?0:"+v+");nmMhRe("+n+")"];})});});
+  it.push({ic:'info',t:'<span style="font-size:12px;color:#c8b070">'+((M.rd&&M.wd)?'出目 赤'+M.rd+'・白'+M.wd+'=DR'+(M.rd+M.wd)+' で判定(ヘクスを選ぶ)':'目を入れるとその目で判定。入れない時は自動で振る')+'</span>'});
   it.push({ic:'tgt',t:'<span style="color:#3ca878">地図で動かすヘクスを選ぶ</span>',sub:'となりのヘクスに必要なDRを表示。タップでDRを振る',f:"nmMhPick("+n+")"}); /* sample(ダルマ指示「マップで指示できるようにする」) */
   it.push({ic:'tgt',t:'動かすヘクス(タップでDRを振る)'});
   BTG.nodes[M.n].nb.forEach(function(b){var c=nmMhCost(M.n,b),N=BTG.nodes[b];if(!c)return;var drm=c.mf+c.tem+(c.road?-2:0)+(M.mmc?-1:0)+Math.max(-4,-2*M.xs-M.xh),need=(g.m||0)-drm;
