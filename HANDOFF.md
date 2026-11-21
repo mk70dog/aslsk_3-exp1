@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1450 から再開。返事待ちなし】**
+- **【2026-11-21 いまの作業=v1450 から再開。返事待ち: sample-pkui】**
+  - 返事待ち: sample-pkui = 判定ボードの選択画面(nmHqPickA)を分かりやすく 1手順カード/2左右の枠/3タブ(window.NM_PKUI、nmHqPkUi)。全判定共通。
   - v1450: 残留火力の③修正に地図でヘクスを選ぶ(NM_RAQ_TAP・nmRaqTapArm・nmRaqTapAt)。
   - v1449: 判定ボードの選択画面「地図でタップして選ぶ」を修正(NM_HQ_TAPFN・nmHqTapArm・nmHqTapAt、LosMapClick の最初で拾う)。
   - v1448: 潰走の地図の帯(nmRtmBanner step3)を sample-rtbn のとおりに(取り込み済み)。
