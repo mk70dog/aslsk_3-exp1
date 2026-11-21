@@ -39049,7 +39049,13 @@ var NM_RAQ=null;
 function nmRaqNode(){var n=null;try{if(NM_IJ&&NM_IJ.b!=null)n=NM_IJ.b;else if(S_LOS.pxB)n=nmNodeOfPx(S_LOS.pxB);else if(S_LOS.pxA)n=nmNodeOfPx(S_LOS.pxA);}catch(e){}return (n!=null&&n>=0&&BTG&&BTG.nodes&&BTG.nodes[n])?n:null;}
 function nmRaqOpen(){var n=nmRaqNode(),N=n!=null?BTG.nodes[n]:null,fp=0;try{if(n!=null)fp=(S_LOS.resid||{})[nmResKey(nmHexOfNode(n))]||0;}catch(e){}
   NM_RAQ={back:nmPanelFrom(null),n:n,nm:N?N.nm:'',tem0:N?(N.tem||0):0,tem:N?(N.tem||0):0,fp:fp,tg:'inf',grp:null,ffmo:!!(N&&N.og),ffnam:true,ft:0,smk:0,r:null,raw:0,logN:0};nmRaqDraw();}
-function nmRaqClose(){var o=document.getElementById('nmRaq');if(o)o.remove();NM_RAQ=null;}
+/* sample-raqhex(ダルマ「③修正にマップでヘクス選択を追加」): 地図でヘクスをタップ→TEM・FFMO(開豁地)・そのヘクスの残留火力を入れる */
+var NM_RAQ_TAP=0;
+function nmRaqTapArm(){if(!NM_RAQ)return;NM_RAQ_TAP=1;var o=document.getElementById('nmRaq');if(o)o.style.display='none';btToast(T('目標のヘクスをタップ'));}
+function nmRaqTapAt(cx,cy){if(!NM_RAQ_TAP)return false;var hx=losHexAtClient(cx,cy);if(!hx)return true;var n=null;try{n=btNodeOf(hx.boardId,hx.col,hx.row);}catch(e){}if(n==null||n<0)return true;
+  NM_RAQ_TAP=0;var R=NM_RAQ,N=BTG.nodes[n];R.n=n;R.nm=N.nm;R.tem0=N.tem||0;R.tem=R.tem0;R.ffmo=!!N.og;try{var fp=(S_LOS.resid||{})[nmResKey(nmHexOfNode(n))];if(fp)R.fp=fp;}catch(e){}R.r=null;
+  var o=document.getElementById('nmRaq');if(o)o.style.display='flex';nmRaqDraw();return true;}
+function nmRaqClose(){NM_RAQ_TAP=0;var o=document.getElementById('nmRaq');if(o)o.remove();NM_RAQ=null;}
 function nmRaqSet(k,v){var R=NM_RAQ;if(!R)return;R[k]=v;if(k==='grp'){R.tg=v?'grp':'inf';var c=v?nmTgtFtCount({grp:v}):0;R.ft=c||0;}if(k==='tg'&&v!=='grp')R.grp=null;if(k!=='r'){R.r=null;}nmRaqDraw();}
 function nmRaqCamo(R){return !!(R&&R.ffmo&&R.tg!=='ce'&&R.grp&&ssrCamoOn(nmGeList(R.grp).nat,R.ffnam));} /* v1211 */
 function nmRaqDrm(){var R=NM_RAQ;var t=R.tg==='ce'?2:R.tem;return t+(R.smk||0)-((R.ffmo&&!nmRaqCamo(R))?1:0)-(R.ffnam?1:0)-(R.ft||0);}
@@ -39070,7 +39076,7 @@ function nmRaqDraw(){var R=NM_RAQ;if(!R)return;var o=document.getElementById('nm
   h+='<div style="font-size:12px;color:#8fa6bd;margin-top:2px">'+(R.nm?'B: '+R.nm+' · '+T('地形')+' TEM '+sg(R.tem0):T('ヘクス未選択（TEMは手で入れる）'))+' · '+T('マップにカウンターがなくても使えます')+'</div>';
   h+=lab('① 残留火力のFP（実物のカウンターの値）')+row([1,2,4,6,8,12].map(function(v){return b(R.fp===v,"nmRaqSet('fp',"+v+")",String(v));}).join(''));
   h+=lab('② 目標（そのヘクスに入った・MFを使った部隊）')+row(b(R.tg==='inf',"nmRaqSet('tg','inf')",T('兵士（詳細なし）'),'#6fb8ff')+gs.map(function(k){var nat=nmGeList(k).nat,col=(nat&&UNITS[nat]&&UNITS[nat].col)||'#6fb8ff';return b(R.grp===k,"nmRaqSet('grp','"+k+"')",nmGrpLbl(k),col);}).join('')+b(R.tg==='ce',"nmRaqSet('tg','ce')",T('CE車両(乗員)'),'#6fb8ff'));
-  h+=lab('③ 修正')+row((R.tg==='ce'?'<span style="padding:8px 10px;border:1px solid #33404f;border-radius:10px">CE +2 <small style="color:#8fa6bd">('+T('TEMと累積しない')+')</small></span>':step('tem','TEM',-1,5))+step('smk','煙幕',0,4)
+  h+=lab('③ 修正')+'<div style="margin-bottom:6px">'+b(!!R.nm,"nmRaqTapArm()",'📍 '+(R.nm?T('ヘクス')+' '+R.nm+' '+T('(地図で選び直す)'):T('地図でヘクスを選ぶ')),'#7ec8e3')+(R.nm?'<span style="font-size:12px;color:#8fa6bd;margin-left:8px">'+btTerrJP(BTG.nodes[R.n].terr)+' · TEM '+sg(R.tem0)+(BTG.nodes[R.n].og?' · '+T('開豁地(FFMO)'):'')+'</span>':'')+'</div>'+row((R.tg==='ce'?'<span style="padding:8px 10px;border:1px solid #33404f;border-radius:10px">CE +2 <small style="color:#8fa6bd">('+T('TEMと累積しない')+')</small></span>':step('tem','TEM',-1,5))+step('smk','煙幕',0,4)
     +b(R.ffmo,"nmRaqSet('ffmo',"+(!R.ffmo)+")",(R.ffmo?'✓ ':'')+'FFMO −1','#3ca878')+b(R.ffnam,"nmRaqSet('ffnam',"+(!R.ffnam)+")",(R.ffnam?'✓ ':'')+'FFNAM −1','#3ca878')+(R.tg==='ce'?'':step('ft','FT保有 −',0,3).replace('FT保有 − <b>'+sg(R.ft||0)+'</b>','FT保有 <b>'+(R.ft?'−'+R.ft:'0')+'</b>')));
   var drm=nmRaqDrm();h+='<div style="margin-top:8px;font-size:12px;color:#8fa6bd">DRM '+T('合計')+' <b style="color:#e8eef4">'+sg(drm)+'</b>'+(R.fp?' ／ '+IFT_LBL[ci(R.fp)]+'FP'+T('列'):'')+' · '+T('FFMOは開けた地形で動いた時、FFNAMは警戒移動でない時')+'</div>';
   if(R.r){var rr=rm(R.r);if(rr.c==='#334455')rr.c='#9fb2c8';h+='<div style="margin-top:12px;padding:10px;border:1px solid #c8a032;border-radius:10px;background:#1a1608"><div style="font-size:15px">DR '+R.raw+' '+sg(R.drm)+' = '+(R.raw+R.drm)+'　→　<b style="color:'+rr.c+';font-size:18px">'+rr.t+'</b></div>'
@@ -50562,6 +50568,7 @@ function LosMapClick(ev){
   // パンモード中はマップ移動専用。地点A/Bの指定は行わない(誤操作防止のハードガード)
   if(S_LOS.panMode)return;
   if(NM_HQ_TAPFN&&ev.clientX!=null){if(nmHqTapAt(ev.clientX,ev.clientY))return;} /* v1449 */
+  if(NM_RAQ_TAP&&ev.clientX!=null){if(nmRaqTapAt(ev.clientX,ev.clientY))return;} /* sample-raqhex */
   if(window.NM_ABMV&&ev.clientX!=null&&!window.NM_IJ){if(nmAbMvTap(ev.clientX,ev.clientY))return;}
   if(typeof nmLPEaten==='function'&&nmLPEaten()){BT_LP.eat=false;return;} /* v342: 長押しでメニューを出した後のタップは捨てる */
   if(NM_TOOL&&ev.clientX!=null){var tH=losHexAtClient(ev.clientX,ev.clientY);if(tH){var tY=window.pageYOffset||0;NM_DBL=null;nmToolRunN(btNodeOf(tH.boardId,tH.col,tH.row));window.scrollTo(0,tY);}return;} /* v500(バグ修正 ダルマ報告「攻撃するヘクスをタップのマーク マップでタップするとマークが変わってしまう」): ボタンを選んでいる時のタップは、マーカーの選び直し・ダブルタップより先にボタンの操作にする */
