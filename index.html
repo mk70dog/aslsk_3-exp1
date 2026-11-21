@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1442</title>
+<title>ASL SKシリーズv1443</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1442">
+<meta property="og:title" content="ASL SKシリーズv1443">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.642"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.643"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1443="v1443(MC・PTCで指揮官の下に分隊の行も表示";
 var APP_VERSION_HIST_v1442="v1442(判定ボードの回復は手番(ターン表)を反映させない";
 var APP_VERSION_HIST_v1441="v1441(地図全画面で右のすき間に下の画面が透ける問題を修正";
 var APP_VERSION_HIST_v1440="v1440(MC・PTCパネルを回復パネルと同じ形に";
@@ -43871,6 +43872,14 @@ function nmRrMcPick(kind,label){var Q=NM_RR;if(!Q)return;var sc=S.scen&&S.scen.s
     var rn=function(v){return typeof v==='string'?v.replace(/>①</g,'>③<').replace(/>②</g,'>④<').replace(/>③</g,'>⑤<'):v;};
     rest.forEach(function(x){if(typeof x.t==='string'){var t=x.t;t=t.replace(/>③</g,'>⑥<').replace(/>②</g,'>⑤<').replace(/>①</g,'>④<');x.t=t;}});
     while(rest.length&&rest[0].sep)rest.shift();
+    try{var M=NM_MC,PP=nmMcParse(P.r),its=nmGeList('_T').items,L0=its.filter(function(x){return x.kind==='smc';})[0],Q0=its.filter(function(x){return x.kind!=='smc';})[0];
+      if(M&&PP&&L0&&Q0&&!M.res[Q0.pid]&&its.indexOf(L0)===M.pick){var rl=M.res[L0.pid],cmd=(nmMcUnitMor(L0)||{}).cmd||0,mor=(nmMcUnitMor(Q0)||{}).mor||7,ptc=PP.k==='PTC',sg2=function(v){return (v>=0?'+':'')+v;};
+        var thr=function(d){return ptc?(mor-d):(mor-1-d);},dB=PP.drm,dL=PP.drm+cmd,lok=!rl||rl.ok;
+        var ti=-1;rest.forEach(function(x,k){if(ti<0&&typeof x.t==='string'&&x.t.indexOf(L0.label+'　士気')===0)ti=k;});
+        var tt=Q0.label+'　士気'+mor+'　DRM'+sg2(rl?(lok?dL:dB):dB)+(cmd&&!rl?'　<span style="color:#ffd070;font-size:12px">→ '+L0.label+'が合格すると DRM'+sg2(dL)+'(指揮官'+sg2(cmd)+')</span>':'');
+        var sb='<span style="color:#9fb2c8">'+T(L0.label+'の後に判定')+'　'+(rl||!cmd?(ptc?'原DR'+thr(lok?dL:dB)+'以下で影響なし':'原DR'+thr(lok?dL:dB)+'以下で合格'):(ptc?'原DR'+thr(dB)+'以下で影響なし(合格後は'+thr(dL)+'以下)':'原DR'+thr(dB)+'以下で合格('+L0.label+'が合格すると'+thr(dL)+'以下)'))+'</span>';
+        var row={ic:'sel',img:vaslCtrHTML('u:'+(Q0.nat||Q.nat)+'|'+Q0.label,30)||'',t:tt,sub:sb};
+        if(ti>=0)rest.splice(ti+1,0,row);}}catch(e){console.log('rrMc next',e);} /* v1443(ダルマ「チェックするユニットを表示」A): 指揮官の下に分隊の行も出す(指揮官の修正の見込み) */
     rest.forEach(function(x){if(typeof x.t==='string'&&x.t.indexOf('部隊_T')>=0){x.t=x.t.replace(/部隊_T\([^)]*\)/,(Q.sel&&Q.sel.label)||'');x.sub='';}});
     return h.concat(rest);}catch(e){console.log('rrMc',e);return it;}};})();
 function nmRmRallyItems(n){var R=NM_RL;if(!R)return nmRMenuItems(n);var d=nmGeList(R.slot),its=d.items,L=NM_SIDE_LBL[R.sd],it=[],sg=function(v){return (v>=0?'+':'')+v;},N=BTG.nodes[R.n];
