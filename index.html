@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1452</title>
+<title>ASL SKシリーズv1453</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1452">
+<meta property="og:title" content="ASL SKシリーズv1453">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.652"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.653"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1453="v1453(--help";
 var APP_VERSION_HIST_v1452="v1452(地図の矢印をドラッグして向きを変える操作をなくす(方向パネルの矢印ボタンだけ)。方向を変えた時に地図の位置が古い位置へ戻らないように)";
 var APP_VERSION_HIST_v1451="v1451(判定ボードの選択画面を手順カードに: A 地図に置いた編成から選ぶ(一覧・地図でタップ)/B 地図に置かずに判定(シナリオのユニット)。全判定共通)";
 var APP_VERSION_HIST_v1450="v1450(残留火力の攻撃: ③修正に「地図でヘクスを選ぶ」(TEM・FFMO・そのヘクスの残留火力FPを入れる))";
@@ -45412,7 +45413,7 @@ function nmClrHdFix(){Object.keys(NM_CLR_HD).forEach(function(id){var o=document
   var c=hb.cloneNode(true);c.classList.add('nmClrHd');c.innerHTML=c.innerHTML.replace('←','↺').replace(/戻る/,T('クリア'));c.setAttribute('onclick',"event.stopPropagation();nmClrDice();NM_CLR_HD['"+id+"']()");hb.after(c);});}
 (function(){var t=null,go=function(){new MutationObserver(function(){if(t)return;t=setTimeout(function(){t=null;nmClrHdFix();},30);}).observe(document.body,{childList:true,subtree:true});};if(document.body)go();else document.addEventListener('DOMContentLoaded',go);})();
 
-function btRmReopen(n){if(NM_RV&&!NM_RM_SUB)NM_RM_SUB='rv'; /* v759: 修理パネルは修理dr後も開いたまま */var keep=BT_RM_XY,ob=document.querySelector('#btRm .rmBox'),st=ob?ob.scrollTop:0,pos=ob?{l:ob.style.left,t:ob.style.top,h:ob.offsetHeight}:null;if(BT_RM_SAVE){pos=BT_RM_SAVE;BT_RM_SAVE=null;}btRMenu(n);BT_RM_XY=keep;
+function btRmReopen(n){if(NM_RV&&!NM_RM_SUB)NM_RM_SUB='rv'; /* v759: 修理パネルは修理dr後も開いたまま */var keep=BT_RM_XY,ob=document.querySelector('#btRm .rmBox'),st=ob?ob.scrollTop:0,pos=ob?{l:ob.style.left,t:ob.style.top,h:ob.offsetHeight}:null;if(BT_RM_SAVE){pos=BT_RM_SAVE;BT_RM_SAVE=null;}btRMenu(n);BT_RM_XY=keep;try{nmMarkScan();}catch(e){} /* v1453(報告「選択するとパネル画面が揺れる」): 「← 戻る」行が一瞬出てから隠れて高さが跳ねていたので、開き直した直後にマーク化する */
   /* v354(バグ修正 ダルマ報告「車両の向き・砲塔の方向変更時にボタンを押すとメニューが上にスクロールする」): 開き直した時に、メニューの中のスクロール位置と置き場所を保つ(同じメニューの中で操作した時) */
   var nb=document.querySelector('#btRm .rmBox');if(nb&&ob){if(pos&&nb.offsetHeight<=innerHeight/nmFzK()-16){nb.style.left=pos.l;nb.style.top=pos.t;var r=nb.getBoundingClientRect(),kz=nmFzK();if(r.bottom/kz>innerHeight/kz-8)nb.style.top=Math.max(8,innerHeight/kz-8-r.height/kz)+'px';}nb.scrollTop=st;}try{btRmClamp(document.querySelector('#btRm .rmBox'));}catch(e){}
   /* v602(バグ修正 ダルマ報告「拡大縮小を選ぶとメニューが上にずれる」): clampが高さと位置を取り直してずれるので、開き直し前の位置・高さに戻す */
