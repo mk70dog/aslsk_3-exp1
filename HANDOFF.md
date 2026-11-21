@@ -1,8 +1,9 @@
-# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-22 / v1478)
+# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-22 / v1479)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-22 いまの作業=v1478 から再開。返事待ちなし】**
+- **【2026-11-22 いまの作業=v1479 から再開。返事待ちなし】**
+  - v1479(ダルマ「編成を選択すると次のパネルで選択されている」画像=編成ボタンの位置にある「+ 8-1」が hover 色): iPad の sticky hover。pointerup から 0.7秒以内に DOM が変わったら #btRm に class nmNoHov を 0.45秒(#btRm.nmNoHov *{pointer-events:none})。確認 /tmp/s/nh.js(タッチ)、smoke 0。**iPad で直ったか未確認**。
   - v1478(ダルマ「指揮官が同じ部隊にいて指揮官誕生ある?」→ASLSK4 5.3 を確認(誕生は自己回復の最初の試み・白兵戦の原DR2だけ、MC では無い、指揮官の有無は無関係)→「指揮官誕生を外」): nmMc の MC 原DR2 → promo を削除。自己回復(31890470 付近)・白兵戦の誕生はそのまま。旧タブ・ルール文書側は未確認。smoke 0。
   - v1477(ダルマ「全て大丈夫? サンプル表示」→/tmp/s/allift.js で4か所を撮影): 車両・砲の HE 命中後は .rmSum でないので表がやや狭かった→ nmIftTblHTML の外枠に class nmIftT、nmSumTxW に .rmIt>.rmTx:has(.nmIftT)。歩兵・車両の機関銃・HE 命中後・残留火力(判定ボード)とも横いっぱい。smoke 0。
   - v1476(ダルマ「iftダイス表がはじめのデザインと変わっている」画像=DRMなし・4-4-7 1つでマスが細い): .rmIt.rmSum の .rmTx が flex 0 1 auto で中身の幅に縮み、width:100% の表も縮んでいた(v1467/1469 で長い FP内訳の行が無くなったため目立った)→ style#nmSumTxW .rmIt.rmSum>.rmTx{flex:1 1 auto;min-width:0}。確認 /tmp/s/fpd3.js(短い)・fpd2.js(長い)とも横いっぱい、smoke 0。
