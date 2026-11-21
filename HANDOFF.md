@@ -1,8 +1,9 @@
-# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1472)
+# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1473)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1472 から再開。返事待ちなし】**
+- **【2026-11-21 いまの作業=v1473 から再開。返事待ちなし】**
+  - v1473(ダルマ「空のヘクスタップで[ヘクスにカウンターを配置]を表示 このヘクスの地形情報・ルールを追加 サンプル」→sample-plinfo 案A 下/B 上の札/C 見出し→「b」): nmRmVehItems の plWrap の先頭にヘクスの札(nmRmInfo を開く)。空のヘクスのタップ=配置パネルは前から(nmEmptyPlOpen)。サンプルと画素一致、smoke 0。
   - v1472(ダルマ「(ヘクスのメニューの)赤枠部分を削除」画像=ヘクス(残骸・煙幕・マーク)の欄): nmRMenuItems の L から [sep ヘクス(残骸・煙幕・マーク)]+X2 を外す。nmRmBuildB(カウンター1個)の「▸ ヘクス」折りたたみも hexIt(配置・白兵戦・退出)だけ。「このヘクスをマークする」はメニューから消えた(機能自体は残る)。smoke 0。
   - v1471(ダルマ「赤枠(A→B の LOS バー)を青枠(凡例 btLegendWrapHTML の #000b)のように半透明」「メインメニューも」→sample-trbar→「メインメニューは変更しない losバーのみ実施」): style#nmAbBdTr #nmAbBd{background:#000b;border-color:#404040}。メモ: メインメニュー #nmFtMn の背景は MutationObserver が inline !important で付けている(31709894 付近の BG)ので、変える時はそこを直す。smoke 0。
   - v1470(ダルマ「ここも同じIFTダイス表を表示 サンプル」→sample-iftvf→「他もIFTの場合には同じ表を表示する 実施」): nmIftTblHTML(fp,drm) を ①nmVf 命中後の「NFP N列 IFTで効果を判定」(!V.res2) ②nmVm 機関銃の FP→列(!V.res) ③nmRmRaItems 残留火力(!R.r、DRM=TEM−FFMO−FFNAM) ④判定ボードの残留火力 nmRaq(!R.r、nmRaqDrm) ⑤スポット判定2画面目 nmIjNvDraw の nvRt(!O)。旧タブ(射撃タブ等)は対象外。確認: ①③④②は表あり(⑤はコードのみ)、smoke 0。
