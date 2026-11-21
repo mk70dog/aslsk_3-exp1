@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-22 いまの作業=v1481 から再開。返事待ち: ①移動パネル A/B/C ②FP内訳 sample-fpwhy ③独軍HMGの原因(動作ログ待ち)。未着手: 人力移動のダイス入力サンプル】**
+- **【2026-11-22 いまの作業=v1482 から再開。返事待ちなし。残り: 人力移動のダイス入力サンプル・独HMG混入の原因】**
+  - v1482(ダルマ「A」「おk 実施」): ①移動パネル=imv の nmRMenuItems ラッパーで NM_RM_CUR=null(rmFull にしない)・NM_MU_F=1・見出し「移動 @ヘクス」+btns を nmMuTiles のタイルに。確認 /tmp/s/mvr.js(高さ257・タイルで移動バー) ②sample-fpwhy を main にマージ。smoke 0。
   - ①移動パネル(ユニットメニューの「移動」→ NM_RM_SUB='imv'): 原因=NM_RM_CUR='imv' で btRmFullApply が rmFull(960px・2列)。案A=見出し+3タイル/B=3行(説明付き: 警戒移動=1ヘクスだけ・FFNAMなし、急速移動=MF+2・CX)/C=3タイル+1行説明。サンプル /tmp/s/mvs.js(NM_RM_CUR を null に戻す+NM_MU_F=1)。
   - ②sample-fpwhy(push済み): nmFpUnits をユニットごとに(PIN ½・射程<距離 ½)、全体の ½(前進射撃・SFF・FPF)は「→ 合計 ×½ 理由」。旧表示は raw>fp を全部「射程を超える」と書いていた(6-2-8 は射程2なので距離2は射程内、実際は PIN の半分)。
   - ③ダルマ「なぜか独軍のhmg」: 地図の射撃パネルで 部隊B(ソ)(内部 slot D)の使うSW・見出しに HMG 7-16(鹵獲) が入る(スポット判定の編成表示には無い)。動作ログ: 前夜 00:25 独 部隊A(HMG込み FP19)が射撃→00:26「ROFで機関銃だけもう一度撃つ」(nmMfRofAgain: f.grps を絞り g.sw=維持したSWだけ・NM_MF.rof=1)→00:30 ⇄入れ替え(nmIjSwap→nmMfReopen(388))。今朝 08:18 nmMfSwUse(256,'hmg716_ge_0')=保存済み編成 D の sw に独の HMG の uid が入っている。ROF→入れ替えの流れで混ざった疑い。/tmp/s/hmg.js は ROF まで再現できていない(g.sw が空になる)。
