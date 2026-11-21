@@ -1,8 +1,9 @@
-# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1460)
+# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1461)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1460 から再開】** 返事待ち: SSR・勝利条件の窓の字をさらに細く(sample-thinfont の thinner.png 案A DemiLight/B Light/C Thin、どれも約1MB増)。
+- **【2026-11-21 いまの作業=v1461 から再開。返事待ちなし】**
+  - v1461(「さらに細く」の返事の代わりにダルマ「少し小さくする サンプル」→sample-thinfont smaller.png 案A/B/C→「b」): nmScnTxtPop の見出し 19→17px、SSR 本文 15→13px、勝利条件本文 16.5→14.5px。サンプルと画素一致、smoke 0。(さらに細い字の案は取りやめ扱い)
   - v1460(ダルマ「スポット判定 ift値の下にそのift値のダイス結果表を表示 サンプルx3」→sample-ifttbl 案A/B/C→「A サンプルx3」→A1/A2/A3→「a2」): nmIftTblHTML(fp,drm)=IFT[行][ci(fp)] を出目2〜12(DRM 込み、行 ≤0/1〜14/≥15)で11マス、マスを結果の色で薄く塗る。歩兵の射撃(nmMf の「FP → 列 DRM」の項目、撃つ前だけ)の sub の下に。確認 /tmp/s/ift3.js、smoke 0。
   - v1459(ダルマ「フォントを細くする」→sample-thinfont(本文を DemiLight/Light/Thin、見出しを中太/普通/Light。AppJP は Noto の普通・中太・太字の3つだけで、より細い字は約1MB増)→「見出し 本文 フォント普通にする」→「実施」): nmScnTxtPop の見出し font-weight 900→400、勝利条件の本文 600→400(SSR の本文は元から 400)。サンプルと画素一致、smoke 0。
   - v1458(ダルマ指示「ドラッグでの移動をなしにする」→確認で「部隊の準備のドラッグ」): nmSu の pointerdown を window.NM_SU_DRAG が true の時だけ(既定 なし)。案内の「ドラッグで好きな編成/ユニットへ」「(ここへドラッグでも作れる)」「ドラッグで渡す」を削除。地図のスタックのドラッグはそのまま。確認 /tmp/s/dd.js、smoke 0。
