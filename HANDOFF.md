@@ -1,8 +1,9 @@
-# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-22 / v1476)
+# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-22 / v1477)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-22 いまの作業=v1476 から再開。返事待ちなし】**
+- **【2026-11-22 いまの作業=v1477 から再開。返事待ちなし】**
+  - v1477(ダルマ「全て大丈夫? サンプル表示」→/tmp/s/allift.js で4か所を撮影): 車両・砲の HE 命中後は .rmSum でないので表がやや狭かった→ nmIftTblHTML の外枠に class nmIftT、nmSumTxW に .rmIt>.rmTx:has(.nmIftT)。歩兵・車両の機関銃・HE 命中後・残留火力(判定ボード)とも横いっぱい。smoke 0。
   - v1476(ダルマ「iftダイス表がはじめのデザインと変わっている」画像=DRMなし・4-4-7 1つでマスが細い): .rmIt.rmSum の .rmTx が flex 0 1 auto で中身の幅に縮み、width:100% の表も縮んでいた(v1467/1469 で長い FP内訳の行が無くなったため目立った)→ style#nmSumTxW .rmIt.rmSum>.rmTx{flex:1 1 auto;min-width:0}。確認 /tmp/s/fpd3.js(短い)・fpd2.js(長い)とも横いっぱい、smoke 0。
   - v1475(ダルマ「案A 項目ごとのカード2列」(sample-terrpop)・「案B ユニットごとに1行」(sample-grpst)・「移動の右に編成ボタン」(sample-edtile)): ①nmTerrRows/nmTerrPopHTML('A')。btStackPopupHTML(n,terr) でスタックが無ければこれ(判定モードは nmRmInfo が BT.stacks を空にして呼ぶ)。nmRmInfo(n,from) が NM_TERR_BACK を設定(from='pl' は配置パネルへ、ほかはヘクスのメニューへ)、← は nmTerrBack ②nmGrpStRows(…,'B')・nmGrpStOne(items の broken/pinned/cx)を nmRmBuildB の top のタイルの後に ③nmRmBuildB で「…を編集」を edt として拾いタイル「編成」。確認 /tmp/s/gst2.js・tp2.js(サンプルと画素一致)・tpb.js(←で配置パネル/メニューへ)、smoke 0。
   - v1474(ダルマ「赤枠部分削除」画像=カウンター1個のヘクスのメニューの LOS・移動 欄と ▾ヘクス(配置)): nmRMenuItems の BQ(nmRmBuildB)経路の L から [sep LOS・移動]+Af+BQ.hex を外す。カウンター2個以上・空のヘクスのメニューはそのまま。smoke 0。
