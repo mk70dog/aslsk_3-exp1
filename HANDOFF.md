@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1448 から再開。返事待ちなし】**
+- **【2026-11-21 いまの作業=v1449 から再開。返事待ちなし】**
+  - v1449: 判定ボードの選択画面「地図でタップして選ぶ」を修正(NM_HQ_TAPFN・nmHqTapArm・nmHqTapAt、LosMapClick の最初で拾う)。
   - v1448: 潰走の地図の帯(nmRtmBanner step3)を sample-rtbn のとおりに(取り込み済み)。
   - v1447: 潰走・阻止「どの地図で？」は案3(白兵戦風の左右の枠)を既定(nmRtChoose→nmRtChooseSmp(3)、NM_RTCH_SMP で1〜5、0で従来)。カウンター画像が無いユニットは同じ表記の画像か文字(9-1しか出ない件の対策)。sample-rtch は取り込み済み。
   - v1446: 潰走の地図の帯は最初から「経路」(M.mode='r': nmRtmStartAt・nmRtmFinish・nmRtmReset(real))。
