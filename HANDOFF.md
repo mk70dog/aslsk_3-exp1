@@ -1,8 +1,9 @@
-# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1470)
+# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1471)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1470 から再開。返事待ちなし】**
+- **【2026-11-21 いまの作業=v1471 から再開。返事待ちなし】**
+  - v1471(ダルマ「赤枠(A→B の LOS バー)を青枠(凡例 btLegendWrapHTML の #000b)のように半透明」「メインメニューも」→sample-trbar→「メインメニューは変更しない losバーのみ実施」): style#nmAbBdTr #nmAbBd{background:#000b;border-color:#404040}。メモ: メインメニュー #nmFtMn の背景は MutationObserver が inline !important で付けている(31709894 付近の BG)ので、変える時はそこを直す。smoke 0。
   - v1470(ダルマ「ここも同じIFTダイス表を表示 サンプル」→sample-iftvf→「他もIFTの場合には同じ表を表示する 実施」): nmIftTblHTML(fp,drm) を ①nmVf 命中後の「NFP N列 IFTで効果を判定」(!V.res2) ②nmVm 機関銃の FP→列(!V.res) ③nmRmRaItems 残留火力(!R.r、DRM=TEM−FFMO−FFNAM) ④判定ボードの残留火力 nmRaq(!R.r、nmRaqDrm) ⑤スポット判定2画面目 nmIjNvDraw の nvRt(!O)。旧タブ(射撃タブ等)は対象外。確認: ①③④②は表あり(⑤はコードのみ)、smoke 0。
   - v1469(ダルマ「(FP→列 DRM と FP 内訳を)わかりやすくする サンプル」→sample-fpdet 案A 札/B 式/C 表→「A」): nmFpUnits(nmMfFpBreak を分けて、射程 rng<距離 のものを半分。SW は「HMG 7-16」の後ろの数字が射程)・nmFpDetHTML('A')。v1467 の FP 行を置き換え、見出しの t も大きな数字に。サンプルと画素一致、smoke 0。
   - v1468(ダルマ「(車両の射撃の命中TH#まわりを)見やすくする サンプル」→sample-vfth 案A/B/C→「AC もう少しコンパクトに」→A2/C2→「案A コンパクト」): nmVfDrmWhy(DRM 項目の理由)・nmVfThHTML('A2',…) で車両の射撃(nmVf の撃つ前)の命中TH# 項目の t と sub を置き換え。スポット判定2画面目の nvSum(31793638 付近)は対象外。サンプルと画素一致、smoke 0。
