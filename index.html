@@ -36776,6 +36776,15 @@ var NM_MF_PH=[['pfph','準備'],['dff','臨機'],['dfph','防御'],['afph','前�
 /* v1247(ダルマ指示「射撃のデフォルトの選択が臨機になっているが未選択にする 全ての攻撃を統一する」): 歩兵の射撃・主砲/砲・機関銃・軽対戦車兵器のパネルを開いた時はフェイズを未選択。選ぶまで判定の設定とダイスは出さない */
 var NM_PHU=false;
 setTimeout(function(){['nmMfOpen','nmVfOpen','nmVmOpen','nmLwOpen'].forEach(function(fn){var o=window[fn];if(typeof o!=='function')return;window[fn]=function(){NM_PHU=true;return o.apply(this,arguments);};});},0);
+/* sample-ifttbl(ダルマ「スポット判定 ift値の下にそのift値のダイス結果表を表示 サンプルx3」) */
+function nmIftTblHTML(fp,drm,sty){try{var c=ci(fp),rows=[];for(var d=2;d<=12;d++){var f=d+(drm||0),ix=f<=0?0:(f>=15?15:f);rows.push({d:d,r:IFT[ix][c],p:(6-Math.abs(d-7))/36});}
+  var col=function(r){r=String(r||'');return /KIA/.test(r)?'#ff5a5a':/^K/.test(r)?'#ff9a40':/MC/.test(r)?'#ffd24a':/PTC/.test(r)?'#8fb0d0':'#5a6474';},lb=function(r){r=String(r||'');return r==='-'||r===''?'—':r;};
+  var head='<div style="font-size:11px;color:#8899aa;margin-bottom:4px">'+IFT_LBL[c]+'列'+(drm?'・DRM'+(drm>0?'+':'')+drm+' 込み':'')+'(2D6の出目→結果)</div>';
+  if(sty==='A'){return '<div style="width:100%">'+head+'<div style="display:grid;grid-template-columns:repeat(11,1fr);gap:3px">'+rows.map(function(x){return '<div style="text-align:center;background:#11151b;border-radius:5px;padding:3px 0;box-shadow:inset 0 -3px 0 '+col(x.r)+'"><div style="font-size:11px;color:#8899aa">'+x.d+'</div><div style="font-size:12px;font-weight:700;color:'+col(x.r)+'">'+lb(x.r)+'</div></div>';}).join('')+'</div></div>';}
+  var G=[];rows.forEach(function(x){var L=G[G.length-1];if(L&&L.r===x.r){L.d2=x.d;L.p+=x.p;}else G.push({r:x.r,d1:x.d,d2:x.d,p:x.p});});
+  var rg=function(g){return g.d1===g.d2?String(g.d1):(g.d1===2?'≤'+g.d2:(g.d2===12?g.d1+'+':g.d1+'〜'+g.d2));};
+  if(sty==='B'){return '<div style="width:100%">'+head+'<div style="display:flex;flex-wrap:wrap;gap:5px">'+G.map(function(g){return '<span style="display:inline-flex;gap:6px;align-items:center;background:#11151b;border:1px solid '+col(g.r)+'55;border-radius:12px;padding:2px 10px"><span style="font-size:12px;color:#9fb2c8">'+rg(g)+'</span><b style="font-size:13px;color:'+col(g.r)+'">'+lb(g.r)+'</b></span>';}).join('')+'</div></div>';}
+  return '<div style="width:100%">'+head+'<div style="display:flex;height:14px;border-radius:7px;overflow:hidden;margin-bottom:5px">'+G.map(function(g){return '<div style="flex:'+g.p+';background:'+col(g.r)+'" title="'+lb(g.r)+'"></div>';}).join('')+'</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:2px 10px">'+G.map(function(g){return '<div style="display:flex;gap:6px;align-items:center;font-size:12px"><span style="width:9px;height:9px;border-radius:2px;background:'+col(g.r)+'"></span><b style="color:'+col(g.r)+';min-width:44px">'+lb(g.r)+'</b><span style="color:#9fb2c8">'+rg(g)+'</span><span style="color:#667788;margin-left:auto">'+Math.round(g.p*100)+'%</span></div>';}).join('')+'</div></div>';}catch(e){return '';}}
 function nmMfOpen(n,sd,slot){var tph=S.turn&&NM_PH_FIRE[S.turn.phase];if(tph&&S.fireSub!==tph){try{FIREsub(tph);}catch(e){}}NM_MF={sd:sd,slot:slot,from:n,tgt:null};try{nmMfFtInit();}catch(e){}NM_RM_SUB='mfire';btRmReopen(n);}
 function nmMfBack(n){NM_MF=null;btRmReopen(n);}
 /* v1040: 歩兵の射撃(スポット判定2画面目・地図の射撃)で、編成が持つSWを使う/使わないを選ぶ。FTは単独(分隊のFPも他のSWも使わない)・FTを外すと他のSWが戻る(射撃タブの FtogSW と同じ決まり) */
@@ -36880,7 +36889,7 @@ function nmRmMFireItems(n){
   var col=IFT_LBL[ci(fp)];
   var parts=[];try{var pt=[['TEM',fireTemEff(f)],['指揮官',fireEffLdr(f)],['妨害',fireHindTotal(f)],['CX',f.cx?1:0],['FFMO',(f.ffmo&&!f.tgtCrewCE&&!fireHeightAdvActive(f)&&fireHindTotal(f)<=0&&!ssrCamoNoFfmo(f))?-1:0],['FFNAM',f.ffnam?-1:0],['危険移動',f.hazardous?-2:0],['SSR',scenShotDrm(fireShotRange(f),fireShotPh())]];pt.forEach(function(x){if(x[1])parts.push(x[0]+sg(x[1]));});if(f.ffmo&&ssrCamoNoFfmo(f))parts.push('FFMOなし(冬季迷彩 SSR1)');}catch(e){}
   if(done){it.pop();it.push({ic:'tgt',img:tgtEh?nmMfTgtImg(tgtEh):'',t:'<span>'+(tgtEh?nmMfTgtName(tgtEh):'')+' @'+BTG.nodes[M.tgt].nm+'　FP'+fp+'・'+col+'列・DRM'+sg(drm)+'</span>',sub:'距離'+btDist(M.from,M.tgt)+(parts.length?'　'+parts.join(' '):'')+(nmMfFpBreak(M.slot)?'　FP内訳: '+nmMfFpBreak(M.slot):'')});}
-  else it.push({ic:'fire',t:'<span>FP <b>'+fp+'</b>　→　<b>'+col+'</b>列　DRM <b>'+sg(drm)+'</b></span>',sub:(parts.length?'DRM内訳: '+parts.join(' ')+'　':'')+(nmMfFpBreak(M.slot)?'FP内訳: '+nmMfFpBreak(M.slot)+'　':'')+'射撃タブ('+(ph||'-')+')と同じ計算'});
+  else it.push({ic:'fire',t:'<span>FP <b>'+fp+'</b>　→　<b>'+col+'</b>列　DRM <b>'+sg(drm)+'</b></span>',sub:(parts.length?'DRM内訳: '+parts.join(' ')+'　':'')+(nmMfFpBreak(M.slot)?'FP内訳: '+nmMfFpBreak(M.slot)+'　':'')+'射撃タブ('+(ph||'-')+')と同じ計算'});if(!done&&window.NM_IFTTBL){var _li=it[it.length-1];if(_li)_li.sub=(_li.sub||'')+'<div style="margin-top:8px">'+nmIftTblHTML(fp,drm,window.NM_IFTTBL)+'</div>';}
   /* v403(ダルマ指示「消す」): 条件の札(fireDetailLines)は内訳と重複・ボタンに見えるため出さない */
   if(f&&f.res&&f.res.ift){var R=f.res,rr=rm(R.ift.r);
     it.push({sep:1});
