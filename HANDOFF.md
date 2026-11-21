@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-22 いまの作業=v1482 から再開。返事待ちなし。残り: 人力移動のダイス入力サンプル・独HMG混入の原因】**
+- **【2026-11-22 いまの作業=v1482 から再開。返事待ち: sample-mhdice(人力移動のダイス入力)。残り: 独HMG混入の原因】**
+  - sample-mhdice(push済み): nmRmMhItems に赤・白の目の行(NM_MH.rd/wd、もう一度押すと外す)と「出目 赤・白=DR で判定」の行。nmMhDo は目が入っていればその目で判定し、目を消す。確認 /tmp/s/mhd.js。
   - v1482(ダルマ「A」「おk 実施」): ①移動パネル=imv の nmRMenuItems ラッパーで NM_RM_CUR=null(rmFull にしない)・NM_MU_F=1・見出し「移動 @ヘクス」+btns を nmMuTiles のタイルに。確認 /tmp/s/mvr.js(高さ257・タイルで移動バー) ②sample-fpwhy を main にマージ。smoke 0。
   - ①移動パネル(ユニットメニューの「移動」→ NM_RM_SUB='imv'): 原因=NM_RM_CUR='imv' で btRmFullApply が rmFull(960px・2列)。案A=見出し+3タイル/B=3行(説明付き: 警戒移動=1ヘクスだけ・FFNAMなし、急速移動=MF+2・CX)/C=3タイル+1行説明。サンプル /tmp/s/mvs.js(NM_RM_CUR を null に戻す+NM_MU_F=1)。
   - ②sample-fpwhy(push済み): nmFpUnits をユニットごとに(PIN ½・射程<距離 ½)、全体の ½(前進射撃・SFF・FPF)は「→ 合計 ×½ 理由」。旧表示は raw>fp を全部「射程を超える」と書いていた(6-2-8 は射程2なので距離2は射程内、実際は PIN の半分)。
