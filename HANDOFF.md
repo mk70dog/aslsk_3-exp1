@@ -5,7 +5,7 @@
 - **【2026-11-22 いまの作業=v1481 から再開。返事待ち: ①移動パネル A/B/C ②FP内訳 sample-fpwhy ③独軍HMGの原因(動作ログ待ち)。未着手: 人力移動のダイス入力サンプル】**
   - ①移動パネル(ユニットメニューの「移動」→ NM_RM_SUB='imv'): 原因=NM_RM_CUR='imv' で btRmFullApply が rmFull(960px・2列)。案A=見出し+3タイル/B=3行(説明付き: 警戒移動=1ヘクスだけ・FFNAMなし、急速移動=MF+2・CX)/C=3タイル+1行説明。サンプル /tmp/s/mvs.js(NM_RM_CUR を null に戻す+NM_MU_F=1)。
   - ②sample-fpwhy(push済み): nmFpUnits をユニットごとに(PIN ½・射程<距離 ½)、全体の ½(前進射撃・SFF・FPF)は「→ 合計 ×½ 理由」。旧表示は raw>fp を全部「射程を超える」と書いていた(6-2-8 は射程2なので距離2は射程内、実際は PIN の半分)。
-  - ③ダルマ「なぜか独軍のhmg」: 地図の射撃パネルで 部隊B(ソ) の使うSW・見出しに HMG 7-16(鹵獲) が入る(スポット判定の編成表示には無い)。使うSW の一覧は savedGroups[slot].sw。再現できず。
+  - ③ダルマ「なぜか独軍のhmg」: 地図の射撃パネルで 部隊B(ソ)(内部 slot D)の使うSW・見出しに HMG 7-16(鹵獲) が入る(スポット判定の編成表示には無い)。動作ログ: 前夜 00:25 独 部隊A(HMG込み FP19)が射撃→00:26「ROFで機関銃だけもう一度撃つ」(nmMfRofAgain: f.grps を絞り g.sw=維持したSWだけ・NM_MF.rof=1)→00:30 ⇄入れ替え(nmIjSwap→nmMfReopen(388))。今朝 08:18 nmMfSwUse(256,'hmg716_ge_0')=保存済み編成 D の sw に独の HMG の uid が入っている。ROF→入れ替えの流れで混ざった疑い。/tmp/s/hmg.js は ROF まで再現できていない(g.sw が空になる)。
   - 人力移動(nmRmMhItems): ダルマ「地図で動かすを選択しても何もない」「ダイス入力を追加」。v1481 で選ぶ時に砲のヘクスを画面中央へ(btCamPt/btCamCenter)。ダイス入力(赤・白の目を選んで nmMhDo に渡す)はサンプル未作成。
   - v1481: 配置パネル(nmRmVehItems)の ← 戻る項目を削除。スポット判定の状態の窓(nmUstBtns)と一覧(ck)で SMC にも PIN。
   - v1480(ダルマ「戻るとパネルが小さくなっている」): btRmReopen が前の高さに maxHeight を縛っていた。NM_RM_SUB が前回と変わった時(回復→← 等)は GR 扱いで縛らない(window.NM_RM_LSUB)。確認 /tmp/s/rlb.js (684→243→684)、smoke 0。
