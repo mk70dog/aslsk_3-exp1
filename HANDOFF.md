@@ -1,8 +1,9 @@
-# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1459)
+# ASL_SK3_EX 引き継ぎ HANDOFF.md (2026-11-21 / v1460)
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-21 いまの作業=v1459 から再開。返事待ちなし】**
+- **【2026-11-21 いまの作業=v1460 から再開】** 返事待ち: SSR・勝利条件の窓の字をさらに細く(sample-thinfont の thinner.png 案A DemiLight/B Light/C Thin、どれも約1MB増)。
+  - v1460(ダルマ「スポット判定 ift値の下にそのift値のダイス結果表を表示 サンプルx3」→sample-ifttbl 案A/B/C→「A サンプルx3」→A1/A2/A3→「a2」): nmIftTblHTML(fp,drm)=IFT[行][ci(fp)] を出目2〜12(DRM 込み、行 ≤0/1〜14/≥15)で11マス、マスを結果の色で薄く塗る。歩兵の射撃(nmMf の「FP → 列 DRM」の項目、撃つ前だけ)の sub の下に。確認 /tmp/s/ift3.js、smoke 0。
   - v1459(ダルマ「フォントを細くする」→sample-thinfont(本文を DemiLight/Light/Thin、見出しを中太/普通/Light。AppJP は Noto の普通・中太・太字の3つだけで、より細い字は約1MB増)→「見出し 本文 フォント普通にする」→「実施」): nmScnTxtPop の見出し font-weight 900→400、勝利条件の本文 600→400(SSR の本文は元から 400)。サンプルと画素一致、smoke 0。
   - v1458(ダルマ指示「ドラッグでの移動をなしにする」→確認で「部隊の準備のドラッグ」): nmSu の pointerdown を window.NM_SU_DRAG が true の時だけ(既定 なし)。案内の「ドラッグで好きな編成/ユニットへ」「(ここへドラッグでも作れる)」「ドラッグで渡す」を削除。地図のスタックのドラッグはそのまま。確認 /tmp/s/dd.js、smoke 0。
   - v1457(ダルマ指示「超過できないようにする」「部隊の順番自動化 指揮官 クラス 順」画像=部隊の準備で部隊C 分隊4/3): nmSuOverAdd(btSqEq で分隊>3・指揮官>4 なら断ってトースト)を nmSuAddU・nmSuDrop(OB から/編成間の移動)に。nmSuSortSlot/nmSuSortKey(指揮官=士気の高い順→修正の良い順、MMC=分隊→半個分隊・乗員、クラス E,1,2,G,C)を nmSuDraw の最初で各編成に(手で並べ替えても自動で戻る)。確認 /tmp/s/srt2.js、smoke 0。
