@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1528</title>
+<title>ASL SKシリーズv1529</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1528">
+<meta property="og:title" content="ASL SKシリーズv1529">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.728"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.729"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1529="v1529(";
 var APP_VERSION_HIST_v1528="v1528(";
 var APP_VERSION_HIST_v1527="v1527(";
 var APP_VERSION_HIST_v1526="v1526(";
@@ -37856,7 +37857,7 @@ function nmsHdr(){return {'Authorization':'token '+gistGetToken(),'Accept':'appl
 function nmsPush(cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);return;}var sc=S.scen&&S.scen.sel;if(!sc){NMS.msg='シナリオが選ばれていません';if(cb)cb(false);return;}
   var h=nmsHash(),at=Date.now(),body={files:{}};body.files[nmsFile(nmsRole())]={content:JSON.stringify({v:1,scen:sc,at:at,dev:nmsDev(),side:nmsRole(),map:JSON.parse(h)})};
   NMS.busy=true;NMS.status='送信中';fetch('https://api.github.com/gists/'+gistGetId(),{method:'PATCH',headers:nmsHdr(),body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw new Error('PATCH '+r.status);
-    NMS.busy=false;NMS.lastHash=h;if(!nmsRole())NMS.remoteAt=at;NMS.last=Date.now();NMS.status='送信済み';try{var mm=JSON.parse(h);nmDbg('マップ同期: 送信 自軍'+(mm.friendHexes||[]).length+'・敵軍'+(mm.enemyHexes||[]).length+' この国 '+(mm.myNat||'-')+'='+(mm.mySide||'-')+' ('+nmsFile(nmsRole())+')');}catch(x){}NMS.msg='';if(cb)cb(true);nmsRedraw();}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=String(e.message||e);if(cb)cb(false);nmsRedraw();});}
+    NMS.busy=false;NMS.lastHash=h;if(!nmsRole())NMS.remoteAt=at;try{localStorage.setItem('aslsk_map_myat_'+sc,String(at));}catch(x){}NMS.last=Date.now();NMS.status='送信済み';try{var mm=JSON.parse(h);nmDbg('マップ同期: 送信 自軍'+(mm.friendHexes||[]).length+'・敵軍'+(mm.enemyHexes||[]).length+' この国 '+(mm.myNat||'-')+'='+(mm.mySide||'-')+' ('+nmsFile(nmsRole())+')');}catch(x){}NMS.msg='';if(cb)cb(true);nmsRedraw();}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=String(e.message||e);if(cb)cb(false);nmsRedraw();});}
 function nmsPull(force,cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);return;}NMS.busy=true;NMS.status=NMS.status||'受信中';
   fetch('https://api.github.com/gists/'+gistGetId()+'?t='+Date.now(),{headers:nmsHdr(),cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('GET '+r.status);return r.json();}).then(function(gist){
     NMS.busy=false;var rl=nmsRole(),f=(gist.files||{})[nmsFile(rl?(rl==='p1'?'p2':'p1'):'')];if(!f||!f.content){NMS.status=rl?'まだ相手のデータがありません':'まだ共有データがありません';if(cb)cb(false);nmsRedraw();return;}
@@ -37866,7 +37867,9 @@ function nmsPull(force,cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);retu
     nmsApply(P,rl);NMS.remoteAt=P.at;NMS.last=Date.now();NMS.status='受信して反映';NMS.msg='';if(cb)cb(true);}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=String(e.message||e);if(cb)cb(false);nmsRedraw();});}
 function nmsApply(P,rl){var m=P.map||{},sc=P.scen;nmBkSnap('受信前(共有で置き換え)');
   /* v1412(ダルマ指示「マップ上のカウンターの位置は同期しないようにする」): マップ同期の受信で自軍・敵軍のカウンター(friendHexes/enemyHexes)の位置は置き換えない(以前: 2Pなら相手の自軍→こちらの敵軍を上書き) */try{nmDbg('マップ同期を受信(カウンターの位置は変えない)');}catch(e){}
-  S_LOS.wreckHexes=m.wreckHexes||{};S_LOS.wreckVeh=m.wreckVeh||{};S_LOS.smoke=m.smoke||{};S_LOS.buildingMarks=m.buildingMarks||{};S_LOS.route=m.route||null;S_LOS.resid=m.resid||{};
+  var jAllP=false;try{jAllP=!!rl&&S.nmMode!=='online'&&nmJsLv()==='all';}catch(e){}var myAt=0;try{myAt=+localStorage.getItem('aslsk_map_myat_'+sc)||0;}catch(e){}
+  if(jAllP&&myAt&&(P.at||0)<myAt){try{nmDbg('マップ同期(同期オール): 相手のデータ('+new Date(P.at||0).toTimeString().slice(0,8)+')よりこちらの送信('+new Date(myAt).toTimeString().slice(0,8)+')が新しいので、煙幕・残骸・マーク・残留火力・A/Bは変えない');}catch(e){}} /* v1529(ダルマ報告「スモーク 残骸が消えた P2マップにはある」): 開き直すと相手の古いデータで煙幕・残骸を上書きしていた */
+  else{S_LOS.wreckHexes=m.wreckHexes||{};S_LOS.wreckVeh=m.wreckVeh||{};S_LOS.smoke=m.smoke||{};S_LOS.buildingMarks=m.buildingMarks||{};S_LOS.route=m.route||null;S_LOS.resid=m.resid||{};}
   var jAll=false;try{jAll=!!rl&&S.nmMode!=='online'&&nmJsLv()==='all';}catch(e){}
   if(jAll){ /* v1522→v1525(ダルマ報告「1Pの配置した部隊がきえて2Pの配置した部隊だけがお互いにマップ上に配置」): 自軍/敵軍は国で決まる(攻撃側=自軍の色、両方のiPadで同じ)ので、「相手の自軍=こちらの敵軍」ではなかった。相手の国(myNat)の側(mySide)にある相手のカウンターを、こちらでその国がいる側に置き、その側のこちらのカウンターだけ置き換える。こちらの国の側は変えない */
     var oN=m.myNat||'',oS=m.mySide||'',myK='';try{myK=nmMyNatNow();}catch(e){}
@@ -37874,7 +37877,7 @@ function nmsApply(P,rl){var m=P.map||{},sc=P.scen;nmBkSnap('受信前(共有で�
     else{try{nmDbg('マップ同期(同期オール): 相手の国が分からない・同じ国なので反映しない(相手 '+(oN||'-')+' / こちら '+(myK||'-')+')');}catch(e){}}}
   else{if(!S.savedGroups)S.savedGroups={};if(rl){var gl=S.savedGroups[sc]||(S.savedGroups[sc]={}),gr=m.groups||{};Object.keys(gr).forEach(function(k){if(!gl[k])gl[k]=gr[k];});}else S.savedGroups[sc]=m.groups||{};}
   try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot&&S.savedGroups[sc][g.activeGroupSlot]){var keep=Draw;FgSelectGroupSlot(g.id,g.activeGroupSlot);}}catch(e){}
-  var abCh=JSON.stringify([S_LOS.pxA,S_LOS.pxB])!==JSON.stringify([m.pxA||null,m.pxB||null]);S_LOS.pxA=m.pxA||null;S_LOS.pxB=m.pxB||null;if(!S_LOS.pxA||!S_LOS.pxB)S_LOS.result=null;
+  var abCh=false;if(!(jAllP&&myAt&&(P.at||0)<myAt)){abCh=JSON.stringify([S_LOS.pxA,S_LOS.pxB])!==JSON.stringify([m.pxA||null,m.pxB||null]);S_LOS.pxA=m.pxA||null;S_LOS.pxB=m.pxB||null;}if(!S_LOS.pxA||!S_LOS.pxB)S_LOS.result=null;
   NMS.lastHash=nmsHash();try{saveState();}catch(e){}
   if(abCh&&S_LOS.pxA&&S_LOS.pxB){try{LosRunPixel();}catch(e){}}else nmsRedraw(true);
   try{if(nmsMode()!=='auto')showToast(T('マップを受け取りました'),'grn');}catch(e){} /* v1158(sample): 自動のマップ共有は受信のたびに通知しない */nmsLog();}
