@@ -40933,8 +40933,8 @@ var NM_CCPK=null;function nmCcMapPick(){var C=NM_CCS||{};NM_CCPK={mode:C.mode||'
    砲は歩いて移動できない(6.5): 砲の人力移動に成功すると、操作班(と追加で押した編成)も砲と一緒に動く */
 function nmMvStkCand(M){if(!M||!M.eh||M.eh.veh||!M.eh.grp)return [];var H={boardId:M.orig.b,col:M.orig.c,row:M.orig.r};return nmAllAt(H,M.sd).filter(function(e){return e!==M.eh&&e.grp&&!e.veh&&!e.gun;});}
 function nmMvStkGun(M){if(!M||!M.eh||M.eh.veh)return null;var H={boardId:M.orig.b,col:M.orig.c,row:M.orig.r};return nmAllAt(H,M.sd).filter(function(e){return e.gun&&!e.veh;})[0]||null;}
-(function(){var oS=nmMvStart;nmMvStart=function(n,sd){var r=oS.apply(this,arguments);try{var M=NM_MOVE;if(M&&!M.stkInit){M.stkInit=1;var C=nmMvStkCand(M);M.stkAll=C;M.stk=C.slice();M.stkOrig=C.map(function(e){return {e:e,b:e.boardId,c:e.col,r:e.row,st:deepCopy(e.st||{})};});if(C.length||nmMvStkGun(M))Draw();}}catch(e){console.log('stk start',e);}return r;};})();
-function nmMvStk(on){var M=NM_MOVE;if(!M)return;if(nmMvUsed()>0){btToast('スタックの組み替えは1歩目の前だけです');return;}M.stk=on?(M.stkAll||[]).slice():[];Draw();}
+(function(){var oS=nmMvStart;nmMvStart=function(n,sd){var r=oS.apply(this,arguments);try{var M=NM_MOVE;if(M&&!M.stkInit){M.stkInit=1;var C=nmMvStkCand(M);M.stkAll=C;M.stk=[];M.stkAsk=C.length?1:0; /* sample-stkask(ダルマ「分割した分隊が一緒に移動してしまう」→「毎回どちらか選ばせる」): 既定で一緒に動かさず、1歩目の前に選ぶ */M.stkOrig=C.map(function(e){return {e:e,b:e.boardId,c:e.col,r:e.row,st:deepCopy(e.st||{})};});if(C.length||nmMvStkGun(M))Draw();}}catch(e){console.log('stk start',e);}return r;};})();
+function nmMvStk(on){var M=NM_MOVE;if(!M)return;if(nmMvUsed()>0){btToast('スタックの組み替えは1歩目の前だけです');return;}M.stk=on?(M.stkAll||[]).slice():[];M.stkAsk=0;Draw();}
 (function(){var oY=nmMvSync;nmMvSync=function(){var M=NM_MOVE;var r=oY.apply(this,arguments);try{if(M&&M.stk&&M.stk.length&&NM_MOVE===M){M.stk.forEach(function(e){e.boardId=M.eh.boardId;e.col=M.eh.col;e.row=M.eh.row;try{nmAcqFollow(e);}catch(x){}});}}catch(e){console.log('stk sync',e);}return r;};})();
 (function(){var oC=nmMvCancel;nmMvCancel=function(){var M=NM_MOVE;try{if(M&&M.stkOrig)M.stkOrig.forEach(function(o){o.e.boardId=o.b;o.e.col=o.c;o.e.row=o.r;o.e.st=o.st;});}catch(e){}return oC.apply(this,arguments);};})();
 (function(){var oE=nmMvEnd;nmMvEnd=function(mode){var M=NM_MOVE;try{if(M&&M.stk&&M.stk.length)nmMvSync();}catch(e){}var r=oE.apply(this,arguments);
@@ -40950,7 +40950,10 @@ function nmMvStkMF(M){var sc=S.scen&&S.scen.sel,SG=sc&&S.savedGroups&&S.savedGro
   if(!g.pickerItems.length)return null;return losUnitMFPerUnit(g,M.eh.grp);}
 (function(){var oD=losStackMFDetails;losStackMFDetails=function(){var r=oD.apply(this,arguments);try{var M=NM_MOVE;if(M&&M.stk&&M.stk.length&&!r.isVehicle&&S_LOS.mfSource==='group'){var pu=nmMvStkMF(M);if(pu){r=Object.assign({},r,{mf:pu.mf,stack:true});r.members=[Object.assign({},(r.members&&r.members[0])||{},{mf:pu.mf,units:pu.units})];}}}catch(e){console.log('stk mf',e);}return r;};})();
 (function(){var oB=nmMvBarHTML;nmMvBarHTML=function(){var h=oB.apply(this,arguments);try{var M=NM_MOVE;if(!h||!M||!M.stkAll)return h;var add='';
-  if(M.stkAll.length){var on=M.stk&&M.stk.length,lk=nmMvUsed()>0;add+='<div style="margin-top:5px;padding-top:5px;border-top:1px solid #3a4352"><div style="font-size:11px;color:#aab4c0;margin-bottom:3px">'+T('同じヘクスの')+' '+M.stkAll.map(function(e){return nmGrpLbl(e.grp);}).join('・')+'</div>'
+  if(M.stkAll.length&&M.stkAsk){var bs='flex:1;font:inherit;font-weight:800;font-size:13px;padding:8px 6px;border-radius:9px;cursor:pointer;';add+='<div style="margin-top:5px;padding:6px;border-radius:10px;border:1.5px solid #ffd040;background:#2b2610"><div style="font-size:12px;color:#ffd040;font-weight:800;margin-bottom:2px">'+T('どう移動しますか？')+'</div><div style="font-size:11px;color:#aab4c0;margin-bottom:5px">'+T('同じヘクスの')+' '+M.stkAll.map(function(e){return nmGrpLbl(e.grp);}).join('・')+'</div><div style="display:flex;gap:6px">'
+    +'<button onclick="event.stopPropagation();nmMvStk(0)" style="'+bs+'border:1px solid #4a5262;background:#2a313d;color:#fff">'+T('このユニットだけ')+'</button>'
+    +'<button onclick="event.stopPropagation();nmMvStk(1)" style="'+bs+'border:1px solid #3ca878;background:#1f4a34;color:#bff0d2">'+T('スタックで一緒に')+'</button></div></div>';}
+  else if(M.stkAll.length){var on=M.stk&&M.stk.length,lk=nmMvUsed()>0;add+='<div style="margin-top:5px;padding-top:5px;border-top:1px solid #3a4352"><div style="font-size:11px;color:#aab4c0;margin-bottom:3px">'+T('同じヘクスの')+' '+M.stkAll.map(function(e){return nmGrpLbl(e.grp);}).join('・')+'</div>'
     +'<button onclick="event.stopPropagation();nmMvStk('+(on?0:1)+')" style="width:100%;font:inherit;font-weight:800;font-size:13px;padding:6px 8px;border-radius:9px;border:1px solid '+(on?'#3ca878':'#4a5262')+';background:'+(on?'#1f4a34':'#2a313d')+';color:'+(on?'#bff0d2':'#cfd8e3')+';'+(lk?'opacity:.6;':'')+'cursor:pointer">'+(on?'● '+T('スタックで一緒に移動'):'○ '+T('このユニットだけ移動'))+'</button></div>';}
   var G=nmMvStkGun(M);if(G)add+='<div style="font-size:11px;color:#ffb060;margin-top:4px">'+T('砲は歩いて移動できません。砲マーカーの「人力移動」で動かすと操作班も一緒に動きます')+'</div>';
   if(!add)return h;return h.replace('進むヘクスをタップ</div>','進むヘクスをタップ</div>'+add);}catch(e){return h;}};})();
@@ -50952,6 +50955,7 @@ function LosMapClick(ev){
   // (2)「rootはダブルタップで再スタート」: 同じヘクスを素早く連続タップ(400ms以内)した
   // 場合のみ、そのヘクスを起点として新規ルートに仕切り直す。単発タップで隣接も直線上でも
   // ないヘクスをタップした場合は何もしない(無視、エラー表示もしない)。
+  if(S_LOS.routeMode&&typeof NM_MOVE!=='undefined'&&NM_MOVE&&NM_MOVE.stkAsk){btToast(T('先に「このユニットだけ」か「スタックで一緒に」を選んでください'));return;} /* sample-stkask */
   if(S_LOS.routeMode){
     // 2026-09追加(ダルマ報告バグ「起点の矢印が出ない」): 起点ヘクスでの初期VCAドラッグ設定
     // (LosRouteVcaDragEnd)が完了した直後は、同じタップに対して発火する重複クリックを
