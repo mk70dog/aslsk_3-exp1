@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1526</title>
+<title>ASL SKシリーズv1527</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1526">
+<meta property="og:title" content="ASL SKシリーズv1527">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.726"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.727"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1527="v1527(";
 var APP_VERSION_HIST_v1526="v1526(";
 var APP_VERSION_HIST_v1525="v1525(";
 var APP_VERSION_HIST_v1524="v1524(";
@@ -36034,8 +36035,9 @@ function nmRClick(e,lp,full){
   if(!btGraphReady())btToast('マップを準備しています…');
   btEnsureGraph().then(function(){var n=btNodeOf(hx.boardId,hx.col,hx.row);NM_RM_HEX.n=(n==null?-1:n);window.NM_RQ=0; /* v1188(ダルマ指示「左右クリックを同じにする」→両方とも今の左クリックのメニュー): 右クリックの短いメニュー(v1170)はやめる */try{btRMenu(NM_RM_HEX.n,lp);}finally{window.NM_RQ=0;}}).catch(function(){btToast('マップを準備できませんでした');});
 }
+function nmOwnSide(){try{var k=nmMyNatNow();return k?nmSuSide(k):'';}catch(e){return '';}} /* v1527(ダルマ「自軍を最初から選んだ状態に」): このiPadの国の側(f/e)。分からなければ '' */
 function nmEmptyPlOpen(e){var hx=losHexAtClient(e.clientX,e.clientY);if(!hx)return;NM_FACE=null;NM_SEL_EH=null;try{nmFtSelAt(hx);}catch(x){}NM_RM_HEX=hx;BT_RM_XY={x:e.clientX,y:e.clientY};if(!btGraphReady())btToast('マップを準備しています…');
-  btEnsureGraph().then(function(){var n=btNodeOf(hx.boardId,hx.col,hx.row);NM_RM_HEX.n=(n==null?-1:n);NM_RM_VEH=(typeof NM_PL!=='undefined'&&NM_PL&&NM_PL.sd)||'f';btRMenu(NM_RM_HEX.n);}).catch(function(){});} /* sample-emptytap: 空のヘクスのタップ=配置パネル(ヘクスメニューの配置と同じ nmRmVehItems) */
+  btEnsureGraph().then(function(){var n=btNodeOf(hx.boardId,hx.col,hx.row);NM_RM_HEX.n=(n==null?-1:n);NM_RM_VEH=nmOwnSide()||(typeof NM_PL!=='undefined'&&NM_PL&&NM_PL.sd)||'f';btRMenu(NM_RM_HEX.n);}).catch(function(){});} /* sample-emptytap: 空のヘクスのタップ=配置パネル(ヘクスメニューの配置と同じ nmRmVehItems) */
 function nmRmDone(){BtRmClose();Draw();}
 function nmRmAB(w){
   var H=NM_RM_HEX;if(!H)return;BtRmClose();losSaveMapScroll();
@@ -36251,7 +36253,7 @@ function nmRMenuItems(n,part){
       var src=v?nmVaslSrc(v.id):g?nmVaslSrc(g.id):eh.grp?(nmGrpSrcs(eh.grp,1)[0]||null):null;
       it.push({ic:sd==='f'?'sel':'enemy',img:src?'<img src="'+src+'" style="width:30px;height:30px;display:block">':'',t:'<span><span style="color:'+L0.col+'">'+L0.nm+(k+1)+'/'+at.length+'</span>: '+nm+'</span>',sub:(st.length?st.join(' ')+'　':'')+'タップでこのマーカーの操作',f:"nmSelK('"+sd+"',"+k+");NM_RM_SUB='unit1';NM_UNIT1='"+sd+"';btRmReopen("+n+")"});});
     });
-  it.push({ic:'sel',t:'ヘクスにカウンターを配置',sub:'自軍・敵軍を選んで 編成・車両・砲・煙幕・残骸を置く',f:"nmRmVehOpen("+n+",'"+((nmAllAt(H,'f').length||!nmAllAt(H,'e').length)?'f':'e')+"')"}); /* v785(ダルマ指示) */
+  it.push({ic:'sel',t:'ヘクスにカウンターを配置',sub:'自軍・敵軍を選んで 編成・車両・砲・煙幕・残骸を置く',f:"nmRmVehOpen("+n+",'"+(nmOwnSide()||((nmAllAt(H,'f').length||!nmAllAt(H,'e').length)?'f':'e'))+"')"}); /* v785(ダルマ指示) */ /* v1527: 自軍を最初から選ぶ */
   ['f','e'].forEach(function(isd){var vs=isd==='f'?'e':'f';if(nmAllAt(H,isd).some(function(x){return x.grp&&!x.veh&&!x.gun;})&&nmAllAt(H,vs).some(function(x){return x.veh;}))it.push({ic:'fire',t:'白兵戦(対車両): '+NM_SIDE_LBL[isd].nm+'の歩兵が攻撃',sub:'PAATC→CCVで撃破/走行不能、車両の反撃(機関銃)',f:"nmCvOpen("+n+",'"+isd+"')"});}); /* v429 */
   try{var cV=curScen(),vh=cV&&cV.vicHexes,ah=(vh&&vh.arrowHexes)||[];if(ah.length&&/退出/.test(String(cV.vic||''))){var nmH=BTG.nodes[n].nm,near=ah.some(function(h){var k=BTG.nodes.findIndex(function(x){return x.nm===(vh.board||'')+h;});return k>=0&&btDist(k,n)<=1;});
     if(near)['f','e'].forEach(function(sd){nmAllAt(H,sd).forEach(function(e){var r=nmExitVPOf(e);it.push({ic:'move',t:'マップから退出させる('+r.vp+'VP)',sub:(e.grp?nmGrpLbl(e.grp):nmMfTgtName(e))+'　勝利条件の退出VPに加える',f:"NM_SEL_EH=nmSideList('"+sd+"')["+nmSideList(sd).indexOf(e)+"];nmExitDo("+n+",'"+sd+"')"});});});}}catch(e){} /* v440 */
