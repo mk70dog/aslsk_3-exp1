@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1522</title>
+<title>ASL SKシリーズv1523</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1522">
+<meta property="og:title" content="ASL SKシリーズv1523">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.722"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.723"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1523="v1523(";
 var APP_VERSION_HIST_v1522="v1522(";
 var APP_VERSION_HIST_v1521="v1521(";
 var APP_VERSION_HIST_v1520="v1520(";
@@ -37849,7 +37850,7 @@ function nmsHdr(){return {'Authorization':'token '+gistGetToken(),'Accept':'appl
 function nmsPush(cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);return;}var sc=S.scen&&S.scen.sel;if(!sc){NMS.msg='シナリオが選ばれていません';if(cb)cb(false);return;}
   var h=nmsHash(),at=Date.now(),body={files:{}};body.files[nmsFile(nmsRole())]={content:JSON.stringify({v:1,scen:sc,at:at,dev:nmsDev(),side:nmsRole(),map:JSON.parse(h)})};
   NMS.busy=true;NMS.status='送信中';fetch('https://api.github.com/gists/'+gistGetId(),{method:'PATCH',headers:nmsHdr(),body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw new Error('PATCH '+r.status);
-    NMS.busy=false;NMS.lastHash=h;if(!nmsRole())NMS.remoteAt=at;NMS.last=Date.now();NMS.status='送信済み';NMS.msg='';if(cb)cb(true);nmsRedraw();}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=String(e.message||e);if(cb)cb(false);nmsRedraw();});}
+    NMS.busy=false;NMS.lastHash=h;if(!nmsRole())NMS.remoteAt=at;NMS.last=Date.now();NMS.status='送信済み';try{var mm=JSON.parse(h);nmDbg('マップ同期: 送信 自軍'+(mm.friendHexes||[]).length+'・敵軍'+(mm.enemyHexes||[]).length+' ('+nmsFile(nmsRole())+')');}catch(x){}NMS.msg='';if(cb)cb(true);nmsRedraw();}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=String(e.message||e);if(cb)cb(false);nmsRedraw();});}
 function nmsPull(force,cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);return;}NMS.busy=true;NMS.status=NMS.status||'受信中';
   fetch('https://api.github.com/gists/'+gistGetId()+'?t='+Date.now(),{headers:nmsHdr(),cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('GET '+r.status);return r.json();}).then(function(gist){
     NMS.busy=false;var rl=nmsRole(),f=(gist.files||{})[nmsFile(rl?(rl==='p1'?'p2':'p1'):'')];if(!f||!f.content){NMS.status=rl?'まだ相手のデータがありません':'まだ共有データがありません';if(cb)cb(false);nmsRedraw();return;}
@@ -37899,7 +37900,7 @@ function nmsRedraw(full){if(full||S.tab==='los'){if(document.getElementById('btR
 function nmsTick(){if(nmsMode()!=='auto'||!GIST_CONFIGURED()||NMS.busy)return;if(!(S.scen&&S.scen.sel))return;
   if(document.getElementById('nmDragG'))return;var h=nmsHash();
   if(NMS.lastHash&&h!==NMS.lastHash){if(!NMS.dirtyAt)NMS.dirtyAt=Date.now();if(Date.now()-NMS.dirtyAt>=2500){NMS.dirtyAt=0;nmsPush();}return;}
-  NMS.dirtyAt=0;if(!NMS.lastHash)NMS.lastHash=h;
+  NMS.dirtyAt=0;if(!NMS.lastHash){NMS.lastHash=h;if(!NMS.pushed1){NMS.pushed1=1;nmsPush();return;}} /* v1523(ダルマ「マップの同期がまだダメ」): 起動・同期オールにした直後は、変化が無いと送らなかった(前から置いていたカウンターが相手に届かない)。最初に1回送る */
   if(Date.now()-(NMS.lastPoll||0)>=6000){NMS.lastPoll=Date.now();nmsPull(false);}}
 function nmsStart(){if(NMS.timer){clearInterval(NMS.timer);NMS.timer=null;}if(nmsMode()==='auto'){NMS.lastHash='';NMS.timer=setInterval(nmsTick,1000);}}
 function nmsAgo(t){if(!t)return '';var s0=Math.round((Date.now()-t)/1000);return s0<60?s0+'秒前':Math.round(s0/60)+'分前';}
@@ -38670,6 +38671,7 @@ function nmDbgHead(){var a=[];try{a.push('版: '+(typeof APP_VERSION!=='undefine
   try{a.push('モード: '+nmModeNow()+'　オートダイス: '+(nmAdOn()?'ON':'OFF'));}catch(e){}
   try{var dsc=function(e){if(!e)return '-';var r=e.getBoundingClientRect(),cs=getComputedStyle(e);return e.tagName.toLowerCase()+(e.id?'#'+e.id:'')+(typeof e.className==='string'&&e.className?'.'+e.className.trim().split(/\s+/).slice(0,2).join('.'):'')+'['+Math.round(r.left)+','+Math.round(r.top)+' '+Math.round(r.width)+'x'+Math.round(r.height)+' '+cs.position+' bg'+cs.backgroundColor.replace(/\s/g,'')+']';};var pts=[[0.85,0.1],[0.85,0.4],[0.85,0.7],[0.5,0.4]];a.push('画面の点の要素(v1506 右上が黒い件の調査): '+pts.map(function(q){var x=Math.round(innerWidth*q[0]),y=Math.round(innerHeight*q[1]);return '('+x+','+y+') '+document.elementsFromPoint(x,y).slice(0,3).map(dsc).join(' > ');}).join(' | '));var mw=document.getElementById('losMapWrap'),cw=document.getElementById('losCropWrap'),sw=document.getElementById('losScrollWrap');a.push('地図: zoom '+S_LOS.zoom+' 回転 '+S_LOS.viewRot+' scroll '+(sw?sw.scrollLeft+','+sw.scrollTop+' / '+sw.scrollWidth+'x'+sw.scrollHeight:'-')+' crop '+dsc(cw)+' map '+dsc(mw)+' 画像 '+[].map.call(document.querySelectorAll('#losMapWrap img'),function(im){var r=im.getBoundingClientRect();return im.naturalWidth+'x'+im.naturalHeight+(im.complete?'':'(未)')+'@'+Math.round(r.left)+','+Math.round(r.top)+' '+Math.round(r.width)+'x'+Math.round(r.height);}).join(' '));}catch(e){a.push('点の要素: エラー '+e);}
   try{var CC=nmTurnRoleCnt();a.push('1P/2P: このiPad '+(nmsRole()||'未設定')+' '+Object.keys(CC).map(function(k){return k+' 自分'+CC[k].m+'・相手'+CC[k].o+'→'+(nmTurnRoleOf(k)||'-');}).join(' '));}catch(e){}
+  try{a.push('マップ同期: 判定の同期 '+(typeof nmJsLv==='function'?nmJsLv():'-')+' / nmsMode '+nmsMode()+' / タイマー '+(NMS.timer?'動作中':'止まっている')+' / 状態 '+(NMS.status||'-')+(NMS.msg?' '+NMS.msg:'')+' / 最後 '+(NMS.last?new Date(NMS.last).toTimeString().slice(0,8):'-')+' / 相手のデータ '+(NMS.remoteAt?new Date(NMS.remoteAt).toTimeString().slice(0,8):'-')+' / Gist '+(GIST_CONFIGURED()?'あり':'なし'));}catch(e){}
   try{var op=['btRm','nmIj','nmHq','nmHqPk','nmCcSc','nmRmPop','nmMvPk','nmFtMn'].filter(function(id){return document.getElementById(id);});a.push('開いている画面: '+(op.join(',')||'なし')+(typeof NM_RM_CUR!=='undefined'&&NM_RM_CUR?' (NM_RM_CUR='+NM_RM_CUR+')':''));}catch(e){}
   try{a.push('保存: '+(NM_SAVE_ST.ok?'OK':'失敗×'+NM_SAVE_ST.fail+'('+(NM_SAVE_ST.err||'')+')')+(NM_SAVE_ST.at?' 最後 '+new Date(NM_SAVE_ST.at).toTimeString().slice(0,8):'')+'　使用 '+nmLsKB()+'KB　大きい順: '+nmLsTop());}catch(e){}
   try{a.push('画面: '+innerWidth+'×'+innerHeight+'　'+navigator.userAgent.replace(/^.*?\(([^)]*)\).*$/,'$1'));}catch(e){}
