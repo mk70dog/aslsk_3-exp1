@@ -36249,6 +36249,7 @@ function nmRmBuildB(n,U,X2){
     if(!del&&ST(x,/^(nmRmFriendDel\(\)|nmRmEnemy\(\))$/)){del=x;return;}
     if(!face&&ST(x,/^nmRmFaceOpen\(/)){face=x;return;}
     if(!mv&&ST(x,/^nmMvStart\(/)){mv=x;return;}
+    if(!mv&&ST(x,/^nmMhOpen\(/)){mv=x;return;} /* sample-gunmv(ダルマ「攻撃の右に移動を追加」画像=砲のメニュー): 砲の「人力移動」を大きなボタン「移動」に */
     if(!atk&&ST(x,/^(nmVfOpen|nmMfOpen)\(/)){atk=x;return;}
     if(!mv&&!x.f&&/このカウンターを移動/.test(x.t||'')){mvInf=true;imv.push(x);return;}
     if(mvInf&&x.row&&x.btns&&x.btns.some(function(b){return /nmMvStartIm\(/.test(String(b[1]));})){imv.push(x);mvInf=false;return;}
