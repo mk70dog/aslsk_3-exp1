@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1496</title>
+<title>ASL SKシリーズv1497</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1496">
+<meta property="og:title" content="ASL SKシリーズv1497">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.696"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.697"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1497="v1497(";
 var APP_VERSION_HIST_v1496="v1496(";
 var APP_VERSION_HIST_v1495="v1495(";
 var APP_VERSION_HIST_v1494="v1494(";
@@ -43308,6 +43309,15 @@ function nmRmSizeInit(){try{var box=document.querySelector('#btRm .rmBox');if(!b
     var k=function(ev){ev.stopPropagation();ev.preventDefault();window.removeEventListener('click',k,true);};window.addEventListener('click',k,true);setTimeout(function(){window.removeEventListener('click',k,true);},300);};
   g.addEventListener('pointerup',end);g.addEventListener('pointercancel',function(){st=null;});g.addEventListener('click',function(e){e.stopPropagation();});}catch(e){console.log('nmRmSizeInit',e);}}
 (function(){var o=window.btRMenu;if(typeof o!=='function')return;window.btRMenu=function(){var r=o.apply(this,arguments);try{nmRmSizeInit();}catch(e){}return r;};})();
+/* v1497(ダルマ「メニューのサイズを記憶して戻っても同じ形サイズで表示する」): メニューから判定パネル(全画面の .rmFull など)へ進んで戻った時、進む前のメニューの位置・幅・高さに戻す */
+function nmRmTopMark(){try{var b=document.querySelector('#btRm .rmBox');if(b)b.__top=nmRmIsMenu(b)&&!NM_RM_SUB&&!window.NM_FACE&&!window.NM_RM_VEH;}catch(e){}} /* 一番上のヘクス/ユニットのメニューか(方向・配置などのサブ画面は除く) */
+(function(){var o=window.btRMenu;window.btRMenu=function(){var r=o.apply(this,arguments);nmRmTopMark();return r;};})();
+(function(){var o=btRmReopen;btRmReopen=function(n){var ob=document.querySelector('#btRm .rmBox'),was=false;try{was=!!ob&&!!ob.__top;if(was){var kz=nmFzK(),r0=ob.getBoundingClientRect();window.NM_RM_LM={l:ob.style.left,t:ob.style.top,w:r0.width/kz,h:r0.height/kz};}}catch(e){}
+  var r=o.apply(this,arguments);
+  try{var nb=document.querySelector('#btRm .rmBox'),L=window.NM_RM_LM;if(nb&&ob&&!was&&L&&nb.__top){var kz=nmFzK(),b=nmRmBounds(),h=Math.max(160,Math.min(L.h,b.B-b.T)),w=Math.max(240,Math.min(L.w,innerWidth/kz-16));
+    nb.style.width=w+'px';nb.style.maxWidth=w+'px';nb.style.height=h+'px';nb.style.maxHeight=h+'px';nb.style.overflowY='auto';if(L.l)nb.style.left=L.l;if(L.t)nb.style.top=L.t;
+    var rr=nb.getBoundingClientRect();if(rr.bottom/kz>b.B)nb.style.top=Math.max(b.T,b.B-h)+'px';if(rr.right/kz>innerWidth/kz-8)nb.style.left=Math.max(8,innerWidth/kz-8-w)+'px';}}catch(e){console.log('rmLM',e);}
+  return r;};})();
 /* sample-rmx(ダルマ指示「各メニュー右上にマルチ判定パネルと同じXを追加」): 基本画像のメニュー(.nmMu)の右上に丸い✕(.nmHqX と同じ見た目)。押すとメニューを閉じる */
 function nmRmXInit(){try{var box=document.querySelector('#btRm .rmBox.nmMu');if(!box||box.querySelector('.nmRmX'))return;var w=document.createElement('div');w.className='nmRmXW';w.innerHTML='<button class="nmRmX" title="'+T('閉じる')+'" aria-label="'+T('閉じる')+'"><span>✕</span></button>';box.insertBefore(w,box.firstChild);
   var b=w.querySelector('button');b.addEventListener('pointerdown',function(e){e.stopPropagation();});b.addEventListener('click',function(e){e.stopPropagation();e.preventDefault();BtRmClose();});}catch(e){console.log('nmRmXInit',e);}}
