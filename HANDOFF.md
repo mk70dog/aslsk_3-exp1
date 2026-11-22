@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-22 いまの作業=v1502 から再開。返事待ちなし】**
+- **【2026-11-22 いまの作業=v1503 から再開。返事待ちなし】**
+  - v1503(ダルマ報告+ログ「部隊を選択すると画面が閉じてしまうことがある」: tap span.rmTx の後に click が無く 0.4秒後 BtRmClose): 原因=v1479 の nmNoHov(pointerup から0.7秒以内に body のどこかの DOM が変わると #btRm の中を0.45秒押せなくする)。タップの pointerup と click の間に地図など別の所の DOM が変わると、click がメニューの中に当たらず背景(#btRm)に当たって閉じていた。起点を click に変え、#btRm の中(または #btRm 自体の追加)の変化の時だけにした。確認 /tmp/s/nohov.js(pointerup で別の DOM を変える: 旧 6回中6回閉じる→新 0回)。
   - v1502(ダルマ「実施」): sample-inlunit をマージ。
   - sample-inlunit(マージ済み): ダルマ「ヘクス 2部隊の場合には部隊を選択で(攻撃・移動・編成・消去+状態・射撃・状態クリア)を下に表示」。nmRMenuItems の外側ラッパーで、部隊の行(nmSelK…unit1)の f を nmRmInlTog に替え、選んだ部隊(NM_RM_INLEH)の操作を nmUnitMenu+nmRmBuildB(NM_BQ_FORCE で1部隊でなくても作る)で作り、部隊の一覧の下に金線で挟んで入れる。選んだ行は金枠(.nmInlOn)、もう一度タップで閉じる。NM_RM_INL=0 で従来(別画面)。確認 /tmp/s/inl.js。
   - v1501(ダルマ「実施」): sample-mhui をマージ。判定ボタン→nmMhGo で結果(res)が出ることを確認(/tmp/s/mh2.js)。
