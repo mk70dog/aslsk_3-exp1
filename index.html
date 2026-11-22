@@ -36283,7 +36283,7 @@ function nmRmCompose(n,part,G,A,U,X,V){ /* v410 */
   var more={ic:'tabs',t:'マップ管理',sub:'全画面・マップ共有・タブ移動・射撃済/残留火力を取り消す・元に戻す・マップクリア・拡大・回転',f:"nmRmSubOpen('more',"+n+")"};
   /* v731(ダルマ指示「折りたたみにする」): 起点(A)・見える範囲・移動コスト・移動などのヘクス操作は折りたたみ(見出しタップで開閉、開閉状態は覚える) */
   var Af=A;if(A.length){var op=nmRmAOpen(),hd={ic:'los',t:(op?'▾ ':'▸ ')+'LOS・移動',sub:op?'タップで閉じる':'起点(A)・見える範囲・移動コスト・移動',f:"nmRmAFold("+n+")"};Af=op?[hd].concat(A):[hd];}
-  var L=[].concat([{sep:1,lbl:'ユニット(移動・行動・配置・消去)'}],nmMvMenu(n),U,[{sep:1,lbl:'LOS・移動'}],Af); /* v784 */ /* ダルマ指示「(ヘクスのメニューの)赤枠部分(ヘクス(残骸・煙幕・マーク))を削除」 */
+  var L=[].concat([{sep:1,lbl:'ユニット(移動・行動・配置・消去)'}],nmMvMenu(n),U,window.NM_RM_NOLOS===0?[{sep:1,lbl:'LOS・移動'}].concat(Af):[]); /* v784 */ /* sample-nolos(ダルマ「LOS移動削除」画像=カウンター2個のヘクスのメニュー): 「LOS・移動」の欄を出さない(NM_RM_NOLOS=0 で従来) */ /* ダルマ指示「(ヘクスのメニューの)赤枠部分(ヘクス(残骸・煙幕・マーク))を削除」 */
   try{var BQ=nmRmBuildB(n,U,X2);if(BQ)L=[{sep:1,lbl:'ユニット(移動・行動・配置・消去)'}].concat(nmMvMenu(n),BQ.top); /* ダルマ指示「(カウンターのメニューの)赤枠部分削除」: LOS・移動 と ▾ヘクス(配置) の欄を出さない */}catch(e){console.log('nmRmBuildB',e);} /* v1170b(ダルマ指示「左クリックを整理・案B」sample-leftmenu): カウンター1個のヘクスは、大きなボタン(攻撃・移動・方向・消去)+折りたたみ(状態・操作 / ヘクス) */
   var vc={ic:'info',t:'勝利条件',sub:'シナリオの勝利条件と勝利ヘクスの支配',f:"NM_RM_SUB='vic';btRmReopen("+n+")"}; /* v439 */
   var ip={ic:'hex',t:'初期配置',sub:'グループごとに置ける場所を表示・編成/車両/砲を置く',f:"BtRmClose();nmIpOpen()"}; /* v620 */
