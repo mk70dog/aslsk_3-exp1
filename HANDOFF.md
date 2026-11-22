@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-22 いまの作業=v1487 から再開。返事待ち: sample-selhi の案1/2/3】**
+- **【2026-11-22 いまの作業=v1488 から再開。返事待ちなし】**
+  - v1488(ダルマ「案2」): sample-selhi をマージし NM_SELHI 既定=2(移動中のカウンターを一番前に描き直し、黄色の枠+「移動中」の札)。対象は移動中(NM_MOVE.eh)だけ。確認 /tmp/s/selhi.js。
   - sample-selhi(push済み、返事待ち): ダルマ「選択中のカウンターをわかるようにする サンプル」(移動中のスタックで、どれが動いているかわからない)。nmSelHiSVG(nmStatusOverlaySVG の後)。NM_MOVE.eh を一番前に描き直す。NM_SELHI=1 点滅する黄色の枠/2 黄色の枠+「移動中」の札/3 同じヘクスの他を暗くして光らせる、0で従来。確認 /tmp/s/selhi.js。
   - v1487: sample-grptag をマージ(ダルマ「実施」)。smoke 0。
   - sample-grptag(push済み): S.nmGrpTag[sc]={t:{slot:'A1'},n:{nat:最後の記号番号}}。分割・合流をした国は nmGrpTagFreeze で今の記号を固定、以後の新しい部隊は n+1(空いた記号は使わない)。分割=元 X1・新 X2、合流=若い記号+'+'。表示は右上の小さい字(¹²⁺)。nmGeFreeSlot で再利用する枠の記号は消す。確認 /tmp/s/tag.js。
