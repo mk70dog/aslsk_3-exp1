@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1530</title>
+<title>ASL SKシリーズv1531</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1530">
+<meta property="og:title" content="ASL SKシリーズv1531">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.730"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.731"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1531="v1531(";
 var APP_VERSION_HIST_v1530="v1530(";
 var APP_VERSION_HIST_v1529="v1529(";
 var APP_VERSION_HIST_v1528="v1528(";
@@ -37696,6 +37697,7 @@ function nmMcSection(it,n,te,r,key,reopen,opt){ /* 射撃の結果(IFT)rの士�
 var NM_MC_ST={},NM_MC_GRP=null;
 (function(){var o=nmMcSection;nmMcSection=function(it,n,te,r,key,reopen,opt){try{if(!te||!te.grp||te.veh||te.gun||!nmMcParse(r)||/^mcp/.test(String(key)))return o.apply(this,arguments);
   var sd=nmSideList('f').indexOf(te)>=0?'f':'e',H={boardId:te.boardId,col:te.col,row:te.row},L=nmAllAt(H,sd).filter(function(e){return e.grp&&!e.veh&&!e.gun&&(nmGeList(e.grp).items||[]).length;});
+  try{var J=NM_IJ,t0=J&&document.getElementById('nmIj')&&nmIjTgtEh();if(t0&&t0.grp===te.grp){var tg=nmIjTgts(),sel={};sel[t0.grp]=1;Object.keys(J.tgtM||{}).forEach(function(i){var x=tg[+i];if(x&&x.grp)sel[x.grp]=1;});L=L.filter(function(e){return sel[e.grp];});}}catch(e){} /* v1531: スポット判定では「一緒に目標」で選んだ部隊だけ */
   if(L.length<2)return o.apply(this,arguments);
   var S0=NM_MC_ST[key]||(NM_MC_ST[key]={}),cur=(NM_MC_GRP&&L.indexOf(NM_MC_GRP)>=0)?NM_MC_GRP:te;
   if(NM_MC&&NM_MC.key===key&&!S0.__init){S0[te.grp]=NM_MC;}S0.__init=1;
@@ -37891,7 +37893,7 @@ function nmsApply(P,rl){var m=P.map||{},sc=P.scen;try{nmOppLblSet(sc,P.lbl);}cat
     else{try{nmDbg('マップ同期(同期オール): 相手の国が分からない・同じ国なので反映しない(相手 '+(oN||'-')+' / こちら '+(myK||'-')+')');}catch(e){}}}
   else{if(!S.savedGroups)S.savedGroups={};if(rl){var gl=S.savedGroups[sc]||(S.savedGroups[sc]={}),gr=m.groups||{};Object.keys(gr).forEach(function(k){if(!gl[k])gl[k]=gr[k];});}else S.savedGroups[sc]=m.groups||{};}
   try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot&&S.savedGroups[sc][g.activeGroupSlot]){var keep=Draw;FgSelectGroupSlot(g.id,g.activeGroupSlot);}}catch(e){}
-  var abCh=false;if(!(jAllP&&myAt&&(P.at||0)<myAt)){abCh=JSON.stringify([S_LOS.pxA,S_LOS.pxB])!==JSON.stringify([m.pxA||null,m.pxB||null]);S_LOS.pxA=m.pxA||null;S_LOS.pxB=m.pxB||null;}if(!S_LOS.pxA||!S_LOS.pxB)S_LOS.result=null;
+  var abCh=false;if(!jAllP){abCh=JSON.stringify([S_LOS.pxA,S_LOS.pxB])!==JSON.stringify([m.pxA||null,m.pxB||null]);S_LOS.pxA=m.pxA||null;S_LOS.pxB=m.pxB||null;}if(!S_LOS.pxA||!S_LOS.pxB)S_LOS.result=null;
   NMS.lastHash=nmsHash();try{saveState();}catch(e){}
   if(abCh&&S_LOS.pxA&&S_LOS.pxB){try{LosRunPixel();}catch(e){}}else nmsRedraw(true);
   try{if(nmsMode()!=='auto')showToast(T('マップを受け取りました'),'grn');}catch(e){} /* v1158(sample): 自動のマップ共有は受信のたびに通知しない */nmsLog();}
