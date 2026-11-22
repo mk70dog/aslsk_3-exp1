@@ -37803,7 +37803,7 @@ function nmStClr(n,sd,k){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(!
 var NMS_FILE='aslsk_map.json';
 setTimeout(function(){try{nmsStart();}catch(e){}},1500);
 var NMS={busy:false,last:0,lastHash:'',remoteAt:0,status:'',msg:'',timer:null,from:'',remoteScen:''};
-function nmsMode(){try{return localStorage.getItem('aslsk_mapsync')||'off';}catch(e){return 'off';}}
+function nmsMode(){try{if(nmModeNow()==='online'&&GIST_CONFIGURED())return 'auto';}catch(e){}try{return localStorage.getItem('aslsk_mapsync')||'off';}catch(e){return 'off';}} /* sample-onsync(ダルマ「オンライン対戦モードは同期は常にオールオン」): オンライン対戦では常に自動で共有 */
 function nmsOnOff(n,on){var m=nmsMode();if(on){if(m!=='off'){btRmReopen(n);return;}var last='auto';try{last=localStorage.getItem('aslsk_mapsync_last')||'auto';}catch(e){}if(!GIST_CONFIGURED()){NM_RM_SUB='sync';btRmReopen(n);return;}nmsSetMode(n,last);}else nmsSetMode(n,'off');}
 function nmsSetMode(n,m){try{localStorage.setItem('aslsk_mapsync',m);if(m!=='off')localStorage.setItem('aslsk_mapsync_last',m);}catch(e){}nmsStart();if(m==='auto')nmsTick();nmsRe(n);}
 /* v608(ダルマ指示「同期の同時編集で消える対策 実施」): この端末の側(自軍f/敵軍e)を決めると、自分の側のマーカーは自分だけが書き、相手の側は相手のファイルから受け取る */
@@ -37873,6 +37873,7 @@ function nmsAgo(t){if(!t)return '';var s0=Math.round((Date.now()-t)/1000);return
 function nmRmSyncItems(n){var it=[],m=nmsMode();
   it.push({ic:'back',t:'← 戻る',sub:'マップ共有',f:"btRmReopen("+n+")"});it.push({sep:1});
   if(!GIST_CONFIGURED()){it.push({ic:'info',t:'GitHub Gistの設定がありません',sub:'シナリオタブ「BATTLE RECORD」の同期設定(トークンとGist ID)を、両方のiPadで同じにしてください'});return it;}
+  if(nmModeNow()==='online')it.push({ic:'info',t:'共有のしかた: 自動(常にオン)',sub:'オンライン対戦モードでは、マップと編成を常に自動で共有します(変更から約3秒で送る・約6秒ごとに受け取る)'});else
   it.push({row:1,ic:'tabs',t:'共有のしかた',btns:[[(m==='off'?'✓':'')+'オフ',"nmsSetMode("+n+",'off')"],[(m==='manual'?'✓':'')+'ボタン',"nmsSetMode("+n+",'manual')"],[(m==='auto'?'✓':'')+'自動',"nmsSetMode("+n+",'auto')"]]});
   var rl=nmsRole();it.push({row:1,ic:'tabs',t:'この端末のプレイヤー',btns:[[(rl==='p1'?'✓':'')+'1P(先手)',"nmsSetRole("+n+",'p1')"],[(rl==='p2'?'✓':'')+'2P(後手)',"nmsSetRole("+n+",'p2')"],[(rl===''?'✓':'')+'分けない',"nmsSetRole("+n+",'')"]]});
   it.push({ic:'info',t:'「この端末のプレイヤー」とは',sub:'2台で1Pと2Pを分けると、どちらの端末でも自分の部隊が「自軍」、相手の部隊が「敵軍」になります。自軍は自分だけが書くので、同時に編集しても消えません。「分けない」は今まで通り全体を丸ごと共有(後から送った方が勝つ)'});
@@ -41738,6 +41739,7 @@ function nmModeSet(m){var cur=nmModeNow();if(m===cur)return;
   else{S.nmMode=m;try{saveState();}catch(e){}
     try{if(m==='judge'){var sm=nmsMode();if(sm!=='off'){localStorage.setItem('aslsk_mapsync_prev',sm);nmsSetMode(-1,'off');}}
       else{var pv=localStorage.getItem('aslsk_mapsync_prev');if(pv&&nmsMode()==='off'&&GIST_CONFIGURED()){localStorage.removeItem('aslsk_mapsync_prev');nmsSetMode(-1,pv);}}}catch(e){}}
+  try{nmsStart();}catch(e){} /* sample-onsync */
   try{nmFtActFill();}catch(e){}try{nmSyChipFill();}catch(e){}try{btMapFullSync();}catch(e){}try{Draw();}catch(e){}
   btToast(m==='judge'?'判定支援(ライト): 同期なし':m==='online'?'判定支援(フル): 同期・配置あり':'AI対戦モード');}
 /* v639: HQ=判定の司令画面。A→Bの結果を上に、判定グループを下に */
