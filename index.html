@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1490</title>
+<title>ASL SKシリーズv1491</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1490">
+<meta property="og:title" content="ASL SKシリーズv1491">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.690"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.691"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1491="v1491(";
 var APP_VERSION_HIST_v1490="v1490(";
 var APP_VERSION_HIST_v1489="v1489(";
 var APP_VERSION_HIST_v1488="v1488(";
@@ -40952,8 +40953,8 @@ function nmMvStkMF(M){var sc=S.scen&&S.scen.sel,SG=sc&&S.savedGroups&&S.savedGro
   if(!g.pickerItems.length)return null;return losUnitMFPerUnit(g,M.eh.grp);}
 (function(){var oD=losStackMFDetails;losStackMFDetails=function(){var r=oD.apply(this,arguments);try{var M=NM_MOVE;if(M&&M.stk&&M.stk.length&&!r.isVehicle&&S_LOS.mfSource==='group'){var pu=nmMvStkMF(M);if(pu){r=Object.assign({},r,{mf:pu.mf,stack:true});r.members=[Object.assign({},(r.members&&r.members[0])||{},{mf:pu.mf,units:pu.units})];}}}catch(e){console.log('stk mf',e);}return r;};})();
 (function(){var oB=nmMvBarHTML;nmMvBarHTML=function(){var h=oB.apply(this,arguments);try{var M=NM_MOVE;if(!h||!M||!M.stkAll)return h;var add='';
-  if(M.stkAll.length&&M.stkAsk){var bs='flex:1;min-width:0;white-space:nowrap;font:inherit;font-weight:800;font-size:12px;letter-spacing:-.3px;padding:9px 2px;border-radius:9px;cursor:pointer;';add+='<div style="margin-top:5px;padding:6px;border-radius:10px;border:1.5px solid #ffd040;background:#2b2610"><div style="font-size:12px;color:#ffd040;font-weight:800;margin-bottom:2px">'+T('どう移動しますか？')+'</div><div style="font-size:11px;color:#aab4c0;margin-bottom:5px">'+T('同じヘクスの')+' '+M.stkAll.map(function(e){return nmGrpLbl(e.grp);}).join('・')+'</div><div style="display:flex;gap:6px">'
-    +'<button onclick="event.stopPropagation();nmMvStk(0)" style="'+bs+'border:1px solid #4a5262;background:#2a313d;color:#fff">'+T('選択した部隊で')+'</button>'
+  if(M.stkAll.length&&M.stkAsk){var bs='flex:1;min-width:0;white-space:nowrap;font:inherit;font-weight:800;font-size:13px;letter-spacing:-.4px;padding:9px 2px;border-radius:9px;cursor:pointer;';add+='<div style="margin-top:5px;padding:6px;border-radius:10px;border:1.5px solid #ffd040;background:#2b2610"><div style="font-size:12px;color:#ffd040;font-weight:800;margin-bottom:2px">'+T('どう移動しますか？')+'</div><div style="font-size:11px;color:#aab4c0;margin-bottom:5px">'+T('同じヘクスの')+' '+M.stkAll.map(function(e){return nmGrpLbl(e.grp);}).join('・')+'</div><div style="display:flex;gap:6px">'
+    +'<button onclick="event.stopPropagation();nmMvStk(0)" style="'+bs+'border:1px solid #4a5262;background:#2a313d;color:#fff">'+T('部隊で')+'</button>'
     +'<button onclick="event.stopPropagation();nmMvStk(1)" style="'+bs+'border:1px solid #3ca878;background:#1f4a34;color:#bff0d2">'+T('全ユニットで')+'</button></div></div>';}
   else if(M.stkAll.length){var on=M.stk&&M.stk.length,lk=nmMvUsed()>0;add+='<div style="margin-top:5px;padding-top:5px;border-top:1px solid #3a4352"><div style="font-size:11px;color:#aab4c0;margin-bottom:3px">'+T('同じヘクスの')+' '+M.stkAll.map(function(e){return nmGrpLbl(e.grp);}).join('・')+'</div>'
     +'<button onclick="event.stopPropagation();nmMvStk('+(on?0:1)+')" style="width:100%;font:inherit;font-weight:800;font-size:13px;padding:6px 8px;border-radius:9px;border:1px solid '+(on?'#3ca878':'#4a5262')+';background:'+(on?'#1f4a34':'#2a313d')+';color:'+(on?'#bff0d2':'#cfd8e3')+';'+(lk?'opacity:.6;':'')+'cursor:pointer">'+(on?'● '+T('スタックで一緒に移動'):'○ '+T('このユニットだけ移動'))+'</button></div>';}
@@ -50957,7 +50958,7 @@ function LosMapClick(ev){
   // (2)「rootはダブルタップで再スタート」: 同じヘクスを素早く連続タップ(400ms以内)した
   // 場合のみ、そのヘクスを起点として新規ルートに仕切り直す。単発タップで隣接も直線上でも
   // ないヘクスをタップした場合は何もしない(無視、エラー表示もしない)。
-  if(S_LOS.routeMode&&typeof NM_MOVE!=='undefined'&&NM_MOVE&&NM_MOVE.stkAsk){btToast(T('先に「選択した部隊で」か「全ユニットで」を選んでください'));return;} /* sample-stkask */
+  if(S_LOS.routeMode&&typeof NM_MOVE!=='undefined'&&NM_MOVE&&NM_MOVE.stkAsk){btToast(T('先に「部隊で」か「全ユニットで」を選んでください'));return;} /* sample-stkask */
   if(S_LOS.routeMode){
     // 2026-09追加(ダルマ報告バグ「起点の矢印が出ない」): 起点ヘクスでの初期VCAドラッグ設定
     // (LosRouteVcaDragEnd)が完了した直後は、同じタップに対して発火する重複クリックを
