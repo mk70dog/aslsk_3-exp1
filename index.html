@@ -38974,7 +38974,7 @@ function nmSuDraw(){var U=NM_SU;if(!U)return;try{nmSuSlots(U.nat).forEach(functi
   if(BK.x)h+=hd(T('グループが混ざっている編成'),'#ff9a3d',T('登場ターン・配置場所が違うユニットが入っています'))+'<div class="grps" style="margin-bottom:12px">'+BK.x.map(cardH).join('')+'</div>';
   if(BK.u)h+=hd(T('グループ未定'),'#8899aa',T('ユニットを入れるとグループが決まります'))+'<div class="grps" style="margin-bottom:12px">'+BK.u.map(cardH).join('')+'</div>';
   if(!GRS.length)h+='<div class="grps">'+addC(null)+'</div>';
-  var OS=nmSuOppSlots(nat);if(OS.length){h+=hd(T('相手のiPadの編成')+(nmsRole()?' ('+(nmsRole()==='p1'?'2P':'1P')+')':''),'#7ec8e3',T('タップで選んで編集できます・⇅同期で相手のiPadに反映(後から変えた方が残る)')+' '+OS.length)+'<div class="grps nmOppG" style="margin-bottom:12px">'+OS.map(cardH).join('')+'</div>';} /* sample-oppedit(ダルマ「判定モード 同期 両軍の部隊を編集可能にする」→「全部」「後から変えた方」): 相手の編成も自分の編成と同じカードで編集。変更は v1432 の edits で相手に送る */ /* v1148(ダルマ報告「同期 部隊の準備に出ない」): 受信した相手の編成を、その国のタブに見るだけで並べる */
+  var OS=nmSuOppSlots(nat);if(OS.length){h+=hd(T('相手のiPadの編成')+(nmsRole()?' ('+(nmsRole()==='p1'?'2P':'1P')+')':''),'#7ec8e3',T('⇅同期で受信・見るだけ')+' '+OS.length)+'<div class="grps" style="margin-bottom:12px">'+OS.map(function(k){var d=nmGeList(k),car=nmSuCarry(k),om=nmSuOnMap(k);return '<div class="g" style="border-color:#2f5a6e;background:#141c24;cursor:default"><div class="gh"><span style="font-size:15px;font-weight:bold;color:#7ec8e3">'+nmGrpLbl(k)+'</span><span>'+(om?'地図: '+om:'未配置')+'</span></div>'+(d.items||[]).map(function(x){var cs=car[x.pid]||[];return '<div class="u" style="cursor:default">'+nmSuCtr('u:'+(x.nat||nat)+'|'+x.label,30)+'<span>'+x.label+(x.broken?' <span style="color:#ff6060">混乱</span>':'')+'</span><span class="sw">'+cs.map(function(c){return nmSuSwImg(c.kind,c.id,26);}).join('')+'</span></div>';}).join('')+'</div>';}).join('')+'</div>';} /* v1148(ダルマ報告「同期 部隊の準備に出ない」): 受信した相手の編成を、その国のタブに見るだけで並べる */
   h+='</div></div>';
   h+='<div class="foot"><div class="btn" style="margin-right:auto;border-color:#8b1e1e;color:#ffb0a0" onclick="nmSuReset()">'+(U.rst?'もう一度押すとリセット':'リセット')+'</div><div class="btn" onclick="nmSuSwClrAll()">支援火器を全部外す</div><div class="btn" onclick="nmSuAuto()">残りを自動で振り分け</div>'+(nmSuOffEntry(nat)?'<div class="btn pri" title="進入のときに盤外のスタックになります" onclick="nmSuClose()">完了(盤外から進入)</div>':'<div class="btn" onclick="nmSuClose()">閉じる</div>')+(!nmSuOffEntry(nat)&&U.slot&&!nmSuSlotOff(U.slot,nat)&&(nmGeList(U.slot).items||[]).length?'<div class="btn pri" onclick="nmSuPlace(\''+U.slot+'\')">'+nmGrpLbl(U.slot)+'を地図に置く</div>':'')+'</div></div>';
   var el=document.getElementById('nmSu');if(!el){el=document.createElement('div');el.id='nmSu';el.onclick=function(){if(NM_SUDD&&NM_SUDD.eat){NM_SUDD.eat=0;return;}nmSuClose();};document.body.appendChild(el);nmSuDnDInit(el);}
@@ -39880,7 +39880,6 @@ function nmGrpRenameDo(k){var inp=document.getElementById('nmGrpRnIn'),v=inp?inp
 function nmGsSt(k){var sc=S.scen&&S.scen.sel;S[k]=S[k]||{};return S[k][sc]||(S[k][sc]={});}
 function nmGsGrpCore(g){return g?{pickerNat:g.pickerNat||null,pickerItems:g.pickerItems||[],sw:g.sw||[],swOwner:g.swOwner||{},latw:g.latw||[]}:null;}
 function nmGsGrpSig(g){return JSON.stringify(nmGsGrpCore(g));} /* 判定で変わる中身(ユニット・状態・SW)だけを比べる */
-function nmGsOwnTouch(G){var A=nmGsSt('nmOwnAt'),Sg=nmGsSt('nmOwnSig'),now=Date.now();Object.keys(G||{}).forEach(function(k){if(/^相手/.test(k))return;var sg=nmGsGrpSig(G[k]);if(Sg[k]!==sg){if(Sg[k]!==undefined)A[k]=now;Sg[k]=sg;}});} /* sample-oppedit: 自分の編成を最後に変えた時刻(相手からの編集と比べる) */
 function nmGsScanEdits(G){var R=nmGsSt('nmOppRcv'),E=nmGsSt('nmOppEd');Object.keys(R).forEach(function(k){var cur=nmGsGrpSig(G[k]);if(cur===R[k]){if(E[k]&&E[k].sig!==cur)delete E[k];return;}if(!E[k]||E[k].sig!==cur)E[k]={at:Date.now(),sig:cur};});
   var o={};Object.keys(E).forEach(function(k){o[k.replace(/^相手/,'')]={at:E[k].at,g:G[k]?JSON.parse(JSON.stringify(nmGsGrpCore(G[k]))):null};});return o;}
 function nmGsApplyEdit(sc,k,e){var G=S.savedGroups[sc]||(S.savedGroups[sc]={}),before=nmGsGrpSig(G[k]);if(e.g)G[k]=Object.assign(G[k]||{},JSON.parse(JSON.stringify(e.g)));else delete G[k];
@@ -39927,7 +39926,7 @@ function nmGsSync(o){o=o||{};var Q=!!o.auto,sc=S.scen&&S.scen.sel;if(!sc){if(!Q)
   if(!GIST_CONFIGURED()){if(!Q)btToast('GitHub Gistの設定がありません(シナリオタブ「BATTLE RECORD」の同期設定でトークンとGist IDを入れてください)');return;}
   var rl=nmsRole();if(!rl){if(!Q)nmGsRoleAsk();return;}if(NM_GS.busy){if(!Q)btToast('同期中です');return;}
   try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot)nmGeSync(g.activeGroupSlot);}catch(e){}
-  nmAsTouch();try{nmGsOwnTouch((S.savedGroups&&S.savedGroups[sc])||{});}catch(e){}
+  nmAsTouch();
   var me=rl==='p1'?'1P':'2P',op=rl==='p1'?'p2':'p1',opN=op==='p1'?'1P':'2P';
   var own=nmGsOwn((S.savedGroups&&S.savedGroups[sc])||{}),nOwn=Object.keys(own).length,body={files:{}};
   var T0=S.turn||{},turn={cur:T0.cur||1,half:T0.half||0,phase:T0.phase||'rph',ended:!!T0.ended,at:S.nmAsTurnAt||0},pf={used:(S.pfTracker&&S.pfTracker.used)||0,at:S.nmAsPfAt||0};
@@ -39946,7 +39945,7 @@ function nmGsSync(o){o=o||{};var Q=!!o.auto,sc=S.scen&&S.scen.sel;if(!sc){if(!Q)
       Object.keys(gr).forEach(function(k){var kk='相手'+k,x=JSON.parse(JSON.stringify(gr[k]));x.opp=1;Rv[kk]=nmGsGrpSig(x);var pd=Ed[kk];if(pd&&(Ak[k]||0)>=pd.at){delete Ed[kk];pd=null;}
         if(pd&&old[kk])G[kk]=old[kk];else G[kk]=x;nIn++;}); /* v1432: こちらの判定結果を相手が反映する(ack)までは、こちらの内容を残す */
       Object.keys(Ed).forEach(function(kk){if(!gr[kk.replace(/^相手/,'')]){if((Ak[kk.replace(/^相手/,'')]||0)>=Ed[kk].at)delete Ed[kk];else Rv[kk]=nmGsGrpSig(null);}});
-      var Me=nmGsSt('nmEdAck'),PE=P.edits||{},nAp=0;try{nmGsOwnTouch(S.savedGroups[sc]||{});}catch(x){}var OA=nmGsSt('nmOwnAt');Object.keys(PE).forEach(function(k){var e=PE[k];if(!e||!e.at||(Me[k]||0)>=e.at)return;if((OA[k]||0)>e.at){Me[k]=e.at;try{nmDbg('編成同期: 相手の編集('+k+')より後にこちらで変えたので、こちらを残す');}catch(x){}return;} /* 後から変えた方を残す */nmGsApplyEdit(sc,k,e);Me[k]=e.at;try{nmGsOwnTouch(S.savedGroups[sc]||{});nmGsSt('nmOwnAt')[k]=e.at;}catch(x){}nAp++;});
+      var Me=nmGsSt('nmEdAck'),PE=P.edits||{},nAp=0;Object.keys(PE).forEach(function(k){var e=PE[k];if(!e||!e.at||(Me[k]||0)>=e.at)return;nmGsApplyEdit(sc,k,e);Me[k]=e.at;nAp++;});
       if(nAp){got.push('判定結果'+nAp+'編成');own=nmGsOwn(S.savedGroups[sc]||{});nOwn=Object.keys(own).length;ack=Me;needSend=true;}
       var sg=function(M){return JSON.stringify(Object.keys(M).filter(function(k){return /^相手/.test(k);}).sort().map(function(k){return [k,M[k]];}));};if(sg(old)!==sg(G))got.push('編成'+nIn);
       if(P.turn&&(P.turn.at||0)>(S.nmAsTurnAt||0)){var t=P.turn;if(!S.turn)S.turn={cur:1,half:0,ended:false,phase:'rph'};S.turn.cur=t.cur;S.turn.half=t.half;S.turn.phase=t.phase;S.turn.ended=!!t.ended;S.nmAsTurnAt=t.at;try{syncAutoSideFromHalf();}catch(e){}try{renderPhaseTracker();}catch(e){}got.push(nmAsTurnLbl(t));turn=t;}
