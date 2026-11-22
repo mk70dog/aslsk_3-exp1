@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1524</title>
+<title>ASL SKシリーズv1525</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1524">
+<meta property="og:title" content="ASL SKシリーズv1525">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.724"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.725"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1525="v1525(";
 var APP_VERSION_HIST_v1524="v1524(";
 var APP_VERSION_HIST_v1523="v1523(";
 var APP_VERSION_HIST_v1522="v1522(";
@@ -37845,13 +37846,13 @@ function nmsSetRole(n,r){try{localStorage.setItem('aslsk_mapsync_side',r||'');}c
 function nmsFile(r){return r?'aslsk_map_'+r+'.json':NMS_FILE;}
 function nmsDev(){try{var d=localStorage.getItem('aslsk_dev_id');if(!d){d=Math.random().toString(36).slice(2,8);localStorage.setItem('aslsk_dev_id',d);}return d;}catch(e){return 'x';}}
 function nmsPayloadMap(){var sc=S.scen&&S.scen.sel;return {friendHexes:S_LOS.friendHexes||[],enemyHexes:S_LOS.enemyHexes||[],wreckHexes:S_LOS.wreckHexes||{},wreckVeh:S_LOS.wreckVeh||{},smoke:S_LOS.smoke||{},buildingMarks:S_LOS.buildingMarks||{},pxA:S_LOS.pxA||null,pxB:S_LOS.pxB||null,route:S_LOS.route||null,resid:S_LOS.resid||{},
-  groups:nmGsOwn((sc&&S.savedGroups&&S.savedGroups[sc])||{})};}
+  groups:nmGsOwn((sc&&S.savedGroups&&S.savedGroups[sc])||{}),myNat:(function(){try{return nmMyNatNow()||'';}catch(e){return '';}})(),mySide:(function(){try{var k=nmMyNatNow();return k?nmSuSide(k):'';}catch(e){return '';}})()};} /* v1525: 送る側の国と、その国が送る側の地図で自軍(f)/敵軍(e)のどちらか */
 function nmsHash(){try{var g=null;try{g=losPrimaryFireGroup();}catch(e){}if(g&&g.activeGroupSlot)nmGeSync(g.activeGroupSlot);}catch(e){}return JSON.stringify(nmsPayloadMap());}
 function nmsHdr(){return {'Authorization':'token '+gistGetToken(),'Accept':'application/vnd.github+json','Content-Type':'application/json'};}
 function nmsPush(cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);return;}var sc=S.scen&&S.scen.sel;if(!sc){NMS.msg='シナリオが選ばれていません';if(cb)cb(false);return;}
   var h=nmsHash(),at=Date.now(),body={files:{}};body.files[nmsFile(nmsRole())]={content:JSON.stringify({v:1,scen:sc,at:at,dev:nmsDev(),side:nmsRole(),map:JSON.parse(h)})};
   NMS.busy=true;NMS.status='送信中';fetch('https://api.github.com/gists/'+gistGetId(),{method:'PATCH',headers:nmsHdr(),body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw new Error('PATCH '+r.status);
-    NMS.busy=false;NMS.lastHash=h;if(!nmsRole())NMS.remoteAt=at;NMS.last=Date.now();NMS.status='送信済み';try{var mm=JSON.parse(h);nmDbg('マップ同期: 送信 自軍'+(mm.friendHexes||[]).length+'・敵軍'+(mm.enemyHexes||[]).length+' ('+nmsFile(nmsRole())+')');}catch(x){}NMS.msg='';if(cb)cb(true);nmsRedraw();}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=String(e.message||e);if(cb)cb(false);nmsRedraw();});}
+    NMS.busy=false;NMS.lastHash=h;if(!nmsRole())NMS.remoteAt=at;NMS.last=Date.now();NMS.status='送信済み';try{var mm=JSON.parse(h);nmDbg('マップ同期: 送信 自軍'+(mm.friendHexes||[]).length+'・敵軍'+(mm.enemyHexes||[]).length+' この国 '+(mm.myNat||'-')+'='+(mm.mySide||'-')+' ('+nmsFile(nmsRole())+')');}catch(x){}NMS.msg='';if(cb)cb(true);nmsRedraw();}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=String(e.message||e);if(cb)cb(false);nmsRedraw();});}
 function nmsPull(force,cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);return;}NMS.busy=true;NMS.status=NMS.status||'受信中';
   fetch('https://api.github.com/gists/'+gistGetId()+'?t='+Date.now(),{headers:nmsHdr(),cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('GET '+r.status);return r.json();}).then(function(gist){
     NMS.busy=false;var rl=nmsRole(),f=(gist.files||{})[nmsFile(rl?(rl==='p1'?'p2':'p1'):'')];if(!f||!f.content){NMS.status=rl?'まだ相手のデータがありません':'まだ共有データがありません';if(cb)cb(false);nmsRedraw();return;}
@@ -37863,8 +37864,10 @@ function nmsApply(P,rl){var m=P.map||{},sc=P.scen;nmBkSnap('受信前(共有で�
   /* v1412(ダルマ指示「マップ上のカウンターの位置は同期しないようにする」): マップ同期の受信で自軍・敵軍のカウンター(friendHexes/enemyHexes)の位置は置き換えない(以前: 2Pなら相手の自軍→こちらの敵軍を上書き) */try{nmDbg('マップ同期を受信(カウンターの位置は変えない)');}catch(e){}
   S_LOS.wreckHexes=m.wreckHexes||{};S_LOS.wreckVeh=m.wreckVeh||{};S_LOS.smoke=m.smoke||{};S_LOS.buildingMarks=m.buildingMarks||{};S_LOS.route=m.route||null;S_LOS.resid=m.resid||{};
   var jAll=false;try{jAll=!!rl&&S.nmMode!=='online'&&nmJsLv()==='all';}catch(e){}
-  if(jAll){ /* v1522(ダルマ報告「同期オールしても2Pのマップに表示されない」): 判定モードの同期オールは、相手の自軍(相手が置いた自分の部隊)をこちらの敵軍に置く。こちらの自軍は変えない(v1412 の「開き直すと位置が変わる」は自分の側を上書きしていたため)。編成は⇅同期(相手〜)が受け持つので、マップ同期では編成を足さない(相手の編成がこちらの編成 A〜 に入って部隊がダブっていた) */
-    var fr=(m.friendHexes||[]).map(function(e){var x=JSON.parse(JSON.stringify(e));if(x.grp&&!x.veh&&!x.gun)x.grp='相手'+x.grp;return x;});S_LOS.enemyHexes=fr;try{nmDbg('マップ同期(同期オール): 相手の部隊 '+fr.length+'個を敵軍に反映');}catch(e){}}
+  if(jAll){ /* v1522→v1525(ダルマ報告「1Pの配置した部隊がきえて2Pの配置した部隊だけがお互いにマップ上に配置」): 自軍/敵軍は国で決まる(攻撃側=自軍の色、両方のiPadで同じ)ので、「相手の自軍=こちらの敵軍」ではなかった。相手の国(myNat)の側(mySide)にある相手のカウンターを、こちらでその国がいる側に置き、その側のこちらのカウンターだけ置き換える。こちらの国の側は変えない */
+    var oN=m.myNat||'',oS=m.mySide||'',myK='';try{myK=nmMyNatNow();}catch(e){}
+    if(oN&&oS&&oN!==myK){var src=(oS==='f'?m.friendHexes:m.enemyHexes)||[],dst=nmSuSide(oN),fr=src.map(function(e){var x=JSON.parse(JSON.stringify(e));if(x.grp&&!x.veh&&!x.gun)x.grp='相手'+x.grp;return x;});if(dst==='f')S_LOS.friendHexes=fr;else S_LOS.enemyHexes=fr;try{nmDbg('マップ同期(同期オール): 相手('+nmNatLbl(oN)+')の部隊 '+fr.length+'個を'+(dst==='f'?'自軍':'敵軍')+'側に反映');}catch(e){}}
+    else{try{nmDbg('マップ同期(同期オール): 相手の国が分からない・同じ国なので反映しない(相手 '+(oN||'-')+' / こちら '+(myK||'-')+')');}catch(e){}}}
   else{if(!S.savedGroups)S.savedGroups={};if(rl){var gl=S.savedGroups[sc]||(S.savedGroups[sc]={}),gr=m.groups||{};Object.keys(gr).forEach(function(k){if(!gl[k])gl[k]=gr[k];});}else S.savedGroups[sc]=m.groups||{};}
   try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot&&S.savedGroups[sc][g.activeGroupSlot]){var keep=Draw;FgSelectGroupSlot(g.id,g.activeGroupSlot);}}catch(e){}
   var abCh=JSON.stringify([S_LOS.pxA,S_LOS.pxB])!==JSON.stringify([m.pxA||null,m.pxB||null]);S_LOS.pxA=m.pxA||null;S_LOS.pxB=m.pxB||null;if(!S_LOS.pxA||!S_LOS.pxB)S_LOS.result=null;
