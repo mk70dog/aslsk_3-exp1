@@ -39282,6 +39282,7 @@ function nmRmMhItems(n){var M=NM_MH;if(!M)return nmRMenuItems(n);var eh=nmUnitAt
   var TO=(M.to!=null&&BTG.nodes[M.to])?BTG.nodes[M.to].nm:null;
   it.push({ic:'move',t:TO?'行き先 <b style="color:#ffd24a">'+TO+'</b>':'<span style="color:#8fa6bd">行き先: 右の一覧か地図でヘクスを選ぶ</span>'});
   if(TO){it.push({ic:'fire',t:'ダイスを振って判定',sub:TO+'へ。赤白のダイスを振る',f:"NM_MH.rd=0;NM_MH.wd=0;nmMhGo("+n+")"});if(M.rd&&M.wd)it.push({ic:'fire',t:'入れた目で判定する',sub:'赤'+M.rd+'・白'+M.wd+'=DR'+(M.rd+M.wd)+'　'+TO+'へ',f:"nmMhGo("+n+")"});}
+  it.push({html:'<span class="nmColBrk"></span>'}); /* ダルマ「ダイスの下に判定ボタンを表示」: 判定ボタンまでを左の列、行き先の選び方は右の列 */
   it.push({ic:'tgt',t:'<span style="color:#3ca878">地図で動かすヘクスを選ぶ</span>',sub:'となりのヘクスに必要なDRを表示。タップで行き先に',f:"nmMhPick("+n+")"}); /* sample(ダルマ指示「マップで指示できるようにする」) */
   it.push({ic:'tgt',t:'動かすヘクス(タップで行き先に)'});
   BTG.nodes[M.n].nb.forEach(function(b){var c=nmMhCost(M.n,b),N=BTG.nodes[b];if(!c)return;var drm=c.mf+c.tem+(c.road?-2:0)+(M.mmc?-1:0)+Math.max(-4,-2*M.xs-M.xh),need=(g.m||0)-drm;
