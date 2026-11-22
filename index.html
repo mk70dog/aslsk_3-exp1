@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1521</title>
+<title>ASL SKシリーズv1522</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1521">
+<meta property="og:title" content="ASL SKシリーズv1522">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.721"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.722"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1522="v1522(";
 var APP_VERSION_HIST_v1521="v1521(";
 var APP_VERSION_HIST_v1520="v1520(";
 var APP_VERSION_HIST_v1519="v1519(";
@@ -37859,7 +37860,10 @@ function nmsPull(force,cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);retu
 function nmsApply(P,rl){var m=P.map||{},sc=P.scen;nmBkSnap('受信前(共有で置き換え)');
   /* v1412(ダルマ指示「マップ上のカウンターの位置は同期しないようにする」): マップ同期の受信で自軍・敵軍のカウンター(friendHexes/enemyHexes)の位置は置き換えない(以前: 2Pなら相手の自軍→こちらの敵軍を上書き) */try{nmDbg('マップ同期を受信(カウンターの位置は変えない)');}catch(e){}
   S_LOS.wreckHexes=m.wreckHexes||{};S_LOS.wreckVeh=m.wreckVeh||{};S_LOS.smoke=m.smoke||{};S_LOS.buildingMarks=m.buildingMarks||{};S_LOS.route=m.route||null;S_LOS.resid=m.resid||{};
-  if(!S.savedGroups)S.savedGroups={};if(rl){var gl=S.savedGroups[sc]||(S.savedGroups[sc]={}),gr=m.groups||{};Object.keys(gr).forEach(function(k){if(!gl[k])gl[k]=gr[k];});}else S.savedGroups[sc]=m.groups||{};
+  var jAll=false;try{jAll=!!rl&&S.nmMode!=='online'&&nmJsLv()==='all';}catch(e){}
+  if(jAll){ /* v1522(ダルマ報告「同期オールしても2Pのマップに表示されない」): 判定モードの同期オールは、相手の自軍(相手が置いた自分の部隊)をこちらの敵軍に置く。こちらの自軍は変えない(v1412 の「開き直すと位置が変わる」は自分の側を上書きしていたため)。編成は⇅同期(相手〜)が受け持つので、マップ同期では編成を足さない(相手の編成がこちらの編成 A〜 に入って部隊がダブっていた) */
+    var fr=(m.friendHexes||[]).map(function(e){var x=JSON.parse(JSON.stringify(e));if(x.grp&&!x.veh&&!x.gun)x.grp='相手'+x.grp;return x;});S_LOS.enemyHexes=fr;try{nmDbg('マップ同期(同期オール): 相手の部隊 '+fr.length+'個を敵軍に反映');}catch(e){}}
+  else{if(!S.savedGroups)S.savedGroups={};if(rl){var gl=S.savedGroups[sc]||(S.savedGroups[sc]={}),gr=m.groups||{};Object.keys(gr).forEach(function(k){if(!gl[k])gl[k]=gr[k];});}else S.savedGroups[sc]=m.groups||{};}
   try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot&&S.savedGroups[sc][g.activeGroupSlot]){var keep=Draw;FgSelectGroupSlot(g.id,g.activeGroupSlot);}}catch(e){}
   var abCh=JSON.stringify([S_LOS.pxA,S_LOS.pxB])!==JSON.stringify([m.pxA||null,m.pxB||null]);S_LOS.pxA=m.pxA||null;S_LOS.pxB=m.pxB||null;if(!S_LOS.pxA||!S_LOS.pxB)S_LOS.result=null;
   NMS.lastHash=nmsHash();try{saveState();}catch(e){}
