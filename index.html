@@ -46860,6 +46860,31 @@ function nmPlainMarkSVG(sd,d,eh){
   }
   return h+'</g>';
 }
+/* sample-selhi(ダルマ「選択中のカウンターをわかるようにする サンプル」): 移動中のカウンターを地図で目立たせる。NM_SELHI=1 点滅枠/2 枠+札/3 前に出す+ヘクス+他を暗く、0で従来 */
+function nmSelHiEh(){try{if(typeof NM_MOVE!=='undefined'&&NM_MOVE&&NM_MOVE.eh)return {eh:NM_MOVE.eh,sd:NM_MOVE.sd||'f',lb:'移動中'};}catch(e){}return null;}
+function nmSelHiSVG(dl){var k=(window.NM_SELHI===undefined)?1:window.NM_SELHI;if(!k)return '';var o=nmSelHiEh();if(!o)return '';var eh=o.eh,sd=o.sd;
+  if(typeof NM_DRAG!=='undefined'&&NM_DRAG&&NM_DRAG.moving)return '';if(nmRtmHideCtr())return '';
+  var g=losColRowToGlobalCanon(eh.boardId,eh.col,eh.row);if(!g)return '';var c=losCanonicalToDisplay(g.x,g.y,dl),d={x:c.x,y:c.y};
+  if(sd==='f'){if(nmUnitAt(eh,'e'))d={x:d.x-8,y:d.y-8};}else{if(nmUnitAt(eh,'f'))d={x:d.x+8,y:d.y+8};}
+  var so=nmStackOff(eh,sd);d={x:d.x+so.dx,y:d.y+so.dy};
+  var isG=!!(eh.grp&&!eh.veh&&!eh.gun),kk=1;try{if(isG)kk=Math.max(1,Math.min(3,nmGrpSrcs(eh.grp).length));}catch(e){}
+  var S0=isG?46:50,ex=(kk-1)*5,x0=d.x-S0/2-4,y0=d.y-S0/2-ex-4,w=S0+ex+8,hh=S0+ex+8,Y='#ffd040',h='';
+  var R='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">',E='</g>';
+  var rc=function(sw,col,op,extra){return '<rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="'+hh+'" rx="7" fill="none" stroke="'+col+'" stroke-width="'+sw+'"'+(op!=null?' opacity="'+op+'"':'')+'>'+(extra||'')+'</rect>';};
+  var redraw=function(){try{return isG?nmGrpSVG(eh,d,sd):nmEnemyVehSVG(eh,d,eh.veh?nmVaslSrc(eh.veh):(eh.gun?nmVaslSrc(eh.gun):null),sd==='f'?'#33aaff':undefined);}catch(e){return '';}};
+  var dimO=function(){var h2='';[['f',nmAllAt(eh,'f')],['e',nmAllAt(eh,'e')]].forEach(function(P){P[1].forEach(function(x){if(x===eh)return;var gx=losColRowToGlobalCanon(x.boardId,x.col,x.row);if(!gx)return;var dx=losCanonicalToDisplay(gx.x,gx.y,dl);if(P[0]==='f'&&nmUnitAt(x,'e'))dx={x:dx.x-8,y:dx.y-8};if(P[0]==='e'&&nmUnitAt(x,'f'))dx={x:dx.x+8,y:dx.y+8};var s2=nmStackOff(x,P[0]);dx={x:dx.x+s2.dx,y:dx.y+s2.dy};var kx=1;try{if(x.grp&&!x.veh&&!x.gun)kx=Math.max(1,Math.min(3,nmGrpSrcs(x.grp).length));}catch(e){}var ey=(kx-1)*5,Sx=(x.grp&&!x.veh&&!x.gun)?46:50;
+    h2+='<g transform="rotate('+(-S_LOS.viewRot)+' '+dx.x+' '+dx.y+')"><rect x="'+(dx.x-Sx/2)+'" y="'+(dx.y-Sx/2-ey)+'" width="'+(Sx+ey)+'" height="'+(Sx+ey)+'" rx="4" fill="#000" opacity=".55"/></g>';});});return h2;};
+  if(k===1){ /* 案1: 一番前に出して、黄色の太い枠が点滅 */
+    h+=redraw()+R+rc(8,'#000',.55)+rc(4,Y,null,'<animate attributeName="opacity" values="1;.25;1" dur="1.1s" repeatCount="indefinite"/>')+E;}
+  else if(k===2){ /* 案2: 一番前に出して、黄色の枠+上に「移動中」の札 */
+    var tw=58,tx=x0+w/2,ty=y0-8;
+    h+=redraw()+R+rc(7,'#000',.55)+rc(3.5,Y)
+      +'<path d="M'+(tx-6)+' '+(ty-1)+' L'+tx+' '+(ty+6)+' L'+(tx+6)+' '+(ty-1)+' Z" fill="'+Y+'" stroke="#000" stroke-width="1"/>'
+      +'<rect x="'+(tx-tw/2)+'" y="'+(ty-22)+'" width="'+tw+'" height="22" rx="11" fill="'+Y+'" stroke="#000" stroke-width="1.5"/>'
+      +'<text x="'+tx+'" y="'+(ty-6.5)+'" text-anchor="middle" font-size="13" font-weight="900" fill="#1a1204" font-family="AppFont,AppJP,sans-serif">'+o.lb+'</text>'+E;}
+  else{ /* 案3: 同じヘクスの他のカウンターを暗くし、選んだものを一番前に出して光らせる */
+    h+=dimO()+R+'<rect x="'+(x0-3)+'" y="'+(y0-3)+'" width="'+(w+6)+'" height="'+(hh+6)+'" rx="9" fill="'+Y+'" opacity=".45"/>'+E+redraw()+R+rc(3,Y)+E;}
+  return h;}
 function nmFriendOverlaySVG(dl){ /* v345: 自軍のカウンター(青の枠)。車両未定は「自軍」の札 */
   var h='';(nmRtmHideCtr()?[]:(S_LOS.friendHexes||[])).forEach(function(eh){var g=losColRowToGlobalCanon(eh.boardId,eh.col,eh.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);
     if(NM_DRAG&&NM_DRAG.moving&&!NM_DRAG.mv&&NM_DRAG.ref===eh)return;
@@ -51993,6 +52018,7 @@ function LOS_PAGE(){
   h+=losEnemyHexOverlaySVG(dispLayout);
   h+=nmFriendOverlaySVG(dispLayout); /* v345 */
   h+=nmStatusOverlaySVG(dispLayout); /* v405: マーカーの状態(混乱・ピン・走行不能など) */
+  try{h+=nmSelHiSVG(dispLayout);}catch(e){} /* sample-selhi: 選択中(移動中)のカウンターを目立たせる */
   h+=nmDcOverlaySVG(dispLayout); /* v430: 爆薬 */
   h+=nmResOverlaySVG(dispLayout); /* v409: 残留火力 */
   h+=nmIpZoneSVG(dispLayout); /* v620: 初期配置のエリア */
