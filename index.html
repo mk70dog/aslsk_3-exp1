@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1516</title>
+<title>ASL SKシリーズv1517</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1516">
+<meta property="og:title" content="ASL SKシリーズv1517">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.716"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.717"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1517="v1517(";
 var APP_VERSION_HIST_v1516="v1516(";
 var APP_VERSION_HIST_v1515="v1515(";
 var APP_VERSION_HIST_v1514="v1514(";
@@ -42564,7 +42565,7 @@ function nmFtMenuHTML(){var id='nmFtMn',cl=function(fn){return 'event.stopPropag
    +sc('マップ')+gr(['マップ管理','マップクリア'],2)
    /* v800(ダルマ指示「使用したことがないので非表示にする」): 操作(直前の操作を中止・やり直す)と全画面表示を解除はメインメニューに出さない */
    /* v1130: 旧タブはメインメニューから消去(ツールバーの旧タブを使う) */
-   +sc('設定')+'<details><summary style="'+sum+'">▸ '+T('表示の設定')+'</summary><div style="display:flex;flex-direction:column;gap:4px;margin-top:4px">'+vw.concat(set).map(function(x){if(x[0]==='__BOTSEG__')return nmFzSegHTML()+nmBotSegHTML()+nmAbColSegHTML()+btBarSegHTML();return '<button class="b sm" style="'+sm+'" onclick="'+cl(x[1])+'">'+x[0]+'</button>';}).join('')+'</div></details>'
+   +sc('設定')+'<details><summary style="'+sum+'">▸ '+T('表示の設定')+'</summary><div style="display:flex;flex-direction:column;gap:4px;margin-top:4px">'+vw.concat(set).map(function(x){if(x[0]==='__BOTSEG__')return nmFzSegHTML()+nmAbColSegHTML()+btBarSegHTML();return '<button class="b sm" style="'+sm+'" onclick="'+cl(x[1])+'">'+x[0]+'</button>';}).join('')+'</div></details>'
    +sc('システム')+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'+(by[T('バックアップ')]||by['バックアップ']?bt(by[T('バックアップ')]||by['バックアップ']):'')+bt(dbg)+(nmGsBtnOn()?bt(['⇅ '+T('同期'),'nmGsSync()']):'')/* v1254(ダルマ指示「メインメニュー システム 同期を追加」B): ツールバーの⇅同期と同じ。判定モードの時だけ */+'<button class="b sm" style="margin:0;height:38px;padding:0 4px;font-size:12px;text-align:left;color:#ffd060;border-color:#c8a032;white-space:nowrap" onclick="'+cl('appForceUpdate()')+'">'+NM_MI.upd+' '+T('アプリ更新')+' <span style="font-size:10px;color:#8899aa">(v'+appVerNum()+')</span></button></div>'
    +''; /* sample-mmx(ダルマ指示「メインメニュー下の閉じるは消去」): 右上の丸い✕で閉じる */
   var hd2='<div style="padding:0 2px 2px"><span style="font-size:12px;color:#8899aa;font-weight:700">'+T('メインメニュー')+'</span></div>';
@@ -42624,8 +42625,9 @@ S51:{s:'① 独MMC隣接配置不可・戦車残骸2 ② 米の事前砲爆撃 �
 S59:{s:'① Q6に尖塔 ② 米の艦砲射撃(RtPh dr1) ③ 独トンネル3本',v:'終了時 米がM列以東の建物を全て支配 または 統制独なし→米勝利'}
 };
 
-function nmBotN(){return S.nmBotN||3;}
-function nmBotKind(w){if(w==='M')return S.nmBotM||'ssr';var k=w==='L'?(S.nmBotL||(nmBotN()===3?'vic':'ssr')):(S.nmBotR||(nmBotN()===3?'pf':'vic'));return k;} /* v1144: 枠2つ/3つ・初期値 3つ=勝利条件/SSR/PF */
+function nmBotN(){return 3;} /* v1517(ダルマ「タスクバー 左から PF 勝利条件 SSR 表示に固定 変更なし」) */
+function nmBotKind(w){return w==='L'?'pf':w==='M'?'vic':'ssr';}
+function nmBotKind0(w){if(w==='M')return S.nmBotM||'ssr';var k=w==='L'?(S.nmBotL||(nmBotN()===3?'vic':'ssr')):(S.nmBotR||(nmBotN()===3?'pf':'vic'));return k;} /* v1144: 枠2つ/3つ・初期値 3つ=勝利条件/SSR/PF */
 (function(){try{var X='html'+':root'.repeat(60)+' #nmFtBot ',st=document.createElement('style');st.id='nmBotFsC';st.textContent=X+'.ssrG{font-size:9px!important;row-gap:0!important;line-height:1.1!important}'+X+'.ssrG>div>span:first-child{min-width:12px!important;height:12px!important;font-size:8px!important}'+X+'.ssrG b{font-size:9px!important}'+X+':is(.botVicS,.cd[onclick*="(\\\'vic\\\')"]) .t1{font-size:10px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}'+X+':is(.botVicS,.cd[onclick*="(\\\'vic\\\')"])>div:first-child>span{height:14px!important;font-size:9px!important}'; /* v1392: 下の帯が2つの枠のときの勝利条件(.botVicS なし)も */document.head.appendChild(st);}catch(e){}})(); /* ダルマ「フォントを小さくする」sample-botfs→「案C: SSR を 9px にして行を詰めます。勝利条件は 10px」: 下の帯の SSR(6つでも3行に収まる)・勝利条件の本文 10px */
 (function(){try{var X='html'+':root'.repeat(40)+' ',st=document.createElement('style');st.id='nmYbThin';st.textContent=X+'#btRm .rmB.on{outline-width:1px!important;outline-offset:-1px!important}'+X+'#btRm .rmSum{border-width:1px!important}'+X+'#btRm .rmB.on.rmDie{outline:0!important}';document.head.appendChild(st);}catch(e){}})(); /* v1463(ダルマ「ダイス選択だけ太く見える」iPad): サイコロのボタンは border 1px と outline 1px の両方があり、Safari では重ならず2本に見えた→ outline を消して border 1px だけ */ /* ダルマ指示「イエロー枠線を細くする」sample-yborder→「B」: 判定パネルの選んでいるボタンの黄色の枠と「FP→列」の枠を 2px→1px */
 var NM_LINE_W=0.8; /* v1466(ダルマ「0.8pxに統一する」) */ /* ダルマ指示「全てのパネルの枠線を0.5pxに変更する」→「画面のすべての枠線」→「実施」(1px に戻す時はこの数字だけ変える): 画面のすべての枠線(border・outline)の太さ。地図の SVG の線は対象外。v1465: #nmIj など ID 付きの指定に負けていた→ :not(#…)×8 で ID の強さを足す */
