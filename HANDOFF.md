@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-22 いまの作業=v1483 から再開。返事待ちなし。残り: 独HMG混入の原因】**
+- **【2026-11-22 いまの作業=v1484 から再開。返事待ちなし。iPad で独HMGが消えたか未確認】**
+  - v1484(独HMG混入の対処): 原因は未特定のまま、防ぐ処理を入れた。nmSwForeignOwner=その SW の国(SWT.nat)と編成の国が違い、同じ uid をその国の別の編成が持っていれば「持ち主は別」。nmSwFixForeign()=保存済み編成から外す(nmMfOpen の最初に呼ぶ・システムログに「相手のSWを編成から外した」)。nmGeSync でも保存前に外す。相手の SW でも他に持ち主がいなければ(本当の鹵獲)残す。確認 /tmp/s/hmg2.js。
   - v1483(ダルマ「判定ボタンは?」「ダイスの下に判定ボタンを表示」「実施」): sample-mhdice をマージ。人力移動は 一覧/地図で行き先(NM_MH.to)を選ぶ→ダイスの下の「ダイスを振って判定」/「入れた目で判定する」(nmMhGo)。.nmColBrk で判定ボタンまで左列。smoke 0。
   - sample-mhdice(push済み): nmRmMhItems に赤・白の目の行(NM_MH.rd/wd、もう一度押すと外す)と「出目 赤・白=DR で判定」の行。nmMhDo は目が入っていればその目で判定し、目を消す。確認 /tmp/s/mhd.js。
   - v1482(ダルマ「A」「おk 実施」): ①移動パネル=imv の nmRMenuItems ラッパーで NM_RM_CUR=null(rmFull にしない)・NM_MU_F=1・見出し「移動 @ヘクス」+btns を nmMuTiles のタイルに。確認 /tmp/s/mvr.js(高さ257・タイルで移動バー) ②sample-fpwhy を main にマージ。smoke 0。

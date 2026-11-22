@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1483</title>
+<title>ASL SKシリーズv1484</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1483">
+<meta property="og:title" content="ASL SKシリーズv1484">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.683"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.684"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1484="v1484(相手の国のSWが別の国の編成に混ざっていたら外す(独HMGがソ連の編成に入る件)";
 var APP_VERSION_HIST_v1483="v1483(人力移動: 行き先を選んでから判定ボタン・ダイス入力(赤白の目)";
 var APP_VERSION_HIST_v1482="v1482(移動パネルをコンパクトに(案A: 見出し+3タイル)・FP内訳で半分の理由をユニットごとに表示";
 var APP_VERSION_HIST_v1481="v1481(配置パネルの←を消去・人力移動の地図選びで砲のヘクスを中央へ・状態の窓で指揮官にもPIN";
@@ -36754,7 +36755,11 @@ function nmScenNats(){var sc=(typeof SCN!=='undefined'&&S.scen&&S.scen.sel)?SCN.
 function nmGeActive(slot){var g=null;try{g=losPrimaryFireGroup();}catch(e){}return (g&&g.activeGroupSlot===slot)?g:null;}
 function nmGeSaved(slot,mkNat){var sc=S.scen&&S.scen.sel;if(!sc)return null;if(!S.savedGroups)S.savedGroups={};if(!S.savedGroups[sc])S.savedGroups[sc]={};var sv=S.savedGroups[sc][slot];if(!sv&&mkNat)sv=S.savedGroups[sc][slot]={pickerNat:mkNat,pickerItems:[],sw:[],swOwner:{},latw:[]};return sv||null;}
 function nmGeList(slot){var g=nmGeActive(slot);if(g)return {nat:g.pickerNat,items:g.pickerItems||[],sw:(g.sw||[]).concat((g.mfOff||[]).filter(function(u){return (g.sw||[]).indexOf(u)<0;})),own:g.swOwner||{}};var sv=nmGeSaved(slot);return sv?{nat:sv.pickerNat,items:sv.pickerItems||[],sw:sv.sw||[],own:sv.swOwner||{}}:{nat:null,items:[],sw:[],own:{}};}
+/* v1484(ダルマ報告「なぜか独軍のhmg」): 相手の国の SW(uid)が、その国の編成にもあるのに別の国の編成に入っていたら外す(1つの SW は1つの編成だけ)。混ざった原因は未特定なので、保存の時と射撃を開く時に直す */
+function nmSwForeignOwner(sv,slot,u){var b=nmGeSwBase(u),t=SWT.filter(function(w){return w.id===b.id;})[0];if(!t||!t.nat||!t.nat.length)return null;var me=(sv[slot]||{}).pickerNat;if(!me||t.nat.indexOf(me)>=0)return null;var hit=null;Object.keys(sv).forEach(function(k){if(k===slot||hit)return;var o=sv[k];if(o&&o.pickerNat&&t.nat.indexOf(o.pickerNat)>=0&&(o.sw||[]).indexOf(u)>=0)hit=k;});return hit;}
+function nmSwFixForeign(){try{var sc=S.scen&&S.scen.sel,sv=(sc&&S.savedGroups&&S.savedGroups[sc])||{},lg=[];Object.keys(sv).forEach(function(k){var o=sv[k];if(!o||!o.sw||!o.sw.length)return;var bad=o.sw.filter(function(u){return nmSwForeignOwner(sv,k,u)!=null;});if(!bad.length)return;o.sw=o.sw.filter(function(u){return bad.indexOf(u)<0;});bad.forEach(function(u){if(o.swOwner)delete o.swOwner[u];});lg.push(k+':'+bad.join(','));var g=nmGeActive(k);if(g){g.sw=(g.sw||[]).filter(function(u){return bad.indexOf(u)<0;});if(g.mfOff)g.mfOff=g.mfOff.filter(function(u){return bad.indexOf(u)<0;});try{fgRecomputeFromPicker(g);}catch(e){}}});if(lg.length){try{nmDbg('相手のSWを編成から外した: '+lg.join(' / '));}catch(e){}}}catch(e){console.log('swfix',e);}}
 function nmGeSync(slot){var g=nmGeActive(slot),sc=S.scen&&S.scen.sel;if(!g||!sc)return;if(!S.savedGroups)S.savedGroups={};if(!S.savedGroups[sc])S.savedGroups[sc]={};
+  try{var sv0=S.savedGroups[sc],tmp={};Object.keys(sv0).forEach(function(k){tmp[k]=sv0[k];});tmp[slot]={pickerNat:g.pickerNat,sw:[]};var bad0=(g.sw||[]).concat(g.mfOff||[]).filter(function(u){return nmSwForeignOwner(tmp,slot,u)!=null;});if(bad0.length){g.sw=(g.sw||[]).filter(function(u){return bad0.indexOf(u)<0;});if(g.mfOff)g.mfOff=g.mfOff.filter(function(u){return bad0.indexOf(u)<0;});try{nmDbg('相手のSWを編成'+slot+'に保存しない: '+bad0.join(','));}catch(e){}}}catch(e){}
   var old=S.savedGroups[sc][slot];S.savedGroups[sc][slot]={pickerNat:g.pickerNat,pickerItems:deepCopy(g.pickerItems||[]),sw:deepCopy((g.sw||[]).concat((g.mfOff||[]).filter(function(u){return (g.sw||[]).indexOf(u)<0;}))), /* v1201: 射撃で使わないSW(g.mfOff)も編成に残す */swOwner:deepCopy(g.swOwner||{}),latw:deepCopy(g.latw||[]),dc:(old&&old.dc)||[],obg:old?old.obg:undefined,res:old?old.res:undefined};}
 function nmGeFreeSlot(){var sc=S.scen&&S.scen.sel,sv=(sc&&S.savedGroups&&S.savedGroups[sc])||{},g=null;try{g=losPrimaryFireGroup();}catch(e){}
   for(var i=0;i<GROUP_SLOTS.length;i++){var s0=GROUP_SLOTS[i],x=sv[s0];if(g&&g.activeGroupSlot===s0&&g.pickerItems&&g.pickerItems.length)continue;if(x&&x.pickerItems&&x.pickerItems.length)continue;if(x&&x.sw&&x.sw.length)continue;return s0;}return null;}
@@ -36898,7 +36903,7 @@ function nmGrpStRows(n,sd,eh,sty){var slot=eh&&eh.grp;if(!slot)return [];var d=n
   var cnt=function(key){return its.filter(function(o){return !!o.x[key];}).length;},lb=function(t,key){var c=cnt(key);return (c===its.length?'✓':'')+t+(c&&c<its.length?' '+c+'/'+its.length:'');};
   if(sty==='A')return [{row:1,cmp:0,ic:'sel',t:'状態',btns:[[lb('混乱','broken'),"nmGrpStAll("+n+",'"+slot+"','brk')"],[lb('PIN','pinned'),"nmGrpStAll("+n+",'"+slot+"','pin')"],[lb('CX','cx'),"nmGrpStAll("+n+",'"+slot+"','cx')"]]}];
   return its.map(function(o,j){var x=o.x;return {row:1,cmp:0,ic:j?'':'sel',t:'<span style="font-size:13px">'+(j?'':'<span style="color:#8899aa;font-size:11px">状態 </span>')+x.label+'</span>',btns:[[(x.broken?'✓':'')+'混乱',"nmGrpStOne("+n+",'"+slot+"',"+o.i+",'brk')"],[(x.pinned?'✓':'')+'PIN',"nmGrpStOne("+n+",'"+slot+"',"+o.i+",'pin')"],[(x.cx?'✓':'')+'CX',"nmGrpStOne("+n+",'"+slot+"',"+o.i+",'cx')"]]};});}
-function nmMfOpen(n,sd,slot){var tph=S.turn&&NM_PH_FIRE[S.turn.phase];if(tph&&S.fireSub!==tph){try{FIREsub(tph);}catch(e){}}NM_MF={sd:sd,slot:slot,from:n,tgt:null};try{nmMfFtInit();}catch(e){}NM_RM_SUB='mfire';btRmReopen(n);}
+function nmMfOpen(n,sd,slot){try{nmSwFixForeign();}catch(e){}var tph=S.turn&&NM_PH_FIRE[S.turn.phase];if(tph&&S.fireSub!==tph){try{FIREsub(tph);}catch(e){}}NM_MF={sd:sd,slot:slot,from:n,tgt:null};try{nmMfFtInit();}catch(e){}NM_RM_SUB='mfire';btRmReopen(n);}
 function nmMfBack(n){NM_MF=null;btRmReopen(n);}
 /* v1040: 歩兵の射撃(スポット判定2画面目・地図の射撃)で、編成が持つSWを使う/使わないを選ぶ。FTは単独(分隊のFPも他のSWも使わない)・FTを外すと他のSWが戻る(射撃タブの FtogSW と同じ決まり) */
 function nmMfSwGrp(){var M=NM_MF;if(!M)return null;var f=getFireState(),g=f&&f.grps&&f.grps[0];if(!g||g.activeGroupSlot!==M.slot)return null;var sc=S.scen&&S.scen.sel,pre=((S.savedGroups&&sc&&S.savedGroups[sc])||{})[M.slot]||{};return {f:f,g:g,pre:pre,all:(pre.sw||[]).slice()};}
