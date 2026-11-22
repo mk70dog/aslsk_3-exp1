@@ -2,8 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-22 いまの作業=v1533 から再開。返事待ち: 2台でのマップ同期の確認・sample-dicebr】**
-  - sample-dicebr(push済み、返事待ち): 射撃の判定(nmRmMFireItems)で FP→列・DRM・IFTの列とダイス(赤白)を、ユニットの状態・攻撃する側・目標・FT保有の後ろ(右下)へ移す(NM_iS〜NM_iE を末尾に)。
+- **【2026-11-22 いまの作業=v1534 から再開。返事待ち: 2台でのマップ同期の確認】**
+  - v1534(sample-dicebr を実施): 射撃の判定(nmRmMFireItems)で FP→列・DRM・IFTの列とダイス(赤白)を、ユニットの状態・攻撃する側・目標・FT保有の後ろ(右下)へ移す(NM_iS〜NM_iE を末尾に)。
   - v1533: 下の帯のSSRの文字を 9px→11px(NM_SSR_FZ、nmBotFsC)。
   - v1532: 判定モードの同期では移動の経路(S_LOS.route)も受け取らない(A/Bと同じく判定中の表示のため)。
   - v1531: sample-hexall と sample-ijhex を実施(main にマージ)。スポット判定で「一緒に目標」に選んだ部隊だけMCの部隊切替に出る(選ばなければ1部隊)。判定モードの同期では A/B(LOSの線)を受け取らない(nmsApply の abCh は !jAllP の時だけ)。
