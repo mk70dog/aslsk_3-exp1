@@ -13713,7 +13713,7 @@ function gSwOwnerBroken(g,uid){
   var ownerPid=(g.swOwner||{})[uid];
   if(ownerPid==null)return false;
   var it=g.pickerItems.filter(function(x){return x.pid===ownerPid;})[0];
-  return !!(it&&(it.broken||it.out)); // v1485: 不参加のユニットが持つSWも撃たない
+  return !!(it&&(it.broken||it.out||it.ufired)); // v1485: 不参加のユニットが持つSWも撃たない
 }
 // ルール5.4：未熟兵ペナルティの判定。徴集兵(C)は常に未熟兵。新兵(G)は統制状態の指揮官とスタックしていない場合のみ未熟兵（指揮官が指揮能力+0でも同行していればペナルティ無視）
 function isGreenEffective(g,ldrPresent){
@@ -13822,7 +13822,7 @@ function gfp(g,ph,m,exFire,ldrPresent){
     if(getFireState().swMode!=="tenkey"&&g.pickerItems&&g.pickerItems.length>0&&origPickerCount>1){
       autoBase=0;var anyMmcItem=false;afphItems=[];
       g.pickerItems.forEach(function(it){
-        if(it.kind!=='mmc'||it.broken||it.out)return; // 2026-08追加(ダルマ指摘バグ再確認): 混乱MMCはここでも除外(v1485: 不参加も)
+        if(it.kind!=='mmc'||it.broken||it.out||it.ufired)return; // 2026-08追加(ダルマ指摘バグ再確認): 混乱MMCはここでも除外(v1485: 不参加も)
         var d=UNITS[it.nat];
         var u=d&&d.mmc&&d.mmc.filter(function(x){return x.lbl===it.label;})[0];
         if(!u)return;
@@ -16956,12 +16956,12 @@ function fgRecomputeFromPicker(g){
   // 2026-08修正(ダルマ指示「混乱ユニットのFPをグループ合計から除外する」): 混乱(it.broken)
   // 状態のMMCはルール上自ら攻撃できない(防御のみ)ため、FP合計・ut/elite/greenClass/afCapable
   // 判定の元となるmmcItemsから除外する。
-  var mmcItems=items.filter(function(it){return it.kind==='mmc'&&!it.broken&&!it.out;});
+  var mmcItems=items.filter(function(it){return it.kind==='mmc'&&!it.broken&&!it.out&&!it.ufired;});
   // 2026-08修正(ダルマ指摘バグ「指揮官混乱チェックしてもldrが反映しない」): 混乱状態の指揮官は
   // 統制状態でなくなるため、未熟兵ペナルティ免除(g.ldrWith)・指揮官修正自動反映(fgSyncLdrFromPickers)
   // のいずれからも除外する必要がある。ここではhasSmcの判定から混乱中のSMCを除外する。
-  var hasSmc=items.some(function(it){return it.kind==='smc'&&!it.broken&&!it.out;});
-  g.smcCount=items.filter(function(it){return it.kind==='smc'&&!it.broken&&!it.out;}).length; // v11.231: 4.1 SMC2名のMG全FP判定用
+  var hasSmc=items.some(function(it){return it.kind==='smc'&&!it.broken&&!it.out&&!it.ufired;});
+  g.smcCount=items.filter(function(it){return it.kind==='smc'&&!it.broken&&!it.out&&!it.ufired;}).length; // v11.231: 4.1 SMC2名のMG全FP判定用
   var fp=0,anyNonHs=false,anyHs=false,anyEi=false,anyAf=false,greenCls=null;
   // 2026-08追加(ダルマ指示・SSR反映): S17 SSR2「英軍：分隊種別を問わず全てAssault Fireを使用できる」。
   var ssrFlagsAF=getScenarioSSRFlags();
@@ -17225,7 +17225,7 @@ function fgSyncLdrFromPickers(f){ /* v1418(ダルマ「pinの指揮官のダイ�
     var autoHexes=f.grps.map(function(g){
       // 2026-08修正(ダルマ指摘バグ「指揮官混乱チェックしてもldrが反映しない」): 混乱状態の
       // SMCは統制状態でないため指揮官DRMの元にできない。混乱でないSMCのみを対象とする。
-      var smcItem=(g.pickerItems||[]).filter(function(it){return it.kind==='smc'&&!it.broken&&!it.pinned&&!it.out;})[0];
+      var smcItem=(g.pickerItems||[]).filter(function(it){return it.kind==='smc'&&!it.broken&&!it.pinned&&!it.out&&!it.ufired;})[0];
       if(!smcItem)return {present:false,ldr:0};
       var d=UNITS[smcItem.nat];
       var u=d&&d.smc&&d.smc.filter(function(x){return x.lbl===smcItem.label;})[0];
@@ -17240,7 +17240,7 @@ function fgSyncLdrFromPickers(f){ /* v1418(ダルマ「pinの指揮官のダイ�
   // そのまま使っていたため、劣る指揮官が先に並ぶと不利な修正値になっていた。最も有利(数値が最小)な指揮官の値を採用する。
   var foundCmd=null;
   f.grps.forEach(function(g){
-    (g.pickerItems||[]).filter(function(it){return it.kind==='smc'&&!it.broken&&!it.pinned&&!it.out;}).forEach(function(smcItem){
+    (g.pickerItems||[]).filter(function(it){return it.kind==='smc'&&!it.broken&&!it.pinned&&!it.out&&!it.ufired;}).forEach(function(smcItem){
       var d=UNITS[smcItem.nat];
       var u=d&&d.smc&&d.smc.filter(function(x){return x.lbl===smcItem.label;})[0];
       if(!u||typeof u.cmd!=='number')return;
@@ -36866,14 +36866,14 @@ function nmVfThHTML(sty,V,th,drm,dL,pHit,od,RF,BN,att){var sg=function(v){return
 function nmFpUnits(M,fp){var F=nmFpDet(M,fp),d=F.d,out=[],G=nmGeList(M.slot),nat=G.nat,its=G.items||[],own=G.own||{}; /* v1482(ダルマ指示「距離2は射程を超えるので…わかりやすくする」): 半分の理由をユニットごとに(PIN・射程外)。全体の半分(前進射撃・SFF・FPF)は別に */
   function rngOf(lb){var sw=lb.match(/(\d+)-(\d+)$/);if(/^(HMG|MMG|LMG|ATR|PSK|BAZ|FT|DC|PF|MTR)/i.test(lb)&&sw)return +sw[2];try{return btInfo(nat,lb).rng;}catch(e){return null;}}
   function add(lb,v,pin){var rng=rngOf(lb),why=[],k=1;if(pin){why.push('PIN');k/=2;}if(rng!=null&&d!=null&&d>rng){why.push('射程'+rng+'<距離'+d);k/=2;}out.push({lb:lb,v:v,rng:rng,use:v*k,half:k<1,why:why});}
-  its.forEach(function(x){if(x.out&&!x.broken&&x.kind!=='smc'){out.push({lb:String(x.label).replace(/\(乗員\)/,''),v:nmCCFp(x)||0,use:0,half:true,out:1,why:[]});return;}if(x.broken||x.out||x.kind==='smc')return;add(String(x.label).replace(/\(乗員\)/,''),nmCCFp(x)||0,!!x.pinned);});
-  (G.sw||[]).forEach(function(u){var w=SWT.filter(function(q){return q.id===nmGeSwBase(u).id;})[0];if(!w||/^FT/.test(w.lbl||''))return;var o=its.filter(function(x){return x.pid===own[u];})[0];if(o&&(o.out||o.broken))return;add(String(w.lbl||w.id).replace(/\s*#\d+/,''),+w.fp||0,!!(o&&o.pinned));});
+  its.forEach(function(x){if((x.out||x.ufired)&&!x.broken&&x.kind!=='smc'){out.push({lb:String(x.label).replace(/\(乗員\)/,''),v:nmCCFp(x)||0,use:0,half:true,out:1,outLb:x.ufired?'射撃済':'不参加',why:[]});return;}if(x.broken||x.out||x.ufired||x.kind==='smc')return;add(String(x.label).replace(/\(乗員\)/,''),nmCCFp(x)||0,!!x.pinned);});
+  (G.sw||[]).forEach(function(u){var w=SWT.filter(function(q){return q.id===nmGeSwBase(u).id;})[0];if(!w||/^FT/.test(w.lbl||''))return;var o=its.filter(function(x){return x.pid===own[u];})[0];if(o&&(o.out||o.ufired||o.broken))return;add(String(w.lbl||w.id).replace(/\s*#\d+/,''),+w.fp||0,!!(o&&o.pinned));});
   var sum=out.reduce(function(a,x){return a+x.use;},0),gw=[];try{var ph=S.fireSub,fm=(getFireState()||{}).fireMode;if(ph==='afph')gw.push('前進射撃');if(ph==='dff'&&fm==='SFF')gw.push('連続臨機射撃(SFF)');if(ph==='dff'&&fm==='FPF')gw.push('緊急防御射撃(FPF)');}catch(e){}
   return {u:out,sum:sum,d:d,F:F,gw:gw};}
 function nmFpDetHTML(sty,M,fp,drm,col){var U=nmFpUnits(M,fp),sg=function(v){return (v>=0?'+':'')+v;},n=function(v){return String(Math.round(v*10)/10);};
   var head='<span style="display:inline-flex;align-items:baseline;gap:10px;flex-wrap:wrap"><span style="font-size:13px;color:#8899aa">FP</span><b style="font-size:20px;color:#ffd24a">'+fp+'</b><span style="color:#8899aa">→</span><b style="font-size:20px;color:#ffd24a">'+col+'列</b><span style="font-size:13px;color:#8899aa;margin-left:6px">DRM</span><b style="font-size:20px;color:'+(drm>0?'#ffb070':drm<0?'#7fd6a0':'#e8eef4')+'">'+sg(drm)+'</b></span>';
   var fpH='';
-  if(sty==='A'){fpH='<div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:6px;font-size:12.5px">'+U.u.map(function(x,i){return (i?'<span style="color:#667">+</span>':'')+'<span style="background:#11151b;border:1px solid '+(x.half?'#ffd07088':'#3a4352')+';border-radius:6px;padding:1px 7px;white-space:nowrap"><span style="color:#c9d6e4">'+x.lb+'</span> '+(x.out?'<s style="color:#7d8b9b">'+n(x.v)+'</s> <span style="font-size:10.5px;color:#8fa6bd">不参加</span>':x.half?'<s style="color:#7d8b9b">'+n(x.v)+'</s> <b style="color:#ffd070">'+n(x.use)+'</b> <span style="font-size:10.5px;color:#ffd070">½ '+x.why.join('・')+'</span>':'<b style="color:#e8eef4">'+n(x.v)+'</b>')+'</span>';}).join('')+(U.gw.length?'<span style="color:#667">→</span><span style="font-size:11.5px;color:#ffd070;white-space:nowrap">'+n(U.sum)+' ×½ '+U.gw.join('・')+'</span>':'')+'<span style="color:#667">=</span><b style="color:#ffd24a;font-size:14px">'+fp+'</b></div>'+(false?'<div style="font-size:11.5px;color:#ffd070;margin-top:3px">距離'+U.d+'は射程を超えるので、射程の短いもの('+U.u.filter(function(x){return x.half;}).map(function(x){return x.lb.replace(/\[.*\]/,'')+' 射程'+x.rng;}).filter(function(v,i,a){return a.indexOf(v)===i;}).join('・')+')は半分</div>':'');}
+  if(sty==='A'){fpH='<div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:6px;font-size:12.5px">'+U.u.map(function(x,i){return (i?'<span style="color:#667">+</span>':'')+'<span style="background:#11151b;border:1px solid '+(x.half?'#ffd07088':'#3a4352')+';border-radius:6px;padding:1px 7px;white-space:nowrap"><span style="color:#c9d6e4">'+x.lb+'</span> '+(x.out?'<s style="color:#7d8b9b">'+n(x.v)+'</s> <span style="font-size:10.5px;color:#8fa6bd">'+(x.outLb||'不参加')+'</span>':x.half?'<s style="color:#7d8b9b">'+n(x.v)+'</s> <b style="color:#ffd070">'+n(x.use)+'</b> <span style="font-size:10.5px;color:#ffd070">½ '+x.why.join('・')+'</span>':'<b style="color:#e8eef4">'+n(x.v)+'</b>')+'</span>';}).join('')+(U.gw.length?'<span style="color:#667">→</span><span style="font-size:11.5px;color:#ffd070;white-space:nowrap">'+n(U.sum)+' ×½ '+U.gw.join('・')+'</span>':'')+'<span style="color:#667">=</span><b style="color:#ffd24a;font-size:14px">'+fp+'</b></div>'+(false?'<div style="font-size:11.5px;color:#ffd070;margin-top:3px">距離'+U.d+'は射程を超えるので、射程の短いもの('+U.u.filter(function(x){return x.half;}).map(function(x){return x.lb.replace(/\[.*\]/,'')+' 射程'+x.rng;}).filter(function(v,i,a){return a.indexOf(v)===i;}).join('・')+')は半分</div>':'');}
   else if(sty==='B'){var hs=U.u.filter(function(x){return x.half;}),fs=U.u.filter(function(x){return !x.half;});fpH='<div style="font-size:13px;color:#c9d6e4;margin-top:6px;line-height:1.7">FP <b style="color:#ffd24a">'+fp+'</b> = '+(hs.length?'<span style="color:#ffd070">('+hs.map(function(x){return n(x.v);}).join('+')+')÷2</span><span style="color:#8899aa;font-size:11.5px">(長射程: '+hs.map(function(x){return x.lb.replace(/\[.*\]/,'');}).filter(function(v,i,a){return a.indexOf(v)===i;}).join('・')+')</span>':'')+(hs.length&&fs.length?' + ':'')+fs.map(function(x){return n(x.v)+'<span style="color:#8899aa;font-size:11.5px">('+x.lb+')</span>';}).join(' + ')+'</div>';}
   else{var td='padding:1px 8px;border-bottom:1px solid #2a313c;';fpH='<table style="border-collapse:collapse;margin-top:6px;font-size:12.5px"><tr style="color:#8899aa"><td style="'+td+'">ユニット</td><td style="'+td+'text-align:right">FP</td><td style="'+td+'text-align:right">射程</td><td style="'+td+'text-align:right">使うFP</td></tr>'+U.u.map(function(x){return '<tr><td style="'+td+'color:#c9d6e4">'+x.lb+'</td><td style="'+td+'text-align:right;color:#c9d6e4">'+n(x.v)+'</td><td style="'+td+'text-align:right;color:'+(x.half?'#ffd070':'#8899aa')+'">'+(x.rng!=null?x.rng:'-')+(x.half?'<距離'+U.d:'')+'</td><td style="'+td+'text-align:right;font-weight:700;color:'+(x.half?'#ffd070':'#e8eef4')+'">'+n(x.use)+(x.half?'(半分)':'')+'</td></tr>';}).join('')+'<tr><td style="padding:1px 8px;color:#e8eef4">合計</td><td></td><td></td><td style="padding:1px 8px;text-align:right;color:#ffd24a;font-weight:800">'+fp+'</td></tr></table>';}
   return {t:head,fp:fpH};}
@@ -36946,7 +36946,10 @@ function nmMfTgt(n,tn){var M=NM_MF;if(!M)return;M.tgt=tn;nmMfEnsureGrp();var A=B
     if(te&&te.grp){var tsw=(nmGeList(te.grp).sw||[]).filter(function(u){return nmGeSwBase(u).id==='ft241';}).length;f.ftTargetCarrier=tsw;}}
   LosRunPixel();var k=0;(function w(){if(S_LOS.loading&&k++<60){setTimeout(w,50);return;}Draw();nmMfReopen(n);})();}
 function nmMfDie(n,k,v){var f=getFireState();if(!f)return;f[k]=v;f.res=null;Draw();nmMfReopen(n);}
-function nmMfMarkFired(){var M=NM_MF,f=getFireState();if(!M||!f||!f.res)return;var rof=(f.res.swr||[]).some(function(w){return w.ro==='維持成功';});if(rof)return;var H=nmHexOfNode(M.from);nmStFired(H&&nmUnitAt(H,M.sd),(NM_MF_PH.filter(function(x){return x[0]===(S.fireSub||'pfph');})[0]||[])[1]);}
+function nmMfMarkFired(){var M=NM_MF,f=getFireState();if(!M||!f||!f.res)return;var rof=(f.res.swr||[]).some(function(w){return w.ro==='維持成功';});if(rof)return;var H=nmHexOfNode(M.from),PL=(NM_MF_PH.filter(function(x){return x[0]===(S.fireSub||'pfph');})[0]||[])[1];try{if(nmUFiredMark(M.slot,PL))return;}catch(e){console.log('ufm',e);}nmStFired(H&&nmUnitAt(H,M.sd),PL);}
+/* v1486(ダルマ「不参加のユニットだけ射撃済みにならない?」→「実施」): 不参加(または射撃済)のユニットがいる編成で撃ったら、撃ったユニットだけに射撃済(x.ufired)を付け、不参加は解除して次に撃てるようにする。全員撃ち終わったらヘクスのマーカーも射撃済 */
+function nmUFiredMark(slot,ph){if(!slot)return false;var d=nmGeList(slot),its=(d.items||[]).filter(function(x){return (x.kind==='mmc'||x.kind==='smc')&&!x.broken;});if(!its.some(function(x){return x.out||x.ufired;}))return false;its.forEach(function(x){if(!x.out&&!x.ufired)x.ufired=ph||'済';});its.forEach(function(x){if(x.out)x.out=false;});var g=nmGeActive(slot);if(g){try{fgRecomputeFromPicker(g);}catch(e){}try{fgSyncLdrFromPickers(getFireState());}catch(e){}}try{nmGeSync(slot);}catch(e){}if(its.every(function(x){return x.ufired;}))return false;try{saveState();}catch(e){}return true;}
+function nmUFiredOff(eh,only){if(!eh||!eh.grp)return 0;var c=0;try{var d=nmGeList(eh.grp);(d.items||[]).forEach(function(x){if(x.ufired&&(!only||only.indexOf(x.ufired)>=0)){delete x.ufired;c++;}});if(c){var g=nmGeActive(eh.grp);if(g){try{fgRecomputeFromPicker(g);}catch(e){}}nmGeSync(eh.grp);var sc=S.scen&&S.scen.sel,sv=sc&&S.savedGroups&&S.savedGroups[sc]&&S.savedGroups[sc][eh.grp];if(sv&&!g)(sv.pickerItems||[]).forEach(function(x){if(x.ufired&&(!only||only.indexOf(x.ufired)>=0))delete x.ufired;});}}catch(e){}return c;}
 function nmMfFixedDiv(){try{var d=document.querySelector('#main div[style*="position:fixed;inset:0"]');if(d&&document.getElementById('nmIj')){nmDbg('全画面divあり(スポット判定中は無視): '+d.outerHTML.slice(0,140));return false;}return !!d;}catch(e){return false;}}
 function nmMfMissing(){var m=S.missingModal;if(!m||!m.items||!m.items.length)return false;S.missingModal=null;var L=m.items.map(function(x){return String(x.label||x.id);});try{var M0=NM_MF,its0=M0&&M0.slot?(nmGeList(M0.slot).items||[]):[];if(its0.length&&its0.every(function(x){return x.broken||x.kind==='smc';})&&its0.some(function(x){return x.broken;}))L=L.map(function(t){return /使えるFPがありません/.test(t)?'撃てるユニットがいません(編成のユニットが全員混乱しています)':t;});}catch(e){} /* v801 */try{if(document.getElementById('nmIj'))L=L.map(function(t){return /PFPhに射撃を行なったかどうか/.test(t)?'このユニットは準備射撃で撃った印があるので、前進射撃できません(印はヘクスメニューの「射撃」で外せます)':t;});}catch(e){}try{nmDbg('判定できない理由: '+L.join(' / '));}catch(e){}
   var o=document.getElementById('nmMfMiss');if(o)o.remove();o=document.createElement('div');o.id='nmMfMiss';o.style.cssText='position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:12px';o.onclick=function(){o.remove();};
@@ -36965,7 +36968,7 @@ function nmMfTgtImg(eh){var src=eh.veh?nmVaslSrc(eh.veh):eh.gun?nmVaslSrc(eh.gun
 function f0res(){var f=getFireState();return !!(f&&f.res);}
 /* v1045(ダルマ「全部実施」): FPの内訳(兵+SW)と判定履歴(取り消す・同じ出目で再計算)。DRM内訳・士気判定・故障の記録は既存(v425/nmMcSection) */
 var NM_MFH=[];
-function nmMfFpBreak(slot){try{var d=nmGeList(slot),a=[],t=0;(d.items||[]).forEach(function(x){if(x.broken||x.out||x.kind==='smc')return;var v=nmCCFp(x)||0;a.push(String(x.label).replace(/\(乗員\)/,'')+' '+v);t+=v;});(d.sw||[]).forEach(function(u){var w=SWT.filter(function(q){return q.id===nmGeSwBase(u).id;})[0];if(!w||/^FT/.test(w.lbl||''))return;var v=+w.fp||0;a.push(String(w.lbl||w.id).replace(/\s*#\d+/,'')+' '+v);t+=v;});return a.length?a.join(' + ')+' = '+t:'';}catch(e){return '';}}
+function nmMfFpBreak(slot){try{var d=nmGeList(slot),a=[],t=0;(d.items||[]).forEach(function(x){if(x.broken||x.out||x.ufired||x.kind==='smc')return;var v=nmCCFp(x)||0;a.push(String(x.label).replace(/\(乗員\)/,'')+' '+v);t+=v;});(d.sw||[]).forEach(function(u){var w=SWT.filter(function(q){return q.id===nmGeSwBase(u).id;})[0];if(!w||/^FT/.test(w.lbl||''))return;var v=+w.fp||0;a.push(String(w.lbl||w.id).replace(/\s*#\d+/,'')+' '+v);t+=v;});return a.length?a.join(' + ')+' = '+t:'';}catch(e){return '';}}
 function nmMfHistPush(){try{var M=NM_MF,f=getFireState();if(!M||!f||!f.res||!f.res.ift)return;var rr=rm(f.res.ift.r),te=nmTgtAt(nmSideList(M.sd==='f'?'e':'f'),M.tgt);NM_MFH.push({a:nmGrpLbl(M.slot),b:te?nmMfTgtName(te):'',fp:f.res.fp,col:f.res.ift.col,rd:f.rd,wd:f.wd,raw:f.res.raw,mod:f.res.mod,t:rr.t,c:rr.c});if(NM_MFH.length>8)NM_MFH.shift();}catch(e){}}
 function nmMfUndo(n){var e=NM_MFH.pop();UndoLast();try{nmMfReopen(n);}catch(x){}}
 function nmMfRedo(n){var e=NM_MFH[NM_MFH.length-1],f=getFireState();if(!e||!f)return;f.rd=e.rd;f.wd=e.wd;nmMfJudge(n);}
@@ -37775,14 +37778,14 @@ function nmMvToU(u,eh){var m=(eh&&eh.st&&eh.st.mv)||0;u.mot=(m==='mot');u.mvd=!!
   return u;}
 function nmStSetMv(n,sd,v){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(!eh)return;var st=nmStOf(eh);st.mv=(st.mv===v)?0:v;nmStSave();btRmReopen(n);}
 function nmStFired(eh,ph){if(!eh)return;var st=nmStOf(eh);st.fired=ph||'済';try{saveState();}catch(e){}}
-function nmStClearFired(){[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){if(eh.st)delete eh.st.fired;});});nmStSave();}
+function nmStClearFired(){[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){if(eh.st)delete eh.st.fired;nmUFiredOff(eh);});});nmStSave();}
 function nmStAnyFired(){return [S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].some(function(L){return L.some(function(eh){return eh.st&&eh.st.fired;});});}
 function nmStFiredRow(it,n,sd,eh){var st=nmStOf(eh);it.push({row:1,ic:'fire',t:'射撃',btns:[[(st.fired?'✓射撃済'+(st.fired!=='済'&&st.fired!=='射撃済'?'('+st.fired+')':''):'射撃済にする'),"nmStTog("+n+",'"+sd+"','fired')"]]});nmStClrRow(it,n,sd,eh);}
 /* v1158(sample): マーカーの状態(射撃済・移動/Motion・目標獲得ACQ)を1つずつ、または全部クリアする行。混乱・PIN・CE/BUは別の操作なので対象外 */
 function nmStClrList(eh){var st=eh.st||{},o=[];if(st.fired)o.push(['fired','射撃済'+(st.fired!=='済'&&st.fired!=='射撃済'?'('+st.fired+')':'')]);if(st.mv)o.push(['mv',st.mv==='mot'?'Motion':'移動']);if(eh.acq)o.push(['acq','ACQ(目標獲得)']);return o;}
 function nmStClrRow(it,n,sd,eh){var L=nmStClrList(eh);if(!L.length)return;var b=L.map(function(x){return ['✕ '+x[1],"nmStClr("+n+",'"+sd+"','"+x[0]+"')"];});if(L.length>1)b.push(['全部クリア',"nmStClr("+n+",'"+sd+"','all')"]);it.push({row:1,ic:'x',t:'状態をクリア',btns:b});}
 function nmStClr(n,sd,k){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(!eh)return;var st=nmStOf(eh);
-  if(k==='fired'||k==='all')delete st.fired;if(k==='mv'||k==='all'){delete st.mv;delete st.mvd;}if(k==='acq'||k==='all')eh.acq=null;
+  if(k==='fired'||k==='all'){delete st.fired;nmUFiredOff(eh);}if(k==='mv'||k==='all'){delete st.mv;delete st.mvd;}if(k==='acq'||k==='all')eh.acq=null;
   try{nmStSave(eh.grp);}catch(e){nmStSave();}btRmReopen(n);}
 
 /* v407(ダルマ指示「マップタブの情報を別iPadで同期して共有」「切り替え式」): 対戦記録と同じGistに aslsk_map.json を置き、マップの状態と編成を共有。
@@ -42776,17 +42779,17 @@ function nmUstSwTog(slot,uid){var eh=nmUstEh(slot);if(!eh){btToast(T('地図に�
   if(k>=0){var m=ms[k];ms.splice(k,1);if(!ms.length)delete eh.swMal;try{nmSwGrpIn(slot,uid,m.own);}catch(e){console.log(e);}msg=nm+' '+T('の故障を解除(編成に戻しました)');}
   else{var own=(nmGeList(slot).own||{})[uid];try{nmSwGrpOut(slot,uid);}catch(e){console.log(e);}if(!eh.swMal)eh.swMal=[];eh.swMal.push({uid:uid,own:own==null?null:own});msg=nm+' '+T('故障(回復フェイズで修理)');}
   var gA=nmGeActive(slot);if(gA){try{fgRecomputeFromPicker(gA);}catch(e){}try{var f2=getFireState();if(f2){fgSyncLdrFromPickers(f2);f2.res=null;}}catch(e){}}try{nmGeSync(slot);}catch(e){}try{saveState();}catch(e){}try{Draw();}catch(e){}try{nmDbg('ユニットの状態: '+nmGrpLbl(slot)+' '+msg);}catch(e){}btToast(msg);}
-function nmUstMk(x,px){var OUT=x.out?'<span style="position:absolute;inset:0;background:#0b0e13b8;border-radius:4px;z-index:1;pointer-events:none;display:flex;align-items:center;justify-content:center;color:#e8eef4;font:800 '+Math.max(10,Math.round((px||48)*0.24))+'px/1 AppFont,AppJP,sans-serif;letter-spacing:-1px">不参加</span>':'';return OUT+nmUstMk0(x,px);}
+function nmUstMk(x,px){var OUT=(x.out||x.ufired)?'<span style="position:absolute;inset:0;background:#0b0e13b8;border-radius:4px;z-index:1;pointer-events:none;display:flex;align-items:center;justify-content:center;color:#e8eef4;font:800 '+Math.max(10,Math.round((px||48)*0.24))+'px/1 AppFont,AppJP,sans-serif;letter-spacing:-1px;text-align:center">'+(x.ufired?'射撃済':'不参加')+'</span>':'';return OUT+nmUstMk0(x,px);}
 function nmUstMk0(x,px){var L=[];if(x.broken)L.push('混乱');else if(x.pinned)L.push('PIN');if(x.cx)L.push('CX');if(x.wounded)L.push('負傷');if(!L.length)return '';var z=Math.max(16,Math.round((px||48)*0.42));
   return '<span style="position:absolute;right:-3px;bottom:-3px;display:flex;flex-direction:column;gap:1px;z-index:2;pointer-events:none">'+L.map(function(k){var D=NM_CTR_DEF[k]||[k,'','#f0ead6','#111'];return '<span style="width:'+z+'px;height:'+z+'px;background:'+D[2]+';color:'+D[3]+';border-radius:2px;box-shadow:0 1px 3px #000;font:900 '+Math.round(z*0.3)+'px/1.05 sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">'+D[0]+(D[1]?'<span>'+D[1]+'</span>':'')+'</span>';}).join('')+'</span>';}
 function nmUstSum(slot){try{var its=(nmGeList(slot).items||[]),c=function(k){return its.filter(function(x){return x[k];}).length;},o=[];var b=c('broken'),p=its.filter(function(x){return x.pinned&&!x.broken;}).length,x=c('cx'),w=c('wounded');if(b)o.push(T('混乱')+b);if(p)o.push('PIN'+p);if(x)o.push('CX'+x);if(w)o.push(T('負傷')+w);var mf=nmUstSwList(slot).filter(function(q){return q.mal;}).length;if(mf)o.push(T('故障')+mf);return o.join('・');}catch(e){return '';}}
 function nmUstSet(slot,i,k){var d=nmGeList(slot),x=(d.items||[])[i];if(!x)return null;
-  if(k==='broken'){x.broken=!x.broken;if(x.broken)x.pinned=false;}else if(k==='pinned'){x.pinned=!x.pinned;if(x.pinned)x.broken=false;}else if(k==='cx')x.cx=!x.cx;else if(k==='wounded')x.wounded=!x.wounded;else if(k==='out')x.out=!x.out; /* v1485(ダルマ「部隊のmmc smcで不参加の選択を追加」): 不参加=この部隊の射撃に加わらない(FP・指揮官修正に入れない) */
+  if(k==='broken'){x.broken=!x.broken;if(x.broken)x.pinned=false;}else if(k==='pinned'){x.pinned=!x.pinned;if(x.pinned)x.broken=false;}else if(k==='cx')x.cx=!x.cx;else if(k==='wounded')x.wounded=!x.wounded;else if(k==='out')x.out=!x.out;else if(k==='ufired'){if(x.ufired)delete x.ufired;else x.ufired='済';} /* v1485(ダルマ「部隊のmmc smcで不参加の選択を追加」): 不参加=この部隊の射撃に加わらない(FP・指揮官修正に入れない) */
   var gA=nmGeActive(slot);if(gA){try{fgRecomputeFromPicker(gA);}catch(e){}try{var pr=losPrimaryFireGroup(),f=getFireState();if(pr&&pr.id===gA.id&&f&&k==='cx')f.cx=(gA.pickerItems||[]).some(function(q){return q.cx;});}catch(e){}try{fgSyncLdrFromPickers(getFireState());}catch(e){}try{var f2=getFireState();if(f2)f2.res=null;}catch(e){}}
   try{nmGeSync(slot);}catch(e){}try{saveState();}catch(e){}try{Draw();}catch(e){}
-  var J={broken:'混乱',pinned:'PIN',cx:'CX',wounded:'負傷',out:'不参加'}[k],msg=x.label+' '+T(J)+(x[k]?'':' '+T('を解除'));try{nmDbg('ユニットの状態: '+nmGrpLbl(slot)+' '+msg);}catch(e){}btToast(msg);return x;}
+  var J={broken:'混乱',pinned:'PIN',cx:'CX',wounded:'負傷',out:'不参加',ufired:'射撃済'}[k],msg=x.label+' '+T(J)+(x[k]?'':' '+T('を解除'));try{nmDbg('ユニットの状態: '+nmGrpLbl(slot)+' '+msg);}catch(e){}btToast(msg);return x;}
 function nmUstBtns(slot,i,x,fn){var b=function(k,lb,on,red){return '<button onclick="event.stopPropagation();'+fn+'(\''+String(slot).replace(/'/g,"\\'")+'\','+i+',\''+k+'\')" style="padding:7px 12px;margin:2px;border-radius:8px;font:800 14px inherit;font-family:inherit;cursor:pointer;border:1px solid '+(on?(red?'#ff6060':'#f2c14e'):'#3a4250')+';background:'+(on?(red?'#7a2020':'#c8a032'):'#141820')+';color:'+(on?'#fff':'#cfd6df')+'">'+lb+'</button>';};
-  var smc=x.kind==='smc';return b('broken',T('混乱'),!!x.broken,1)+b('pinned','PIN',!!x.pinned&&!x.broken,1)+b('cx','CX',!!x.cx)+(smc?b('wounded',T('負傷'),!!x.wounded,1):'')+'<span style="display:inline-block;width:10px"></span>'+b('out',T('不参加'),!!x.out);}
+  var smc=x.kind==='smc';return b('broken',T('混乱'),!!x.broken,1)+b('pinned','PIN',!!x.pinned&&!x.broken,1)+b('cx','CX',!!x.cx)+(smc?b('wounded',T('負傷'),!!x.wounded,1):'')+'<span style="display:inline-block;width:10px"></span>'+b('out',T('不参加'),!!x.out)+(x.ufired?b('ufired','✓'+T('射撃済')+(x.ufired!=='済'?'('+x.ufired+')':''),true):'');}
 /* A: 長押しの窓 */ /* v1481(ダルマ指示「pinを追加」): 指揮官(SMC)にも PIN(ASLSK の PTC は SMC も PIN になる) */
 var NM_USTP=null;
 function nmUstPopClose(){var e=document.getElementById('nmUstPop');if(e)e.remove();NM_USTP=null;}
@@ -43673,8 +43676,8 @@ function nmPhaseStep(d){setTimeout(function(){try{S.nmAsTurnAt=Date.now();NM_GS.
     if(prev==='mph'&&S_LOS.resid&&Object.keys(S_LOS.resid).length){S_LOS.resid={};msg.push('残留火力を外しました');}
     if(prev==='mph'){var cg=0;Object.keys(S_LOS.smoke||{}).forEach(function(k){if(S_LOS.smoke[k].type==='g2'){delete S_LOS.smoke[k];cg++;}});if(cg)msg.push('煙幕手榴弾を外しました('+cg+')');} /* v418 */
     if(id==='pfph'){var cd=0;Object.keys(S_LOS.smoke||{}).forEach(function(k){if(S_LOS.smoke[k].type==='d2'){delete S_LOS.smoke[k];cd++;}});if(cd)msg.push('拡散煙幕を外しました('+cd+')');}
-    if(prev==='dfph'){var c=0;[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){if(eh.st&&(eh.st.fired==='臨機'||eh.st.fired==='防御')){delete eh.st.fired;c++;}});});if(c)msg.push('臨機・防御の射撃済を取り消しました('+c+')');}
-    if(id==='rph'&&turnCh){var c2=0,c3=0;[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){if(!eh.st)return;if(eh.st.fired){delete eh.st.fired;c2++;}if(eh.st.mv&&eh.st.mv!=='mot'){eh.st.mv=0;c3++;}});});
+    if(prev==='dfph'){var c=0;[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){if(eh.st&&(eh.st.fired==='臨機'||eh.st.fired==='防御')){delete eh.st.fired;c++;}c+=nmUFiredOff(eh,['臨機','防御']);});});if(c)msg.push('臨機・防御の射撃済を取り消しました('+c+')');}
+    if(id==='rph'&&turnCh){var c2=0,c3=0;[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){c2+=nmUFiredOff(eh);if(!eh.st)return;if(eh.st.fired){delete eh.st.fired;c2++;}if(eh.st.mv&&eh.st.mv!=='mot'){eh.st.mv=0;c3++;}});});
       if(c2)msg.push('射撃済を取り消しました('+c2+')');if(c3)msg.push('車両の移動の印を外しました('+c3+')');}}
   if(NM_PH_FIRE[id]&&S.fireSub!==NM_PH_FIRE[id]){try{FIREsub(NM_PH_FIRE[id]);}catch(e){S.fireSub=NM_PH_FIRE[id];}}
   try{renderPhaseTracker();}catch(e){}try{saveState();}catch(e){}Draw();
