@@ -41725,8 +41725,8 @@ function nmModeSegHTML(id){if(id!=='nmFtMn')return '';var cur=nmModeNow(),av=fal
   var go=function(m){return 'event.stopPropagation();nmModeSet(\''+m+'\');setTimeout(nmMenuRebuild,0);setTimeout(nmMenuRebuild,400)';}; /* v1223: どのモードに切り替えてもメニューは閉じず、中身をそのモードのものに */ /* v692(ダルマ指示「ライト・フルを選択すると閉じてしまう」): ライト・フルの切り替えではメニューを閉じない */
   var seg=function(m,nm,sub,bg,dim){return '<div style="'+st+(cur===m?'background:'+bg+';color:#fff':'color:'+(dim?'#556':'#8899aa'))+'" onclick="'+go(m)+'">'+T(nm)+'<small style="'+sm+'">'+T(sub)+'</small></div>';};
   return '<div id="nmModeSeg" style="display:flex;gap:3px;background:#0e1218;border:1px solid #39414f;border-radius:10px;padding:3px;margin:2px 0 6px">'
-   +seg('judge','ライト','判定支援・同期なし','linear-gradient(#d8b04a,#9a7418)') /* v692(ダルマ指示「ライト 色変更」): 緑→アプリの選択色(金) */
-   +seg('online','フル','判定支援・同期・配置','linear-gradient(#3a7ac8,#1f4f8a)')
+   +seg('judge','判定','リアル盤で管理','linear-gradient(#d8b04a,#9a7418)') /* v692(ダルマ指示「ライト 色変更」): 緑→アプリの選択色(金) */
+   +seg('online','オンライン対戦','同期・状態も管理','linear-gradient(#3a7ac8,#1f4f8a)')
    +seg('ai','AI対戦','開発中','linear-gradient(#c8793a,#8a4a1a)',!av)+'</div>';}
 /* v1223(ダルマ指示「判定モード 対戦モードに切り替えでメニューは出したまま メニュー内容をモードの内容に変更する」) */
 function nmMenuRebuild(){var m=document.getElementById('nmFtMn');if(!m)return;var sc=m.scrollTop,ai=(typeof btActive==='function'&&btActive());try{m.innerHTML=ai?btFtMenuHTML():nmFtMenuHTML();}catch(e){console.log('nmMenuRebuild',e);return;}if(!ai){try{nmMmRzInit(m);}catch(e){}}m.scrollTop=sc;}
@@ -41739,7 +41739,7 @@ function nmModeSet(m){var cur=nmModeNow();if(m===cur)return;
     try{if(m==='judge'){var sm=nmsMode();if(sm!=='off'){localStorage.setItem('aslsk_mapsync_prev',sm);nmsSetMode(-1,'off');}}
       else{var pv=localStorage.getItem('aslsk_mapsync_prev');if(pv&&nmsMode()==='off'&&GIST_CONFIGURED()){localStorage.removeItem('aslsk_mapsync_prev');nmsSetMode(-1,pv);}}}catch(e){}}
   try{nmFtActFill();}catch(e){}try{nmSyChipFill();}catch(e){}try{btMapFullSync();}catch(e){}try{Draw();}catch(e){}
-  btToast(m==='judge'?'判定支援(ライト): 同期なし':m==='online'?'判定支援(フル): 同期・配置あり':'AI対戦モード');}
+  btToast(m==='judge'?'判定モード':m==='online'?'オンライン対戦モード':'AI対戦モード'); /* sample-modenm(ダルマ「判定モード オンライン対戦モード AI対戦モードの3種類で分ける」) */}
 /* v639: HQ=判定の司令画面。A→Bの結果を上に、判定グループを下に */
 var NM_HQ_G=[['fire','射撃','小火器・砲・LATW・爆薬',[['!qk','簡易射撃(マーカー無し・数字だけ)'],['!fire','マップ上で射撃判定(A→B)'],['fire','射撃/残留火力(タブ)'],['gun','砲撃'],['latw','軽対戦車兵器'],['dc','爆薬配置/起動']]],['afv','装甲戦闘車両','命中・貫通・撃破',[['afv','装甲戦闘車両']]],['move','移動','ボグ・人力・煙幕',[['move','ボグ/人力/煙幕']]],['mc','士気・損耗','MC・損耗・潰走',[['mc','士気/損耗'],['rout','潰走/阻止']]],['cc','近接','突撃・白兵戦',[['aphcc','突撃/白兵戦']]],['rally','回復','回復・修理・回収',[['rally','回復'],['repair','修理']]],['ref','早見表・ユニット','',[['ref','早見表'],['unit','ユニット']]]];
 /* v640: 判定支援モードで各判定タブに居る間、HQ(と地図)へ戻るボタンを左下に出す */
