@@ -36430,7 +36430,8 @@ function nmUnitMenu(it,H,n,sd){
     it.push({ic:'fire',t:'ここから攻撃する(砲撃)',sub:nmGunName(eg)+'で'+(sd==='f'?'敵':'自軍')+'のマーカーを攻撃する。命中→効果までダイスで',f:"nmVfOpen("+n+",'"+sd+"')"}); /* v404 */
     nmStFiredRow(it,n,sd,eh); /* v406 */
     nmGunManSync(eh);var gst=nmStOf(eh);it.push({row:1,ic:'sel',t:'状態',btns:[[(gst.mal?'✓':'')+'主砲故障',"nmStTog("+n+",'"+sd+"','mal')"],[(gst.brk?'✓':'')+'操作班混乱',eh.man?null:"nmStTog("+n+",'"+sd+"','brk')"]]}); /* v405 / v542: 操作するユニットを決めた時は混乱を自動 */
-    try{var GP=nmGunPen(eh);it.push({ic:'sel',t:'<span>操作するユニット: <b style="color:'+(!eh.man?'#ffb060':(GP.none||GP.brk)?'#ff8060':(GP.nq||GP.cap)?'#ffb060':'#7fd0a0')+'">'+(eh.man?(function(){var M=nmGunMan(eh);return (M&&!M.missing?M.x.label+' ':'')+'— '+GP.txt;})():'⚠ 決まっていません')+'</b></span>',sub:'選択(このヘクスの歩兵・OBの乗員を配置)',f:"nmGmOpen("+n+",'"+sd+"')"});}catch(e){console.log('gunManRow',e);} /* v544 */
+    try{var GP=nmGunPen(eh),lb='乗員(未設定)',bad=false;if(eh.man){var M=nmGunMan(eh);lb=(M&&!M.missing?M.x.label:'なし');bad=GP.none||GP.brk;if(GP.nq)lb+=' 非正規';if(GP.cap)lb+=' 鹵獲';if(GP.brk)lb+=' 混乱';}
+      it.push({row:1,ic:'sel',t:'操作する兵',btns:[[bad?'<span style="color:#ff8060">'+lb+'</span>':lb,"nmGmOpen("+n+",'"+sd+"')"]]});}catch(e){console.log('gunManRow',e);} /* v544 */ /* sample-gman(ダルマ「操作するユニット: 決まっていませんの警告色をやめる・たたんで目立たなくする」): 射撃・状態と同じ小さい1行に。未設定は普通の色で「乗員(未設定)」 */
     nmMaRepRow(it,n,sd,eh,'砲'); /* v425 */
     if(!eg.mtrNoManhandle||true)it.push({ic:'move',t:'人力移動',sub:'隣接ヘクスへ(M#'+(eg.m!=null?eg.m:'?')+'・DR<M#で成功)',f:"nmMhOpen("+n+",'"+sd+"')"}); /* v438 */
     it.push({ic:'rot',t:'砲の方向(CA)を決める',sub:'CA'+(eh.facing==null?'未設定':'設定済み')+'　方向の画面を開く',f:"nmRmFaceOpen("+n+",'"+sd+"')"});
