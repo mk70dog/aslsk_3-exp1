@@ -37692,6 +37692,19 @@ function nmMcSection(it,n,te,r,key,reopen,opt){ /* 射撃の結果(IFT)rの士�
       it.push({ic:'sel',img:vaslCtrHTML('u:'+(x.nat||d.nat)+'|'+x.label,26)||'',t:x.label+'　士気'+mm.mor+(L.rev?' DRM+'+L.rev:'')+(rr?'　→ DR'+rr.dr+(L.rev?'+'+L.rev:'')+'='+rr.fin+' <b style="color:'+(rr.ok?'#3ca878':'#ff6060')+'">'+rr.txt+'</b>':'')});
       if(!rr)[[2,3,4,5,6,7],[8,9,10,11,12]].forEach(function(vs,j){it.push({row:1,cmp:1,ic:j?'':'fire',t:'<span style="font-size:12px;color:#8899aa">'+(j?'':'DR')+'</span>',btns:vs.map(function(v){return [v,"nmMcLl("+n+",'"+te.grp+"',"+x.pid+","+li+","+v+",'"+reopen+"')"];})});});});});
 }
+/* sample-hexall(ダルマ「同じヘクスに2部隊ある場合 全てを射撃するには」→「サンプル」): 射撃の結果(IFT)はヘクスの全員に効く(SK 3.2)。目標と同じヘクス・同じ側の部隊(編成)を並べ、切り替えて同じ結果で士気チェック。部隊ごとに結果を覚える */
+var NM_MC_ST={},NM_MC_GRP=null;
+(function(){var o=nmMcSection;nmMcSection=function(it,n,te,r,key,reopen,opt){try{if(!te||!te.grp||te.veh||te.gun||!nmMcParse(r)||/^mcp/.test(String(key)))return o.apply(this,arguments);
+  var sd=nmSideList('f').indexOf(te)>=0?'f':'e',H={boardId:te.boardId,col:te.col,row:te.row},L=nmAllAt(H,sd).filter(function(e){return e.grp&&!e.veh&&!e.gun&&(nmGeList(e.grp).items||[]).length;});
+  if(L.length<2)return o.apply(this,arguments);
+  var S0=NM_MC_ST[key]||(NM_MC_ST[key]={}),cur=(NM_MC_GRP&&L.indexOf(NM_MC_GRP)>=0)?NM_MC_GRP:te;
+  if(NM_MC&&NM_MC.key===key&&!S0.__init){S0[te.grp]=NM_MC;}S0.__init=1;
+  var done=function(e){var st=S0[e.grp];if(!st)return false;var its=nmGeList(e.grp).items||[];return its.length>0&&its.every(function(x){return st.res[x.pid]||(x.broken&&r==='PTC');})||!!st.kiaDone;};
+  it.push({sep:1});it.push({ic:'hex',t:'<span style="color:#ffd24a">このヘクスの全部隊に同じ結果('+r+')</span>',sub:'1回の射撃でヘクスの全員が攻撃されます(SK 3.2)。部隊を切り替えて、それぞれ士気チェック'});
+  it.push({row:1,ic:'sel',t:'部隊',btns:L.map(function(e){var i=nmSideList(sd).indexOf(e);return [(e===cur?'✓':'')+nmGrpLbl(e.grp)+(done(e)?' ○':''),"NM_MC_GRP=nmSideList('"+sd+"')["+i+"];"+reopen+"("+n+")"];})});
+  NM_MC=S0[cur.grp]||null;var rr=o.call(this,it,n,cur,r,key,reopen,opt);S0[cur.grp]=NM_MC;
+  var left=L.filter(function(e){return !done(e);});if(!left.length)it.push({ic:'info',t:'<span style="color:#3ca878">このヘクスの全部隊の士気チェックが終わりました</span>'});
+  return rr;}catch(e){console.log('hexall',e);return o.apply(this,arguments);}};})();
 function nmMcLl(n,slot,pid,li,dr,reopen){var M=NM_MC;if(!M||!M.ll||!M.ll[li])return;var L=M.ll[li],items=nmGeList(slot).items,i=-1;items.forEach(function(x,k){if(x.pid===pid)i=k;});if(i<0||L.done[pid])return;var x=items[i],mm=nmMcUnitMor(x),fin=dr+L.rev,ok=mm.mor==null?true:(fin<=mm.mor),txt,lg=[],lbl0=x.label;
   if(ok&&L.k==='LLMC'&&!x.broken&&mm.mor!=null&&fin===mm.mor){x.pinned=true;txt='合格（ちょうど → PIN）';} /* v896: LLMC(NMC)もちょうどで合格ならPIN */
   else if(ok)txt='合格';
