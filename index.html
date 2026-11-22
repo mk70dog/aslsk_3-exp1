@@ -37805,7 +37805,7 @@ function nmStClr(n,sd,k){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(!
 var NMS_FILE='aslsk_map.json';
 setTimeout(function(){try{nmsStart();}catch(e){}},1500);
 var NMS={busy:false,last:0,lastHash:'',remoteAt:0,status:'',msg:'',timer:null,from:'',remoteScen:''};
-function nmsMode(){try{if(nmModeNow()==='online'&&GIST_CONFIGURED())return 'auto';}catch(e){}try{return localStorage.getItem('aslsk_mapsync')||'off';}catch(e){return 'off';}} /* sample-onsync(ダルマ「オンライン対戦モードは同期は常にオールオン」): オンライン対戦では常に自動で共有 */
+function nmsMode(){try{var md=S.nmMode,ai=false;try{ai=!!btActive();}catch(e){} /* nmModeNow は nmsMode を呼ぶので、ここでは S.nmMode を直接見る(再帰しない) */if(!ai&&md==='online'&&GIST_CONFIGURED())return 'auto';if(!ai&&md==='judge'&&nmJsLv()==='all'&&GIST_CONFIGURED())return 'auto';}catch(e){}try{return localStorage.getItem('aslsk_mapsync')||'off';}catch(e){return 'off';}} /* sample-onsync(ダルマ「オンライン対戦モードは同期は常にオールオン」): オンライン対戦では常に自動で共有 */
 function nmsOnOff(n,on){var m=nmsMode();if(on){if(m!=='off'){btRmReopen(n);return;}var last='auto';try{last=localStorage.getItem('aslsk_mapsync_last')||'auto';}catch(e){}if(!GIST_CONFIGURED()){NM_RM_SUB='sync';btRmReopen(n);return;}nmsSetMode(n,last);}else nmsSetMode(n,'off');}
 function nmsSetMode(n,m){try{localStorage.setItem('aslsk_mapsync',m);if(m!=='off')localStorage.setItem('aslsk_mapsync_last',m);}catch(e){}nmsStart();if(m==='auto')nmsTick();nmsRe(n);}
 /* v608(ダルマ指示「同期の同時編集で消える対策 実施」): この端末の側(自軍f/敵軍e)を決めると、自分の側のマーカーは自分だけが書き、相手の側は相手のファイルから受け取る */
@@ -39838,7 +39838,7 @@ function nmGsApplyEdit(sc,k,e){var G=S.savedGroups[sc]||(S.savedGroups[sc]={}),b
   try{nmDbg('編成同期: 相手の判定結果を反映 '+k+(before===nmGsGrpSig(e.g)?'(変化なし)':''));}catch(x){}}
 function nmGsOwn(G){var o={};Object.keys(G||{}).forEach(function(k){if(!/^相手/.test(k))o[k]=G[k];});return o;}
 var NM_GS={busy:false,at:0};
-function nmGsBtnOn(){try{return nmModeNow()==='judge';}catch(e){return false;}}
+function nmGsBtnOn(){try{return nmModeNow()==='judge'&&nmJsLv()!=='none';}catch(e){return false;}}
 function nmGsRoleAsk(msg){var el=document.getElementById('nmGsPop');if(el)el.remove();el=document.createElement('div');el.id='nmGsPop';el.style.cssText='position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center';el.onclick=function(e){if(e.target===el)el.remove();};
   var b=function(r,t,s){return '<button onclick="nmGsSetRole(\''+r+'\')" style="flex:1;height:64px;border-radius:10px;border:1px solid #3a4555;background:#262d38;color:#e8eef4;font-weight:800;font-size:16px">'+t+'<br><small style="font-weight:600;color:#9fb0c4;font-size:11px">'+s+'</small></button>';};
   el.innerHTML='<div style="background:#1b2028;border:2px solid #7ec8e3;border-radius:14px;padding:14px 16px;width:min(360px,92vw);color:#e8eef4" onclick="event.stopPropagation()"><div style="font-weight:800;color:#7ec8e3;font-size:15px">⇅ 編成の同期</div><div style="font-size:12.5px;color:'+(msg?'#ffb060':'#9fb0c4')+';margin:4px 0 12px">'+(msg||'このiPadはどちら？ 2台で別々を選んでください')+'</div><div style="display:flex;gap:8px">'+b('p1','1P','先手')+b('p2','2P','後手')+'</div><div style="margin-top:10px;border-top:1px solid #2a3b4d;padding-top:8px"><div style="font-size:12px;color:#9fb0c4;margin-bottom:6px">別のiPadからプレイを引き継ぐ(前のiPadの編成・ターン・PFをこのiPadへ。前のiPadは同期から外れます)</div><div style="display:flex;gap:8px"><button onclick="nmGsTakeover(\'p1\')" style="flex:1;height:44px;border-radius:10px;border:1px solid #c8a032;background:#2a2412;color:#ffd24a;font-weight:800;font-size:14px">1Pを引き継ぐ</button><button onclick="nmGsTakeover(\'p2\')" style="flex:1;height:44px;border-radius:10px;border:1px solid #c8a032;background:#2a2412;color:#ffd24a;font-weight:800;font-size:14px">2Pを引き継ぐ</button></div></div><div onclick="nmAsToggle()" style="margin-top:12px;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:#141a22;cursor:pointer"><span style="flex:1;font-weight:800">自動同期<br><small style="font-weight:600;color:#9fb0c4;font-size:11px">20秒ごとに受信・変更したら送信</small></span><span id="nmAsSw" style="padding:4px 14px;border-radius:8px;font-weight:900;'+(nmAsOn()?'background:#2f9e5a;color:#fff':'background:#3a4250;color:#9fb0c4')+'">'+(nmAsOn()?'ON':'OFF')+'</span></div></div>';document.body.appendChild(el);}
@@ -39863,7 +39863,10 @@ function nmGsSetRole(r){try{localStorage.setItem('aslsk_mapsync_side',r);}catch(
 /* v1150(ダルマ指示「同期を自動に: 部隊の準備を閉じた時・スポット判定の部隊編集を閉じた時・ターン表・PFの増減」「受ける側は定期的に確認」):
    自動同期(S.nmAsOn、初期ON)。20秒ごとに相手のファイルを確認して新しければ取り込む。自分の編成・ターン・PF使用数が変わっていれば送る。
    ターン・PFは後から変えた方を正とする(at=変更時刻)。編成は各自の分だけ送るのでぶつからない */
-function nmAsOn(){return S.nmAsOn!==false;}
+/* sample-jsync(ダルマ「判定モードの同期 ナシ/ライト/オール」): ライト=部隊の登録情報とターン表(⇅同期)、オール=ライト+部隊の状態とマップの情報(マップ共有を自動) */
+function nmJsLv(){var v=S.nmJSync;return v==='none'||v==='all'?v:'lite';}
+function nmJsSet(v){S.nmJSync=v;try{saveState();}catch(e){}try{nmsStart();}catch(e){}try{nmFtActFill();}catch(e){}try{if(v!=='none')nmAsKick();}catch(e){}btToast(T('同期')+': '+(v==='none'?T('ナシ'):v==='all'?T('オール(部隊の登録・ターン表・部隊の状態・マップ)'):T('ライト(部隊の登録・ターン表)')));}
+function nmAsOn(){try{if(nmModeNow()==='judge'&&nmJsLv()==='none')return false;}catch(e){}return S.nmAsOn!==false;}
 function nmAsTurnSig(){var t=S.turn||{};return [t.cur,t.half,t.phase,t.ended?1:0].join('|');}
 function nmAsPfSig(){var p=S.pfTracker||{};return String(p.used||0);}
 function nmAsTouch(){var ts=nmAsTurnSig(),ps=nmAsPfSig();if(NM_GS.ts!=null&&NM_GS.ts!==ts)S.nmAsTurnAt=Date.now();if(NM_GS.ps!=null&&NM_GS.ps!==ps)S.nmAsPfAt=Date.now();NM_GS.ts=ts;NM_GS.ps=ps;}
@@ -41730,7 +41733,10 @@ function nmModeSegHTML(id){if(id!=='nmFtMn')return '';var cur=nmModeNow(),av=fal
   return '<div id="nmModeSeg" style="display:flex;gap:3px;background:#0e1218;border:1px solid #39414f;border-radius:10px;padding:3px;margin:2px 0 6px">'
    +seg('judge','判定','リアル盤<br>＋判定アプリ','linear-gradient(#d8b04a,#9a7418)') /* v692(ダルマ指示「ライト 色変更」): 緑→アプリの選択色(金) */
    +seg('online','オンライン対戦','アプリだけで<br>遠くの人と','linear-gradient(#3a7ac8,#1f4f8a)')
-   +seg('ai','AI対戦','アプリだけで<br>AIと','linear-gradient(#c8793a,#8a4a1a)',!av)+'</div>';}
+   +seg('ai','AI対戦','アプリだけで<br>AIと','linear-gradient(#c8793a,#8a4a1a)',!av)+'</div>'
+   +(cur==='judge'?(function(){var lv=nmJsLv(),js=function(v,nm,sub){var on=lv===v;return '<div style="'+st+(on?'background:#2c3442;color:#ffd24a;outline:1px solid #ffd24a;outline-offset:-1px':'color:#8899aa')+'" onclick="event.stopPropagation();nmJsSet(\''+v+'\');setTimeout(nmMenuRebuild,0)">'+T(nm)+'<small style="'+sm+'">'+sub+'</small></div>';};
+     return '<div style="font-size:11px;color:#8899aa;margin:0 2px 2px">'+T('判定モードの同期(2台のiPad)')+'</div><div id="nmJsSeg" style="display:flex;gap:3px;background:#0e1218;border:1px solid #39414f;border-radius:10px;padding:3px;margin:0 0 6px">'
+       +js('none','同期ナシ',T('この端末だけ'))+js('lite','同期ライト',T('部隊の登録')+'<br>'+T('ターン表'))+js('all','同期オール',T('ライト')+'＋'+T('部隊の状態')+'<br>'+T('マップの情報'))+'</div>';})():'');}
 /* v1223(ダルマ指示「判定モード 対戦モードに切り替えでメニューは出したまま メニュー内容をモードの内容に変更する」) */
 function nmMenuRebuild(){var m=document.getElementById('nmFtMn');if(!m)return;var sc=m.scrollTop,ai=(typeof btActive==='function'&&btActive());try{m.innerHTML=ai?btFtMenuHTML():nmFtMenuHTML();}catch(e){console.log('nmMenuRebuild',e);return;}if(!ai){try{nmMmRzInit(m);}catch(e){}}m.scrollTop=sc;}
 function nmModeSegRefresh(){setTimeout(function(){var el=document.getElementById('nmModeSeg');if(el)el.outerHTML=nmModeSegHTML('nmFtMn');},0);}
