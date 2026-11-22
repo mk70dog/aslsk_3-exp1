@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-22 いまの作業=v1497 から再開。返事待ちなし】**
+- **【2026-11-22 いまの作業=v1498 から再開。返事待ちなし】**
+  - v1498(ダルマ「赤枠部分削除」画像=砲の方向パネルの下の空き): nmRmSizeInit の nmRmSizeApply が記憶した高さ(nmRmSize)を方向などのサブ画面にも固定で付けていた。サブ画面(NM_RM_SUB/NM_FACE/NM_RM_VEH)は height を外し maxHeight だけにする。確認 /tmp/s/rsz3.js(方向 300x389=中身の高さ、戻ると 300x560)。
   - v1497(ダルマ「メニューのサイズを記憶して戻っても同じ形サイズで表示する」画像=砲のメニューが狭く低い): 原因=判定パネル(.rmFull 960px)や方向パネルから ← で戻ると btRmReopen が直前のパネルの高さを引き継いでいた。btRMenu の後に一番上のメニューか(__top: nmRmIsMenu かつ NM_RM_SUB/NM_FACE/NM_RM_VEH なし)を印付け、btRmReopen のラッパーで、一番上のメニューを離れる時に位置・幅・高さ(NM_RM_LM)を覚え、戻った時に戻す。確認 /tmp/s/rsz.js(記憶サイズあり 300x560 が保たれる)・rsz2.js(記憶なし 340x499 が保たれる)。
   - v1496(ダルマ「実施」): sample-jsync をマージ。nmsMode の判定モード条件は S.nmMode!=='online'(未設定も判定)、nmJsSet で S.nmMode を確定(同期オールで nmModeNow が online に化けないように)。確認 /tmp/s/jlv.js(none:off/ボタンなし、lite:off/ボタン、all:auto/ボタン、online:auto)。2台での実機同期は未確認。
   - sample-jsync(マージ済み): 判定モードの同期 ナシ/ライト/オール(S.nmJSync、既定 lite)。メインメニューのモード切替の下に3つのボタン(判定モードの時だけ)。ナシ=⇅同期ボタンを出さず自動同期も止める、ライト=今の⇅同期(部隊の登録・ターン表・PF)、オール=ライト+マップ共有を自動(nmsMode が auto: マーカー・状態・残骸・煙幕・マーク・A/B・移動)。
