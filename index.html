@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1485</title>
+<title>ASL SKシリーズv1486</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1485">
+<meta property="og:title" content="ASL SKシリーズv1486">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.685"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.686"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1486="v1486(撃ったユニットだけ射撃済・部隊の分割・合流(編成の画面)";
 var APP_VERSION_HIST_v1485="v1485(ユニットの不参加(状態の窓・FP/指揮官修正/持つSWに入れない)";
 var APP_VERSION_HIST_v1484="v1484(相手の国のSWが別の国の編成に混ざっていたら外す(独HMGがソ連の編成に入る件)";
 var APP_VERSION_HIST_v1483="v1483(人力移動: 行き先を選んでから判定ボタン・ダイス入力(赤白の目)";
@@ -44480,10 +44481,24 @@ function nmRmSgItems(n){var G=NM_SG;if(!G)return nmRMenuItems(n);var eh=nmUnitAt
 function nmGeSplitRows(it,n,G,d){var sp=G.spl||[],its=d.items||[];
   it.push({sep:1,lbl:'部隊の分割・合流'});
   if(its.length>=2){it.push({row:1,ic:'sel',t:'分割<div style="font-size:11px;color:#8899aa">新しい部隊に移すユニットを選ぶ</div>',btns:its.map(function(x){var on=sp.indexOf(x.pid)>=0;return [(on?'✓':'')+x.label,"nmGeSplTog("+n+","+x.pid+")"];})});
-    if(sp.length&&sp.length<its.length)it.push({ic:'move',t:'<span style="color:#3ca878">選んだ'+sp.length+'個で新しい部隊を作る</span>',sub:'同じヘクスに置く。持っているSWも一緒に移る',f:"btToast('サンプル')"});}
+    if(sp.length&&sp.length<its.length)it.push({ic:'move',t:'<span style="color:#3ca878">選んだ'+sp.length+'個で新しい部隊を作る</span>',sub:'同じヘクスに置く。持っているSWも一緒に移る',f:"nmGeSplitDo("+n+")"});}
   var oth=[];try{nmAllAt(NM_RM_HEX,G.sd).forEach(function(e){if(e.grp&&e.grp!==G.slot&&!e.veh&&!e.gun)oth.push(e.grp);});}catch(e){}
-  if(!oth.length)oth=['(例)'];
-  it.push({row:1,ic:'hex',t:'合流<div style="font-size:11px;color:#8899aa">同じヘクスの部隊をこの部隊に合流させる</div>',btns:oth.map(function(k){return [(k==='(例)'?'部隊C(ソ)':nmGrpLbl(k)+' '+(nmGrpText(k)||''))+' を合流',"btToast('サンプル')"];})});}
+  if(!oth.length)return;
+  it.push({row:1,ic:'hex',t:'合流<div style="font-size:11px;color:#8899aa">同じヘクスの部隊をこの部隊に合流させる</div>',btns:oth.map(function(k){return [nmGrpLbl(k)+' '+(nmGrpText(k)||'')+' を合流',"nmGeMergeDo("+n+",'"+k+"')"];})});}
+/* v1487: 1ユニットを編成 k から k2 へ(状態・持っているSW/LW/DCごと) */
+function nmGeMoveUnit(k,pid,k2,nat){var L=nmGeList(k).items||[],i=-1;L.forEach(function(x,q){if(x.pid===pid)i=q;});if(i<0)return null;var x=L[i],keep={};Object.keys(x).forEach(function(q){if(['pid','kind','label','nat'].indexOf(q)<0)keep[q]=x[q];});var car=nmSuTakeAll(k,pid);
+  nmGeDelCore(k,i);nmGeSync(k);var sv=nmGeSaved(k2,nat);if(sv&&!(sv.pickerItems&&sv.pickerItems.length))sv.pickerNat=nat;nmGeAddCore(k2,x.nat||nat,x.kind,x.label);var L2=nmGeList(k2).items||[],y=L2[L2.length-1];if(!y)return null;Object.keys(keep).forEach(function(q){y[q]=keep[q];});nmSuGiveBack(k2,y.pid,car);nmGeSync(k2);return y;}
+function nmGeSplitDo(n){var G=NM_GE;if(!G||!G.spl||!G.spl.length)return;var H=NM_RM_HEX;if(!H)return;var eh=nmAllAt(H,G.sd).filter(function(e){return e.grp===G.slot;})[0];if(!eh)return;var d=nmGeList(G.slot),nat=d.nat,nk=nmGeFreeSlot();if(!nk){btToast(T('空いている編成がありません'));return;}
+  nmBkSnap('部隊を分割');var sel=G.spl.slice(),nm=[];sel.forEach(function(pid){var y=nmGeMoveUnit(G.slot,pid,nk,nat);if(y)nm.push(y.label);});
+  var ne={boardId:eh.boardId,col:eh.col,row:eh.row,st:JSON.parse(JSON.stringify(eh.st||{})),grp:nk};nmSideList(G.sd).push(ne);G.spl=[];
+  try{nmDbg('部隊を分割: '+nmGrpLbl(G.slot)+' → '+nmGrpLbl(nk)+' ('+nm.join(' ')+')');}catch(e){}try{saveState();}catch(e){}Draw();btToast(nmGrpLbl(nk)+' '+T('を作りました'));NM_RM_SUB='grpedit';btRmReopen(n);}
+function nmGeMergeDo(n,k){var G=NM_GE;if(!G||!k||k===G.slot)return;var H=NM_RM_HEX;if(!H)return;var d=nmGeList(k),nat=nmGeList(G.slot).nat||d.nat,lb=nmGrpLbl(k);nmBkSnap('部隊を合流');
+  (d.items||[]).slice().forEach(function(x){nmGeMoveUnit(k,x.pid,G.slot,nat);});
+  (nmGeList(k).sw||[]).slice().forEach(function(u){nmSwGrpOut(k,u);nmSwGrpIn(G.slot,u,null);});
+  try{(nmSuLwList(k)||[]).slice().reverse().forEach(function(e,j,a){nmSuLwDel(k,a.length-1-j);nmSuLwAdd(G.slot,e.id,null);});}catch(e){}
+  try{(nmSuDcList(k)||[]).slice().forEach(function(){nmSuDcDel(k,0);nmSuDcAdd(G.slot,null);});}catch(e){}
+  nmGeSync(k);nmGeSync(G.slot);var L=nmSideList(G.sd);for(var i=L.length-1;i>=0;i--){var e=L[i];if(e&&e.grp===k&&e.boardId===H.boardId&&e.col===H.col&&e.row===H.row)L.splice(i,1);}
+  try{nmDbg('部隊を合流: '+lb+' → '+nmGrpLbl(G.slot));}catch(e){}try{saveState();}catch(e){}Draw();btToast(lb+' '+T('を合流しました'));NM_RM_SUB='grpedit';btRmReopen(n);}
 function nmGeSplTog(n,pid){var G=NM_GE;if(!G)return;G.spl=G.spl||[];var i=G.spl.indexOf(pid);if(i>=0)G.spl.splice(i,1);else G.spl.push(pid);NM_RM_SUB='grpedit';btRmReopen(n);}
 function nmRmGrpEditItems(n){
   var G=NM_GE;if(!G)return nmRMenuItems(n);var L=NM_SIDE_LBL[G.sd],d=nmGeList(G.slot),nat=d.nat,it=[],nc=(UNITS[nat]&&UNITS[nat].col)||'#ccddee';

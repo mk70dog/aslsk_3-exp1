@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-22 いまの作業=v1485 から再開。返事待ち: ①sample-ufired(撃ったユニットだけ射撃済) ②sample-split(部隊の分割・合体、見た目のみ)】**
+- **【2026-11-22 いまの作業=v1486 から再開。返事待ちなし】**
+  - v1486(ダルマ「合体を合流にする」「実施」): sample-ufired と sample-split をマージ。分割=nmGeSplitDo(選んだユニットを nmGeMoveUnit で空き編成へ・同じヘクスに新しいマーカー[st を写す])、合流=nmGeMergeDo(相手の編成のユニット・SW・LW・DC をこの編成へ・相手のマーカーを消す)。確認 /tmp/s/spl2.js。smoke 0。
   - sample-ufired: x.ufired(撃ったフェイズ名)。nmMfMarkFired→nmUFiredMark(不参加/射撃済のユニットがいる編成で撃ったら、撃ったユニットだけ ufired・不参加は解除・全員撃ったらヘクスのマーカーを射撃済)。除外は out と同じ所に ||ufired。nmUFiredOff を射撃済のクリア(nmStClearFired・nmStClr・dfph の終わり[臨機/防御だけ]・ターン変わりの rph)に。状態の窓に「✓射撃済(臨機)」で外せる。確認 /tmp/s/ufd.js。
   - sample-split: nmRmGrpEditItems の中に nmGeSplitRows(分割=ユニットを選ぶ→新しい部隊を作る、合体=同じヘクスの別の部隊を合わせる)。ボタンはまだ toast だけ。/tmp/s/spl.js。
   - v1485: sample-ustout をマージ。ダルマ質問「不参加のユニットだけ射撃済みにならない?」→いまは射撃済の印がヘクスのマーカー単位(nmMfMarkFired→nmStFired(eh))なので不参加も含めて射撃済になる。
