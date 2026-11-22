@@ -39270,6 +39270,7 @@ function nmMhDo(n,b){var M=NM_MH,eh=nmUnitAt(nmHexOfNode(M.n),M.sd),g=eh&&nmGun(
   if(t!=='fail'){var H=nmHexOfNode(b);eh.boardId=H.boardId;eh.col=H.col;eh.row=H.row;}
   M.res={dr:dr,drm:drm,fin:fin,mn:mn,t:t,to:BTG.nodes[b].nm};try{logResult(function(){return {tabLbl:'MAP 人力移動',text:nmGunName(g)+'→'+BTG.nodes[b].nm+' DR'+dr+'+'+drm+'='+fin+' M#'+mn+' → '+({ok:'成功',stop:'進入して停止',fail:'失敗'}[t]),color:t==='fail'?'#cc3333':'#00aa55',detail:null};});}catch(e){}
   try{saveState();}catch(e){}Draw();if(t!=='fail'){M.n=b;NM_RM_HEX=null;nmOpenMenuAt(b);}nmMhRe(M.n);}
+function nmMhGo(n){var M=NM_MH;if(!M||M.to==null)return;var b=M.to;M.to=null;nmMhDo(n,b);}
 function nmRmMhItems(n){var M=NM_MH;if(!M)return nmRMenuItems(n);var eh=nmUnitAt(nmHexOfNode(M.n),M.sd),g=eh&&nmGun(eh.gun),it=[];
   it.push({ic:'back',t:'← 戻る',sub:'人力移動',f:"NM_MH=null;btRmReopen("+n+")"});it.push({sep:1});
   if(!g){it.push({ic:'info',t:'砲のマーカーがありません'});return it;}
@@ -39278,11 +39279,13 @@ function nmRmMhItems(n){var M=NM_MH;if(!M)return nmRMenuItems(n);var eh=nmUnitAt
   it.push({row:1,ic:'sel',t:'動かす',btns:[[(M.mmc?'':'✓')+'乗員',"NM_MH.mmc=false;nmMhRe("+n+")"],[(M.mmc?'✓':'')+'分隊−1',"NM_MH.mmc=true;nmMhRe("+n+")"]]});
   it.push({row:1,ic:'',t:'<span style="font-size:12px">追加</span>',btns:[['分隊'+M.xs,"NM_MH.xs=(NM_MH.xs+1)%3;nmMhRe("+n+")"],['半分隊'+M.xh,"NM_MH.xh=(NM_MH.xh+1)%3;nmMhRe("+n+")"]]});
   [['rd','赤','#ff6060'],['wd','白','#e8eef4']].forEach(function(x){var cv=M[x[0]]||0;it.push({row:1,cmp:1,ic:'fire',t:'<span style="color:'+x[2]+'">'+x[1]+'</span>',btns:[1,2,3,4,5,6].map(function(v){return [(cv===v?'✓':'')+v,"NM_MH."+x[0]+"=(NM_MH."+x[0]+"==="+v+"?0:"+v+");nmMhRe("+n+")"];})});});
-  it.push({ic:'info',t:'<span style="font-size:12px;color:#c8b070">'+((M.rd&&M.wd)?'出目 赤'+M.rd+'・白'+M.wd+'=DR'+(M.rd+M.wd)+' で判定(ヘクスを選ぶ)':'目を入れるとその目で判定。入れない時は自動で振る')+'</span>'});
-  it.push({ic:'tgt',t:'<span style="color:#3ca878">地図で動かすヘクスを選ぶ</span>',sub:'となりのヘクスに必要なDRを表示。タップでDRを振る',f:"nmMhPick("+n+")"}); /* sample(ダルマ指示「マップで指示できるようにする」) */
-  it.push({ic:'tgt',t:'動かすヘクス(タップでDRを振る)'});
+  var TO=(M.to!=null&&BTG.nodes[M.to])?BTG.nodes[M.to].nm:null;
+  it.push({ic:'move',t:TO?'行き先 <b style="color:#ffd24a">'+TO+'</b>':'<span style="color:#8fa6bd">行き先: 右の一覧か地図でヘクスを選ぶ</span>'});
+  if(TO){it.push({ic:'fire',t:'ダイスを振って判定',sub:TO+'へ。赤白のダイスを振る',f:"NM_MH.rd=0;NM_MH.wd=0;nmMhGo("+n+")"});if(M.rd&&M.wd)it.push({ic:'fire',t:'入れた目で判定する',sub:'赤'+M.rd+'・白'+M.wd+'=DR'+(M.rd+M.wd)+'　'+TO+'へ',f:"nmMhGo("+n+")"});}
+  it.push({ic:'tgt',t:'<span style="color:#3ca878">地図で動かすヘクスを選ぶ</span>',sub:'となりのヘクスに必要なDRを表示。タップで行き先に',f:"nmMhPick("+n+")"}); /* sample(ダルマ指示「マップで指示できるようにする」) */
+  it.push({ic:'tgt',t:'動かすヘクス(タップで行き先に)'});
   BTG.nodes[M.n].nb.forEach(function(b){var c=nmMhCost(M.n,b),N=BTG.nodes[b];if(!c)return;var drm=c.mf+c.tem+(c.road?-2:0)+(M.mmc?-1:0)+Math.max(-4,-2*M.xs-M.xh),need=(g.m||0)-drm;
-    it.push({ic:'move',t:N.nm+'　'+btTerrJP(N.terr)+'　DRM'+(drm>=0?'+':'')+drm,sub:(c.bld?'建物(大型の砲は不可)　':'')+'DR'+(need-1)+'以下で成功',f:"nmMhDo("+n+","+b+")"});});
+    it.push({ic:'move',t:'<span'+(M.to===b?' style="color:#ffd24a">✓ ':'>')+N.nm+'　'+btTerrJP(N.terr)+'　DRM'+(drm>=0?'+':'')+drm+'</span>',sub:(c.bld?'建物(大型の砲は不可)　':'')+'DR'+(need-1)+'以下で成功',f:"NM_MH.to="+b+";nmMhRe("+n+")"});});
   return it;}
 /* sample(ダルマ指示「(人力移動) マップで指示できるようにする」): 地図で、となりのヘクスに必要なDR(成功の見込みで色分け)を出し、タップでそのヘクスへDRを振る */
 /* 色のサンプル(ダルマ指示「色のサンプルX5」): a=信号(緑黄橙赤) b=青の濃淡 c=枠だけ d=アプリの色(水色・金・橙・赤) e=水色の枠で数字の色だけ */
@@ -39296,11 +39299,11 @@ function nmMhList(){var M=NM_MH;if(!M)return [];var eh=nmUnitAt(nmHexOfNode(M.n)
   BTG.nodes[M.n].nb.forEach(function(b){var c=nmMhCost(M.n,b);if(!c)return;var drm=c.mf+c.tem+(c.road?-2:0)+(M.mmc?-1:0)+Math.max(-4,-2*M.xs-M.xh),need=(g.m||0)-drm-1;out.push({tn:b,drm:drm,need:need,bld:c.bld});});return out;}
 function nmMhPick(n){var L=nmMhList();if(!L.length){btToast(T('動かせるヘクスがありません'));return;}var el=document.getElementById('btRm');if(el)el.style.visibility='hidden';
   NM_PICK={kind:'mh',n:n,list:L};nmPickBanner(true);Draw();try{var M=NM_MH,P=btCamPt(M?M.n:n);if(P){btCamCenter(P,btCamFree(false),false);Draw();}}catch(e){console.log('mhc',e);}} /* v1481(ダルマ報告「地図で動かすを選択しても何もない」): 砲のヘクスが画面の外だと色付きのヘクスが見えないので、砲のヘクスを画面の中央へ */
-function nmMhPickEnd(tn){var P=NM_PICK;if(!P)return;NM_PICK=null;nmPickBanner(false);var el=document.getElementById('btRm');if(el)el.style.visibility='';Draw();if(tn!=null)nmMhDo(P.n,tn);else{NM_RM_SUB='mh';btRmReopen(P.n);}}
+function nmMhPickEnd(tn){var P=NM_PICK;if(!P)return;NM_PICK=null;nmPickBanner(false);var el=document.getElementById('btRm');if(el)el.style.visibility='';Draw();if(tn!=null&&NM_MH){NM_MH.to=tn;}NM_RM_SUB='mh';btRmReopen(P.n);} /* v1483(ダルマ「判定ボタンは?」): 地図で選んだヘクスは行き先にするだけ。判定は判定ボタンで */
 (function(){var oT=nmPickTap;nmPickTap=function(cx,cy){var P=NM_PICK;if(!P||P.kind!=='mh')return oT.apply(this,arguments);var H=losHexAtClient(cx,cy),tn=H?btNodeOf(H.boardId,H.col,H.row):null,hit=null;if(tn!=null)P.list.forEach(function(x){if(x.tn===tn)hit=x;});
   if(!hit){btToast(T('色の付いたとなりのヘクスをタップしてください'));return true;}nmMhPickEnd(tn);return true;};
   var oE=nmPickEnd;nmPickEnd=function(tn){var P=NM_PICK;if(P&&P.kind==='mh')return nmMhPickEnd(tn);return oE.apply(this,arguments);};
-  var oB=nmPickBanner;nmPickBanner=function(on){var r=oB.apply(this,arguments);try{var P=NM_PICK,b=document.getElementById('nmPickBn');if(on&&P&&P.kind==='mh'&&b)b.firstChild.textContent=T('砲を動かすヘクスをタップ(DRを振ります)');}catch(e){}return r;};
+  var oB=nmPickBanner;nmPickBanner=function(on){var r=oB.apply(this,arguments);try{var P=NM_PICK,b=document.getElementById('nmPickBn');if(on&&P&&P.kind==='mh'&&b)b.firstChild.textContent=T('砲を動かすヘクスをタップ(行き先にします)');}catch(e){}return r;};
   var oO=nmPickOverlaySVG;nmPickOverlaySVG=function(dl){var P=NM_PICK;if(!P||P.kind!=='mh')return oO.apply(this,arguments);var h='';P.list.forEach(function(x){var H=nmHexOfNode(x.tn);if(!H)return;var g=losColRowToGlobalCanon(H.boardId,H.col,H.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);
     var k=x.need>=6?0:x.need>=4?1:x.need>=2?2:3,PL=NM_MH_PAL[NM_MH_PALK]||NM_MH_PAL.a,col=PL.c[k],fil=PL.f?PL.f[k]:col+'33',sw=PL.sw||3;
     h+='<polygon points="'+losHexPolygonPoints(d.x,d.y,losBoardRotById(H.boardId))+'" fill="'+fil+'" stroke="'+(PL.st?PL.st[k]:col)+'" stroke-width="'+sw+'"/>';
