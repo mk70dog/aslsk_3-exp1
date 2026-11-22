@@ -36251,7 +36251,7 @@ function nmRmUFold(n){try{localStorage.setItem('nmRmUOpen',nmRmUOpen()?'0':'1');
 function nmRmXFold(n){try{localStorage.setItem('nmRmXOpen',nmRmXOpen()?'0':'1');}catch(e){}window.NM_RM_GROW=1;btRmReopen(n);}
 var NM_RM_IMV=null;
 function nmRmBuildB(n,U,X2){
-  var H=NM_RM_HEX;if(!H||nmAllAt(H,'f').length+nmAllAt(H,'e').length!==1)return null;
+  var H=NM_RM_HEX;if(!H||(nmAllAt(H,'f').length+nmAllAt(H,'e').length!==1&&!window.NM_BQ_FORCE))return null;
   var head=null,atk=null,mv=null,face=null,del=null,edt=null,hexIt=[],rest=[],imv=[],mvInf=false,ST=function(x,r){return typeof x.f==='string'&&r.test(x.f);};
   U.forEach(function(x,i){
     if(x.sep||x.html||x.arr){rest.push(x);return;}
@@ -36278,7 +36278,7 @@ function nmRmBuildB(n,U,X2){
   if(T.length<2)return null;
   var th=nmMuTiles(T); /* 基本画像のタイル(右クリックと同じ) */
   var uo=nmRmUOpen(),xo=nmRmXOpen(),top=[head,{html:th}];
-  try{var H0=NM_RM_HEX,e0=nmAllAt(H0,'f')[0]||nmAllAt(H0,'e')[0],s0=nmAllAt(H0,'f').length?'f':'e';if(e0&&e0.grp&&!e0.veh&&!e0.gun)top=top.concat(nmGrpStRows(n,s0,e0,'B'));}catch(e){console.log('grpst',e);}
+  try{var H0=NM_RM_HEX,e0=window.NM_BQ_FORCE||nmAllAt(H0,'f')[0]||nmAllAt(H0,'e')[0],s0=window.NM_BQ_FORCE?(nmAllAt(H0,'f').indexOf(window.NM_BQ_FORCE)>=0?'f':'e'):nmAllAt(H0,'f').length?'f':'e';if(e0&&e0.grp&&!e0.veh&&!e0.gun)top=top.concat(nmGrpStRows(n,s0,e0,'B'));}catch(e){console.log('grpst',e);}
   if(rest.length&&window.NM_RM_NOFOLD!==false){top=top.concat(rest);} /* sample-rmst(ダルマ指示「赤枠部分無くして状態は常に表示」): 「▼ 状態・操作 タップで閉じる」の見出しを出さず、中身を常に表示 */
   else if(rest.length){top.push({ic:'sel',t:(uo?'▾ ':'▸ ')+'状態・操作',sub:uo?'タップで閉じる':'状態・操作するユニット・MG・煙幕手榴弾・回復など',f:"nmRmUFold("+n+")"});if(uo)top=top.concat(rest);}
   var hx=hexIt,hexL=[]; /* 残骸・煙幕・マークは削除(ダルマ指示) */
@@ -43336,6 +43336,15 @@ function nmRmSizeInit(){try{var box=document.querySelector('#btRm .rmBox');if(!b
     var k=function(ev){ev.stopPropagation();ev.preventDefault();window.removeEventListener('click',k,true);};window.addEventListener('click',k,true);setTimeout(function(){window.removeEventListener('click',k,true);},300);};
   g.addEventListener('pointerup',end);g.addEventListener('pointercancel',function(){st=null;});g.addEventListener('click',function(e){e.stopPropagation();});}catch(e){console.log('nmRmSizeInit',e);}}
 (function(){var o=window.btRMenu;if(typeof o!=='function')return;window.btRMenu=function(){var r=o.apply(this,arguments);try{nmRmSizeInit();}catch(e){}return r;};})();
+/* sample-inlunit(ダルマ「ヘクス 2部隊の場合には部隊を選択で(攻撃・移動・編成・消去と状態の)部分を下に表示する」): 同じ側が2つ以上のヘクスのメニューで、部隊の行をタップすると別の画面へ進まず、一覧の下にその部隊の操作を出す(もう一度タップで閉じる) */
+(function(){var o=nmRMenuItems;nmRMenuItems=function(n){var L=o.apply(this,arguments);try{if(NM_RM_SUB||window.NM_RM_INL===0||!Array.isArray(L))return L;var H=NM_RM_HEX,last=-1,selIdx=-1;
+  L.forEach(function(x,i){if(x&&typeof x.f==='string'&&/^nmSelK\('[fe]',\d+\);NM_RM_SUB='unit1'/.test(x.f)){last=i;var m=/^nmSelK\('([fe])',(\d+)\)/.exec(x.f),sd=m[1],k=+m[2],eh=nmAllAt(H,sd)[k],on=!!(window.NM_RM_INLEH&&eh===window.NM_RM_INLEH);
+    x.f="nmRmInlTog('"+sd+"',"+k+","+n+")";x.sub=String(x.sub||'').replace('タップでこのマーカーの操作',on?'タップで閉じる':'タップで操作を下に表示');if(on){selIdx=i;x.t=String(x.t).replace(/^<span>/,'<span class="nmInlOn"><span style="color:#ffd24a">▼ </span>');}}});
+  if(selIdx<0||!window.NM_RM_INLEH)return L;var eh=window.NM_RM_INLEH,sd=nmAllAt(H,'f').indexOf(eh)>=0?'f':'e',keep=NM_SEL_EH;NM_SEL_EH=eh;var u=[];nmUnitMenu(u,H,n,sd);window.NM_BQ_FORCE=eh;var BQ=null;try{BQ=nmRmBuildB(n,u,[]);}catch(e){console.log('inlB',e);}window.NM_BQ_FORCE=null;
+  var add=BQ?BQ.top.slice(1):u.slice(1);add=[{html:'<div style="flex:1 1 100%;width:100%;border-top:2px solid #ffd24a;margin:2px 0 0"></div>'}].concat(add).concat([{html:'<div style="flex:1 1 100%;width:100%;border-top:2px solid #ffd24a;margin:0 0 4px"></div>'}]);
+  L.splice.apply(L,[last+1,0].concat(add)); /* 部隊の一覧の下(一覧の行は動かない) */}catch(e){console.log('inlunit',e);}return L;};})();
+function nmRmInlTog(sd,k,n){var eh=nmAllAt(NM_RM_HEX,sd)[k]||null;nmSelK(sd,k);window.NM_RM_INLEH=(window.NM_RM_INLEH===eh)?null:eh;window.NM_RM_GROW=1;btRmReopen(n);}
+(function(){try{var st=document.createElement('style');st.id='nmInlCss';st.textContent='html:root:root:root:root #btRm .rmIt:has(.nmInlOn){outline:2px solid #ffd24a!important;outline-offset:-2px;background:#2b2610!important}';document.head.appendChild(st);}catch(e){}})();
 /* v1497(ダルマ「メニューのサイズを記憶して戻っても同じ形サイズで表示する」): メニューから判定パネル(全画面の .rmFull など)へ進んで戻った時、進む前のメニューの位置・幅・高さに戻す */
 function nmRmTopMark(){try{var b=document.querySelector('#btRm .rmBox');if(b)b.__top=nmRmIsMenu(b)&&!NM_RM_SUB&&!window.NM_FACE&&!window.NM_RM_VEH;}catch(e){}} /* 一番上のヘクス/ユニットのメニューか(方向・配置などのサブ画面は除く) */
 (function(){var o=window.btRMenu;window.btRMenu=function(){var r=o.apply(this,arguments);nmRmTopMark();return r;};})();
