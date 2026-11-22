@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1511</title>
+<title>ASL SKシリーズv1512</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1511">
+<meta property="og:title" content="ASL SKシリーズv1512">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.711"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.712"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1512="v1512(";
 var APP_VERSION_HIST_v1511="v1511(";
 var APP_VERSION_HIST_v1510="v1510(";
 var APP_VERSION_HIST_v1509="v1509(";
@@ -38655,6 +38656,7 @@ function nmDbgHead(){var a=[];try{a.push('版: '+(typeof APP_VERSION!=='undefine
   try{a.push('ターン/フェイズ: '+(S.turn?'T'+S.turn.cur+(S.turn.half?'裏':'表')+' '+(S.turn.phase||''):'-'));}catch(e){}
   try{a.push('モード: '+nmModeNow()+'　オートダイス: '+(nmAdOn()?'ON':'OFF'));}catch(e){}
   try{var dsc=function(e){if(!e)return '-';var r=e.getBoundingClientRect(),cs=getComputedStyle(e);return e.tagName.toLowerCase()+(e.id?'#'+e.id:'')+(typeof e.className==='string'&&e.className?'.'+e.className.trim().split(/\s+/).slice(0,2).join('.'):'')+'['+Math.round(r.left)+','+Math.round(r.top)+' '+Math.round(r.width)+'x'+Math.round(r.height)+' '+cs.position+' bg'+cs.backgroundColor.replace(/\s/g,'')+']';};var pts=[[0.85,0.1],[0.85,0.4],[0.85,0.7],[0.5,0.4]];a.push('画面の点の要素(v1506 右上が黒い件の調査): '+pts.map(function(q){var x=Math.round(innerWidth*q[0]),y=Math.round(innerHeight*q[1]);return '('+x+','+y+') '+document.elementsFromPoint(x,y).slice(0,3).map(dsc).join(' > ');}).join(' | '));var mw=document.getElementById('losMapWrap'),cw=document.getElementById('losCropWrap'),sw=document.getElementById('losScrollWrap');a.push('地図: zoom '+S_LOS.zoom+' 回転 '+S_LOS.viewRot+' scroll '+(sw?sw.scrollLeft+','+sw.scrollTop+' / '+sw.scrollWidth+'x'+sw.scrollHeight:'-')+' crop '+dsc(cw)+' map '+dsc(mw)+' 画像 '+[].map.call(document.querySelectorAll('#losMapWrap img'),function(im){var r=im.getBoundingClientRect();return im.naturalWidth+'x'+im.naturalHeight+(im.complete?'':'(未)')+'@'+Math.round(r.left)+','+Math.round(r.top)+' '+Math.round(r.width)+'x'+Math.round(r.height);}).join(' '));}catch(e){a.push('点の要素: エラー '+e);}
+  try{var CC=nmTurnRoleCnt();a.push('1P/2P: このiPad '+(nmsRole()||'未設定')+' '+Object.keys(CC).map(function(k){return k+' 自分'+CC[k].m+'・相手'+CC[k].o+'→'+(nmTurnRoleOf(k)||'-');}).join(' '));}catch(e){}
   try{var op=['btRm','nmIj','nmHq','nmHqPk','nmCcSc','nmRmPop','nmMvPk','nmFtMn'].filter(function(id){return document.getElementById(id);});a.push('開いている画面: '+(op.join(',')||'なし')+(typeof NM_RM_CUR!=='undefined'&&NM_RM_CUR?' (NM_RM_CUR='+NM_RM_CUR+')':''));}catch(e){}
   try{a.push('保存: '+(NM_SAVE_ST.ok?'OK':'失敗×'+NM_SAVE_ST.fail+'('+(NM_SAVE_ST.err||'')+')')+(NM_SAVE_ST.at?' 最後 '+new Date(NM_SAVE_ST.at).toTimeString().slice(0,8):'')+'　使用 '+nmLsKB()+'KB　大きい順: '+nmLsTop());}catch(e){}
   try{a.push('画面: '+innerWidth+'×'+innerHeight+'　'+navigator.userAgent.replace(/^.*?\(([^)]*)\).*$/,'$1'));}catch(e){}
@@ -40567,7 +40569,12 @@ function nmTurnLiteStep(d){try{if(!S.turn)return;var t=S.turn;if(d>0)t.phase=PHA
 function nmRoleDup(){try{return !!(NM_GS.dupAt&&Date.now()-NM_GS.dupAt<120000);}catch(e){return false;}}
 function nmRoleBadge(){var rl=nmsRole();if(!rl)return '<span style="display:block;font-size:9px;color:#8fa6bd;line-height:1">'+T('未設定')+'</span>';var d=nmRoleDup();return '<span style="display:block;margin-top:2px;padding:0 4px;border-radius:4px;font-size:10px;font-weight:900;line-height:14px;'+(d?'background:#e04848;color:#fff':'background:#ffd24a;color:#1a1204')+'">'+(rl==='p1'?'1P':'2P')+(d?'!':'')+'</span>';}
 function nmRoleChip(){var rl=nmsRole(),d=nmRoleDup();return '<span onclick="event.stopPropagation();nmGsRoleAsk()" style="margin-left:auto;cursor:pointer;white-space:nowrap;flex:0 0 auto;padding:1px 8px;border-radius:6px;font-size:12px;font-weight:800;'+(!rl?'border:1px solid #556;color:#8fa6bd':d?'background:#e04848;color:#fff':'border:1px solid #ffd24a;color:#ffd24a')+'">'+T('このiPad')+' '+(rl==='p1'?'1P':rl==='p2'?'2P':T('未設定'))+(d?' '+T('相手も同じ'):'')+'</span>';}
-function nmTurnRoleOf(nat){try{var rl=nmsRole();if(!rl||!nat)return '';var m=0,o=0;try{m=nmSuSlots(nat).length;}catch(e){}try{o=nmSuOppSlots(nat).length;}catch(e){}var me=rl==='p1'?'1P':'2P',ot=rl==='p1'?'2P':'1P';if(m&&!o)return me;if(o&&!m)return ot;if(!m&&!o){var ns=nmSuNats(),oth=ns.filter(function(k){return k!==nat;});if(oth.length===1){var mo=0,oo=0;try{mo=nmSuSlots(oth[0]).length;oo=nmSuOppSlots(oth[0]).length;}catch(e){}if(mo&&!oo)return ot;if(oo&&!mo)return me;}}return '';}catch(e){return '';}} /* v1511: 編成の国は nmSuSlots/nmSuOppSlots(pickerNat が無い・選択中の編成も数える)で決める。片方の国しか分からない時は、もう一方の国を反対の番号にする */
+function nmTurnRoleCnt(){var o={};try{nmSuNats().forEach(function(k){var m=0,p=0;try{m=nmSuSlots(k).length;}catch(e){}try{p=nmSuOppSlots(k).length;}catch(e){}o[k]={m:m,o:p};});}catch(e){}return o;}
+function nmTurnRoleOf(nat){try{var rl=nmsRole();if(!rl||!nat)return '';var C=nmTurnRoleCnt(),ns=Object.keys(C),me=rl==='p1'?'1P':'2P',ot=rl==='p1'?'2P':'1P';if(!C[nat])return '';
+  var oppN=ns.filter(function(k){return C[k].o>0;}),myN=ns.filter(function(k){return C[k].m>0;});
+  if(oppN.length===1)return nat===oppN[0]?ot:me; /* v1512: 相手の編成がある国が1つなら、それが相手・ほかは自分(こちらで相手の国の編成も作っていても) */
+  if(oppN.length===0&&myN.length===1)return nat===myN[0]?me:ot;
+  if(C[nat].m&&!C[nat].o)return me;if(C[nat].o&&!C[nat].m)return ot;return '';}catch(e){return '';}}
 function nmTurnRoleTag(nat){var r=nmTurnRoleOf(nat);if(!r)return '';var me=nmsRole()===(r==='1P'?'p1':'p2');return ' <span style="display:inline-block;margin-left:4px;padding:0 5px;border-radius:5px;font-size:11px;font-weight:800;line-height:16px;'+(me?'background:#ffd24a;color:#1a1204':'border:1px solid #7ec8e3;color:#7ec8e3')+'" title="'+(me?T('このiPadの手番'):T('相手のiPadの手番'))+'">'+r+'</span>';}
 function nmTurnLiteHTML(){var t=S.turn;if(!(t&&S.scen&&S.scen.sel))return '';var sc=SCN.filter(function(x){return x.id===S.scen.sel;})[0],tot=sc&&sc.trn?sc.trn:0,cur=t.cur||1,last=!!(tot&&(t.ended||cur>=tot)),nat=nmPhaseSideNat(),nc=(nat&&UNITS[nat]&&UNITS[nat].col)||'#9fb0c2',nl=nat?nmNatLbl(nat):'';
   var ar=function(d,p){return '<button class="tlAr" onclick="event.stopPropagation();nmTurnLiteStep('+d+')"><svg viewBox="0 0 24 24"><path d="'+p+'"/></svg></button>';};
