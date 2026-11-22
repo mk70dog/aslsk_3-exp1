@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1520</title>
+<title>ASL SKシリーズv1521</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1520">
+<meta property="og:title" content="ASL SKシリーズv1521">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.720"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.721"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1521="v1521(";
 var APP_VERSION_HIST_v1520="v1520(";
 var APP_VERSION_HIST_v1519="v1519(";
 var APP_VERSION_HIST_v1518="v1518(";
@@ -38688,11 +38689,13 @@ function nmSuOffEntry(nat){try{return !!(typeof btActive==='function'&&btActive(
 function nmSuSlotOff(k,nat){try{if(!(typeof btActive==='function'&&btActive()&&BT&&!BT.started))return false;if(nmSuOffEntry(nat))return true;var g=nmSuSlotGrp(k,nat);if(g==null||g<0)return false;var sd=['GER','SOV'].filter(function(x){return x===nat||btNat(x)===nat;})[0];var o=btObItems().filter(function(x){return x.side===sd&&x.gi===g;})[0];return !!o&&btGroupOf(o)!=='setup';}catch(e){return false;}} /* ダルマ報告「S51 ドイツ初期配置の指示がおかしい」: 初期配置する軍でも、増援のグループ(S51 独 T3 降下猟兵)の編成は地図に置かず盤外から進入 */
 function nmSuClose(){var el=document.getElementById('nmSu');if(el)el.remove();NM_SU=null;try{saveState();}catch(e){}Draw();nmAsKick();}
 function nmSuTab(nat){NM_SU.nat=nat;S.nmSuLastNat=nat;try{saveState();}catch(e){}NM_SU.sel=null;NM_SU.slot=null; /* sample(バグ修正): 国を切り替えた時、前の国で選んでいた編成が残って表示され、そこへ別の国のユニットが入っていた */var sl=nmSuSlots(nat);NM_SU.slot=sl[0]||null;nmSuDraw();}
-function nmSuNew(){var k=nmGeFreeSlot();if(!k){btToast('空いている編成(A〜Z)がありません');return;}var sv=nmGeSaved(k,NM_SU.nat);if(sv){sv.pickerNat=NM_SU.nat;}NM_SU.slot=k;nmSuDraw();}
+function nmSuOppNat(nat){try{if(!nmGsBtnOn())return false;var my=nmMyNatNow();return !!(my&&nat&&nat!==my);}catch(e){return false;}} /* v1521(ダルマ「相手の国の部隊も作成できるのでできなくする」): 同期中、このiPadの国でない国には自分の編成を作らない */
+function nmSuOppBlock(){if(!NM_SU||!nmSuOppNat(NM_SU.nat))return false;if(NM_SU.oppEd&&NM_SU.slot===NM_SU.oppEd)return false;btToast(T('相手の国の部隊は相手のiPadで作ります(相手の編成は「✎ 編集」で変えられます)'));return true;}
+function nmSuNew(){if(nmSuOppBlock())return;var k=nmGeFreeSlot();if(!k){btToast('空いている編成(A〜Z)がありません');return;}var sv=nmGeSaved(k,NM_SU.nat);if(sv){sv.pickerNat=NM_SU.nat;}NM_SU.slot=k;nmSuDraw();}
 function nmSuSyncNow(){try{nmGsSync();}catch(e){console.log('suSync',e);}var t0=Date.now(),w=function(){if(NM_GS.busy&&Date.now()-t0<15000){setTimeout(w,400);return;}try{if(document.getElementById('nmSu'))nmSuDraw();}catch(e){}};setTimeout(w,500);} /* sample-oppedit2(ダルマ「部隊の準備に今すぐ同期ボタンを追加」) */
 function nmSuSelG(k){NM_SU.slot=k;nmSuDraw();}
 function nmSuResBlock(k,kind){var nat=NM_SU&&NM_SU.nat,R=nmSuResCfg(nat);if(!R||!k||!nmSuIsRes(k))return false;var a=nmSuResCnt(nat),q=kind==='smc'?'smc':(kind==='mmc'?'mmc':'sw');if(a[q]+1>R.cap[q]){btToast(R.lbl+'の上限('+q.toUpperCase()+' '+R.cap[q]+')を超えるので入れられません');return true;}return false;}
-function nmSuAddU(i){var it=nmSuPoolItem(i);if(!it)return;if((it.kind==='mmc'||it.kind==='smc')&&nmSuResBlock(NM_SU.slot,it.kind))return;if(it.kind==='mmc'||it.kind==='smc'){if(!NM_SU.slot)nmSuNew();if(!NM_SU.slot)return;
+function nmSuAddU(i){var it=nmSuPoolItem(i);if(!it)return;if(nmSuOppNat(NM_SU.nat)&&!(NM_SU.oppEd&&NM_SU.slot===NM_SU.oppEd)&&(/^相手/.test(NM_SU.slot||'')===false)){if(nmSuOppBlock())return;}if((it.kind==='mmc'||it.kind==='smc')&&nmSuResBlock(NM_SU.slot,it.kind))return;if(it.kind==='mmc'||it.kind==='smc'){if(!NM_SU.slot)nmSuNew();if(!NM_SU.slot)return;
     if(it.g!=null){var cg=nmSuSlotGrp(NM_SU.slot,NM_SU.nat),hasU=(nmGeList(NM_SU.slot).items||[]).length; /* v465: 別のグループの編成には入れず、そのグループの空いた編成か新しい編成へ */
       if(hasU&&cg!=null&&cg>=0&&cg!==it.g){var old=NM_SU.slot,tg=nmSuSlots(NM_SU.nat).filter(function(k){return k!==old&&nmSuSlotGrp(k,NM_SU.nat)===it.g&&!(nmGeList(k).items||[]).length;})[0];if(tg)NM_SU.slot=tg;else nmSuNew();if(NM_SU.slot===old)return;btToast('別のグループなので編成'+NM_SU.slot+'に入れました');}
       if(!(nmGeList(NM_SU.slot).items||[]).length)nmSuSetGrp(NM_SU.slot,it.g);}
@@ -38971,7 +38974,7 @@ function nmSuDraw(){var U=NM_SU;if(!U)return;try{nmSuSlots(U.nat).forEach(functi
   /* v465(ダルマ指示「手動振り分けでもグループを分けて表示」): 編成をシナリオのグループごとの見出しの下に並べる。グループが決まらない編成・混ざった編成は最後に */
   var BK={},hd=function(t,c,sub){return '<div style="margin:2px 0 6px;padding:4px 8px;border-left:3px solid '+c+';background:#1a1d24;border-radius:3px;font-size:13px;font-weight:bold;color:'+c+'">'+t+(sub?'<span style="color:#8899aa;font-weight:normal;margin-left:6px;font-size:11px">'+sub+'</span>':'')+'</div>';};
   sl.forEach(function(k){var g=nmSuSlotGrp(k,nat,GRS),key=(nmSuResCfg(nat)&&nmSuIsRes(k))?'r':g==null?'u':g<0?'x':String(g);(BK[key]=BK[key]||[]).push(k);});
-  var addC=function(gi){return '<div class="add" data-drop="new:'+(gi==null?'':gi)+'" onclick="nmSuNewG('+gi+')" style="min-height:80px;flex-direction:column;text-align:center">＋ '+(GRS.length>1&&gi!=null?T('このグループの新しい編成'):T('新しい編成'))+'</div>';};
+  var addC=function(gi){if(nmSuOppNat(nat))return '<div style="min-height:60px;display:flex;align-items:center;justify-content:center;padding:10px;border:1px dashed #4a5566;border-radius:10px;color:#8fa6bd;font-size:12px;text-align:center">'+T('相手の国です。部隊は相手のiPadで作ります')+'<br>'+T('相手の編成は下の「✎ 編集」で変えられます')+'</div>';return '<div class="add" data-drop="new:'+(gi==null?'':gi)+'" onclick="nmSuNewG('+gi+')" style="min-height:80px;flex-direction:column;text-align:center">＋ '+(GRS.length>1&&gi!=null?T('このグループの新しい編成'):T('新しい編成'))+'</div>';};
   GRS.forEach(function(gr){var ks=BK[String(gr.i)]||[];h+=hd(gr.gl?gr.gl.replace(/</g,'&lt;'):T('グループ')+(gr.i+1),'#ffd060',T('編成')+ks.length)+'<div class="grps" style="margin-bottom:12px">'+ks.map(cardH).join('')+addC(gr.i)+'</div>';});
   var RC=nmSuResCfg(nat);if(RC)h+=hd(T(RC.lbl)+nmSuResBar(nat),'#ff9a3d',T(RC.sub)+' · '+T('編成の「戦術予備(T3)にする」で入れる'))+'<div class="grps" style="margin-bottom:12px">'+(BK.r||[]).map(cardH).join('')+((BK.r||[]).length?'':'<div style="color:#8899aa;font-size:12px;padding:10px">'+T('まだありません')+'</div>')+'</div>';
   if(BK.x)h+=hd(T('グループが混ざっている編成'),'#ff9a3d',T('登場ターン・配置場所が違うユニットが入っています'))+'<div class="grps" style="margin-bottom:12px">'+BK.x.map(cardH).join('')+'</div>';
