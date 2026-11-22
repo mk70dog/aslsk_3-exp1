@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1508</title>
+<title>ASL SKシリーズv1509</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1508">
+<meta property="og:title" content="ASL SKシリーズv1509">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.708"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.709"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1509="v1509(";
 var APP_VERSION_HIST_v1508="v1508(";
 var APP_VERSION_HIST_v1507="v1507(";
 var APP_VERSION_HIST_v1506="v1506(";
@@ -40117,6 +40118,7 @@ function nmTbeShow(id){var c=nmTbCfg();delete c.off[id];S.nmTbCfg=c;try{saveStat
   document.addEventListener('pointerdown',function(e){var b=e.target.closest&&e.target.closest(NM_TBE_SEL);if(!b)return;
     if(NM_TBE&&e.target.closest('.nmTbX')){e.preventDefault();e.stopPropagation();var hid=nmTbeId(b);if(hid)nmTbeHide(hid);return;} /* ダルマ報告「ボタンを消せない」: この捕捉が先に動いてドラッグを始め、−の処理まで届いていなかった */
     if(NM_TBE){var id=nmTbeId(b);if(!id)return;e.preventDefault();e.stopPropagation();var r=b.getBoundingClientRect(),g=b.cloneNode(true);g.id='nmTbGhost';var kz=nmFzK();g.style.left=(r.left/kz)+'px';g.style.top=(r.top/kz)+'px';g.style.width=(r.width/kz)+'px';g.style.height=(r.height/kz)+'px';document.body.appendChild(g);b.classList.add('nmTbDrag');st={b:b,id:id,g:g,dy:e.clientY-r.top,dx:e.clientX-r.left};return;}
+    if(window.NM_TBE_LP!==true)return; /* v1509(ダルマ「ツールバーのドラッグと削除を廃止」): 長押しで編集モード(ドラッグで並べ替え・−でしまう)に入らない。並びと表示は ≡メニューの「ツールバー表示設定」で */
     clearTimeout(lp);var x0=e.clientX,y0=e.clientY;lp=setTimeout(function(){lp=null;window.NM_TBE_EAT=Date.now()+700;nmTbeOn();},650);
     var cancel=function(ev){if(ev.type==='pointermove'&&Math.hypot(ev.clientX-x0,ev.clientY-y0)<10)return;clearTimeout(lp);lp=null;document.removeEventListener('pointermove',cancel,true);document.removeEventListener('pointerup',cancel,true);};
     document.addEventListener('pointermove',cancel,true);document.addEventListener('pointerup',cancel,true);},true);
