@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1512</title>
+<title>ASL SKシリーズv1513</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1512">
+<meta property="og:title" content="ASL SKシリーズv1513">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.712"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.713"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1513="v1513(";
 var APP_VERSION_HIST_v1512="v1512(";
 var APP_VERSION_HIST_v1511="v1511(";
 var APP_VERSION_HIST_v1510="v1510(";
@@ -40574,7 +40575,9 @@ function nmTurnRoleOf(nat){try{var rl=nmsRole();if(!rl||!nat)return '';var C=nmT
   var oppN=ns.filter(function(k){return C[k].o>0;}),myN=ns.filter(function(k){return C[k].m>0;});
   if(oppN.length===1)return nat===oppN[0]?ot:me; /* v1512: 相手の編成がある国が1つなら、それが相手・ほかは自分(こちらで相手の国の編成も作っていても) */
   if(oppN.length===0&&myN.length===1)return nat===myN[0]?me:ot;
-  if(C[nat].m&&!C[nat].o)return me;if(C[nat].o&&!C[nat].m)return ot;return '';}catch(e){return '';}}
+  if(C[nat].m&&!C[nat].o)return me;if(C[nat].o&&!C[nat].m)return ot;
+  var sc=function(k){return C[k].m-C[k].o;},mx=Math.max.apply(null,ns.map(sc)),top=ns.filter(function(k){return sc(k)===mx;});if(top.length===1&&ns.length>1)return nat===top[0]?me:ot; /* v1513(ログ: GER 自分5・相手2、SOV 自分1・相手1 で両方「-」): 両方の国に自分と相手の編成がある時は、(自分の編成数−相手の編成数)が一番多い国を自分の国にする */
+  return '';}catch(e){return '';}}
 function nmTurnRoleTag(nat){var r=nmTurnRoleOf(nat);if(!r)return '';var me=nmsRole()===(r==='1P'?'p1':'p2');return ' <span style="display:inline-block;margin-left:4px;padding:0 5px;border-radius:5px;font-size:11px;font-weight:800;line-height:16px;'+(me?'background:#ffd24a;color:#1a1204':'border:1px solid #7ec8e3;color:#7ec8e3')+'" title="'+(me?T('このiPadの手番'):T('相手のiPadの手番'))+'">'+r+'</span>';}
 function nmTurnLiteHTML(){var t=S.turn;if(!(t&&S.scen&&S.scen.sel))return '';var sc=SCN.filter(function(x){return x.id===S.scen.sel;})[0],tot=sc&&sc.trn?sc.trn:0,cur=t.cur||1,last=!!(tot&&(t.ended||cur>=tot)),nat=nmPhaseSideNat(),nc=(nat&&UNITS[nat]&&UNITS[nat].col)||'#9fb0c2',nl=nat?nmNatLbl(nat):'';
   var ar=function(d,p){return '<button class="tlAr" onclick="event.stopPropagation();nmTurnLiteStep('+d+')"><svg viewBox="0 0 24 24"><path d="'+p+'"/></svg></button>';};
