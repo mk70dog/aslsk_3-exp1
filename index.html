@@ -44473,14 +44473,14 @@ function nmRmSgItems(n){var G=NM_SG;if(!G)return nmRMenuItems(n);var eh=nmUnitAt
   it.push({ic:'fire',t:'DRを振る',f:"NM_SG.a=1+Math.floor(Math.random()*6);NM_SG.b=1+Math.floor(Math.random()*6);nmSgDo("+n+")"});
   [['a','赤','#ff6060'],['b','白','#e8eef4']].forEach(function(x){it.push({row:1,cmp:1,ic:'fire',t:'<span style="color:'+x[2]+'">'+x[1]+'</span>',btns:[1,2,3,4,5,6].map(function(v){return [(G[x[0]]===v?'✓':'')+v,"NM_SG."+x[0]+"=(NM_SG."+x[0]+"==="+v+"?0:"+v+");nmSgRe("+n+")"];})});});it.push({row:1,ic:'',t:'',btns:[[(G.a&&G.b?'🎲 '+T('判定する')+'（'+G.a+'+'+G.b+'）':'🎲 '+T('判定する')),"if(!(NM_SG.a&&NM_SG.b)){if(!nmAdOn()){btToast(T('出目を選んでください(オートダイスOFF)'));return;}NM_SG.a=1+Math.floor(Math.random()*6);NM_SG.b=1+Math.floor(Math.random()*6);}nmSgDo("+n+")"]]});
   return it;}
-/* sample-split(ダルマ「部隊を分割 合体を追加」): 編成の画面に 分割(選んだユニットを同じヘクスの新しい部隊に)・合体(同じヘクスの別の部隊をこの部隊に合わせる) */
+/* sample-split(ダルマ「部隊を分割 合体を追加」「合体を合流にする」): 編成の画面に 分割(選んだユニットを同じヘクスの新しい部隊に)・合流(同じヘクスの別の部隊をこの部隊に合わせる) */
 function nmGeSplitRows(it,n,G,d){var sp=G.spl||[],its=d.items||[];
-  it.push({sep:1,lbl:'部隊の分割・合体'});
+  it.push({sep:1,lbl:'部隊の分割・合流'});
   if(its.length>=2){it.push({row:1,ic:'sel',t:'分割<div style="font-size:11px;color:#8899aa">新しい部隊に移すユニットを選ぶ</div>',btns:its.map(function(x){var on=sp.indexOf(x.pid)>=0;return [(on?'✓':'')+x.label,"nmGeSplTog("+n+","+x.pid+")"];})});
     if(sp.length&&sp.length<its.length)it.push({ic:'move',t:'<span style="color:#3ca878">選んだ'+sp.length+'個で新しい部隊を作る</span>',sub:'同じヘクスに置く。持っているSWも一緒に移る',f:"btToast('サンプル')"});}
   var oth=[];try{nmAllAt(NM_RM_HEX,G.sd).forEach(function(e){if(e.grp&&e.grp!==G.slot&&!e.veh&&!e.gun)oth.push(e.grp);});}catch(e){}
   if(!oth.length)oth=['(例)'];
-  it.push({row:1,ic:'hex',t:'合体<div style="font-size:11px;color:#8899aa">同じヘクスの部隊をこの部隊に合わせる</div>',btns:oth.map(function(k){return [(k==='(例)'?'部隊C(ソ)':nmGrpLbl(k)+' '+(nmGrpText(k)||''))+' を合わせる',"btToast('サンプル')"];})});}
+  it.push({row:1,ic:'hex',t:'合流<div style="font-size:11px;color:#8899aa">同じヘクスの部隊をこの部隊に合流させる</div>',btns:oth.map(function(k){return [(k==='(例)'?'部隊C(ソ)':nmGrpLbl(k)+' '+(nmGrpText(k)||''))+' を合流',"btToast('サンプル')"];})});}
 function nmGeSplTog(n,pid){var G=NM_GE;if(!G)return;G.spl=G.spl||[];var i=G.spl.indexOf(pid);if(i>=0)G.spl.splice(i,1);else G.spl.push(pid);NM_RM_SUB='grpedit';btRmReopen(n);}
 function nmRmGrpEditItems(n){
   var G=NM_GE;if(!G)return nmRMenuItems(n);var L=NM_SIDE_LBL[G.sd],d=nmGeList(G.slot),nat=d.nat,it=[],nc=(UNITS[nat]&&UNITS[nat].col)||'#ccddee';
