@@ -46238,10 +46238,15 @@ function btDockPosApply(el){var p=btDockPosGet();if(!p){['left','top'].forEach(f
   el.style.setProperty('left',(x/kz)+'px','important');el.style.setProperty('top',(y/kz)+'px','important');el.style.setProperty('right','auto','important');el.style.setProperty('bottom','auto','important');}
 function btDockDrag(ev){var el=document.getElementById('btDockCtx');if(!el)return;ev.preventDefault();ev.stopPropagation();var r=el.getBoundingClientRect(),dx=ev.clientX-r.left,dy=ev.clientY-r.top,moved=false;
   var mv=function(e){moved=true;try{localStorage.setItem('nmDockPos',JSON.stringify({x:Math.round(e.clientX-dx),y:Math.round(e.clientY-dy)}));}catch(x){}btDockPosApply(el);};
-  var up=function(){removeEventListener('pointermove',mv,true);removeEventListener('pointerup',up,true);removeEventListener('pointercancel',up,true);if(moved)BT_DRAG_EAT=Date.now();};
+  var x0=ev.clientX,y0=ev.clientY;var mv0=mv;mv=function(e){if(!moved&&Math.abs(e.clientX-x0)<6&&Math.abs(e.clientY-y0)<6)return;mv0(e);};
+  var up=function(){removeEventListener('pointermove',mv,true);removeEventListener('pointerup',up,true);removeEventListener('pointercancel',up,true);if(moved)BT_DRAG_EAT=Date.now();else if(window.NM_DKTAP!==0)btDockCycle(el);}; /* sample(ダルマ「タップで場所を変更」): ⠿ をタップ(動かさない)で 右下→左下→下の中央→上の中央 の順に置き場所を変える */
   var eat=function(e){e.stopPropagation();if(e.cancelable&&e.type==='touchmove')e.preventDefault();};['mousemove','touchmove','mouseup','touchend'].forEach(function(t){addEventListener(t,eat,{capture:true,passive:false});});
   var up0=up;up=function(){up0();setTimeout(function(){['mousemove','touchmove','mouseup','touchend'].forEach(function(t){removeEventListener(t,eat,{capture:true});});},0);};
   addEventListener('pointermove',mv,true);addEventListener('pointerup',up,true);addEventListener('pointercancel',up,true);}
+function btDockCycle(el){var W=el.offsetWidth,H=el.offsetHeight,k=0;try{k=(+localStorage.getItem('nmDockCyc')||0)+1;localStorage.setItem('nmDockCyc',k%4);}catch(e){}k=k%4;
+  var R=document.getElementById('nmFullTabs'),rw=R?R.getBoundingClientRect().width:0,B=document.getElementById('btFullBot'),bt=B?B.getBoundingClientRect().top:innerHeight;
+  var P=[[innerWidth-rw-W-10,bt-H-6],[10,bt-H-6],[(innerWidth-rw-W)/2,bt-H-6],[(innerWidth-rw-W)/2,60]][k];
+  try{localStorage.setItem('nmDockPos',JSON.stringify({x:Math.round(P[0]),y:Math.round(P[1])}));}catch(e){}btDockPosApply(el);BT_DRAG_EAT=Date.now();}
 function BtDockPosReset(){try{localStorage.removeItem('nmDockPos');}catch(e){}Draw();}
 (function(){try{var st=document.createElement('style');st.textContent='#btDockCtx .btDkGrip{display:flex;align-items:center;align-self:stretch;padding:0 4px 0 2px;color:#ffd060;font-size:20px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}#btDockCtx .btDkMin{min-width:38px;padding:0 8px !important;color:#ffd060 !important;font-size:16px !important}';document.head.appendChild(st);}catch(e){}})();
 function btDockCtxSync(h){var el=document.getElementById('btDockCtx');
@@ -55928,7 +55933,15 @@ var st=document.createElement('style');st.textContent='html.bt-mapfull .los-comp
   /* 3: 縦の細い札(見出し・カウンター・ボタンを縦に、幅は中身) */
   +C.replace('X',3)+'{max-width:260px!important}'+C.replace('X',3)+'>div[style*="#4a5262"]>div{margin-top:3px!important}'+C.replace('X',3)+'>div[style*="#4a5262"]>div[style*="overflow-x"]{flex-wrap:wrap!important}';
  (document.head?document.head.appendChild(st):document.addEventListener('DOMContentLoaded',function(){document.head.appendChild(st);}));
- function up(){var v=window.NM_CMDC||0,r=document.documentElement;[1,2,3].forEach(function(k){r.classList.toggle('btCmc'+k,v===k);});}
+
+ /* sample(ダルマ「(下の操作バー btDockCtx)赤枠 コンパクト 半透明にする サンプルx3」): window.NM_DKC=1..3 */
+ var D='html.btDkcX #btDockCtx',dk=function(n){return D.replace('X',n);};
+ var st2=document.createElement('style');st2.id='btDkcCss';st2.textContent=
+  dk(1)+'{padding:3px 5px!important;gap:4px!important;background:#0c121b99!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);border-radius:10px!important}'+dk(1)+' .nb,'+dk(1)+' .cd{height:28px!important;font-size:12px!important;padding:0 9px!important}'+dk(1)+' .cd{max-width:190px;overflow:hidden}'
+  +dk(2)+'{padding:2px 4px!important;gap:3px!important;background:#0c121b80!important;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);border-color:#33425a88!important;border-radius:999px!important}'+dk(2)+' .nb,'+dk(2)+' .cd{height:26px!important;font-size:11.5px!important;padding:0 9px!important;border-radius:999px!important}'+dk(2)+' .cd{max-width:150px;overflow:hidden}'
+  +dk(3)+'{padding:2px!important;gap:2px!important;background:#0c121b66!important;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);border:0!important;box-shadow:0 2px 8px #0007!important;border-radius:8px!important}'+dk(3)+' .nb,'+dk(3)+' .cd{height:26px!important;font-size:11px!important;padding:0 7px!important;background:#161b24aa!important;border-color:#39414f88!important}'+dk(3)+' .cd{max-width:120px;overflow:hidden}';
+ (document.head?document.head.appendChild(st2):document.addEventListener('DOMContentLoaded',function(){document.head.appendChild(st2);}));
+ function up(){var v=window.NM_CMDC||0,w=window.NM_DKC||0,r=document.documentElement;[1,2,3].forEach(function(k){r.classList.toggle('btCmc'+k,v===k);r.classList.toggle('btDkc'+k,w===k);});}
  setInterval(up,500);setTimeout(up,100);})();
 </script>
 </body>
