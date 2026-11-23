@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1535</title>
+<title>ASL SKシリーズv1536</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1535">
+<meta property="og:title" content="ASL SKシリーズv1536">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.735"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.736"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1536="v1536(";
 var APP_VERSION_HIST_v1535="v1535(";
 var APP_VERSION_HIST_v1534="v1534(";
 var APP_VERSION_HIST_v1533="v1533(";
@@ -39968,6 +39969,8 @@ function nmAsTurnSig(){var t=S.turn||{};return [t.cur,t.half,t.phase,t.ended?1:0
 function nmAsPfSig(){var p=S.pfTracker||{};return String(p.used||0);}
 function nmAsTouch(){var ts=nmAsTurnSig(),ps=nmAsPfSig();if(NM_GS.ts!=null&&NM_GS.ts!==ts)S.nmAsTurnAt=Date.now();if(NM_GS.ps!=null&&NM_GS.ps!==ps)S.nmAsPfAt=Date.now();NM_GS.ts=ts;NM_GS.ps=ps;}
 function nmAsKick(){if(!nmAsOn())return;clearTimeout(NM_GS.kt);NM_GS.kt=setTimeout(function(){try{if(nmsRole()&&GIST_CONFIGURED()&&S.scen&&S.scen.sel)nmGsSync({auto:1});}catch(e){}},1200);}
+/* v1536(ダルマ「同期ライト 状態を変えたらすぐ(約1秒後)に送る」): 自分の編成(ユニット・混乱/PIN/CX/負傷・SW)が変わったら、20秒を待たずに送る */
+(function(){var o=saveState,sig=null;saveState=function(){var r=o.apply(this,arguments);try{if(typeof nmGsBtnOn==='function'&&nmGsBtnOn()&&nmsRole()&&S.scen&&S.scen.sel){var sc=S.scen.sel,G=nmGsOwn((S.savedGroups&&S.savedGroups[sc])||{}),x=sc+JSON.stringify(Object.keys(G).sort().map(function(k){return [k,nmGsGrpCore(G[k])];}));if(sig!==null&&x!==sig)nmAsKick();sig=x;}}catch(e){}return r;};})();
 function nmAsLoop(){if(NM_GS.loop)return;try{NM_GS.ts=nmAsTurnSig();NM_GS.ps=nmAsPfSig();}catch(e){}setTimeout(function(){try{if(nmAsOn()&&nmsRole()&&GIST_CONFIGURED()&&S.scen&&S.scen.sel)nmGsSync({auto:1});}catch(e){}},1500);NM_GS.loop=setInterval(function(){try{if(document.visibilityState!=='visible'||!nmAsOn()||!nmGsBtnOn()||!nmsRole()||!GIST_CONFIGURED()||!(S.scen&&S.scen.sel))return;nmGsSync({auto:1});}catch(e){}},20000);}
 function nmAsTurnLbl(t){var ph=(PHASE_SEQ.filter(function(x){return x.id===t.phase;})[0]||{}).lbl||'';return 'ターン'+t.cur+(t.half?' 裏':' 表')+(ph?'('+ph+')':'');}
 function nmGsSync(o){o=o||{};var Q=!!o.auto,sc=S.scen&&S.scen.sel;if(!sc){if(!Q)btToast('シナリオを選んでください');return;}
