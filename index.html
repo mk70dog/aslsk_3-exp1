@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1568</title>
+<title>ASL SKシリーズv1569</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1568">
+<meta property="og:title" content="ASL SKシリーズv1569">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.768"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.769"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1569="v1569(AI対戦: 指示パネルが画面外へはみ出さないように";
 var APP_VERSION_HIST_v1568="v1568(AI対戦: 右下の操作バーを下のバー(2B)と同じ形に";
 var APP_VERSION_HIST_v1567="v1567(AI対戦: A→Bの札に＋隣(隣接ヘクスとの射撃グループ)";
 var APP_VERSION_HIST_v1566="v1566(S29: 建物10(X1-X2)を勝利条件の枠に追加";
@@ -33769,10 +33770,15 @@ if(window.NM_CMD_STY==null)window.NM_CMD_STY='B'; /* v1278 */
 function BtCmdMin(on){BT_CMDMIN=!!on;Draw();}
 function btCmdMinChip(){if(!BT_CMDMIN||!window.__btCmdHas)return '';var hot=BT.pend==='react';return '<button class="cd" onclick="event.stopPropagation();BtCmdMin(0)" style="flex:0 0 auto;max-width:42%;flex-direction:row;align-items:center;gap:8px;padding:0 12px;cursor:pointer;font:inherit;color:#e8eef4;border:'+(hot?'1.5px solid #ff9040':'1px solid #c8a032')+';background:#2a2412"><span style="color:#ffd070;font-size:15px">▴</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:bold">'+(BT_CMDMIN_LBL||T('パネル'))+'</span></button>';}
 (function(){try{var st=document.createElement('style');st.textContent='#btCmd .btCmdMinB{position:absolute;top:4px;right:8px;z-index:3;width:34px;height:26px;padding:0;border-radius:8px;border:1px solid #4a5566;background:#14171d;color:#e8eef4;font-size:16px;line-height:1;cursor:pointer;box-shadow:0 3px 0 #0e0e0c}';document.head.appendChild(st);}catch(e){}})();
+function btCmdClamp(el){ /* v1569(ダルマ報告「表示する場所が悪く欠けている」): 指示パネルを右上などへ動かした後、中身が増えて画面の外へはみ出すのを防ぐ(記憶した位置は変えず、表示だけ画面内へ寄せる) */
+  try{var de=document.documentElement;if(!el||!el.classList.contains('bt-cmdpop')||!de.classList.contains('bt-mapfull'))return;var P=null;try{P=JSON.parse(localStorage.getItem('btCmdPos')||'null');}catch(e){}if(!P)return;
+    for(var it=0;it<3;it++){var r=el.getBoundingClientRect(),H=de.clientHeight,W=de.clientWidth,tb=0;try{tb=nmTbW()||0;}catch(e){}var T0=40;
+    var x=Math.max(0,Math.min(P.x,W-tb-r.width-6)),y=Math.max(0,Math.min(P.y,H-r.height-T0));
+    if(parseFloat(de.style.getPropertyValue('--btcmdx'))===x&&parseFloat(de.style.getPropertyValue('--btcmdy'))===y)break;de.style.setProperty('--btcmdx',x+'px');de.style.setProperty('--btcmdy',y+'px');}}catch(e){}}
 function btCmdMeasure(){
   try{var de=document.documentElement,tb=document.querySelector('#main .los-tb'),c=document.getElementById('btCmd');
     de.style.setProperty('--lostbh',(tb?tb.offsetHeight:56)+'px');de.style.setProperty('--btcmdh',(c?c.offsetHeight:0)+'px');
-    var bd=document.getElementById('btBand');de.style.setProperty('--btbandh',(bd&&bd.offsetParent&&getComputedStyle(bd).display!=='none'?bd.offsetHeight+8:0)+'px');}catch(e){} // v322: 帯が出ている時はその分も引いて、地図を画面の下端に合わせる
+    btCmdClamp(c);var bd=document.getElementById('btBand');de.style.setProperty('--btbandh',(bd&&bd.offsetParent&&getComputedStyle(bd).display!=='none'?bd.offsetHeight+8:0)+'px');}catch(e){} // v322: 帯が出ている時はその分も引いて、地図を画面の下端に合わせる
 }
 
 // ---------- v288(ダルマ指示「車両・ユニットの情報と行動のボタンを、車両の移動の枠内に」) ----------
