@@ -2,8 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-22 いまの作業=v1537 から再開。返事待ち: 2台でのマップ同期の確認・sample-vicctl】**
-  - sample-vicctl(push済み、返事待ち): 勝利条件の文に「支配」があるシナリオで、勝利ヘクスの印を支配している側の国の色(UNITS[国].col、S.nmVicCtrl)で塗る(nmVicCtlCol)。未支配は今の紺色のまま。
+- **【2026-11-22 いまの作業=v1538 から再開。返事待ち: 2台でのマップ同期の確認】**
+  - v1538(sample-vicctl 案3を実施): 勝利条件の文に「支配」があるシナリオで、勝利ヘクスの枠を支配している国の色(UNITS[国].col、S.nmVicCtrl)にし「独支配」の札(nmVicCtlCol/nmVicCtlAbbr、NM_VICCTL_STY=3)。未支配は紺のまま。
   - v1537(sample-plnew を実施): 配置パネルの「＋新しい編成」は同期中(ライト・オールとも)なら自分の国だけ(nmSuOppNat)。v1528 のオールで非表示はやめた。編成の「加える」はOBの残り(nmGeObRem=nmSuOb−nmSuUsed)があるユニット・SWだけ、「残りN」を表示。OBに無いもの(HSなど)は出さない。
   - v1536: 判定の同期(ライト・オール)で、自分の編成(ユニット・状態・SW)が変わったら約1秒後に編成同期(saveState のラッパーで nmGsGrpCore の変化を見て nmAsKick)。ライトでも状態は以前から編成と一緒に送っていた(20秒ごと)。
   - v1535: ×・「閉じる」は nmRmCloseAll(NM_RM_XALL=1→BtRmClose のラッパーでスポット判定のステップ2なら nmIjClose)。←・それ以外の BtRmClose は今まで通りステップ1へ(nmIjStageBack)。ダルマ「xは閉じる ←は戻る」。
