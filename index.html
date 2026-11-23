@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1560</title>
+<title>ASL SKシリーズv1561</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1560">
+<meta property="og:title" content="ASL SKシリーズv1561">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.760"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.761"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1561="v1561(S29 勝利の札のP1の○×を見やすく";
 var APP_VERSION_HIST_v1560="v1560(S29 勝利の数え方: 相手側も数える・P1の○×を表示・X1-X2を追加";
 var APP_VERSION_HIST_v1559="v1559(スタックのパネルと下の操作バーをコンパクト・半透明(3と3)・⠿タップで置き場所";
 var APP_VERSION_HIST_v1558="v1558(見える範囲のパネルをコンパクトに(案2)";
@@ -30425,7 +30426,7 @@ function btUpdateCtl(){if(BT_HIPM)return btHipEng(btUpdateCtl);
 }
 function btVicCount(){if(BT_HIPM)return btHipEng(btVicCount);var cX=btCfg();if(cX&&cX.vic==='exit'){var ev=(BT.exitVP||{});return {ger:ev.GER||0,sov:ev.SOV||0,total:cX.exitVP,exit:true,xs:cX.vicSide,xv:ev[cX.vicSide]||0,xl:T(String(BT_SIDE_NAME[cX.vicSide]).charAt(0))};}
   if(cX&&cX.vic==='occ'){var oc=0,os=cX.vicSide;cX.occHexes.forEach(function(h){var n=BTG.nodes.findIndex(function(N){return N.nm===h;});if(n>=0&&BT.stacks.some(function(x){return x.side===os&&x.n===n&&btInf(x).some(btGO);}))oc++;});var r1={ger:0,sov:0,total:1,occ:true};r1[os==='GER'?'ger':'sov']=oc;return r1;} /* v1370(S51): 占領(統制状態のユニットがいる)ヘクスの数、1つで勝ち */
-  if(cX&&cX.vic==='req'){var vs=cX.vicSide,BL=btBldgs(),rq=!!(BT.ctl&&BL[0]&&BT.ctl[BL[0].id]===vs),k=0;BL.slice(1).forEach(function(bl){if(BT.ctl&&BT.ctl[bl.id]===vs)k++;});var ko=0;BL.slice(1).forEach(function(bl){if(BT.ctl&&BT.ctl[bl.id]===btOpp(vs))ko++;});var rR={ger:0,sov:0,total:BL.length-1,req:rq,reqNm:BL[0]?BL[0].hexes.join('-'):'',reqTag:' <span style="font-size:10px;opacity:.85">'+(BL[0]?BL[0].hexes[BL[0].hexes.length-1]:'')+(rq?'○':'×')+'</span>'};rR[vs==='GER'?'ger':'sov']=k;rR[vs==='GER'?'sov':'ger']=ko;return rR;} /* v1560: 相手側の数も数え、必須の建物(P1)の○×を札に出す */ /* v1551(S29): 必須の建物(1番目)+ほかの建物の数 */
+  if(cX&&cX.vic==='req'){var vs=cX.vicSide,BL=btBldgs(),rq=!!(BT.ctl&&BL[0]&&BT.ctl[BL[0].id]===vs),k=0;BL.slice(1).forEach(function(bl){if(BT.ctl&&BT.ctl[bl.id]===vs)k++;});var ko=0;BL.slice(1).forEach(function(bl){if(BT.ctl&&BT.ctl[bl.id]===btOpp(vs))ko++;});var rR={ger:0,sov:0,total:BL.length-1,req:rq,reqNm:BL[0]?BL[0].hexes.join('-'):'',reqTag:'<span style="font-size:10px;margin-left:6px;padding:0 5px;border-radius:7px;border:1px solid '+(rq?'#6fe08a':'#ff8080')+';color:'+(rq?'#6fe08a':'#ff8080')+'">'+(BL[0]?BL[0].hexes[BL[0].hexes.length-1]:'')+(rq?'○':'×')+'</span>'};rR[vs==='GER'?'ger':'sov']=k;rR[vs==='GER'?'sov':'ger']=ko;return rR;} /* v1560: 相手側の数も数え、必須の建物(P1)の○×を札に出す */ /* v1551(S29): 必須の建物(1番目)+ほかの建物の数 */
   if(cX&&cX.vic==='clear'){var en=btOpp(cX.vicSide),g0=0,s0=0;btBldgs().forEach(function(bl){var occ=btBldgNodes(bl).some(function(n){return BT.stacks.some(function(x){return x.side===en&&x.n===n&&btInf(x).some(function(u){return btI(u,en).kind==='mmc'&&btGO(u);});});});if(occ)s0++;else g0++;});
     var r0={ger:0,sov:0,total:btBldgs().length,clear:true};r0[cX.vicSide==='GER'?'ger':'sov']=g0;r0[cX.vicSide==='GER'?'sov':'ger']=s0;return r0;} /* v1368(S15): 一掃=敵の統制状態のMMCがいない建物の数 */ /* v1352: S4 退出VP */
   var g=0,s=0;btBldgs().forEach(function(bl){if(BT.ctl&&BT.ctl[bl.id]==='GER')g++;else if(BT.ctl&&BT.ctl[bl.id]==='SOV')s++;});return {ger:g,sov:s,total:btBldgs().length};}
