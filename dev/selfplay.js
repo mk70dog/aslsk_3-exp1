@@ -6,6 +6,7 @@ p.on('console',m=>{const t=m.text();if(/Error|error|undefined/.test(t)&&!/favico
 await p.goto('file://'+(process.env.APP||'/tmp/w/idx_sp.html'),{timeout:180000});await p.waitForTimeout(4000);
 await p.evaluate((sc)=>{S.scen=S.scen||{};S.scen.sel=sc;NAVTAB('scen');NAVTAB('los');try{LOS_PAGE();}catch(x){}},sc);await p.waitForTimeout(3000);
 await p.evaluate((w)=>{if(w){var c=BT_SCFG[btScId()];c.aiw=Object.assign({},c.aiw||{},JSON.parse(w));}},process.env.AIW||'');
+await p.evaluate((w)=>{if(w){var o=JSON.parse(w);for(var k in o)BT_AIW[k]=o[k];}},process.env.BAIW||'');
 if(process.env.DBG)await p.evaluate(()=>{window.BT_DBG=[];});
 // 監査(AUD=1): どちらの軍がどの行動を何回したかを数える(アプリのロジックは変えず、関数を包んで数えるだけ)
 if(process.env.AUD)await p.evaluate(()=>{var A=window.BT_AUD={};function inc(k,side,n){var key=(side||'?')+'|'+k;A[key]=(A[key]||0)+(n==null?1:n);}
