@@ -36819,6 +36819,7 @@ function nmGeSync(slot){var g=nmGeActive(slot),sc=S.scen&&S.scen.sel;if(!g||!sc)
 function nmGeFreeSlot(){var sc=S.scen&&S.scen.sel,sv=(sc&&S.savedGroups&&S.savedGroups[sc])||{},g=null;try{g=losPrimaryFireGroup();}catch(e){}
   for(var i=0;i<GROUP_SLOTS.length;i++){var s0=GROUP_SLOTS[i],x=sv[s0];if(g&&g.activeGroupSlot===s0&&g.pickerItems&&g.pickerItems.length)continue;if(x&&x.pickerItems&&x.pickerItems.length)continue;if(x&&x.sw&&x.sw.length)continue;try{delete nmGrpTagMap().t[s0];}catch(e){}return s0;}return null;}
 function nmGeOpen(n,sd,slot){NM_GE={sd:sd,slot:slot};NM_RM_SUB='grpedit';btRmReopen(n);}
+function nmGeObRem(nat){try{var ob=nmSuOb(nat);if(!ob||!ob.length)return null;var u=nmSuUsed(nat),R={};ob.forEach(function(x){var k=x.kind+'|'+x.id,v=x.q?Infinity:Math.max(0,x.n-(u[k]||0));R[k]=v;if(x.label&&x.label!==x.id)R[x.kind+'|'+x.label]=v;});return R;}catch(e){return null;}}
 function nmGeNew(n,sd,slot,nat){var g=nmGeActive(slot);if(g){g.pickerNat=nat;}var sv=nmGeSaved(slot,nat);if(sv&&!(sv.pickerItems&&sv.pickerItems.length))sv.pickerNat=nat;
   var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(!eh){if(sd==='f'){eh={boardId:H.boardId,col:H.col,row:H.row};nmSideList('f').push(eh);}else{losToggleEnemyHexAt(H.boardId,H.col,H.row);eh=nmEnemyAt(H);}if(!eh)return;}
   eh.veh=null;eh.gun=null;eh.tca=null;eh.facing=null;eh.grp=slot;try{saveState();}catch(e){}Draw();nmGeOpen(n,sd,slot);}
@@ -44724,11 +44725,13 @@ function nmRmGrpEditItems(n){
   it.push({sep:1});
   it.push({ic:'info',t:'加える',sub:'このシナリオの'+nmNatLbl(nat)+'のユニット(タップで1個ずつ)'});
   var D=UNITS[nat]||{mmc:[],smc:[]},fl=null;try{fl=scenarioUnitLabels(nat);}catch(e){}
-  (D.smc||[]).filter(function(u){return !fl||fl.smc[u.lbl];}).forEach(function(u){it.push({ic:'sel',img:vaslCtrHTML('u:'+nat+'|'+u.lbl,30)||'',t:'＋ '+u.lbl,sub:'指揮官',f:"nmGeAdd("+n+",'"+nat+"','smc','"+q(u.lbl)+"')"});});
+  var RM=nmGeObRem(nat),rmT=function(k,l){if(!RM)return '';var v=RM[k+'|'+l];return v==null?'':v===Infinity?'':'　'+T('残り')+v;},rmOk=function(k,l){if(!RM)return true;var v=RM[k+'|'+l];return v!=null&&v>0;},nAdd=0; /* sample-plnew(ダルマ「部隊の準備でまだ割り当てられていないユニットのみ選択可能」): OBの残りがあるものだけ */
+  (D.smc||[]).filter(function(u){return (!fl||fl.smc[u.lbl])&&rmOk('smc',u.lbl);}).forEach(function(u){nAdd++;it.push({ic:'sel',img:vaslCtrHTML('u:'+nat+'|'+u.lbl,30)||'',t:'＋ '+u.lbl,sub:'指揮官'+rmT('smc',u.lbl),f:"nmGeAdd("+n+",'"+nat+"','smc','"+q(u.lbl)+"')"});});
   var mm=[];try{mm=scenarioMmcListForNat(nat)||[];}catch(e){mm=D.mmc||[];}
-  mm.forEach(function(u){it.push({ic:'sel',img:vaslCtrHTML('u:'+nat+'|'+u.lbl,30)||'',t:'＋ '+u.lbl,sub:u.hs?'半分隊':'分隊',f:"nmGeAdd("+n+",'"+nat+"','mmc','"+q(u.lbl)+"')"});});
-  var swl=nmGeSwList(nat);if(swl.length){it.push({sep:1});it.push({ic:'info',t:'支援火器を加える',sub:(d.items.length?'まだ支援火器を持っていないユニットに自動で持たせる(射撃タブで変更可)':'先に分隊か指揮官を加えてください')});
-    swl.forEach(function(t){it.push({ic:'fire',img:vaslCtrHTML('u:SW|'+t.id,30)||'',t:'＋ '+swLblT(t.lbl),sub:'B#'+(t.b<99?t.b:'—')+(t.fp?'　FP'+t.fp:''),f:d.items.length?"nmGeSwAdd("+n+",'"+q(t.id)+"')":''});});}
+  mm.filter(function(u){return rmOk('mmc',u.lbl);}).forEach(function(u){nAdd++;it.push({ic:'sel',img:vaslCtrHTML('u:'+nat+'|'+u.lbl,30)||'',t:'＋ '+u.lbl,sub:(u.hs?'半分隊':'分隊')+rmT('mmc',u.lbl),f:"nmGeAdd("+n+",'"+nat+"','mmc','"+q(u.lbl)+"')"});});
+  if(RM&&!nAdd)it.push({ic:'info',t:'<span style="color:#8fa6bd">'+T('OBのユニットはすべて部隊に入っています')+'</span>',sub:T('部隊の準備で確認できます')});
+  var swl=nmGeSwList(nat);if(RM)swl=swl.filter(function(t){return rmOk('sw',t.id);});if(swl.length){it.push({sep:1});it.push({ic:'info',t:'支援火器を加える',sub:(d.items.length?'まだ支援火器を持っていないユニットに自動で持たせる(射撃タブで変更可)':'先に分隊か指揮官を加えてください')});
+    swl.forEach(function(t){it.push({ic:'fire',img:vaslCtrHTML('u:SW|'+t.id,30)||'',t:'＋ '+swLblT(t.lbl),sub:'B#'+(t.b<99?t.b:'—')+(t.fp?'　FP'+t.fp:'')+rmT('sw',t.id),f:d.items.length?"nmGeSwAdd("+n+",'"+q(t.id)+"')":''});});}
   return it;
 }
 /* v358(ダルマ指示「自軍マーカーに射撃タブの編成を選択可能にする」): 自軍に射撃タブの編成(A/B/C…)を割り当てる(eh.grp)。地図には編成のカウンター(指揮官→分隊の順、最大3枚重ね) */
@@ -44988,7 +44991,7 @@ function nmRmVehItems(n,sd){
       var used=nmSideList('f').concat(nmSideList('e')).some(function(e){return e.grp===slot&&!e.veh&&!e.gun;});
       h+='<button class="plTile'+(on?' on':'')+(used&&!on?' used':'')+'" onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push("nmRmSetGrp("+n+",'"+slot+"','"+sd+"')")-1)+')">'+(used&&!on?'<span class="plUsedB">✓ '+T('配置済み')+'</span>':'')+'<span class="plC" style="color:#c8a032'+(/^相手/.test(slot)?';font-size:13px;white-space:nowrap':'')+'">'+slot+'</span><span class="plStk">'+imgs+'</span><span class="plNm">'+d.items.slice(0,2).map(function(x){return x.label;}).join(' ')+(d.items.length>2?'…':'')+'</span><small>'+d.items.length+'ユニット</small></button>';});
     var jAll0=false;try{jAll0=nmModeNow()==='judge'&&nmJsLv()==='all'&&!!nmsRole();}catch(e){} /* v1528(ダルマ「同期オール時は ＋新しい編成を非表示にする」): 編成は部隊の準備で作る */
-    var nsl=jAll0?null:nmGeFreeSlot();if(nsl&&nat)h+='<button class="plTile plAdd" onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push("nmGeNew("+n+",'"+sd+"','"+nsl+"','"+nat+"')")-1)+')"><span style="font-size:24px">＋</span><span class="plNm">'+T('新しい編成')+'</span><small>'+nmGrpLbl(nsl)+'</small></button>';
+    var nsl=(jAll0||nmSuOppNat(nat))?null:nmGeFreeSlot();if(nsl&&nat)h+='<button class="plTile plAdd" onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push("nmGeNew("+n+",'"+sd+"','"+nsl+"','"+nat+"')")-1)+')"><span style="font-size:24px">＋</span><span class="plNm">'+T('新しい編成')+'</span><small>'+nmGrpLbl(nsl)+'</small></button>';
     if(!grps.length&&!nsl)h+='<div class="plNone">'+T('編成がありません')+'</div>';}
   else if(K==='veh'){
     vehs.forEach(function(v){var tot=nmPlVehN(v,nat),u=nmPlUsed('veh',v.id),on=eh&&eh.veh===v.id;
