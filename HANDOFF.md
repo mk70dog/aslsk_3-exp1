@@ -2,8 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-22 いまの作業=v1536 から再開。返事待ち: 2台でのマップ同期の確認・sample-plnew】**
-  - sample-plnew(push済み、返事待ち): 配置パネルの「＋新しい編成」は同期中なら自分の国だけ(nmSuOppNat)。編成の「加える」はOBの残り(nmGeObRem=nmSuOb−nmSuUsed)があるユニット・SWだけ、「残りN」を表示。OBに無いもの(HSなど)は出さない。
+- **【2026-11-22 いまの作業=v1537 から再開。返事待ち: 2台でのマップ同期の確認】**
+  - v1537(sample-plnew を実施): 配置パネルの「＋新しい編成」は同期中(ライト・オールとも)なら自分の国だけ(nmSuOppNat)。v1528 のオールで非表示はやめた。編成の「加える」はOBの残り(nmGeObRem=nmSuOb−nmSuUsed)があるユニット・SWだけ、「残りN」を表示。OBに無いもの(HSなど)は出さない。
   - v1536: 判定の同期(ライト・オール)で、自分の編成(ユニット・状態・SW)が変わったら約1秒後に編成同期(saveState のラッパーで nmGsGrpCore の変化を見て nmAsKick)。ライトでも状態は以前から編成と一緒に送っていた(20秒ごと)。
   - v1535: ×・「閉じる」は nmRmCloseAll(NM_RM_XALL=1→BtRmClose のラッパーでスポット判定のステップ2なら nmIjClose)。←・それ以外の BtRmClose は今まで通りステップ1へ(nmIjStageBack)。ダルマ「xは閉じる ←は戻る」。
   - v1534(sample-dicebr を実施): 射撃の判定(nmRmMFireItems)で FP→列・DRM・IFTの列とダイス(赤白)を、ユニットの状態・攻撃する側・目標・FT保有の後ろ(右下)へ移す(NM_iS〜NM_iE を末尾に)。
