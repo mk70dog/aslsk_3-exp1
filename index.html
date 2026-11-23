@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1540</title>
+<title>ASL SKシリーズv1541</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1540">
+<meta property="og:title" content="ASL SKシリーズv1541">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.740"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.741"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1541="v1541(";
 var APP_VERSION_HIST_v1540="v1540(";
 var APP_VERSION_HIST_v1539="v1539(";
 var APP_VERSION_HIST_v1538="v1538(";
@@ -40239,6 +40240,7 @@ function nmTbOrdApply(){var c=nmTbCfg();[['nmFtAct',1],['nmFullTabs',2]].forEach
   c.order.forEach(function(id){var it=NM_TB_ITEMS.filter(function(x){return x.id===id&&x.g===P[1];})[0];if(!it)return;bs.forEach(function(b){if(got.indexOf(b)<0&&it.m(b.getAttribute('onclick')||'')){got.push(b);b.style.display=c.off[id]?'none':'';}});});
   if(got.length<2)return;var anchor=got.reduce(function(a,b){return (a.compareDocumentPosition(b)&Node.DOCUMENT_POSITION_PRECEDING)?b:a;});var ph=document.createComment('tb');el.insertBefore(ph,anchor);got.forEach(function(b){el.insertBefore(b,ph);});ph.remove();});}
 function nmTbCfgOpen(){var id='nmTbCfgP',o=document.getElementById(id);if(o)o.remove();var el=document.createElement('div');el.id=id;el.style.cssText='position:fixed;inset:0;z-index:9400;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center';el.onclick=function(e){if(e.target===el)el.remove();};document.body.appendChild(el);nmTbCfgDraw();}
+function nmTbCfgBack(){var p=document.getElementById('nmTbCfgP');if(p)p.remove();var b=document.getElementById('nmFtMenuB');if(!b)return;if(document.getElementById('nmFtMn'))return;try{nmFtMenu(b);var m=document.getElementById('nmFtMn'),d=m&&m.querySelector('details');if(d){d.open=true;var t=[].filter.call(m.querySelectorAll('button'),function(x){return /nmTbCfgOpen/.test(x.getAttribute('onclick')||'');})[0];if(t)t.scrollIntoView({block:'center'});}}catch(e){}} /* v1541(ダルマ「←を追加」): メインメニューの表示の設定に戻る */
 function nmTbCfgDraw(){var el=document.getElementById('nmTbCfgP');if(!el)return;var c=nmTbCfg();var _sc0=el.firstElementChild?el.firstElementChild.scrollTop:0; /* v1319: 押してもスクロール位置を保つ */
   var row=function(id,i,arr){var it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0];var on=!c.off[id];
     var B=function(t,f,dis,st){return '<button onclick="event.stopPropagation();'+(dis?'':f)+'" style="font:inherit;font-weight:800;min-width:36px;height:34px;border-radius:8px;border:1px solid #4a5262;background:#2a313d;color:'+(dis?'#4a5262':'#e8eef4')+';'+(st||'')+'">'+t+'</button>';};
@@ -40246,7 +40248,7 @@ function nmTbCfgDraw(){var el=document.getElementById('nmTbCfgP');if(!el)return;
       +'<button onclick="event.stopPropagation();nmTbCfgSet(\''+id+'\',\'tog\')" style="font:inherit;font-weight:900;width:64px;height:34px;border-radius:8px;border:0;background:'+(on?'#ffb020':'#2a313d')+';color:'+(on?'#111':'#9fb2c8')+'">'+(on?T('表示'):T('非表示'))+'</button>'
       +B('↑',"nmTbCfgSet('"+id+"','up')",i===0)+B('↓',"nmTbCfgSet('"+id+"','dn')",i===arr.length-1)+'</div>';};
   var g1=c.order.filter(function(id){var it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0];return it&&it.g===1&&nmTbInMode(id);}),g2=c.order.filter(function(id){var it=NM_TB_ITEMS.filter(function(x){return x.id===id;})[0];return it&&it.g===2&&nmTbInMode(id);});
-  var h='<div onclick="event.stopPropagation()" style="background:#1b2028;border:2px solid #7ec8e3;border-radius:14px;padding:12px 14px;width:min(420px,94vw);max-height:88vh;overflow:auto;color:#e8eef4"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:16px;color:#7ec8e3">🧰 '+T('ツールバーの設定')+'</b><button class="b sm" style="margin:0;height:30px;padding:0 10px" onclick="event.stopPropagation();document.getElementById(\'nmTbCfgP\').remove()">✕ '+T('閉じる')+'</button></div>'
+  var h='<div onclick="event.stopPropagation()" style="background:#1b2028;border:2px solid #7ec8e3;border-radius:14px;padding:12px 14px;width:min(420px,94vw);max-height:88vh;overflow:auto;color:#e8eef4"><div style="display:flex;justify-content:space-between;align-items:center"><span style="display:flex;align-items:center;gap:8px"><button class="b sm nmRnd" title="'+T('戻る')+'" style="margin:0;width:36px;height:36px;padding:0;border-radius:50%;font-size:18px" onclick="event.stopPropagation();nmTbCfgBack()">←</button><b style="font-size:16px;color:#7ec8e3">🧰 '+T('ツールバーの設定')+'</b></span><button class="b sm" style="margin:0;height:30px;padding:0 10px" onclick="event.stopPropagation();document.getElementById(\'nmTbCfgP\').remove()">✕ '+T('閉じる')+'</button></div>'
     +'<div style="font-size:12px;color:#8fa6bd;margin:4px 0 6px">'+T('↑↓で並び順、表示/非表示で出す・出さないを決めます。≡(メインメニュー)はいつも一番上です')+'</div>'
     +'<div style="font-size:12px;font-weight:700;color:#e0b850;margin-top:6px">'+T('操作のボタン')+'</div>'+g1.map(row).join('')
     +'<div style="font-size:12px;font-weight:700;color:#e0b850;margin-top:10px">'+T('地図の表示のボタン')+'</div>'+g2.map(row).join('')
