@@ -29108,6 +29108,7 @@ function losUnusableHexOverlaySVG(sc,dispLayout){
   });
   return h;
 }
+function nmVicCtlCol(board,col,row){try{if(window.NM_VICCTL===0)return null;var c=curScen();if(!c||!/支配/.test(String(c.vic||'')))return null;var nm=board+losHexNameFromColRow(col,row),sd=nmVicCtrl(nm);if(!sd)return null;var nat=nmSuNats().filter(function(k){return nmSuSide(k)===sd;})[0];return (nat&&UNITS[nat]&&UNITS[nat].col)||(sd==='f'?'#4fc3f7':'#ff6b6b');}catch(e){return null;}}
 function losVicHexesOverlaySVG(sc,dispLayout){
   if(!sc||!sc.vicHexes||!S_LOS.showVicHexes)return '';
   // 2026-09追加(Kato指示「S22 道路が2ボードにまたがる」): vicHexesは従来単一ボード
@@ -29204,6 +29205,7 @@ function losVicHexesOverlayOneSVG(sc,vh,vhIdx,dispLayout){
     if(!g)return;
     var d=losCanonicalToDisplay(g.x,g.y,dispLayout);
     var pts=losHexPolygonPoints(d.x,d.y,losBoardRotById(board));
+    var cc=nmVicCtlCol(board,item.col,item.row);if(cc){h+='<polygon points="'+pts+'" fill="'+cc+'" fill-opacity="0.5" stroke="'+cc+'" stroke-width="3.5"/>';return;} /* sample-vicctl(ダルマ「勝利条件が支配のシナリオはヘクスを支配している国籍の色にする」) */
     if(item.filtered){
       h+='<polygon points="'+pts+'" fill="rgba(42,77,122,0.35)" stroke="'+VIC_COLOR+'" stroke-width="2.5"/>';
     } else if(item.isCenter){
