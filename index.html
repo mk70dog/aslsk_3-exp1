@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1552</title>
+<title>ASL SKシリーズv1553</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1552">
+<meta property="og:title" content="ASL SKシリーズv1553">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.752"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.753"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1553="v1553(同期オールで相手のカウンターは動かす・消す・置くができない";
 var APP_VERSION_HIST_v1552="v1552(S29 米のアプリは P1 の建物を重く";
 var APP_VERSION_HIST_v1551="v1551(S29 AI対戦モード対応";
 var APP_VERSION_HIST_v1550="v1550(車両・砲を置く帯とヘクスを部隊と同じ形に";
@@ -12209,7 +12210,19 @@ function fitSumRows(){ // v209: iPad縦のデジタルパネル行を幅に合�
 }
 window.addEventListener('resize',function(){try{fitSumRows();}catch(e){}});
 try{if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){try{fitSumRows();}catch(e){}});}catch(e){}
-function Draw(){if(typeof nmFaceSync==='function')nmFaceSync();
+/* v1553(ダルマ指示「同期オール マップ上の相手のカウンターを動かす 消すなどはできないようにする 相手のカウンターを配置も不可にする」):
+   判定モードの同期オールで、相手の国の側のカウンターは相手のiPadだけが動かす・消す・置く。受信した時の状態を覚え(nmOppLockSnap)、描くたびに
+   こちらで足した・消した・動かしたものを元に戻す(nmOppLockEnforce)。判定用の仮のマーカー(ijTmp・ccTmp・lwTmp)はそのまま。ドラッグは始めない */
+var NM_OPPL=null,NM_OPPL_T=0;
+function nmOppLockSd(){try{if(!nmsRole()||S.nmMode==='online'||nmJsLv()!=='all')return '';var my=nmMyNatNow();if(!my)return '';var o=nmSuNats().filter(function(k){return k!==my;})[0];if(!o)return '';var a=nmSuSide(o),b=nmSuSide(my);return (a&&a!==b)?a:'';}catch(e){return '';}}
+function nmOppTmp(e){return !!(e&&(e.ijTmp||e.ccTmp||e.lwTmp));}
+function nmOppLockSnap(){var sd=nmOppLockSd();if(!sd){NM_OPPL=null;return;}var L=nmSideList(sd).filter(function(e){return !nmOppTmp(e);});NM_OPPL={sd:sd,sc:S.scen&&S.scen.sel,refs:L.slice(),pos:L.map(function(e){return [e.boardId,e.col,e.row];})};}
+function nmOppLockMsg(){var t=Date.now();if(t-NM_OPPL_T<2500)return;NM_OPPL_T=t;try{btToast(T('相手のカウンターは相手のiPadで動かす・消す・置きます(同期オール)'));}catch(e){}}
+function nmOppLockEnforce(){var sd=nmOppLockSd();if(!sd){NM_OPPL=null;return;}if(!NM_OPPL||NM_OPPL.sd!==sd||NM_OPPL.sc!==(S.scen&&S.scen.sel)){nmOppLockSnap();return;}
+  var P=NM_OPPL,L=nmSideList(sd),ch=false,keep=L.filter(function(e){return nmOppTmp(e)||P.refs.indexOf(e)>=0;});if(keep.length!==L.length)ch=true;
+  P.refs.forEach(function(e,i){if(keep.indexOf(e)<0){keep.push(e);ch=true;}var q=P.pos[i];if(e.boardId!==q[0]||e.col!==q[1]||e.row!==q[2]){e.boardId=q[0];e.col=q[1];e.row=q[2];ch=true;}});
+  if(ch){L.length=0;keep.forEach(function(x){L.push(x);});nmOppLockMsg();}}
+function Draw(){try{nmOppLockEnforce();}catch(e){}if(typeof nmFaceSync==='function')nmFaceSync();
   try{if(typeof NM_MOVE!=="undefined"&&NM_MOVE)nmMvSync();}catch(e){} /* v453: マーカーを経路の終点へ先に動かしてから描く */
   document.getElementById("main").innerHTML=PAGE();
   try{nmHqSync();}catch(e){}
@@ -36672,7 +36685,7 @@ function nmDropSVG(){
   return h;
 }
 function nmDropKeep(){}
-function nmDragStart(x,y,touch){if(typeof NM_TOOL!=='undefined'&&NM_TOOL)return false; /* v552(バグ修正 ダルマ報告「マーカーボタンを選んですぐカウンターを選んでも反映しない」): ボタンを選んでいる時はカウンターのドラッグを始めず、タップとして通す */var p=nmDragPick(x,y);if(!p)return false;if(p.bt){NM_DRAG={bt:p.bt,x0:x,y0:y,moving:false,touch:touch,t0:Date.now()};return true;}NM_DRAG={sd:p.sd,ref:p.ref,x0:x,y0:y,moving:false,touch:touch,mv:nmDragMvMode(p.ref)};return true;}
+function nmDragStart(x,y,touch){if(typeof NM_TOOL!=='undefined'&&NM_TOOL)return false; /* v552(バグ修正 ダルマ報告「マーカーボタンを選んですぐカウンターを選んでも反映しない」): ボタンを選んでいる時はカウンターのドラッグを始めず、タップとして通す */var p=nmDragPick(x,y);if(!p)return false;if(!p.bt&&p.ref&&!nmOppTmp(p.ref)&&p.sd===nmOppLockSd()){nmOppLockMsg();return false;} /* v1553 */if(p.bt){NM_DRAG={bt:p.bt,x0:x,y0:y,moving:false,touch:touch,t0:Date.now()};return true;}NM_DRAG={sd:p.sd,ref:p.ref,x0:x,y0:y,moving:false,touch:touch,mv:nmDragMvMode(p.ref)};return true;}
 /* v453(ダルマ指示「アプリマップとリアルマップの操作感を合わせる」②): MPh(移動フェイズ)・APh(突撃フェイズ)(または移動中)はドラッグ=実物と同じく1ヘクスずつ動かす。
    通ったヘクスが経路になりMF/MPを数える。指を離すと「止まる/Motion/BU・CE/向き」のメニュー。それ以外のフェイズは従来どおり自由に置き直す */
 function nmDragMvMode(ref){if(NM_MOVE&&NM_MOVE.eh===ref&&S_LOS.routeMode)return 'cont';return null;} /* v637(ダルマ指示「アプリは脇役 判定がメイン」お任せ): フェイズに関係なく、ドラッグは置き直し。経路移動(MPを数える)はメニューの「移動」から */
@@ -37940,7 +37953,7 @@ function nmsApply(P,rl){var m=P.map||{},sc=P.scen;try{nmOppLblSet(sc,P.lbl);}cat
   var jAll=false;try{jAll=!!rl&&S.nmMode!=='online'&&nmJsLv()==='all';}catch(e){}
   if(jAll){ /* v1522→v1525(ダルマ報告「1Pの配置した部隊がきえて2Pの配置した部隊だけがお互いにマップ上に配置」): 自軍/敵軍は国で決まる(攻撃側=自軍の色、両方のiPadで同じ)ので、「相手の自軍=こちらの敵軍」ではなかった。相手の国(myNat)の側(mySide)にある相手のカウンターを、こちらでその国がいる側に置き、その側のこちらのカウンターだけ置き換える。こちらの国の側は変えない */
     var oN=m.myNat||'',oS=m.mySide||'',myK='';try{myK=nmMyNatNow();}catch(e){}
-    if(oN&&oS&&oN!==myK){var src=(oS==='f'?m.friendHexes:m.enemyHexes)||[],dst=nmSuSide(oN),fr=src.map(function(e){var x=JSON.parse(JSON.stringify(e));if(x.grp&&!x.veh&&!x.gun)x.grp='相手'+x.grp;return x;});if(dst==='f')S_LOS.friendHexes=fr;else S_LOS.enemyHexes=fr;try{nmDbg('マップ同期(同期オール): 相手('+nmNatLbl(oN)+')の部隊 '+fr.length+'個を'+(dst==='f'?'自軍':'敵軍')+'側に反映');}catch(e){}}
+    if(oN&&oS&&oN!==myK){var src=(oS==='f'?m.friendHexes:m.enemyHexes)||[],dst=nmSuSide(oN),fr=src.map(function(e){var x=JSON.parse(JSON.stringify(e));if(x.grp&&!x.veh&&!x.gun)x.grp='相手'+x.grp;return x;});if(dst==='f')S_LOS.friendHexes=fr;else S_LOS.enemyHexes=fr;try{nmOppLockSnap();}catch(e){} /* v1553 */try{nmDbg('マップ同期(同期オール): 相手('+nmNatLbl(oN)+')の部隊 '+fr.length+'個を'+(dst==='f'?'自軍':'敵軍')+'側に反映');}catch(e){}}
     else{try{nmDbg('マップ同期(同期オール): 相手の国が分からない・同じ国なので反映しない(相手 '+(oN||'-')+' / こちら '+(myK||'-')+')');}catch(e){}}}
   else{if(!S.savedGroups)S.savedGroups={};if(rl){var gl=S.savedGroups[sc]||(S.savedGroups[sc]={}),gr=m.groups||{};Object.keys(gr).forEach(function(k){if(!gl[k])gl[k]=gr[k];});}else S.savedGroups[sc]=m.groups||{};}
   try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot&&S.savedGroups[sc][g.activeGroupSlot]){var keep=Draw;FgSelectGroupSlot(g.id,g.activeGroupSlot);}}catch(e){}
