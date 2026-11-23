@@ -33121,6 +33121,8 @@ function btBldgOverlaySVG(dispLayout){
     var ns=btBldgNodes(bl);if(!ns.length)return;
     var d=btDispPt(ns[0],dispLayout);
     var c=BT.ctl[bl.id];var col=c?BT_SIDE_COL[c]:'#778';
+    if(c&&window.NM_BTCTL!==0){ns.forEach(function(n){var N=BTG.nodes[n],dd=btDispPt(n,dispLayout),pts='';try{pts=losHexPolygonPoints(dd.x,dd.y,losBoardRotById(N.b));}catch(e){return;} /* sample(ダルマ「建物ヘクスの支配表示を判定モードと同じにする」): 判定モードの支配(案3)と同じ=建物の各ヘクスを国の色の枠+下に「独支配」 */
+      h+='<polygon points="'+pts+'" fill="rgba(42,77,122,0.35)" stroke="'+col+'" stroke-width="4"/><g transform="rotate('+(-S_LOS.viewRot)+' '+dd.x+' '+dd.y+')"><rect x="'+(dd.x-16)+'" y="'+(dd.y+LOS_GEO_HEX_H*0.18)+'" width="32" height="16" rx="4" fill="'+col+'" stroke="#111" stroke-width="1"/><text x="'+dd.x+'" y="'+(dd.y+LOS_GEO_HEX_H*0.18+12.5)+'" text-anchor="middle" font-size="12" font-weight="900" fill="#111" font-family="AppFont,AppJP,sans-serif">'+T(btSideShort(c))+T('支配')+'</text></g>';});}
     var x=d.x-20,y=d.y-18;
     h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><circle cx="'+x+'" cy="'+y+'" r="10" fill="'+col+'" fill-opacity="0.9" stroke="#000" stroke-width="2"/><text x="'+x+'" y="'+(y+4)+'" text-anchor="middle" font-size="12" font-weight="bold" fill="#000" font-family="AppFont,AppJP,monospace">'+bl.id+'</text></g>';
   });
