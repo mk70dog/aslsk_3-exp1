@@ -44775,7 +44775,7 @@ function nmGrpBadge(d,S0,g,more){
   var h='',st=NM_GRP_BADGE,en=(S.lang==='en');
   if(st==='num'){ /* 射撃タブの編成ボタン(.op-numbadge)と同じ: 黒の丸に白字、カウンターの右上の角から少しはみ出す */
     var cx=d.x+S0/2+4-8,cy=d.y-S0/2-4+8-((Math.min(3,1+(more?3:2))-1)*5*0);
-    var opp=/^相手/.test(String(g)),tx0=nmGrpBadgeTx(g);if(opp){g=tx0;var oc=window.NM_OPP_BADGE_SMP||{f:'#c62828',s:'#fff',w:1.2,t:'#fff'}; /* v1429(ダルマ「相手A 相手B を色違いの A B に」サンプルA): 相手の編成は赤い丸に白い字 */
+    var opp=/^相手/.test(String(g)),tx0=nmGrpBadgeTx(g);try{var n0=Array.from(String(tx0)).length;if(n0>1&&window.NM_BADGE_RA){var w0=8+6.2*n0;cx=cx+8-w0/2;}}catch(e){} /* sample-badgew: 長い記号はカウンターの右上の角から左へ伸ばす */if(opp){g=tx0;var oc=window.NM_OPP_BADGE_SMP||{f:'#c62828',s:'#fff',w:1.2,t:'#fff'}; /* v1429(ダルマ「相手A 相手B を色違いの A B に」サンプルA): 相手の編成は赤い丸に白い字 */
       h+=nmGrpBadgeShape(cx,cy,g,'fill="'+oc.f+'" stroke="'+oc.s+'" stroke-width="'+(oc.w||0)+'"')+'<text x="'+cx+'" y="'+(cy+3.8)+'" text-anchor="middle" font-size="10.5" font-weight="bold" fill="'+oc.t+'" font-family="AppFont,AppJP,monospace">'+g+'</text>';
       if(more)h+='<text x="'+(cx+10)+'" y="'+(cy+4)+'" font-size="8.5" font-weight="900" fill="#fff" stroke="#000" stroke-width="2.5" paint-order="stroke">+'+more+'</text>';return h;}
     g=tx0;h+=nmGrpBadgeShape(cx,cy,g,'fill="#000" fill-opacity=".85"')+'<text x="'+cx+'" y="'+(cy+3.8)+'" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#fff" font-family="AppFont,AppJP,monospace">'+g+'</text>';
