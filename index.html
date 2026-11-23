@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1563</title>
+<title>ASL SKシリーズv1564</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1563">
+<meta property="og:title" content="ASL SKシリーズv1564">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.763"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.764"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1564="v1564(AI対戦: 見える範囲を判定モードと同じに";
 var APP_VERSION_HIST_v1563="v1563(AI対戦: 見える範囲表示中にタップで起点変更";
 var APP_VERSION_HIST_v1562="v1562(S29の勝利条件の窓をわかりやすく・対戦モードの建物の支配を判定モードと同じ表示";
 var APP_VERSION_HIST_v1561="v1561(S29 勝利の札のP1の○×を見やすく";
@@ -45431,7 +45432,9 @@ var BT_RMS=null,BT_HEXR=null;
 function btRmStamp(){return BT.turn+'.'+BT.half+'.'+BT.ph;}
 function btRmShowName(){return BT_RMS?({view:'見える範囲',threat:'このヘクスを攻撃可能な部隊',ca:'射界',cost:'移動コスト'}[BT_RMS.k]+' @ '+BTG.nodes[BT_RMS.n].nm):'';}
 function btTerrJP(t){try{return LOS_TERRAIN_NAME_JP[t]||t;}catch(e){return t;}}
-function BtRmShowOff(){var hadCam=!!(typeof NM_TH_CAM!=='undefined'&&NM_TH_CAM);if(typeof NM_TOOL!=='undefined'&&NM_TOOL==='cost'){NM_TOOL=null;NM_COST_DST=null;NM_COST_S0=null;try{nmFtActFill();}catch(e){}} /* v810 */BT_RMS=null;BtRmClose();if(hadCam)nmCamBack();else Draw();}
+function btViewOn(){try{var o=btRmLive();return !!(o&&o.k==='view');}catch(e){return false;}}
+function btViewTool(){if(btViewOn()||BT.sideView){BT.sideView=false;if(btViewOn())BtRmShowOff();}else BT.sideView=true;try{nmFtActFill();}catch(e){}}
+function BtRmShowOff(){var hadCam=!!(typeof NM_TH_CAM!=='undefined'&&NM_TH_CAM);if(typeof NM_TOOL!=='undefined'&&NM_TOOL==='cost'){NM_TOOL=null;NM_COST_DST=null;NM_COST_S0=null;try{nmFtActFill();}catch(e){}} /* v810 */BT_RMS=null;BtRmClose();if(hadCam)nmCamBack();else Draw();try{if(btActive())nmFtActFill();}catch(e){}}
 function BtRmShow(k,n,a,b){
   BtRmClose();
   var o={k:k,n:n,st:btRmStamp(),g:BTG};
@@ -45441,7 +45444,7 @@ function BtRmShow(k,n,a,b){
     else if(k==='ca'){o.sid=a;o.uid=b;}
     else if(k==='cost'){o.sid=a;btRmCost(o);}
   }catch(e){console.log('BtRmShow',e);btToast('計算できませんでした');return;}
-  BT_RMS=o;Draw();
+  BT_RMS=o;Draw();try{if(btActive())nmFtActFill();}catch(e){}
 }
 function btRmLive(){if(BT_RMS&&(BT_RMS.st!==btRmStamp()||(BT_RMS.g&&BT_RMS.g!==BTG)))BT_RMS=null;return BT_RMS;}
 // ヘクスの形(表示座標)。盤の切り抜きは平行移動だけなので、中心を変換してから角を足す
@@ -45476,7 +45479,7 @@ function nmViewBdCalc(o){var A=BTG.nodes[o.n],B=BTG.nodes[o.bdN],r=null;
 /* v1225(ダルマ「表示を小さく わかりやすく カッコよくする」→ sample-viewB): 見える範囲の戦術カード。id=nmRmPop のままなのでドラッグ移動もそのまま */
 /* v1236(ダルマ指示「重ならないように離して表示する」): 見える範囲のカードは起点のヘクスと反対側の角に置く(左右=起点の反対、上下=起点の反対) */
 function nmViewCardPos(o){var q=null;try{q=nmClientOfNode(o.n);}catch(e){}var W=innerWidth,H=innerHeight;
-  var bot=btActive()?'calc(var(--nmsumh,0px) + var(--btfbot,0px) + 10px)':'calc(var(--nmsumh,0px) + 10px)',top=btActive()?'calc(var(--btftop,0px) + 60px)':'60px';
+  var bot=btActive()?'calc(var(--nmsumh,0px) + var(--btfbot,0px) + 46px)':'calc(var(--nmsumh,0px) + 10px)',top=btActive()?'calc(var(--btftop,0px) + 60px)':'60px';
   var right=!q||q.x<W/2,lower=!q||q.y<H/2;
   return (right?'right:calc(var(--nmtbw,64px) + 12px);':'left:78px;')+(lower?'bottom:'+bot+';':'top:'+top+';');}
 function nmViewCardHTML0(o,N){
@@ -46142,7 +46145,7 @@ function btSideActHTML(){var h='',mv=BT.mv,un=BT.started&&mv&&(mv.veh?btVCanUndo
   h+=b(0,!un,'一つ戻る','btFtUndo();nmFtActFill()','<span style="font-size:15px;line-height:1">↶</span>')+b(0,!rd,'やり直す(車両の移動)','if(btVCanRedo())BtVRedo();nmFtActFill()','<span style="font-size:15px;line-height:1">↷</span>');
   if(BT.started)h+=b(!!(BT_RT||BT_RTARM),0,'移動の確認(どこまで動けるか・実際には動かない)','btFtMove();nmFtActFill()',NM_TOOL_DEF.move[1]); /* v1338(ダルマ「対戦モードのツールバーに移動を追加」→「どこまで移動できるかを確認」sample rt→実施) */
   h+=b(!!(BT.losAB&&(BT.losAB.arm||BT.losAB.rc)),0,'LOS測定(起点A・目標B)','BtLosAB();nmFtActFill()','A→B');
-  h+=b(!!BT.sideView,0,'このヘクスから見える範囲(次にタップしたヘクス)','BT.sideView=!BT.sideView;nmFtActFill()',NM_TOOL_DEF.view[1]);
+  h+=b(!!BT.sideView||btViewOn(),0,'このヘクスから見える範囲','btViewTool()',NM_TOOL_DEF.view[1]); /* v1564(ダルマ「全て判定モードと同じに」): 表示中は光る・もう一度押すと範囲も消す */
   h+=b(0,0,'早見表','NM_TVHQ=0;nmTvOpen(\'ref\')','<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 5.5C7 4 10 4.2 12 6c2-1.8 5-2 8-.5V19c-3-1.5-6-1.3-8 .5-2-1.8-5-2-8-.5z"/><path d="M12 6v13.5"/></svg>');
   h+=b(0,0,'シナリオカード','nmScenView()','<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5"/></svg>');
   if(BT.started)h+=b(0,0,'DR','btFtDice()','🎲')+b(0,!nr,'リアル盤へ','nmFtRb()','▣'+(nr?' <span class="bd">'+nr+'</span>':''));
