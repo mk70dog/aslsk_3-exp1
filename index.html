@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1541</title>
+<title>ASL SKシリーズv1542</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1541">
+<meta property="og:title" content="ASL SKシリーズv1542">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.741"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.742"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1542="v1542(";
 var APP_VERSION_HIST_v1541="v1541(";
 var APP_VERSION_HIST_v1540="v1540(";
 var APP_VERSION_HIST_v1539="v1539(";
@@ -44767,14 +44768,17 @@ function nmRmSetGrp(n,slot,sd){sd=sd||'f';var H=NM_RM_HEX;if(!H)return;var eh=nm
 /* v358(ダルマ指示「編成A もう少しかっこよく」「何種類か」): NM_GRP_BADGE
    'shield'=部隊章の帯(濃紺+金縁+盾) / 'tab'=カウンターの上にタブ(大きなA) / 'coin'=右上に丸いメダル / 'plate'=VASL風の白い札 */
 var NM_GRP_BADGE='num'; /* ダルマ指示「射撃タブの編成マークと同じ○A」 */
+/* v1542(ダルマ報告「マップ上はH メニューはB1」): 地図の編成マークは内部の枠(H)ではなく、メニューと同じ記号(B¹²)。相手の部隊は相手のiPadの記号 */
+function nmGrpBadgeTx(g){g=String(g==null?'':g);try{var L=nmGrpLbl(g),m=String(L).match(/^部隊(.+?)\(/)||String(L).match(/^Unit group\s*(\S+?)\(/);if(m)return m[1];}catch(e){}return g.replace(/^相手/,'');}
+function nmGrpBadgeShape(cx,cy,t,at){var n=Array.from(String(t)).length;if(n<=1)return '<circle cx="'+cx+'" cy="'+cy+'" r="8" '+at+'/>';var w=8+6.2*n;return '<rect x="'+(cx-w/2)+'" y="'+(cy-8)+'" width="'+w+'" height="16" rx="8" '+at+'/>';}
 function nmGrpBadge(d,S0,g,more){
   var h='',st=NM_GRP_BADGE,en=(S.lang==='en');
   if(st==='num'){ /* 射撃タブの編成ボタン(.op-numbadge)と同じ: 黒の丸に白字、カウンターの右上の角から少しはみ出す */
     var cx=d.x+S0/2+4-8,cy=d.y-S0/2-4+8-((Math.min(3,1+(more?3:2))-1)*5*0);
-    var opp=/^相手/.test(String(g));if(opp){g=String(g).replace(/^相手/,'');var oc=window.NM_OPP_BADGE_SMP||{f:'#c62828',s:'#fff',w:1.2,t:'#fff'}; /* v1429(ダルマ「相手A 相手B を色違いの A B に」サンプルA): 相手の編成は赤い丸に白い字 */
-      h+='<circle cx="'+cx+'" cy="'+cy+'" r="8" fill="'+oc.f+'" stroke="'+oc.s+'" stroke-width="'+(oc.w||0)+'"/><text x="'+cx+'" y="'+(cy+3.8)+'" text-anchor="middle" font-size="10.5" font-weight="bold" fill="'+oc.t+'" font-family="AppFont,AppJP,monospace">'+g+'</text>';
+    var opp=/^相手/.test(String(g)),tx0=nmGrpBadgeTx(g);if(opp){g=tx0;var oc=window.NM_OPP_BADGE_SMP||{f:'#c62828',s:'#fff',w:1.2,t:'#fff'}; /* v1429(ダルマ「相手A 相手B を色違いの A B に」サンプルA): 相手の編成は赤い丸に白い字 */
+      h+=nmGrpBadgeShape(cx,cy,g,'fill="'+oc.f+'" stroke="'+oc.s+'" stroke-width="'+(oc.w||0)+'"')+'<text x="'+cx+'" y="'+(cy+3.8)+'" text-anchor="middle" font-size="10.5" font-weight="bold" fill="'+oc.t+'" font-family="AppFont,AppJP,monospace">'+g+'</text>';
       if(more)h+='<text x="'+(cx+10)+'" y="'+(cy+4)+'" font-size="8.5" font-weight="900" fill="#fff" stroke="#000" stroke-width="2.5" paint-order="stroke">+'+more+'</text>';return h;}
-    h+='<circle cx="'+cx+'" cy="'+cy+'" r="8" fill="#000" fill-opacity=".85"/><text x="'+cx+'" y="'+(cy+3.8)+'" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#fff" font-family="AppFont,AppJP,monospace">'+g+'</text>';
+    g=tx0;h+=nmGrpBadgeShape(cx,cy,g,'fill="#000" fill-opacity=".85"')+'<text x="'+cx+'" y="'+(cy+3.8)+'" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#fff" font-family="AppFont,AppJP,monospace">'+g+'</text>';
     if(more)h+='<text x="'+(cx+10)+'" y="'+(cy+4)+'" font-size="8.5" font-weight="900" fill="#fff" stroke="#000" stroke-width="2.5" paint-order="stroke">+'+more+'</text>';}
   else if(st==='tab'){var x=d.x-S0/2+10,y=d.y-S0/2-17-10;
     h+='<path d="M'+(x)+' '+(y+17)+'v-12q0-5 5-5h16q5 0 5 5v12z" fill="#2a6fdb" stroke="#fff" stroke-width="1.4"/><text x="'+(x+13)+'" y="'+(y+14)+'" text-anchor="middle" font-size="13" font-weight="900" fill="#fff" font-family="AppFont,AppJP,monospace">'+g+'</text>';
