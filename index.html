@@ -33585,7 +33585,25 @@ function BtTopLog(){var R=null;try{R=btRecLoad();}catch(e){}var src=(R&&R.log&&R
     var at=String(x.at||'').replace(/^T(\d+)([AB]) \S+ /,function(a,t,h){return 'T'+t+(h==='A'?'表':'裏')+' ';}).replace(/PFPh/,'準備射撃').replace(/DFPh/,'防御射撃').replace(/AFPh/,'前進射撃').replace(/RtPh/,'潰走').replace(/APh/,'突撃').replace(/CCPh/,'白兵戦').replace(/RPh/,'回復').replace(/MPh/,'移動');
     h+='<div class="e" style="border-left-color:'+col+'"><div class="ph">'+at.replace(' ','<br>')+'</div><div class="dot" style="background:'+col+'"></div><div><div class="m">'+first.replace(/</g,'&lt;')+btTopRes(first)+'</div>'+(L.length>1?'<div class="s">'+L.slice(1).map(function(t){return String(t).replace(/</g,'&lt;');}).join('<br>')+'</div>':'')+'</div></div>';});
   btTopPop(T('戦闘記録'),h||T('記録はまだありません'),'≡',src.length+T('件'));}
-function BtTopVic(){var vc=btVicCount(),cf=btCfg(),need=btCfgNeed(),vs=cf?cf.vicSide:'GER',G=BT_SIDE_COL.GER,Sv=BT_SIDE_COL.SOV,tot=vc.total||1,mx=btMaxTurn(),sty=btTopSty();var goal='';try{var sc=btScObj();if(sc&&sc.vic)goal=sc.vic;}catch(e){}
+/* sample(ダルマ「(S29の勝利条件を)わかりやすく」): vic:'req' の勝利条件の窓。必須の建物・ほかの建物(何棟/必要)・建物ごとの支配と理由 */
+function btVicWhy(b,c){var ns=btBldgNodes(b),st={GER:{mmc:0,smc:0,any:0},SOV:{mmc:0,smc:0,any:0}};BT.stacks.forEach(function(s){if(ns.indexOf(s.n)<0)return;s.u.forEach(function(u){var I=btI(u,s.side);if(!btIsInfK(I.kind))return;st[s.side].any++;if(I.kind==='mmc'&&btGO(u))st[s.side].mmc++;else if(I.kind==='smc')st[s.side].smc++;});});
+  var o=c?btOpp(c):null,S=function(sd){return T(BT_SIDE_NAME[sd]);};
+  if(c&&st[c].mmc&&!st[o].any)return T('いる');
+  if(c&&st[o].any&&!st[o].mmc)return S(o)+T('は指揮官・混乱だけ(分隊が必要)');
+  if(c&&st[o].any)return S(c)+T('も')+S(o)+T('もいる(')+S(o)+T('が追い出すまで')+S(c)+T(')');
+  if(c)return T('今はいない(最後にいたのは')+S(c)+')';
+  return T('まだ誰も入っていない');}
+function btTopVicReq(){var c=btCfg(),vs=c.vicSide,op=btOpp(vs),BL=btBldgs(),vc=btVicCount(),need=c.vicN,mx=btMaxTurn(),col=function(sd){return BT_SIDE_COL[sd]||'#8fa0b3';},nm=function(sd){return T(BT_SIDE_NAME[sd]);};
+  var row=function(b,big){var cc=BT.ctl&&BT.ctl[b.id],w=btVicWhy(b,cc);return '<div style="display:flex;align-items:center;gap:8px;padding:'+(big?'8px 10px':'5px 8px')+';border-radius:8px;background:#141920;border:1px solid '+(cc?col(cc):'#39414f')+';border-left:6px solid '+(cc?col(cc):'#39414f')+'"><b style="min-width:'+(big?90:70)+'px;font-size:'+(big?15:13)+'px">'+b.hexes.join('-')+'</b><b style="color:'+(cc?col(cc):'#8899aa')+';min-width:44px">'+(cc?nm(cc):'—')+'</b><span style="color:#9fb2c8;font-size:11.5px">'+w+'</span></div>';};
+  var k=vc[vs==='GER'?'ger':'sov'],ok=vc.req&&k>=need,gap=Math.max(0,need-k);
+  var h='<div style="font-size:13px;line-height:1.5;color:#e8eef4">';
+  h+='<div style="padding:8px 10px;border-radius:9px;background:'+(ok?'#123a22':'#2a1a14')+';border:1px solid '+(ok?'#3ca878':'#a0603a')+';margin-bottom:10px"><b style="font-size:15px;color:'+(ok?'#6fe08a':'#ffb070')+'">'+(ok?nm(vs)+T('が勝つ条件を満たしています'):T('今のままなら')+nm(op)+T('の勝ち'))+'</b><br><span style="color:#cfd8e2">'+nm(vs)+T('の勝利')+': '+T('ゲーム終了(T')+mx+')'+T('に、①と②の両方')+'</span>'+(ok?'':'<br><span style="color:#ffd070">'+T('あと')+': '+(vc.req?'':'① '+T('建物')+BL[0].hexes.join('-')+T('を取る'))+(!vc.req&&gap?' ＋ ':'')+(gap?'② '+T('ほかの建物を')+gap+T('棟'):'')+'</span>')+'</div>';
+  h+='<div style="font-weight:900;margin:2px 0 5px">① '+T('建物')+' '+BL[0].hexes.join('-')+' <span style="font-size:12px;color:'+(vc.req?'#6fe08a':'#ff8080')+'">'+(vc.req?'✓ '+nm(vs)+T('が支配'):'✕ '+T('まだ'))+'</span></div>'+row(BL[0],1);
+  h+='<div style="font-weight:900;margin:12px 0 5px">② '+T('ほかの複数ヘクスの建物')+' <span style="font-size:12px;color:'+(k>=need?'#6fe08a':'#ffd070')+'">'+nm(vs)+' '+k+' / '+T('必要')+need+'</span></div>';
+  var L=BL.slice(1),grp=[vs,op,null];h+='<div style="display:flex;flex-direction:column;gap:4px">'+grp.map(function(g){return L.filter(function(b){return (BT.ctl&&BT.ctl[b.id]||null)===g;}).map(function(b){return row(b,0);}).join('');}).join('')+'</div>';
+  h+='<div style="margin-top:10px;font-size:11px;color:#8fa6bd">'+T('支配: 最後にその建物にいた統制状態の分隊(MMC)の側。離れても残る。相手の歩兵が同じ建物にいる間は変わらない')+'</div></div>';
+  btTopPop(T('勝利条件'),h,btVicIc(16,'#16180f'),'T'+BT.turn+'/'+mx);}
+function BtTopVic(){try{var cR=btCfg();if(cR&&cR.vic==='req'&&window.NM_VICREQ!==0){btTopVicReq();return;}}catch(e){console.log('vicreq',e);}var vc=btVicCount(),cf=btCfg(),need=btCfgNeed(),vs=cf?cf.vicSide:'GER',G=BT_SIDE_COL.GER,Sv=BT_SIDE_COL.SOV,tot=vc.total||1,mx=btMaxTurn(),sty=btTopSty();var goal='';try{var sc=btScObj();if(sc&&sc.vic)goal=sc.vic;}catch(e){}
   var bl='';try{bl=btBldgs().map(function(b){var c=BT.ctl&&BT.ctl[b.id];var col=c?(BT_SIDE_COL[c]||'#8fa0b3'):'#5a6676';return '<span style="color:'+col+';border-color:'+col+'">'+(b.hexes&&b.hexes[0]?String(b.hexes[0]).replace(/^z/,''):b.id)+' '+(c?BT_SIDE_NAME[c]:'—')+'</span>';}).join('');}catch(e){}
   var h='';
   if(sty==='A'){h+='<div class="vrow"><span class="vl" style="color:'+G+'">'+T('独軍')+'</span><div class="bar"><i style="width:'+(vc.ger/tot*100)+'%;background:'+G+'"></i></div><span class="vn" style="color:'+G+'">'+vc.ger+'</span></div>'
