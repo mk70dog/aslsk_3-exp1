@@ -55908,5 +55908,28 @@ var st=document.createElement('style');st.textContent='html.bt-mapfull .los-comp
   var k=1;try{k=nmFzK()||1;}catch(e){}d.style.display='block';d.style.left=Math.max(0,Math.floor(r.right/k))+'px';d.style.top=Math.floor(r.top/k)+'px';d.style.height=Math.max(0,Math.ceil(r.height/k))+'px';}catch(e){}} /* v1507(ダルマ報告「画面右上黒い」「文字サイズを小にすると発生」): #nmFtGap は文字の倍率(zoom)がかかるので、地図の枠の画面の px を倍率で割る(小=0.9 だと左にずれて地図の右上を覆っていた) */
   setInterval(up,700);addEventListener('resize',up);setTimeout(up,300);})();
 </script>
+<script>
+/* sample(ダルマ「(スタックの)パネルをコンパクトにする」): window.NM_CMDC=1..3(0=従来)。html に btCmc1〜3 を付けて CSS で詰める */
+(function(){var C='html.bt-mapfull.btCmcX #main #btCmd.bt-cmdpop',K='#btCmd>div[style*="#4a5262"]';
+ var css=function(n){var P=C.replace('X',n),Q=P+'>div[style*="#4a5262"]';return [
+  P+'{width:max-content!important;max-width:min(640px,calc(100vw - 110px))!important;background-color:#1c1f27cc!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);padding:4px 38px 4px 6px!important}',
+  Q+'{border:0!important;padding:0!important}',
+  Q+'>div[style*="#667788"]{display:none!important}',
+  Q+' img.btCmdIc{width:24px!important;height:24px!important}',
+  Q+' button.tb-reset{padding:3px 7px!important;font-size:11.5px!important}',
+  Q+'>div:first-child span{font-size:11.5px!important}',
+  P+' .btCmdGrip{height:10px!important;margin:-2px 0 2px!important}'].join('');};
+ var st=document.createElement('style');st.id='btCmcCss';
+ st.textContent=css(1)+css(2)+css(3)
+  /* 1: 1行(見出し・カウンター・ボタンを横に) */
+  +C.replace('X',1)+'>div[style*="#4a5262"]{display:flex!important;align-items:center;gap:8px;flex-wrap:wrap}'+C.replace('X',1)+'>div[style*="#4a5262"]>div{margin-top:0!important}'
+  /* 2: 見出し+ボタンを1行目、カウンターを2行目 */
+  +C.replace('X',2)+'>div[style*="#4a5262"]{display:flex!important;flex-wrap:wrap;align-items:center;gap:4px 8px}'+C.replace('X',2)+'>div[style*="#4a5262"]>div:first-child{order:1}'+C.replace('X',2)+'>div[style*="#4a5262"]>div[style*="flex-wrap:wrap;margin-top:4px"]{order:2;margin-top:0!important;margin-left:auto}'+C.replace('X',2)+'>div[style*="#4a5262"]>div[style*="overflow-x"]{order:3;flex-basis:100%;margin-top:0!important}'
+  /* 3: 縦の細い札(見出し・カウンター・ボタンを縦に、幅は中身) */
+  +C.replace('X',3)+'{max-width:260px!important}'+C.replace('X',3)+'>div[style*="#4a5262"]>div{margin-top:3px!important}'+C.replace('X',3)+'>div[style*="#4a5262"]>div[style*="overflow-x"]{flex-wrap:wrap!important}';
+ (document.head?document.head.appendChild(st):document.addEventListener('DOMContentLoaded',function(){document.head.appendChild(st);}));
+ function up(){var v=window.NM_CMDC||0,r=document.documentElement;[1,2,3].forEach(function(k){r.classList.toggle('btCmc'+k,v===k);});}
+ setInterval(up,500);setTimeout(up,100);})();
+</script>
 </body>
 </html>
