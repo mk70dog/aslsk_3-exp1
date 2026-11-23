@@ -37522,10 +37522,10 @@ function nmRmVFireItems(n){
    射撃の結果(IFT)から士気チェック(PTC/MC)を振る(指揮官が先、合格した指揮官の修正を分隊に)、撃破・走行不能・ショックをマーカーへ反映 */
 var NM_ST_LBL={brk:'混乱',pin:'PIN',imm:'走行不能',shock:'ショック',mal:'主砲故障',stun:'スタン',recall:'リコール',uk:'UK',bog:'ボグ',mired:'Mired'};
 function nmStOf(eh){if(!eh.st)eh.st={};return eh.st;}
-function nmStList(eh){var o=[],st0=eh.st||{};if(st0.fired)o.push(NM_CTR_DEF&&NM_CTR_DEF[st0.fired]?st0.fired:'射撃済');if(st0.mv)o.push(st0.mv==='mot'?'Motion':'移動');if(eh.veh&&eh.ce)o.push('CE');if(eh.acq)o.push('ACQ');if(eh.grp&&!eh.veh&&!eh.gun){var d=nmGeList(eh.grp),nb=0,np=0;(d.items||[]).forEach(function(x){if(x.broken)nb++;else if(x.pinned)np++;});if(nb)o.push('混乱'+nb);if(np)o.push('PIN'+np);return o;}
+function nmStList(eh){var o=[],st0=eh.st||{};if(st0.fired)o.push(NM_CTR_DEF&&NM_CTR_DEF[st0.fired]?st0.fired:'射撃済');if(st0.mv)o.push(st0.mv==='mot'?'Motion':'移動');if(eh.veh&&eh.ce)o.push('CE');if(eh.acq)o.push('ACQ');if(eh.grp&&!eh.veh&&!eh.gun){var d=nmGeList(eh.grp),nb=0,np=0;var nc=0,nw=0;(d.items||[]).forEach(function(x){if(x.broken)nb++;else if(x.pinned)np++;if(x.cx)nc++;if(x.wounded)nw++;});if(nb)o.push('混乱'+nb);if(np)o.push('PIN'+np);if(window.NM_CXMK!==0){if(nc||st0.cx)o.push('CX'+(nc>1?nc:''));if(nw)o.push('負傷'+(nw>1?nw:''));} /* sample-cxmk(ダルマ「cxのバッチはない？」): CX・負傷の札も地図に */return o;}
   var st=eh.st||{};['brk','pin','imm','shock','uk','bog','mired','stun','recall','mal'].forEach(function(k){if(st[k])o.push(k==='mal'&&st[k]==='X'?(eh.gun&&!eh.veh?'砲破壊':'主砲破壊'):NM_ST_LBL[k]);});return o;}
 /* v415(ダルマ指示「マップを直感的に」お任せ): 札を種類ごとに色分け(1つずつの札)。地図の左上(手番の下)に、今地図にある札だけの凡例 */
-var NM_ST_COL={'混乱':'#8b1e1e','PIN':'#b07a1c','射撃済':'#3d4a3a','移動':'#4b5d2c','Motion':'#5a4a6b','走行不能':'#6b4a2b','ショック':'#7a3b3b','故障':'#4a4a44','主砲故障':'#4a4a44','スタン':'#6b3b5a','UK':'#5a1e1e','ボグ':'#6b5a2b','Mired':'#6b5a2b','リコール':'#3b4a6b','主砲破壊':'#2e2e2a','砲破壊':'#2e2e2a','残留':'#a3561d'}; /* ミリタリー寄り: 暗い赤・黄土・オリーブドラブ・カーキ */
+var NM_ST_COL={'混乱':'#8b1e1e','PIN':'#b07a1c','射撃済':'#3d4a3a','移動':'#4b5d2c','Motion':'#5a4a6b','走行不能':'#6b4a2b','ショック':'#7a3b3b','故障':'#4a4a44','主砲故障':'#4a4a44','スタン':'#6b3b5a','UK':'#5a1e1e','ボグ':'#6b5a2b','Mired':'#6b5a2b','リコール':'#3b4a6b','主砲破壊':'#2e2e2a','砲破壊':'#2e2e2a','残留':'#a3561d','CX':'#5d6b3a','負傷':'#7a2b2b'}; /* ミリタリー寄り: 暗い赤・黄土・オリーブドラブ・カーキ */
 function nmStKind(t){var m=String(t).replace(/\d+$/,'');return NM_ST_COL[m]?m:'混乱';}
 /* v451(ダルマ指示「アプリマップとリアルマップの操作感・カウンターの状態・システムカウンターを統一」①): 状態の印を実物のシステムカウンター風(正方形・2段の英字)で描く */
 var NM_CTR_DEF={'混乱':['BRO-','KEN','#b8261e','#fff'],'PIN':['PIN','','#f0ead6','#111'],'Motion':['MO-','TION','#f0ead6','#111'],'移動':['MOV-','ED','#f0ead6','#111'],
@@ -37550,7 +37550,9 @@ function nmStatusOverlaySVG(dl){try{nmMvSync();}catch(e){}var h=nmTapHexSVG(dl);
       h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+top.x+' '+top.y+')"><circle cx="'+(top.x-26)+'" cy="'+(top.y-24)+'" r="9" fill="#000" stroke="#d8cfae" stroke-width="1.2"/><text x="'+(top.x-26)+'" y="'+(top.y-20.5)+'" text-anchor="middle" font-size="10" font-weight="900" fill="#f2ead0" font-family="AppFont,AppJP,monospace">×'+so.n+'</text></g>';if(!l.length)return;}
     var C=nmCtrOf(l),Z=26,gp=2,tot=C.length*Z+(C.length-1)*gp,x=d.x-tot/2,y=d.y+6;
     h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
-    C.forEach(function(c){h+=nmCtrSVG(c,x,y,Z);x+=Z+gp;});
+    if(window.NM_CTR_WRAP!==0&&(C.length>2||C.some(function(c){return c.n>1;}))){ /* sample-cxmk(ダルマ「x2がかさなる」): 数のバッジの分だけ間を空け、3枚以上は2段に */
+      var Z2=C.length>2?22:Z,gp2=7,per=2,rows=Math.ceil(C.length/per);C.forEach(function(c,i){var r=Math.floor(i/per),k=i%per,nr=Math.min(per,C.length-r*per),tw=nr*Z2+(nr-1)*gp2;h+=nmCtrSVG(c,d.x-tw/2+k*(Z2+gp2),y+r*(Z2+4),Z2);});}
+    else C.forEach(function(c){h+=nmCtrSVG(c,x,y,Z);x+=Z+gp;});
     h+='</g>';});});
   return h;}
 /* v455(ダルマ指示「プレイ時はなるべく手間なく、アプリマップとリアルマップをリンクして進める」③): アプリの地図で印・マーカーが変わったら、
@@ -37633,7 +37635,7 @@ function nmRbRender(){var el=document.getElementById('nmRl'),L=NM_RB.items;
     h+='</div>';}
   el.innerHTML=h;var sl=el.querySelector('.rbL');if(sl)sl.scrollTop=sl.scrollHeight;}
 function nmStLegendHTML(){var u={},ord=[];[S_LOS.friendHexes||[],S_LOS.enemyHexes||[]].forEach(function(L){L.forEach(function(eh){nmStList(eh).forEach(function(t){var k=String(t).replace(/\d+$/,'');if(!NM_CTR_DEF[k])k=t;if(!u[k]){u[k]=1;ord.push(k);}});});});
-  var tip={'混乱':'混乱','PIN':'ピン','射撃済':'射撃済','準備':'準備射撃済','臨機':'臨機射撃済','防御':'防御射撃済','移動':'移動した','Motion':'Motion','CE':'CE(ハッチ開)','ACQ':'目標獲得','走行不能':'走行不能','ショック':'ショック','UK':'UK','スタン':'スタン','リコール':'リコール','ボグ':'ボグ','Mired':'Mired','故障':'主砲故障','主砲破壊':'主砲破壊','砲破壊':'砲破壊'};
+  var tip={'CX':'CX(疲労)','負傷':'負傷','混乱':'混乱','PIN':'ピン','射撃済':'射撃済','準備':'準備射撃済','臨機':'臨機射撃済','防御':'防御射撃済','移動':'移動した','Motion':'Motion','CE':'CE(ハッチ開)','ACQ':'目標獲得','走行不能':'走行不能','ショック':'ショック','UK':'UK','スタン':'スタン','リコール':'リコール','ボグ':'ボグ','Mired':'Mired','故障':'主砲故障','主砲破壊':'主砲破壊','砲破壊':'砲破壊'};
   var ks=Object.keys(NM_CTR_DEF).filter(function(k){return u[k];});if(S_LOS.resid&&Object.keys(S_LOS.resid).length)ks.push('残留');if(!ks.length)return '';
   return '<div style="display:flex;gap:6px 8px;flex-wrap:wrap;margin-top:4px;white-space:nowrap">'+ks.map(function(k){if(k==='残留')return '<span style="background:#a3561d;color:#f2ead0;font-size:11px;font-weight:bold;border-radius:3px;padding:0 5px;line-height:18px">残留火力</span>';
     var c=nmCtrOf([k])[0];if(k==='ACQ')return '<span onclick="event.stopPropagation();nmAcqTog()" title="'+T('目標獲得の詳細')+'" style="display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:bold;color:#e8e0c8;cursor:pointer;pointer-events:auto;border-radius:4px;padding:0 4px 0 0;'+(NM_ACQ_SHOW?'background:#1e4a7a;outline:1px solid #66ccff':'')+'"><svg width="20" height="20" viewBox="0 0 28 28">'+nmCtrSVG(c,0,0,26)+'</svg>'+tip[k]+' '+(NM_ACQ_SHOW?'▾':'▸')+'</span>';
