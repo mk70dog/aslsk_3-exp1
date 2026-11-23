@@ -46218,6 +46218,20 @@ function btBar5(v,o){var gold='#ffd060',G='linear-gradient(#ffdf7a,#e0a800)',btn
     L='<div '+o.vOC+' style="'+btn+box+'gap:6px;font-size:14px">'+btVicIc(15)+vicS+'</div>'+icB('📜',T('履歴'),o.hOC);
     C='<div style="'+box+'gap:14px;padding:3px 16px"><div style="line-height:1;text-align:center"><small style="font-size:9.5px;letter-spacing:.15em;color:'+(last?'#ff9080':'#9ab')+'">'+(last?'FINAL':'TURN')+'</small><div><b style="font:900 22px/1 AppFont,AppJP,sans-serif;color:#fff">'+o.turn+'</b><span style="font-size:12px;color:#8fa6b8">/'+o.maxT+'</span> <b style="color:'+gold+';font-size:13px">'+hfT+'</b></div></div><span style="width:1px;height:28px;background:#33425a"></span>'+natTag+'<div><div style="font-weight:900;font-size:19px;color:'+gold+';line-height:1.05">'+o.phN+'</div>'+dots(6,5,2)+'</div></div>';
     R=nextBig;}
+  else if(v===21){ /* 2-A: 2を少し大きく・ターンの進み具合の線 */
+    var sa='display:flex;align-items:center;gap:9px;height:38px;padding:0 12px;border-radius:10px;background:#0d131c;border:1px solid #2c3644;box-sizing:border-box;white-space:nowrap;font-size:14px;';
+    L='<div '+o.vOC+' style="'+btn+sa+'">'+btVicIc(14)+vicS+'</div><div '+o.hOC+' style="'+btn+sa+'">📜 '+T('履歴')+'</div>';
+    C='<div style="'+sa+'gap:12px;border-color:#ffd06066;position:relative;overflow:hidden"><span style="color:#fff;font-size:17px">T'+o.turn+'<span style="color:#8fa6b8;font-size:12px">/'+o.maxT+'</span> <span style="color:'+gold+'">'+hfT+'</span></span><span style="color:#445">|</span><span style="color:'+o.col+'">'+o.nm+'</span><span style="color:'+gold+';font-size:17px">'+o.phN+'</span>'+dots(6,6,3)+'<span style="position:absolute;left:0;bottom:0;height:2px;width:'+turnPct+'%;background:#e0a84a"></span></div>';
+    R='<div '+o.nOC+' style="'+btn+sa+'background:'+G+';border:0;color:#1b1500;'+o.dim+'">▶ '+o.nxN+'<small style="font-size:10.5px;opacity:.75">('+o.nxW+')</small></div>';}
+  else if(v===22){ /* 2-B: 全部を1本につなげる */
+    var cell='display:flex;align-items:center;gap:8px;height:34px;padding:0 12px;box-sizing:border-box;white-space:nowrap;font-size:13px;border-right:1px solid #2c3644;';
+    C='<div style="display:flex;align-items:stretch;border-radius:10px;overflow:hidden;background:#0d131c;border:1px solid #ffd06066"><div '+o.vOC+' style="'+btn+cell+'">'+btVicIc(13)+vicS+'</div><div '+o.hOC+' style="'+btn+cell+'">📜</div><div style="'+cell+'gap:10px"><span style="color:#fff;font-size:15px">T'+o.turn+'<span style="color:#8fa6b8;font-size:11px">/'+o.maxT+'</span> '+hfT+'</span><span style="color:'+o.col+'">'+o.nm+'</span><span style="color:'+gold+';font-size:15px">'+o.phN+'</span>'+dots(5,5,2)+'</div><div '+o.nOC+' style="'+btn+cell+'border:0;background:'+G+';color:#1b1500;'+o.dim+'">▶ '+o.nxN+'<small style="font-size:10px;opacity:.7">('+o.nxW+')</small></div></div>';
+    L='';R='';}
+  else if(v===23){ /* 2-C: 半透明・地図の上に浮かぶ細いバー */
+    var sc3='display:flex;align-items:center;gap:8px;height:32px;padding:0 11px;border-radius:16px;background:rgba(13,19,28,.7);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);border:1px solid #ffffff22;box-sizing:border-box;white-space:nowrap;font-size:13px;';
+    L='<div '+o.vOC+' style="'+btn+sc3+'">'+btVicIc(13)+vicS+'</div><div '+o.hOC+' style="'+btn+sc3+'">📜</div>';
+    C='<div style="'+sc3+'gap:10px;border-color:#ffd06055"><span style="color:#fff;font-size:15px">T'+o.turn+'<span style="color:#8fa6b8;font-size:11px">/'+o.maxT+'</span> '+hfT+'</span><span style="color:#445">|</span><span style="color:'+o.col+'">'+o.nm+'</span><span style="color:'+gold+';font-size:15px">'+o.phN+'</span>'+dots(5,5,2)+'</div>';
+    R='<div '+o.nOC+' style="'+btn+sc3+'background:rgba(224,168,0,.85);border:0;color:#1b1500;'+o.dim+'">▶ '+o.nxN+'<small style="font-size:10px;opacity:.7">('+o.nxW+')</small></div>';}
   else if(v===2){ /* 1本の細いバー(小さく) */
     var sl='display:flex;align-items:center;gap:8px;height:34px;padding:0 10px;border-radius:9px;background:#0d131c;border:1px solid #2c3644;box-sizing:border-box;white-space:nowrap;font-size:13px;';
     L='<div '+o.vOC+' style="'+btn+sl+'">'+btVicIc(13)+vicS+'</div><div '+o.hOC+' style="'+btn+sl+'">📜</div>';
@@ -46394,7 +46408,7 @@ function btFullBars(on){
   if(bh!==BT_FB_H.b||b.__fbh!==bh){b.innerHTML=bh;BT_FB_H.b=bh;b.__fbh=bh;}
   b.style.display=(topInfo&&!wantDock)?'none':''; /* v1284 */
   try{btLosCardSync(sideOn&&slim);}catch(e){console.log('btLosCard',e);}
-  setV('--btftop',t.offsetHeight+'px');setV('--btfbot',((topInfo&&!wantDock)?0:b.offsetHeight)+'px');btDockCtxSync(wantDock?ctx:'');
+  setV('--btftop',t.offsetHeight+'px');setV('--btfbot',((topInfo&&!wantDock)?0:b.offsetHeight)+'px');var fl=wantDock&&window.NM_BTBAR5===23&&!BT.finished;b.style.background=fl?'transparent':'';b.style.borderTop=fl?'0':'';b.style.boxShadow=fl?'none':'';de.classList.toggle('bt-barfl',fl);if(fl&&!document.getElementById('btBarFlCss')){var sf=document.createElement('style');sf.id='btBarFlCss';sf.textContent='html.bt-mapfull.bt-barfl #losScrollWrap{bottom:var(--nmsumh,0px) !important}';document.head.appendChild(sf);} /* sample-btbar2 2-C: 地図の上に浮かぶ */btDockCtxSync(wantDock?ctx:'');
   return t.offsetHeight;
 }
 /* v361(ダルマ指示「全画面表示時、デフォルトでは上下左右にブランクを表示しないように拡大縮小」): 地図の枠を縦・横とも盤で埋める倍率(はみ出す方はスクロール)にして、使用可能範囲の中央へ */
