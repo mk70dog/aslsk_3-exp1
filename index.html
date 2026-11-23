@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1545</title>
+<title>ASL SKシリーズv1546</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1545">
+<meta property="og:title" content="ASL SKシリーズv1546">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.745"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.746"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1546="v1546(";
 var APP_VERSION_HIST_v1545="v1545(";
 var APP_VERSION_HIST_v1544="v1544(";
 var APP_VERSION_HIST_v1543="v1543(";
@@ -38666,7 +38667,8 @@ function nmSuGNat(d){return d.nat||((d.items||[])[0]&&d.items[0].nat)||null;}
 function nmSuSlots(nat){var sc=nmSuScen(),sv=(sc&&S.savedGroups&&S.savedGroups[sc])||{},o=[];GROUP_SLOTS.forEach(function(k){var d=nmGeList(k);d.nat=nmSuGNat(d);var has=(d.items&&d.items.length)||(d.sw&&d.sw.length)||nmSuDcList(k).length||nmSuLwList(k).length;if((d.nat===nat&&has)||(NM_SU&&NM_SU.slot===k&&NM_SU.nat===nat&&(!has||d.nat===nat)))o.push(k);});return o;}
 /* v1149(ダルマ指示「部隊の準備で 混乱 PIN クラス低下 損耗 CXなどを素早く変更可能にする」): ユニットごとの状態ボタン */
 function nmSuStChips(k,i,x,nat){var smc=x.kind==='smc',elr=!smc&&!!((ELR_MAP[x.nat||nat]||{})[x.label])&&!elrExempt(x.nat||nat,x.label),cas=!smc&&!/\(乗員\)/.test(x.label);
-  var b=function(on,op,t,red){return '<span class="st'+(on?(red?' r':' y'):'')+'" onclick="event.stopPropagation();nmSuStOp(\''+k+'\','+i+',\''+op+'\')">'+t+'</span>';};
+  var swSel=!!(typeof NM_SU!=='undefined'&&NM_SU&&NM_SU.sel); /* v1546(ダルマ「(支援火器を選択中の)この場合には状態ボタンを反応させない」): 押しても状態は変えず、行を押したのと同じ(支援火器を持たせる) */
+  var b=function(on,op,t,red){return swSel?'<span class="st'+(on?(red?' r':' y'):'')+'" style="opacity:.35">'+t+'</span>':'<span class="st'+(on?(red?' r':' y'):'')+'" onclick="event.stopPropagation();nmSuStOp(\''+k+'\','+i+',\''+op+'\')">'+t+'</span>';};
   return '<span class="stR">'+b(!!x.broken,'brk','混乱',1)+b(!!x.pinned,'pin','PIN',1)+b(!!x.cx,'cx','CX')+(smc?b(!!x.wounded,'wnd','負傷',1):'')+(elr?b(false,'elr','クラス低下'):'')+(cas?b(false,'cas','損耗'):'')+'</span>';}
 function nmSuStOp(slot,i,op){var d=nmGeList(slot),x=(d.items||[])[i];if(!x)return;var lg=[],msg='';
   if(op==='brk'){x.broken=!x.broken;if(x.broken)x.pinned=false;msg=x.label+(x.broken?' 混乱':' 混乱を解除');}
