@@ -37550,7 +37550,9 @@ function nmStatusOverlaySVG(dl){try{nmMvSync();}catch(e){}var h=nmTapHexSVG(dl);
       h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+top.x+' '+top.y+')"><circle cx="'+(top.x-26)+'" cy="'+(top.y-24)+'" r="9" fill="#000" stroke="#d8cfae" stroke-width="1.2"/><text x="'+(top.x-26)+'" y="'+(top.y-20.5)+'" text-anchor="middle" font-size="10" font-weight="900" fill="#f2ead0" font-family="AppFont,AppJP,monospace">×'+so.n+'</text></g>';if(!l.length)return;}
     var C=nmCtrOf(l),Z=26,gp=2,tot=C.length*Z+(C.length-1)*gp,x=d.x-tot/2,y=d.y+6;
     h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
-    C.forEach(function(c){h+=nmCtrSVG(c,x,y,Z);x+=Z+gp;});
+    if(window.NM_CTR_WRAP!==0&&(C.length>2||C.some(function(c){return c.n>1;}))){ /* sample-cxmk(ダルマ「x2がかさなる」): 数のバッジの分だけ間を空け、3枚以上は2段に */
+      var Z2=C.length>2?22:Z,gp2=7,per=2,rows=Math.ceil(C.length/per);C.forEach(function(c,i){var r=Math.floor(i/per),k=i%per,nr=Math.min(per,C.length-r*per),tw=nr*Z2+(nr-1)*gp2;h+=nmCtrSVG(c,d.x-tw/2+k*(Z2+gp2),y+r*(Z2+4),Z2);});}
+    else C.forEach(function(c){h+=nmCtrSVG(c,x,y,Z);x+=Z+gp;});
     h+='</g>';});});
   return h;}
 /* v455(ダルマ指示「プレイ時はなるべく手間なく、アプリマップとリアルマップをリンクして進める」③): アプリの地図で印・マーカーが変わったら、
