@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1564</title>
+<title>ASL SKシリーズv1565</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1564">
+<meta property="og:title" content="ASL SKシリーズv1565">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.764"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.765"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1565="v1565(AI対戦: タスクバーを2B(1本の細いバー)に";
 var APP_VERSION_HIST_v1564="v1564(AI対戦: 見える範囲を判定モードと同じに";
 var APP_VERSION_HIST_v1563="v1563(AI対戦: 見える範囲表示中にタップで起点変更";
 var APP_VERSION_HIST_v1562="v1562(S29の勝利条件の窓をわかりやすく・対戦モードの建物の支配を判定モードと同じ表示";
@@ -46195,6 +46196,63 @@ function btNextLbl(){try{if(BT.finished||!BT.started)return T('次へ')+' ▶';v
   var who=nx[0]==='RtPh'?T('両軍'):((typeof nmNatLbl==='function'?nmNatLbl(sd):BT_SIDE_NAME[sd])+(BT.app&&sd===BT.app?'・'+T('アプリ'):''));
   /* v1342(ダルマ「C ▶左」「次フェイズに変更」): 左に大きな▶、右に「次フェイズ」/「防御射撃(ソ連・アプリ)」 */
   return '<span style="font-size:20px;line-height:1;margin-right:2px">▶</span><span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.1"><span style="font-size:16px;font-weight:900">'+T('次フェイズ')+'</span><span style="font-size:10px;font-weight:700;opacity:.75">'+T(nx[1])+'('+who+')</span></span>';}catch(e){return T('次へ')+' ▶';}}
+/* v1565(既定0): ターンの札 1=判定モードと同じ TURN 大きな数字 2=ターン数+残り 3=ターンのマス */
+function btTurnBlk(v,turn,maxT,hf){var gold='#ffd060',hc=hf?'#c9d3df':gold,last=turn>=maxT,box='flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:3px 12px;border-radius:12px;background:#0d131c;border:1px solid '+(last?'#ff7060':'#ffd06088')+';height:44px;box-sizing:border-box;white-space:nowrap;margin-right:10px;';
+  var half='<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;font-weight:900;font-size:14px;background:'+(hf?'#2a3442':'#3a3214')+';border:1px solid '+hc+';color:'+hc+'">'+T(hf?'裏':'表')+'</span>';
+  if(v===1){var pct=Math.round(((turn-1)*2+hf+1)/(maxT*2)*100);
+    return '<div style="'+box+'flex-direction:column;align-items:stretch;gap:2px;padding:3px 12px 4px"><div style="display:flex;align-items:baseline;gap:6px"><small style="font-size:10px;letter-spacing:.15em;color:'+(last?'#ff9080':'#9ab')+'">'+(last?'FINAL TURN':'TURN')+'</small><b style="font:900 22px/1 AppFont,AppJP,sans-serif;color:#fff">'+turn+'</b><i style="font-style:normal;font-size:13px;color:#8fa6b8">/ '+maxT+'</i>'+half+'</div><div style="height:3px;border-radius:2px;background:#232b37;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:#e0a84a"></div></div></div>';}
+  if(v===2){var left=maxT-turn;
+    return '<div style="'+box+'"><div style="text-align:center;line-height:1"><div style="font-size:10px;color:#9ab">'+T('ターン')+'</div><b style="font:900 24px/1 AppFont,AppJP,sans-serif;color:#fff">'+turn+'</b><span style="font-size:13px;color:#8fa6b8"> / '+maxT+'</span></div>'+half+'<div style="font-size:11px;line-height:1.2;color:'+(last?'#ff9080':'#c9d3df')+'">'+(last?T('最終ターン'):T('あと')+' '+left+'<br>'+T('ターン'))+'</div></div>';}
+  var cells='';for(var i=1;i<=maxT;i++){var on=i===turn,past=i<turn;cells+='<span style="display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:'+(on?30:20)+'px;height:'+(on?34:24)+'px;border-radius:5px;font-weight:900;font-size:'+(on?15:11)+'px;'+(on?'background:linear-gradient(#ffdf7a,#e0a800);color:#1b1500;':past?'background:#1a212b;color:#566;':'background:#141a22;border:1px solid #3a4a5e;color:#9ab;')+'">'+i+(on?'<small style="font-size:9px;line-height:1">'+T(hf?'裏':'表')+'</small>':'')+'</span>';}
+  return '<div style="'+box+'gap:3px;padding:3px 10px"><span style="font-size:10px;color:#9ab;writing-mode:vertical-rl;margin-right:3px">'+T('ターン')+'</span>'+cells+'</div>';}
+/* v1565(ダルマ「AI対戦モード タスクバー 見直し サンプルx5」) */
+function btBar5(v,o){var gold='#ffd060',G='linear-gradient(#ffdf7a,#e0a800)',btn='flex:0 0 auto;font:inherit;cursor:pointer;box-sizing:border-box;white-space:nowrap;',hfT=T(o.hf?'裏':'表'),last=o.turn>=o.maxT,eF=!!((btScObj()||{}).endsOnFront),eH=T(eF?'表':'裏'),endS=function(fs){return '<span style="color:'+(last?'#ff9080':'#8fa6b8')+';font-size:'+fs+'px">'+(last?T('最終ターン・')+eH+T('で終了'):'/'+o.maxT+eH+T('まで'))+'</span>';},vc=o.vc;
+  var vicS=vc?(vc.exit?'<b style="color:'+o.gc+'">'+vc.xv+'</b><span style="color:#8fa6b8">/'+vc.total+'VP</span>':'<b style="color:'+o.gc+'">'+T(btSideShort('GER'))+vc.ger+'</b><span style="color:#556"> : </span><b style="color:'+o.sc+'">'+T(String(BT_SIDE_NAME.SOV).charAt(0))+vc.sov+'</b><span style="color:#8fa6b8;font-size:11px"> /'+vc.total+'</span>'+(vc.reqTag||'')):'';
+  var dots=function(w,h,gap){var d='';for(var i=0;i<BT_PHASES.length;i++)d+='<span style="width:'+(i===o.cur?w*2:w)+'px;height:'+h+'px;border-radius:'+h+'px;background:'+(i<o.cur?'#5e6b7b':(i===o.cur?gold:'transparent'))+';border:1px solid '+(i>o.cur?'#5e6b7b':'transparent')+'"></span>';return '<span style="display:flex;gap:'+gap+'px;align-items:center">'+d+'</span>';};
+  var turnPct=Math.round(((o.turn-1)*2+o.hf+1)/(o.maxT*2)*100);
+  var box='display:flex;align-items:center;gap:8px;padding:3px 12px;border-radius:12px;background:#0d131c;border:1px solid #ffd06055;height:44px;box-sizing:border-box;white-space:nowrap;';
+  var nextBig='<div '+o.nOC+' style="'+btn+box+'padding:3px 16px 3px 6px;background:'+G+';border:0;box-shadow:0 0 12px #ffd06066;color:#1b1500;'+o.dim+'"><span style="display:inline-flex;width:32px;height:32px;border-radius:50%;background:#1b1500;color:'+gold+';align-items:center;justify-content:center;font-size:16px">▶</span><div><div style="font-weight:900;font-size:17px;line-height:1">'+o.nxN+'</div><div style="font-size:10px;font-weight:700;opacity:.75">'+T('次フェイズ')+'・'+o.nxW+'</div></div></div>';
+  var icB=function(ic,lb,oc,sub){return '<div '+oc+' style="'+btn+'display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:52px;height:44px;padding:0 8px;border-radius:10px;background:#0d131c;border:1px solid #2c3644;color:#c9d3df"><span style="font-size:15px;line-height:1.1">'+ic+'</span><span style="font-size:10px;color:#9ab">'+lb+'</span>'+(sub||'')+'</div>';};
+  var natTag='<span style="display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:6px;background:'+o.col+'33;border:1px solid '+o.col+';color:'+o.col+';font-weight:900;font-size:14px">'+o.nm+'</span>';
+  var L='',C='',R='';
+  if(v===1){ /* 左=ターン 中央=誰の何フェイズ 右=次 */
+    L='<div '+o.vOC+' style="'+btn+box+'gap:6px;font-size:14px">'+btVicIc(15)+vicS+'</div>'+icB('📜',T('履歴'),o.hOC);
+    C='<div style="'+box+'gap:14px;padding:3px 16px"><div style="line-height:1;text-align:center"><small style="font-size:9.5px;letter-spacing:.15em;color:'+(last?'#ff9080':'#9ab')+'">'+(last?'FINAL':'TURN')+'</small><div><b style="font:900 22px/1 AppFont,AppJP,sans-serif;color:#fff">'+o.turn+'</b><span style="font-size:12px;color:#8fa6b8">/'+o.maxT+'</span> <b style="color:'+gold+';font-size:13px">'+hfT+'</b></div></div><span style="width:1px;height:28px;background:#33425a"></span>'+natTag+'<div><div style="font-weight:900;font-size:19px;color:'+gold+';line-height:1.05">'+o.phN+'</div>'+dots(6,5,2)+'</div></div>';
+    R=nextBig;}
+  else if(v===21){ /* 2-A: 2を少し大きく・ターンの進み具合の線 */
+    var sa='display:flex;align-items:center;gap:9px;height:38px;padding:0 12px;border-radius:10px;background:#0d131c;border:1px solid #2c3644;box-sizing:border-box;white-space:nowrap;font-size:14px;';
+    L='<div '+o.vOC+' style="'+btn+sa+'">'+btVicIc(14)+vicS+'</div><div '+o.hOC+' style="'+btn+sa+'">📜 '+T('履歴')+'</div>';
+    C='<div style="'+sa+'gap:12px;border-color:#ffd06066;position:relative;overflow:hidden"><span style="color:#fff;font-size:17px">T'+o.turn+' <span style="color:'+gold+'">'+hfT+'</span> '+endS(12)+'</span><span style="color:#445">|</span><span style="color:'+o.col+'">'+o.nm+'</span><span style="color:'+gold+';font-size:17px">'+o.phN+'</span>'+dots(6,6,3)+'<span style="position:absolute;left:0;bottom:0;height:2px;width:'+turnPct+'%;background:#e0a84a"></span></div>';
+    R='<div '+o.nOC+' style="'+btn+sa+o.dim+'"><span style="color:'+gold+'">▶</span> '+o.nxN+'<small style="font-size:10.5px;opacity:.75">('+o.nxW+')</small></div>';}
+  else if(v===22){ /* 2-B: 全部を1本につなげる */
+    var cell='display:flex;align-items:center;gap:8px;height:34px;padding:0 12px;box-sizing:border-box;white-space:nowrap;font-size:13px;border-right:1px solid #2c3644;';
+    C='<div style="display:flex;align-items:stretch;border-radius:10px;overflow:hidden;background:#0d131c;border:1px solid #ffd06066"><div '+o.vOC+' style="'+btn+cell+'">'+btVicIc(13)+vicS+'</div><div '+o.hOC+' style="'+btn+cell+'">📜</div><div style="'+cell+'gap:10px"><span style="color:#fff;font-size:15px">T'+o.turn+' '+hfT+' '+endS(11)+'</span><span style="color:'+o.col+'">'+o.nm+'</span><span style="color:'+gold+';font-size:15px">'+o.phN+'</span>'+dots(5,5,2)+'</div><div '+o.nOC+' style="'+btn+cell+'border:0;'+o.dim+'"><span style="color:'+gold+'">▶</span> '+o.nxN+'<small style="font-size:10px;opacity:.7">('+o.nxW+')</small></div></div>';
+    L='';R='';}
+  else if(v===23){ /* 2-C: 半透明・地図の上に浮かぶ細いバー */
+    var sc3='display:flex;align-items:center;gap:8px;height:32px;padding:0 11px;border-radius:16px;background:rgba(13,19,28,.7);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);border:1px solid #ffffff22;box-sizing:border-box;white-space:nowrap;font-size:13px;';
+    L='<div '+o.vOC+' style="'+btn+sc3+'">'+btVicIc(13)+vicS+'</div><div '+o.hOC+' style="'+btn+sc3+'">📜</div>';
+    C='<div style="'+sc3+'gap:10px;border-color:#ffd06055"><span style="color:#fff;font-size:15px">T'+o.turn+' '+hfT+' '+endS(11)+'</span><span style="color:#445">|</span><span style="color:'+o.col+'">'+o.nm+'</span><span style="color:'+gold+';font-size:15px">'+o.phN+'</span>'+dots(5,5,2)+'</div>';
+    R='<div '+o.nOC+' style="'+btn+sc3+o.dim+'"><span style="color:'+gold+'">▶</span> '+o.nxN+'<small style="font-size:10px;opacity:.7">('+o.nxW+')</small></div>';}
+  else if(v===2){ /* 1本の細いバー(小さく) */
+    var sl='display:flex;align-items:center;gap:8px;height:34px;padding:0 10px;border-radius:9px;background:#0d131c;border:1px solid #2c3644;box-sizing:border-box;white-space:nowrap;font-size:13px;';
+    L='<div '+o.vOC+' style="'+btn+sl+'">'+btVicIc(13)+vicS+'</div><div '+o.hOC+' style="'+btn+sl+'">📜</div>';
+    C='<div style="'+sl+'gap:10px;border-color:#ffd06066"><b style="color:#fff;font-size:15px">T'+o.turn+' '+hfT+' '+endS(11)+'</b><span style="color:#445">|</span><b style="color:'+o.col+'">'+o.nm+'</b><b style="color:'+gold+';font-size:15px">'+o.phN+'</b>'+dots(5,5,2)+'</div>';
+    R='<div '+o.nOC+' style="'+btn+sl+o.dim+'"><span style="color:'+gold+'">▶</span> '+o.nxN+'<small style="font-size:10px;opacity:.7">('+o.nxW+')</small></div>';}
+  else if(v===3){ /* フェイズの段を全部並べる */
+    var seg='';BT_PHASES.forEach(function(x,i){var on=i===o.cur,past=i<o.cur;seg+='<span style="flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:'+(on?78:40)+'px;height:40px;'+(on?'background:'+G+';color:#1b1500;':past?'background:#161c25;color:#566;':'background:#0d131c;color:#9ab;')+'border-right:1px solid #222a36"><b style="font-size:'+(on?14:11)+'px;line-height:1.1">'+T(x[1])+'</b><small style="font-size:9px;opacity:.75">'+x[0]+'</small></span>';});
+    L='<div style="'+box+'flex-direction:column;justify-content:center;gap:0;padding:2px 10px;line-height:1.1"><span style="font-size:10px;color:#9ab">'+T('ターン')+'</span><b style="font-size:17px;color:#fff">'+o.turn+'<span style="font-size:11px;color:#8fa6b8">/'+o.maxT+'</span> <span style="color:'+gold+'">'+hfT+'</span></b></div>'+natTag;
+    C='<div style="display:flex;border-radius:10px;overflow:hidden;border:1px solid #ffd06066;flex:1 1 auto;max-width:760px">'+seg+'</div>';
+    R='<div '+o.vOC+' style="'+btn+box+'font-size:13px">'+vicS+'</div>'+icB('📜',T('履歴'),o.hOC)+'<div '+o.nOC+' style="'+btn+'display:flex;align-items:center;justify-content:center;width:52px;height:44px;border-radius:12px;background:'+G+';color:#1b1500;font-size:22px;font-weight:900;'+o.dim+'">▶</div>';}
+  else if(v===4){ /* 国の色の帯で「誰の番」を大きく */
+    L='<div style="display:flex;align-items:stretch;height:46px;border-radius:12px;overflow:hidden;border:1px solid '+o.col+'"><div style="background:linear-gradient('+o.col+'cc,'+o.col+'55);padding:0 14px;display:flex;flex-direction:column;justify-content:center;color:#fff"><b style="font-size:17px;line-height:1.05">'+o.nm+T('の番')+'</b><small style="font-size:10px;opacity:.85">'+(BT.app&&o.sn===BT.app?T('アプリが操作'):T('あなたが操作'))+'</small></div><div style="background:#0d131c;padding:0 14px;display:flex;flex-direction:column;justify-content:center"><b style="font-size:19px;color:'+gold+';line-height:1.05">'+o.phN+'</b>'+dots(6,5,2)+'</div><div style="background:#141a22;padding:0 12px;display:flex;flex-direction:column;justify-content:center;align-items:center;border-left:1px solid #2c3644"><small style="font-size:9.5px;color:#9ab">'+T('ターン')+'</small><b style="font-size:17px;color:#fff;line-height:1">'+o.turn+'<span style="font-size:11px;color:#8fa6b8">/'+o.maxT+'</span> <span style="color:'+gold+';font-size:13px">'+hfT+'</span></b></div></div>';
+    C='';R='<div '+o.vOC+' style="'+btn+box+'font-size:14px">'+btVicIc(15)+vicS+'</div>'+icB('📜',T('履歴'),o.hOC)+nextBig;}
+  else{ /* 5: 左に大きなターン、右は次へだけ。勝利・履歴はアイコン */
+    var tc=last?'#ff7060':gold;
+    L='<div style="display:flex;align-items:center;gap:10px;height:48px;padding:0 14px 0 8px;border-radius:12px;background:#0d131c;border:1px solid '+tc+'88"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:46px;height:40px;border-radius:9px;background:'+tc+'22;border:1px solid '+tc+'"><b style="font:900 22px/1 AppFont,AppJP,sans-serif;color:'+tc+'">'+o.turn+'</b><small style="font-size:9px;color:#c9d3df">/'+o.maxT+' '+hfT+'</small></div><div><div style="display:flex;align-items:center;gap:8px">'+natTag+'<b style="font-size:19px;color:#fff;line-height:1">'+o.phN+'</b></div><div style="margin-top:4px">'+dots(7,5,3)+'</div></div></div>';
+    C='';R=icB(btVicIc(15),'',o.vOC,'<span style="font-size:11px;font-weight:900">'+vicS+'</span>')+icB('📜',T('履歴'),o.hOC)+nextBig;}
+  var nrm=function(x){return window.NM_BTBOLD?x:x.replace(/<b(\s|>)/g,'<span$1').replace(/<\/b>/g,'</span>').replace(/font-weight:(900|800|700)/g,'font-weight:400').replace(/font:900 /g,'font:400 ');}; /* ダルマ「太字を普通に」 */
+  L=nrm(L);C=nrm(C);R=nrm(R);
+  return '<div style="flex:0 0 auto;display:flex;align-items:center;gap:8px">'+L+o.chip+'</div><div style="flex:1;min-width:0;display:flex;justify-content:center;align-items:center">'+C+'</div><div style="flex:0 0 auto;display:flex;align-items:center;gap:8px">'+R+'</div>';}
 function btDockHTML(sty){ /* v1343(ダルマ「タスクバーの中央に表示」T1/T2/T3「次フェイズなどもデザインを合わせる」「今のメインメニューのタスクバー切り替え3つと入れ替え」): 下バーの形 A=T1 / B=T2 / C=T3 */
   var sn=btSideNow(),col=BT_SIDE_COL[sn]||'#9cc4ff',cur=BT.ph,turn=BT.turn,maxT=btMaxTurn(),hf=BT.half?1:0,gold='#ffd060',G='linear-gradient(#ffdf7a,#e0a800)',BD='1px solid #ffd06088';
   var canNext=!(BT.mv&&BT.app&&BT.mv.side===BT.app),natL=function(sd){return typeof nmNatLbl==='function'?nmNatLbl(sd):BT_SIDE_NAME[sd];},nm=natL(sn),badge=String(nm).charAt(0);
@@ -46231,10 +46289,12 @@ function btDockHTML(sty){ /* v1343(ダルマ「タスクバーの中央に表示
      +'<div '+nOC+' style="'+btn+box3+'padding:3px 14px 3px 6px;background:'+G+';border:0;box-shadow:0 0 12px #ffd06066;color:#1b1500;'+dim+'"><span style="display:inline-flex;width:32px;height:32px;border-radius:50%;background:#1b1500;color:'+gold+';align-items:center;justify-content:center;font-size:16px">▶</span><div><div style="font-weight:900;font-size:18px;line-height:1">'+nxN+'</div><div style="font-size:10px;font-weight:700;opacity:.75">'+T('次フェイズ')+'・'+nxW+'</div></div></div>';
   }
   var m=h.match(/\u0001([\s\S]*?)\u0002/),cen=m?m[1]:'',rest=h.replace(/\u0001[\s\S]*?\u0002/,''),ni=rest.lastIndexOf('<div '+nOC);if(ni<0)ni=rest.length;
+  var tv=window.NM_BTTURN||0;if(tv&&!BT.finished){cen=cen.replace('<br>'+tt,'').replace('・'+tt,'').replace(tt,'');cen=btTurnBlk(tv,turn,maxT,hf)+cen;} /* v1565 試作のまま(既定0)(ダルマ「AI対戦モード ターンがわかりにくい」) */
   if(BT.finished){var wv=null;try{wv=btCfgWinner();}catch(e){}var wc=wv?(BT_SIDE_COL[wv]||gold):gold; /* v1361(ダルマ「勝利がわかりにくい」): 終了後は、フェイズの札を勝敗に、次フェイズを「結果を見る」に */
     cen='<div onclick="event.stopPropagation();btWinModal(true)" style="'+btn+'display:flex;align-items:center;gap:10px;padding:3px 16px;border-radius:12px;background:linear-gradient('+wc+'55,#0d131c);border:2px solid '+gold+';height:44px;box-shadow:0 0 14px #ffd06077"><span style="font-size:22px">🏆</span><div><div style="font-weight:900;font-size:19px;color:#fff;line-height:1.05">'+(wv?T(BT_SIDE_NAME[wv]+'の勝利'):T('ゲーム終了'))+'</div><div style="font-size:11px;color:#ffe9a8">'+T('ゲーム終了')+'・'+btWinReason(true)+'</div></div></div>';
     rest=rest.slice(0,ni)+'<div onclick="event.stopPropagation();BtResetAsk()" style="'+btn+'display:flex;align-items:center;gap:8px;padding:3px 14px;border-radius:12px;background:#0d131c;border:'+BD+';height:40px;color:'+gold+';font-weight:900;font-size:15px">⟲ '+T('新しい対戦')+'</div>';ni=rest.length;
     if(!BT.winShown)setTimeout(function(){try{btWinModal(false);}catch(e){}},300);}
+  var bv5=window.NM_BTBAR5==null?22:window.NM_BTBAR5;if(bv5&&!BT.finished)return btBar5(bv5,{sn:sn,col:col,cur:cur,turn:turn,maxT:maxT,hf:hf,nm:nm,badge:badge,phN:phN,phC:phC,nxN:nxN,nxW:nxW,nxC:nxC,vc:vc,dim:dim,vOC:vOC,hOC:hOC,nOC:nOC,chip:chip,gc:gc,sc:sc}); /* v1565(ダルマ「タスクバー見直し」→案2→2B): 既定は 22=1本につなげた細いバー。0=従来 */
   h='<div style="flex:0 0 auto;display:flex;align-items:center;gap:10px">'+rest.slice(0,ni)+'</div><div style="flex:1;min-width:0;display:flex;justify-content:flex-end;align-items:center">'+cen+'</div>'+rest.slice(ni);
   return h;}
 var BT_DOCKMIN=false;
@@ -46349,7 +46409,7 @@ function btFullBars(on){
   if(bh!==BT_FB_H.b||b.__fbh!==bh){b.innerHTML=bh;BT_FB_H.b=bh;b.__fbh=bh;}
   b.style.display=(topInfo&&!wantDock)?'none':''; /* v1284 */
   try{btLosCardSync(sideOn&&slim);}catch(e){console.log('btLosCard',e);}
-  setV('--btftop',t.offsetHeight+'px');setV('--btfbot',((topInfo&&!wantDock)?0:b.offsetHeight)+'px');btDockCtxSync(wantDock?ctx:'');
+  setV('--btftop',t.offsetHeight+'px');setV('--btfbot',((topInfo&&!wantDock)?0:b.offsetHeight)+'px');var fl=wantDock&&window.NM_BTBAR5===23&&!BT.finished;b.style.background=fl?'transparent':'';b.style.borderTop=fl?'0':'';b.style.boxShadow=fl?'none':'';de.classList.toggle('bt-barfl',fl);if(fl&&!document.getElementById('btBarFlCss')){var sf=document.createElement('style');sf.id='btBarFlCss';sf.textContent='html.bt-mapfull.bt-barfl #losScrollWrap{bottom:var(--nmsumh,0px) !important}';document.head.appendChild(sf);} /* v1565 2-C(NM_BTBAR5=23の時): 地図の上に浮かぶ */btDockCtxSync(wantDock?ctx:'');
   return t.offsetHeight;
 }
 /* v361(ダルマ指示「全画面表示時、デフォルトでは上下左右にブランクを表示しないように拡大縮小」): 地図の枠を縦・横とも盤で埋める倍率(はみ出す方はスクロール)にして、使用可能範囲の中央へ */
