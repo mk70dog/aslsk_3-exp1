@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1553</title>
+<title>ASL SKシリーズv1554</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1553">
+<meta property="og:title" content="ASL SKシリーズv1554">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.753"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.754"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1554="v1554(メインメニューの同期で同期の設定画面";
 var APP_VERSION_HIST_v1553="v1553(同期オールで相手のカウンターは動かす・消す・置くができない";
 var APP_VERSION_HIST_v1552="v1552(S29 米のアプリは P1 の建物を重く";
 var APP_VERSION_HIST_v1551="v1551(S29 AI対戦モード対応";
@@ -40042,6 +40043,24 @@ function nmGsSetRole(r){try{localStorage.setItem('aslsk_mapsync_side',r);}catch(
    自動同期(S.nmAsOn、初期ON)。20秒ごとに相手のファイルを確認して新しければ取り込む。自分の編成・ターン・PF使用数が変わっていれば送る。
    ターン・PFは後から変えた方を正とする(at=変更時刻)。編成は各自の分だけ送るのでぶつからない */
 /* sample-jsync(ダルマ「判定モードの同期 ナシ/ライト/オール」): ライト=部隊の登録情報とターン表(⇅同期)、オール=ライト+部隊の状態とマップの情報(マップ共有を自動) */
+/* v1554(ダルマ「メインメニュー システム 同期を選択しても設定画面が表示しない」→実施→ まとめた設定画面): このiPadの1P/2P・国・同期のナシ/ライト/オール・GitHub(Gist)・今すぐ同期 */
+function nmSyCfgClose(){var o=document.getElementById('nmSyCfg');if(o)o.remove();}
+function nmSyCfgRe(){setTimeout(function(){if(document.getElementById('nmSyCfg'))nmSyCfgOpen();},0);}
+function nmSyCfgOpen(){try{var mn=document.getElementById('nmFtMn');if(mn)mn.remove();}catch(e){}
+  var o=document.getElementById('nmSyCfg');if(!o){o=document.createElement('div');o.id='nmSyCfg';o.style.cssText='position:fixed;inset:0;z-index:9600;background:#0008;display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,monospace';o.onclick=function(e){if(e.target===o)nmSyCfgClose();};document.body.appendChild(o);}
+  var rl=nmsRole(),lv=nmJsLv(),gc=false;try{gc=GIST_CONFIGURED();}catch(e){}var tok='',gid='';try{tok=gistGetToken()||'';gid=gistGetId()||'';}catch(e){}
+  var sec=function(n,t){return '<div style="font-size:12px;color:#ffd060;font-weight:800;margin:12px 0 6px">'+n+' '+T(t)+'</div>';};
+  var seg=function(on,t,sub,f){return '<div onclick="event.stopPropagation();'+f+';nmSyCfgRe()" style="flex:1;text-align:center;padding:8px 4px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:800;line-height:1.25;'+(on?'background:#2c3442;color:#ffd24a;outline:1px solid #ffd24a;outline-offset:-1px':'color:#8899aa')+'">'+T(t)+(sub?'<small style="display:block;font-size:10px;font-weight:400;margin-top:2px">'+sub+'</small>':'')+'</div>';};
+  var box=function(h){return '<div style="display:flex;gap:3px;background:#0e1218;border:1px solid #39414f;border-radius:10px;padding:3px">'+h+'</div>';};
+  var nat='';try{nat=nmMyNatMenuHTML().replace(/setTimeout\(nmMenuRebuild,0\)/g,'nmSyCfgRe()');}catch(e){}
+  o.innerHTML='<div onclick="event.stopPropagation()" style="width:min(460px,94vw);max-height:88vh;overflow:auto;background:#1f2227;border:1px solid #39414f;border-radius:14px;padding:12px 14px;box-shadow:0 10px 40px #000;color:#e8eef4">'
+   +'<div style="display:flex;align-items:center;gap:10px"><button class="nmRnd" title="'+T('閉じる')+'" onclick="nmSyCfgClose();try{nmFtMenu();}catch(e){}"><span>←</span></button><b style="flex:1;text-align:center;font-size:16px">⇅ '+T('同期の設定')+'</b><button class="nmRnd" title="'+T('閉じる')+'" onclick="nmSyCfgClose()"><span>✕</span></button></div>'
+   +sec('①','このiPad')+box(seg(rl==='p1','1P','',"localStorage.setItem('aslsk_mapsync_side','p1')")+seg(rl==='p2','2P','',"localStorage.setItem('aslsk_mapsync_side','p2')"))
+   +(nat?'<div style="margin-top:6px">'+nat+'</div>':'<div style="font-size:11px;color:#8fa6bd;margin-top:4px">'+T('このiPadの国は、シナリオを選ぶと選べます')+'</div>')
+   +sec('②','同期のしかた')+box(seg(lv==='none','同期ナシ',T('この端末だけ'),"nmJsSet('none')")+seg(lv==='lite','同期ライト',T('部隊の登録')+'<br>'+T('ターン表'),"nmJsSet('lite')")+seg(lv==='all','同期オール',T('ライト')+'＋'+T('部隊の状態')+'<br>'+T('マップの情報'),"nmJsSet('all')"))
+   +sec('③','GitHub(Gist)')+'<div style="font-size:12px;margin-bottom:6px;color:'+(gc?'#6fe08a':'#ff9a9a')+'">'+(gc?'✓ '+T('設定済み'):'✕ '+T('未設定(2台で同じトークンとGist IDを入れてください)'))+'</div>'
+   +'<div style="display:grid;grid-template-columns:auto 1fr;gap:6px;align-items:center;font-size:12px"><span style="color:#9ab">'+T('トークン')+'</span><input type="password" value="'+String(tok).replace(/"/g,'&quot;')+'" placeholder="ghp_..." onchange="gistSetToken(this.value);nmSyCfgRe()" style="background:#0e1218;color:#e8eef4;border:1px solid #39414f;border-radius:6px;padding:6px;font:12px monospace"><span style="color:#9ab">Gist ID</span><input value="'+String(gid).replace(/"/g,'&quot;')+'" onchange="gistSetId(this.value);nmSyCfgRe()" style="background:#0e1218;color:#e8eef4;border:1px solid #39414f;border-radius:6px;padding:6px;font:12px monospace"></div>'
+   +'<button class="b" style="margin:14px 0 0;width:100%;height:46px;font-weight:900;color:#ffd060;border-color:#c8a032" onclick="nmSyCfgClose();nmGsSync()">⇅ '+T('今すぐ同期')+'</button></div>';}
 function nmJsLv(){var v=S.nmJSync;return v==='none'||v==='all'?v:'lite';}
 function nmJsSet(v){try{if(S.nmMode!=='judge'&&S.nmMode!=='online'){var m0=nmModeNow();if(m0==='judge'||m0==='online')S.nmMode=m0;}}catch(e){} /* 同期オールで nmsMode が auto になっても判定モードのまま */S.nmJSync=v;try{saveState();}catch(e){}try{nmsStart();}catch(e){}try{nmFtActFill();}catch(e){}try{if(v!=='none')nmAsKick();}catch(e){}btToast(T('同期')+': '+(v==='none'?T('ナシ'):v==='all'?T('オール(部隊の登録・ターン表・部隊の状態・マップ)'):T('ライト(部隊の登録・ターン表)')));}
 function nmAsOn(){try{if(nmModeNow()==='judge'&&nmJsLv()==='none')return false;}catch(e){}return S.nmAsOn!==false;}
@@ -42699,7 +42718,7 @@ function nmFtMenuHTML(){var id='nmFtMn',cl=function(fn){return 'event.stopPropag
    /* v800(ダルマ指示「使用したことがないので非表示にする」): 操作(直前の操作を中止・やり直す)と全画面表示を解除はメインメニューに出さない */
    /* v1130: 旧タブはメインメニューから消去(ツールバーの旧タブを使う) */
    +sc('設定')+'<details><summary style="'+sum+'">▸ '+T('表示の設定')+'</summary><div style="display:flex;flex-direction:column;gap:4px;margin-top:4px">'+vw.concat(set).map(function(x){if(x[0]==='__BOTSEG__')return nmFzSegHTML()+nmAbColSegHTML()+btBarSegHTML();return '<button class="b sm" style="'+sm+'" onclick="'+(/nmTbCfgOpen|uiThemePop/.test(x[1])?cl(x[1]):'event.stopPropagation();'+x[1]+';setTimeout(nmMenuRebuild,0)')+'">'+x[0]+'</button>';}).join('')+'</div></details>'
-   +sc('システム')+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'+(by[T('バックアップ')]||by['バックアップ']?bt(by[T('バックアップ')]||by['バックアップ']):'')+bt(dbg)+(nmGsBtnOn()?bt(['⇅ '+T('同期'),'nmGsSync()']):'')/* v1254(ダルマ指示「メインメニュー システム 同期を追加」B): ツールバーの⇅同期と同じ。判定モードの時だけ */+'<button class="b sm" style="margin:0;height:38px;padding:0 4px;font-size:12px;text-align:left;color:#ffd060;border-color:#c8a032;white-space:nowrap" onclick="'+cl('appForceUpdate()')+'">'+NM_MI.upd+' '+T('アプリ更新')+' <span style="font-size:10px;color:#8899aa">(v'+appVerNum()+')</span></button></div>'
+   +sc('システム')+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'+(by[T('バックアップ')]||by['バックアップ']?bt(by[T('バックアップ')]||by['バックアップ']):'')+bt(dbg)+(nmGsBtnOn()?bt(['⇅ '+T('同期'),'nmSyCfgOpen()']):'')/* v1254(ダルマ指示「メインメニュー システム 同期を追加」B): ツールバーの⇅同期と同じ。判定モードの時だけ */+'<button class="b sm" style="margin:0;height:38px;padding:0 4px;font-size:12px;text-align:left;color:#ffd060;border-color:#c8a032;white-space:nowrap" onclick="'+cl('appForceUpdate()')+'">'+NM_MI.upd+' '+T('アプリ更新')+' <span style="font-size:10px;color:#8899aa">(v'+appVerNum()+')</span></button></div>'
    +''; /* sample-mmx(ダルマ指示「メインメニュー下の閉じるは消去」): 右上の丸い✕で閉じる */
   var hd2='<div style="padding:0 2px 2px"><span style="font-size:12px;color:#8899aa;font-weight:700">'+T('メインメニュー')+'</span></div>';
   return hd2+nmModeSegHTML(id)+body;}
