@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1569</title>
+<title>ASL SKシリーズv1570</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1569">
+<meta property="og:title" content="ASL SKシリーズv1570">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.769"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.770"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1570="v1570(AI対戦: 防御射撃のタスクバーは撃つ側(防御側)を表示";
 var APP_VERSION_HIST_v1569="v1569(AI対戦: 指示パネルが画面外へはみ出さないように";
 var APP_VERSION_HIST_v1568="v1568(AI対戦: 右下の操作バーを下のバー(2B)と同じ形に";
 var APP_VERSION_HIST_v1567="v1567(AI対戦: A→Bの札に＋隣(隣接ヘクスとの射撃グループ)";
@@ -46232,7 +46233,7 @@ function btTurnBlk(v,turn,maxT,hf){var gold='#ffd060',hc=hf?'#c9d3df':gold,last=
   var cells='';for(var i=1;i<=maxT;i++){var on=i===turn,past=i<turn;cells+='<span style="display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:'+(on?30:20)+'px;height:'+(on?34:24)+'px;border-radius:5px;font-weight:900;font-size:'+(on?15:11)+'px;'+(on?'background:linear-gradient(#ffdf7a,#e0a800);color:#1b1500;':past?'background:#1a212b;color:#566;':'background:#141a22;border:1px solid #3a4a5e;color:#9ab;')+'">'+i+(on?'<small style="font-size:9px;line-height:1">'+T(hf?'裏':'表')+'</small>':'')+'</span>';}
   return '<div style="'+box+'gap:3px;padding:3px 10px"><span style="font-size:10px;color:#9ab;writing-mode:vertical-rl;margin-right:3px">'+T('ターン')+'</span>'+cells+'</div>';}
 /* v1565(ダルマ「AI対戦モード タスクバー 見直し サンプルx5」) */
-function btBar5(v,o){var gold='#ffd060',G='linear-gradient(#ffdf7a,#e0a800)',btn='flex:0 0 auto;font:inherit;cursor:pointer;box-sizing:border-box;white-space:nowrap;',hfT=T(o.hf?'裏':'表'),last=o.turn>=o.maxT,eF=!!((btScObj()||{}).endsOnFront),eH=T(eF?'表':'裏'),endS=function(fs){return '<span style="color:'+(last?'#ff9080':'#8fa6b8')+';font-size:'+fs+'px">'+(last?T('最終ターン・')+eH+T('で終了'):'/'+o.maxT+eH+T('まで'))+'</span>';},vc=o.vc;
+function btBar5(v,o){if(o.phC==='DFPh'){var od=btOpp(o.sn);o=Object.assign({},o,{sn:od,col:BT_SIDE_COL[od]||o.col,nm:(typeof nmNatLbl==='function'?nmNatLbl(od):BT_SIDE_NAME[od])});} /* v1570(ダルマ報告「米軍防御射撃となっているがドイツが防御射撃」): 防御射撃は撃つ側(防御側)を出す */var gold='#ffd060',G='linear-gradient(#ffdf7a,#e0a800)',btn='flex:0 0 auto;font:inherit;cursor:pointer;box-sizing:border-box;white-space:nowrap;',hfT=T(o.hf?'裏':'表'),last=o.turn>=o.maxT,eF=!!((btScObj()||{}).endsOnFront),eH=T(eF?'表':'裏'),endS=function(fs){return '<span style="color:'+(last?'#ff9080':'#8fa6b8')+';font-size:'+fs+'px">'+(last?T('最終ターン・')+eH+T('で終了'):'/'+o.maxT+eH+T('まで'))+'</span>';},vc=o.vc;
   var vicS=vc?(vc.exit?'<b style="color:'+o.gc+'">'+vc.xv+'</b><span style="color:#8fa6b8">/'+vc.total+'VP</span>':'<b style="color:'+o.gc+'">'+T(btSideShort('GER'))+vc.ger+'</b><span style="color:#556"> : </span><b style="color:'+o.sc+'">'+T(String(BT_SIDE_NAME.SOV).charAt(0))+vc.sov+'</b><span style="color:#8fa6b8;font-size:11px"> /'+vc.total+'</span>'+(vc.reqTag||'')):'';
   var dots=function(w,h,gap){var d='';for(var i=0;i<BT_PHASES.length;i++)d+='<span style="width:'+(i===o.cur?w*2:w)+'px;height:'+h+'px;border-radius:'+h+'px;background:'+(i<o.cur?'#5e6b7b':(i===o.cur?gold:'transparent'))+';border:1px solid '+(i>o.cur?'#5e6b7b':'transparent')+'"></span>';return '<span style="display:flex;gap:'+gap+'px;align-items:center">'+d+'</span>';};
   var turnPct=Math.round(((o.turn-1)*2+o.hf+1)/(o.maxT*2)*100);
