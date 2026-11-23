@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1551</title>
+<title>ASL SKシリーズv1552</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1551">
+<meta property="og:title" content="ASL SKシリーズv1552">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.751"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.752"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1552="v1552(S29 米のアプリは P1 の建物を重く";
 var APP_VERSION_HIST_v1551="v1551(S29 AI対戦モード対応";
 var APP_VERSION_HIST_v1550="v1550(車両・砲を置く帯とヘクスを部隊と同じ形に";
 var APP_VERSION_HIST_v1549="v1549(配置の帯を小さく半透明・移動可能、置けないヘクスに赤い×";
@@ -30049,7 +30050,7 @@ var BT_SCFG={
     blList:[['wO3','wP2','wP1'],['wG4','wH3'],['wK5','wL4'],['wK8','wK9'],['wM8','wN7'],['wO5','wO6'],['wO9','wP9'],['wU7','wV6'],['wW7','wX6']],
     fix:{GER:[['wP1',[/^4-6-7/,1],[/^8-1/,1],[/^HMG/,1]],['wP2',[/^4-4-7/,1]],['wO3',[/^4-4-7/,1]],['wO5',[/^4-6-7/,1],[/^8-0/,1],[/^MMG/,1]],['wO6',[/^4-4-7/,1]],
       ['wM8',[/^4-6-7/,1],[/^7-0/,1]],['wN7',[/^4-4-7/,1]],['wK8',[/^4-6-7/,1],[/^8-0/,1]],['wL4',[/^4-4-7/,1]],['wK5',[/^4-4-7/,1]]]},
-    aiw:{fort:1}},
+    aiw:{fort:1,reqB:9,attRisk:1.0,attPath:0.8,attUrg:0.3}}, /* v1552: 米のアプリは P1 の建物を重く(reqB)・危険を少し受け入れる。自己対戦で唯一 P1 を取れた組み合わせ */
   /* v1375(ダルマ「全て本体に入れてから調整」): S42 One More Hedgerow。盤p の A〜L列。独=E〜L列に先に設置(全 MMC を建物・麦畑・果樹園に隠蔽設置できる SSR2)、米=T1 西端から進入、米が先攻。
      SSR1: 生垣のヘクス辺は TEM+2・越えるのに 2+COT。勝利: 終了時、米が G5・J5・J7 を支配 */
   S42:{natB:'USA',nameB:'米軍',colB:'#8a9a3c',
@@ -32163,6 +32164,7 @@ function btGoalMap(side){
     }
   });
   var AH=btAIW().afvHunt;if(AH&&btFirst()===side)BT.stacks.forEach(function(e){if(e.side===side||e.n==null||e.n<0||btInf(e).length)return;if(!btAFVs(e).some(function(u){return !u.imm&&!btIsWreck(u);}))return;BTG.nodes[e.n].nb.forEach(function(m){if(btEnemyAt(m,side))return;G[m]=Math.max(G[m]||0,AH+(btInCover(m)?1:0));});}); /* v1347: 敵車両(歩兵なし)の隣へ(DC・白兵戦) */
+  var RB=btAIW().reqB;if(RB&&cGX&&cGX.vic==='req'&&cGX.vicSide===side&&bl[0]&&!(BT.ctl&&BT.ctl[bl[0].id]===side)){var rn=btBldgNodes(bl[0]),rs={};rn.forEach(function(n){rs[n]=1;BTG.nodes[n].nb.forEach(function(m){rs[m]=1;});});Object.keys(rs).forEach(function(n){if(G[n])G[n]+=RB;});} /* v1552(S29): 必須の建物(P1)とその隣の目標を重く */
   btFocusGoal(side,G); // v296: 作戦の層(狙う建物)
   return G;
 }
