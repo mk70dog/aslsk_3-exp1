@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1557</title>
+<title>ASL SKシリーズv1558</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1557">
+<meta property="og:title" content="ASL SKシリーズv1558">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.757"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.758"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1558="v1558(見える範囲のパネルをコンパクトに(案2)";
 var APP_VERSION_HIST_v1557="v1557(AI対戦中は判定モードの地図のカウンターを描かない";
 var APP_VERSION_HIST_v1556="v1556(対戦モードのA→Bの札から射撃・射撃中のタップは目標";
 var APP_VERSION_HIST_v1555="v1555(対戦モードの準備の小さい札を1行・半透明・⠿で移動";
@@ -45453,7 +45454,7 @@ function nmViewCardPos(o){var q=null;try{q=nmClientOfNode(o.n);}catch(e){}var W=
   var bot=btActive()?'calc(var(--nmsumh,0px) + var(--btfbot,0px) + 10px)':'calc(var(--nmsumh,0px) + 10px)',top=btActive()?'calc(var(--btftop,0px) + 60px)':'60px';
   var right=!q||q.x<W/2,lower=!q||q.y<H/2;
   return (right?'right:calc(var(--nmtbw,64px) + 12px);':'left:78px;')+(lower?'bottom:'+bot+';':'top:'+top+';');}
-function nmViewCardHTML(o,N){
+function nmViewCardHTML0(o,N){
   var c0=o.c0||0,c1=o.c1||0,tile=function(n,l,col){return '<div style="flex:1;background:#0c1b28;border:1px solid #213c52;border-radius:7px;padding:3px 4px;text-align:center"><div style="font:900 21px/1.15 AppFont,AppJP,sans-serif;color:'+col+'">'+n+'</div><div style="font-size:10.5px;color:#8fa6b8;letter-spacing:1px">'+T(l)+'</div></div>';},
     dot=function(bg,bd){return '<i style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px;background:'+bg+(bd?';border:1px solid #567':'')+'"></i>';};
   var h='<div id="nmRmPop" style="position:fixed;'+nmViewCardPos(o)+'z-index:8915;width:300px;max-width:94vw;max-height:52vh;overflow-y:auto;background:linear-gradient(180deg,rgba(14,26,38,.95),rgba(6,12,20,.95));border:1px solid #4d8fb8;border-radius:10px;box-shadow:0 0 0 1px #0008,0 6px 22px #000b;font:12px/1.45 AppFont,AppJP,sans-serif;color:#d6e4ef;padding:6px 0 0">';
@@ -45479,6 +45480,34 @@ function nmViewCardHTML(o,N){
     h+='</div>';}}
   h+='<div style="display:flex;align-items:center;gap:8px;padding:0 8px 8px"><button class="b sm'+(o.bd?' on':'')+'" style="margin:0;padding:3px 10px;border-radius:6px;flex:none;white-space:nowrap" onclick="nmViewBdTog()">'+T('内訳')+(o.bd?' ON':'')+'</button><span style="color:#7f93a4;font-size:10.5px;line-height:1.3">'+T(o.bd?'ヘクスをタップで妨害の内訳(起点を変える時はOFF)':'ONでタップしたヘクスの妨害の内訳')+'</span></div>';
   return h+'</div>';}
+/* v1558(ダルマ「(見える範囲の)パネルをコンパクトにする サンプルx3」): window.NM_VIEWC=1..3(0=従来) */
+window.NM_VIEWC=window.NM_VIEWC==null?2:window.NM_VIEWC; /* v1558: ダルマ選択 案2 */
+function nmViewCardHTML(o,N){var v=window.NM_VIEWC||0;if(!v)return nmViewCardHTML0(o,N);
+  var VN=nmViewNatList(o),nats=Object.keys(VN),full=nmViewCardHTML0(o,N);
+  /* 一覧と内訳の部分は従来のものを使う */
+  var li='',a=full.indexOf('<div style="margin:0 8px 6px;border:1px solid #2d5a7a'),b=full.indexOf('<div style="display:flex;justify-content:space-between;padding:0 10px 6px');if(a>=0&&b>a)li=full.slice(a,b);
+  var bd='',c=full.indexOf('<div style="margin:0 8px 6px;padding:5px 8px;border-radius:7px'),d=full.lastIndexOf('<div style="display:flex;align-items:center;gap:8px;padding:0 8px 8px">');if(c>=0&&d>c)bd=full.slice(c,d);
+  var W=v===1?250:v===2?250:220,pos=nmViewCardPos(o);
+  var box='<div id="nmRmPop" style="position:fixed;'+pos+'z-index:8915;width:'+W+'px;max-width:94vw;max-height:46vh;overflow-y:auto;background:'+(v===3?'rgba(10,18,28,.82)':'rgba(10,20,30,.9)')+';-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);border:1px solid #4d8fb8;border-radius:9px;box-shadow:0 4px 16px #000a;font:11px/1.35 AppFont,AppJP,sans-serif;color:#d6e4ef;padding:0">';
+  var x='<button onclick="BtRmShowOff()" style="flex:none;width:22px;height:22px;border-radius:50%;border:1px solid #2d5a7a;background:#0a1826;color:#9ab;font-size:11px;cursor:pointer;padding:0">✕</button>';
+  var bdB='<button onclick="nmViewBdTog()" style="flex:none;font:inherit;font-size:10.5px;padding:2px 7px;border-radius:6px;cursor:pointer;border:1px solid '+(o.bd?'#ffd24a':'#2d5a7a')+';background:'+(o.bd?'#3a3214':'#0a1826')+';color:'+(o.bd?'#ffd24a':'#9ab')+'">'+T('内訳')+'</button>';
+  var natB=function(k,big){var L=VN[k],nh=L.filter(function(q){return q.hd>0;}).length,on=o.vnat===k,cl=VN[k].col;
+    return '<button onclick="event.stopPropagation();nmViewNat(\''+k+'\')" style="flex:1;cursor:pointer;font:inherit;display:flex;align-items:center;justify-content:center;gap:5px;padding:'+(big?'3px 4px':'2px 4px')+';border-radius:6px;background:'+(on?'#16304a':'#0c1b28')+';border:1px solid '+(on?cl:'#213c52')+';border-left:4px solid '+cl+';color:#d6e4ef"><b style="color:'+cl+';font-size:11px">'+nmNatShort(k)+'</b><b style="font-size:'+(big?17:15)+'px;color:#fff">'+L.length+'</b>'+(nh?'<small style="color:#ffd040;font-size:10px">'+T('妨')+nh+'</small>':'')+'</button>';};
+  var leg='<span title="'+T('妨害なし・妨害あり・見えない')+'" style="display:inline-flex;gap:3px;align-items:center"><i style="width:8px;height:8px;border-radius:2px;background:#5fd06a;display:inline-block"></i><i style="width:8px;height:8px;border-radius:2px;background:#e8c83a;display:inline-block"></i><i style="width:8px;height:8px;border-radius:2px;background:#111;border:1px solid #567;display:inline-block"></i></span>';
+  var h=box;
+  if(v===1){ /* 1行の見出し(国籍の数も同じ行) */
+    h+='<div style="display:flex;align-items:center;gap:5px;padding:4px 5px 4px 7px;background:linear-gradient(90deg,#123a57,#0b2236);border-bottom:1px solid #2d5a7a"><span style="font:800 9px sans-serif;letter-spacing:1px;color:#66ccff">LOS</span><b style="color:#fff;font-size:12px">'+N.nm+'</b>'+nats.map(function(k){return natB(k,0);}).join('')+bdB+x+'</div>';}
+  else if(v===2){ /* 見出し+国籍の行。色の説明は小さな印だけ */
+    h+='<div style="display:flex;align-items:center;gap:6px;padding:4px 5px 4px 8px;background:linear-gradient(90deg,#123a57,#0b2236);border-bottom:1px solid #2d5a7a"><span style="font:800 9px sans-serif;letter-spacing:1px;color:#66ccff">LOS</span><b style="color:#fff;font-size:12px">'+T('見える範囲')+' '+N.nm+'</b><span style="flex:1"></span>'+leg+bdB+x+'</div>'
+      +'<div style="display:flex;gap:5px;padding:5px 6px">'+nats.map(function(k){return natB(k,1);}).join('')+'</div>';}
+  else { /* 縦長の小さい札(半透明) */
+    h+='<div style="display:flex;align-items:center;gap:5px;padding:4px 5px 3px 8px"><span style="font:800 9px sans-serif;letter-spacing:1px;color:#66ccff">LOS</span><b style="color:#fff;font-size:12px">'+N.nm+'</b><span style="flex:1"></span>'+bdB+x+'</div>'
+      +'<div style="display:flex;flex-direction:column;gap:3px;padding:0 6px 6px">'+nats.map(function(k){return natB(k,0);}).join('')+'</div>';}
+  if(li)h+=li.replace('margin:0 8px 6px','margin:0 6px 6px');
+  if(bd)h+=bd.replace('margin:0 8px 6px','margin:0 6px 6px');
+  if(o.bd&&!bd)h+='<div style="padding:0 8px 6px;color:#7f93a4;font-size:10px">'+T('ヘクスをタップで妨害の内訳')+'</div>';
+  return h+'</div>';}
+
 /* 見える範囲: 国籍ごとの見えるユニット。判定モード=自軍・敵軍のマーカー、対戦モード=盤上のスタック */
 /* v1233(ダルマ指示「カウンター選択でスポット判定を表示 カウンターを目標に設定 スポット判定で←選択でこの画面に戻る」): 一覧のカウンター→スポット判定(A=見える範囲の起点・B=そのカウンター、目標=そのカウンター) */
 /* v1332(ダルマ指示「選択して射撃画面を表示」): 対戦中、見える範囲の一覧の敵の行をタップ → 起点のスタックを選び、その敵を目標に射撃画面を開く */
