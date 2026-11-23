@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1566</title>
+<title>ASL SKシリーズv1567</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1566">
+<meta property="og:title" content="ASL SKシリーズv1567">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.766"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.767"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1567="v1567(AI対戦: A→Bの札に＋隣(隣接ヘクスとの射撃グループ)";
 var APP_VERSION_HIST_v1566="v1566(S29: 建物10(X1-X2)を勝利条件の枠に追加";
 var APP_VERSION_HIST_v1565="v1565(AI対戦: タスクバーを2B(1本の細いバー)に";
 var APP_VERSION_HIST_v1564="v1564(AI対戦: 見える範囲を判定モードと同じに";
@@ -33052,8 +33053,24 @@ function btMapTap(boardId,col,row){var hm=BT&&BT.app&&btActive()&&btCfg()&&btCfg
    A→B の札に「◎ 射撃」(A のヘクスの、B の敵を撃てる側のスタックで射撃を始め、目標=B)。射撃中は A→B の札が出ていても地図のタップは射撃の目標(A変更・B変更の時だけ測定)。
    見える範囲の一覧の敵の行(nmViewFire)からも撃てる */
 function btLosABFireSt(){try{var L=BT.losAB;if(!L||L.a==null||L.b==null||!btActive()||!BT.started||BT.finished)return null;return BT.stacks.filter(function(q){return q.n===L.a&&q.u.length&&!q.mel&&btEnemyAt(L.b,q.side)&&!!btHumanFirePh(q.side);})[0]||null;}catch(e){return null;}}
+/* v1567(ダルマ「判定モードと同じ隣接ヘクス部隊とのグループ射撃を可能にする」): 対戦モードの A→B の札に「＋隣」。
+   押してから A(またはグループ)に隣接する味方スタックをタップで射撃グループに加える/外す。「◎射撃」でグループごと射撃開始(射撃中のタップでの追加・削除は従来どおり) */
+var BT_FGADD=false;
+function btFgSide(){var L=BT.losAB;if(!L||L.a==null)return null;if(BT.fire)return BT.fire.side;var s=btLosABFireSt();if(s)return s.side;var h=btHuman&&btHuman();return h||null;}
+function btFgArm(){var L=BT.losAB;if(!L)return;BT_FGADD=!BT_FGADD;if(!L.fg)L.fg=[];btToast(BT_FGADD?T('Aの隣の味方スタックをタップで射撃グループに加える(もう一度で外す)'):T('射撃グループの選択を終えました'));Draw();}
+function btFgTap(n){var L=BT.losAB,sd=btFgSide();if(!L||!sd)return false;if(!L.fg)L.fg=[];
+  if(BT.fire){btFireTap(n);return true;}
+  var own=btStackSideAt(n,sd);if(!own||n===L.a){btToast(T('隣の味方スタックをタップしてください'));return true;}
+  var i=L.fg.indexOf(own.id);if(i>=0){L.fg.splice(i,1);btToast(BTG.nodes[n].nm+' '+T('を射撃グループから外しました'));Draw();return true;}
+  var hs=[L.a].concat(L.fg.map(function(id){var q=btStackById(id);return q?q.n:null;}).filter(function(x){return x!=null;}));
+  if(!hs.some(function(h){return btDist(h,n)===1;})){btToast(T('射撃グループのヘクスに隣接していません'));return true;}
+  if(L.b!=null){var lq=btLOS(n,L.b,false);if(!lq.ok){btToast(BTG.nodes[n].nm+'→'+BTG.nodes[L.b].nm+' '+T('LOSなし')+(lq.why?'('+lq.why+')':'')+'・'+T('射撃グループに入れられません'));return true;}}
+  L.fg.push(own.id);btToast(BTG.nodes[n].nm+' '+T('を射撃グループに加えました'));Draw();return true;}
+function btFgLine(){var L=BT.losAB;if(!L)return '';var k=BT.fire?BT.fire.parts.length:((L.fg||[]).length?L.fg.length+1:0);if(k<2)return '';
+  var fp='';if(BT.fire&&BT.fire.tgtN!=null){try{var ev=btFireEval(btFireFd());if(ev.ok)fp=' FP'+(Math.round(ev.fp*10)/10);}catch(e){}}
+  return '<br><span style="color:#ffd24a">'+T('射撃グループ')+' '+k+T('ヘクス')+fp+'</span>';}
 function BtLosABFire(){var L=BT.losAB,s=btLosABFireSt();if(!s){btToast(T('A のヘクスに、B の敵を撃てるスタックがありません'));return;}try{if(BT.fire)BtFireCancel();}catch(e){}
-  BT.sel=s.id;BT.selU=null;BtFireStart();if(BT.fire&&BT.fire.parts&&BT.fire.parts[0]&&BT.fire.parts[0].sid===s.id){BT.fire.tgtN=L.b;BT.fire.err=null;try{btSave();}catch(e){}}if(L)L.mv=null;Draw();try{nmFtActFill();}catch(e){}}
+  BT.sel=s.id;BT.selU=null;BtFireStart();if(BT.fire&&BT.fire.parts&&BT.fire.parts[0]&&BT.fire.parts[0].sid===s.id){BT.fire.tgtN=L.b;BT.fire.err=null;(L.fg||[]).forEach(function(id){var q=btStackById(id);if(q&&q.side===s.side&&!BT.fire.parts.some(function(p){return p.sid===id;}))BT.fire.parts.push({sid:id,uids:q.u.map(function(u){return u.id;})});});L.fg=[];BT_FGADD=false;try{btSave();}catch(e){}}if(L)L.mv=null;Draw();try{nmFtActFill();}catch(e){}}
 function btMapTap0(boardId,col,row){
   if(!btGraphReady()){btEnsureGraph().then(function(){Draw();});return;}
   var n=btNodeOf(boardId,col,row);if(n==null)return;
@@ -33064,6 +33081,7 @@ function btMapTap0(boardId,col,row){
   if(BT_RT||BT_RTARM){btRtTap(n);return;} /* v1338 */
   if(BT.sideView){BT.sideView=false;try{nmFtActFill();}catch(e){}BtRmShow('view',n);return;} /* v1563(ダルマ指摘): 見える範囲表示中は、タップで起点変更・同じヘクスで終了(判定モードと同じ) */ {var RV=null;try{RV=btRmLive();}catch(e){}if(RV&&RV.k==='view'&&!BT.fire&&!BT_RCLK){if(RV.bd&&RV.n!==n){RV.bdN=n;Draw();return;}if(RV.n===n){BtRmShowOff();try{nmFtActFill();}catch(e){}return;}BtRmShow('view',n);return;}} /* sample-btside: ツールバーの「見える範囲」→タップしたヘクスから */
   if(BT_RCLK){btLosRTap(n);return;} // v307: 右クリックでLOS
+  if(BT_FGADD&&BT.losAB&&!BT.losAB.rc&&!BT.losAB.mv&&!BT.losAB.arm&&btFgTap(n))return; /* v1567 */
   if(BT.fire&&BT.losAB&&!BT.losAB.rc&&!BT.losAB.mv&&!BT.losAB.arm&&BT.losAB.b!=null){btFireTap(n);return;} /* v1556: 射撃中は A→B の札が出ていても、タップは射撃の目標(A変更・B変更の時だけ測定) */
   if(BT.losAB&&!BT.losAB.rc){btLosABTap(n);return;} // v284: A▶︎B測定中は測定だけ(右クリックで始めた測定は、左クリックは通常の操作)
   if(BT.rtp&&btPhId()==='RtPh'&&btRtpTap(n))return; /* v1281 */
@@ -35878,13 +35896,13 @@ function BtLosAB(){
   if(BT.losAB&&BT.losAB.arm)btToast(T('タップで起点A→目標BのLOSを測る'));
   Draw();try{nmFtActFill();}catch(e){}
 }
-function BtLosABEnd(){BT.losAB=null;Draw();try{nmFtActFill();}catch(e){}}
+function BtLosABEnd(){BT.losAB=null;BT_FGADD=false;Draw();try{nmFtActFill();}catch(e){}}
 function BtLosABMv(k){var L=BT.losAB;if(!L)return;L.mv=(L.mv===k?null:k);L.arm=false;if(L.mv)btToast(T(k==='a'?'タップしたヘクスを起点(A)にする':'タップしたヘクスを目標(B)にする'));Draw();}
 function btLosABTap(n){
   var L=BT.losAB;
   if(L.rc){if(L.a==null||L.b!=null){L.a=n;L.b=null;}else if(n===L.a){L.a=null;}else L.b=n;Draw();return;} /* 右クリックは従来どおり */
-  if(L.arm||L.a==null){L.a=n;L.b=null;L.arm=false;L.mv=null;}
-  else if(L.mv==='a'){L.a=n;L.mv=null;}
+  if(L.arm||L.a==null){L.a=n;L.b=null;L.arm=false;L.mv=null;L.fg=[];BT_FGADD=false;}
+  else if(L.mv==='a'){L.a=n;L.mv=null;L.fg=[];BT_FGADD=false;}
   else{L.b=n;L.mv=null;}
   Draw();try{nmFtActFill();}catch(e){}
 }
@@ -46173,8 +46191,8 @@ function btLosCardSync(on){var el=document.getElementById('btLosCd'),LA=BT&&BT.l
   var sp='<span style="width:1px;height:26px;background:#39414f;margin:0 1px"></span>',h,n=LA.b!=null?LA.b:LA.a;
   if(LA.b==null)h='<span style="color:#aab4c0;white-space:nowrap">'+T('目標(B)のヘクスをタップ')+'</span>';
   else{var r=btLosABEval(LA.a,LA.b),ed=(BTG.nodes[LA.b].elev||0)-(BTG.nodes[LA.a].elev||0),tem=BTG.nodes[LA.b].tem;
-    h='<div style="white-space:nowrap"><b style="color:'+(r.ok?'#3ca878':'#ff6060')+'">LOS '+(r.ok?'OK':'NG')+'</b> '+T('距離')+r.dist+'<br><span style="color:#aab4c0">'+T('妨害')+'+'+(r.hind||0)+'・'+T('地形')+(tem==null?'—':tem)+'・'+T('高低差')+(ed>0?'+':'')+ed+'</span></div>';}
-  h+=sp+bt('A'+T('変更'),"BtLosABMv('a')",LA.mv==='a')+(LA.b!=null?bt('B'+T('変更'),"BtLosABMv('b')",LA.mv==='b'):'')+(btLosABFireSt()?sp+'<button onclick="event.stopPropagation();BtLosABFire()" style="font:inherit;font-weight:900;font-size:13px;padding:5px 10px;border-radius:8px;border:1px solid #7ec8e3;background:#7ec8e3;color:#0d2233">◎ '+T('射撃')+'</button>':'')+sp+(LA.b!=null?bt('⇄','var L=BT.losAB;if(L&&L.b!=null){var x=L.a;L.a=L.b;L.b=x;}Draw()'):'')+bt('✕','BtLosABEnd()');
+    h='<div style="white-space:nowrap"><b style="color:'+(r.ok?'#3ca878':'#ff6060')+'">LOS '+(r.ok?'OK':'NG')+'</b> '+T('距離')+r.dist+'<br><span style="color:#aab4c0">'+T('妨害')+'+'+(r.hind||0)+'・'+T('地形')+(tem==null?'—':tem)+'・'+T('高低差')+(ed>0?'+':'')+ed+'</span>'+btFgLine()+'</div>';}
+  h+=sp+bt('A'+T('変更'),"BtLosABMv('a')",LA.mv==='a')+(LA.b!=null?bt('B'+T('変更'),"BtLosABMv('b')",LA.mv==='b'):'')+(btLosABFireSt()||(LA.fg&&LA.fg.length)?sp+bt(BT_FGADD?'✓ '+T('隣を選択中'):'＋'+T('隣'),'btFgArm()',BT_FGADD):'')+(btLosABFireSt()?sp+'<button onclick="event.stopPropagation();BtLosABFire()" style="font:inherit;font-weight:900;font-size:13px;padding:5px 10px;border-radius:8px;border:1px solid #7ec8e3;background:#7ec8e3;color:#0d2233">◎ '+T('射撃')+'</button>':'')+sp+(LA.b!=null?bt('⇄','var L=BT.losAB;if(L&&L.b!=null){var x=L.a;L.a=L.b;L.b=x;}Draw()'):'')+bt('✕','BtLosABEnd()');
   if(el.__h!==h){el.__h=h;el.innerHTML='<span class="nmAbGrip" style="color:#9aa4b0;font-size:18px;padding:2px 4px;cursor:grab;touch-action:none;user-select:none">⠿</span>'+h;try{nmAbGripBind(el);}catch(e){}}
   var q=null,qa=null;try{q=nmClientOfNode(n);qa=nmClientOfNode(LA.a);}catch(e){}var sw=document.getElementById('losScrollWrap'),wr=sw&&sw.getBoundingClientRect();if(!q||(wr&&(q.x<wr.left||q.x>wr.right||q.y<wr.top||q.y>wr.bottom))){el.style.display='none';return;}el.style.display='flex';
   /* 判定モード(nmAbBoard)と同じ置き方: LOS線・印と重ならないよう、Aと反対側(線の延長の外)に置く */
