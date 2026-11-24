@@ -33757,7 +33757,25 @@ function btReactPanelHTML(sty,ms,rw,fg){
     h+='</div>'+foot();
   }
   return h+'</div>';}
+/* sample-phann(ダルマ「フェイズの切り替わりがわかりにくい」): フェイズが変わった時に知らせる。window.NM_PHANN 1=画面中央の大きな帯(1.6秒) 2=上から降りる札(2.5秒) 3=下のバーが光って上に吹き出し(2.5秒) */
+var BT_PHANN_K=null;
+function btPhAnnChk(){var v=window.NM_PHANN;if(v==null)v=1;if(!v||window.BT_SELFPLAY||!BT.started||BT.finished)return;var k=btPhKey();if(k===BT_PHANN_K)return;var first=BT_PHANN_K==null;BT_PHANN_K=k;if(first)return;setTimeout(function(){btPhAnnShow(v);},0);}
+function btPhAnnShow(v){var o=document.getElementById('btPhAnn');if(o)o.remove();
+  var sn=btSideNow(),ph=BT_PHASES[BT.ph],id=ph[0],act=(id==='DFPh')?btOpp(sn):sn,col=BT_SIDE_COL[act]||'#ffd060',nm=T(BT_SIDE_NAME[act]),me=!BT.app||act!==BT.app,who=me?T('あなたの番'):T('アプリの番');
+  var nx=BT_PHASES[(BT.ph+1)%BT_PHASES.length][1],dots='';for(var i=0;i<BT_PHASES.length;i++)dots+='<span style="width:'+(i===BT.ph?18:8)+'px;height:8px;border-radius:4px;background:'+(i<BT.ph?'#5e6b7b':(i===BT.ph?'#ffd060':'transparent'))+';border:1px solid '+(i>BT.ph?'#5e6b7b':'transparent')+'"></span>';
+  var tl='T'+BT.turn+' '+T(BT.half?'裏':'表');
+  if(!document.getElementById('btPhAnnCss')){var st=document.createElement('style');st.id='btPhAnnCss';st.textContent='@keyframes phA1{0%{opacity:0;transform:translate(-50%,-50%) scaleX(.3)}12%{opacity:1;transform:translate(-50%,-50%) scaleX(1)}80%{opacity:1}100%{opacity:0}}@keyframes phA2{0%{opacity:0;transform:translate(-50%,-30px)}12%{opacity:1;transform:translate(-50%,0)}85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-30px)}}@keyframes phA3{0%{opacity:0;transform:translate(-50%,10px)}12%{opacity:1;transform:translate(-50%,0)}85%{opacity:1}100%{opacity:0}}@keyframes phGl{0%,100%{box-shadow:0 0 0 #ffd06000}50%{box-shadow:0 0 18px #ffd060cc}}';document.head.appendChild(st);}
+  var d=document.createElement('div');d.id='btPhAnn';d.style.pointerEvents='none';var dur=v===1?1700:2600;
+  if(v===1){d.style.cssText+='position:fixed;left:50%;top:45%;z-index:9300;width:100vw;transform:translate(-50%,-50%);animation:phA1 '+dur+'ms ease forwards;';
+    d.innerHTML='<div style="background:linear-gradient(90deg,transparent,'+col+'dd 18%,'+col+'dd 82%,transparent);padding:14px 0;text-align:center;color:#fff;text-shadow:0 2px 6px #000"><div style="font-size:14px;letter-spacing:.2em;opacity:.9">'+tl+' ・ '+nm+' ・ '+who+'</div><div style="font-size:44px;font-weight:900;letter-spacing:.1em;line-height:1.15">'+T(ph[1])+T('フェイズ')+'</div><div style="display:flex;gap:4px;justify-content:center;margin-top:6px">'+dots+'</div></div>';}
+  else if(v===2){d.style.cssText+='position:fixed;left:50%;top:14px;z-index:9300;transform:translate(-50%,0);animation:phA2 '+dur+'ms ease forwards;';
+    d.innerHTML='<div style="display:flex;align-items:center;gap:14px;background:#0d131cf2;border:2px solid '+col+';border-radius:14px;padding:8px 18px;box-shadow:0 6px 20px #000c;color:#e8eef4"><span style="width:10px;height:44px;border-radius:5px;background:'+col+'"></span><div><div style="font-size:12px;color:#9ab">'+tl+' ・ <b style="color:'+col+'">'+nm+'</b> ・ '+who+'</div><div style="font-size:26px;color:#ffd060;line-height:1.15">'+T(ph[1])+T('フェイズ')+'</div><div style="display:flex;gap:3px;margin-top:3px">'+dots+'</div></div><div style="font-size:12px;color:#9ab;border-left:1px solid #2c3644;padding-left:12px">'+T('次')+'<br><span style="color:#e8eef4;font-size:14px">'+T(nx)+'</span></div></div>';}
+  else{d.style.cssText+='position:fixed;left:50%;bottom:calc(var(--btfbot,60px) + 14px);z-index:9300;transform:translate(-50%,0);animation:phA3 '+dur+'ms ease forwards;';
+    d.innerHTML='<div style="position:relative;background:#0d131cf2;border:1px solid #ffd060;border-radius:12px;padding:8px 18px;color:#e8eef4;text-align:center;box-shadow:0 6px 20px #000c"><div style="font-size:12px;color:#9ab">'+T('フェイズが変わりました')+' ・ '+who+'</div><div style="font-size:22px;color:#ffd060"><span style="color:'+col+'">'+nm+'</span> '+T(ph[1])+T('フェイズ')+'</div><span style="position:absolute;left:50%;bottom:-8px;width:14px;height:14px;background:#0d131c;border-right:1px solid #ffd060;border-bottom:1px solid #ffd060;transform:translateX(-50%) rotate(45deg)"></span></div>';
+    var bb=document.getElementById('btFullBot');if(bb){bb.style.animation='phGl .8s ease 3';setTimeout(function(){bb.style.animation='';},2600);}}
+  document.body.appendChild(d);setTimeout(function(){if(d.parentNode)d.remove();},dur);}
 function btCmdHTML(){
+  try{btPhAnnChk();}catch(e){} /* sample-phann */
   if(BT_OFFPOP)setTimeout(btOffPopSync,0); /* v1295 */
   if(BT_FXPOP)setTimeout(btFxPopSync,0); /* v1283 */
   setTimeout(btRtpSync,0);setTimeout(btCcSync,0);setTimeout(btRphSync,0);setTimeout(btBogSync,0);setTimeout(btDCAskSync,0); /* v1302 */
