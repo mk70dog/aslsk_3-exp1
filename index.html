@@ -56341,7 +56341,10 @@ var st=document.createElement('style');st.textContent='html.bt-mapfull .los-comp
   +'html.btLegSty #nmAbBd button svg{width:14px!important;height:14px!important}html.btLegSty #nmAbBd .nmAbGrip{font-size:13px!important}'
   /* v1592: 選択中のスタックのパネル(bt-cmdpop)を中身の幅(最大360px)に、盤外パネルの文字を小さく */
   +'html:root:root:root.btSzDn #main #btCmd.bt-cmdpop{width:max-content!important;max-width:min(360px,calc(100vw - 110px))!important}html:root:root:root.btSzDn #main #btCmd.bt-cmdpop .nb{font-size:11px!important;padding:0 7px!important;height:26px!important}'
-  +'html.btSzDn #btOffC{padding:4px 5px 5px!important}html.btSzDn #btOffC b,html.btSzDn #btOffC div{font-size:10px!important}html.btSzDn #btOffC div[onclick]{gap:4px!important;padding:2px!important;margin:3px 0!important}';
+  +'html.btSzDn #btOffC{padding:4px 5px 5px!important}html.btSzDn #btOffC b,html.btSzDn #btOffC div{font-size:10px!important}html.btSzDn #btOffC div[onclick]{gap:4px!important;padding:2px!important;margin:3px 0!important}'
+  /* sample-lossz(ダルマ「判定モード 対戦モード 共に実施」→LOSの札): LOSの札(判定・対戦の nmAbBd、AI対戦の btLosCd)を小さく */
+  +'html.btSzDn #nmAbBd,html.btSzDn #btLosCd{font-size:10px!important;line-height:1.2!important;padding:1px 4px!important;gap:3px!important}'
+  +'html.btSzDn #nmAbBd button,html.btSzDn #btLosCd button{font-size:10px!important;min-height:20px!important;padding:1px 5px!important}html.btSzDn #nmAbBd button svg{width:12px!important;height:12px!important}html.btSzDn #nmAbBd .nmAbGrip,html.btSzDn #btLosCd .nmAbGrip{font-size:11px!important;padding:0 2px!important}';
  (document.head?document.head.appendChild(st3):document.addEventListener('DOMContentLoaded',function(){document.head.appendChild(st3);}));
  if(window.NM_CMDC==null)window.NM_CMDC=3;if(window.NM_DKC==null)window.NM_DKC=5; /* v1559: ダルマ選択 3と3 → v1568: 操作バーは5(下のバー2Bと同じ形) */
  function up(){var v=window.NM_CMDC||0,w=window.NM_DKC||0,r=document.documentElement;[1,2,3,4,5,6].forEach(function(k){r.classList.toggle('btCmc'+k,v===k);r.classList.toggle('btDkc'+k,w===k);});r.classList.toggle('btLegSty',window.NM_LEGSTY!==0);r.classList.toggle('btSzDn',window.NM_SZDN!==0);}
