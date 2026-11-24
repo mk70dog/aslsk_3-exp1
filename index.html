@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1579</title>
+<title>ASL SKシリーズv1580</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1579">
+<meta property="og:title" content="ASL SKシリーズv1580">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.779"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.780"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1580="v1580(AI対戦は常に同期なし";
 var APP_VERSION_HIST_v1579="v1579(部隊の準備: 相手のiPadの編成にもトータルFP";
 var APP_VERSION_HIST_v1578="v1578(S29: 独のアプリの作戦(P1に集中・前哨・取り返しの白兵戦)";
 var APP_VERSION_HIST_v1577="v1577(AI対戦: 相手の射撃のカードをわかりやすく";
@@ -38093,7 +38094,7 @@ function nmsMode(){try{var md=S.nmMode,ai=false;try{ai=!!btActive();}catch(e){} 
 function nmsOnOff(n,on){var m=nmsMode();if(on){if(m!=='off'){btRmReopen(n);return;}var last='auto';try{last=localStorage.getItem('aslsk_mapsync_last')||'auto';}catch(e){}if(!GIST_CONFIGURED()){NM_RM_SUB='sync';btRmReopen(n);return;}nmsSetMode(n,last);}else nmsSetMode(n,'off');}
 function nmsSetMode(n,m){try{localStorage.setItem('aslsk_mapsync',m);if(m!=='off')localStorage.setItem('aslsk_mapsync_last',m);}catch(e){}nmsStart();if(m==='auto')nmsTick();nmsRe(n);}
 /* v608(ダルマ指示「同期の同時編集で消える対策 実施」): この端末の側(自軍f/敵軍e)を決めると、自分の側のマーカーは自分だけが書き、相手の側は相手のファイルから受け取る */
-function nmsRole(){try{var r=localStorage.getItem('aslsk_mapsync_side');if(r==='f')r='p1';if(r==='e')r='p2';return r==='p1'||r==='p2'?r:'';}catch(e){return '';}} /* v616(ダルマ指示「どちらのiPadでも自分が自軍」): p1=先手・p2=後手。どちらの端末でも自分の部隊は「自軍」、相手の部隊は「敵軍」。受信すると相手の自軍を自分の敵軍へ入れ替える */
+function nmsRole(){if(nmAiNoSync())return '';try{var r=localStorage.getItem('aslsk_mapsync_side');if(r==='f')r='p1';if(r==='e')r='p2';return r==='p1'||r==='p2'?r:'';}catch(e){return '';}} /* v616(ダルマ指示「どちらのiPadでも自分が自軍」): p1=先手・p2=後手。どちらの端末でも自分の部隊は「自軍」、相手の部隊は「敵軍」。受信すると相手の自軍を自分の敵軍へ入れ替える */
 function nmsRe(n){NM_RM_SUB='sync';btRmReopen(n);} /* v619(バグ修正 ダルマ報告「1P選択で画面変わる」): 開き直す時に「マップ共有」の画面を指定しないと、普通のメニューに戻っていた */
 function nmsSetRole(n,r){try{localStorage.setItem('aslsk_mapsync_side',r||'');}catch(e){}NMS.lastHash='';NMS.remoteAt=0;nmsRe(n);}
 function nmsFile(r){return r?'aslsk_map_'+r+'.json':NMS_FILE;}
@@ -38885,7 +38886,7 @@ function nmSuStOp(slot,i,op){var d=nmGeList(slot),x=(d.items||[])[i];if(!x)retur
   else if(op==='cas'){try{nmCasRed(slot,x,lg);}catch(e){console.log(e);}msg='損耗 '+(lg.join('・')||x.label);}
   var gA=nmGeActive(slot);if(gA){try{fgRecomputeFromPicker(gA);}catch(e){}}try{nmGeSync(slot);}catch(e){}
   try{nmDbg('部隊の準備 状態変更: '+nmGrpLbl(slot)+' '+msg);}catch(e){}try{saveState();}catch(e){}try{Draw();}catch(e){}nmSuDraw();btToast(msg);}
-function nmSuOppSlots(nat){var sc=nmSuScen(),sv=(sc&&S.savedGroups&&S.savedGroups[sc])||{};return Object.keys(sv).filter(function(k){if(!/^相手/.test(k))return false;var d=nmGeList(k);return nmSuGNat(d)===nat&&((d.items&&d.items.length)||(d.sw&&d.sw.length));}).sort();}
+function nmSuOppSlots(nat){if(nmAiNoSync())return [];var sc=nmSuScen(),sv=(sc&&S.savedGroups&&S.savedGroups[sc])||{};return Object.keys(sv).filter(function(k){if(!/^相手/.test(k))return false;var d=nmGeList(k);return nmSuGNat(d)===nat&&((d.items&&d.items.length)||(d.sw&&d.sw.length));}).sort();}
 function nmSuUsed(nat){var u={};function inc(k){u[k]=(u[k]||0)+1;}
   GROUP_SLOTS.forEach(function(k){var d=nmGeList(k);if(nmSuGNat(d)!==nat)return;(d.items||[]).forEach(function(x){inc((x.kind==='smc'?'smc':'mmc')+'|'+x.label);});(d.sw||[]).forEach(function(uid){inc('sw|'+nmGeSwBase(uid).id);});nmSuLwList(k).forEach(function(e){inc('lw|'+e.id);});nmSuDcList(k).forEach(function(){inc('dc|dc');});});
   nmSuOppSlots(nat).forEach(function(k){var d=nmGeList(k);(d.items||[]).forEach(function(x){inc((x.kind==='smc'?'smc':'mmc')+'|'+x.label);});(d.sw||[]).forEach(function(uid){inc('sw|'+nmGeSwBase(uid).id);});}); /* v1148: 同期で受け取った相手の編成もOBから使用済みにする */
@@ -40228,7 +40229,8 @@ function nmSyCfgOpen(){try{var mn=document.getElementById('nmFtMn');if(mn)mn.rem
    +sec('③','GitHub(Gist)')+'<div style="font-size:12px;margin-bottom:6px;color:'+(gc?'#6fe08a':'#ff9a9a')+'">'+(gc?'✓ '+T('設定済み'):'✕ '+T('未設定(2台で同じトークンとGist IDを入れてください)'))+'</div>'
    +'<div style="display:grid;grid-template-columns:auto 1fr;gap:6px;align-items:center;font-size:12px"><span style="color:#9ab">'+T('トークン')+'</span><input type="password" value="'+String(tok).replace(/"/g,'&quot;')+'" placeholder="ghp_..." onchange="gistSetToken(this.value);nmSyCfgRe()" style="background:#0e1218;color:#e8eef4;border:1px solid #39414f;border-radius:6px;padding:6px;font:12px monospace"><span style="color:#9ab">Gist ID</span><input value="'+String(gid).replace(/"/g,'&quot;')+'" onchange="gistSetId(this.value);nmSyCfgRe()" style="background:#0e1218;color:#e8eef4;border:1px solid #39414f;border-radius:6px;padding:6px;font:12px monospace"></div>'
    +'<button class="b" style="margin:14px 0 0;width:100%;height:46px;font-weight:900;color:#ffd060;border-color:#c8a032" onclick="nmSyCfgClose();nmGsSync()">⇅ '+T('今すぐ同期')+'</button></div>';}
-function nmJsLv(){var v=S.nmJSync;return v==='none'||v==='all'?v:'lite';}
+function nmAiNoSync(){try{return typeof btActive==='function'&&!!btActive();}catch(e){return false;}} /* v1580(ダルマ「AI対戦は常に同期をなしにする」) */
+function nmJsLv(){if(nmAiNoSync())return 'none';var v=S.nmJSync;return v==='none'||v==='all'?v:'lite';}
 function nmJsSet(v){try{if(S.nmMode!=='judge'&&S.nmMode!=='online'){var m0=nmModeNow();if(m0==='judge'||m0==='online')S.nmMode=m0;}}catch(e){} /* 同期オールで nmsMode が auto になっても判定モードのまま */S.nmJSync=v;try{saveState();}catch(e){}try{nmsStart();}catch(e){}try{nmFtActFill();}catch(e){}try{if(v!=='none')nmAsKick();}catch(e){}btToast(T('同期')+': '+(v==='none'?T('ナシ'):v==='all'?T('オール(部隊の登録・ターン表・部隊の状態・マップ)'):T('ライト(部隊の登録・ターン表)')));}
 function nmAsOn(){try{if(nmModeNow()==='judge'&&nmJsLv()==='none')return false;}catch(e){}return S.nmAsOn!==false;}
 function nmAsTurnSig(){var t=S.turn||{};return [t.cur,t.half,t.phase,t.ended?1:0].join('|');}
