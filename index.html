@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1587</title>
+<title>ASL SKシリーズv1588</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1587">
+<meta property="og:title" content="ASL SKシリーズv1588">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.787"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.788"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1588="v1588(ダルマ「ダイスが揺れて止まるまで1-2秒 上から順番に」): MC・PTCの判定パネルで、ダイスを行の中で約1.5秒揺らしてから止める。自軍は🎲を押した行で揺れて止まる(全画面のダイスの演出は使わない)。相手(AI)の判定は上の行から順に自動で揺れて止まる(「全部見る」で残りを一度に、終わったら「閉じる」)。ELRで格下げされたユニットの名前は判定前の名前で表示。NM_MCSHK=ミリ秒/0で揺れなし";
 var APP_VERSION_HIST_v1587="v1587(ダルマ「自軍のダイスはアプリ上で自分で振る・相手のダイスはAIの目を確認」実施): AI対戦で、アプリの射撃で自軍にMC・PTC(K#のMCも)が出たら判定を止め、指揮官から順に1ユニットずつ🎲で振る(指揮修正・LLMC・LLTC・損耗の負傷drもルールどおり。振ったダイスで再現して本番を適用)。判定が終わるまでアプリの射撃・移動・フェイズ進行は止まる。相手(アプリ)のユニットのMC・PTCは、AIの目を1ユニットずつ「次へ」で確認(全部見るあり)。相手の射撃カードは自動で閉じず「確認 ▶」で閉じる。AI対戦ではダイス手動(相手の射撃の前に止める)を使わない。NM_MCMAN=0で従来";
 var APP_VERSION_HIST_v1586="v1586(ダルマ「移動できるようにする」): 盤外(進入待ち)パネルを見出し(⠿)のドラッグで動かせるように。位置は記憶(画面外に出ないよう補正)。パネル幅を少し広げて✕が欠けないように";
 var APP_VERSION_HIST_v1585="v1585(バグ修正・ダルマ報告「部隊の準備で構成した部隊が表示しない」): 進入のとき、部隊の準備の編成を内部の軍(SOV)で探していたため S29 の米軍などで見つからず、全員が1つの未編成スタックになっていた。部隊の準備の国籍(USA)で探し、編成どおりの盤外スタックを作る";
@@ -30502,7 +30503,7 @@ function btCasualty(s,u,log){ // 損耗(Casualty Reduction)
 }
 // 1ユニットのMC/NMC。戻り値 'pass'|'pin'|'break'|'cas'|'elim'
 function btMC1(s,u,drm,ldr,log,tag){
-  btMcHook(s,u,tag||'MC',drm,ldr);var d1=btDie(),d2=btDie(),raw=d1+d2,fin=raw+(drm||0)+(ldr||0);
+  var nm0=u.nm;btMcHook(s,u,tag||'MC',drm,ldr);var d1=btDie(),d2=btDie(),raw=d1+d2,fin=raw+(drm||0)+(ldr||0);
   var mor=btMorale(s.side,u),I=btI(u,s.side),res;
   var was=u.s;
   if(u.s==='br'){
@@ -30516,7 +30517,7 @@ function btMC1(s,u,drm,ldr,log,tag){
       if(raw===12)res='break+cas';
     }
   }
-  btMcRow(s,{tag:tag||'MC',nm:u.nm,side:s.side,s0:was,d:[d1,d2],drm:drm||0,ldr:ldr||0,fin:fin,mor:mor,res:res});
+  btMcRow(s,{tag:tag||'MC',nm:nm0,nm1:u.nm,side:s.side,s0:was,d:[d1,d2],drm:drm||0,ldr:ldr||0,fin:fin,mor:mor,res:res});
   log.push((tag||'MC')+' '+u.nm+(was==='br'?'(混乱)':'')+' DR'+raw+((drm||ldr)?('→'+fin):'')+'/士気'+mor+' → '+({pass:'成功',pin:'釘付け',break:'混乱','break+cas':'混乱+損耗',cas:'損耗',elim:'除去'}[res]));
   if(res==='cas'||res==='break+cas')btCasualty(s,u,log);
   else if(res==='elim'){btRemoveUnit(s,u);log.push('  '+u.nm+' 除去');}
@@ -30538,7 +30539,7 @@ function btMcOn(){return !!(typeof BT!=='undefined'&&BT&&BT.app&&BT.started&&!wi
 function btMcPend(){return !!(BT&&BT.mcQ&&BT.mcQ.length);}
 function btMcHook(s,u,tag,drm,ldr){var M=BT_MCSIM;if(!M)return;if(M.cnt>=M.allow){M.next={tag:tag,nm:u.nm,side:s.side,s0:u.s,mor:btMorale(s.side,u),drm:drm||0,ldr:ldr||0,d:[0,0],res:''};throw BT_MCSTOP;}M.cnt++;}
 function btMcRow(s,r){if(BT_MCSIM){BT_MCSIM.rows.push(r);return;}if(BT_MCVCUR&&BT_MCVCUR.sid===s.id)BT_MCVCUR.rows.push(r);}
-function btMcViewStart(s,isPTC,drm){if(BT_MCSIM||!btMcOn()||s.side!==BT.app)return null;var g={sid:s.id,n:s.n,side:s.side,isPTC:isPTC,drm:drm||0,rows:[],shown:1};BT_MCVCUR=g;return g;}
+function btMcViewStart(s,isPTC,drm){if(BT_MCSIM||!btMcOn()||s.side!==BT.app)return null;var g={sid:s.id,n:s.n,side:s.side,isPTC:isPTC,drm:drm||0,rows:[],shown:0};BT_MCVCUR=g;return g;}
 function btMcViewEnd(g){if(!g)return;BT_MCVCUR=null;if(g.rows.length){BT_MCVQ.push(g);setTimeout(function(){try{btMcSync();}catch(e){}},50);}}
 function btMcDefer(s,targets,drm,isPTC,r,log){if(BT_MCSIM||!btMcOn()||s.side!==btHuman()||!targets.length)return false;
   BT.mcQ=BT.mcQ||[];BT.mcQ.push({sid:s.id,n:s.n,uids:targets.map(function(u){return u.id;}),drm:drm||0,isPTC:!!isPTC,r:r,dice:[],done:0});
@@ -30551,18 +30552,19 @@ function btMcSim(it,allow,real){var s=btStackById(it.sid);if(!s)return {rows:[],
 function BtMcRoll(){var it=BT.mcQ&&BT.mcQ[0];if(!it||BT_MCROLLING)return;var r0=btMcSim(it,it.done+1,false); /* ここで初めてこのユニットのダイスを振る */
   var nr=r0.rows[r0.rows.length-1];btSave();
   var go=function(){BT_MCROLLING=false;it.done++;btSave();btMcSync();};
-  if(nr&&typeof diceRollAnim==='function'&&typeof btDiceAnimOn==='function'&&btDiceAnimOn()){BT_MCROLLING=true;try{diceRollAnim(nr.d[0],nr.d[1],nr.tag+' '+nr.nm,go,{hold:300});}catch(e){go();}}else go();}
+  if(nr&&window.NM_MCSHK!==0){BT_MCROLLING=nr;btMcSync();setTimeout(go,window.NM_MCSHK||1500);}else go();} /* v1588(ダルマ「ダイスが揺れて止まるまで1-2秒」): 行の中でダイスを揺らして止める */
 var BT_MCROLLING=false;
 function BtMcApply(){var it=BT.mcQ&&BT.mcQ[0];if(!it)return;var r=btMcSim(it,999,true);var s=btStackById(it.sid);
   btLog([BT_SIDE_NAME[s?s.side:btHuman()]+' '+(BTG.nodes[it.n]?BTG.nodes[it.n].nm:'')+' '+it.r+'(あなたが振ったダイス)'].concat(r.log));
   BT.mcQ.shift();try{btCleanStacks();}catch(e){}try{btAfterHit();}catch(e){}btUpdateCtl();btSave();var g=document.getElementById('btMcGate');if(g)g.remove();Draw();btKick(300);}
-function BtMcNext(all){var g=BT_MCVQ[0];if(!g)return;if(all)g.shown=g.rows.length;else if(g.shown<g.rows.length)g.shown++;else{BT_MCVQ.shift();var el=document.getElementById('btMcGate');if(el)el.remove();btKick(200);}btMcSync();}
-function btMcRowHTML(r,cur,open){var img='';try{var im=btVcUnitImg(r.side,{nm:r.nm,s:open?(r.res==='pass'?r.s0:(r.res==='pin'?'ok':'br')):r.s0,id:'mc'});if(im&&im.src)img='<img src="'+im.src+'" style="width:44px;height:44px;border-radius:3px;flex:0 0 auto">';}catch(e){}
+function BtMcNext(all){var g=BT_MCVQ[0];if(!g)return;if(g.tm){clearTimeout(g.tm);g.tm=null;}if(all)g.shown=g.rows.length;else if(g.shown<g.rows.length)g.shown++;else{BT_MCVQ.shift();var el=document.getElementById('btMcGate');if(el)el.remove();btKick(200);}btMcSync();}
+function btMcRowHTML(r,cur,open,roll){var img='';try{var im=btVcUnitImg(r.side,{nm:(open&&r.nm1)?r.nm1:r.nm,s:open?(r.res==='pass'?r.s0:(r.res==='pin'?'ok':'br')):r.s0,id:'mc'});if(im&&im.src)img='<img src="'+im.src+'" style="width:44px;height:44px;border-radius:3px;flex:0 0 auto">';}catch(e){}
   var die=function(n,rd){return '<span style="display:inline-flex;width:30px;height:30px;border-radius:6px;background:'+(rd?'#c62828':'#f4f4f4')+';color:'+(rd?'#fff':'#111')+';align-items:center;justify-content:center;font-size:18px;font-weight:900;box-shadow:0 2px 4px #000a">'+n+'</span>';};
   var nd='<span style="display:inline-flex;width:30px;height:30px;border-radius:6px;border:2px dashed #5a6676;color:#5a6676;align-items:center;justify-content:center;font-size:16px">?</span>';
+  var rd=function(red,k){return '<span class="mcRoll" style="display:inline-flex;width:30px;height:30px;border-radius:6px;background:'+(red?'#c62828':'#f4f4f4')+';color:'+(red?'#fff':'#111')+';align-items:center;justify-content:center;font-size:18px;font-weight:900;box-shadow:0 2px 4px #000a;animation:mcShk .16s '+(k*0.05)+'s infinite">'+(1+Math.floor(Math.random()*6))+'</span>';}; /* v1588: 揺れているダイス */
   var L={pass:['成功','#60e060'],pin:['釘付け','#ffd060'],'break':['混乱','#ff8040'],'break+cas':['混乱+損耗','#ff5050'],cas:['損耗','#ff5050'],elim:['除去','#ff3030']}[r.res]||[r.res,'#fff'];
   var dm=(r.drm||r.ldr)?((r.drm?(r.drm>0?'+':'')+r.drm:'')+(r.ldr?' '+(r.ldr>0?'+':'')+r.ldr+'('+T('指揮')+')':'')):'0';
-  return '<div style="display:flex;align-items:center;gap:12px;padding:6px 10px;border-radius:8px;margin-top:6px;background:'+(cur?'#2a2410':'#0f141b')+';border:1px solid '+(cur?'#ffd060':'#2c3644')+'">'+img+'<div style="min-width:118px"><b style="font-size:15px">'+(r.tag!=='MC'&&r.tag!=='PTC'?'<span style="color:#ff9a70">'+r.tag+'</span> ':'')+r.nm+(r.s0==='br'?'<span style="color:#ff8040">('+T('混乱')+')</span>':'')+'</b><div style="font-size:12px;color:#9fb0c3">'+T('士気')+' <b style="color:#fff">'+r.mor+'</b> ・ DRM <b style="color:#fff">'+dm+'</b></div></div><span style="display:flex;gap:5px;align-items:center">'+(open?die(r.d[0],1)+die(r.d[1],0)+'<span style="font-size:15px;margin-left:4px">= '+(r.d[0]+r.d[1])+(r.fin!==r.d[0]+r.d[1]?' → <b>'+r.fin+'</b>':'')+'</span>':nd+nd)+'</span><span style="flex:1"></span><b style="font-size:20px;color:'+L[1]+'">'+(open?T(L[0]):'')+'</b></div>';}
+  return '<div style="display:flex;align-items:center;gap:12px;padding:6px 10px;border-radius:8px;margin-top:6px;background:'+(cur?'#2a2410':'#0f141b')+';border:1px solid '+(cur?'#ffd060':'#2c3644')+'">'+img+'<div style="min-width:118px"><b style="font-size:15px">'+(r.tag!=='MC'&&r.tag!=='PTC'?'<span style="color:#ff9a70">'+r.tag+'</span> ':'')+r.nm+(r.s0==='br'?'<span style="color:#ff8040">('+T('混乱')+')</span>':'')+'</b><div style="font-size:12px;color:#9fb0c3">'+T('士気')+' <b style="color:#fff">'+r.mor+'</b> ・ DRM <b style="color:#fff">'+dm+'</b></div></div><span style="display:flex;gap:5px;align-items:center">'+(roll?rd(1,0)+rd(0,1):open?'<span class="mcStop" style="display:inline-flex;gap:5px;align-items:center">'+die(r.d[0],1)+die(r.d[1],0)+'</span><span style="font-size:15px;margin-left:4px">= '+(r.d[0]+r.d[1])+(r.fin!==r.d[0]+r.d[1]?' → <b>'+r.fin+'</b>':'')+'</span>':nd+nd)+'</span><span style="flex:1"></span><b style="font-size:20px;color:'+L[1]+'">'+(open?T(L[0]):'')+'</b></div>';}
 function btMcSync(){var el=document.getElementById('btMcGate');
   if(!btActive()||!BT.started||(typeof BT_FX_CUR!=='undefined'&&(BT_FX_CUR||BT_FX_Q.length))){if(el)el.remove();return;}
   var it=BT.mcQ&&BT.mcQ[0],g=!it&&BT_MCVQ[0];if(!it&&!g){if(el)el.remove();return;}
@@ -30572,13 +30574,18 @@ function btMcSync(){var el=document.getElementById('btMcGate');
   if(it){var r=btMcSim(it,it.done,false),rows=r.rows.slice(0,it.done),more=!!r.next,nxR=r.next;
     var N=BTG.nodes[it.n];col='#ffd060';hd='🎲 '+it.r+' — '+T('あなたの部隊が判定');sub=(N?N.nm+' ':'')+T('指揮官から順に、1つずつダイスを振ってください');
     rows.forEach(function(x){body+=btMcRowHTML(x,false,true);});
-    if(more){var pv=nxR;body+=btMcRowHTML({tag:pv.tag,nm:pv.nm,side:pv.side,s0:pv.s0,mor:pv.mor,drm:pv.drm,ldr:pv.ldr,d:[0,0],res:''},true,false);
-      foot=bt('🎲 '+pv.nm+' '+T('の')+pv.tag+T('を振る'),'BtMcRoll()',1);}
+    if(more){var pv=nxR;body+=btMcRowHTML({tag:pv.tag,nm:pv.nm,side:pv.side,s0:pv.s0,mor:pv.mor,drm:pv.drm,ldr:pv.ldr,d:[0,0],res:''},true,false,!!BT_MCROLLING);
+      foot=BT_MCROLLING?'<span style="height:48px;display:inline-flex;align-items:center;font-size:15px;color:#ffd060">🎲 '+T('振っています…')+'</span>':bt('🎲 '+pv.nm+' '+T('の')+pv.tag+T('を振る'),'BtMcRoll()',1);}
     else foot=bt(T('判定を終える')+' ▶','BtMcApply()',1)+(rows.length?'':'<span style="font-size:12px;color:#9fb0c3">'+T('判定するユニットがありません')+'</span>');}
   else{var N2=BTG.nodes[g.n];col='#8fd0ff';hd=T('相手')+'('+T(BT_SIDE_NAME[g.side])+'・AI)'+T('の判定')+(g.isPTC?' — PTC':'');sub=(N2?N2.nm+' ':'')+T('AIが振ったダイスを1つずつ表示します');
-    g.rows.forEach(function(x,i){if(i<g.shown)body+=btMcRowHTML(x,false,true);else if(i===g.shown)body+=btMcRowHTML(x,true,false);});
-    var left=g.rows.length-g.shown;foot=left>0?bt(T('次へ')+' ▶','BtMcNext()',1)+bt(T('全部見る'),'BtMcNext(true)')+'<span style="flex:1"></span><span style="font-size:12px;color:#9fb0c3">'+T('残り')+' '+left+'</span>':bt(T('閉じる'),'BtMcNext()',1)+(BT_MCVQ.length>1?'<span style="font-size:12px;color:#9fb0c3">'+T('次の判定')+' '+(BT_MCVQ.length-1)+'</span>':'');}
-  el.innerHTML='<div style="position:fixed;inset:0;z-index:9490;background:rgba(5,7,10,.4)"></div><div style="position:fixed;z-index:9500;left:50%;top:50%;transform:translate(-50%,-50%);width:min(640px,94vw);max-height:86vh;overflow:auto;background:#141a22f5;border:2px solid '+col+';border-radius:14px;box-shadow:0 14px 44px #000d;color:#e8eef4;font-family:AppFont,AppJP,monospace;padding:12px 16px 14px"><div style="font-size:19px;font-weight:900;color:'+col+'">'+hd+'</div><div style="font-size:12.5px;color:#9fb0c3;margin-top:3px">'+sub+'</div>'+body+'<div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">'+foot+'</div></div>';}
+    g.rows.forEach(function(x,i){if(i<g.shown)body+=btMcRowHTML(x,false,true);else if(i===g.shown)body+=btMcRowHTML(x,true,false,true);else body+=btMcRowHTML(x,false,false);});
+    var left=g.rows.length-g.shown;
+    if(left>0&&!g.tm){g.tm=setTimeout(function(){g.tm=null;if(BT_MCVQ[0]!==g)return;if(g.shown<g.rows.length)g.shown++;btMcSync();},window.NM_MCSHK||1500);} /* v1588: 上から順に、1.5秒揺らして止める */
+    foot=left>0?bt(T('全部見る'),'BtMcNext(true)')+'<span style="flex:1"></span><span style="font-size:12px;color:#9fb0c3">'+T('残り')+' '+left+'</span>':bt(T('閉じる'),'BtMcNext()',1)+(BT_MCVQ.length>1?'<span style="font-size:12px;color:#9fb0c3">'+T('次の判定')+' '+(BT_MCVQ.length-1)+'</span>':'');}
+  el.innerHTML='<div style="position:fixed;inset:0;z-index:9490;background:rgba(5,7,10,.4)"></div><div style="position:fixed;z-index:9500;left:50%;top:50%;transform:translate(-50%,-50%);width:min(640px,94vw);max-height:86vh;overflow:auto;background:#141a22f5;border:2px solid '+col+';border-radius:14px;box-shadow:0 14px 44px #000d;color:#e8eef4;font-family:AppFont,AppJP,monospace;padding:12px 16px 14px"><div style="font-size:19px;font-weight:900;color:'+col+'">'+hd+'</div><div style="font-size:12.5px;color:#9fb0c3;margin-top:3px">'+sub+'</div>'+body+'<div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">'+foot+'</div></div>';
+  if(!document.getElementById('mcShkCss')){var cs=document.createElement('style');cs.id='mcShkCss';cs.textContent='@keyframes mcShk{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(-2px,1px) rotate(-14deg)}50%{transform:translate(2px,-2px) rotate(10deg)}75%{transform:translate(-1px,-1px) rotate(-6deg)}100%{transform:translate(0,0) rotate(0)}}@keyframes mcStp{0%{transform:scale(1.35)}100%{transform:scale(1)}}#btMcGate .mcStop{animation:none}';document.head.appendChild(cs);}
+  if(BT_MCSPIN){clearInterval(BT_MCSPIN);BT_MCSPIN=null;}if(el.querySelector('.mcRoll'))BT_MCSPIN=setInterval(function(){var L=document.querySelectorAll('#btMcGate .mcRoll');if(!L.length){clearInterval(BT_MCSPIN);BT_MCSPIN=null;return;}L.forEach(function(x){x.textContent=1+Math.floor(Math.random()*6);});},90);}
+var BT_MCSPIN=null;
 // 対象ユニット群へMC(またはPTC)。指揮官が先に判定し、無事なら他のユニットへ指揮修正。指揮官喪失(LLMC)・指揮官混乱(LLTC)も処理
 function btGroupCheck(s,targets,drm,log,isPTC){
   var vg=btMcViewStart(s,isPTC,drm);try{return btGroupCheck0(s,targets,drm,log,isPTC);}finally{btMcViewEnd(vg);}}
