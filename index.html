@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1586</title>
+<title>ASL SKシリーズv1587</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1586">
+<meta property="og:title" content="ASL SKシリーズv1587">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.786"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.787"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1587="v1587(ダルマ「自軍のダイスはアプリ上で自分で振る・相手のダイスはAIの目を確認」実施): AI対戦で、アプリの射撃で自軍にMC・PTC(K#のMCも)が出たら判定を止め、指揮官から順に1ユニットずつ🎲で振る(指揮修正・LLMC・LLTC・損耗の負傷drもルールどおり。振ったダイスで再現して本番を適用)。判定が終わるまでアプリの射撃・移動・フェイズ進行は止まる。相手(アプリ)のユニットのMC・PTCは、AIの目を1ユニットずつ「次へ」で確認(全部見るあり)。相手の射撃カードは自動で閉じず「確認 ▶」で閉じる。AI対戦ではダイス手動(相手の射撃の前に止める)を使わない。NM_MCMAN=0で従来";
 var APP_VERSION_HIST_v1586="v1586(ダルマ「移動できるようにする」): 盤外(進入待ち)パネルを見出し(⠿)のドラッグで動かせるように。位置は記憶(画面外に出ないよう補正)。パネル幅を少し広げて✕が欠けないように";
 var APP_VERSION_HIST_v1585="v1585(バグ修正・ダルマ報告「部隊の準備で構成した部隊が表示しない」): 進入のとき、部隊の準備の編成を内部の軍(SOV)で探していたため S29 の米軍などで見つからず、全員が1つの未編成スタックになっていた。部隊の準備の国籍(USA)で探し、編成どおりの盤外スタックを作る";
 var APP_VERSION_HIST_v1584="v1584(ダルマ「盤外がわかりにくい」実施): 盤外の進入待ち表示を改善。左上パネル=「盤外(進入待ち)」「北端から進入」「20個/FP85」。下の盤外パネルに進入の案内と指揮官・分隊・支援火器の数。盤外の自軍スタックを選んでいる間は進入できる端のヘクスを金色の点線で光らせ「進入」の札。NM_OFFENT=0で従来";
@@ -29699,7 +29700,7 @@ function btMaxTurn(){var sc=btScObj();return (sc&&sc.trn)||7;}
 function btPhId(){return BT_PHASES[BT.ph][0];}
 function btHexName(boardId,col,row){var n=row+((col%2===0)?1:0);return boardId+(LOS_COL_LIST[col]||'?')+n;}
 function btELR(side){var sc=btScObj();return (sc&&sc.f&&sc.f[side]&&sc.f[side].elr!=null)?sc.f[side].elr:3;}
-function btDie(){if(typeof BT_RD!=='undefined'&&BT_RD&&BT_RD.length)return BT_RD.shift();if(typeof BT!=='undefined'&&BT)BT.dieN=(BT.dieN||0)+1;var v=1+Math.floor(Math.random()*6);if(typeof BT_FX_REC!=='undefined'&&BT_FX_REC)BT_FX_REC.dice.push(v);else if(typeof BT_DICE_LOG!=='undefined')BT_DICE_LOG.push(v);return v;}
+function btDie(){if(BT_MCSIM){var M=BT_MCSIM;if(M.i<M.q.length)return M.q[M.i++];var v0=1+Math.floor(Math.random()*6);M.q.push(v0);M.i++;return v0;} /* v1587: MC・PTCを自分で振る(記録したダイスで再現) */if(typeof BT_RD!=='undefined'&&BT_RD&&BT_RD.length)return BT_RD.shift();if(typeof BT!=='undefined'&&BT)BT.dieN=(BT.dieN||0)+1;var v=1+Math.floor(Math.random()*6);if(typeof BT_FX_REC!=='undefined'&&BT_FX_REC)BT_FX_REC.dice.push(v);else if(typeof BT_DICE_LOG!=='undefined')BT_DICE_LOG.push(v);return v;}
 var BT_DICE_LOG=[]; /* v472: 射撃以外で振ったダイス(次の記録の行に付ける) */ // v288: 振った回数(車両の移動の「一つ戻る」判定)
 function btLog(lines){if(!lines||!lines.length)return;BT.log=(BT.log||[]).concat([lines]).slice(-600);}
 
@@ -30270,7 +30271,7 @@ function btPFvsAFV(s,v,log){ /* HEAT TK#31(4.4.2)。装甲値は命中箇所(DR 
   var d=btAfvData(v.nm)||{},a1=btDie(),a2=btDie(),hull=a1<a2,af=hull?(d.afFh||d.af||0):(d.afFt||d.af||0),tk=31,b1=btDie(),b2=btDie(),f=b1+b2;
   var res=(b1+b2===12)?'不発':(f<tk-af?'撃破':(f===tk-af?'ショック':'効果なし'));log.push('  PF vs '+v.nm+' TK#'+tk+'−装甲'+af+' DR'+f+' → '+res);if(res==='撃破')btWreck(s,v,log);else if(res==='ショック')v.shock='S';return 'hit';}
 /* アプリのPF: 命中しそうで効果がありそうな目標に、ユニットごとに1回 */
-function btAIPFPhase(side,ph,onlyN){var logs=[];if(!btPFOk(side))return logs;var P=btPFCfg();
+function btAIPFPhase(side,ph,onlyN){var logs=[];if(!btPFOk(side))return logs;if(btMcPend()&&BT.app&&side===BT.app)return logs; /* v1587 */var P=btPFCfg();
   BT.stacks.filter(function(s){return s.side===side&&s.n!=null&&s.n>=0;}).forEach(function(s){
     btInf(s).slice().forEach(function(u){if(!btPFOk(side)||s.u.indexOf(u)<0||!btPFUnitOK(s,u,ph))return;var I=btI(u,side);if(I.kind==='smc')return; /* 指揮官は指揮に回す */
       var tg=btPFTargets(s,side,ph).filter(function(t){return onlyN==null||t.n===onlyN;});if(!tg.length)return;
@@ -30501,7 +30502,7 @@ function btCasualty(s,u,log){ // 損耗(Casualty Reduction)
 }
 // 1ユニットのMC/NMC。戻り値 'pass'|'pin'|'break'|'cas'|'elim'
 function btMC1(s,u,drm,ldr,log,tag){
-  var d1=btDie(),d2=btDie(),raw=d1+d2,fin=raw+(drm||0)+(ldr||0);
+  btMcHook(s,u,tag||'MC',drm,ldr);var d1=btDie(),d2=btDie(),raw=d1+d2,fin=raw+(drm||0)+(ldr||0);
   var mor=btMorale(s.side,u),I=btI(u,s.side),res;
   var was=u.s;
   if(u.s==='br'){
@@ -30515,19 +30516,73 @@ function btMC1(s,u,drm,ldr,log,tag){
       if(raw===12)res='break+cas';
     }
   }
+  btMcRow(s,{tag:tag||'MC',nm:u.nm,side:s.side,s0:was,d:[d1,d2],drm:drm||0,ldr:ldr||0,fin:fin,mor:mor,res:res});
   log.push((tag||'MC')+' '+u.nm+(was==='br'?'(混乱)':'')+' DR'+raw+((drm||ldr)?('→'+fin):'')+'/士気'+mor+' → '+({pass:'成功',pin:'釘付け',break:'混乱','break+cas':'混乱+損耗',cas:'損耗',elim:'除去'}[res]));
   if(res==='cas'||res==='break+cas')btCasualty(s,u,log);
   else if(res==='elim'){btRemoveUnit(s,u);log.push('  '+u.nm+' 除去');}
   return res;
 }
 function btPTC1(s,u,drm,ldr,log,tag){
-  var raw=btDie()+btDie(),fin=raw+(drm||0)+(ldr||0),mor=btMorale(s.side,u);
+  btMcHook(s,u,tag||'PTC',drm,ldr);var p1=btDie(),p2=btDie(),raw=p1+p2,fin=raw+(drm||0)+(ldr||0),mor=btMorale(s.side,u);
   var ok=fin<=mor;if(!ok)u.s='pn';
+  btMcRow(s,{tag:tag||'PTC',nm:u.nm,side:s.side,s0:'ok',d:[p1,p2],drm:drm||0,ldr:ldr||0,fin:fin,mor:mor,res:ok?'pass':'pin'});
   log.push((tag||'PTC')+' '+u.nm+' DR'+raw+((drm||ldr)?('→'+fin):'')+'/士気'+mor+' → '+(ok?'成功':'釘付け'));
   return ok?'pass':'pin';
 }
+/* ---------- v1587(ダルマ「自軍のMC PTC ダイスロールはアプリ上で自分実施」「相手軍のMC PTCダイスロールもAIのダイスロールを確認」): ----------
+   自軍(人間)のユニットがアプリの射撃でMC・PTCを受けたら、判定を止めて BT.mcQ に入れ、1ユニットずつ🎲で振る。
+   振ったダイスは記録し、スタックの写しで btGroupCheck を再現して結果を見せ、全員振り終えたら同じダイスで本番を適用する(指揮修正・LLMC・LLTCもそのまま)。
+   相手(アプリ)のユニットの判定は、ダイスと結果を記録して BT_MCVQ に入れ、1ユニットずつ「次へ」で見せる。NM_MCMAN=0で従来 */
+var BT_MCSIM=null,BT_MCSTOP={stop:1},BT_MCVQ=[],BT_MCVCUR=null;
+function btMcOn(){return !!(typeof BT!=='undefined'&&BT&&BT.app&&BT.started&&!window.BT_SELFPLAY&&window.NM_MCMAN!==0);}
+function btMcPend(){return !!(BT&&BT.mcQ&&BT.mcQ.length);}
+function btMcHook(s,u,tag,drm,ldr){var M=BT_MCSIM;if(!M)return;if(M.cnt>=M.allow){M.next={tag:tag,nm:u.nm,side:s.side,s0:u.s,mor:btMorale(s.side,u),drm:drm||0,ldr:ldr||0,d:[0,0],res:''};throw BT_MCSTOP;}M.cnt++;}
+function btMcRow(s,r){if(BT_MCSIM){BT_MCSIM.rows.push(r);return;}if(BT_MCVCUR&&BT_MCVCUR.sid===s.id)BT_MCVCUR.rows.push(r);}
+function btMcViewStart(s,isPTC,drm){if(BT_MCSIM||!btMcOn()||s.side!==BT.app)return null;var g={sid:s.id,n:s.n,side:s.side,isPTC:isPTC,drm:drm||0,rows:[],shown:1};BT_MCVCUR=g;return g;}
+function btMcViewEnd(g){if(!g)return;BT_MCVCUR=null;if(g.rows.length){BT_MCVQ.push(g);setTimeout(function(){try{btMcSync();}catch(e){}},50);}}
+function btMcDefer(s,targets,drm,isPTC,r,log){if(BT_MCSIM||!btMcOn()||s.side!==btHuman()||!targets.length)return false;
+  BT.mcQ=BT.mcQ||[];BT.mcQ.push({sid:s.id,n:s.n,uids:targets.map(function(u){return u.id;}),drm:drm||0,isPTC:!!isPTC,r:r,dice:[],done:0});
+  log.push('→ '+r+' の判定はあなたが振ります');setTimeout(function(){try{btMcSync();}catch(e){}},60);return true;}
+function btMcSim(it,allow,real){var s=btStackById(it.sid);if(!s)return {rows:[],fin:true,log:[]};
+  var st=real?s:JSON.parse(JSON.stringify(s)),tg=st.u.filter(function(u){return it.uids.indexOf(u.id)>=0;}),log=[];
+  BT_MCSIM={q:it.dice,i:0,allow:allow,cnt:0,rows:[]};var fin=true;
+  try{btGroupCheck(st,tg,it.drm,log,it.isPTC);}catch(e){if(e===BT_MCSTOP)fin=false;else{BT_MCSIM=null;throw e;}}
+  var rows=BT_MCSIM.rows,nx=BT_MCSIM.next||null;BT_MCSIM=null;return {rows:rows,fin:fin,log:log,st:st,next:fin?null:nx};}
+function BtMcRoll(){var it=BT.mcQ&&BT.mcQ[0];if(!it||BT_MCROLLING)return;var r0=btMcSim(it,it.done+1,false); /* ここで初めてこのユニットのダイスを振る */
+  var nr=r0.rows[r0.rows.length-1];btSave();
+  var go=function(){BT_MCROLLING=false;it.done++;btSave();btMcSync();};
+  if(nr&&typeof diceRollAnim==='function'&&typeof btDiceAnimOn==='function'&&btDiceAnimOn()){BT_MCROLLING=true;try{diceRollAnim(nr.d[0],nr.d[1],nr.tag+' '+nr.nm,go,{hold:300});}catch(e){go();}}else go();}
+var BT_MCROLLING=false;
+function BtMcApply(){var it=BT.mcQ&&BT.mcQ[0];if(!it)return;var r=btMcSim(it,999,true);var s=btStackById(it.sid);
+  btLog([BT_SIDE_NAME[s?s.side:btHuman()]+' '+(BTG.nodes[it.n]?BTG.nodes[it.n].nm:'')+' '+it.r+'(あなたが振ったダイス)'].concat(r.log));
+  BT.mcQ.shift();try{btCleanStacks();}catch(e){}try{btAfterHit();}catch(e){}btUpdateCtl();btSave();var g=document.getElementById('btMcGate');if(g)g.remove();Draw();btKick(300);}
+function BtMcNext(all){var g=BT_MCVQ[0];if(!g)return;if(all)g.shown=g.rows.length;else if(g.shown<g.rows.length)g.shown++;else{BT_MCVQ.shift();var el=document.getElementById('btMcGate');if(el)el.remove();btKick(200);}btMcSync();}
+function btMcRowHTML(r,cur,open){var img='';try{var im=btVcUnitImg(r.side,{nm:r.nm,s:open?(r.res==='pass'?r.s0:(r.res==='pin'?'ok':'br')):r.s0,id:'mc'});if(im&&im.src)img='<img src="'+im.src+'" style="width:44px;height:44px;border-radius:3px;flex:0 0 auto">';}catch(e){}
+  var die=function(n,rd){return '<span style="display:inline-flex;width:30px;height:30px;border-radius:6px;background:'+(rd?'#c62828':'#f4f4f4')+';color:'+(rd?'#fff':'#111')+';align-items:center;justify-content:center;font-size:18px;font-weight:900;box-shadow:0 2px 4px #000a">'+n+'</span>';};
+  var nd='<span style="display:inline-flex;width:30px;height:30px;border-radius:6px;border:2px dashed #5a6676;color:#5a6676;align-items:center;justify-content:center;font-size:16px">?</span>';
+  var L={pass:['成功','#60e060'],pin:['釘付け','#ffd060'],'break':['混乱','#ff8040'],'break+cas':['混乱+損耗','#ff5050'],cas:['損耗','#ff5050'],elim:['除去','#ff3030']}[r.res]||[r.res,'#fff'];
+  var dm=(r.drm||r.ldr)?((r.drm?(r.drm>0?'+':'')+r.drm:'')+(r.ldr?' '+(r.ldr>0?'+':'')+r.ldr+'('+T('指揮')+')':'')):'0';
+  return '<div style="display:flex;align-items:center;gap:12px;padding:6px 10px;border-radius:8px;margin-top:6px;background:'+(cur?'#2a2410':'#0f141b')+';border:1px solid '+(cur?'#ffd060':'#2c3644')+'">'+img+'<div style="min-width:118px"><b style="font-size:15px">'+(r.tag!=='MC'&&r.tag!=='PTC'?'<span style="color:#ff9a70">'+r.tag+'</span> ':'')+r.nm+(r.s0==='br'?'<span style="color:#ff8040">('+T('混乱')+')</span>':'')+'</b><div style="font-size:12px;color:#9fb0c3">'+T('士気')+' <b style="color:#fff">'+r.mor+'</b> ・ DRM <b style="color:#fff">'+dm+'</b></div></div><span style="display:flex;gap:5px;align-items:center">'+(open?die(r.d[0],1)+die(r.d[1],0)+'<span style="font-size:15px;margin-left:4px">= '+(r.d[0]+r.d[1])+(r.fin!==r.d[0]+r.d[1]?' → <b>'+r.fin+'</b>':'')+'</span>':nd+nd)+'</span><span style="flex:1"></span><b style="font-size:20px;color:'+L[1]+'">'+(open?T(L[0]):'')+'</b></div>';}
+function btMcSync(){var el=document.getElementById('btMcGate');
+  if(!btActive()||!BT.started||(typeof BT_FX_CUR!=='undefined'&&(BT_FX_CUR||BT_FX_Q.length))){if(el)el.remove();return;}
+  var it=BT.mcQ&&BT.mcQ[0],g=!it&&BT_MCVQ[0];if(!it&&!g){if(el)el.remove();return;}
+  if(!el){el=document.createElement('div');el.id='btMcGate';document.body.appendChild(el);}
+  var bt=function(t,f,y){return '<button onclick="'+f+'" style="font:inherit;cursor:pointer;height:'+(y?48:40)+'px;padding:0 '+(y?22:16)+'px;border-radius:'+(y?12:10)+'px;font-weight:900;font-size:'+(y?17:14)+'px;'+(y?'background:linear-gradient(#ffdf7a,#e0a800);color:#1b1500;border:0;box-shadow:0 0 16px #e0a80066':'background:#1c2430;color:#cfe3f5;border:1px solid #3a4658')+'">'+t+'</button>';};
+  var hd,sub,col,body='',foot='';
+  if(it){var r=btMcSim(it,it.done,false),rows=r.rows.slice(0,it.done),more=!!r.next,nxR=r.next;
+    var N=BTG.nodes[it.n];col='#ffd060';hd='🎲 '+it.r+' — '+T('あなたの部隊が判定');sub=(N?N.nm+' ':'')+T('指揮官から順に、1つずつダイスを振ってください');
+    rows.forEach(function(x){body+=btMcRowHTML(x,false,true);});
+    if(more){var pv=nxR;body+=btMcRowHTML({tag:pv.tag,nm:pv.nm,side:pv.side,s0:pv.s0,mor:pv.mor,drm:pv.drm,ldr:pv.ldr,d:[0,0],res:''},true,false);
+      foot=bt('🎲 '+pv.nm+' '+T('の')+pv.tag+T('を振る'),'BtMcRoll()',1);}
+    else foot=bt(T('判定を終える')+' ▶','BtMcApply()',1)+(rows.length?'':'<span style="font-size:12px;color:#9fb0c3">'+T('判定するユニットがありません')+'</span>');}
+  else{var N2=BTG.nodes[g.n];col='#8fd0ff';hd=T('相手')+'('+T(BT_SIDE_NAME[g.side])+'・AI)'+T('の判定')+(g.isPTC?' — PTC':'');sub=(N2?N2.nm+' ':'')+T('AIが振ったダイスを1つずつ表示します');
+    g.rows.forEach(function(x,i){if(i<g.shown)body+=btMcRowHTML(x,false,true);else if(i===g.shown)body+=btMcRowHTML(x,true,false);});
+    var left=g.rows.length-g.shown;foot=left>0?bt(T('次へ')+' ▶','BtMcNext()',1)+bt(T('全部見る'),'BtMcNext(true)')+'<span style="flex:1"></span><span style="font-size:12px;color:#9fb0c3">'+T('残り')+' '+left+'</span>':bt(T('閉じる'),'BtMcNext()',1)+(BT_MCVQ.length>1?'<span style="font-size:12px;color:#9fb0c3">'+T('次の判定')+' '+(BT_MCVQ.length-1)+'</span>':'');}
+  el.innerHTML='<div style="position:fixed;inset:0;z-index:9490;background:rgba(5,7,10,.4)"></div><div style="position:fixed;z-index:9500;left:50%;top:50%;transform:translate(-50%,-50%);width:min(640px,94vw);max-height:86vh;overflow:auto;background:#141a22f5;border:2px solid '+col+';border-radius:14px;box-shadow:0 14px 44px #000d;color:#e8eef4;font-family:AppFont,AppJP,monospace;padding:12px 16px 14px"><div style="font-size:19px;font-weight:900;color:'+col+'">'+hd+'</div><div style="font-size:12.5px;color:#9fb0c3;margin-top:3px">'+sub+'</div>'+body+'<div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">'+foot+'</div></div>';}
 // 対象ユニット群へMC(またはPTC)。指揮官が先に判定し、無事なら他のユニットへ指揮修正。指揮官喪失(LLMC)・指揮官混乱(LLTC)も処理
 function btGroupCheck(s,targets,drm,log,isPTC){
+  var vg=btMcViewStart(s,isPTC,drm);try{return btGroupCheck0(s,targets,drm,log,isPTC);}finally{btMcViewEnd(vg);}}
+function btGroupCheck0(s,targets,drm,log,isPTC){
   var alive=function(u){return s.u.indexOf(u)>=0;};
   var leaders=targets.filter(function(u){return btI(u,s.side).kind==='smc';}).sort(function(a,b){return btMorale(s.side,b)-btMorale(s.side,a);});
   var others=targets.filter(function(u){return btI(u,s.side).kind==='mmc';});
@@ -30565,7 +30620,7 @@ function btApplyIFT(s,targets,r,log){
   var colQ=BT_DMQ&&BT_DMQ.c; /* v1363: KIA時の武器の判定で使う */
   btDMHit(s,targets,log);
   if(!r||r==='-'){log.push('効果なし');return;}
-  if(r==='PTC'){btGroupCheck(s,targets.filter(function(u){return u.s==='ok';}),0,log,true);return;}
+  if(r==='PTC'){if(btMcDefer(s,targets.filter(function(u){return u.s==='ok';}),0,true,r,log))return;btGroupCheck(s,targets.filter(function(u){return u.s==='ok';}),0,log,true);return;}
   var m;
   if((m=r.match(/^(\d+)KIA$/))){
     var k=parseInt(m[1],10),pool=targets.slice();
@@ -30581,10 +30636,11 @@ function btApplyIFT(s,targets,r,log){
   if((m=r.match(/^K(\d+)$/))){
     var pick=targets[Math.floor(Math.random()*targets.length)];
     btCasualty(s,pick,log);
+    if(btMcDefer(s,targets.filter(function(u){return s.u.indexOf(u)>=0;}),parseInt(m[1],10),false,r,log))return;
     btGroupCheck(s,targets.filter(function(u){return s.u.indexOf(u)>=0;}),parseInt(m[1],10),log,false);
     return;
   }
-  if((m=r.match(/^(\d*)MC$/))){btGroupCheck(s,targets,m[1]?parseInt(m[1],10):0,log,false);return;}
+  if((m=r.match(/^(\d*)MC$/))){if(btMcDefer(s,targets,m[1]?parseInt(m[1],10):0,false,r,log))return;btGroupCheck(s,targets,m[1]?parseInt(m[1],10):0,log,false);return;}
   log.push('未対応の結果 '+r);
 }
 // ---------- [B6] 射撃 ----------
@@ -32018,7 +32074,7 @@ function btFireables(side,ph,tgtN){
 // ---------- [C2] 射撃の判断 ----------
 // 候補: 各スタック単独、および隣接スタックとの組み合わせ。戻り値 [{fd,ev,val}]
 function btFireOptions(side,ph,targetsN,ctx){
-  var res=[];
+  var res=[];if(btMcPend()&&BT.app&&side===BT.app)return res; /* v1587: 自軍のMC判定待ちの間はアプリは撃たない */
   targetsN.forEach(function(tn){
     var fr=btFireables(side,ph,tn);
     var single=[];
@@ -32085,7 +32141,7 @@ function btAIFire(opt){
 function btEnemyNodes(side){var m={};BT.stacks.forEach(function(s){if(s.side!==side&&s.n!=null&&s.n>=0&&btInf(s).length)m[s.n]=1;});return Object.keys(m).map(Number);}
 // 通常の射撃フェイズ(準備射撃・防御射撃・前進射撃)をまとめて行う
 var BT_DICE_WAIT=false;
-function btDiceMan(){return !!S.btDiceMan;}
+function btDiceMan(){return !!S.btDiceMan&&!(typeof BT!=='undefined'&&BT&&BT.app&&window.NM_MCMAN!==0);} /* v1587: AI対戦では相手の目はAIが振る(手動の止めは使わない) */
 function btDiceManT(){S.btDiceMan=!S.btDiceMan;try{saveState();}catch(e){}if(!S.btDiceMan&&BT.dicePend){BT.dicePend=null;BT.__rollOK=false;btSave();btKick(100);}try{Draw();}catch(e){}}
 /* v1321(ダルマ「攻撃を受けた際のモラルチェック・釘付けチェック・射撃のダイスロールを🎲でするしない設定」「実施」): 手動のとき、アプリの射撃を受ける前に「🎲 振る」を押すまで止める */
 function BtDiceGo(){BT.__rollOK=true;BT.dicePend=null;btSave();try{Draw();}catch(e){}btKick(80);}
@@ -32472,6 +32528,7 @@ function btAIReactDFF(defSide){
     lg[0]+='  [期待損害 '+best.val.toFixed(2)+']';
     logs.push(lg);
     btAfterHit();
+    if(btMcPend())break; /* v1587 */
   }
   return logs;
 }
@@ -32755,16 +32812,18 @@ function btAppTick0(){
   if(typeof BT_FX_CUR!=='undefined'&&(BT_FX_CUR||BT_FX_Q.length||BT_FX_PEND)){btKick(250);return;} /* v333(ダルマ指示): 射撃の演出ポップアップが出ている間(待ちの件も含む)は、アプリの移動・射撃・フェイズ進行を止める。閉じたら続きを進める */
   if(BT.fire||BT.edit)return;
   if(BT.dicePend&&btDiceMan()){try{btDiceGateSync();}catch(e){}return;} /* v1321 */
+  if(btMcPend()||BT_MCVQ.length){try{btMcSync();}catch(e){}btKick(400);return;} /* v1587: MC・PTCの判定(自分で振る/相手の確認)の間は進めない */
   var app=BT.app,att=btSideNow(),ph=btPhId(),key=btPhKey();
   if(BT.aiDone!==key){
-    if(ph==='PFPh'&&att===app){btAIPrepFire(app).forEach(btLog);if(!BT_DICE_WAIT)BT.aiDone=key;}
+    if(ph==='PFPh'&&att===app){btAIPrepFire(app).forEach(btLog);if(!BT_DICE_WAIT&&!btMcPend())BT.aiDone=key;}
     else if(ph==='MPh'&&att===app){if(!btAppMoveTick())return;BT.aiDone=key;}
-    else if(ph==='DFPh'&&att!==app){btAIFirePhase(app,'FF',null,0.06).forEach(btLog);if(!BT_DICE_WAIT)BT.aiDone=key;}
-    else if(ph==='AFPh'&&att===app){btAIFirePhase(app,'AF',null,0.06).forEach(btLog);if(!BT_DICE_WAIT)BT.aiDone=key;}
+    else if(ph==='DFPh'&&att!==app){btAIFirePhase(app,'FF',null,0.06).forEach(btLog);if(!BT_DICE_WAIT&&!btMcPend())BT.aiDone=key;}
+    else if(ph==='AFPh'&&att===app){btAIFirePhase(app,'AF',null,0.06).forEach(btLog);if(!BT_DICE_WAIT&&!btMcPend())BT.aiDone=key;}
     else if(ph==='APh'&&att===app){btAIAdvance(app);BT.stacks.forEach(function(s3){if(s3.side===app&&btAFVs(s3).length)btAICE(s3);});BT.aiDone=key;}
     else BT.aiDone=key;
     btUpdateCtl();btSave();Draw();
   }
+  if(btMcPend()||BT_MCVQ.length){try{btMcSync();}catch(e){}btKick(400);return;} /* v1587: 判定が終わるまでフェイズを進めない */
   if(!btHumanActs(ph)&&!BT.mv&&!BT.pend){btAdvancePhase();btSave();Draw();btKick(500);}
 }
 // アプリの移動(1歩ずつ。人間が防御側なら、各歩のあとで射撃の機会を与える)。戻り値: 全て終わったらtrue
@@ -33835,6 +33894,7 @@ function btPhAnnShow(v,eid){eid=eid||'btPhAnn';var o=document.getElementById(eid
 function btCmdHTML(){
   try{btPhAnnChk();}catch(e){} /* v1576 */
   if(BT_OFFPOP)setTimeout(btOffPopSync,0); /* v1295 */
+  try{if(btMcPend()||BT_MCVQ.length)setTimeout(btMcSync,0);else{var mg=document.getElementById('btMcGate');if(mg)mg.remove();}}catch(e){}
   if(BT_FXPOP)setTimeout(btFxPopSync,0); /* v1283 */
   setTimeout(btRtpSync,0);setTimeout(btCcSync,0);setTimeout(btRphSync,0);setTimeout(btBogSync,0);setTimeout(btDCAskSync,0); /* v1302 */
   if(!btAvail()||!btActive()||!btGraphReady()){setTimeout(btCmdMeasure,0);return '';}
@@ -35012,7 +35072,7 @@ function btITTValue(o,ev,tS,ctx){
 function btVTTValue(o,ev){var od=btVTTOdds(o,ev);return (od.kill+od.imm*0.35+od.shock*0.45)*btVehVal(o.tgt)*(BT_AIW.tgtM||1);}
 // 射撃候補(車両主砲・砲・PSK・車載機銃)
 function btAIOrdOptions(side,ph,targetsN,ctx,filterStack){
-  var res=[];
+  var res=[];if(btMcPend()&&BT.app&&side===BT.app)return res; /* v1587 */
   var mvS=(ph==='DFF'&&BT.mv)?btStackById(BT.mv.sid):null;
   BT.stacks.forEach(function(s){
     if(s.side!==side||s.n==null||s.n<0||s.mel)return;
@@ -46299,7 +46359,7 @@ function btFtMenuHTML(){ /* v1344(ダルマ「アプリ対応 メインメニュ
   var tabs=[['game',T('ゲーム')],['play',T('プレイ')],['view',T('表示')],['etc',T('システム')]],cur=BT_MNTAB; /* v1574(ダルマ「その他をシステムに変更」) */
   var body='';
   if(cur==='game')body=B('🆕 '+T('新しい対戦(最初から)'),'BtResetAsk()')+B('💾 '+T('セーブ・ロード'),'BtSvOpen()')+B('📋 '+T('シナリオ選択'),"nmTvOpen('scen')")+B('📤 '+T('記録を書き出す'),'BtRecExport()');
-  else if(cur==='play')body=B('🎲 '+T('ダイス'),'btDiceManT()',1,val(S.btDiceMan?T('手動'):T('自動'),!S.btDiceMan))+B('✦ '+T('演出設定'),'BtFxPop()')+B('◎ '+T('クローズアップ'),'BtCam()',1,OO(BT.cam!==false));
+  else if(cur==='play')body=(window.NM_MCMAN!==0?'':B('🎲 '+T('ダイス'),'btDiceManT()',1,val(S.btDiceMan?T('手動'):T('自動'),!S.btDiceMan)))+B('✦ '+T('演出設定'),'BtFxPop()')+B('◎ '+T('クローズアップ'),'BtCam()',1,OO(BT.cam!==false));
   else if(cur==='view')body=B('▦ '+T('VASLカウンター'),'BtVaslToggle()',1,OO(BT.vasl!==false))+B('🗺 '+T('全体マップ'),"S.nmMmOff=!S.nmMmOff;try{saveState();}catch(e){}nmMmUpdate()",1,OO(!S.nmMmOff))+B('▣ '+T('リアル盤へ'),"S.nmRealOn=!S.nmRealOn;try{saveState();}catch(e){}nmRbRender();Draw()",1,OO(!!S.nmRealOn))+B('▭ '+T('下バーの形'),'btBarStyNext()',1,val(btBarStyName(),true))+B(NM_MI.skin+' '+T('スキン'),'uiThemePop()',0,val(uiThemeName(),false))+B('🔧 '+T('ツールバー表示設定'),'nmTbCfgOpen()');
   else body=B('📝 '+T('システムログ')+'('+((typeof NM_DBG!=='undefined'&&NM_DBG.buf)?NM_DBG.buf.length:0)+')','nmDbgOpen()');
   var tb='<div style="display:flex;gap:3px;margin:6px 0 4px">'+tabs.map(function(t){var on=t[0]===cur;return '<button class="tb-reset" onclick="event.stopPropagation();BtMnTab(\''+t[0]+'\')" style="flex:1;padding:6px 0;border-radius:7px;border:0;font:bold 13px inherit;cursor:pointer;'+(on?'background:#ffd060;color:#14171d':'background:#232a35;color:#aab')+'">'+t[1]+'</button>';}).join('')+'</div>';
@@ -46982,11 +47042,11 @@ function btFxPanelHTML(){
 function btFxKindOf(resLbl,killed){return (killed||/撃破|KIA|^K$/.test(resLbl))?'kill':(/効果なし|外れ|^-?$/.test(resLbl)?'ng':'ok');}
 /* 次へボタン/自動クローズの設定。kind=ok|ng|kill。戻り値 true=ボタン待ち */
 function btFxArm(el,kind,autoMs){
-  var v=btFxSpd(kind);
+  var v=btFxSpd(kind);if(el.__forceBtn)v='btn'; /* v1587: 相手の射撃は確認ボタンを押すまで閉じない */
   if(v==='btn'){
     el.onclick=null;var card=el.querySelector('.fxCard');
     if(card){var d=document.createElement('div');d.style.cssText='display:flex;justify-content:center;margin-top:8px';
-      d.innerHTML='<button class="tb-reset" style="padding:9px 30px;font-size:14px;font-weight:bold;color:#ffd060;border:1px solid #c0a030;border-radius:5px;background:#3a2c00;cursor:pointer">次へ ▶'+(BT_FX_Q.length?' (残り'+BT_FX_Q.length+'件)':'')+'</button>';
+      d.innerHTML='<button class="tb-reset" style="padding:9px 30px;font-size:14px;font-weight:bold;color:#ffd060;border:1px solid #c0a030;border-radius:5px;background:#3a2c00;cursor:pointer">'+(el.__forceBtn?T('確認'):'次へ')+' ▶'+(BT_FX_Q.length?' (残り'+BT_FX_Q.length+'件)':'')+'</button>';
       d.firstChild.onclick=function(ev){ev.stopPropagation();btFxClose();};
       var tp=card.lastElementChild;if(tp&&/タップで閉じる|次の/.test(tp.textContent)&&tp.tagName==='DIV'&&tp.children.length===0)tp.style.display='none';
       card.appendChild(d);}
@@ -47016,7 +47076,7 @@ function btFxWrap(name,info){
 var BT_FX_PEND=0;
 function btFxPush(e){BT_FX_Q.push(e);if(!BT_FX_CUR&&!BT_FX_PEND){BT_FX_PEND=1;setTimeout(function(){BT_FX_PEND=0;btFxNext();},30);}} // v320: 射撃の処理と画面の描き直しが終わってから表示(射線・着弾の位置ずれ防止)
 function btFxClear(){BT_FX_Q=[];btFxClose(true);}
-function btFxClose(noNext){var wasApp=!!(BT_FX_CUR&&BT&&BT_FX_CUR.side===BT.app);BT_FX_T.forEach(clearTimeout);BT_FX_T=[];BT_FX_CUR=null;if(wasApp&&!(noNext!==true&&BT_FX_Q.length))setTimeout(function(){try{Draw();}catch(e){}},0); /* v1285: アプリの射撃のカードを閉じたらパネルを戻す */var el=document.getElementById('btFx');if(el)el.remove();if(!noNext&&BT_FX_Q.length)setTimeout(btFxNext,80);else if(typeof btCamLater==='function'&&BT_CAM.sv)btCamLater(700);}
+function btFxClose(noNext){setTimeout(function(){try{btMcSync();}catch(e){}},120);var wasApp=!!(BT_FX_CUR&&BT&&BT_FX_CUR.side===BT.app);BT_FX_T.forEach(clearTimeout);BT_FX_T=[];BT_FX_CUR=null;if(wasApp&&!(noNext!==true&&BT_FX_Q.length))setTimeout(function(){try{Draw();}catch(e){}},0); /* v1285: アプリの射撃のカードを閉じたらパネルを戻す */var el=document.getElementById('btFx');if(el)el.remove();if(!noNext&&BT_FX_Q.length)setTimeout(btFxNext,80);else if(typeof btCamLater==='function'&&BT_CAM.sv)btCamLater(700);}
 function btFxScreenPt(n){
   var g=document.getElementById('btOvG');if(!g||n==null||n<0)return null;
   var d=btDispPt(n,losComputeDisplayLayout());var c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',d.x);c.setAttribute('cy',d.y);c.setAttribute('r',1);g.appendChild(c);
@@ -47131,6 +47191,7 @@ function btFxNext(){
     BT_FX_T.push(setTimeout(function(){var x=document.getElementById('btFx');if(x)x.classList.add('fxS2');},650));
     BT_FX_T.push(setTimeout(function(){var x=document.getElementById('btFx');if(x)x.classList.add('fxS3');},1250));
   }else el.classList.add('fxS2','fxS3');
+  if(window.NM_MCMAN!==0&&BT.app&&e.side===BT.app&&!window.BT_SELFPLAY)el.__forceBtn=1;
   btFxArm(el,fxK0,short?(hurry?1300:1800):(us.length?3800:3000));
   if(e.side===BT.app)try{Draw();}catch(x){} /* v1285: アプリの射撃のカードの間はパネルを隠す */
 }
