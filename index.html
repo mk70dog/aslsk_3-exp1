@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1584</title>
+<title>ASL SKシリーズv1585</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1584">
+<meta property="og:title" content="ASL SKシリーズv1585">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.784"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.785"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1585="v1585(バグ修正・ダルマ報告「部隊の準備で構成した部隊が表示しない」): 進入のとき、部隊の準備の編成を内部の軍(SOV)で探していたため S29 の米軍などで見つからず、全員が1つの未編成スタックになっていた。部隊の準備の国籍(USA)で探し、編成どおりの盤外スタックを作る";
 var APP_VERSION_HIST_v1584="v1584(ダルマ「盤外がわかりにくい」実施): 盤外の進入待ち表示を改善。左上パネル=「盤外(進入待ち)」「北端から進入」「20個/FP85」。下の盤外パネルに進入の案内と指揮官・分隊・支援火器の数。盤外の自軍スタックを選んでいる間は進入できる端のヘクスを金色の点線で光らせ「進入」の札。NM_OFFENT=0で従来";
 var APP_VERSION_HIST_v1583="v1583(部隊の準備: 見出しのボタンと説明文の間をあける";
 var APP_VERSION_HIST_v1582="v1582(部隊の準備: リファレンスボタンをシナリオカードと同じ形に";
@@ -31887,7 +31888,7 @@ function btReinforce(){
     items.forEach(function(o){var left=o.total-btPlacedCount(o.key);for(var i=0;i<left;i++){var u=btMkUnit(o.key,o.name,att);if(btInfo(att,o.name).kind==='afv'){u.mot=1;if(d.e&&d.e.mpHalf)u.mpHalfT=BT.turn;afv.u.push(u);}else inf.u.push(u);}});
     // 歩兵の盤外スタックは、指揮官1人+分隊2〜3個+SWの小グループに分ける(移動の単位)
     // v291(ダルマ指示「初めの仮のスタックはやめてプレイヤーが編成を組む」): 人間の軍は全員を1つの「未編成」スタックにして、編成を変える画面を開く(SWの持ち主は既定の割り当て。変更可)
-    var nmMade=[];if(att!==BT.app&&!window.BT_SELFPLAY&&inf.u.length&&((att==='GER'&&!btCfg())||btCfg())){try{var gi0=d.grp==='g1'?0:1;if(btCfg()){gi0=null;var gl0=(items.filter(function(o){return o.group;})[0]||{}).group;if(gl0){var ng=nmSuObG(att).filter(function(g){return g.gl===gl0;})[0];if(ng)gi0=ng.i;}} /* 部隊の準備のグループは見出しで対応させる(番号は見出しの無い行の数え方が違う) */if(gi0!=null)nmMade=btPoolFromNm(inf,gi0);}catch(e){console.log('btPoolFromNm',e);}} /* v1214(ダルマ「案A」): S2/S6/S24 も、進入の時に部隊の準備の編成どおり盤外スタックを作る(S6 は予備の編成を戦術予備に) */
+    var nmMade=[];if(att!==BT.app&&!window.BT_SELFPLAY&&inf.u.length&&((att==='GER'&&!btCfg())||btCfg())){try{var gi0=d.grp==='g1'?0:1;if(btCfg()){gi0=null;var gl0=(items.filter(function(o){return o.group;})[0]||{}).group;if(gl0){var ng=nmSuObG(btNat(att)||att).filter(function(g){return g.gl===gl0;})[0];if(ng)gi0=ng.i;}} /* 部隊の準備のグループは見出しで対応させる(番号は見出しの無い行の数え方が違う) */if(gi0!=null)nmMade=btPoolFromNm(inf,gi0);}catch(e){console.log('btPoolFromNm',e);}} /* v1214(ダルマ「案A」): S2/S6/S24 も、進入の時に部隊の準備の編成どおり盤外スタックを作る(S6 は予備の編成を戦術予備に) */
     if(nmMade.length)log.push(BT_SIDE_NAME[att]+' マップタブの編成'+nmMade.join('・')+'のとおりに盤外のスタックを組みました');
     if(att!==BT.app&&!window.BT_SELFPLAY&&inf.u.length){inf.pool=true;BT.stacks.push(inf);BT.sel=inf.id;BT.selU=null;BT.regroup={sid:inf.id,pick:null};}
     else if(att!==BT.app&&!window.BT_SELFPLAY&&nmMade.length){}
@@ -33448,7 +33449,7 @@ function btSuPlaceAt(k,n){var d=nmGeList(k),side=d.nat;if(BT.started){btToast('�
   if(ok){if(!BT.suAt)BT.suAt={};BT.suAt[k]=n;}
   btSave();Draw();btToast(nmGrpLbl(k)+': '+ok+'個を'+BTG.nodes[n].nm+'に置きました'+(ng.length?'。置けなかった: '+ng.slice(0,4).join('、')+'(配置範囲の外かOBの残りなし)':''));}
 /* v470: 人間の独軍の進入時、マップタブの編成(同じグループ)があれば、その編成どおりに盤外のスタックを組む(残りは未編成のまま) */
-function btPoolFromNm(pool,gi){var made=[],nat=pool.side;var G=nmSuObG(nat);
+function btPoolFromNm(pool,gi){var made=[],nat=btNat(pool.side)||pool.side; /* v1585 バグ修正(ダルマ報告「部隊の準備で構成した部隊が表示しない」): 内部の軍(SOV)ではなく部隊の準備の国籍(S29なら USA)で編成を探す */var G=nmSuObG(nat);
   nmSuSlots(nat).forEach(function(k){if(nmSuSlotGrp(k,nat,G)!==gi)return;var st={id:'s'+(++BT.seq),side:pool.side,n:-1,off:pool.off,due:pool.due,u:[],mel:false},pmap={},owns=[];
     btNmSlotItems(k).forEach(function(x){var u=pool.u.filter(function(v){return x.m({name:v.nm});})[0];if(!u)return;pool.u.splice(pool.u.indexOf(u),1);st.u.push(u);if(x.kind==='u')pmap[x.pid]=u.id;else if(x.own!=null)owns.push([u,x.own]);});
     owns.forEach(function(a){a[0].own=pmap[a[1]]||null;});st.u.forEach(function(u){if(u.own&&!st.u.some(function(v){return v.id===u.own;}))u.own=null;});
