@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1608</title>
+<title>ASL SKシリーズv1609</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1608">
+<meta property="og:title" content="ASL SKシリーズv1609">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.808"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.809"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1609="v1609(ダルマ「このパネルが表示する前に2秒マップ上のどの部隊がどの部隊に攻撃しているかを表示」): 相手の射撃カードの前に約2秒、地図の上で撃った部隊(黄色の輪)→狙われた部隊(赤い輪)の射線と、上に「⚠ 独軍の防御射撃: wP1 → あなたの wO2」の札を出す。タップで飛ばせる。NM_EFXPRE=ミリ秒/0で出さない";
 var APP_VERSION_HIST_v1608="v1608(ダルマ「射撃可能相手部隊をMAP上でわかるようにする」→案3): 射撃の準備中(撃つ部隊を選び、目標はまだ)に、その部隊が撃てる敵のヘクスを薄い赤で塗り、「FP→列 DRM」と効果の見込み(KIA・K・MC+PTC×0.4)を表示。撃てるかは射撃と同じ判定(LOS・射程・臨機射撃の条件など)。NM_FTGT=1/2で他の案・0で出さない";
 var APP_VERSION_HIST_v1607="v1607(ダルマ「盤外の部隊を選んだ状態でヘクスを選択すると通常移動で開始にする」): 移動フェイズに盤外の自軍スタックを選んでいるとき、光っている進入ヘクスをタップすると、「移動開始」を押さなくても通常の移動を始めてそのヘクスへ進入する(進入できなかったときは移動を取り消してメッセージ)。駆け足・警戒移動はこれまでどおりボタンから。NM_OFFTAPMV=0で従来";
 var APP_VERSION_HIST_v1606="v1606(ダルマ「全てルール通りに実施」): SK4 3.2.3の照合 ①最終防護射撃のNMCで指揮官が除去→同じヘクスの士気の低いユニットはLLMC、混乱→統制ユニットはLLTC(負の指揮修正はプラスのDRMで) ②指揮修正を付けるのは、統制・非釘付けで判定に無傷で通った指揮官だけ(上限ちょうどで釘付けになった指揮官の修正は付かない) ③MC・PTCで士気の低い指揮官にも、先に無傷で通った指揮官の指揮修正を付ける";
@@ -47254,6 +47255,16 @@ function btFxNext(){
     var hitV=!/効果なし|外れ/.test(resLbl);
     svg+='<g class="fxBurst" style="transform-origin:'+tp.x+'px '+tp.y+'px">'+(hitV?'<circle cx="'+tp.x+'" cy="'+tp.y+'" r="40" fill="url(#fxBst)"/>':'')+'<circle cx="'+tp.x+'" cy="'+tp.y+'" r="56" fill="none" stroke="'+(hitV?'#ff7a20':'#8899aa')+'" stroke-width="3" opacity=".75"/></g>';}
   svg+='</svg>';
+  /* v1609(ダルマ「このパネルが表示する前に2秒マップ上のどの部隊がどの部隊に攻撃しているかを表示」): 相手の射撃は、カードの前に約2秒、地図の上で撃った部隊(黄の輪)→狙われた部隊(赤の輪)の射線と札を出す。タップで飛ばせる。NM_EFXPRE=ミリ秒/0で出さない */
+  if(window.NM_EFXPRE!==0&&window.NM_EFX!==0&&BT.app&&e.side===BT.app&&!e.__pre&&tp&&/FP[\d.]+\(列/.test(head)){e.__pre=1;
+    var ps='<svg class="fxMap" width="'+innerWidth+'" height="'+innerHeight+'" style="position:absolute;left:0;top:0;pointer-events:none">'+(FXV?btFxLnSVG(FXV,fps,tp):'');
+    fps.forEach(function(p){ps+='<circle cx="'+p.x+'" cy="'+p.y+'" r="30" fill="#ffd060" fill-opacity=".15" stroke="#ffd060" stroke-width="5"><animate attributeName="r" values="26;34;26" dur="0.9s" repeatCount="indefinite"/></circle>';});
+    ps+='<circle cx="'+tp.x+'" cy="'+tp.y+'" r="34" fill="#ff2020" fill-opacity=".18" stroke="#ff3030" stroke-width="5"><animate attributeName="r" values="30;40;30" dur="0.7s" repeatCount="indefinite"/></circle></svg>';
+    var TNp=BTG.nodes[e.tgtN],frN=(e.from||[]).map(function(n){return BTG.nodes[n]?BTG.nodes[n].nm:'';}).join('+');
+    var bnr='<div style="position:absolute;left:50%;top:calc(var(--btftop,0px) + 14px);transform:translateX(-50%);background:#1a0d0df2;border:2px solid #d04040;border-radius:12px;padding:8px 18px;color:#ffd0c8;font-weight:bold;font-size:16px;white-space:nowrap;box-shadow:0 6px 20px #000c;font-family:AppFont,AppJP,sans-serif">⚠ '+T(BT_SIDE_NAME[e.side])+'の'+((head.match(/^\S+\s+(\S+)/)||[])[1]||T('射撃'))+' : <span style="color:#ffd060">'+frN+'</span> → '+T('あなたの')+' <span style="color:#ff8070">'+(TNp?TNp.nm:'')+'</span></div>';
+    var pe=document.createElement('div');pe.id='btFx';pe.className='fxShow fxPre';pe.innerHTML=ps+bnr;
+    var gone=false,go=function(){if(gone)return;gone=true;if(pe.parentNode)pe.remove();BT_FX_CUR=null;BT_FX_Q.unshift(e);btFxNext();};
+    pe.onclick=go;document.body.appendChild(pe);setTimeout(go,window.NM_EFXPRE||2000);return;}
   // カード
   var c='<div class="fxCard"><div style="display:flex;gap:8px;align-items:center;font-size:13px;color:#8fb4d8;flex-wrap:wrap"><span style="color:#ffcf40;font-weight:bold">'+who+'</span><span>→ '+tgt+'</span></div>';
   c+='<div style="display:flex;align-items:center;gap:12px;margin-top:8px"><span class="fxDice">'+btFxDie(red,true,!short)+btFxDie(wht,false,!short)+'</span>';
