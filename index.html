@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1602</title>
+<title>ASL SKシリーズv1603</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1602">
+<meta property="og:title" content="ASL SKシリーズv1603">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.802"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.803"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1603="v1603(ダルマ「臨機射撃 ルールを確認して厳格に守る」): SK4 3.3.3〜3.4を照合。指揮官の指揮を厳格化 ①指揮修正がプラスになる指揮官(負傷など)は指揮に使わない(指揮は任意) ②臨機射撃で指揮した指揮官は、再射撃・最終防護射撃・防御射撃フェイズで1回だけ、前と同じ部隊(またはその一部)の射撃にだけ指揮を使える(新しい射撃グループは指揮できない)。人間・アプリ共通。NM_LDRSTRICT=0で従来";
 var APP_VERSION_HIST_v1602="v1602(ダルマ報告「AI射撃中ログが取れない」): 射撃のカードやMC・PTCの判定パネルが出ている間は、画面全体がカードの受け皿になっていて、右上のメニューを押してもカードに吸われていた。その間は右のツールバーとメニューをカードより上に出し、メニュー→システム→システムログを開けるように。NM_FXUP=0で従来";
 var APP_VERSION_HIST_v1601="v1601(ダルマ「臨機射撃撃ちすぎ」): アプリの臨機射撃(移動中の敵への射撃)を絞る。①火力2以下の射撃は隣接(距離1以下)の時だけ ②続けての臨機射撃(SFF・半分の火力)のしきい値を+0.08→+0.16 ③同じ移動への臨機射撃が3回目以降はしきい値をさらに上げる(+0.12ずつ)。最終防護射撃・車両・白兵は従来どおり。NM_DFFCUT=0で従来";
 var APP_VERSION_HIST_v1600="v1600(ダルマ「この画面で1-2秒ダイスを回す」): 相手の射撃カードの中でダイスを約1.5秒回して(揺らして)から止め、そのあと合計・出た目の枠・結果・ユニットを出す。相手の射撃では全画面のダイス演出は使わない。NM_EFXSHK=ミリ秒/0で回さない";
@@ -30729,6 +30730,10 @@ function btVehHindDRM(a,b,fast){
   return d;
 }
 // 射撃可能か(マーカー)。戻り値: null=不可, 'full'|'half'|'fpf'
+/* v1603(ダルマ「臨機射撃 ルールを確認して厳格に守る」): 指揮官の指揮の条件(SK4 3.4)
+   ①指揮はしなくてもよいので、負傷などで指揮修正がプラス(悪くなる)の指揮官は使わない
+   ②臨機射撃で指揮した指揮官は、再射撃・最終防護射撃・防御射撃フェイズで、もう1回だけ、前と同じ部隊(またはその一部)の射撃にだけ指揮を使える。新しい射撃グループは指揮できない */
+function btLdrDirOk(side,L,fIds){if(btCmdOf(side,L)>0)return false;var f=L.fire||'';if(f==='F1'||f==='F2'){if(!L.dirIds||L.dirRe)return false;for(var i=0;i<fIds.length;i++)if(L.dirIds.indexOf(fIds[i])<0)return false;}return true;}
 function btFireMode(u,ph,dist){
   var f=u.fire||'';
   if(ph==='PF')return (f===''||f==='R')?'full':null; /* v1362: ROFを保ったSW/砲は準備射撃フェイズ中にもう一度撃てる(1.2.4.1) */
@@ -30815,7 +30820,8 @@ function btFireEval(fd){
     });
     if(contrib<=0)return;
     // 指揮: このヘクスの統制・非釘付けの指揮官(SWを使っていない者)
-    var L=leaders.filter(function(x){return !x.__usedSW;}).sort(function(a,b){return btCmdOf(s.side,a)-btCmdOf(s.side,b);})[0];
+    var fIds=us.filter(function(u){return btIsInfK(btI(u,s.side).kind)&&btI(u,s.side).kind!=='smc'&&btGO(u)&&btFireMode(u,fd.ph,d);}).map(function(u){return u.id;});
+    var L=leaders.filter(function(x){return !x.__usedSW&&(window.NM_LDRSTRICT===0||btLdrDirOk(s.side,x,fIds));}).sort(function(a,b){return btCmdOf(s.side,a)-btCmdOf(s.side,b);})[0];
     leaders.forEach(function(x){delete x.__usedSW;});
     if(L){ldrParts++;var c=btCmdOf(s.side,L);ldrCmdWorst=(ldrCmdWorst==null)?c:Math.max(ldrCmdWorst,c);ldrUnits.push({s:s,u:L});if(L.cx)cx=true;}
     fp+=contrib;hindMax=Math.max(hindMax,los.hind||0);minDist=Math.min(minDist,d);fireElevMax=Math.max(fireElevMax,BTG.nodes[s.n].elev);
@@ -30919,7 +30925,7 @@ function btFireExec(fd,ev){
   // 射撃済みマーカー
   var mk={PF:'P',DFF:'F1',SFF:'F2',FPF:'F2',FF:'F2',AF:'A'}[fd.ph];
   ev.usedU.forEach(function(x){if(keepROF[x.u.id]){x.u.fire='R';return;}if(fd.ph==='SFF'||fd.ph==='FPF'){x.u.fire='F2';btSWOf(x.s,x.u).forEach(function(w){if(!keepROF[w.id])w.fire='F2';});}else x.u.fire=mk;});
-  ev.ldrUnits.forEach(function(x){x.u.fire=(fd.ph==='SFF'||fd.ph==='FPF')?'F2':mk;});
+  ev.ldrUnits.forEach(function(x){var f0=x.u.fire||'';if(f0===''||f0==='R'||f0==='P'||f0==='A'){x.u.dirIds=ev.usedU.map(function(y){return y.u.id;});x.u.dirRe=0;}else x.u.dirRe=1;x.u.fire=(fd.ph==='SFF'||fd.ph==='FPF')?'F2':mk;}); /* v1603: 指揮した部隊を記録(再使用の制限 3.4) */
   // 残留火力(移動フェイズの臨機射撃)
   if(fd.ph==='DFF'||fd.ph==='SFF'||fd.ph==='FPF'){
     var rfp=ev.fp;ev.mgUsed.forEach(function(m){if(m===malf||keepROF[m.uid])rfp-=m.fp;});
