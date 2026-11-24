@@ -33365,6 +33365,7 @@ function btOverlaySVG0(dispLayout){
   h+=btVehOverlaySVG(dispLayout);
   h+=ghMk; /* v1288 */
   try{h+=btResidSVG(dispLayout);}catch(e){}
+  try{h+=btFireTgtSVG(dispLayout);}catch(e){}
   h+=btSmokeDCOverlaySVG(dispLayout);
   // 射撃の目標
   var ofT=(BT.ofire&&BT.ofire.tgtN!=null)?BT.ofire.tgtN:((BT.mgfire&&BT.mgfire.tgtN!=null)?BT.mgfire.tgtN:null);
@@ -46402,6 +46403,18 @@ function btLegendWrapHTML(){var lg=btLegendHTML();if(!lg)return '';return '<div 
   try{var st=document.createElement('style');st.textContent='.nmHvHide{transition:opacity .18s}.nmHvHide.nmHvOn{opacity:.06!important}';document.head.appendChild(st);}catch(e){}})();
 /* v1596(ダルマ「残留のマーカーは出ない？」→案2): 残留火力を、カウンターより上に残留火力カウンターの画像+数字で描く(凡例にも出す)。NM_RESID=1:赤い札を上に 3:ヘクス塗り+札 0:従来(カウンターの下の小さな札) */
 if(window.NM_RESID==null)window.NM_RESID=2;
+/* sample-ftgt(ダルマ「射撃可能相手部隊をMAP上でわかるようにする」): 射撃の準備中(撃つ部隊を選んだ・目標はまだ)、撃てる敵のヘクスを地図で示す。NM_FTGT=1:赤い点線の枠+「火力→列」 2:照準マーク+火力 3:赤い塗り+火力と効果の見込み。0=出さない */
+var BT_FTGT_C=null;
+function btFireTgtList(){var f=BT.fire;if(!f||!f.parts||!f.parts.length)return [];var key=JSON.stringify([f.side,f.ph,f.parts,BT.ph,BT.turn,BT.stacks.length,(BT.mv&&BT.mv.path)||0]);if(BT_FTGT_C&&BT_FTGT_C.k===key)return BT_FTGT_C.v;
+  var seen={},out=[];BT.stacks.forEach(function(e){if(e.side===f.side||e.n==null||e.n<0||seen[e.n])return;seen[e.n]=1;try{var ev=btFireEval({side:f.side,ph:f.ph,parts:f.parts,tgtN:e.n,fast:true});if(ev&&ev.ok){var p=0;try{var ds=btFireDist(ev);p=(ds.KIA+ds.K+ds.MC+ds.PTC*0.4)/36;}catch(x){}out.push({n:e.n,fp:ev.fp,col:ev.colLbl,drm:ev.drm,p:p});}}catch(x){}});
+  BT_FTGT_C={k:key,v:out};return out;}
+function btFireTgtSVG(dl){var v=window.NM_FTGT==null?1:window.NM_FTGT;if(!v||!BT.fire||BT.fire.tgtN!=null)return '';if(BT.app&&BT.fire.side!==btHuman())return '';var L=btFireTgtList();if(!L.length)return '';var h='<g style="pointer-events:none">',R=btHexR();
+  L.forEach(function(t){var d=btDispPt(t.n,dl),g='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
+    if(v===1){h+='<polygon points="'+btHexPoly(t.n,dl,0.95)+'" fill="none" stroke="#ff3030" stroke-width="4" stroke-dasharray="9 5"/>';g+='<rect x="'+(d.x-34)+'" y="'+(d.y+R*0.5)+'" width="68" height="18" rx="4" fill="#000d" stroke="#ff5050"/><text x="'+d.x+'" y="'+(d.y+R*0.5+13)+'" text-anchor="middle" font-size="12" font-weight="bold" fill="#ffb0a0" font-family="AppFont,AppJP,monospace">FP'+t.fp+'→'+t.col+'</text>';}
+    else if(v===2){var r=R*0.55;g+='<circle cx="'+d.x+'" cy="'+d.y+'" r="'+r+'" fill="none" stroke="#ff3030" stroke-width="3"/><path d="M'+(d.x-r-8)+' '+d.y+'H'+(d.x-r+8)+'M'+(d.x+r-8)+' '+d.y+'H'+(d.x+r+8)+'M'+d.x+' '+(d.y-r-8)+'V'+(d.y-r+8)+'M'+d.x+' '+(d.y+r-8)+'V'+(d.y+r+8)+'" stroke="#ff3030" stroke-width="3"/><rect x="'+(d.x-20)+'" y="'+(d.y+r+6)+'" width="40" height="17" rx="4" fill="#b01818"/><text x="'+d.x+'" y="'+(d.y+r+19)+'" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff" font-family="AppFont,AppJP,monospace">'+t.fp+'</text>';}
+    else{h+='<polygon points="'+btHexPoly(t.n,dl,0.95)+'" fill="#ff2020" fill-opacity="0.25" stroke="#ff4040" stroke-width="2.5"/>';g+='<rect x="'+(d.x-40)+'" y="'+(d.y+R*0.45)+'" width="80" height="30" rx="4" fill="#000d" stroke="#ff5050"/><text x="'+d.x+'" y="'+(d.y+R*0.45+13)+'" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#ffb0a0" font-family="AppFont,AppJP,monospace">FP'+t.fp+'→'+t.col+' '+(t.drm>=0?'+':'')+t.drm+'</text><text x="'+d.x+'" y="'+(d.y+R*0.45+26)+'" text-anchor="middle" font-size="11" fill="#ffd060" font-family="AppFont,AppJP,monospace">'+T('効果')+' '+Math.round(t.p*100)+'%</text>';}
+    h+=g+'</g>';});
+  return h+'</g>';}
 function btResidSVG(dl){var v=window.NM_RESID;if(!v||!BT.resid)return '';var h='';
   Object.keys(BT.resid).forEach(function(k){var fp=BT.resid[k];if(!fp)return;var n=+k,d=btDispPt(n,dl),R=btHexR();
     if(v===3)h+='<polygon points="'+btHexPoly(n,dl,0.96)+'" fill="#ff2020" fill-opacity="0.22" stroke="#ff5050" stroke-width="3" stroke-dasharray="7 4" style="pointer-events:none"/>';
