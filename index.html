@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1619</title>
+<title>ASL SKシリーズv1620</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1619">
+<meta property="og:title" content="ASL SKシリーズv1620">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.819"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.820"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1620="v1620(バグ修正 ダルマ「勝手にスクロールする」): 指で地図を動かしたあと慣性で流れた分の位置を保存していなかったため、次の描き直し(マップ同期・タップなど)で前の位置へ戻っていた。指・ホイールの操作から2.5秒の間の地図のスクロールを保存する(判定・対戦・AI対戦すべて)。NM_SCRSAVE=0で旧動作";
 var APP_VERSION_HIST_v1619="v1619(ダルマ「ai対戦モード 回復フェイズがわかりにくい」「AI の回復も同じ画面で表示」「実施」): 回復フェイズをMC・PTCのパネルと同じ形に。自分の回復は1ユニット1行で回復のしかた(指揮官/自己回復、成功率つき)を選び🎲で振る。ダイスが揺れて止まり、出目・修正後・回復/失敗を行に出す。SW・車両の修理も同じパネル。アプリの回復も同じ形のパネルで実際の出目を1行ずつ揺らして見せ、確認▶で閉じる(閉じるまでフェイズを進めない)。マップの吹き出しと結果カードは出さない。NM_RPH_STY='B'で旧画面";
 var APP_VERSION_HIST_v1618="v1618(ダルマ「ai対戦モード s21 対応実施」): S21 Clash at Borisovka をAI対戦に。盤t+v縦置き・北が上の戦車戦。ソ連=T1北端から進入(MP半分使用済み)、独=T1南端から進入、ソ連先攻、5ターン。勝利=撃破したAFVの数の比べ合い(ソ連AFVが南端から出れば独AFV1両撃破とみなす)。南端の退出ボタン・タスクバーは撃破数。アプリのソ連は南端へ向かい出られれば出る。アプリの車両は敵が14ヘクスより遠くても進入・接近する(独が入れず除去されていた)。撃破された車両に停止の記録を出さない";
 var APP_VERSION_HIST_v1617="v1617(ダルマ「S29 米軍の今回の作戦を組み込む」): S29でアプリが米軍の時、ダルマの勝った作戦どおりに動く(aiw.plan)。進入時に A=9-2+分隊3+MMG×2(H8→I8の火力拠点→T5 L4→M4→N3→O3)、B=7-0+分隊3(J8→K8→L6→L5→M3→N2→Q2)、C=8-1+分隊2(J9→K9→L8→M8→O7→O6→O5→P4)、D=8-0+分隊3(W8→V8→W7→V6→T4→S4→S3→R3)を組み、ターンごとに移動フェイズの待機ヘクスへ動いて突撃フェイズに目標へ入る。目標に敵がいれば隣で待って白兵戦。着いたら留まって撃つ。NM_S29PLAN=0で旧動作";
@@ -46101,6 +46102,9 @@ function nmViewTemSVG(o,dl,VT){var h='';
     else{var g='';if(v>0)g+=pill(d.x-9,d.y-6,'+'+v,'#ffd040','#1a1400',12);if(tm)g+=pill(d.x+9,d.y+10,'T'+(tm>0?'+':'')+tm,'#1d5f7a','#e8f8ff',11);h+=rot(d,g);}});
   return h;}
 function btRmViewCount(o){var c0=0,c1=0;Object.keys(o.m).forEach(function(k){var v=o.m[k];if(v===0)c0++;else if(v>0)c1++;});o.c0=c0;o.c1=c1;}
+/* v1620(バグ修正 ダルマ「勝手にスクロールする」): 指で地図を動かしたあと慣性で流れた分の位置を保存していなかったため、次の描き直し(同期・タップ)で前の位置に戻っていた。指・ホイールの操作から2.5秒の間の地図のスクロールは保存する。NM_SCRSAVE=0で旧動作 */
+(function(){if(window.__nmScrS)return;window.__nmScrS=1;var t0=0;['touchstart','touchmove','touchend','wheel','pointerdown','pointermove'].forEach(function(k){document.addEventListener(k,function(e){if(k==='pointermove'&&!e.buttons&&e.pointerType==='mouse')return;var t=e.target;if(t&&t.closest&&t.closest('#losScrollWrap'))t0=Date.now();},{capture:true,passive:true});});
+  document.addEventListener('scroll',function(e){var t=e.target;if(window.NM_SCRSAVE===0||!t||t.id!=='losScrollWrap'||Date.now()-t0>2500)return;try{S_LOS.scrollLeft=t.scrollLeft;S_LOS.scrollTop=t.scrollTop;}catch(x){}},{capture:true,passive:true});})();
 (function(){if(window.__nmScrT)return;window.__nmScrT=1;var mk=function(e){var t=e.target;if(t&&t.closest&&t.closest('#losScrollWrap'))window.NM_MAP_SCRT=Date.now();};['touchstart','touchmove','wheel','pointerdown','pointermove'].forEach(function(k){document.addEventListener(k,function(e){if(k==='pointermove'&&!e.buttons&&e.pointerType==='mouse')return;mk(e);},{capture:true,passive:true});});document.addEventListener('scroll',function(e){if(e.target&&e.target.id==='losScrollWrap')window.NM_MAP_SCRT=Date.now();},{capture:true,passive:true});})();
 function btRmViewRefine(o){
   if(BT_RMS!==o||!o.todo)return;
@@ -56648,10 +56652,15 @@ var st=document.createElement('style');st.textContent='html.bt-mapfull .los-comp
   +'html.btSzDn #btOffC{padding:4px 5px 5px!important}html.btSzDn #btOffC b,html.btSzDn #btOffC div{font-size:10px!important}html.btSzDn #btOffC div[onclick]{gap:4px!important;padding:2px!important;margin:3px 0!important}'
   /* v1594(ダルマ「判定モード 対戦モード 共に実施」→LOSの札): LOSの札(判定・対戦の nmAbBd、AI対戦の btLosCd)を小さく */
   +'html.btSzDn #nmAbBd,html.btSzDn #btLosCd{font-size:10px!important;line-height:1.2!important;padding:1px 4px!important;gap:3px!important}'
-  +'html.btSzDn #nmAbBd button,html.btSzDn #btLosCd button{font-size:10px!important;min-height:20px!important;padding:1px 5px!important}html.btSzDn #nmAbBd button svg{width:12px!important;height:12px!important}html.btSzDn #nmAbBd .nmAbGrip,html.btSzDn #btLosCd .nmAbGrip{font-size:11px!important;padding:0 2px!important}';
+  +'html.btSzDn #nmAbBd button,html.btSzDn #btLosCd button{font-size:10px!important;min-height:20px!important;padding:1px 5px!important}html.btSzDn #nmAbBd button svg{width:12px!important;height:12px!important}html.btSzDn #nmAbBd .nmAbGrip,html.btSzDn #btLosCd .nmAbGrip{font-size:11px!important;padding:0 2px!important}'
+  /* sample-absz(ダルマ「両モードab判定バーを少し大きくするサンプルx3」): NM_ABSZ=1/2/3 */
+  +'html.btSzDn.btAbSz1 #nmAbBd,html.btSzDn.btAbSz1 #btLosCd{font-size:12px!important;padding:2px 5px!important;gap:4px!important}html.btSzDn.btAbSz1 #nmAbBd button,html.btSzDn.btAbSz1 #btLosCd button{font-size:12px!important;min-height:24px!important;padding:1px 6px!important}html.btSzDn.btAbSz1 #nmAbBd button svg{width:14px!important;height:14px!important}html.btSzDn.btAbSz1 #nmAbBd .nmAbGrip,html.btSzDn.btAbSz1 #btLosCd .nmAbGrip{font-size:13px!important}'
++'html.btSzDn.btAbSz2 #nmAbBd,html.btSzDn.btAbSz2 #btLosCd{font-size:13px!important;padding:3px 6px!important;gap:5px!important}html.btSzDn.btAbSz2 #nmAbBd button,html.btSzDn.btAbSz2 #btLosCd button{font-size:13px!important;min-height:28px!important;padding:1px 7px!important}html.btSzDn.btAbSz2 #nmAbBd button svg{width:16px!important;height:16px!important}html.btSzDn.btAbSz2 #nmAbBd .nmAbGrip,html.btSzDn.btAbSz2 #btLosCd .nmAbGrip{font-size:15px!important}'
++'html.btSzDn.btAbSz3 #nmAbBd,html.btSzDn.btAbSz3 #btLosCd{font-size:15px!important;padding:4px 8px!important;gap:6px!important}html.btSzDn.btAbSz3 #nmAbBd button,html.btSzDn.btAbSz3 #btLosCd button{font-size:15px!important;min-height:32px!important;padding:1px 8px!important}html.btSzDn.btAbSz3 #nmAbBd button svg{width:18px!important;height:18px!important}html.btSzDn.btAbSz3 #nmAbBd .nmAbGrip,html.btSzDn.btAbSz3 #btLosCd .nmAbGrip{font-size:17px!important}'
+  ;
  (document.head?document.head.appendChild(st3):document.addEventListener('DOMContentLoaded',function(){document.head.appendChild(st3);}));
  if(window.NM_CMDC==null)window.NM_CMDC=3;if(window.NM_DKC==null)window.NM_DKC=5; /* v1559: ダルマ選択 3と3 → v1568: 操作バーは5(下のバー2Bと同じ形) */
- function up(){var v=window.NM_CMDC||0,w=window.NM_DKC||0,r=document.documentElement;[1,2,3,4,5,6].forEach(function(k){r.classList.toggle('btCmc'+k,v===k);r.classList.toggle('btDkc'+k,w===k);});r.classList.toggle('btLegSty',window.NM_LEGSTY!==0);r.classList.toggle('btSzDn',window.NM_SZDN!==0);}
+ function up(){var v=window.NM_CMDC||0,w=window.NM_DKC||0,r=document.documentElement;[1,2,3,4,5,6].forEach(function(k){r.classList.toggle('btCmc'+k,v===k);r.classList.toggle('btDkc'+k,w===k);});r.classList.toggle('btLegSty',window.NM_LEGSTY!==0);r.classList.toggle('btSzDn',window.NM_SZDN!==0);[1,2,3].forEach(function(k){r.classList.toggle('btAbSz'+k,window.NM_ABSZ===k);});}
  setInterval(up,500);setTimeout(up,100);})();
 </script>
 </body>
