@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1572</title>
+<title>ASL SKシリーズv1573</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1572">
+<meta property="og:title" content="ASL SKシリーズv1573">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.772"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.773"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1573="v1573(AI対戦: 射撃のライン・攻撃実施時の射線を「弾が飛ぶ」に";
 var APP_VERSION_HIST_v1572="v1572(対戦の準備の札: 支配の数を数え直す・下のバーと同じ表記";
 var APP_VERSION_HIST_v1571="v1571(S29: 米のアプリを強化(通り道の危険・準備射撃・射撃グループ・狙いを絞る・終盤P1)";
 var APP_VERSION_HIST_v1570="v1570(AI対戦: 防御射撃のタスクバーは撃つ側(防御側)を表示";
@@ -33145,6 +33146,30 @@ function btDispPt(n,dispLayout){var N=BTG.nodes[n];
   // v302(ダルマ指摘「数値が見えにくい」): 盤端の半ヘクスは中心が盤の縁の上にあり、円・数字・カウンターが半分切れる。表示位置だけ盤の内側へ寄せる(内側の隣接ヘクスの平均へ70%)
   if(N.half&&N.nb.length){var ix=0,iy=0;N.nb.forEach(function(m){ix+=BTG.nodes[m].x;iy+=BTG.nodes[m].y;});ix/=N.nb.length;iy/=N.nb.length;var hk=(window.BT_HALFK!=null?BT_HALFK:0.33);return losCanonicalToDisplay(N.x+(ix-N.x)*hk,N.y+(iy-N.y)*hk,dispLayout);}
   return losCanonicalToDisplay(N.x,N.y,dispLayout);}
+/* v1573(ダルマ「射撃時のラインのエフェクトや色を変えたい」→4を実施。既定4、0=従来) 1=曳光弾(流れる点線) 2=レーザー(光る線) 3=太い矢印 4=弾が飛ぶ 5=控えめ(白い線と照準) */
+function btFireLnSVG(v,dl){var t=btDispPt(BT.fire.tgtN,dl),h='',HH=LOS_GEO_HEX_H||60,ps=[];
+  BT.fire.parts.forEach(function(p){var s=btStackById(p.sid);if(!s||s.n==null||s.n<0)return;ps.push(btDispPt(s.n,dl));});
+  var ln=function(a,st){return '<line x1="'+a.x+'" y1="'+a.y+'" x2="'+t.x+'" y2="'+t.y+'" '+st+'/>';};
+  if(v===1){h+='<defs><filter id="flGl1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5"/></filter></defs>';
+    ps.forEach(function(a){h+=ln(a,'stroke="#000" stroke-opacity=".5" stroke-width="7" stroke-linecap="round"')+ln(a,'stroke="#ffb020" stroke-width="5" stroke-dasharray="14 10" stroke-linecap="round" filter="url(#flGl1)" opacity=".8"')+ln(a,'stroke="#fff3a0" stroke-width="2.5" stroke-dasharray="14 10" stroke-linecap="round"><animate attributeName="stroke-dashoffset" from="48" to="0" dur=".6s" repeatCount="indefinite"/></line');});
+    h+='<g transform="translate('+t.x+' '+t.y+')"><circle r="26" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="6"/><circle r="26" fill="none" stroke="#ffb020" stroke-width="3" stroke-dasharray="20 7"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="4s" repeatCount="indefinite"/></circle></g>';}
+  else if(v===2){h+='<defs><filter id="flGl2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter></defs>';
+    ps.forEach(function(a){h+=ln(a,'stroke="#ff2040" stroke-width="10" filter="url(#flGl2)" opacity=".75"')+ln(a,'stroke="#ff6070" stroke-width="3.5"')+ln(a,'stroke="#fff" stroke-width="1.2" opacity=".9"');h+='<circle cx="'+a.x+'" cy="'+a.y+'" r="7" fill="#ff6070" stroke="#fff" stroke-width="1.5"/>';});
+    h+='<circle cx="'+t.x+'" cy="'+t.y+'" r="22" fill="#ff2040" fill-opacity=".18" stroke="#ff6070" stroke-width="3"/><circle cx="'+t.x+'" cy="'+t.y+'" r="22" fill="none" stroke="#ff2040" stroke-width="3"><animate attributeName="r" from="22" to="40" dur="1.2s" repeatCount="indefinite"/><animate attributeName="opacity" from="1" to="0" dur="1.2s" repeatCount="indefinite"/></circle>';}
+  else if(v===3){var pts='';try{pts=losHexPolygonPoints(t.x,t.y,losBoardRotById(BTG.nodes[BT.fire.tgtN].b));}catch(e){}
+    if(pts)h+='<polygon points="'+pts+'" fill="#ff3020" fill-opacity=".28" stroke="#ff3020" stroke-width="3"/>';
+    ps.forEach(function(a){var dx=t.x-a.x,dy=t.y-a.y,L=Math.sqrt(dx*dx+dy*dy)||1,ux=dx/L,uy=dy/L,nx=-uy,ny=ux,w=7,hw=16,hl=26,s0=HH*0.28,e0=L-HH*0.3;
+      var P=function(d,o){return (a.x+ux*d+nx*o).toFixed(1)+','+(a.y+uy*d+ny*o).toFixed(1);};
+      h+='<polygon points="'+[P(s0,w),P(e0-hl,w),P(e0-hl,hw),P(e0,0),P(e0-hl,-hw),P(e0-hl,-w),P(s0,-w)].join(' ')+'" fill="#ff8a20" fill-opacity=".85" stroke="#2a1000" stroke-width="2" stroke-linejoin="round"/>';});}
+  else if(v===4){ps.forEach(function(a,i){h+=ln(a,'stroke="#000" stroke-opacity=".35" stroke-width="3" stroke-dasharray="2 6" stroke-linecap="round"');
+      for(var k=0;k<3;k++)h+='<circle r="4.5" fill="#ffe070" stroke="#7a3a00" stroke-width="1.5"><animateMotion dur=".9s" begin="'+(k*0.3)+'s" repeatCount="indefinite" path="M'+a.x+','+a.y+' L'+t.x+','+t.y+'"/></circle>';
+      h+='<circle cx="'+a.x+'" cy="'+a.y+'" r="9" fill="#ffd060" fill-opacity=".9" stroke="#7a3a00" stroke-width="2"><animate attributeName="r" values="7;11;7" dur=".3s" repeatCount="indefinite"/></circle>';});
+    h+='<g stroke="#ff3030" stroke-width="3" fill="none"><circle cx="'+t.x+'" cy="'+t.y+'" r="20"/><line x1="'+(t.x-30)+'" y1="'+t.y+'" x2="'+(t.x-12)+'" y2="'+t.y+'"/><line x1="'+(t.x+12)+'" y1="'+t.y+'" x2="'+(t.x+30)+'" y2="'+t.y+'"/><line x1="'+t.x+'" y1="'+(t.y-30)+'" x2="'+t.x+'" y2="'+(t.y-12)+'"/><line x1="'+t.x+'" y1="'+(t.y+12)+'" x2="'+t.x+'" y2="'+(t.y+30)+'"/></g>';}
+  else{var sc=BT_SIDE_COL[BT.fire.side]||'#fff';
+    ps.forEach(function(a){h+=ln(a,'stroke="#000" stroke-opacity=".6" stroke-width="4.5" stroke-linecap="round"')+ln(a,'stroke="#f4f6f8" stroke-width="2" stroke-linecap="round"');h+='<circle cx="'+a.x+'" cy="'+a.y+'" r="'+(HH*0.42)+'" fill="none" stroke="'+sc+'" stroke-width="3"/>';});
+    var tk='';[0,90,180,270].forEach(function(dg){var r=dg*Math.PI/180,c=Math.cos(r),s2=Math.sin(r);tk+='<line x1="'+(t.x+c*14)+'" y1="'+(t.y+s2*14)+'" x2="'+(t.x+c*28)+'" y2="'+(t.y+s2*28)+'"/>';});
+    h+='<g stroke="#000" stroke-opacity=".6" stroke-width="6" stroke-linecap="round">'+tk+'</g><g stroke="#ff4040" stroke-width="3" stroke-linecap="round">'+tk+'</g><circle cx="'+t.x+'" cy="'+t.y+'" r="3.5" fill="#ff4040" stroke="#000" stroke-width="1"/>';}
+  return h;}
 function btBldgOverlaySVG(dispLayout){
   if(!btActive()||!BT.ctl||!btGraphReady())return '';
   var h='';
@@ -33235,7 +33260,7 @@ function btOverlaySVG0(dispLayout){
       D.path.forEach(function(n){if(n!==D.n&&btInterdictors(n,rc.s.side)){var q=btDispPt(n,dispLayout);h+='<text x="'+q.x+'" y="'+(q.y+6)+'" text-anchor="middle" font-size="18" font-weight="900" fill="#ff5050" stroke="#000" stroke-width="0.8">!</text>';}});
       var d=btDispPt(D.n,dispLayout);h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="16" fill="'+(D.rec?'#ffe040':'#60e070')+'" fill-opacity="0.9" stroke="#000" stroke-width="1.5"/><text x="'+d.x+'" y="'+(d.y+5)+'" text-anchor="middle" font-size="13" font-weight="800" fill="#000">'+(D.rec?'★':'')+D.mf+'</text>';});
       var ST0=btRtpSteps(rc);ST0.steps.forEach(function(x){if(x.dest)return;var d=btDispPt(x.n,dispLayout);var it=btInterdictors(x.n,rc.s.side);h+='<circle cx="'+d.x+'" cy="'+d.y+'" r="11" fill="#ffffff" fill-opacity="0.85" stroke="'+(it?'#ff3030':'#000')+'" stroke-width="'+(it?3:1.5)+'"/><text x="'+d.x+'" y="'+(d.y+4)+'" text-anchor="middle" font-size="11" font-weight="800" fill="#000">'+x.mf+'</text>';});}}}
-  if(BT.fire&&BT.fire.tgtN!=null){var t=btDispPt(BT.fire.tgtN,dispLayout);h+='<circle cx="'+t.x+'" cy="'+t.y+'" r="24" fill="none" stroke="#ff3030" stroke-width="4"/>';
+  var FLV=window.NM_FIRELN==null?4:window.NM_FIRELN;if(BT.fire&&BT.fire.tgtN!=null&&FLV){h+=btFireLnSVG(FLV,dispLayout);}else if(BT.fire&&BT.fire.tgtN!=null){var t=btDispPt(BT.fire.tgtN,dispLayout);h+='<circle cx="'+t.x+'" cy="'+t.y+'" r="24" fill="none" stroke="#ff3030" stroke-width="4"/>';
     BT.fire.parts.forEach(function(p){var s=btStackById(p.sid);if(!s||s.n==null||s.n<0)return;var a=btDispPt(s.n,dispLayout);h+='<line x1="'+a.x+'" y1="'+a.y+'" x2="'+t.x+'" y2="'+t.y+'" stroke="#ff3030" stroke-width="3" stroke-dasharray="8 5"/>';});}
   if(BT.pend==='react'&&BT.reactWho&&BT.mv){ // v322(ダルマ指示「反応の確認のクローズアップ 点線で結ぶ」): 撃てるスタック(選んでいればそのスタックだけ)と移動中のスタックを点線で結ぶ
     var rkM=btStackById(BT.mv.sid);
@@ -46894,6 +46919,22 @@ function btFxOutcome(b,after){
   if(a.wd&&!b.wd)return {t:'負傷',c:'#ffb040'};
   return null;
 }
+/* v1573(ダルマ「攻撃実施時のライン」→4を実施。既定4、0=従来): 演出の射線 window.NM_FXLN 1=曳光弾 2=レーザー(撃つ側から伸びる) 3=太い矢印が伸びる 4=弾が飛ぶ 5=控えめ */
+function btFxLnSVG(v,fps,tp){var h='',ln=function(p,st){return '<line x1="'+p.x+'" y1="'+p.y+'" x2="'+tp.x+'" y2="'+tp.y+'" '+st+'/>';},L=function(p){var dx=tp.x-p.x,dy=tp.y-p.y;return Math.sqrt(dx*dx+dy*dy)||1;};
+  if(v===1){h+='<defs><filter id="fxG1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter></defs>';
+    fps.forEach(function(p){h+=ln(p,'stroke="#000" stroke-opacity=".5" stroke-width="8" stroke-linecap="round"')+ln(p,'stroke="#ffb020" stroke-width="7" stroke-dasharray="16 10" filter="url(#fxG1)" opacity=".85"')+ln(p,'stroke="#fff3a0" stroke-width="3" stroke-dasharray="16 10" stroke-linecap="round"><animate attributeName="stroke-dashoffset" from="52" to="0" dur=".45s" repeatCount="indefinite"/></line')+'<circle cx="'+p.x+'" cy="'+p.y+'" r="14" fill="#ffd060" fill-opacity=".35" stroke="#ffb020" stroke-width="3"/>';});}
+  else if(v===2){h+='<defs><filter id="fxG2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter></defs>';
+    fps.forEach(function(p){var l=L(p);h+=ln(p,'stroke="#ff2040" stroke-width="12" filter="url(#fxG2)" opacity=".8" stroke-dasharray="'+l+' '+l+'"><animate attributeName="stroke-dashoffset" from="'+l+'" to="0" dur=".35s" fill="freeze"/></line')+ln(p,'stroke="#fff" stroke-width="2.5" stroke-dasharray="'+l+' '+l+'"><animate attributeName="stroke-dashoffset" from="'+l+'" to="0" dur=".35s" fill="freeze"/></line')+'<circle cx="'+p.x+'" cy="'+p.y+'" r="8" fill="#ff6070" stroke="#fff" stroke-width="2"/>';});
+    h+='<circle cx="'+tp.x+'" cy="'+tp.y+'" r="20" fill="none" stroke="#ff2040" stroke-width="4"><animate attributeName="r" from="20" to="70" dur=".9s" repeatCount="indefinite"/><animate attributeName="opacity" from="1" to="0" dur=".9s" repeatCount="indefinite"/></circle>';}
+  else if(v===3){fps.forEach(function(p){var dx=tp.x-p.x,dy=tp.y-p.y,l=L(p),ux=dx/l,uy=dy/l,nx=-uy,ny=ux,w=9,hw=20,hl=30,e0=l-34;var P=function(d,o){return (p.x+ux*d+nx*o).toFixed(1)+','+(p.y+uy*d+ny*o).toFixed(1);};
+      h+='<g style="transform-origin:'+p.x+'px '+p.y+'px"><animateTransform attributeName="transform" type="scale" from="0.05" to="1" dur=".35s" fill="freeze" additive="sum"/><polygon points="'+[P(20,w),P(e0-hl,w),P(e0-hl,hw),P(e0,0),P(e0-hl,-hw),P(e0-hl,-w),P(20,-w)].join(' ')+'" fill="#ff8a20" fill-opacity=".9" stroke="#2a1000" stroke-width="2.5" stroke-linejoin="round"/></g>';});}
+  else if(v===4){fps.forEach(function(p){h+=ln(p,'stroke="#000" stroke-opacity=".35" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"');
+      for(var k=0;k<4;k++)h+='<circle r="6" fill="#ffe070" stroke="#7a3a00" stroke-width="2"><animateMotion dur=".6s" begin="'+(k*0.15)+'s" repeatCount="indefinite" path="M'+p.x+','+p.y+' L'+tp.x+','+tp.y+'"/></circle>';
+      h+='<circle cx="'+p.x+'" cy="'+p.y+'" r="12" fill="#fff6c0" stroke="#ff9a20" stroke-width="3"><animate attributeName="r" values="9;17;9" dur=".2s" repeatCount="indefinite"/></circle>';});}
+  else{fps.forEach(function(p){h+=ln(p,'stroke="#000" stroke-opacity=".6" stroke-width="5" stroke-linecap="round"')+ln(p,'stroke="#f4f6f8" stroke-width="2.2" stroke-linecap="round"')+'<circle cx="'+p.x+'" cy="'+p.y+'" r="14" fill="none" stroke="#f4f6f8" stroke-width="2.5"/>';});
+    var tk='';[0,90,180,270].forEach(function(dg){var r=dg*Math.PI/180,c=Math.cos(r),s2=Math.sin(r);tk+='<line x1="'+(tp.x+c*16)+'" y1="'+(tp.y+s2*16)+'" x2="'+(tp.x+c*32)+'" y2="'+(tp.y+s2*32)+'"/>';});
+    h+='<g stroke="#000" stroke-opacity=".6" stroke-width="7" stroke-linecap="round">'+tk+'</g><g stroke="#ff4040" stroke-width="3.5" stroke-linecap="round">'+tk+'</g>';}
+  return h;}
 function btFxNext(){
   if(BT_FX_CUR||!BT_FX_Q.length)return;
   var e=BT_FX_Q.shift();BT_FX_CUR=e;
@@ -46918,7 +46959,7 @@ function btFxNext(){
   // 地図: 射線と着弾
   var tp=btFxScreenPt(e.tgtN),fps=(e.from||[]).map(btFxScreenPt).filter(Boolean);
   var svg='<svg class="fxMap" width="'+innerWidth+'" height="'+innerHeight+'" style="position:absolute;left:0;top:0;pointer-events:none"><defs><radialGradient id="fxBst"><stop offset="0" stop-color="#fff6c0"/><stop offset=".45" stop-color="#ff9a20" stop-opacity=".9"/><stop offset="1" stop-color="#ff3000" stop-opacity="0"/></radialGradient></defs>';
-  if(tp){fps.forEach(function(p){svg+='<line class="fxTr" x1="'+p.x+'" y1="'+p.y+'" x2="'+tp.x+'" y2="'+tp.y+'" stroke="#ffcf40" stroke-width="3" stroke-dasharray="14 10"/><circle cx="'+p.x+'" cy="'+p.y+'" r="16" fill="none" stroke="#ffcf40" stroke-width="3"/>';});
+  if(tp){var FXV=window.NM_FXLN==null?4:window.NM_FXLN;if(FXV)svg+=btFxLnSVG(FXV,fps,tp);else fps.forEach(function(p){svg+='<line class="fxTr" x1="'+p.x+'" y1="'+p.y+'" x2="'+tp.x+'" y2="'+tp.y+'" stroke="#ffcf40" stroke-width="3" stroke-dasharray="14 10"/><circle cx="'+p.x+'" cy="'+p.y+'" r="16" fill="none" stroke="#ffcf40" stroke-width="3"/>';});
     var hitV=!/効果なし|外れ/.test(resLbl);
     svg+='<g class="fxBurst" style="transform-origin:'+tp.x+'px '+tp.y+'px">'+(hitV?'<circle cx="'+tp.x+'" cy="'+tp.y+'" r="40" fill="url(#fxBst)"/>':'')+'<circle cx="'+tp.x+'" cy="'+tp.y+'" r="56" fill="none" stroke="'+(hitV?'#ff7a20':'#8899aa')+'" stroke-width="3" opacity=".75"/></g>';}
   svg+='</svg>';
