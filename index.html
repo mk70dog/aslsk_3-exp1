@@ -46894,6 +46894,22 @@ function btFxOutcome(b,after){
   if(a.wd&&!b.wd)return {t:'負傷',c:'#ffb040'};
   return null;
 }
+/* sample-fxln(ダルマ「攻撃実施時のライン サンプル」): 演出の射線 window.NM_FXLN 1=曳光弾 2=レーザー(撃つ側から伸びる) 3=太い矢印が伸びる 4=弾が飛ぶ 5=控えめ */
+function btFxLnSVG(v,fps,tp){var h='',ln=function(p,st){return '<line x1="'+p.x+'" y1="'+p.y+'" x2="'+tp.x+'" y2="'+tp.y+'" '+st+'/>';},L=function(p){var dx=tp.x-p.x,dy=tp.y-p.y;return Math.sqrt(dx*dx+dy*dy)||1;};
+  if(v===1){h+='<defs><filter id="fxG1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter></defs>';
+    fps.forEach(function(p){h+=ln(p,'stroke="#000" stroke-opacity=".5" stroke-width="8" stroke-linecap="round"')+ln(p,'stroke="#ffb020" stroke-width="7" stroke-dasharray="16 10" filter="url(#fxG1)" opacity=".85"')+ln(p,'stroke="#fff3a0" stroke-width="3" stroke-dasharray="16 10" stroke-linecap="round"><animate attributeName="stroke-dashoffset" from="52" to="0" dur=".45s" repeatCount="indefinite"/></line')+'<circle cx="'+p.x+'" cy="'+p.y+'" r="14" fill="#ffd060" fill-opacity=".35" stroke="#ffb020" stroke-width="3"/>';});}
+  else if(v===2){h+='<defs><filter id="fxG2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter></defs>';
+    fps.forEach(function(p){var l=L(p);h+=ln(p,'stroke="#ff2040" stroke-width="12" filter="url(#fxG2)" opacity=".8" stroke-dasharray="'+l+' '+l+'"><animate attributeName="stroke-dashoffset" from="'+l+'" to="0" dur=".35s" fill="freeze"/></line')+ln(p,'stroke="#fff" stroke-width="2.5" stroke-dasharray="'+l+' '+l+'"><animate attributeName="stroke-dashoffset" from="'+l+'" to="0" dur=".35s" fill="freeze"/></line')+'<circle cx="'+p.x+'" cy="'+p.y+'" r="8" fill="#ff6070" stroke="#fff" stroke-width="2"/>';});
+    h+='<circle cx="'+tp.x+'" cy="'+tp.y+'" r="20" fill="none" stroke="#ff2040" stroke-width="4"><animate attributeName="r" from="20" to="70" dur=".9s" repeatCount="indefinite"/><animate attributeName="opacity" from="1" to="0" dur=".9s" repeatCount="indefinite"/></circle>';}
+  else if(v===3){fps.forEach(function(p){var dx=tp.x-p.x,dy=tp.y-p.y,l=L(p),ux=dx/l,uy=dy/l,nx=-uy,ny=ux,w=9,hw=20,hl=30,e0=l-34;var P=function(d,o){return (p.x+ux*d+nx*o).toFixed(1)+','+(p.y+uy*d+ny*o).toFixed(1);};
+      h+='<g style="transform-origin:'+p.x+'px '+p.y+'px"><animateTransform attributeName="transform" type="scale" from="0.05" to="1" dur=".35s" fill="freeze" additive="sum"/><polygon points="'+[P(20,w),P(e0-hl,w),P(e0-hl,hw),P(e0,0),P(e0-hl,-hw),P(e0-hl,-w),P(20,-w)].join(' ')+'" fill="#ff8a20" fill-opacity=".9" stroke="#2a1000" stroke-width="2.5" stroke-linejoin="round"/></g>';});}
+  else if(v===4){fps.forEach(function(p){h+=ln(p,'stroke="#000" stroke-opacity=".35" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"');
+      for(var k=0;k<4;k++)h+='<circle r="6" fill="#ffe070" stroke="#7a3a00" stroke-width="2"><animateMotion dur=".6s" begin="'+(k*0.15)+'s" repeatCount="indefinite" path="M'+p.x+','+p.y+' L'+tp.x+','+tp.y+'"/></circle>';
+      h+='<circle cx="'+p.x+'" cy="'+p.y+'" r="12" fill="#fff6c0" stroke="#ff9a20" stroke-width="3"><animate attributeName="r" values="9;17;9" dur=".2s" repeatCount="indefinite"/></circle>';});}
+  else{fps.forEach(function(p){h+=ln(p,'stroke="#000" stroke-opacity=".6" stroke-width="5" stroke-linecap="round"')+ln(p,'stroke="#f4f6f8" stroke-width="2.2" stroke-linecap="round"')+'<circle cx="'+p.x+'" cy="'+p.y+'" r="14" fill="none" stroke="#f4f6f8" stroke-width="2.5"/>';});
+    var tk='';[0,90,180,270].forEach(function(dg){var r=dg*Math.PI/180,c=Math.cos(r),s2=Math.sin(r);tk+='<line x1="'+(tp.x+c*16)+'" y1="'+(tp.y+s2*16)+'" x2="'+(tp.x+c*32)+'" y2="'+(tp.y+s2*32)+'"/>';});
+    h+='<g stroke="#000" stroke-opacity=".6" stroke-width="7" stroke-linecap="round">'+tk+'</g><g stroke="#ff4040" stroke-width="3.5" stroke-linecap="round">'+tk+'</g>';}
+  return h;}
 function btFxNext(){
   if(BT_FX_CUR||!BT_FX_Q.length)return;
   var e=BT_FX_Q.shift();BT_FX_CUR=e;
@@ -46918,7 +46934,7 @@ function btFxNext(){
   // 地図: 射線と着弾
   var tp=btFxScreenPt(e.tgtN),fps=(e.from||[]).map(btFxScreenPt).filter(Boolean);
   var svg='<svg class="fxMap" width="'+innerWidth+'" height="'+innerHeight+'" style="position:absolute;left:0;top:0;pointer-events:none"><defs><radialGradient id="fxBst"><stop offset="0" stop-color="#fff6c0"/><stop offset=".45" stop-color="#ff9a20" stop-opacity=".9"/><stop offset="1" stop-color="#ff3000" stop-opacity="0"/></radialGradient></defs>';
-  if(tp){fps.forEach(function(p){svg+='<line class="fxTr" x1="'+p.x+'" y1="'+p.y+'" x2="'+tp.x+'" y2="'+tp.y+'" stroke="#ffcf40" stroke-width="3" stroke-dasharray="14 10"/><circle cx="'+p.x+'" cy="'+p.y+'" r="16" fill="none" stroke="#ffcf40" stroke-width="3"/>';});
+  if(tp){if(window.NM_FXLN)svg+=btFxLnSVG(window.NM_FXLN,fps,tp);else fps.forEach(function(p){svg+='<line class="fxTr" x1="'+p.x+'" y1="'+p.y+'" x2="'+tp.x+'" y2="'+tp.y+'" stroke="#ffcf40" stroke-width="3" stroke-dasharray="14 10"/><circle cx="'+p.x+'" cy="'+p.y+'" r="16" fill="none" stroke="#ffcf40" stroke-width="3"/>';});
     var hitV=!/効果なし|外れ/.test(resLbl);
     svg+='<g class="fxBurst" style="transform-origin:'+tp.x+'px '+tp.y+'px">'+(hitV?'<circle cx="'+tp.x+'" cy="'+tp.y+'" r="40" fill="url(#fxBst)"/>':'')+'<circle cx="'+tp.x+'" cy="'+tp.y+'" r="56" fill="none" stroke="'+(hitV?'#ff7a20':'#8899aa')+'" stroke-width="3" opacity=".75"/></g>';}
   svg+='</svg>';
