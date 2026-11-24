@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1616</title>
+<title>ASL SKシリーズv1617</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1616">
+<meta property="og:title" content="ASL SKシリーズv1617">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.816"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.817"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1617="v1617(ダルマ「S29 米軍の今回の作戦を組み込む」): S29でアプリが米軍の時、ダルマの勝った作戦どおりに動く(aiw.plan)。進入時に A=9-2+分隊3+MMG×2(H8→I8の火力拠点→T5 L4→M4→N3→O3)、B=7-0+分隊3(J8→K8→L6→L5→M3→N2→Q2)、C=8-1+分隊2(J9→K9→L8→M8→O7→O6→O5→P4)、D=8-0+分隊3(W8→V8→W7→V6→T4→S4→S3→R3)を組み、ターンごとに移動フェイズの待機ヘクスへ動いて突撃フェイズに目標へ入る。目標に敵がいれば隣で待って白兵戦。着いたら留まって撃つ。NM_S29PLAN=0で旧動作";
 var APP_VERSION_HIST_v1616="v1616(ダルマ「実施」): 阻止のNMCを射撃のMCと同じパネルに。自分のユニットが潰走で受ける阻止は自分で🎲を振る(付き添いの指揮官も)、AIのユニットが受ける阻止はAIのダイスを確認。NM_RTMC=0で旧動作(自動)。バグ修正: 米軍・英軍・伊軍などの分隊が損耗でHSにならず除去されていた(損耗表にSOV/GERしか無かった)";
 var APP_VERSION_HIST_v1615="v1615(ダルマ「ROFは判定モードのようにわかりやすくする」「実施」): AI対戦のROFを判定モードのように。射撃パネルに使う機関銃ごとのROF(赤○以下でもう一度)・故障B#の札、ROFを保った機関銃のあるスタックに緑の帯「🔁 ROF維持 MMG×2 もう一度撃てる(前の目標)」と「機関銃だけもう一度撃つ」ボタン、臨機射撃では「ROFを捨てて残留火力を残す」(3.3.5)。NM_ROFUI=0で旧表示";
 var APP_VERSION_HIST_v1614="v1614(ダルマ「他も実施」): AI対戦の運搬でPSKのPPを実物カウンターどおり1に(旧2)。NM_PSKPP2=1で旧動作";
@@ -30133,7 +30134,12 @@ var BT_SCFG={
     vic:'req',vicSide:'SOV',vicN:5,bl:'list',
     blList:[['wO3','wP2','wP1'],['wG4','wH3'],['wK5','wL4'],['wK8','wK9'],['wM8','wN7'],['wO5','wO6'],['wO9','wP9'],['wU7','wV6'],['wW7','wX6'],['wX1','wX2']], /* v1560: 盤w の X1-X2 も複数ヘクスの建物(勝利条件の対象) */
     fix:{GER:[['wP1',[/^4-6-7/,1],[/^4-4-7/,1],[/^8-1/,1],[/^HMG/,1]],['wP2',[/^4-6-7/,1],[/^4-4-7/,1],[/^8-0/,1],[/^MMG/,1]],['wO3',[/^4-4-7/,2],[/^7-0/,1]],['wO5',[/^4-6-7/,1],[/^8-0/,1]],['wO6',[/^4-4-7/,1]],['wN7',[/^4-6-7/,1]],['wM8',[/^4-4-7/,1]]]}, /* v1578(ダルマ「私は米軍、クロードが独軍 しっかり作戦立てて」): P1 の建物に6分隊・HMG・MMG・指揮官3人を集める(必須の建物を絶対に渡さない)。O5-O6 は P2・O3 を射界に入れる前哨、N7・M8 は北からの進入を遅らせる。自己対戦(米=v1571のアプリ): 独の勝ち 旧配置 6/10 → 11/12 */
-    aiw:{fort:1,fortCC:1,reqB:9,attRisk:2.5,attPath:0.8,attUrg:0.3,focus:4,fFire:1.5,fDist:2,pathRisk:3,pfW:30,fg3:1,dcGo:5,dcMin:0.2,reqFocusT:6,ccLate:0.1,ccLateT:2,gAdjAtt:3,riskStk:0.5,rallyAI:1,ldrRally:2,replan:1}}, /* v1571(ダルマ「次も同じ戦法でドイツ軍やるから全力で攻略」): 米のアプリ=通り道の臨機射撃の危険(pathRisk)・準備射撃を重く(pfW)・3ヘクスの射撃グループ・狙う建物を絞る(focus)・DCを持って敵の隣へ・T6から P1 だけを狙い白兵戦の基準を下げる。自己対戦(独=籠城のアプリ): 米の勝ち 0/18→約15%、米の支配 平均3.2→5.5棟、独の残りユニット 16→11。 */ /* v1552: 米のアプリは P1 の建物を重く(reqB)・危険を少し受け入れる。自己対戦で唯一 P1 を取れた組み合わせ */
+    aiw:{postMode:'plan',plan:{SOV:[ /* v1617(ダルマ「S29 米軍の今回の作戦を組み込む」): 2026-11-25 ダルマの米軍(勝利 7棟)の動き。[ターン,そのターンの終わりにいるヘクス]。A=9-2+MMG×2の火力拠点(I8から O5 を撃つ)→T5 南へ回り M4→N3→O3、B=7-0 は K8→L5→N2→Q2、C=8-1 は建物伝いに K9→L8→M8→O6→O5→P4、D=8-0 は東を回り V8→V6→S4→S3→R3。目標のヘクスに敵がいれば隣まで行き白兵戦。NM_S29PLAN=0で旧動作 */
+      {nm:'A',ldr:/^9-2/,sq:3,sw:[/^MMG/,/^MMG/],wp:[[1,'wI8','wH8'],[5,'wM4','wL4'],[6,'wN3'],[7,'wO3','wO3']]},
+      {nm:'B',ldr:/^7-0/,sq:3,sw:[],wp:[[1,'wK8','wJ8'],[5,'wL5','wL6'],[6,'wN2','wM3'],[7,'wQ2','wQ2']]},
+      {nm:'C',ldr:/^8-1/,sq:2,sw:[],wp:[[1,'wK9','wJ9'],[3,'wL8'],[4,'wM8'],[5,'wO6','wO7'],[6,'wO5'],[7,'wP4']]},
+      {nm:'D',ldr:/^8-0/,sq:3,sw:[],wp:[[1,'wV8','wW8'],[2,'wV6','wW7'],[5,'wS4','wT4'],[6,'wS3'],[7,'wR3']]}]}, /* [ターン, 突撃で入るヘクス, 移動フェイズの終わりのヘクス(無ければ隣で待って突撃)] */
+    fort:1,fortCC:1,reqB:9,attRisk:2.5,attPath:0.8,attUrg:0.3,focus:4,fFire:1.5,fDist:2,pathRisk:3,pfW:30,fg3:1,dcGo:5,dcMin:0.2,reqFocusT:6,ccLate:0.1,ccLateT:2,gAdjAtt:3,riskStk:0.5,rallyAI:1,ldrRally:2,replan:1}}, /* v1571(ダルマ「次も同じ戦法でドイツ軍やるから全力で攻略」): 米のアプリ=通り道の臨機射撃の危険(pathRisk)・準備射撃を重く(pfW)・3ヘクスの射撃グループ・狙う建物を絞る(focus)・DCを持って敵の隣へ・T6から P1 だけを狙い白兵戦の基準を下げる。自己対戦(独=籠城のアプリ): 米の勝ち 0/18→約15%、米の支配 平均3.2→5.5棟、独の残りユニット 16→11。 */ /* v1552: 米のアプリは P1 の建物を重く(reqB)・危険を少し受け入れる。自己対戦で唯一 P1 を取れた組み合わせ */
   /* v1375(ダルマ「全て本体に入れてから調整」): S42 One More Hedgerow。盤p の A〜L列。独=E〜L列に先に設置(全 MMC を建物・麦畑・果樹園に隠蔽設置できる SSR2)、米=T1 西端から進入、米が先攻。
      SSR1: 生垣のヘクス辺は TEM+2・越えるのに 2+COT。勝利: 終了時、米が G5・J5・J7 を支配 */
   S42:{natB:'USA',nameB:'米軍',colB:'#8a9a3c',
@@ -32045,7 +32051,7 @@ function btReinforce(){
     if(nmMade.length)log.push(BT_SIDE_NAME[att]+' マップタブの編成'+nmMade.join('・')+'のとおりに盤外のスタックを組みました');
     if(att!==BT.app&&!window.BT_SELFPLAY&&inf.u.length){inf.pool=true;BT.stacks.push(inf);BT.sel=inf.id;BT.selU=null;BT.regroup={sid:inf.id,pick:null};}
     else if(att!==BT.app&&!window.BT_SELFPLAY&&nmMade.length){}
-    else btSplitEntry(inf).forEach(function(s){var EP=btAIW().entPost;if(EP&&EP[d.grp]){var m=BTG.nodes.findIndex(function(N){return N.nm===EP[d.grp];});if(m>=0){s.post=m;s.u.forEach(function(u){u.post=m;});}}BT.stacks.push(s);}); /* v1368: 増援の持ち場 */
+    else (btPlanSpec(att)?btPlanEntry(inf,btPlanSpec(att)):btSplitEntry(inf)).forEach(function(s){var EP=btAIW().entPost;if(EP&&EP[d.grp]){var m=BTG.nodes.findIndex(function(N){return N.nm===EP[d.grp];});if(m>=0){s.post=m;s.u.forEach(function(u){u.post=m;});}}BT.stacks.push(s);}); /* v1368: 増援の持ち場 */
     afv.u.forEach(function(u){BT.stacks.push({id:'s'+(++BT.seq),side:att,n:-1,off:d.off,due:BT.turn,u:[u],mel:false,afv:true});});
     log.push(BT_SIDE_NAME[att]+' 増援: '+(d.e?d.e.lbl:{g1:'group1(東端)',g2:'group2(西端)',sovT1:'第71重戦車連隊(北端)'}[d.grp])+' が盤外に待機'+(inf.pool?'(未編成。スタックを組んでください)':''));
   });
@@ -32429,8 +32435,31 @@ function btRoleW(side){ // シナリオの攻撃側は危険を受け入れ、�
   return att?{risk:rk,path:A.attPath,goal:urg}:{risk:A.defRisk,path:A.defPath,goal:1};
 }
 /* v1368: 持ち場のあるスタックの目標。mode 'fall'=敵が postNear 以内に来るか postTurn 以降に持ち場へ下がる / 'town'=townTurn までは持ち場の手前(2〜3ヘクス・遮蔽)で待ち、以降は持ち場(敵がいれば空いている勝利の建物)へ */
+/* v1617(ダルマ「S29 米軍の今回の作戦を組み込む」): シナリオの作戦(aiw.plan)。進入時に作戦どおりの部隊を組み、ターンごとの目標ヘクスへ動く(着いたら留まって撃つ) */
+function btPlanSpec(side){if(window.NM_S29PLAN===0)return null;var A=btAIW();return (A&&A.postMode==='plan'&&A.plan&&A.plan[side])||null;}
+function btPlanNode(h){return BTG.nodes.findIndex(function(N){return N.nm===h;});}
+function btPlanWp(G){var t=null;G.wp.forEach(function(w){if(w[0]<=BT.turn||t==null)t=w;});return t;}
+function btPlanTgt(G){var t=btPlanWp(G);return t?btPlanNode(t[1]):-1;}
+function btPlanEntry(inf,P){var side=inf.side,left=inf.u.slice(),take=function(f){var i=left.findIndex(f);return i>=0?left.splice(i,1)[0]:null;};
+  var gs=P.map(function(G,gi){var g={id:'s'+(++BT.seq),side:side,n:-1,off:inf.off,due:inf.due,u:[],mel:false,plan:gi};
+    var L=take(function(u){return btI(u,side).kind==='smc'&&G.ldr.test(u.nm);});if(L)g.u.push(L);
+    var sqs=[];for(var k=0;k<G.sq;k++){var q=take(function(u){return btI(u,side).kind==='mmc';});if(q){g.u.push(q);sqs.push(q);}}
+    (G.sw||[]).forEach(function(re,k){var w=take(function(u){return btIsSWK(btI(u,side).kind)&&re.test(u.nm);});if(w){var o=sqs.filter(function(q){return !g.u.some(function(x){return x.own===q.id;});})[0]||sqs[0];w.own=o?o.id:null;g.u.push(w);}});
+    return g;});
+  /* 残りの部隊: 歩兵は分隊の少ない作戦の部隊へ、SWは持ち主のいない分隊へ */
+  left.filter(function(u){return btI(u,side).kind!=='mmc'&&!btIsSWK(btI(u,side).kind)||btI(u,side).kind==='mmc';}).forEach(function(u){var g=gs.slice().sort(function(a,b){return a.u.length-b.u.length;})[0];g.u.push(u);});
+  left.filter(function(u){return btIsSWK(btI(u,side).kind);}).forEach(function(w){var g=gs.filter(function(g){return g.u.some(function(q){return btI(q,side).kind==='mmc'&&!g.u.some(function(x){return x.own===q.id;});});})[0]||gs[0];var o=g.u.filter(function(q){return btI(q,side).kind==='mmc'&&!g.u.some(function(x){return x.own===q.id;});})[0]||g.u.filter(function(q){return btI(q,side).kind==='mmc';})[0];w.own=o?o.id:null;g.u.push(w);});
+  gs.forEach(function(g){var t=btPlanTgt(P[g.plan]);g.post=t;g.u.forEach(function(u){u.planI=g.plan;if(btIsInfK(btI(u,side).kind))u.post=t;});});
+  return gs.filter(function(g){return g.u.length;});}
+function btPlanOf(s){var P=btPlanSpec(s.side);if(!P)return null;var u=s.u.filter(function(x){return x.planI!=null&&btIsInfK(btI(x,s.side).kind);})[0];return u?P[u.planI]:null;}
 function btStackPost(s){if(s.post!=null)return s.post;var u=s.u.filter(function(x){return x.post!=null;})[0];return u?u.post:null;}
 function btPostGoal(side,s){var A=btAIW();var P=btStackPost(s);if(P==null||s.n==null)return null;var en=btOpp(side);
+  if(A.postMode==='plan'){var G=btPlanOf(s);if(!G)return null;var tg=btPlanTgt(G);if(tg<0)return null;if(s.n===tg)return {hold:true,tgt:tg};var g3={};
+    if(btPhId()==='MPh'){var W0=btPlanWp(G),mvN=(W0&&W0[0]===BT.turn&&W0[2])?btPlanNode(W0[2]):-1; /* 移動フェイズ: 決めた待機ヘクスへ。無ければ目標の隣で待つ(突撃フェイズに入る) */
+      if(mvN>=0&&!btEnemyAt(mvN,side)){if(s.n===mvN)return {hold:true,tgt:tg};g3[mvN]=20;return {g:g3,tgt:tg};}
+      if(s.n>=0&&btDist(s.n,tg)===1)return {hold:true,tgt:tg};}
+    if(btEnemyAt(tg,side)){BTG.nodes[tg].nb.forEach(function(m){if(!btEnemyAt(m,side))g3[m]=16+(BTG.nodes[m].tem||0);});if(s.n>=0&&g3[s.n])return {hold:true,tgt:tg,cc:true};return {g:g3,tgt:tg};}
+    g3[tg]=20;return {g:g3,tgt:tg};}
   var near=99;if(s.n>=0)BT.stacks.forEach(function(x){if(x.side===en&&x.n!=null&&x.n>=0&&btInf(x).some(btGO))near=Math.min(near,btDist(x.n,s.n));});
   var PU=s.u.filter(function(x){return x.pst;})[0];if(PU){var Q=PU.pst; /* ダルマ指示(S51 rY2): 集合地 go へ集まり、敵の歩兵が near 以内(los なら go へLOSが通る)に来たら fall の建物のうち都合の良い方へ入る */
     if(Q.st===1&&BT.stacks.some(function(x){return x.side===en&&x.n!=null&&x.n>=0&&btInf(x).some(btGO)&&btDist(x.n,Q.go)<=Q.near&&(!Q.los||btLOS(x.n,Q.go,false).ok);}))Q.st=2;
@@ -32447,7 +32476,7 @@ function btAIPlanMoves0(side){
   var W=btRoleW(side);
   var G=btGoalMap(side),F0=btGoalField(side,G),F=F0.map(function(v){return v*W.goal;});
   var plans=[];
-  var fortOnlyPost=btAIW().fort&&btFirst()!==side&&btAIW().postMode; /* v1368: 籠城でも持ち場へ下がる部隊だけは動く */
+  var fortOnlyPost=btAIW().fort&&btFirst()!==side&&btAIW().postMode&&btAIW().postMode!=='plan'; /* v1368: 籠城でも持ち場へ下がる部隊だけは動く */
   if(btAIW().fort&&btFirst()!==side&&!fortOnlyPost)return plans; /* v1351: 守備側は籠城(動かない) */
   var movers=BT.stacks.filter(function(s){
     if(s.side!==side||s.mel||s.afv)return false;
@@ -32557,6 +32586,10 @@ function btAIAdvance0(side){
     var here=(s.n!=null&&s.n>=0)?s.n:null;
     var nbs=here!=null?BTG.nodes[here].nb:BTG.nodes.filter(function(N){return btEntHit(s,N);}).map(function(N){return N.i;});
     if(fortR)nbs=nbs.filter(function(to){return fortR.indexOf(to)>=0;});
+    var PGa=(btAIW().postMode==='plan'&&btPlanOf(s))?btPostGoal(side,s):null; /* v1617: 作戦の目標ヘクス。着いていれば留まる、隣なら入る(敵がいれば白兵戦の判断はいつもどおり) */
+    if(PGa&&PGa.hold&&!PGa.cc)return;
+    if(PGa&&PGa.tgt!=null&&PGa.tgt>=0&&nbs.indexOf(PGa.tgt)>=0&&!btEnemyAt(PGa.tgt,side)){var cP=btAdvanceCheck(s.id,uids,PGa.tgt);if(!cP.err){var eP=btAdvance(s.id,uids,PGa.tgt);if(!eP)logs.push(1);return;}}
+    if(PGa&&PGa.cc)nbs=nbs.filter(function(to){return to===PGa.tgt;});
     var best=null,stay=here!=null?(F[here]+BTG.nodes[here].tem*0.9-btThreatAt(side,here,false,true)*W.risk+btHoldValue(side,s)):-99;
     nbs.forEach(function(to){
       var c=btAdvanceCheck(s.id,uids,to);
