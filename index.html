@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1580</title>
+<title>ASL SKシリーズv1581</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1580">
+<meta property="og:title" content="ASL SKシリーズv1581">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -1076,7 +1076,7 @@ html[data-full="1"] #hdrHotFull{box-shadow:0 0 8px 3px rgba(60,255,120,.7)}
     <button class="nb" id="nb-rout" onclick="NAVTAB('rout')">潰走/阻止</button>
     <button class="nb" id="nb-aphcc" onclick="NAVTAB('aphcc')">突撃/白兵戦</button>
     <button class="nb" id="nb-mc" onclick="NAVTAB('mc')">士気/損耗</button>
-    <button class="nb" id="nb-ref" onclick="NAVTAB('ref')">早見表</button>
+    <button class="nb" id="nb-ref" onclick="NAVTAB('ref')">リファレンス</button>
     <button class="nb" id="nb-unit" onclick="NAVTAB('unit')">ユニット</button>
     <button class="nb" id="nb-scen" onclick="NAVTAB('scen')">シナリオ</button>
     <button class="nb" id="nb-los" onclick="NAVTAB('los')">メインマップ</button>
@@ -5936,7 +5936,7 @@ var I18N_EN={
   "指揮官は自分のMCに合格すると、同じヘクスの他のユニットに指揮修正を与える(自分には適用しない)":"A leader who passes his MC applies his modifier to other units in the hex, not to himself.",
   "指揮官が除去されるとLLMC、混乱するとLLTC。マイナスの指揮修正はプラスとして加える":"A leader eliminated causes an LLMC, a leader broken an LLTC; a negative modifier is added instead of subtracted.",
   "SMCの損耗は負傷：dr1〜4で軽傷(士気・指揮修正が1悪化、3MF、IPC0)、5〜6で除去。再負傷は+1":"Casualty Reduction wounds a SMC: dr 1–4 light wound (morale and modifier −1, 3 MF, IPC 0), 5–6 eliminated; +1 if already wounded.",
-  "早見表":"Reference tables",
+  "早見表":"Reference tables","リファレンス":"Reference",
   "入力機能のない閲覧用ページ。":"A read-only reference page.",
   "IFT・TEM・CCTの各表と、損耗・ELR・指揮官誕生・CXの早見":"IFT, TEM and CCT, plus Casualty/ELR, Leader Creation and CX summaries.",
   "GUN/LATW：TO HIT DRM一覧、赤TH#の条件、ROF、砲の破壊判定、国別TH#表(砲データから自動表示)":"GUN/LATW: To Hit DRM cases, red TH# conditions, ROF, Gun destruction and the per-nationality TH# table (built from the Gun data).",
@@ -7095,7 +7095,7 @@ var I18N_EN={
   "潰走/阻止":"Rout/Interdiction",
   "突撃/白兵戦":"Assault/Close Combat",
   "士気/損耗":"Morale/Casualty",
-  "早見表":"Reference Tables",
+  "早見表":"Reference Tables","リファレンス・ユニット":"Reference / Units",
   "シナリオ":"Scenario",
   "ユニット":"Units",
   "HELP":"HELP",
@@ -9838,7 +9838,7 @@ var NAV_LABELS=[
   ['nb-rout','潰走/阻止'],
   ['nb-aphcc','突撃/白兵戦'],
   ['nb-mc','士気/損耗'],
-  ['nb-ref','早見表'],
+  ['nb-ref','リファレンス'],
   ['nb-scen','シナリオ'],
   ['nb-unit','ユニット'],
   ['tbHelpBtn','HELP'],
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.780"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.781"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1581="v1581(早見表→リファレンス、部隊の準備にリファレンスボタン";
 var APP_VERSION_HIST_v1580="v1580(AI対戦は常に同期なし";
 var APP_VERSION_HIST_v1579="v1579(部隊の準備: 相手のiPadの編成にもトータルFP";
 var APP_VERSION_HIST_v1578="v1578(S29: 独のアプリの作戦(P1に集中・前哨・取り返しの白兵戦)";
@@ -12695,7 +12696,7 @@ function renderHelpPanel(){
     {id:'rout',icon:'',lbl:T('潰走')},
     {id:'cc',icon:'',lbl:T('白兵')},
     {id:'mc',icon:'',lbl:T('士気')},
-    {id:'ref',icon:'',lbl:(S.lang==='en'?'Tables':T('早見表'))},
+    {id:'ref',icon:'',lbl:(S.lang==='en'?'Tables':T('リファレンス'))},
     {id:'scen',icon:'',lbl:T('シナリオ')},
     {id:'unit',icon:'',lbl:T('ユニット')},
     {id:'los',icon:'',lbl:T('LOS判定')},
@@ -12749,7 +12750,7 @@ function renderHelpPanel(){
     h+=hSec(T("士気/損耗"),T("NMC・#MC・PTC、損耗・ELR・LLMC/LLTCを扱う(3.2.3・5.1)。"),[],[T("修正後DR＜士気値で合格、＝士気値でPIN、＞士気値で混乱(DM)"),T("原DR12は損耗＋混乱。混乱中のユニットが失敗すると損耗、原DR12なら除去"),T("混乱していないユニットがELRを超えて失敗すると1段階低いクラスに置き換わる(士気値下線・操作班は対象外)"),T("指揮官は自分のMCに合格すると、同じヘクスの他のユニットに指揮修正を与える(自分には適用しない)"),T("指揮官が除去されるとLLMC、混乱するとLLTC。マイナスの指揮修正はプラスとして加える"),T("SMCの損耗は負傷：dr1〜4で軽傷(士気・指揮修正が1悪化、3MF、IPC0)、5〜6で除去。再負傷は+1")],[]);
   }
   else if(cat==='ref'){
-    h+=hSec(T("早見表"),T("入力機能のない閲覧用ページ。"),[],[T("IFT・TEM・CCTの各表と、損耗・ELR・指揮官誕生・CXの早見"),T("GUN/LATW：TO HIT DRM一覧、赤TH#の条件、ROF、砲の破壊判定、国別TH#表(砲データから自動表示)"),T("捕捉：ユニット獲得と地域獲得の違い、獲得が失われる条件")],[]);
+    h+=hSec(T("リファレンス"),T("入力機能のない閲覧用ページ。"),[],[T("IFT・TEM・CCTの各表と、損耗・ELR・指揮官誕生・CXの早見"),T("GUN/LATW：TO HIT DRM一覧、赤TH#の条件、ROF、砲の破壊判定、国別TH#表(砲データから自動表示)"),T("捕捉：ユニット獲得と地域獲得の違い、獲得が失われる条件")],[]);
   }
   else if(cat==='scen'){
     h+=hSec(T("シナリオ"),null,[],[T("シナリオを選ぶと、OB・盤面・季節・SSR・勝利条件が各タブに反映される"),T("ターン表は上部の−／＋／RESETとAUTOで管理"),T("対戦記録：シナリオ・日付・対戦者・勝敗・メモを記録し、国別の勝敗統計を表示"),T("GitHub Gist同期を設定すると、対戦記録を他の端末と共有できる")],[]);
@@ -39235,7 +39236,7 @@ function nmSuResTog(k){var nat=NM_SU&&NM_SU.nat,R=nmSuResCfg(nat);if(!R)return;v
 function nmSuResBar(nat){var R=nmSuResCfg(nat);if(!R)return '';var c=nmSuResCnt(nat),ch=function(l,a,b){var full=a>=b,over=a>b;return '<span style="display:inline-block;margin-left:6px;padding:1px 9px;border-radius:9px;border:1px solid '+(over?'#ff6a6a':full?'#ffd24a':'#4a5566')+';color:'+(over?'#ff9a9a':full?'#ffd24a':'#e8eef4')+';font-size:12px;font-weight:800">'+l+' '+a+'/'+b+'</span>';};return ch('MMC',c.mmc,R.cap.mmc)+ch('SMC',c.smc,R.cap.smc)+ch('SW',c.sw,R.cap.sw);}
 function nmSuDraw(){var U=NM_SU;if(!U)return;try{nmSuSlots(U.nat).forEach(function(k){nmSuSortSlot(k,U.nat);});}catch(e){}var nat=U.nat,ob=nmSuOb(nat),used=nmSuUsed(nat),sc=curScen(),sd=nmSuSide(nat);U.pool=[];
   var css='<style>#nmSu{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;position:fixed;inset:0;z-index:9400;background:#000a;display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,monospace}#nmSu .bx{width:min(1080px,96vw);max-height:92vh;overflow:auto;background:#1c1f27;border:1px solid #39414f;border-radius:14px;color:#e8eef4;padding:14px 16px;box-shadow:0 10px 40px #000}#nmSu h2{margin:0 0 4px;font-size:19px}#nmSu .sub{color:#8899aa;font-size:12px;margin-bottom:8px}#nmSu .tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;align-items:center}#nmSu .tb{padding:5px 14px;border:1px solid #39414f;border-radius:6px;font-weight:bold;font-size:13px;background:#161b24;cursor:pointer}#nmSu .tb.on{border-color:#c8a032;color:#ffd060;background:#2a2416}#nmSu .cols{display:grid;grid-template-columns:330px 1fr;gap:12px}@media (max-width:820px){#nmSu .cols{grid-template-columns:1fr}}#nmSu .pool{background:#12151c;border:1px solid #2c3242;border-radius:10px;padding:8px;align-self:start}#nmSu .pt{font-size:12px;color:#8899aa;margin:4px 0}#nmSu .chips{display:flex;flex-wrap:wrap;gap:6px}#nmSu .chip{position:relative;display:flex;flex-direction:column;align-items:center;padding:3px;border:1px solid #39414f;border-radius:6px;background:#1e2430;font-size:10px;color:#c9d3df;cursor:pointer}#nmSu .chip.sel{border-color:#40ff90;box-shadow:0 0 0 2px #40ff9055}#nmSu .chip.zero{opacity:.35}#nmSu .stR{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}#nmSu .st{padding:2px 8px;border-radius:6px;background:#262d38;color:#b8c4d2;font-size:11.5px;font-weight:700;cursor:pointer;line-height:1.5}#nmSu .st.r{background:#7a2020;color:#fff}#nmSu .st.y{background:#c8a032;color:#14110a}#nmSu .chip .n{position:absolute;right:-5px;top:-6px;background:#c8a032;color:#000;border-radius:8px;padding:0 5px;font-weight:900;font-size:11px}#nmSu .grps{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}#nmSu .g{background:#12151c;border:1px solid #2c3242;border-radius:10px;padding:8px;min-height:120px;cursor:pointer}#nmSu .g.on{border-color:#4499ee;box-shadow:0 0 0 2px #4499ee44}#nmSu .gh{display:flex;justify-content:space-between;align-items:center;font-weight:bold;margin-bottom:6px;gap:6px}#nmSu .gh span{font-size:11px;color:#8899aa;font-weight:normal}#nmSu .u{display:flex;align-items:center;gap:6px;padding:3px;border-radius:6px;background:#1a1f29;margin-bottom:4px;font-size:12px}#nmSu .u.drop{outline:1px solid rgba(64,255,144,.65);outline-offset:-1px;background:rgba(64,255,144,.07);cursor:copy}#nmSu .u .sw{display:flex;gap:3px;margin-left:auto;align-items:center}#nmSu .u .x{color:#ff7070;font-weight:900;padding:0 4px;cursor:pointer}#nmSu .warn{color:#ffb040;font-size:10px}#nmSu .add{border:1px dashed #39414f;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#8899aa;min-height:120px;font-size:13px;cursor:pointer}#nmSu .foot{display:flex;gap:8px;justify-content:flex-end;margin-top:10px;flex-wrap:wrap}#nmSu .btn{padding:7px 14px;border-radius:7px;border:1px solid #39414f;background:#232a36;font-weight:bold;font-size:13px;color:#e8eef4;cursor:pointer}#nmSu .btn.pri{background:#2a4d36;border-color:#3ca878;color:#d8ffe6}#nmSu .step{display:flex;gap:10px;font-size:12px;color:#c9d3df;margin-bottom:8px;flex-wrap:wrap}#nmSu .step b{color:#ffd060}#nmSu .dd-on{outline:3px solid #40ff90 !important;outline-offset:2px}#nmSu [data-dk]{touch-action:none;cursor:grab}#nmSu .mini{font-size:10px;padding:2px 6px;border-radius:5px;border:1px solid #39414f;background:#232a36;color:#c9d3df;cursor:pointer}</style>';
-  var h=css+'<div class="bx" onclick="event.stopPropagation()"><div style="display:flex;align-items:center;gap:8px"><div class="btn" style="display:inline-flex;align-items:center;white-space:nowrap" onclick="event.stopPropagation();nmSuBack()">← 戻る</div><h2 style="flex:1;min-width:0">'+(sc?sc.id+' ':'')+'部隊の準備</h2>'+(nmGsBtnOn()?'<div class="btn" style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;border:1px solid #7ec8e3;color:#7ec8e3" onclick="event.stopPropagation();nmSuSyncNow()">⇅ '+T('今すぐ同期')+'</div>':'')+(sc?'<div class="btn" style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap" onclick="event.stopPropagation();nmScenView()">'+(NM_MI&&NM_MI.card||'')+' シナリオカード</div>':'')+'</div><div class="sub">シナリオのOBから編成を作り、支援火器を運ぶユニットを決めます(射撃タブの編成と共有)。地図へは「地図に置く」→ヘクスをタップ</div>';
+  var h=css+'<div class="bx" onclick="event.stopPropagation()"><div style="display:flex;align-items:center;gap:8px"><div class="btn" style="display:inline-flex;align-items:center;white-space:nowrap" onclick="event.stopPropagation();nmSuBack()">← 戻る</div><h2 style="flex:1;min-width:0">'+(sc?sc.id+' ':'')+'部隊の準備</h2>'+(nmGsBtnOn()?'<div class="btn" style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;border:1px solid #7ec8e3;color:#7ec8e3" onclick="event.stopPropagation();nmSuSyncNow()">⇅ '+T('今すぐ同期')+'</div>':'')+'<div class="btn" style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap" onclick="event.stopPropagation();NM_TVHQ=0;nmTvOpen(\'ref\')">📖 '+T('リファレンス')+'</div>'/* v1581(ダルマ「シナリオカードボタンの左横に早見表(リファレンス)ボタン」) */+(sc?'<div class="btn" style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap" onclick="event.stopPropagation();nmScenView()">'+(NM_MI&&NM_MI.card||'')+' シナリオカード</div>':'')+'</div><div class="sub">シナリオのOBから編成を作り、支援火器を運ぶユニットを決めます(射撃タブの編成と共有)。地図へは「地図に置く」→ヘクスをタップ</div>';
   h+='<div class="tabs">'+nmSuNats().map(function(k){var c=(UNITS[k]&&UNITS[k].col)||'#ccc';return '<div class="tb'+(k===nat?' on':'')+'" onclick="nmSuTab(\''+k+'\')"><span style="color:'+c+'">'+nmNatLbl(k)+'</span>'+(sc&&sc.atk===k?'(攻撃)':'')+nmTurnRoleTag(k)+'</div>'; /* sample-natrole(ダルマ「独軍 ソ連軍 どちらが1P 2Pかをわかりやすく」) */}).join('')
     +(function(){var sq=function(c){return '<i style="display:inline-block;width:16px;height:16px;border-radius:4px;background:'+c+';vertical-align:-3px;margin:0 5px 0 0"></i>';},lb=function(x){var ns=nmSuNats().filter(function(k){return nmSuSide(k)===x;});return ns.map(function(k){return nmNatLbl(k);}).join('/');};var rl=nmsRole(),rch=(function(){if(!rl||nmSuNats().length<2)return '';var my=nmMyNat(),B=function(k,t,c){var on=my===k;return '<span onclick="event.stopPropagation();nmMyNatSet(\''+k+'\')" style="cursor:pointer;padding:4px 10px;font-size:13px;font-weight:800;'+(on?'background:#ffd24a;color:#1a1204':'color:'+(c||'#9fb2c8'))+'">'+t+'</span>';};return '<div class="tb" style="margin-left:auto;padding:0!important;display:flex;align-items:center;overflow:hidden;font-size:13px" title="'+T('このiPadの国')+'"><span style="padding:0 6px 0 10px;color:#8fa6bd;font-size:11px">'+T('このiPadの国')+'</span>'+B('',T('自動'))+nmSuNats().map(function(k){return B(k,nmNatLbl(k),(UNITS[k]&&UNITS[k].col));}).join('')+'</div>';})(); /* v1515: 「このiPad 1P = 独軍」は消去(ダルマ指示)、国の選択だけ */if(nmSuNats().length<2)return rch;return rch+'<div class="tb" style="margin-left:8px;font-size:14px" title="地図の色を入れ替える" onclick="nmSuSwapSides()">'+sq(NM_SIDE_LBL.f.col)+lb('f')+' ⇄ '+sq(NM_SIDE_LBL.e.col)+lb('e')+'</div>';})()+'</div>'; /* v1097: 自軍/敵ボタン→色の入れ替え(攻撃側=青が標準) */
   h+=nmSvHTML(); /* v446 */
@@ -40298,7 +40299,7 @@ function nmFtActFill(){var el=document.getElementById('nmFtAct');if(!el)return;v
   if(nmBarLite())h+='<button class="fa g" id="nmSbSu" title="'+T('部隊の準備')+'" onclick="event.stopPropagation();nmSuOpen()" style="flex-direction:column"><span style="display:flex;flex-direction:column;align-items:center;line-height:1"><svg viewBox="0 0 24 24" width="24" height="22" fill="currentColor"><circle cx="12" cy="6" r="2.6"/><path d="M8.5 21l1.3-7.5-2 1.5-1.5-2.5 4-3.5h3.4l4 3.5-1.5 2.5-2-1.5 1.3 7.5h-2.4l-1.1-5-1.1 5z"/><circle cx="5" cy="9" r="1.8" opacity=".55"/><circle cx="19" cy="9" r="1.8" opacity=".55"/></svg><small style="font-size:9px;margin-top:2px">'+T('部隊')+'</small></span></button>'; /* v1151(ダルマ指示「サイドバーに部隊ボタン」案C): 部隊の準備を開く */
   if(nmGsBtnOn())h+='<button class="fa g" title="'+T('編成を同期(2台のiPad)')+'" onclick="event.stopPropagation();if(NM_GS.lpDone){NM_GS.lpDone=0;return;}nmGsSync()" onpointerdown="nmGsLpStart()" onpointerup="nmGsLpEnd()" onpointerleave="nmGsLpEnd()" oncontextmenu="event.preventDefault();return false;" style="-webkit-touch-callout:none;user-select:none;flex-direction:column;gap:0"><b style="font-size:12px;white-space:nowrap;position:relative">⇅'+T('同期')+(nmAsOn()&&nmsRole()?'<i style="position:absolute;right:-5px;top:-1px;width:'+((NM_GS.newAt&&Date.now()-NM_GS.newAt<9000)?'10':'7')+'px;height:'+((NM_GS.newAt&&Date.now()-NM_GS.newAt<9000)?'10':'7')+'px;border-radius:50%;background:'+((NM_GS.newAt&&Date.now()-NM_GS.newAt<9000)?'#ffb020':'#3ccf6e')+'"></i>':'')+'</b>'+nmRoleBadge()+'</button>'; /* v818 / v1150: 自動同期ONは緑の点 */
   h+=['fire','view','move'].filter(function(k){return NM_TOOL===k||nmBarLite();}).map(function(k){var t=NM_TOOL_DEF[k],on=NM_TOOL===k||(k==='move'&&(NM_MOVE||S_LOS.routeMode));return '<button class="fa g ftTool'+(on?' on':'')+'" title="'+T(on&&k==='move'&&NM_TOOL!=='move'?'移動をリセットして終了':t[0])+'" onclick="event.stopPropagation();nmToolArm(\''+k+'\')">'+t[1]+'</button>';}).join(''); /* v497 */
-  if(nmBarLite())h+='<button class="fa g" title="'+T('早見表')+'" onclick="event.stopPropagation();NM_TVHQ=0;nmTvOpen(\'ref\')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 5.5C7 4 10 4.2 12 6c2-1.8 5-2 8-.5V19c-3-1.5-6-1.3-8 .5-2-1.8-5-2-8-.5z"/><path d="M12 6v13.5"/></svg></button>'
+  if(nmBarLite())h+='<button class="fa g" title="'+T('リファレンス')+'" onclick="event.stopPropagation();NM_TVHQ=0;nmTvOpen(\'ref\')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 5.5C7 4 10 4.2 12 6c2-1.8 5-2 8-.5V19c-3-1.5-6-1.3-8 .5-2-1.8-5-2-8-.5z"/><path d="M12 6v13.5"/></svg></button>'
     +'<button class="fa g" title="'+T('シナリオカード')+'" onclick="event.stopPropagation();nmScenView()"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5"/></svg></button>' /* sample(ダルマ指示「ツールバーにシナリオカードを追加」) */
     +'<button class="fa g" title="'+T('旧タブ')+'" onclick="event.stopPropagation();nmOldTabPop(this)"><b style="font-size:12px;white-space:nowrap">'+T('旧タブ')+'</b></button>'; /* v833(ダルマ指示「ツールバーに早見表、旧タブボタンを追加」) */
   h+='<span class="fsp"></span><button class="fa g" title="'+T('編成・他のタブ')+'" onclick="event.stopPropagation();nmFtMenu(this)">≡</button>';
@@ -40471,7 +40472,7 @@ var NM_TB_ITEMS=[
  {id:'fire',g:1,lb:'選択したスタックで攻撃',m:function(o){return o.indexOf("nmToolArm('fire')")>=0;}},
  {id:'atk',g:1,lb:'選択したスタックを攻撃',m:function(o){return o.indexOf("nmToolArm('atk')")>=0;}},
  {id:'move',g:1,lb:'移動',m:function(o){return o.indexOf("nmToolArm('move')")>=0;}},
- {id:'ref',g:1,lb:'早見表',m:function(o){return o.indexOf("nmTvOpen('ref')")>=0;}}, /* v837: 作り直した早見表 */
+ {id:'ref',g:1,lb:'リファレンス',m:function(o){return o.indexOf("nmTvOpen('ref')")>=0;}}, /* v837: 作り直した早見表 */
  {id:'card',g:1,lb:'シナリオカード',m:function(o){return /nmScenView\(/.test(o);}},
  {id:'old',g:1,lb:'旧タブ',m:function(o){return /nmOldTabPop/.test(o);}},
  /* v1249(ダルマ指示「対戦モードのツールバーと、下の拡大・縮小などのボタン実施」): 対戦モードの右ツールバーのボタン */
@@ -40540,7 +40541,7 @@ function nmTvOpen(k){NM_TV=k;var o=document.getElementById('nmTv');if(o)o.remove
   v.setAttribute('style','position:fixed;inset:0;z-index:9600;background:#000a;display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,monospace');
   v.onclick=function(e){if(e.target===v)nmTvClose();};
   v.innerHTML='<div style="width:min(1100px,calc(100vw - 16px));height:calc(100vh - var(--nmsumh,64px) - 24px);display:flex;flex-direction:column;background:#1f2227;border:1px solid #3a4250;border-radius:16px;box-shadow:0 12px 40px #000c;overflow:hidden" onclick="event.stopPropagation()">'
-    +'<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #2c323c;flex-shrink:0">'+((k==='scen'&&!NM_TVHQ)?'':'<button class="b sm" style="margin:0;height:36px;padding:0 12px" onclick="var hq=NM_TVHQ;nmTvClose();if(hq)nmHqOpen()">← '+T('戻る')+'</button>')+'<b style="flex:1;font-size:17px;color:#e8eef4">'+T(k==='scen'?'シナリオ選択':k==='ref'?'早見表':'ユニット')+'</b>'+((k==='scen'&&!NM_TVHQ)?'<button class="b sm" style="margin:0;height:36px;padding:0 12px" onclick="nmTvClose()">✕ '+T('閉じる')+'</button>':'')+'</div>'
+    +'<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #2c323c;flex-shrink:0">'+((k==='scen'&&!NM_TVHQ)?'':'<button class="b sm" style="margin:0;height:36px;padding:0 12px" onclick="var hq=NM_TVHQ;nmTvClose();if(hq)nmHqOpen()">← '+T('戻る')+'</button>')+'<b style="flex:1;font-size:17px;color:#e8eef4">'+T(k==='scen'?'シナリオ選択':k==='ref'?'リファレンス':'ユニット')+'</b>'+((k==='scen'&&!NM_TVHQ)?'<button class="b sm" style="margin:0;height:36px;padding:0 12px" onclick="nmTvClose()">✕ '+T('閉じる')+'</button>':'')+'</div>'
     +'<div id="nmTvBody" style="flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:10px 12px 24px">'+nmTvBody(k)+'</div></div>';
   document.body.appendChild(v);nmTvFlat(document.getElementById('nmTvBody'));}
 /* v1270(ダルマ指示「背景細かいドット ボタン枠なし暗め」「欄もそろえる」シナリオ選択など): #nmTv の背景をマルチ判定と同じ細かいドット、シナリオ・キット・APP/ORIG・バトルレコードのボタンを枠なしの暗いボタン(選んでいるものは金の内枠) */
@@ -42142,7 +42143,7 @@ function nmModeSet(m){var cur=nmModeNow();if(m===cur)return;
   try{nmFtActFill();}catch(e){}try{nmSyChipFill();}catch(e){}try{btMapFullSync();}catch(e){}try{Draw();}catch(e){}
   btToast(m==='judge'?'判定モード':m==='online'?'オンライン対戦モード':'AI対戦モード'); /* sample-modenm(ダルマ「判定モード オンライン対戦モード AI対戦モードの3種類で分ける」) */}
 /* v639: HQ=判定の司令画面。A→Bの結果を上に、判定グループを下に */
-var NM_HQ_G=[['fire','射撃','小火器・砲・LATW・爆薬',[['!qk','簡易射撃(マーカー無し・数字だけ)'],['!fire','マップ上で射撃判定(A→B)'],['fire','射撃/残留火力(タブ)'],['gun','砲撃'],['latw','軽対戦車兵器'],['dc','爆薬配置/起動']]],['afv','装甲戦闘車両','命中・貫通・撃破',[['afv','装甲戦闘車両']]],['move','移動','ボグ・人力・煙幕',[['move','ボグ/人力/煙幕']]],['mc','士気・損耗','MC・損耗・潰走',[['mc','士気/損耗'],['rout','潰走/阻止']]],['cc','近接','突撃・白兵戦',[['aphcc','突撃/白兵戦']]],['rally','回復','回復・修理・回収',[['rally','回復'],['repair','修理']]],['ref','早見表・ユニット','',[['ref','早見表'],['unit','ユニット']]]];
+var NM_HQ_G=[['fire','射撃','小火器・砲・LATW・爆薬',[['!qk','簡易射撃(マーカー無し・数字だけ)'],['!fire','マップ上で射撃判定(A→B)'],['fire','射撃/残留火力(タブ)'],['gun','砲撃'],['latw','軽対戦車兵器'],['dc','爆薬配置/起動']]],['afv','装甲戦闘車両','命中・貫通・撃破',[['afv','装甲戦闘車両']]],['move','移動','ボグ・人力・煙幕',[['move','ボグ/人力/煙幕']]],['mc','士気・損耗','MC・損耗・潰走',[['mc','士気/損耗'],['rout','潰走/阻止']]],['cc','近接','突撃・白兵戦',[['aphcc','突撃/白兵戦']]],['rally','回復','回復・修理・回収',[['rally','回復'],['repair','修理']]],['ref','リファレンス・ユニット','',[['ref','リファレンス'],['unit','ユニット']]]];
 /* v640: 判定支援モードで各判定タブに居る間、HQ(と地図)へ戻るボタンを左下に出す */
 /* v851(ダルマ指示「旧タブ 赤枠部分非表示」「戻るボタン 判定と同じライトブルー デザインサンプル4」) */
 var NM_HQB_STY='b'; /* ダルマ「B」 */
@@ -42806,7 +42807,7 @@ function nmHqOpen(gi){NM_HQPK_FN=null;NM_HQGI=(gi==='ccx')?gi:null;var o=documen
   var body;
   if(gi==='qk')body=nmQkBody();
   else{
-    var TL={fire:['!fire','射撃(A→B)','','fire','射撃 A→B'],bog:['&bog','ボグ判定','','move'] /* v1436(ダルマ指示「部隊登録・地図に配置してあっても画面を変えない」まずボグ判定のみ): 置いていない時と同じパネルをいつも開く */,manh:['&manh','人力移動','','move'],gun:['@nmHqGunOpen','砲撃','','fire'],ftab:['&raq','残留火力','','fire'],react:['&react','車両が入ってきた','','cc','臨機の白兵戦<br>（動く車両）'],latw:['@nmLwOpen','軽対戦車兵器','','fire'] /* v971(ダルマ指示「軽対戦車兵器にタイル名を変更」) */,dc:['@nmDcOpen','爆薬','','fire'],afv:['@nmHqAfvOpen','装甲戦闘車両','','afv','車両 AFV'],move:['@nmHqMvOpen','移動','','move'],mc:['&mcp','MC・PTC','','mc'] /* v1438(ダルマ「パネルの統一 mc ptcも実施」) */,rout:['@nmRtOpen','潰走・阻止','','mc'],cc:['&ccsc','白兵戦','','cc','白兵戦<br>（歩兵どうし）'] /* v1444(ダルマ「白兵戦 歩兵どうしのトップパネルにする」) */,ccx:['&ccx','白兵戦','','cc','白兵戦'],ccv:['&ccv','車両への白兵戦','','cc','白兵戦<br>（車両を攻撃）'],rally:['&rally','回復','','rally'] /* v1437(ダルマ「回復も実施」): 配置・部隊登録に関係なく置いていない時と同じパネル */,repair:['@nmRpOpen','修理','','rally'],pa:['&pa','PAATC','','cc','PAATC<br>（歩兵が車両へ）'],ve:['&ve','車両の突入','','move','車両が目標のAFVへ<br>（停止できる？）'],ref:['%ref','早見表','','ref'],unit:['%unit','ユニット','','ref'],scen:['%scen','シナリオ','','ref']};
+    var TL={fire:['!fire','射撃(A→B)','','fire','射撃 A→B'],bog:['&bog','ボグ判定','','move'] /* v1436(ダルマ指示「部隊登録・地図に配置してあっても画面を変えない」まずボグ判定のみ): 置いていない時と同じパネルをいつも開く */,manh:['&manh','人力移動','','move'],gun:['@nmHqGunOpen','砲撃','','fire'],ftab:['&raq','残留火力','','fire'],react:['&react','車両が入ってきた','','cc','臨機の白兵戦<br>（動く車両）'],latw:['@nmLwOpen','軽対戦車兵器','','fire'] /* v971(ダルマ指示「軽対戦車兵器にタイル名を変更」) */,dc:['@nmDcOpen','爆薬','','fire'],afv:['@nmHqAfvOpen','装甲戦闘車両','','afv','車両 AFV'],move:['@nmHqMvOpen','移動','','move'],mc:['&mcp','MC・PTC','','mc'] /* v1438(ダルマ「パネルの統一 mc ptcも実施」) */,rout:['@nmRtOpen','潰走・阻止','','mc'],cc:['&ccsc','白兵戦','','cc','白兵戦<br>（歩兵どうし）'] /* v1444(ダルマ「白兵戦 歩兵どうしのトップパネルにする」) */,ccx:['&ccx','白兵戦','','cc','白兵戦'],ccv:['&ccv','車両への白兵戦','','cc','白兵戦<br>（車両を攻撃）'],rally:['&rally','回復','','rally'] /* v1437(ダルマ「回復も実施」): 配置・部隊登録に関係なく置いていない時と同じパネル */,repair:['@nmRpOpen','修理','','rally'],pa:['&pa','PAATC','','cc','PAATC<br>（歩兵が車両へ）'],ve:['&ve','車両の突入','','move','車両が目標のAFVへ<br>（停止できる？）'],ref:['%ref','リファレンス','','ref'],unit:['%unit','ユニット','','ref'],scen:['%scen','シナリオ','','ref']};
     /* v760(ダルマ指示「判定ボード内を使いやすく整理」): 射撃/移動・士気・近接/調べるの3区分・1画面。金枠=今のフェイズでよく使う */
     var ph=(S.turn&&S.turn.phase)||'',REC={rph:['rally','repair','mc'],pfph:['fire','gun','afv','latw','dc'],mph:['move','bog','manh','fire','afv'],dfph:['fire','gun','afv','latw','ftab'],afph:['fire','dc','ftab'],rtph:['rout','mc'],aph:['ccx','mc'],ccph:['ccx']}[ph]||[];
     var tile=function(k){var t=TL[k],rec=REC.indexOf(k)>=0,oc=t[0]==='&ccx'?"nmHqOpen('ccx')":t[0]==='&pa'?"nmHqClose();nmPaOpen()":t[0]==='&ve'?"nmHqClose();nmVeOpen()":t[0]==='&ccv'?"nmHqClose();NM_HQFROM=1;NM_CVREACT=0;nmCcScOpen('veh')":t[0]==='&ccsc'?"nmHqClose();NM_HQFROM=1;nmCcScOpen()":t[0]==='&mcp'?"nmHqClose();NM_HQFROM=1;nmRrOpen('mc')":t[0]==='&rally'?"nmHqClose();NM_HQFROM=1;nmRrOpen('rally')":t[0]==='&bog'?"nmHqClose();NM_HQFROM=1;nmScOpen('nmHqBogOpen')":t[0]==='&manh'?"nmHqClose();nmMh2Open()":t[0]==='&raq'?"nmHqClose();NM_PBACK='nmHqBk()';nmRaqOpen()":t[0]==='&react'?"nmHqClose();NM_HQFROM=1;NM_CVREACT=1;nmCcScOpen('veh');btToast('攻撃する歩兵と、入ってきた相手の車両を選んでください')":t[0].charAt(0)==='%'?"nmHqClose();NM_TVHQ=1;nmTvOpen('"+t[0].slice(1)+"')":t[0].charAt(0)==='@'?"nmHqAtA('"+t[0].slice(1)+"')":t[0]==='!qk'?"nmHqOpen('qk')":t[0].charAt(0)==='!'?'nmHqFire()':"nmHqClose();nmRmTabGo('"+t[0]+"')";return '<button class="b" style="margin:0;height:54px;min-height:0;padding:2px 3px;line-height:1.15;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;font-size:12px;'+((rec&&!nmHqLite())?'border:2px solid #c8a032;background:#2a2412':'')+'" onclick="'+esc(oc)+'">'+nmHqIc(t[3],16)+'<span>'+(t[4]||t[1])+'</span></button>';};
@@ -45098,7 +45099,7 @@ function nmRmSetTcaF(n,d){try{losSaveMapScroll();}catch(e){} /* v1452: 方向を
 /* v338(ダルマ指示「移動もシナリオ登場車両を選択式にして車両の能力を反映(カウンター)」「煙幕もカウンター・種類選択」) */
 var NM_RM_SUB=null;
 /* v360(ダルマ指示「右クリックメニューにタブ移動。全画面表示からタブ移動で移動してマップに戻る際は全画面表示のまま」) */
-var NM_TABS=[['rally','回復/修理/回収'],['fire','射撃/残留火力'],['gun','砲撃'],['afv','装甲戦闘車両'],['latw','軽対戦車兵器'],['move','ボグ/人力/煙幕'],['dc','爆薬配置/起動'],['rout','潰走/阻止'],['aphcc','突撃/白兵戦'],['mc','士気/損耗'],['ref','早見表'],['unit','ユニット'],['scen','シナリオ']];
+var NM_TABS=[['rally','回復/修理/回収'],['fire','射撃/残留火力'],['gun','砲撃'],['afv','装甲戦闘車両'],['latw','軽対戦車兵器'],['move','ボグ/人力/煙幕'],['dc','爆薬配置/起動'],['rout','潰走/阻止'],['aphcc','突撃/白兵戦'],['mc','士気/損耗'],['ref','リファレンス'],['unit','ユニット'],['scen','シナリオ']];
 var NM_FULL_RESUME=false;
 var NM_FULL_TABS=['fire','gun','afv','latw','scen']; /* v433(ダルマ指示): 全画面の上タブから早見表・ボグ/人力/煙幕を外す */
 var NM_FULL_DEFAULT=true; /* v361: MAPタブを開いた時は全画面(falseで従来どおり) */
@@ -46301,7 +46302,7 @@ function btSideActHTML(){var h='',mv=BT.mv,un=BT.started&&mv&&(mv.veh?btVCanUndo
   if(BT.started)h+=b(!!(BT_RT||BT_RTARM),0,'移動の確認(どこまで動けるか・実際には動かない)','btFtMove();nmFtActFill()',NM_TOOL_DEF.move[1]); /* v1338(ダルマ「対戦モードのツールバーに移動を追加」→「どこまで移動できるかを確認」sample rt→実施) */
   h+=b(!!(BT.losAB&&(BT.losAB.arm||BT.losAB.rc)),0,'LOS測定(起点A・目標B)','BtLosAB();nmFtActFill()','A→B');
   h+=b(!!BT.sideView||btViewOn(),0,'このヘクスから見える範囲','btViewTool()',NM_TOOL_DEF.view[1]); /* v1564(ダルマ「全て判定モードと同じに」): 表示中は光る・もう一度押すと範囲も消す */
-  h+=b(0,0,'早見表','NM_TVHQ=0;nmTvOpen(\'ref\')','<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 5.5C7 4 10 4.2 12 6c2-1.8 5-2 8-.5V19c-3-1.5-6-1.3-8 .5-2-1.8-5-2-8-.5z"/><path d="M12 6v13.5"/></svg>');
+  h+=b(0,0,'リファレンス','NM_TVHQ=0;nmTvOpen(\'ref\')','<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 5.5C7 4 10 4.2 12 6c2-1.8 5-2 8-.5V19c-3-1.5-6-1.3-8 .5-2-1.8-5-2-8-.5z"/><path d="M12 6v13.5"/></svg>');
   h+=b(0,0,'シナリオカード','nmScenView()','<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5"/></svg>');
   if(BT.started)h+=b(0,0,'DR','btFtDice()','🎲')+b(0,!nr,'リアル盤へ','nmFtRb()','▣'+(nr?' <span class="bd">'+nr+'</span>':''));
   if(BT.started){var I=function(c){return '<span style="font-size:17px;line-height:1">'+c+'</span>';};
