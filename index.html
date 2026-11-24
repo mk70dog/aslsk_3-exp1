@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1571</title>
+<title>ASL SKシリーズv1572</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1571">
+<meta property="og:title" content="ASL SKシリーズv1572">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.771"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.772"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1572="v1572(対戦の準備の札: 支配の数を数え直す・下のバーと同じ表記";
 var APP_VERSION_HIST_v1571="v1571(S29: 米のアプリを強化(通り道の危険・準備射撃・射撃グループ・狙いを絞る・終盤P1)";
 var APP_VERSION_HIST_v1570="v1570(AI対戦: 防御射撃のタスクバーは撃つ側(防御側)を表示";
 var APP_VERSION_HIST_v1569="v1569(AI対戦: 指示パネルが画面外へはみ出さないように";
@@ -55929,7 +55930,8 @@ function btSuPopHTML(){
   var C=BT_SIDE_COL,N=BT_SIDE_NAME,cf=btCfg(),vc=btVicCount();
   if(NM_BT_SUMIN&&window.NM_SUMIN2!==0){ /* v1555(ダルマ「見やすく 半透明 動かせるようにする」→実施): 1行の小さい札。⠿ で移動・半透明。配置中は札の中に小さく */
     try{if(!document.getElementById('btSuMin2Css')){var st2=document.createElement('style');st2.id='btSuMin2Css';st2.textContent='#btSuPop .mini2{display:flex;align-items:center;gap:7px;background:#151a23b8;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);border:1px solid #ffd24a88;border-radius:10px;padding:3px 6px 3px 4px;box-shadow:0 4px 12px #0007;font-size:12px;font-weight:700;color:#ffd24a;touch-action:none;white-space:nowrap}#btSuPop .mini2 .hd2{color:#9ab;font-size:15px;cursor:move;padding:0 2px}#btSuPop .mini2 .op{color:#e8eef4;cursor:pointer;padding:3px 9px;border-radius:7px;background:#2c3442cc;font-size:12px}#btSuPop .mini2 .pl{color:#8fb;font-weight:400;font-size:11px;border-left:1px solid #39414f;padding-left:7px}';document.head.appendChild(st2);}}catch(e){}
-    return '<div class="mini2" data-drag="1"><span class="hd2">⠿</span>'+T('準備')+'<span style="color:#9fb2c8;font-weight:400">'+T(btSideShort('GER'))+vc.ger+'/'+T(String(BT_SIDE_NAME.SOV).charAt(0))+vc.sov+'</span>'+(NM_SUPL?'<span class="pl">'+T('配置中')+'</span>':'')+'<span class="op" onclick="btSuMin(false)">▸ '+T('開く')+'</span></div>';}
+    try{if(btCfg()&&BT.ctl&&btBldgs().some(function(bl){return !(bl.id in BT.ctl);})){btCfgInitCtl();vc=btVicCount();}}catch(e){} /* v1572: 古い保存で数えていない建物があれば支配を数え直す */
+    return '<div class="mini2" data-drag="1"><span class="hd2">⠿</span>'+T('準備')+'<span style="color:#9fb2c8;font-weight:400">'+T(btSideShort('GER'))+vc.ger+' : '+T(String(BT_SIDE_NAME.SOV).charAt(0))+vc.sov+(vc.reqNm?' /'+vc.total+'</span>'+(vc.reqTag||''):'</span>')+(NM_SUPL?'<span class="pl">'+T('配置中')+'</span>':'')+'<span class="op" onclick="btSuMin(false)">▸ '+T('開く')+'</span></div>';}
   if(NM_BT_SUMIN)return '<div class="mini" data-drag="1">'+T('準備(初期配置)')+'<span style="color:#8899aa;font-weight:400">'+T('独軍')+vc.ger+'/'+T(BT_SIDE_NAME.SOV)+vc.sov+'</span><span class="op" onclick="btSuMin(false)">▸ '+T('開く')+'</span></div>'+(NM_SUPL?'<div class="hint" style="margin-top:6px;background:#1c1f27;border:1px solid #4a5566;border-radius:9px;padding:6px 10px;color:#cfd8e2;font-size:12px">'+T('配置中')+': '+T('地図のヘクスをタップ')+'</div>':'');
   var h='<div class="pn">'; /* v1207: ー/✕ は見出しの行の右端に(はみ出し・ボタンと重なるのを修正) */
   h+='<div class="hd" data-drag="1"><span class="chip" style="color:#ffd24a;border-color:#ffd24a;cursor:pointer" onclick="BtToggle()">'+T('対戦')+' ON</span><span class="tt">'+T('準備(初期配置)')+'</span><span style="color:#c8d4e0;font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+btScId()+' '+((btScObj()||{}).jp||'')+'</span><span style="flex:1"></span><span class="rx" onclick="btSuMin(true)" title="'+T('小さくする')+'">ー</span><span class="rx" onclick="btSuMin(true)" title="'+T('小さくする')+'">✕</span></div><div class="tl">'+
