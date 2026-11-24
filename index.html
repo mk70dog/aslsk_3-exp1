@@ -47027,6 +47027,29 @@ function btFxLnSVG(v,fps,tp){var h='',ln=function(p,st){return '<line x1="'+p.x+
     var tk='';[0,90,180,270].forEach(function(dg){var r=dg*Math.PI/180,c=Math.cos(r),s2=Math.sin(r);tk+='<line x1="'+(tp.x+c*16)+'" y1="'+(tp.y+s2*16)+'" x2="'+(tp.x+c*32)+'" y2="'+(tp.y+s2*32)+'"/>';});
     h+='<g stroke="#000" stroke-opacity=".6" stroke-width="7" stroke-linecap="round">'+tk+'</g><g stroke="#ff4040" stroke-width="3.5" stroke-linecap="round">'+tk+'</g>';}
   return h;}
+/* sample-efx(ダルマ「相手の攻撃もわかりにくい」→案で作り込み): アプリ(相手)の射撃の演出カード。撃った部隊▶狙われた部隊・火力→列・DRM・ダイスと合計・目ごとの結果表(出た目を囲む)・結果と部隊ごとの変化 */
+function btFxEnemyCardHTML(e,head,resLbl,rc,red,wht,us,sub,tgt){btFpCss();
+  var m=head.match(/FP([\d.]+)\(列([\d.]+)\)/);if(!m)return null;var fp=m[1],colL=m[2];
+  var dm=head.match(/DR(\d+)\(赤\d\)\s*([+-]\d+)=(\d+)/),dr=red+wht,drm=dm?parseInt(dm[2],10):0,fin=dm?parseInt(dm[3],10):dr;
+  var col=null;try{col=ci(parseFloat(colL));}catch(x){}
+  var ph=(head.match(/^\S+\s+(\S+)/)||[])[1]||T('射撃');
+  var who=T(BT_SIDE_NAME[e.side]);
+  var tn=e.tgtN,TN=BTG.nodes[tn];
+  var aImg=(e.from||[]).map(function(n){var ss=BT.stacks.filter(function(x){return x.n===n&&x.side===e.side;});var im='';ss.forEach(function(s){btInf(s).concat(s.u.filter(function(u){return btInf(s).indexOf(u)<0;})).slice(0,5).forEach(function(u){im+=btFpImg(s,u,38);});});return '<div class="rw"><span class="cn">'+im+'</span><span><b class="gold">'+BTG.nodes[n].nm+'</b> <span class="st">'+T('距離')+btDist(n,tn)+'</span></span></div>';}).join('');
+  var tImg=us.map(function(x){var b=x.b,o=x.o;var im=btVcUnitImg(b.side,{nm:b.nm,s:b.s,id:'fx'});return im&&im.src?'<img src="'+im.src+'" style="width:38px;height:38px">':'<span class="chip">'+b.nm+'</span>';}).join('');
+  var row='';if(col!=null)for(var r=2;r<=12;r++){var x=IFT[Math.max(0,Math.min(15,r+drm))][col];var rs=(x==null||x===''||x==='-')?'-':x;var cc=/KIA$/.test(rs)?'#ff5a5a':(/^K/.test(rs)?'#ff9a4a':(/MC$/.test(rs)?'#ffd060':(rs==='PTC'?'#8fd0ff':'#6a7686')));row+='<td style="'+(r===dr?'background:#ffd06033;outline:2px solid #ffd060;':'')+'"><span style="color:#9ab">'+r+'</span><br><b style="color:'+cc+';font-size:12.5px">'+rs+'</b></td>';}
+  var die=function(n,rd){return '<span style="display:inline-flex;width:34px;height:34px;border-radius:7px;background:'+(rd?'#c62828':'#f4f4f4')+';color:'+(rd?'#fff':'#111')+';align-items:center;justify-content:center;font-size:20px;font-weight:900;box-shadow:0 2px 4px #000a">'+n+'</span>';};
+  var drmL=(e.drmL&&e.drmL.length?e.drmL:[]).map(function(x){return '<span class="chip">'+x+'</span>';}).join('')+(/畏縮/.test(head)?'<span class="chip" style="border-color:#ff8080;color:#ff9090">'+T('畏縮')+'</span>':'');
+  var uo=us.map(function(x){var b=x.b,o=x.o;var im=btVcUnitImg(b.side,{nm:(o&&o.nm)||b.nm,s:(o&&o.br)?'br':b.s,id:'fx'});var src=im&&im.src;return '<span style="text-align:center;width:56px"><span style="position:relative;display:inline-block">'+(src?'<img src="'+src+'" style="width:44px;height:44px;border-radius:3px;'+(o&&o.x?'filter:grayscale(1) brightness(.5)':'')+'">':'<span class="chip">'+b.nm+'</span>')+(o&&o.x?'<svg viewBox="0 0 44 44" style="position:absolute;inset:0"><path d="M5 5L39 39M39 5L5 39" stroke="#ff3030" stroke-width="5" stroke-linecap="round"/></svg>':'')+'</span><br><b style="font-size:11.5px;color:'+(o?o.c:'#8fa0b3')+'">'+(o?o.t:T('変化なし'))+'</b></span>';}).join('');
+  var extra=sub.filter(function(l){return !/^\s*(MC|PTC)\s/.test(l);}).slice(0,3).map(function(l){return '<div class="st">'+l+'</div>';}).join('');
+  if(!document.getElementById('btFpECss')){var stE=document.createElement('style');stE.id='btFpECss';stE.textContent='#btFx .fxCard.btFpE{width:min(860px,94vw)!important;max-width:none!important;top:38%!important;padding:10px 14px 12px!important}#btFx .fxCard.btFpE .fr{min-width:0}';document.head.appendChild(stE);}
+  var h='<div class="fxCard btFp btFpE" style="width:min(860px,94vw);top:38%;border-color:#d04040;padding:10px 14px 12px;font-family:AppFont,AppJP,sans-serif">'
+   +'<div class="hd"><div><div class="tt" style="color:#ff8070">⚠ '+who+'の'+ph+' → '+T('あなたの')+' '+(TN?TN.nm:tgt)+'</div><div class="st">'+T('タップで閉じる')+(BT_FX_Q.length?'(次の射撃 '+BT_FX_Q.length+'件)':'')+'</div></div></div>'
+   +'<div style="display:flex;gap:8px;margin-top:7px"><div class="fr"><div class="st">'+T('撃った部隊')+'</div>'+aImg+'</div><div style="display:flex;align-items:center;font-size:24px;color:#d04040">▶</div><div class="fr" style="border-color:#d0404088"><div class="st">'+T('狙われた部隊(あなた)')+'</div><div class="rw"><span class="cn">'+tImg+'</span><span><b class="gold">'+(TN?TN.nm:tgt)+'</b><br><span class="st">'+(TN?btTerrJP(TN.terr):'')+'</span></span></div></div></div>'
+   +'<div class="rw" style="margin-top:6px;flex-wrap:wrap;border-bottom:1px dashed #2c3644;padding-bottom:5px"><span class="st">'+T('火力')+'</span><span class="big">'+fp+'</span><span class="gold" style="font-size:18px">→ '+T('列')+' '+colL+'</span><span class="st" style="margin-left:14px">DRM</span><span class="big">'+(drm>0?'+':'')+drm+'</span><span>'+drmL+'</span><span style="margin-left:auto;display:flex;align-items:center;gap:6px">'+die(red,1)+die(wht,0)+'<span style="font-size:20px">= '+dr+(drm?' '+(drm>0?'+':'')+drm+' = <b style="font-size:24px">'+fin+'</b>':'')+'</span></span></div>'
+   +(row?'<div style="margin-top:5px"><div class="st">'+T('ダイスの目ごとの結果(出た目を黄色で囲む)')+'</div><table><tr>'+row+'</tr></table></div>':'')
+   +'<div style="display:flex;align-items:center;gap:16px;margin-top:9px"><span style="font-size:34px;font-weight:900;color:'+rc+';text-shadow:0 0 12px '+rc+'88;white-space:nowrap">'+resLbl+'</span><span style="display:flex;gap:8px;flex-wrap:wrap">'+uo+'</span><span style="flex:1"></span></div>'+extra+'</div>';
+  return h;}
 function btFxNext(){
   if(BT_FX_CUR||!BT_FX_Q.length)return;
   var e=BT_FX_Q.shift();BT_FX_CUR=e;
@@ -47073,6 +47096,7 @@ function btFxNext(){
         +'<div style="font-size:10px;margin-top:2px;font-weight:bold;color:'+(o?o.c:'#667788')+'">'+(o?o.t:'変化なし')+'</div></div>';});
     c+='</div>';}
   c+='<div class="fxFoot" style="text-align:center;font-size:10px;color:#667788;margin-top:6px">'+(BT_FX_Q.length?'(次の射撃 '+BT_FX_Q.length+'件) ':'')+'タップで閉じる</div></div>';
+  if(window.NM_EFX!==0&&BT.app&&e.side===BT.app&&/FP[\d.]+\(列/.test(head)){try{var cE=btFxEnemyCardHTML(e,head,resLbl,rc,red,wht,us,sub,tgt);if(cE)c=cE;}catch(x){}} /* sample-efx */
   var el=document.createElement('div');el.id='btFx';el.className='fxShow'+(short?' fxShort':'')+(cam?' fxCam':'')+(window.NM_FX_STY!==''?' fxSty'+(window.NM_FX_STY||'B1'):''); /* v1285: 既定はB1(コンパクト) */
   el.innerHTML=svg+c;el.onclick=function(){btFxClose();};
   document.body.appendChild(el);
