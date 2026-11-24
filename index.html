@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1604</title>
+<title>ASL SKシリーズv1605</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1604">
+<meta property="og:title" content="ASL SKシリーズv1605">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.804"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.805"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1605="v1605(ダルマ「FPFのNMCはログにあった？」→ルール照合 SK4 3.3.3): 最終防護射撃のNMCを厳格化 ①指揮した指揮官もNMCを受ける(自分の指揮修正なし・先に判定、混乱などしたら他のユニットに指揮修正は付かない) ②ELR超過の格下げ・DR12の損耗も通常のMCと同じに(元の射撃のダイスで判定)。NM_FPFNMC=0で従来";
 var APP_VERSION_HIST_v1604="v1604(ダルマ「v1601 の変更を戻す」): v1601(アプリの臨機射撃を絞る: 火力2以下は隣接のみ・再射撃のしきい値+0.16・3回目以降のしきい値上げ)を取り消し、アプリの臨機射撃の判断をv1600以前に戻す。v1603の指揮官の指揮のルール修正はそのまま";
 var APP_VERSION_HIST_v1603="v1603(ダルマ「臨機射撃 ルールを確認して厳格に守る」): SK4 3.3.3〜3.4を照合。指揮官の指揮を厳格化 ①指揮修正がプラスになる指揮官(負傷など)は指揮に使わない(指揮は任意) ②臨機射撃で指揮した指揮官は、再射撃・最終防護射撃・防御射撃フェイズで1回だけ、前と同じ部隊(またはその一部)の射撃にだけ指揮を使える(新しい射撃グループは指揮できない)。人間・アプリ共通。NM_LDRSTRICT=0で従来";
 var APP_VERSION_HIST_v1602="v1602(ダルマ報告「AI射撃中ログが取れない」): 射撃のカードやMC・PTCの判定パネルが出ている間は、画面全体がカードの受け皿になっていて、右上のメニューを押してもカードに吸われていた。その間は右のツールバーとメニューをカードより上に出し、メニュー→システム→システムログを開けるように。NM_FXUP=0で従来";
@@ -30946,12 +30947,17 @@ function btFireExec(fd,ev){
   (ev.ceV||[]).forEach(function(c){if(!c.v.ce||btIsWreck(c.v)||c.s.u.indexOf(c.v)<0)return;var m2=raw+c.drm,r2=(col<0)?'-':IFT[Math.max(0,Math.min(15,m2))][col];log.push('  '+c.v.nm+'(CE乗員) DR'+raw+(c.drm>=0?'+':'')+c.drm+'='+m2+' → '+r2);btCrewResult(c.s,c.v,r2,log);}); /* v1367 */
   // 最終防護射撃: 射撃したユニットは元のDR(指揮修正のみ)でNMC
   if(fd.ph==='FPF'){
+    if(window.NM_FPFNMC===0){
     ev.usedU.forEach(function(x){var I=btI(x.u,x.s.side);if(!btIsInfK(I.kind)||x.s.u.indexOf(x.u)<0||x.u.s==='br')return;
       var fin=raw+(ev.ldr||0),mor=btMorale(x.s.side,x.u);
       if(fin<mor){log.push('FPF-NMC '+x.u.nm+' '+fin+'/'+mor+' 成功');}
       else if(fin===mor){x.u.s='pn';log.push('FPF-NMC '+x.u.nm+' '+fin+'/'+mor+' 釘付け');}
       else{x.u.s='br';x.u.dm=1;log.push('FPF-NMC '+x.u.nm+' '+fin+'/'+mor+' 混乱');}
-    });
+    });}else{ /* v1605(ダルマ「FPFのNMCはログにあった？」→ルール照合 SK4 3.3.3): 指揮した指揮官もNMCを受ける(指揮官は自分の指揮修正なし・先に判定、混乱したら他のユニットに指揮修正は付かない)。ELR超過・DR12の損耗も通常のMCと同じ扱い(元のDRのダイスで判定) */
+      var lBr=false,done={},rd0=BT_RD;
+      (ev.ldrUnits||[]).forEach(function(x){if(done[x.u.id]||x.s.u.indexOf(x.u)<0||x.u.s==='br')return;done[x.u.id]=1;BT_RD=[d1,d2];var r0=btMC1(x.s,x.u,0,0,log,'FPF-NMC');if(r0!=='pass'&&r0!=='pin')lBr=true;});
+      ev.usedU.forEach(function(x){var I=btI(x.u,x.s.side);if(done[x.u.id]||!btIsInfK(I.kind)||x.s.u.indexOf(x.u)<0||x.u.s==='br')return;done[x.u.id]=1;BT_RD=[d1,d2];btMC1(x.s,x.u,0,lBr?0:(ev.ldr||0),log,'FPF-NMC');});
+      BT_RD=rd0;}
   }
   btCleanStacks();
   return {log:log,r:r,raw:raw};
