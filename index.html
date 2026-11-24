@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1613</title>
+<title>ASL SKシリーズv1614</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1613">
+<meta property="og:title" content="ASL SKシリーズv1614">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.813"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.814"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1614="v1614(ダルマ「他も実施」): AI対戦の運搬でPSKのPPを実物カウンターどおり1に(旧2)。NM_PSKPP2=1で旧動作";
 var APP_VERSION_HIST_v1613="v1613(ダルマ「この2つも直す」「AI対戦モード 阻止ができない？」): AI対戦の不足をルールどおりに。①BAZ/PSKを指揮官2人で撃てる(1人は不可 SK4 4.4.1、撃った2人はそのフェイズの指揮能力なし) ②BAZ/PSKの命中DRに別の指揮官の指揮修正(自分の攻撃は不可) ③分隊はSW1つなら自分の火力も使える・HS/乗員は失う(4.0) ④阻止を判定モードと同じに: 車両(CEの主砲・BMG/CMG/RMG/AAMGを射界で、ショック/スタン/Motionは不可)・砲・2人の指揮官のMG・稜線の例外。BAZ43はデータあり撃てる";
 var APP_VERSION_HIST_v1612="v1612(ダルマ「今のAI対戦モードでは、バズーカは撃てません 修正」「AI対戦モードだからできないは無しにする」): AI対戦でBAZ(BAZ44/45)をPSKと同じ携行対戦車兵器として撃てるように。建物の中の歩兵(命中でIFT 8火力列、PSKは12)・車両(HEAT TK16)。射程・TH表・X#はカウンターどおり、建物外の歩兵には撃てない(SK4 4.4/4.4.1)。BAZ/PSKを撃った分隊も自分の火力で別に撃てる";
 var APP_VERSION_HIST_v1611="v1611(ダルマ「なぜ射撃できない？」): 射撃できないとき「射撃できるユニットがありません」だけだったのを、ユニットごとの理由を出すように(射程外: 距離・射程・遠距離の上限、準備射撃済・臨機射撃済・最終射撃済、再射撃は通常射程まで など)";
@@ -29967,7 +29968,7 @@ function btInfo0(side,name){
     return {kind:'mg',type:type,fp:fp,rng:rng,b:sw?sw.b:12,rof:sw?sw.rof:(type==='LMG'?1:2),pp:sw?sw.pp:(type==='LMG'?1:3),r:sw?sw.r:1,val:type==='LMG'?0.35:0.6};
   }
   if(/^DC/.test(name))return {kind:'dc',fp:30,pp:1,val:0.4};
-  if(/^PSK|^PF\b|^BAZ|^PIAT|^ATR/.test(name))return {kind:'latw',pp:/PSK/.test(name)?2:1,val:0.3};
+  if(/^PSK|^PF\b|^BAZ|^PIAT|^ATR/.test(name))return {kind:'latw',pp:(/PSK/.test(name)&&window.NM_PSKPP2===1)?2:1,val:0.3}; /* v1614(ダルマ「他も実施」): PSKのPPは実物カウンターどおり1(LATW_DATA psk pp:1)。旧2 */
   if(/PTP|対戦車砲|砲\b|Gun/.test(name)&&!/\d-\d-\d/.test(name))return {kind:'gun',val:0.8};
   if(/T-34|IS-2|パンター|ティーガー|IV号|PzKpfw|KT|Panther|Tiger/.test(name)||((typeof btAfvData==='function')&&btAfvData(name))){var av=(typeof btAfvData==='function')?btAfvData(name):null; /* v1193: 車両データにあれば車両(シャーマンIII・III号N) */return {kind:'afv',val:(av&&BT_VAL_AFV[av.id])||2.5};}
   var gL=btGunData(name);if(gL&&gL.gsType==='MTR'&&(gL.cal||99)<=60)return {kind:'lmtr',pp:gL.pp||1,val:0.5}; /* v1373: 軽迫撃砲(60mm以下)は SW(4.5)。分隊/HS が撃つ */
