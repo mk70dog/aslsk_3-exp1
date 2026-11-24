@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1607</title>
+<title>ASL SKシリーズv1608</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1607">
+<meta property="og:title" content="ASL SKシリーズv1608">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.807"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.808"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1608="v1608(ダルマ「射撃可能相手部隊をMAP上でわかるようにする」→案3): 射撃の準備中(撃つ部隊を選び、目標はまだ)に、その部隊が撃てる敵のヘクスを薄い赤で塗り、「FP→列 DRM」と効果の見込み(KIA・K・MC+PTC×0.4)を表示。撃てるかは射撃と同じ判定(LOS・射程・臨機射撃の条件など)。NM_FTGT=1/2で他の案・0で出さない";
 var APP_VERSION_HIST_v1607="v1607(ダルマ「盤外の部隊を選んだ状態でヘクスを選択すると通常移動で開始にする」): 移動フェイズに盤外の自軍スタックを選んでいるとき、光っている進入ヘクスをタップすると、「移動開始」を押さなくても通常の移動を始めてそのヘクスへ進入する(進入できなかったときは移動を取り消してメッセージ)。駆け足・警戒移動はこれまでどおりボタンから。NM_OFFTAPMV=0で従来";
 var APP_VERSION_HIST_v1606="v1606(ダルマ「全てルール通りに実施」): SK4 3.2.3の照合 ①最終防護射撃のNMCで指揮官が除去→同じヘクスの士気の低いユニットはLLMC、混乱→統制ユニットはLLTC(負の指揮修正はプラスのDRMで) ②指揮修正を付けるのは、統制・非釘付けで判定に無傷で通った指揮官だけ(上限ちょうどで釘付けになった指揮官の修正は付かない) ③MC・PTCで士気の低い指揮官にも、先に無傷で通った指揮官の指揮修正を付ける";
 var APP_VERSION_HIST_v1605="v1605(ダルマ「FPFのNMCはログにあった？」→ルール照合 SK4 3.3.3): 最終防護射撃のNMCを厳格化 ①指揮した指揮官もNMCを受ける(自分の指揮修正なし・先に判定、混乱などしたら他のユニットに指揮修正は付かない) ②ELR超過の格下げ・DR12の損耗も通常のMCと同じに(元の射撃のダイスで判定)。NM_FPFNMC=0で従来";
@@ -33365,6 +33366,7 @@ function btOverlaySVG0(dispLayout){
   h+=btVehOverlaySVG(dispLayout);
   h+=ghMk; /* v1288 */
   try{h+=btResidSVG(dispLayout);}catch(e){}
+  try{h+=btFireTgtSVG(dispLayout);}catch(e){}
   h+=btSmokeDCOverlaySVG(dispLayout);
   // 射撃の目標
   var ofT=(BT.ofire&&BT.ofire.tgtN!=null)?BT.ofire.tgtN:((BT.mgfire&&BT.mgfire.tgtN!=null)?BT.mgfire.tgtN:null);
@@ -46402,6 +46404,18 @@ function btLegendWrapHTML(){var lg=btLegendHTML();if(!lg)return '';return '<div 
   try{var st=document.createElement('style');st.textContent='.nmHvHide{transition:opacity .18s}.nmHvHide.nmHvOn{opacity:.06!important}';document.head.appendChild(st);}catch(e){}})();
 /* v1596(ダルマ「残留のマーカーは出ない？」→案2): 残留火力を、カウンターより上に残留火力カウンターの画像+数字で描く(凡例にも出す)。NM_RESID=1:赤い札を上に 3:ヘクス塗り+札 0:従来(カウンターの下の小さな札) */
 if(window.NM_RESID==null)window.NM_RESID=2;
+/* v1608(ダルマ「射撃可能相手部隊をMAP上でわかるようにする」→案3。既定3): 射撃の準備中(撃つ部隊を選んだ・目標はまだ)、撃てる敵のヘクスを地図で示す。NM_FTGT=1:赤い点線の枠+「火力→列」 2:照準マーク+火力 3:赤い塗り+火力と効果の見込み。0=出さない */
+var BT_FTGT_C=null;
+function btFireTgtList(){var f=BT.fire;if(!f||!f.parts||!f.parts.length)return [];var key=JSON.stringify([f.side,f.ph,f.parts,BT.ph,BT.turn,BT.stacks.length,(BT.mv&&BT.mv.path)||0]);if(BT_FTGT_C&&BT_FTGT_C.k===key)return BT_FTGT_C.v;
+  var seen={},out=[];BT.stacks.forEach(function(e){if(e.side===f.side||e.n==null||e.n<0||seen[e.n])return;seen[e.n]=1;try{var ev=btFireEval({side:f.side,ph:f.ph,parts:f.parts,tgtN:e.n,fast:true});if(ev&&ev.ok){var p=0;try{var ds=btFireDist(ev);p=(ds.KIA+ds.K+ds.MC+ds.PTC*0.4)/36;}catch(x){}out.push({n:e.n,fp:ev.fp,col:ev.colLbl,drm:ev.drm,p:p});}}catch(x){}});
+  BT_FTGT_C={k:key,v:out};return out;}
+function btFireTgtSVG(dl){var v=window.NM_FTGT==null?3:window.NM_FTGT;if(!v||!BT.fire||BT.fire.tgtN!=null)return '';if(BT.app&&BT.fire.side!==btHuman())return '';var L=btFireTgtList();if(!L.length)return '';var h='<g style="pointer-events:none">',R=btHexR();
+  L.forEach(function(t){var d=btDispPt(t.n,dl),g='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">';
+    if(v===1){h+='<polygon points="'+btHexPoly(t.n,dl,0.95)+'" fill="none" stroke="#ff3030" stroke-width="4" stroke-dasharray="9 5"/>';g+='<rect x="'+(d.x-34)+'" y="'+(d.y+R*0.5)+'" width="68" height="18" rx="4" fill="#000d" stroke="#ff5050"/><text x="'+d.x+'" y="'+(d.y+R*0.5+13)+'" text-anchor="middle" font-size="12" font-weight="bold" fill="#ffb0a0" font-family="AppFont,AppJP,monospace">FP'+t.fp+'→'+t.col+'</text>';}
+    else if(v===2){var r=R*0.55;g+='<circle cx="'+d.x+'" cy="'+d.y+'" r="'+r+'" fill="none" stroke="#ff3030" stroke-width="3"/><path d="M'+(d.x-r-8)+' '+d.y+'H'+(d.x-r+8)+'M'+(d.x+r-8)+' '+d.y+'H'+(d.x+r+8)+'M'+d.x+' '+(d.y-r-8)+'V'+(d.y-r+8)+'M'+d.x+' '+(d.y+r-8)+'V'+(d.y+r+8)+'" stroke="#ff3030" stroke-width="3"/><rect x="'+(d.x-20)+'" y="'+(d.y+r+6)+'" width="40" height="17" rx="4" fill="#b01818"/><text x="'+d.x+'" y="'+(d.y+r+19)+'" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff" font-family="AppFont,AppJP,monospace">'+t.fp+'</text>';}
+    else{h+='<polygon points="'+btHexPoly(t.n,dl,0.95)+'" fill="#ff2020" fill-opacity="0.25" stroke="#ff4040" stroke-width="2.5"/>';g+='<rect x="'+(d.x-40)+'" y="'+(d.y+R*0.45)+'" width="80" height="30" rx="4" fill="#000d" stroke="#ff5050"/><text x="'+d.x+'" y="'+(d.y+R*0.45+13)+'" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#ffb0a0" font-family="AppFont,AppJP,monospace">FP'+t.fp+'→'+t.col+' '+(t.drm>=0?'+':'')+t.drm+'</text><text x="'+d.x+'" y="'+(d.y+R*0.45+26)+'" text-anchor="middle" font-size="11" fill="#ffd060" font-family="AppFont,AppJP,monospace">'+T('効果')+' '+Math.round(t.p*100)+'%</text>';}
+    h+=g+'</g>';});
+  return h+'</g>';}
 function btResidSVG(dl){var v=window.NM_RESID;if(!v||!BT.resid)return '';var h='';
   Object.keys(BT.resid).forEach(function(k){var fp=BT.resid[k];if(!fp)return;var n=+k,d=btDispPt(n,dl),R=btHexR();
     if(v===3)h+='<polygon points="'+btHexPoly(n,dl,0.96)+'" fill="#ff2020" fill-opacity="0.22" stroke="#ff5050" stroke-width="3" stroke-dasharray="7 4" style="pointer-events:none"/>';
