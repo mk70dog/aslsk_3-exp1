@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1606</title>
+<title>ASL SKシリーズv1607</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1606">
+<meta property="og:title" content="ASL SKシリーズv1607">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.806"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.807"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1607="v1607(ダルマ「盤外の部隊を選んだ状態でヘクスを選択すると通常移動で開始にする」): 移動フェイズに盤外の自軍スタックを選んでいるとき、光っている進入ヘクスをタップすると、「移動開始」を押さなくても通常の移動を始めてそのヘクスへ進入する(進入できなかったときは移動を取り消してメッセージ)。駆け足・警戒移動はこれまでどおりボタンから。NM_OFFTAPMV=0で従来";
 var APP_VERSION_HIST_v1606="v1606(ダルマ「全てルール通りに実施」): SK4 3.2.3の照合 ①最終防護射撃のNMCで指揮官が除去→同じヘクスの士気の低いユニットはLLMC、混乱→統制ユニットはLLTC(負の指揮修正はプラスのDRMで) ②指揮修正を付けるのは、統制・非釘付けで判定に無傷で通った指揮官だけ(上限ちょうどで釘付けになった指揮官の修正は付かない) ③MC・PTCで士気の低い指揮官にも、先に無傷で通った指揮官の指揮修正を付ける";
 var APP_VERSION_HIST_v1605="v1605(ダルマ「FPFのNMCはログにあった？」→ルール照合 SK4 3.3.3): 最終防護射撃のNMCを厳格化 ①指揮した指揮官もNMCを受ける(自分の指揮修正なし・先に判定、混乱などしたら他のユニットに指揮修正は付かない) ②ELR超過の格下げ・DR12の損耗も通常のMCと同じに(元の射撃のダイスで判定)。NM_FPFNMC=0で従来";
 var APP_VERSION_HIST_v1604="v1604(ダルマ「v1601 の変更を戻す」): v1601(アプリの臨機射撃を絞る: 火力2以下は隣接のみ・再射撃のしきい値+0.16・3回目以降のしきい値上げ)を取り消し、アプリの臨機射撃の判断をv1600以前に戻す。v1603の指揮官の指揮のルール修正はそのまま";
@@ -33219,6 +33220,7 @@ function btMapTap0(boardId,col,row){
     var ms=btStackById(BT.mv.sid);
     if(ms&&ms.n!==n){btMoveTap(n);return;}
   }
+  if(!BT.mv&&!BT.edit&&window.NM_OFFTAPMV!==0&&BT.sel&&btPhId()==='MPh'){var os0=btStackById(BT.sel);if(os0&&(os0.n==null||os0.n<0)&&os0.side===btHuman()&&btSideNow()===os0.side&&BTG.nodes[n]&&btEntHit(os0,BTG.nodes[n])){BtMoveStart();if(BT.mv){btMoveTap(n);var os1=btStackById(os0.id);if(BT.mv&&os1&&(os1.n==null||os1.n<0)){try{BtMoveCancel();}catch(e){}}return;}}} /* v1607(ダルマ「盤外の部隊を選んだ状態でヘクスを選択すると通常移動で開始」): 光っている進入ヘクスをタップしたら、移動開始を押さなくても通常の移動で進入 */
   if(BT.advMode){btAdvTap(n);return;}
   if(!BT.edit&&typeof btVQuickTap==='function'&&btVQuickTap(n))return; // v321: 選んだ車両の円をタップで移動
   if(BT.placing&&(!BT.started||BT.edit)){
