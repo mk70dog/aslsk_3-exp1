@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1615</title>
+<title>ASL SKシリーズv1616</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1615">
+<meta property="og:title" content="ASL SKシリーズv1616">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.815"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.816"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1616="v1616(ダルマ「実施」): 阻止のNMCを射撃のMCと同じパネルに。自分のユニットが潰走で受ける阻止は自分で🎲を振る(付き添いの指揮官も)、AIのユニットが受ける阻止はAIのダイスを確認。NM_RTMC=0で旧動作(自動)。バグ修正: 米軍・英軍・伊軍などの分隊が損耗でHSにならず除去されていた(損耗表にSOV/GERしか無かった)";
 var APP_VERSION_HIST_v1615="v1615(ダルマ「ROFは判定モードのようにわかりやすくする」「実施」): AI対戦のROFを判定モードのように。射撃パネルに使う機関銃ごとのROF(赤○以下でもう一度)・故障B#の札、ROFを保った機関銃のあるスタックに緑の帯「🔁 ROF維持 MMG×2 もう一度撃てる(前の目標)」と「機関銃だけもう一度撃つ」ボタン、臨機射撃では「ROFを捨てて残留火力を残す」(3.3.5)。NM_ROFUI=0で旧表示";
 var APP_VERSION_HIST_v1614="v1614(ダルマ「他も実施」): AI対戦の運搬でPSKのPPを実物カウンターどおり1に(旧2)。NM_PSKPP2=1で旧動作";
 var APP_VERSION_HIST_v1613="v1613(ダルマ「この2つも直す」「AI対戦モード 阻止ができない？」): AI対戦の不足をルールどおりに。①BAZ/PSKを指揮官2人で撃てる(1人は不可 SK4 4.4.1、撃った2人はそのフェイズの指揮能力なし) ②BAZ/PSKの命中DRに別の指揮官の指揮修正(自分の攻撃は不可) ③分隊はSW1つなら自分の火力も使える・HS/乗員は失う(4.0) ④阻止を判定モードと同じに: 車両(CEの主砲・BMG/CMG/RMG/AAMGを射界で、ショック/スタン/Motionは不可)・砲・2人の指揮官のMG・稜線の例外。BAZ43はデータあり撃てる";
@@ -29941,7 +29942,15 @@ function btToast(msg){
 // ---------- [B1] 部隊のデータ ----------
 var BT_HS_MAP={ // 損耗(分隊→HS)。ASL標準の減少に従う。要確認: カウンター実物で照合すること
   GER:{'5-4-8[E]':'2-3-8[E](HS)','8-3-8[E]':'3-3-8[E](HS)','4-6-8[E]':'2-4-8[E](HS)','4-6-7[1]':'2-4-7[1](HS)','4-4-7[2]':'2-3-7[2](HS)','4-3-6[C]':'2-3-6[C](HS)'},
-  SOV:{'4-5-8[E]':'2-4-8[E](HS)','6-2-8[E]':'3-2-8[E](HS)','5-2-7[1]':'2-2-7[1](HS)','4-4-7[1]':'2-3-7[1](HS)','4-2-6[C]':'2-2-6[C](HS)'}
+  SOV:{'4-5-8[E]':'2-4-8[E](HS)','6-2-8[E]':'3-2-8[E](HS)','5-2-7[1]':'2-2-7[1](HS)','4-4-7[1]':'2-3-7[1](HS)','4-2-6[C]':'2-2-6[C](HS)'},
+  /* v1616(バグ修正): 米軍などの分隊が損耗でHSにならず除去されていた(表にSOV/GERしか無かった)。各国のHSカウンター(UNITS)で対応 */
+  USA:{'7-4-7[E]':'3-4-7[E](HS)','6-6-7[E]':'3-3-7[E](HS)','6-6-6[1]':'3-4-6[1](HS)','5-4-6[2]':'2-3-6[2](HS)','5-3-6[G]':'2-2-6[G](HS)'},
+  ITA:{'3-4-7[1]':'1-3-7[1](HS)','3-4-6[1]':'1-3-6[1](HS)','3-3-6[C]':'1-2-6[C](HS)'},
+  GBR:{'6-4-8[E]':'3-3-8[E](HS)','4-5-8[E]':'2-4-8[E](HS)','4-5-7[1]':'2-4-7[1](HS)','4-4-7[2]':'2-3-7[2](HS)','4-3-6[G]':'2-2-6[G](HS)'},
+  FFR:{'6-4-8[E]':'3-3-8[E](HS)','4-5-8[E]':'2-4-8[E](HS)','4-5-7[1]':'2-4-7[1](HS)','4-4-7[2]':'2-3-7[2](HS)','4-3-6[G]':'2-2-6[G](HS)'},
+  ALM:{'4-5-7[1]':'2-3-7[1](HS)','4-3-7[G]':'2-2-7[G](HS)'},
+  POL:{'4-5-8[E]':'2-4-8[E](HS)','4-5-7[1]':'2-3-7[1](HS)','4-3-7[G]':'2-2-7[G](HS)'},
+  SLO:{'4-4-7[E]':'2-4-7[E](HS)','3-4-7[1]':'1-3-7[1](HS)','3-3-6[C]':'1-2-6[C](HS)'}
 };
 var BT_INFO_C={};
 function btInfo(side,name){
@@ -30544,7 +30553,7 @@ function btMC1(s,u,drm,ldr,log,tag){
       if(raw===12)res='break+cas';
     }
   }
-  btMcRow(s,{tag:tag||'MC',nm:nm0,nm1:u.nm,side:s.side,s0:was,d:[d1,d2],drm:drm||0,ldr:ldr||0,fin:fin,mor:mor,res:res});
+  btMcRow(s,{tag:String(tag||'MC').trim(),nm:nm0,nm1:u.nm,side:s.side,s0:was,d:[d1,d2],drm:drm||0,ldr:ldr||0,fin:fin,mor:mor,res:res});
   log.push((tag||'MC')+' '+u.nm+(was==='br'?'(混乱)':'')+' DR'+raw+((drm||ldr)?('→'+fin):'')+'/士気'+mor+' → '+({pass:'成功',pin:'釘付け',break:'混乱','break+cas':'混乱+損耗',cas:'損耗',elim:'除去'}[res]));
   if(res==='cas'||res==='break+cas')btCasualty(s,u,log);
   else if(res==='elim'){btRemoveUnit(s,u);log.push('  '+u.nm+' 除去');}
@@ -30572,7 +30581,21 @@ function btMcDefer(s,targets,drm,isPTC,r,log){if(BT_MCSIM||!btMcOn()||s.side!==b
   var si=-1;for(var li=log.length-1;li>=0;li--){if(/→/.test(log[li])&&String(log[li]).indexOf(r)>=0){si=li;break;}}var src=si>=0?String(log[si]).replace(/\s+\[期待.*$/,''):'',ext=si>=0?log.slice(si+1).map(String).filter(function(x){return !/^\s*$/.test(x);}).slice(0,4):[]; /* v1595(ダルマ報告「突然MCが発生した」): 何の攻撃の結果か(残留火力など)をパネルに出す */
   BT.mcQ=BT.mcQ||[];BT.mcQ.push({sid:s.id,n:s.n,uids:targets.map(function(u){return u.id;}),drm:drm||0,isPTC:!!isPTC,r:r,dice:[],done:0,src:src,ext:ext});
   log.push('→ '+r+' の判定はあなたが振ります');setTimeout(function(){try{btMcSync();}catch(e){}},60);return true;}
-function btMcSim(it,allow,real){var s=btStackById(it.sid);if(!s)return {rows:[],fin:true,log:[]};
+/* v1616(ダルマ「実施」): 自分のユニットが潰走で受ける阻止のNMCは、射撃のMCと同じパネルで自分が振る(SK4 3.6)。NM_RTMC=0で旧動作(自動) */
+function btRtIntHexes(s,path,low){if(low)return [];var o=[];for(var i=0;i<path.length;i++){var pv=i?path[i-1]:s.n,w=btInterdictors(path[i],s.side,pv);if(w)o.push({n:path[i],who:w});}return o;}
+function btRtIntDefer(c,path,low,must,ldr){if(window.NM_RTMC===0||!btMcOn()||c.s.side!==btHuman()||BT_MCSIM)return false;var H=btRtIntHexes(c.s,path,low);if(!H.length)return false;
+  BT.mcQ=BT.mcQ||[];BT.mcQ.push({kind:'rt',sid:c.s.id,uid:c.u.id,n:c.s.n,path:path.slice(),low:!!low,must:!!must,ldr:ldr?ldr.id:null,uids:[c.u.id],drm:0,isPTC:false,r:'阻止のNMC',dice:[],done:0,
+    src:T('潰走')+' '+c.u.nm+(ldr?'+'+ldr.nm:'')+' '+BTG.nodes[c.s.n].nm+'→'+path.map(function(n){return BTG.nodes[n].nm;}).join('→'),ext:H.map(function(h){return T('開豁地')+' '+BTG.nodes[h.n].nm+' ← '+h.who+T('から阻止');})});
+  btSave();setTimeout(function(){try{btMcSync();}catch(e){}},60);return true;}
+function btRtIntSim(it,allow,real){var s=btStackById(it.sid),u=s&&s.u.filter(function(x){return x.id===it.uid;})[0];if(!s||!u)return {rows:[],fin:true,log:[]};
+  var L=it.ldr?s.u.filter(function(x){return x.id===it.ldr;})[0]:null,log=[];BT_MCSIM={q:it.dice,i:0,allow:allow,cnt:0,rows:[]};var fin=true;
+  try{if(real)btRoutExec(s,u,it.path,it.low,it.must,log,L);
+    else{var t={id:'rtSim',side:s.side,n:s.n,u:JSON.parse(JSON.stringify([u].concat(L?[L]:[]))),mel:false},uc=t.u[0],lc=L?t.u[1]:null,ldm=lc?btCmdOf(s.side,lc):0;
+      for(var i=0;i<it.path.length;i++){var pv=i?it.path[i-1]:s.n,w=it.low?null:btInterdictors(it.path[i],s.side,pv);if(!w)continue;var rr=btMC1(t,uc,0,ldm,log,'阻止('+w+'から)');
+        if(lc&&rr!=='pass'&&t.u.indexOf(lc)>=0){btRemoveUnit(t,lc);lc=null;ldm=0;}if(t.u.indexOf(uc)<0||uc.s==='pn')break;}}}
+  catch(e){if(e===BT_MCSTOP)fin=false;else{BT_MCSIM=null;throw e;}}
+  var rows=BT_MCSIM.rows,nx=BT_MCSIM.next||null;BT_MCSIM=null;return {rows:rows,fin:fin,log:log,next:fin?null:nx};}
+function btMcSim(it,allow,real){if(it.kind==='rt')return btRtIntSim(it,allow,real);var s=btStackById(it.sid);if(!s)return {rows:[],fin:true,log:[]};
   var st=real?s:JSON.parse(JSON.stringify(s)),tg=st.u.filter(function(u){return it.uids.indexOf(u.id)>=0;}),log=[];
   BT_MCSIM={q:it.dice,i:0,allow:allow,cnt:0,rows:[]};var fin=true;
   try{btGroupCheck(st,tg,it.drm,log,it.isPTC);}catch(e){if(e===BT_MCSTOP)fin=false;else{BT_MCSIM=null;throw e;}}
@@ -30582,7 +30605,9 @@ function BtMcRoll(){var it=BT.mcQ&&BT.mcQ[0];if(!it||BT_MCROLLING)return;var r0=
   var go=function(){BT_MCROLLING=false;it.done++;btSave();btMcSync();};
   if(nr&&window.NM_MCSHK!==0){BT_MCROLLING=nr;btMcSync();setTimeout(go,window.NM_MCSHK||1500);}else go();} /* v1588(ダルマ「ダイスが揺れて止まるまで1-2秒」): 行の中でダイスを揺らして止める */
 var BT_MCROLLING=false;
-function BtMcApply(){var it=BT.mcQ&&BT.mcQ[0];if(!it)return;var r=btMcSim(it,999,true);var s=btStackById(it.sid);
+function BtMcApply(){var it=BT.mcQ&&BT.mcQ[0];if(!it)return;
+  if(it.kind==='rt'){var r1=btMcSim(it,999,true);BT.mcQ.shift();var c1=BT.rtp?btRtpCur():null,ln=['('+T('阻止のNMCはあなたが振ったダイス')+')'].concat(r1.log);if(BT.rtp&&c1&&c1.u&&c1.u.id===it.uid)btRtpDone(c1,ln);else{var uu=btFindUnit(it.uid);if(uu)uu.u._rtd=1;if(BT.rtp){BT.rtp.log=BT.rtp.log.concat(ln);BT.rtp.res.push(ln.join(' / '));BT.rtp.path=[];BT.rtp.cur=btRtpNext2();}else btLog(ln);}try{btCleanStacks();}catch(e){}btUpdateCtl();btSave();var g1=document.getElementById('btMcGate');if(g1)g1.remove();Draw();btKick(300);return;}
+  var r=btMcSim(it,999,true);var s=btStackById(it.sid);
   btLog([BT_SIDE_NAME[s?s.side:btHuman()]+' '+(BTG.nodes[it.n]?BTG.nodes[it.n].nm:'')+' '+it.r+'(あなたが振ったダイス)'].concat(r.log));
   BT.mcQ.shift();try{btCleanStacks();}catch(e){}try{btAfterHit();}catch(e){}btUpdateCtl();btSave();var g=document.getElementById('btMcGate');if(g)g.remove();Draw();btKick(300);}
 function BtMcNext(all){var g=BT_MCVQ[0];if(!g)return;if(g.tm){clearTimeout(g.tm);g.tm=null;}if(all)g.shown=g.rows.length;else if(g.shown<g.rows.length)g.shown++;else{BT_MCVQ.shift();var el=document.getElementById('btMcGate');if(el)el.remove();btKick(200);}btMcSync();}
@@ -31630,12 +31655,13 @@ function btRoutExec(s,u,path,low,must,log,ldr){
   s.u=s.u.filter(function(x){return t.u.indexOf(x)<0;});BT.stacks.push(t);
   var ldm=ldr?btCmdOf(side,ldr):0;
   log.push(BTG.nodes[s.n].nm+' '+u.nm+(must?'(潰走義務)':'')+(ldr?'+'+ldr.nm+'(付き添い)':'')+' 潰走'+(low?'(匍匐後退)':'')+' → '+path.map(function(n){return BTG.nodes[n].nm;}).join('→'));
-  for(var i=0;i<path.length;i++){
+  var vgR=(window.NM_RTMC!==0)?btMcViewStart(t,false,0):null; /* v1616(ダルマ「実施」): 阻止のNMC。AIのユニットはダイスを確認パネルで見せる(自分のユニットは btRtIntDefer で自分が振る) */
+  try{for(var i=0;i<path.length;i++){
     btSetPos(t,path[i]);
     var pvI=i?path[i-1]:s.n;if(!low&&btInterdictors(path[i],side,pvI)){var who=btInterdictors(path[i],side,pvI);var rr=btMC1(t,u,0,ldm,log,'  阻止('+who+'から)');
       if(ldr&&rr!=='pass'&&t.u.indexOf(ldr)>=0){btRemoveUnit(t,ldr);log.push('  '+ldr.nm+'(付き添いの指揮官) 阻止のNMC失敗で除去');ldr=null;ldm=0;}
       if(t.u.indexOf(u)<0)break;if(u.s==='pn')break;}
-  }
+  }}finally{btMcViewEnd(vgR);}
   if(t.u.indexOf(u)>=0&&btAdjGOEnemy(t.n,side)){btRemoveUnit(t,u);log.push('  '+u.nm+' 敵に隣接したまま → 除去');}
 }
 function btRoutPhase(){
@@ -31653,18 +31679,19 @@ function btRtpNext2(){var R=BT.rtp;var L=btRoutList(R.side).filter(function(x){r
 function BtRtpPick(sid,uid){if(BT.rtp){BT.rtp.cur={sid:sid,uid:uid};BT.rtp.low=false;BT.rtp.path=[];BT.rtp.ldr=null;btSave();Draw();}}
 function BtRtpLow(){if(BT.rtp){BT.rtp.low=!BT.rtp.low;Draw();}}
 function btRtpTap(n){var c=btRtpCur();if(!c)return false;var R=BT.rtp,O=btRoutOpts(c.s,c.u),lines=[],must=btMustRout(c.s,c.u);
-  if(R.low){if(O.low.indexOf(n)<0){btToast('匍匐後退できるのは光っている隣接ヘクス');return true;}btRoutExec(c.s,c.u,[n],true,must,lines,btRtpLdrSel(c));}
+  var dfR=false;if(R.low){if(O.low.indexOf(n)<0){btToast('匍匐後退できるのは光っている隣接ヘクス');return true;}btRoutExec(c.s,c.u,[n],true,must,lines,btRtpLdrSel(c));}
   else{var P=R.path||[],ST=btRtpSteps(c),st=ST.steps.filter(function(x){return x.n===n;})[0];
     if(st&&!st.dest){R.path=P.concat(st.seg);btSave();Draw();return true;} /* 途中のヘクス(経由) */
-    if(st&&st.dest){btRoutExec(c.s,c.u,P.concat(st.seg),false,must,lines,btRtpLdrSel(c));}
-    else if(!P.length){var d=O.dests.filter(function(x){return x.n===n;})[0];if(!d){btToast('緑の円(行き先)か、白い円(コースの1歩)をタップ');return true;}btRoutExec(c.s,c.u,d.path,false,must,lines,btRtpLdrSel(c));}
+    if(st&&st.dest){dfR=btRtIntDefer(c,P.concat(st.seg),false,must,btRtpLdrSel(c));if(!dfR)btRoutExec(c.s,c.u,P.concat(st.seg),false,must,lines,btRtpLdrSel(c));}
+    else if(!P.length){var d=O.dests.filter(function(x){return x.n===n;})[0];if(!d){btToast('緑の円(行き先)か、白い円(コースの1歩)をタップ');return true;}dfR=btRtIntDefer(c,d.path,false,must,btRtpLdrSel(c));if(!dfR)btRoutExec(c.s,c.u,d.path,false,must,lines,btRtpLdrSel(c));}
     else{btToast('白い円(途中のヘクス)か、緑の円(行き先)をタップ');return true;}}
-  btRtpDone(c,lines);return true;}
+  if(dfR){btSave();Draw();return true;}btRtpDone(c,lines);return true;}
 function BtRtpAuto(){var c=btRtpCur();if(!c)return;var lines=[],must=btMustRout(c.s,c.u),pl=btRoutPlan(c.s,c.u);
   if(!pl){if(must){btRemoveUnit(c.s,c.u);lines.push(BTG.nodes[c.s.n].nm+' '+c.u.nm+' 潰走不能 → 除去');}else lines.push(c.u.nm+' 留まる');}
-  else btRoutExec(c.s,c.u,pl.path,false,must,lines);btRtpDone(c,lines);}
+  else{if(btRtIntDefer(c,pl.path,false,must,null)){btSave();Draw();return;}btRoutExec(c.s,c.u,pl.path,false,must,lines);}btRtpDone(c,lines);}
 function BtRtpStay(){var c=btRtpCur();if(!c)return;if(btMustRout(c.s,c.u)){btToast('潰走義務のユニットは留まれません');return;}btRtpDone(c,[BTG.nodes[c.s.n].nm+' '+c.u.nm+' 潰走しない(留まる)']);}
-function BtRtpEnd(){var R=BT.rtp;if(!R)return;
+function BtRtpEnd(){var R=BT.rtp;if(!R)return;if(btMcPend())return;
+  if(window.NM_RTMC!==0&&btMcOn()&&R.side===btHuman()){var lf=btRoutList(R.side).filter(function(x){if(x.u._rtd||!x.must)return false;var pl=btRoutPlan(x.s,x.u);return pl&&btRtIntHexes(x.s,pl.path,false).length;})[0];if(lf){R.cur={sid:lf.s.id,uid:lf.u.id};R.path=[];btToast(T('潰走義務のユニットが阻止を受けます。行き先を選ぶか「おまかせ」で潰走させてください'));btSave();Draw();return;}} /* v1616 */
   btRoutList(R.side).forEach(function(x){if(x.u._rtd)return;var lines=[];if(x.must){var pl=btRoutPlan(x.s,x.u);if(pl)btRoutExec(x.s,x.u,pl.path,false,true,lines);else{btRemoveUnit(x.s,x.u);lines.push(BTG.nodes[x.s.n].nm+' '+x.u.nm+' 潰走不能 → 除去');}R.log=R.log.concat(lines);}});
   BT.stacks.forEach(function(s){s.u.forEach(function(u){delete u._rtd;});});
   var log=R.log;R.rest.forEach(function(sd){btRoutSide(sd,log);});BT.rtp=null;btRoutFin(log);btSave();
@@ -31696,14 +31723,15 @@ function btRoutSide(side,log){
         s.u=s.u.filter(function(x){return t.u.indexOf(x)<0;});BT.stacks.push(t);
         var line=BTG.nodes[s.n].nm+' '+u.nm+(must?'(潰走義務)':'')+' 潰走'+(low?'(匍匐後退)':'')+' → '+path.map(function(n){return BTG.nodes[n].nm;}).join('→');
         log.push(line);
-        for(var i=0;i<path.length;i++){
+        var vgR=(window.NM_RTMC!==0)?btMcViewStart(t,false,0):null; /* v1616: AIの阻止のNMCもダイスを確認 */
+        try{for(var i=0;i<path.length;i++){
           btSetPos(t,path[i]);
           var pvI=i?path[i-1]:s.n;if(!low&&btInterdictors(path[i],side,pvI)){
             var who=btInterdictors(path[i],side,pvI);
             var r=btMC1(t,u,0,0,log,'  阻止('+who+'から)');
             if(t.u.indexOf(u)<0){break;}
           }
-        }
+        }}finally{btMcViewEnd(vgR);}
         if(t.u.indexOf(u)>=0&&btAdjGOEnemy(t.n,side)){btRemoveUnit(t,u);log.push('  '+u.nm+' 敵に隣接したまま → 除去');}
       });
     });
