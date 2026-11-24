@@ -56319,8 +56319,17 @@ var st=document.createElement('style');st.textContent='html.bt-mapfull .los-comp
    +dk(5)+'{padding:3px 6px!important;gap:0!important;background:#0d131cf0!important;border:1px solid #ffd06066!important;box-shadow:0 3px 12px #000b!important;border-radius:10px!important}'+dk(5)+' .nb,'+dk(5)+' .cd{height:30px!important;font-size:13px!important;padding:0 12px!important;background:transparent!important;border:0!important;border-right:1px solid #2c3644!important;border-radius:0!important;color:#e8eef4!important}'+dk(5)+'>span[style*="c8a032"]{color:#ffd060!important;font-size:13px!important;padding:0 12px!important;border-right:1px solid #2c3644}'
    +dk(6)+'{padding:4px 6px!important;gap:6px!important;background:#121a26f5!important;border:2px solid #8fa6b8!important;box-shadow:0 4px 16px #000c!important;border-radius:12px!important}'+dk(6)+' .nb,'+dk(6)+' .cd{height:34px!important;font-size:14px!important;padding:0 14px!important;background:linear-gradient(#34405a,#222b3c)!important;border:1px solid #7f93ad!important;color:#fff!important}'+dk(6)+'>span[style*="c8a032"]{color:#1b1500!important;background:#ffd060;border-radius:7px;font-size:13px!important;padding:5px 10px!important}';
  (document.head?document.head.appendChild(st2):document.addEventListener('DOMContentLoaded',function(){document.head.appendChild(st2);}));
+ /* sample-legsty(ダルマ「赤枠2つとも 青枠と同じフォントサイズ 透明度にする」): 操作バー(btDockCtx)とA→Bの札(btLosCd)を、マーカーの凡例と同じ 黒の半透明(#000b)・細い灰色の枠・11pxの太字 に。NM_LEGSTY=0で従来 */
+ var st3=document.createElement('style');st3.id='btLegStyCss';st3.textContent=
+  'html.btLegSty #btDockCtx{padding:1px 3px!important;gap:0!important;background:#000b!important;border:1px solid #404040!important;box-shadow:none!important;border-radius:5px!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}'
+  +'html.btLegSty #btDockCtx .nb,html.btLegSty #btDockCtx .cd{height:24px!important;font-size:11px!important;font-weight:bold!important;padding:0 8px!important;background:transparent!important;border:0!important;border-right:1px solid #404040!important;border-radius:0!important;color:#e8e0c8!important}'
+  +'html.btLegSty #btDockCtx>span[style*="c8a032"]{font-size:11px!important;padding:0 6px!important;border-right:1px solid #404040}'
+  +'html.btLegSty #btLosCd{background:#000b!important;border:1px solid #404040!important;border-radius:5px!important;box-shadow:none!important;padding:2px 5px!important;font-size:11px!important;color:#e8e0c8!important;gap:4px!important}'
+  +'html.btLegSty #btLosCd button{font-size:11px!important;padding:3px 7px!important;border-radius:4px!important;background:transparent!important;border:1px solid #404040!important;color:#e8e0c8!important}'
+  +'html.btLegSty #btLosCd .nmAbGrip{font-size:13px!important}html.btLegSty #btLosCd span[style*="height:26px"]{height:18px!important}';
+ (document.head?document.head.appendChild(st3):document.addEventListener('DOMContentLoaded',function(){document.head.appendChild(st3);}));
  if(window.NM_CMDC==null)window.NM_CMDC=3;if(window.NM_DKC==null)window.NM_DKC=5; /* v1559: ダルマ選択 3と3 → v1568: 操作バーは5(下のバー2Bと同じ形) */
- function up(){var v=window.NM_CMDC||0,w=window.NM_DKC||0,r=document.documentElement;[1,2,3,4,5,6].forEach(function(k){r.classList.toggle('btCmc'+k,v===k);r.classList.toggle('btDkc'+k,w===k);});}
+ function up(){var v=window.NM_CMDC||0,w=window.NM_DKC||0,r=document.documentElement;[1,2,3,4,5,6].forEach(function(k){r.classList.toggle('btCmc'+k,v===k);r.classList.toggle('btDkc'+k,w===k);});r.classList.toggle('btLegSty',window.NM_LEGSTY!==0);}
  setInterval(up,500);setTimeout(up,100);})();
 </script>
 </body>
