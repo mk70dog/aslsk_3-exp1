@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1601</title>
+<title>ASL SKシリーズv1602</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1601">
+<meta property="og:title" content="ASL SKシリーズv1602">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.801"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.802"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1602="v1602(ダルマ報告「AI射撃中ログが取れない」): 射撃のカードやMC・PTCの判定パネルが出ている間は、画面全体がカードの受け皿になっていて、右上のメニューを押してもカードに吸われていた。その間は右のツールバーとメニューをカードより上に出し、メニュー→システム→システムログを開けるように。NM_FXUP=0で従来";
 var APP_VERSION_HIST_v1601="v1601(ダルマ「臨機射撃撃ちすぎ」): アプリの臨機射撃(移動中の敵への射撃)を絞る。①火力2以下の射撃は隣接(距離1以下)の時だけ ②続けての臨機射撃(SFF・半分の火力)のしきい値を+0.08→+0.16 ③同じ移動への臨機射撃が3回目以降はしきい値をさらに上げる(+0.12ずつ)。最終防護射撃・車両・白兵は従来どおり。NM_DFFCUT=0で従来";
 var APP_VERSION_HIST_v1600="v1600(ダルマ「この画面で1-2秒ダイスを回す」): 相手の射撃カードの中でダイスを約1.5秒回して(揺らして)から止め、そのあと合計・出た目の枠・結果・ユニットを出す。相手の射撃では全画面のダイス演出は使わない。NM_EFXSHK=ミリ秒/0で回さない";
 var APP_VERSION_HIST_v1599="v1599(ダルマ「緑のバナーをやめて次のフェイズの知らせにまとめる」実施): アプリのフェイズが終わったときの緑のバナー(OKで閉じる)を出さず、次のフェイズの知らせ(上のカード)の上に「✓ アプリ(独軍): 防御射撃 終了」を付ける(その時は約4秒表示)。NM_PEMRG=0で従来";
@@ -46392,6 +46393,10 @@ function btResidSVG(dl){var v=window.NM_RESID;if(!v||!BT.resid)return '';var h='
     else{var y2=d.y+R*0.42;g+='<rect x="'+(d.x-26)+'" y="'+(y2-11)+'" width="52" height="20" rx="4" fill="#b01818" stroke="#fff" stroke-width="1.5"/><text x="'+d.x+'" y="'+(y2+4)+'" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff" font-family="AppFont,AppJP,monospace">'+T('残留')+fp+'</text>';}
     h+=g+'</g>';});
   return h;}
+/* v1602(ダルマ「AI射撃中ログが取れない」): 射撃のカード(btFx)や判定パネル(btMcGate)が出ている間も、右のツールバー(メニュー)は押せるように上に出す */
+(function(){try{var st=document.createElement('style');st.textContent='html.btFxUp body #nmFullTabs#nmFullTabs{z-index:9505!important}html.btFxUp body #nmFtMn#nmFtMn{z-index:9510!important}';document.head.appendChild(st);
+  var chk=function(){var on=!!(document.getElementById('btFx')||document.getElementById('btMcGate'))&&window.NM_FXUP!==0;if(on!==document.documentElement.classList.contains('btFxUp'))document.documentElement.classList.toggle('btFxUp',on);};
+  new MutationObserver(chk).observe(document.body,{childList:true});}catch(e){}})();
 function btFtUndo(){var mv=BT.mv;if(!mv){btToast('戻せる操作がありません(移動中だけ戻せます)');return;}if(mv.veh){BtVUndo();return;}BtMoveCancel();}
 function btFtDice(){var a=1+Math.floor(Math.random()*6),b=1+Math.floor(Math.random()*6);diceRollAnim(a,b,T('手動のDR'),function(){btFtDiceDone(a,b);});}
 function btFtDiceDone(a,b){btLog(['🎲 '+T('手動のDR')+' '+(a+b)+' ('+a+'+'+b+')']);btSave();Draw();}
