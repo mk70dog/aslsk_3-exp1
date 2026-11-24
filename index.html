@@ -31449,7 +31449,36 @@ function btRphMHTML(A,hu,att,R){
   var left=A.filter(function(a){return !a.info&&!a.dis;}).length;
   h+='<div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end;align-items:center"><span style="font-size:11.5px;color:#8fa0b3;flex:1">'+T('SWの受け渡しとDMの除去は終了時に自動')+'</span>'+(left?btBtn(T('残りはアプリが振る'),'BtRphAuto()',{st:';margin:0'}):'')+btBtn(T('回復フェイズ終了 ▶'),'BtRphEnd()',{on:true,st:';margin:0'})+'</div></div>';
   return h;}
+/* sample-rphm(ダルマ「AI の回復も同じ画面で表示」): アプリの回復も同じ形のパネルで、1行ずつダイスが揺れて止まり、確認 ▶ で閉じる */
+function btRphAIRows(lines,DZ){var rows=[],di=0,take=function(n){var a=DZ.slice(di,di+n);di+=n;return a;};
+  lines.forEach(function(l){var m;l=String(l);
+    if(m=l.match(/^(\S+) (\S+?)が(\S+)を回復 DR(\d+)→(-?\d+)\/(\d+) (成功|失敗)/)){var d=take(2);if(d.length<2||d[0]+d[1]!==+m[4])d=[Math.min(6,+m[4]-1),+m[4]-Math.min(6,+m[4]-1)];rows.push({hx:m[1],nm:m[3],lab:m[2]+'が回復',dice:d,fin:+m[5],mor:+m[6],ok:m[7]==='成功',n:2});}
+    else if(m=l.match(/^(\S+) (\S+) (自己回復(?:\(MMC1つ\))?) DR(\d+)→(-?\d+)\/(\d+) (成功|失敗)/)){var d2=take(2);if(d2.length<2||d2[0]+d2[1]!==+m[4])d2=[Math.min(6,+m[4]-1),+m[4]-Math.min(6,+m[4]-1)];rows.push({hx:m[1],nm:m[2],lab:m[3].replace('(MMC1つ)','(追加の1個)'),dice:d2,fin:+m[5],mor:+m[6],ok:m[7]==='成功',n:2});}
+    else if(/修理|回収/.test(l)){var d3=take(1),dm=l.match(/dr(\d)/);if(dm&&(!d3.length||d3[0]!==+dm[1]))d3=[+dm[1]];rows.push({hx:l.split(' ')[0],nm:'',lab:l.replace(/^\S+ /,'').replace(/\(dr.*$/,'').replace(/ → .*$/,''),dice:d3.length?d3:null,ok:/成功|を回収/.test(l),n:1,sw:1,res:/除去|使用不能/.test(l)?(/除去/.test(l)?'除去':'使用不能'):null});}
+  });return rows;}
+function BtRphAIOk(){BT.rphAI=null;btSave();Draw();btKick(200);}
+function btRphAIHTML(){var A=BT.rphAI,side=BT.app;
+  var die=function(n,red){return '<span style="display:inline-flex;width:30px;height:30px;border-radius:6px;background:'+(red?'#c62828':'#f4f4f4')+';color:'+(red?'#fff':'#111')+';align-items:center;justify-content:center;font-size:18px;font-weight:900;box-shadow:0 2px 4px #000a">'+n+'</span>';};
+  var rd=function(red,k){return '<span style="display:inline-flex;width:30px;height:30px;border-radius:6px;background:'+(red?'#c62828':'#f4f4f4')+';color:'+(red?'#fff':'#111')+';align-items:center;justify-content:center;font-size:18px;font-weight:900;box-shadow:0 2px 4px #000a;animation:mcShk .16s '+(k*0.05)+'s infinite">'+(1+Math.floor(Math.random()*6))+'</span>';};
+  var nd='<span style="display:inline-flex;width:30px;height:30px;border-radius:6px;border:2px dashed #5a6676;color:#5a6676;align-items:center;justify-content:center;font-size:16px">?</span>';
+  var img=function(nm,st){try{var im=btVcUnitImg(side,{nm:nm,s:st,id:'ra'});if(im&&im.src)return '<img src="'+im.src+'" style="width:44px;height:44px;border-radius:3px;flex:0 0 auto">';}catch(e){}return '<div style="width:44px;height:44px;background:#334;border-radius:3px;flex:0 0 auto"></div>';};
+  if(!document.getElementById('mcShkCss')){var cs=document.createElement('style');cs.id='mcShkCss';cs.textContent='@keyframes mcShk{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(-2px,1px) rotate(-14deg)}50%{transform:translate(2px,-2px) rotate(10deg)}75%{transform:translate(-1px,2px) rotate(-8deg)}100%{transform:translate(0,0) rotate(0)}}';document.head.appendChild(cs);}
+  var tbw=0,tL=false;try{tbw=nmTbW()||0;tL=document.documentElement.classList.contains('nm-tbL');}catch(e){}
+  var spinI=A.shown<A.rows.length?A.shown:-1;
+  if(spinI>=0&&!window.__rphAIT)window.__rphAIT=setTimeout(function(){window.__rphAIT=null;if(BT.rphAI){BT.rphAI.shown++;Draw();}},window.NM_MCSHK===0?50:1500);
+  var h='<div style="position:fixed;left:calc(50% '+(tL?'+':'-')+' '+(tbw/2)+'px);top:calc(var(--btftop,0px) + (100vh - var(--btftop,0px) - var(--btfbot,0px))/2);transform:translate(-50%,-50%);width:min(620px,calc(100vw - '+(tbw+16)+'px));max-height:calc(100vh - var(--btftop,0px) - var(--btfbot,0px) - 16px);overflow:auto;background:#12161cf4;border:1.5px solid #8fb8ff;border-radius:12px;box-shadow:0 10px 40px #000c;font:13px/1.45 AppFont,AppJP,sans-serif;color:#e8eef4;z-index:9000;padding:12px 14px">';
+  h+='<div style="display:flex;align-items:center;gap:8px"><b style="font-size:18px">'+T('回復フェイズ')+'</b><span style="color:#9fb0c3">'+T(BT_SIDE_NAME[side])+'('+T('アプリ')+')</span></div>';
+  h+='<div style="font-size:12.5px;color:#bcd;margin:4px 0 2px">'+T('アプリの回復のダイスを確認してください')+'</div>';
+  var U=A.rows.filter(function(r){return !r.sw;}),W=A.rows.filter(function(r){return r.sw;});
+  var row=function(r){var i=A.rows.indexOf(r),open=i<A.shown,spin=i===spinI;
+    if(r.sw)return '<div style="display:flex;align-items:center;gap:10px;padding:5px 10px;border-radius:8px;margin-top:5px;background:'+(spin?'#1c2433':'#0f141b')+';border:1px solid '+(spin?'#8fb8ff':'#2c3644')+'"><b>'+r.hx+' '+r.lab+'</b><span style="flex:1"></span>'+(spin?rd(0,0):open?(r.dice?die(r.dice[0],0):''):nd)+'<b style="font-size:16px;min-width:60px;text-align:right;color:'+(r.ok?'#60e060':'#ff8040')+'">'+(open?(r.res?T(r.res):r.ok?T('成功'):T('失敗')):'')+'</b></div>';
+    return '<div style="display:flex;align-items:center;gap:12px;padding:6px 10px;border-radius:8px;margin-top:6px;background:'+(spin?'#1c2433':'#0f141b')+';border:1px solid '+(spin?'#8fb8ff':'#2c3644')+'">'+img(r.nm,open&&r.ok?'ok':'br')+'<div style="min-width:150px"><b style="font-size:15px">'+r.nm+'</b> <span style="color:#9ab">@'+r.hx+'</span><div style="font-size:12px;color:#9fb0c3">'+r.lab+' ・ '+T('士気')+' <b style="color:#fff">'+r.mor+'</b>'+(open&&r.fin!==r.dice[0]+r.dice[1]?' ・ DRM <b style="color:#fff">'+((r.fin-r.dice[0]-r.dice[1])>0?'+':'')+(r.fin-r.dice[0]-r.dice[1])+'</b>':'')+'</div></div><span style="display:flex;gap:5px;align-items:center">'+(spin?rd(1,0)+rd(0,1):open?die(r.dice[0],1)+die(r.dice[1],0)+'<span style="font-size:15px;margin-left:4px">= '+(r.dice[0]+r.dice[1])+(r.fin!==r.dice[0]+r.dice[1]?' → <b>'+r.fin+'</b>':'')+'</span>':nd+nd)+'</span><span style="flex:1"></span><b style="font-size:20px;color:'+(r.ok?'#60e060':'#ff8040')+'">'+(open?(r.ok?T('回復'):T('失敗')):'')+'</b></div>';};
+  if(U.length)h+='<div style="font-weight:800;color:#8fb8ff;margin:8px 0 0">'+T('混乱したユニット')+'</div>'+U.map(row).join('');
+  if(W.length)h+='<div style="font-weight:800;color:#8fb8ff;margin:10px 0 0">'+T('SW・車両')+'</div>'+W.map(row).join('');
+  h+='<div style="display:flex;justify-content:flex-end;margin-top:10px">'+(A.shown>=A.rows.length?btBtn(T('確認 ▶'),'BtRphAIOk()',{on:true,st:';margin:0'}):'<span style="color:#8fa0b3;font-size:12px">'+T('ダイスを振っています')+'…</span>')+'</div></div>';
+  return h;}
 function btRphPanelHTML(){
+  if(BT.rphAI&&BT.rphAI.key===btPhKey()&&btRphIsM())return btRphAIHTML();
   var R=BT.rph;if(!R||!R.on||!BT.app)return '';
   var A=btRphActs(),man=(BT.rphMode==='man');
   var hu=btHuman(),att=(hu===btSideNow());
@@ -32051,7 +32080,8 @@ function btPhaseEnter(id){
   var att=btSideNow();
   if(id==='RPh'){btSnowRoll(att);btReinforce();
     if(window.BT_SELFPLAY){btRallyPhase();btShockRecover();} /* 監査(2026-11-17): 自己対戦は両軍とも自動で回復(これまでは片方の軍だけ回復し、もう片方は同じユニットが2度回復していた) */
-    else if(BT.app){var lg0=['RPh(回復フェイズ)(アプリ)'];btRallySide(BT.app,BT.app===att,lg0);if(lg0.length===1)lg0.push('回復の対象なし');btLog(lg0);try{btRcShow(lg0);}catch(e){}btShockRecover(BT.app);
+    else if(BT.app){var lg0=['RPh(回復フェイズ)(アプリ)'],DZ=[],od0=window.btDie;if(btRphIsM())window.btDie=function(){var v=od0.apply(this,arguments);DZ.push(v);return v;};try{btRallySide(BT.app,BT.app===att,lg0);}finally{window.btDie=od0;}if(lg0.length===1)lg0.push('回復の対象なし');btLog(lg0);
+      if(btRphIsM()){var RA=btRphAIRows(lg0.slice(1),DZ);BT.rphAI=RA.length?{key:btPhKey(),rows:RA,shown:0}:null;}else{try{btRcShow(lg0);}catch(e){}}btShockRecover(BT.app);
       BT.rph={key:btPhKey(),on:false,used:{},done:{},res:[],extra:0,ask:null,min:0};
       BT.rph.on=btRphActs().some(function(a){return !a.info&&a.g!=='sh';});}
     else{btRallyPhase();btShockRecover();}}
@@ -33006,6 +33036,7 @@ function btAppTick0(){
     btUpdateCtl();btSave();Draw();
   }
   if(btMcPend()||BT_MCVQ.length){try{btMcSync();}catch(e){}btKick(400);return;} /* v1587: 判定が終わるまでフェイズを進めない */
+  if(BT.rphAI&&BT.rphAI.key===btPhKey()){btKick(400);return;} /* sample-rphm: アプリの回復を見せている間は進めない */
   if(!btHumanActs(ph)&&!BT.mv&&!BT.pend){btAdvancePhase();btSave();Draw();btKick(500);}
 }
 // アプリの移動(1歩ずつ。人間が防御側なら、各歩のあとで射撃の機会を与える)。戻り値: 全て終わったらtrue
@@ -47547,7 +47578,7 @@ function btFxResScan(lines){
 function btFxResHook(){
   var f=window.btLog;if(typeof f!=='function'||f.__res)return;
   var w=function(lines){var r=f.apply(this,arguments);var dz=BT_FX_REC?[]:BT_DICE_LOG.splice(0);
-    try{if(window.__rphNoFx&&lines&&lines[0]==='回復(あなた)'){window.__rphNoFx=false;}else if(!BT_FX_REC&&btFxOn()&&lines&&lines.length){var it=btFxResScan(lines);if(it.length)btFxPush({kind:'res',items:it,head:String(lines[0]).trim(),dice:dz});}}catch(e){}
+    try{if(lines&&(lines[0]==='回復(あなた)'||lines[0]==='RPh(回復フェイズ)(アプリ)')&&btRphIsM()){window.__rphNoFx=false;}else if(!BT_FX_REC&&btFxOn()&&lines&&lines.length){var it=btFxResScan(lines);if(it.length)btFxPush({kind:'res',items:it,head:String(lines[0]).trim(),dice:dz});}}catch(e){}
     return r;};
   w.__res=1;window.btLog=w;
 }
