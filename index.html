@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1600</title>
+<title>ASL SKシリーズv1601</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1600">
+<meta property="og:title" content="ASL SKシリーズv1601">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.800"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.801"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1601="v1601(ダルマ「臨機射撃撃ちすぎ」): アプリの臨機射撃(移動中の敵への射撃)を絞る。①火力2以下の射撃は隣接(距離1以下)の時だけ ②続けての臨機射撃(SFF・半分の火力)のしきい値を+0.08→+0.16 ③同じ移動への臨機射撃が3回目以降はしきい値をさらに上げる(+0.12ずつ)。最終防護射撃・車両・白兵は従来どおり。NM_DFFCUT=0で従来";
 var APP_VERSION_HIST_v1600="v1600(ダルマ「この画面で1-2秒ダイスを回す」): 相手の射撃カードの中でダイスを約1.5秒回して(揺らして)から止め、そのあと合計・出た目の枠・結果・ユニットを出す。相手の射撃では全画面のダイス演出は使わない。NM_EFXSHK=ミリ秒/0で回さない";
 var APP_VERSION_HIST_v1599="v1599(ダルマ「緑のバナーをやめて次のフェイズの知らせにまとめる」実施): アプリのフェイズが終わったときの緑のバナー(OKで閉じる)を出さず、次のフェイズの知らせ(上のカード)の上に「✓ アプリ(独軍): 防御射撃 終了」を付ける(その時は約4秒表示)。NM_PEMRG=0で従来";
 var APP_VERSION_HIST_v1598="v1598(ダルマ「他に二重で表示される項目はある？」): 相手の射撃で自軍にMC・PTC(K#のMCも)が出たとき、相手の射撃カードに自軍ユニットの「変化なし」を出していた(MCは後で自分で振るため結果ではない)。カードには「→ 3MC の判定はあなたが振ります」だけを出し、ユニットごとの結果は判定パネルだけに";
@@ -32533,6 +32534,8 @@ function btAIReactDFF(defSide){
     if(!isVeh||btAFVs(mvS).some(function(v){return v.ce;}))['DFF','SFF','FPF'].forEach(function(ph){btFireOptions(defSide,ph,[n],{mph:true}).forEach(function(o){o.ph=ph;opts.push(o);});});
     btAIOrdOptions(defSide,'DFF',[n],{mph:true}).forEach(function(o){o.ph='DFF';o.ord=true;if(isVeh&&o.type==='ord'&&o.o.tgt)o.val=o.val/btVehVal(o.o.tgt)*0.6;opts.push(o);});
     if(isVeh)btReactionCCOptions(defSide).forEach(function(o){o.type='rcc';o.ph='DFF';o.val=(o.pKill+0.35*o.pImm)*0.6;opts.push(o);});
+    if(window.NM_DFFCUT!==0){var dN=function(o){try{var ss=((o.fd&&o.fd.parts)||[]).map(function(p){return btStackById(p.sid);}).filter(Boolean);return ss.length?Math.min.apply(null,ss.map(function(x){return btDist(x.n,n);})):1;}catch(e){return 1;}};
+      opts=opts.filter(function(o){if(o.type==='rcc'||o.ord)return true;var fp=o.ev&&o.ev.fp;return !(fp!=null&&fp<=2&&dN(o)>1);});} /* v1601(ダルマ「臨機射撃撃ちすぎ」): 火力2以下の射撃は隣接(距離1以下)の時だけ */
     opts.sort(function(a,b){return b.val-a.val;});
     var best=opts[0];if(!best)break;
     // しきい値: 開豁地・隣接・建物に迫る時は低く。最終防護射撃は危険なので高い
@@ -32541,13 +32544,15 @@ function btAIReactDFF(defSide){
     var thr=0.42;
     if(N.og)thr=0.22;
     if(adj||nearB)thr=Math.min(thr,0.16);
-    if(best.ph==='SFF')thr+=0.08;
+    if(best.ph==='SFF')thr+=(window.NM_DFFCUT!==0?0.16:0.08); /* v1601: 続けての臨機射撃(半分の火力)はより慎重に */
+    if(window.NM_DFFCUT!==0&&!isVeh&&best.ph!=='FPF'){var k0=(BT.mv.aiShotN||0);if(k0>=2)thr+=0.12*(k0-1);} /* v1601: 同じ移動への臨機射撃が3回目以降は、しきい値を上げる */
     if(best.ph==='FPF')thr=adj?0.35:0.9;
     if(isVeh)thr=0.07;
     if(best.val<thr)break;
     var lg;if(best.type==='rcc'){lg=[];btReactionCC(best,lg);}else lg=best.ord?btAIExecOpt(best):btAIFire(best);if(!lg||!lg.length)break;
     lg[0]+='  [期待損害 '+best.val.toFixed(2)+']';
     logs.push(lg);
+    if(BT.mv)BT.mv.aiShotN=(BT.mv.aiShotN||0)+1;
     btAfterHit();
     if(btMcPend())break; /* v1587 */
   }
