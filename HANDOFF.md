@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-25 夕 引き継ぎ いまの作業=v1646 から再開、返事待ちなし】** main=v1646。車両ノートの裏画像は全シナリオの車両・砲に入れ済み(残りは車両ノートに裏がない 45mm AT・2cm FlaK38・40mm Bofors・105/155mm 米榴弾砲、80mm vz.36 は画像に s8 がないので生成のまま)(H_EXP1.pdf の画像 98枚、pdfimages -j で取り出し、右半分を切り出し→NM_HNIMG に jpeg、説明の位置は NM_HNBK に手で)。
+- **【2026-11-25 夕 引き継ぎ いまの作業=v1647 から再開、返事待ちなし】** main=v1647。車両ノートの裏画像は全シナリオの車両・砲に入れ済み(残りは車両ノートに裏がない 45mm AT・2cm FlaK38・40mm Bofors・105/155mm 米榴弾砲、80mm vz.36 は画像に s8 がないので生成のまま)(H_EXP1.pdf の画像 98枚、pdfimages -j で取り出し、右半分を切り出し→NM_HNIMG に jpeg、説明の位置は NM_HNBK に手で)。
+  - v1647(ダルマ「57mm PTP obr.43 情報が表示しない」「8.8cm FlaK 18 これも」): シナリオカード(nmScenView)の砲チップは SCEN_PAGE 内の gunUnitTabChipHTML で描いていて、v1643 で足した gunCategoryChip のタップが効いていなかった→gunUnitTabChipHTML もタップで nmVehInfo(g.id)。軽迫撃砲も同じ。返事待ち: 弾が無く撃っていない扱いでも獲得マーカーを置く件(従来から)。smoke 0。
   - v1646(ダルマ「実施」): AP の欠乏No.(IV号D AP7・KV-2 AP9 のみ)を地図上の射撃(nmVf)と AI 対戦(btFireOrd)でも。btAPNum・BT_AMMO_OUT.AP=apOut・btAmmoOK(AP)は apOut だけ見る・原DR>No.=撃っていない扱い+以後AP無し、=No.で最後。弾の一覧から AP を外す。nmVfDeplNote に「AP 7」。既知(従来から APDS/HEAT も同じ): 弾が無かった時も獲得マーカーを置いてしまう。smoke 0。
   - v1645(ダルマ「実施」): sample-hnall をマージ。残りのシナリオの車両21両・砲8門・軽迫撃砲3の裏を車両ノートの実物画像に(カラーの実物裏がある Mk VIB・M4A3・ジャンボ・81mm・PaK40・75/27 はそのまま)。データ修正: IV号D specialAmmo HEAT6・Smoke9・AP7、T-34/85 APCR{1944:5,1945:6}、KV-1 M41 APCR{1942:4,1943:5}、76.2mm PP obr.27 H6=HEAT(HE は無制限に)、37mm M3A1 の APCR{1942:2} を削除(裏は C7ᴬ²⁺=キャニスターのみ)。smoke 0。
   - v1644(ダルマ「確認」): 6ポンド砲 APDS {"1944-06":6,1945:7}・HE {"1943-02":7,1944:8}、シャーマンIII(a)(ソ連) WP availFrom "1944-06"(車両ノート裏面どおり)。S24(1944/6/28)・S23(1944/9) はどちらも使える。smoke 0。
