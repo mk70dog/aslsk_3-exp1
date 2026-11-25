@@ -23628,12 +23628,25 @@ function gunCaliberChip(cal,desc,bc,wrap){
 }
 // 2026-09追加(ダルマ指示「戦車タブの砲の種類の表示を砲撃タブと同じにする」): AFVタブの車両選択チップも
 // GUN_DATAのgunCategoryChip()と同じ体裁(上段=短いラベル、下段=枠付きバッジ)に統一。
+/* sample-vehinfo(ダルマ「車両を選択すると早見表と同様の車両の表裏の説明を表示」): シナリオの部隊表の車両をタップ→窓。早見表に説明のある車両は同じ表裏の説明図、無い車両は表の画像+データ(移動力・装甲・主砲・ROF・B#・機関銃・目標サイズ・煙幕・特殊弾) */
+function nmVehInfo(id){var v=AFV_DATA.filter(function(x){return x.id===id;})[0];if(!v)return;window.NM_VI=id;nmVehInfoDraw();}
+function nmVehInfoDraw(){var id=window.NM_VI,v=AFV_DATA.filter(function(x){return x.id===id;})[0];var o=document.getElementById('nmVi');if(!v){if(o)o.remove();return;}
+  if(!o){o=document.createElement('div');o.id='nmVi';o.style.cssText='position:fixed;inset:0;z-index:2147482500;background:#000a;display:flex;align-items:center;justify-content:center';o.onclick=function(e){if(e.target===o){window.NM_VI=null;o.remove();}};document.body.appendChild(o);}
+  var k=VASL_CTR_MAP[v.id],L=REF_CTR_SETS.afv||[],ix=-1;L.forEach(function(e,i){if(e.f&&e.f.k===k)ix=i;});var body='';
+  if(ix>=0){S.refCtr=S.refCtr||{};var R=S.refCtr.afv=S.refCtr.afv||{ex:0,face:'f',sel:-1};if(R.ex!==ix){R.ex=ix;R.sel=-1;}var sv=REF_CTR_SETS.afv;REF_CTR_SETS.afv=[sv[ix]];R.ex=0;try{body=REF_CTR_GUIDE('afv','車両カウンターの見方');}finally{REF_CTR_SETS.afv=sv;R.ex=ix;}}
+  else{var row=function(a,b){return '<tr><td style="color:#8fa6bd;padding:4px 10px;white-space:nowrap">'+a+'</td><td style="color:#e8eef4;padding:4px 10px">'+b+'</td></tr>';},af=function(x){return x?(x.hull+(x.turret!=null?' / 砲塔'+x.turret:'')):'?';},ma=v.ma||{},mg=v.mg||{},mgs=['bmg','cmg','rmg','aamg'].filter(function(q){return mg[q];}).map(function(q){return q.toUpperCase()+mg[q];}).join('・')||'なし',sa=((ma.specialAmmo)||[]).map(function(x){return x.type+(x.deplete?'('+(typeof x.deplete==='object'?JSON.stringify(x.deplete).replace(/[{}"]/g,''):x.deplete)+')':'');}).join('・');
+    var sz={small:'小(+1)',vsmall:'極小(+2)',large:'大(−1)',vlarge:'極大(−2)',avg:'普通(0)'}[v.targetSize]||v.targetSize||'普通(0)';
+    body='<div class="card"><div class="sh">'+T('車両カウンターの見方')+'　<span style="color:#8fa6bd;font-size:12px">(早見表に説明図がない車両は、データの一覧で表示)</span></div><div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap"><div>'+(vaslCtrHTML(v.id,200,'')||'')+'</div><table style="font-size:14px;border-collapse:collapse">'
+     +row('移動力',(v.mp||'?')+'MP'+(v.gp?'　接地圧 '+({low:'低い',normal:'普通',high:'高い'}[v.gp]||v.gp):''))+row('前面装甲',af(v.afFront))+row('側面・背面装甲',af(v.afSide))+row('主砲',(ma.cal?(ma.ctrCode&&ma.ctrCode.indexOf('_')>0?ma.ctrCode.split('_')[1]:ma.cal+'mm'):'なし')+(ma.rof?'　ROF'+ma.rof:'')+(ma.b?'　B#'+ma.b:'')+(v.turretType?'　砲塔 '+v.turretType:''))+(sa?row('特殊弾',sa):'')+row('機関銃',mgs)+row('目標サイズ',sz)+(v.smoke?row('煙幕',(v.smoke.options||[v.smoke]).map(function(x){return x.type+(x.deplete||'');}).join('・')):'')+(v.ot?row('上面開放','OT(オープントップ)'):'')+'</table></div></div>';}
+  o.innerHTML='<div style="position:relative;max-width:min(960px,96vw);max-height:92vh;overflow:auto;background:#1c1f27;background-image:radial-gradient(circle,#000a 1px,transparent 1.35px);background-size:4px 4px;border:1px solid #3a4250;border-radius:14px;padding:14px"><div style="display:flex;align-items:center;margin-bottom:6px"><b style="flex:1;font-size:18px;color:#e8eef4">'+(typeof afvOfficialName==='function'?afvOfficialName(v):v.lbl)+'</b><button class="b sm" style="margin:0" onclick="window.NM_VI=null;document.getElementById(\'nmVi\').remove()">✕</button></div>'+body+'</div>';}
+(function(){var o=RefCtrSet;RefCtrSet=function(){var r=o.apply(this,arguments);try{if(window.NM_VI&&document.getElementById('nmVi'))nmVehInfoDraw();}catch(e){}return r;};})();
 function afvCategoryChip(afv,bc){
   var afFront=afv.afFront?(afv.afFront.hull+(afv.afFront.turret!=null?'/'+afv.afFront.turret:'')):'?';
   // 2026-09修正(ダルマ指摘「シャーマンIII(レンドリース)を(他の車両と)同じ表示にする」): 車両名は
   // 「シャーマンIII(レンドリース)」のように長いものがあり、従来のnowrap指定だとグリッドセル幅を
   // はみ出して隣のボタンと重なって見えていた。AFVチップのみ折り返し可(wrap:true)にして解消。
   var vaslA=vaslCtrHTML(afv.id,56,afvOfficialName(afv),bc); // 2026-10: VASLカウンター画像
+  if(vaslA&&window.NM_VEHINFO!==false)return '<span style="cursor:pointer" onclick="event.stopPropagation();nmVehInfo(\''+afv.id+'\')">'+vaslA+'</span>'; /* sample-vehinfo */
   if(vaslA)return vaslA;
   return gunCaliberChip('AF'+afFront,T(afv.lbl),bc,true);
 }
@@ -55332,7 +55345,7 @@ function SCEN_PAGE(){
     h+='<div style="flex:1;min-width:0">';
     h+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">';
     h+='<span style="font-size:12px;font-weight:bold;color:'+nc+';display:inline-flex;align-items:center;gap:4px">'+natIconSVG(nat,12)+' '+nl+'</span>';
-    h+='<span style="font-size:12px;color:'+nc+';background:'+nc+'18;border:1px solid '+nc+'33;padding:1px 6px;border-radius:2px">ELR '+f.elr+'</span>';
+    if(f.elr!=null)h+='<span style="font-size:12px;color:'+nc+';background:'+nc+'18;border:1px solid '+nc+'33;padding:1px 6px;border-radius:2px">ELR '+f.elr+'</span>'; /* sample-vehinfo: ELR が無いシナリオ(S21 など車両だけ)で「ELR undefined」と出ていた */
     h+='</div>';
     f.u.forEach(function(u){
       var isTurn=u.indexOf('【')===0;
