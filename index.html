@@ -38048,7 +38048,8 @@ function nmRmVFireItems(n){
   try{if(window.NM_VFWPN!==false){var WB=[],sm=null;try{sm=nmVfDepl(B,'Smoke');}catch(e){}var isS=V.ammo==='Smoke'||V.wantAmmo==='Smoke';
     WB.push([(isS?'':'✓')+(B.v?'主砲 ':'')+B.gd.cal+'mm',"nmVfWpn("+n+",'ma')"]);
     if(sm!=null)WB.push([(isS?'✓':'')+'煙幕弾 s'+sm,"nmVfWpn("+n+",'smoke')"]);
-    if(B.v&&nmVmKeys(B.v).length)WB.push(['機関銃 '+nmVmKeys(B.v).map(function(k){return k.toUpperCase()+B.v.mg[k];}).join('・'),"nmVfToVm("+n+")"]);
+    var tV=false;try{tV=V.tgt!=null&&B.mode==='VTT';}catch(e){}
+    if(B.v&&nmVmKeys(B.v).length)WB.push(tV?['<span style="opacity:.45">機関銃 '+nmVmKeys(B.v).map(function(k){return k.toUpperCase()+B.v.mg[k];}).join('・')+'<br><span style="font-size:10px">車両には撃てない</span></span>',null]:['機関銃 '+nmVmKeys(B.v).map(function(k){return k.toUpperCase()+B.v.mg[k];}).join('・'),"nmVfToVm("+n+")"]); /* v1633(ダルマ「目標が車両…で使える武器の表示が変わる?」→実施): 目標が車両の時は機関銃を押せない */
     if(B.v&&B.v.smoke)WB.push(['煙幕発射機 '+(B.v.smoke.options||[B.v.smoke]).map(function(o){return o.type;}).join('/'),"nmVfToSg("+n+")"]);
     if(WB.length>1)it.push({row:1,ic:'fire',t:'使う武器',btns:WB});}}catch(e){console.log('vfwpn',e);} /* sample-vfwpn(ダルマ「主砲以外も選択可能にする」「煙幕弾は?」) */
   var vdone=!!(V.res&&!V.edit); /* v413: 撃った後は設定を畳む */
