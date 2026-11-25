@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1623</title>
+<title>ASL SKシリーズv1624</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1623">
+<meta property="og:title" content="ASL SKシリーズv1624">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.823"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.824"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1624="v1624(ダルマ「空ヘクス右クリックも左クリックと同じにする」): 判定・対戦モードで何もないヘクスの右クリックも、左クリックと同じ配置パネルを開く(A→B測定中の右クリックは今までどおりAの付け替え)。NM_RC_EMPTY=0で旧動作(ヘクスメニュー)";
 var APP_VERSION_HIST_v1623="v1623(ダルマ「判定モードターン表 最終ターンが表裏どちらで終了かわかるようにする」→「c3」): 下のターン表の右に小さな枠「END/7裏」(表で終わるシナリオは「7表」)。最終ターンは赤。NM_TLEND=''で表示なし";
 var APP_VERSION_HIST_v1622="v1622(ダルマ「aiの移動がわかりにくい」「実施」): アプリの移動中、上に帯(カウンターの絵・ユニット・通ったヘクス・使ったMF/MP)を出し、マップの軌跡を黒縁の黄色の太線と矢印に、通ったヘクスにMFの合計、出発(盤外からは進入)の印。NM_AIMV=0で旧表示";
 var APP_VERSION_HIST_v1621="v1621(ダルマ「両モードab判定バーを少し大きくする」→「案1」): A→Bバー(判定・対戦の nmAbBd、AI対戦の btLosCd)を約1.2倍に(文字12px・ボタンの高さ24px)。NM_ABSZ=0で前の大きさ";
@@ -36479,7 +36480,7 @@ function btLosRTap(n){
     if(e.button!==2||!BT_RC0)return;var r=BT_RC0;BT_RC0=null;
     if(Math.abs(e.clientX-r.x)>6||Math.abs(e.clientY-r.y)>6)return; // ドラッグ=地図の移動
     if(typeof btActive!=='function')return;
-    if(!btActive()||!btGraphReady()){if(!btActive()){try{if(nmAbRMoveA(e))return;}catch(x){console.log('nmAbRMoveA',x);}try{nmRClick(e);}catch(x){console.log('nmRClick',x);}}return;} /* v335: 通常のMAPタブ */
+    if(!btActive()||!btGraphReady()){if(!btActive()){try{if(nmAbRMoveA(e))return;}catch(x){console.log('nmAbRMoveA',x);}try{if(window.NM_RC_EMPTY!==0&&window.NM_EMPTY_PL!==false&&!S_LOS.abMode&&!S_LOS.pxA){var rH=losHexAtClient(e.clientX,e.clientY);if(rH&&!nmUnitAt(rH,'f')&&!nmUnitAt(rH,'e')){nmEmptyPlOpen(e);return;}}}catch(x){console.log('rc empty',x);} /* v1624(ダルマ「空ヘクス右クリックも左クリックと同じにする」): 何もないヘクスの右クリックも配置パネル。NM_RC_EMPTY=0で旧動作(ヘクスメニュー) */try{nmRClick(e);}catch(x){console.log('nmRClick',x);}}return;} /* v335: 通常のMAPタブ */
     var w=document.getElementById('losMapWrap');if(!w)return;
     BT_RM_XY={x:e.clientX,y:e.clientY};
     BT_RCLK=true;try{LosMapClick({currentTarget:w,clientX:e.clientX,clientY:e.clientY});}catch(x){}finally{BT_RCLK=false;}
