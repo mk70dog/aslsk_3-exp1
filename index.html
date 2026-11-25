@@ -37199,6 +37199,12 @@ function nmUnitAt(H,sd){if(sd!=='f')return nmEnemyAt(H);return nmPickAt(nmAllAt(
 function nmTgtAt(L,tn){var at=L.filter(function(x){return btNodeOf(x.boardId,x.col,x.row)===tn;});if(NM_TGT_EH&&at.indexOf(NM_TGT_EH)>=0)return NM_TGT_EH;return at[0]||null;}
 function nmSelK(sd,k){var H=NM_RM_HEX;if(!H)return;NM_SEL_EH=nmAllAt(H,sd)[k]||null;if(NM_SEL_EH)NM_FT_SEL=NM_SEL_EH;}
 function nmStackOff(eh,sd){var at=nmAllAt(eh,sd),i=at.indexOf(eh);return {i:i,n:at.length,dx:i*16,dy:-i*16};}
+
+/* sample-ammoreset(ダルマ「無しをリセットするボタンを追加」): 欠乏(弾が無い)にした弾を元に戻す。間違えて振った時やシナリオをやり直す時用 */
+var NM_AMMO_OUT_K=[['apcrOut','APCR'],['apdsOut','APDS'],['heatOut','HEAT'],['apOut','AP'],['smkOut','煙幕弾'],['wpOut','WP']];
+function nmAmmoOutRow(it,n,sd,eh){if(window.NM_AMMORESET===false||!eh)return;var L=NM_AMMO_OUT_K.filter(function(k){return eh[k[0]];});if(!L.length)return;
+  it.push({row:1,cmp:0,ic:'',t:'<span style="font-size:11px;color:#8899aa">弾の欠乏(無し)</span>',btns:L.map(function(k){return ['↺ '+k[1]+' 無しを戻す',"nmAmmoOutReset("+n+",'"+sd+"','"+k[0]+"')"];}).concat(L.length>1?[['↺ 全部戻す',"nmAmmoOutReset("+n+",'"+sd+"','all')"]]:[])});}
+function nmAmmoOutReset(n,sd,k){var eh=nmUnitAt(NM_RM_HEX,sd);if(!eh)return;NM_AMMO_OUT_K.forEach(function(q){if(k==='all'||k===q[0])delete eh[q[0]];});try{nmStSave();}catch(e){}try{btRmReopen(n);}catch(e){}}
 function nmUnitMenu(it,H,n,sd){
   var L=NM_SIDE_LBL[sd],eh=nmUnitAt(H,sd);
   if(!eh)return; /* v785: 配置は「ヘクスにカウンターを配置」にまとめた */
@@ -37233,7 +37239,7 @@ function nmUnitMenu(it,H,n,sd){
     it.push({ic:'rot',t:'砲の方向(CA)を決める',sub:'CA'+(eh.facing==null?'未設定':'設定済み')+'　方向の画面を開く',f:"nmRmFaceOpen("+n+",'"+sd+"')"});
     it.push({ic:'x',t:'カウンターを消去',sub:L.nm+'の配置を取り消す',f:sd==='f'?"nmRmFriendDel()":"nmRmEnemy()"});return;}
   it.push({ic:'turret',img:ev?vaslCtrHTML(ev.id,34,''):'',t:'<span><span style="color:'+L.col+'">'+(ev?nmNatShortOf(ev.nat,L.nm):L.nm)+'</span>: '+(ev?nmAfvName(ev):L.mk)+'</span>',sub:(ev?nmNatLbl(String(ev.nat).split('/')[0])+'　':'')+'タップで車両を変える・地図ではドラッグで動かせる',f:"nmRmVehOpen("+n+",'"+sd+"')"});
-  if(ev){var vst=nmStOf(eh);it.push({row:1,cmp:0,ic:'sel',t:'状態',btns:[[(vst.imm?'✓':'')+'走行不能',"nmStTog("+n+",'"+sd+"','imm')"],[(vst.shock?'✓':'')+'ショック',"nmStTog("+n+",'"+sd+"','shock')"],[(vst.mal?'✓':'')+'主砲故障',"nmStTog("+n+",'"+sd+"','mal')"]]});it.push({row:1,cmp:0,ic:'',t:'<span style="font-size:11px;color:#8899aa">状態(続き)</span>',btns:[[(vst.stun?'✓':'')+'スタン',"nmStTog("+n+",'"+sd+"','stun')"],[(vst.recall?'✓':'')+'リコール',"nmStTog("+n+",'"+sd+"','recall')"],[(vst.uk?'✓':'')+'UK',"nmStTog("+n+",'"+sd+"','uk')"]]}); /* v432 / v1430(ダルマ「UKを足す」): UK(未確認撃破)も手で付けられる */nmMaRepRow(it,n,sd,eh,'主砲'); /* v425 */
+  if(ev){var vst=nmStOf(eh);it.push({row:1,cmp:0,ic:'sel',t:'状態',btns:[[(vst.imm?'✓':'')+'走行不能',"nmStTog("+n+",'"+sd+"','imm')"],[(vst.shock?'✓':'')+'ショック',"nmStTog("+n+",'"+sd+"','shock')"],[(vst.mal?'✓':'')+'主砲故障',"nmStTog("+n+",'"+sd+"','mal')"]]});it.push({row:1,cmp:0,ic:'',t:'<span style="font-size:11px;color:#8899aa">状態(続き)</span>',btns:[[(vst.stun?'✓':'')+'スタン',"nmStTog("+n+",'"+sd+"','stun')"],[(vst.recall?'✓':'')+'リコール',"nmStTog("+n+",'"+sd+"','recall')"],[(vst.uk?'✓':'')+'UK',"nmStTog("+n+",'"+sd+"','uk')"]]}); /* v432 / v1430(ダルマ「UKを足す」): UK(未確認撃破)も手で付けられる */nmMaRepRow(it,n,sd,eh,'主砲'); /* v425 */nmAmmoOutRow(it,n,sd,eh); /* sample-ammoreset */
     [NM_MV_OPT.slice(0,2),NM_MV_OPT.slice(2)].forEach(function(grp,j){it.push({row:1,ic:j?'':'move',t:j?'<span style="font-size:11px;color:#8899aa">使ったMP(攻撃される時の補正)</span>':'移動',btns:grp.map(function(o){return [((vst.mv||0)===o[0]?'✓':'')+o[1],"nmStSetMv("+n+",'"+sd+"',"+(typeof o[0]==='string'?"'"+o[0]+"'":o[0])+")"];})});}); /* v406: 対戦モードと同じ移動の扱い(Case14/16/24/25) */
     nmStFiredRow(it,n,sd,eh);
     it.push({ic:'wreck',t:'撃破(残骸にする)',sub:'マーカーを取り消して、このヘクスに'+nmAfvName(ev)+'の残骸を配置',f:"BtRmClose();nmStWreck("+n+",'"+sd+"')"});} /* v405 */
