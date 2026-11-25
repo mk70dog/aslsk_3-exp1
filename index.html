@@ -1421,12 +1421,12 @@ var CCT_R=["<1:8","1:8","1:6","1:4","1:2","1:1","3:2","2:1","3:1","4:1","6:1","8
 var CCT_N=[0,1,2,3,4,5,6,7,8,9,10,11,12,13];
 var SWT=[
   /* sample-ltmtr(ダルマ「mtrはユニットとスタックした方がわかりやすい?」→「実施」): ASLSK4 6.9 口径60mm以下の迫撃砲は SW(½"カウンター)。歩兵が持ち PP を数える。撃つ時は砲のデータ(gun)で To Hit(エリア目標・最小/最大射程) */
-  {id:"mtr50_ge",lbl:"MTR 50mm",fp:0,pp:5,nat:["GER"],ltmtr:"g_50mm"},
-  {id:"mtr60_us",lbl:"MTR 60mm",fp:0,pp:5,nat:["USA","GBR","FFR"],ltmtr:"g_60mm"},
-  {id:"mtr51_gb",lbl:"MTR 2-in",fp:0,pp:4,nat:["GBR"],ltmtr:"g_2inmtr_gbr"},
-  {id:"mtr50_so",lbl:"MTR 50mm",fp:0,pp:4,nat:["SOV"],ltmtr:"g_50rm40_so"},
-  {id:"mtr45_it",lbl:"MTR 45mm",fp:0,pp:4,nat:["ITA"],ltmtr:"g_45brixia_it"},
-  {id:"mtr46_pl",lbl:"MTR 46mm",fp:0,pp:4,nat:["POL"],ltmtr:"g_46wz36_pl"},
+  {id:"mtr50_ge",lbl:"MTR 50mm",fp:0,b:99,x:99,rof:0,pp:5,nat:["GER"],ltmtr:"g_50mm"},
+  {id:"mtr60_us",lbl:"MTR 60mm",fp:0,b:99,x:99,rof:0,pp:5,nat:["USA","GBR","FFR"],ltmtr:"g_60mm"},
+  {id:"mtr51_gb",lbl:"MTR 2-in",fp:0,b:99,x:99,rof:0,pp:4,nat:["GBR"],ltmtr:"g_2inmtr_gbr"},
+  {id:"mtr50_so",lbl:"MTR 50mm",fp:0,b:99,x:99,rof:0,pp:4,nat:["SOV"],ltmtr:"g_50rm40_so"},
+  {id:"mtr45_it",lbl:"MTR 45mm",fp:0,b:99,x:99,rof:0,pp:4,nat:["ITA"],ltmtr:"g_45brixia_it"},
+  {id:"mtr46_pl",lbl:"MTR 46mm",fp:0,b:99,x:99,rof:0,pp:4,nat:["POL"],ltmtr:"g_46wz36_pl"},
   // 2024实物カウンター写真で確認済み（独・米・ソ連）。natは表示絞り込み用（GER/USA/SOVいずれかを含む配列）
   // 独・米MGはカウンターにB#印字なし＝ルール4.1によりB12。ソ連MGはB11がカウンターに明示されている
   // r：修理ナンバー（R#・カウンター左上）。ダルマ提供の実物カウンターデータに基づく
@@ -36922,7 +36922,7 @@ function nmRmBuildB(n,U,X2){
   if(T.length<2)return null;
   var th=nmMuTiles(T); /* 基本画像のタイル(右クリックと同じ) */
   var uo=nmRmUOpen(),xo=nmRmXOpen(),top=[head,{html:th}];
-  try{var H0=NM_RM_HEX,e0=window.NM_BQ_FORCE||nmAllAt(H0,'f')[0]||nmAllAt(H0,'e')[0],s0=window.NM_BQ_FORCE?(nmAllAt(H0,'f').indexOf(window.NM_BQ_FORCE)>=0?'f':'e'):nmAllAt(H0,'f').length?'f':'e';if(e0&&e0.grp&&!e0.veh&&!e0.gun)top=top.concat(nmGrpStRows(n,s0,e0,'B'));}catch(e){console.log('grpst',e);}
+  try{var H0=NM_RM_HEX,e0=window.NM_BQ_FORCE||nmAllAt(H0,'f')[0]||nmAllAt(H0,'e')[0],s0=window.NM_BQ_FORCE?(nmAllAt(H0,'f').indexOf(window.NM_BQ_FORCE)>=0?'f':'e'):nmAllAt(H0,'f').length?'f':'e';if(e0&&e0.grp&&!e0.veh&&!e0.gun){top=top.concat(nmGrpStRows(n,s0,e0,'B'));try{top=top.concat(nmLtmRows(n,s0,e0));}catch(e){console.log('ltm',e);}}}catch(e){console.log('grpst',e);}
   if(rest.length&&window.NM_RM_NOFOLD!==false){top=top.concat(rest);} /* sample-rmst(ダルマ指示「赤枠部分無くして状態は常に表示」): 「▼ 状態・操作 タップで閉じる」の見出しを出さず、中身を常に表示 */
   else if(rest.length){top.push({ic:'sel',t:(uo?'▾ ':'▸ ')+'状態・操作',sub:uo?'タップで閉じる':'状態・操作するユニット・MG・煙幕手榴弾・回復など',f:"nmRmUFold("+n+")"});if(uo)top=top.concat(rest);}
   var hx=hexIt,hexL=[]; /* 残骸・煙幕・マークは削除(ダルマ指示) */
@@ -37043,7 +37043,19 @@ function nmAddMore(n,sd){var H=NM_RM_HEX;if(!H)return;var eh={boardId:H.boardId,
 /* v374(ダルマ指示「自軍敵軍マーカーに砲を追加」): 自軍・敵軍のカウンターにシナリオに登場する砲(eh.gun)。向き=CA(eh.facing、地図は国籍色の矢印) */
 function nmGun(id){return (typeof GUN_DATA!=='undefined'&&GUN_DATA.filter(function(g){return g.id===id;})[0])||null;}
 function nmGunName(g){return (typeof ORD_OFFICIAL_NAME!=='undefined'&&ORD_OFFICIAL_NAME[g.id])||T(g.lbl);}
-function nmScenGuns(){var ids=null;try{ids=scenarioGunIds();}catch(e){}if(!ids)return [];return GUN_DATA.filter(function(g){return ids[g.id]&&nmVaslSrc(g.id);});}
+function nmScenGuns(){var ids=null;try{ids=scenarioGunIds();}catch(e){}if(!ids)return [];return GUN_DATA.filter(function(g){return ids[g.id]&&nmVaslSrc(g.id)&&!nmLtmIsGun(g.id);});}
+/* v1629(ダルマ「軽迫撃砲(SW化)実施」): ASLSK4 6.9 口径60mm以下の迫撃砲は SW。歩兵が持ち PP を数える。撃つ時は砲のデータで To Hit(持ち主の歩兵が撃つ・非正規操作の罰なし)。NM_LTMTR=false で従来(砲) */
+var NM_LTMTR=true;function nmLtmIsGun(gid){return window.NM_LTMTR!==false&&SWT.some(function(w){return w.ltmtr===gid;});}
+function nmLtmOfTok(nat,lbl){if(window.NM_LTMTR===false)return null;var m=String(lbl).match(/^MTR(?:\([a-z]\))?\s*(\d+)/i)||String(lbl).match(/^(\d+)mm.*迫撃砲/);if(!m)return null;var cal=+m[1];if(cal>60)return null;return SWT.filter(function(w){if(!w.ltmtr||w.nat.indexOf(nat)<0)return false;var g=nmGun(w.ltmtr);return g&&g.cal===cal;})[0]||null;}
+function nmLtmSw(uid){var b=nmGeSwBase(uid);return SWT.filter(function(w){return w.id===b.id&&w.ltmtr;})[0]||null;}
+function nmLtmRows(n,sd,eh){var o=[];if(window.NM_LTMTR===false||!eh||!eh.grp)return o;var d=nmGeList(eh.grp);(d.sw||[]).forEach(function(u){var w=nmLtmSw(u);if(!w)return;var g=nmGun(w.ltmtr),ow=(d.items||[]).filter(function(x){return x.pid===(d.own||{})[u];})[0],ok=ow&&!ow.broken&&!ow.out&&!ow.ufired;o.push({ic:'fire',t:'迫撃砲 '+w.lbl+'で撃つ',sub:(ow?nmGeCandLbl(d.items,ow)+'が持つ'+(ow.broken?'(混乱・撃てない)':''):'持ち主なし(撃てない)')+(g?'・To Hit エリア目標・射程'+(g.minRange||'')+'〜'+(g.maxRange||''):''),f:ok?"nmLtmOpen("+n+",'"+sd+"','"+eh.grp+"','"+String(u).replace(/'/g,'')+"')":undefined});});return o;}
+function nmLtmOpen(n,sd,slot,uid){var w=nmLtmSw(uid);if(!w)return;var d=nmGeList(slot),pid=(d.own||{})[uid];nmVfOpen(n,sd);if(!NM_VF)return;NM_VF.ltm={id:w.ltmtr,slot:slot,pid:pid,uid:uid};NM_VF.vEh=null;nmVfRe(n);}
+(function(){var oE=nmVfEh;nmVfEh=function(){var V=NM_VF;if(V&&V.ltm){if(!V.vEh){var H=nmHexOfNode(V.from);if(!H)return null;V.vEh={boardId:H.boardId,col:H.col,row:H.row,gun:V.ltm.id,man:{slot:V.ltm.slot,pid:V.ltm.pid},nqSel:0,__sd:V.sd,__ltm:1,st:{}};}return V.vEh;}return oE.apply(this,arguments);};
+  var oB=nmVfBuild;nmVfBuild=function(){var r=oB.apply(this,arguments);if(r&&NM_VF&&NM_VF.ltm)r.note='';return r;};
+  var oM=nmRMenuItems;nmRMenuItems=function(n){var L=oM.apply(this,arguments);try{if(NM_VF&&NM_VF.ltm&&NM_RM_CUR==='vfire'&&Array.isArray(L)){var V=NM_VF,d=nmGeList(V.ltm.slot),ow=(d.items||[]).filter(function(x){return x.pid===V.ltm.pid;})[0],w=nmLtmSw(V.ltm.uid),js=function(x){return JSON.stringify(x||{});};
+    L=L.filter(function(x){var j=js(x);return !/nmVfNqSet|集中射撃|nmRmFaceOpen|砲の方向\(CA\)/.test(j);});
+    L.forEach(function(x){if(x&&typeof x.t==='string'&&/が攻撃する/.test(x.t)&&w){x.t=x.t.replace(/[^:>]*が攻撃する/,' '+(ow?nmGeCandLbl(d.items,ow)+' の ':'')+w.lbl+' が攻撃する');x.sub=(x.sub||'')+' (支援火器の軽迫撃砲: 非正規操作の罰なし・CAなし・集中射撃なし)';}});}}catch(e){console.log('ltmvf',e);}return L;};
+  var oC=nmGunManCands;nmGunManCands=function(eh){if(eh&&eh.__ltm){var H=nmHexOfN(btNodeOf(eh.boardId,eh.col,eh.row)),o=[];if(!H)return o;nmAllAt(H,eh.__sd).forEach(function(e){if(!e.grp||e.veh||e.gun)return;var d=nmGeList(e.grp);(d.items||[]).forEach(function(x){o.push({slot:e.grp,x:x,nat:x.nat||d.nat,items:d.items});});});return o;}return oC.apply(this,arguments);};})();
 function nmUnitNat(eh){var v=eh&&eh.veh?nmAfv(eh.veh):null,g=eh&&eh.gun?nmGun(eh.gun):null;return v?v.nat.split('/')[0]:g&&g.nat?g.nat.split('/')[0]:'';}
 function nmRmSetGun(n,id,sd){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);
   if(!eh){if(sd==='f'){eh={boardId:H.boardId,col:H.col,row:H.row};nmSideList('f').push(eh);}else{losToggleEnemyHexAt(H.boardId,H.col,H.row);eh=nmEnemyAt(H);}if(!eh)return;}
@@ -39218,6 +39230,7 @@ function nmSuObParse(nat){var c=curScen();if(!c||!c.f||!c.f[nat])return {all:[],
     if(/^DC/.test(lbl)){add('dc','dc','DC',cnt,!!mq);return;}
     if(/^ATR\b/.test(lbl)){var aid=(nat==='POL'||nat==='ALM')?'atr_sw_pol':nat==='GER'?'atr_sw_ge':'atr_sw_so';add('sw',aid,'ATR',cnt,!!mq);return;}
     var w=lbl.match(/^(MMG|HMG|LMG|FT)(?:\([a-z]\))?(\d+-\d+)$/);if(w){var cand=SWT.filter(function(x){return x.lbl.indexOf(w[1]+' '+w[2])===0&&x.nat.indexOf(nat)>=0;})[0]||SWT.filter(function(x){return x.lbl.indexOf(w[1]+' '+w[2])===0;})[0]||(w[1]==='FT'?SWT.filter(function(x){return x.id==='ft241';})[0]:null);if(cand){add('sw',cand.id,w[1]+' '+w[2],cnt,!!mq);}return;}
+    try{var mw=nmLtmOfTok(nat,lbl);if(mw){add('sw',mw.id,mw.lbl,cnt,!!mq);return;}}catch(e){} /* v1629: 60mm以下の迫撃砲は SW */
     var nl=lbl.replace(/\s+/g,'').toUpperCase(),lw=LATW_DATA.filter(function(x){if(x.oneShot)return false;var a=x.lbl.replace(/\s+/g,'').toUpperCase();return (a===nl||a.replace(/\(.*$/,'')===nl)&&(x.nat||'').split('/').indexOf(nat)>=0;})[0];
     if(lw)add('lw',lw.id,lw.lbl,cnt,!!mq);});});
   G=G.filter(function(g){return g.items.length;});G.forEach(function(g){delete g.m;});
