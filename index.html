@@ -38453,7 +38453,7 @@ function nmMcSection(it,n,te,r,key,reopen,opt){ /* 射撃の結果(IFT)rの士�
     var st=nmStOf(te),sd=(nmSideList('f').indexOf(te)>=0)?'f':'e';
     it.push({row:1,ic:'sel',t:'目標の状態',btns:[[(st.brk?'✓':'')+'混乱',"nmMcPlainTog("+n+",'"+sd+"','brk','"+reopen+"')"],[(st.pin?'✓':'')+'PIN',"nmMcPlainTog("+n+",'"+sd+"','pin','"+reopen+"')"]]});return;}
   var d=nmGeList(te.grp),items=d.items||[],ld=nmMcLdrDrm(items,M.res);
-  it.push({ic:'sel',t:'士気チェック: '+(P.k==='PTC'?'PTC(ピン判定)':'MC'+(P.drm?'(DRM'+sg(P.drm)+')':''))+'　'+nmGrpLbl(te.grp),sub:(P.cas?'損耗1(先に1ユニットを損耗させる)。':'')+(P.kia?'最低'+P.kia+'ユニット除去・残り全員混乱(✕で除去、混乱で印)。':'')+'指揮官が先。合格した指揮官の修正'+(ld?sg(ld):'')+'を分隊に加える'});
+  it.push({ic:'sel',t:'士気チェック: '+(P.k==='PTC'?'PTC(ピン判定)':(window.NM_NMC===false?'MC'+(P.drm?'(DRM'+sg(P.drm)+')':''):(P.drm>0?P.drm+'MC':P.drm?'MC(DRM'+sg(P.drm)+')':'NMC'))/* sample-nmc(ダルマ「1MC 2MC 3MCで表示する」) */)+'　'+nmGrpLbl(te.grp),sub:(P.cas?'損耗1(先に1ユニットを損耗させる)。':'')+(P.kia?'最低'+P.kia+'ユニット除去・残り全員混乱(✕で除去、混乱で印)。':'')+'指揮官が先。合格した指揮官の修正'+(ld?sg(ld):'')+'を分隊に加える'});
   if(P.cas&&!M.casDone&&items.length){it.push({row:1,ic:'x',t:'損耗1',sub:'損耗させるユニットを選びます。ランダム=アプリが1つ選ぶ / ユニット名=自分で指定',btns:(M.casMan?[['← 自動に戻す',"NM_MC.casMan=0;"+reopen+"("+n+")"]].concat(items.map(function(x,i){return [x.label,"nmMcCas("+n+",'"+te.grp+"',"+i+",'"+reopen+"')"];})):[['🎲 自動(無作為)',"nmMcCas("+n+",'"+te.grp+"',-1,'"+reopen+"')"],['✋ 自分で選ぶ',"NM_MC.casMan=1;"+reopen+"("+n+")"]])});} /* v426 / v1083: 自動と自分で選ぶを分ける */
   if(M.casDone)it.push({ic:'x',t:'<span style="color:#ff6060">損耗: '+M.casDone+'</span>'});
   if(P.kia&&!M.kiaDone&&items.length)it.push({row:1,ic:'x',t:'KIAの適用',sub:M.kiaMan?'下のユニットごとに「混乱」「✕」で自分で決めます':'自動=無作為に'+Math.min(P.kia,items.length)+'ユニット除去・残りは混乱',btns:M.kiaMan?[['← 自動に戻す',"NM_MC.kiaMan=0;"+reopen+"("+n+")"]]:[['🎲 自動で適用(無作為)',"nmMcKia("+n+",'"+te.grp+"','"+reopen+"')"],['✋ 自分で選ぶ',"NM_MC.kiaMan=1;"+reopen+"("+n+")"]]}); /* v426 / v1083 */
@@ -38526,7 +38526,7 @@ function nmMcCrewSection(it,n,te,P0,r,reopen){var M=NM_MC,C=M.crew||(M.crew={}),
   if(r2==='-'){it.push({ic:'ok',t:'<span style="color:#3ca878">乗員に効果なし</span>'});return;}
   if(/KIA|^K\d?$/.test(r2)){it.push({ic:'x',t:'<span style="color:#ff6060">乗員は'+(/KIA/.test(r2)?'除去(KIA)':'損耗(除去)')+'・砲は無人</span>',sub:'乗員を取り除く'});return;}
   var P=nmMcParse(r2)||P0;C.r2=r2;
-  var kind=P.k==='PTC'?'PTC(ピン判定)':'MC'+(P.drm?'(DRM'+sg(P.drm)+')':'');
+  var kind=P.k==='PTC'?'PTC(ピン判定)':(window.NM_NMC===false?'MC'+(P.drm?'(DRM'+sg(P.drm)+')':''):(P.drm>0?P.drm+'MC':P.drm?'MC(DRM'+sg(P.drm)+')':'NMC'))/* sample-nmc(ダルマ「1MC 2MC 3MCで表示する」) */;
   it.push({ic:'sel',img:vaslCtrHTML('u:'+cr.nat+'|'+cr.lbl,30)||'',t:'砲の乗員の士気チェック: '+kind,sub:(cr.nat?nmNatLbl(cr.nat)+' ':'')+cr.lbl+' 士気'+(cr.mor==null?'?':cr.mor)+'　最終DRが士気以下なら合格'});
   var dz=function(k,lab){return {row:1,ic:'die',t:lab,cmp:1,btns:[1,2,3,4,5,6].map(function(v){return [(C[k]===v?'✓':'')+v,"nmMcCrewDie("+n+",'"+sd+"','"+k+"',"+v+",'"+reopen+"')"];})};};
   it.push(dz('a','赤'));it.push(dz('b','白'));
