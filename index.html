@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1634</title>
+<title>ASL SKシリーズv1635</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1634">
+<meta property="og:title" content="ASL SKシリーズv1635">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10978,7 +10978,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.834"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.835"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1635="v1635(車両の煙幕展張器: sD=自分のヘクス(射程・向きなし)、sM=距離1〜3・LOSの説明を表示";
 var APP_VERSION_HIST_v1634="v1634(車体ごと回す時のCA変更が少なすぎた不具合を修正(砲塔が目標を向くまでの数で非砲塔のDRM)";
 var APP_VERSION_HIST_v1633="v1633(目標が車両の時は使う武器の機関銃を押せない";
 var APP_VERSION_HIST_v1632="v1632(車両・砲の射撃で使う武器(主砲・煙幕弾・機関銃・煙幕発射機)を選べる";
@@ -37117,7 +37118,7 @@ function nmUnitMenu(it,H,n,sd){
     nmStFiredRow(it,n,sd,eh);
     it.push({ic:'wreck',t:'撃破(残骸にする)',sub:'マーカーを取り消して、このヘクスに'+nmAfvName(ev)+'の残骸を配置',f:"BtRmClose();nmStWreck("+n+",'"+sd+"')"});} /* v405 */
   if(ev&&ev.mp&&!NM_MOVE)it.push({ic:'move',t:'このカウンターを移動',sub:ev.mp+'MP。1ヘクスずつタップでマーカーが進む。方向・CE/BUを変えて「ここで止まる」','f':"nmMvStart("+n+",'"+sd+"')"}); /* v450 */
-  if(ev&&ev.smoke)it.push({ic:'smoke',t:'煙幕手榴弾('+((ev.smoke.options||[ev.smoke]).map(function(o){return o.type;}).join('/'))+')',sub:'DR ≦ 使用ナンバーで拡散煙幕+2',f:"nmSgOpen("+n+",'"+sd+"')"}); /* v418 */
+  if(ev&&ev.smoke)it.push({ic:'smoke',t:'煙幕展張器('+((ev.smoke.options||[ev.smoke]).map(function(o){return o.type;}).join('/'))+')',sub:'DR ≦ 使用ナンバーで拡散煙幕+2',f:"nmSgOpen("+n+",'"+sd+"')"}); /* v418 */
   if(ev&&nmVmKeys(ev).length)it.push({ic:'fire',t:'ここから攻撃する(機関銃)',sub:nmVmKeys(ev).map(function(k){return k.toUpperCase()+ev.mg[k];}).join('・')+'　歩兵のマーカーへIFTで',f:"nmVmOpen("+n+",'"+sd+"')"}); /* v428 */
   if(ev)it.push({ic:'x',t:'このカウンターを消去',sub:L.nm+'の配置を取り消す',f:sd==='f'?"nmRmFriendDel()":"nmRmEnemy()"}); /* v669: 機関銃の下 */
   if(ev)nmVmRepRows(it,n,sd,eh); /* v428 */
@@ -45376,7 +45377,7 @@ function nmSgDrm(G,eh,v2,sm){var o={drm:0,dl:[],err:null};function add(v,l){if(v
   return o;}
 function nmSgDisp(v){var sm=v&&v.smoke;if(!sm)return null;if(sm.options&&sm.options.length)return sm.options[Math.min(NM_SG?NM_SG.opt:0,sm.options.length-1)];return sm;}
 function nmRmSgItems(n){var G=NM_SG;if(!G)return nmRMenuItems(n);var eh=nmUnitAt(nmHexOfNode(G.n),G.sd),it=[],N=BTG.nodes[G.n];
-  it.push({ic:'back',t:'← 戻る',sub:G.veh?'車両の煙幕手榴弾(7.5)':'煙幕手榴弾',f:"NM_SG=null;btRmReopen("+n+")"});it.push({sep:1});
+  it.push({ic:'back',t:'← 戻る',sub:G.veh?'車両の煙幕展張器(7.5)':'煙幕手榴弾',f:"NM_SG=null;btRmReopen("+n+")"});it.push({sep:1});
   if(!eh){it.push({ic:'info',t:'マーカーがありません'});return it;}
   var ph=S.turn&&S.turn.phase;if(ph&&ph!=='mph')it.push({ic:'info',t:'<span style="color:#ffb040">煙幕手榴弾・煙幕展張はMPh(移動フェイズ)(相手の移動中の展張器も)に行います</span>'});
   var hexes=[G.n];var R=G.veh?3:1;BTG.nodes.forEach(function(x,i){var d=btDist(G.n,i);if(d>0&&d<=R)hexes.push(i);});
@@ -45398,6 +45399,7 @@ function nmRmSgItems(n){var G=NM_SG;if(!G)return nmRMenuItems(n);var eh=nmUnitAt
   if(v2.smoke.options&&v2.smoke.options.length>1)it.push({row:1,ic:'smoke',t:'展張器',btns:v2.smoke.options.map(function(o,i){return [(G.opt===i?'✓':'')+o.type,"nmSgSet("+n+",'opt',"+i+")"];})});
   var un=smokeUsageNum(sm),SD=nmSgDrm(G,eh,v2,sm),drm=SD.drm;
   it.push({row:1,ic:'turret',t:'ハッチ',btns:[[(G.ce?'':'✓')+'BU +1',"nmSgSet("+n+",'ce',false)"],[(G.ce?'✓':'')+'CE',"nmSgSet("+n+",'ce',true)"]]});
+  it.push({ic:'info',t:'<span style="font-size:13px;color:#9fd0e8">'+(sm.type==='sM'?'sM(煙幕迫撃砲): 距離1〜3のヘクスで、LOSが通るところに置く。砲塔の向き(TCA)の外ならCA変更のDRM':sm.type==='sD'?'sD(煙幕発射機): 自分のヘクスに置く(射程・向きなし)':sm.type+': 自分のヘクスに置く')+'</span>'}); /* v1635(ダルマ「sDのときは…一言出す」「sM…も追加」) */
   if(sm.type==='sM'){var hx=hexes.filter(function(h){return h===G.n||btDist(G.n,h)<=3;}).slice(0,1);var near=(S_LOS.enemyHexes||[]).concat(S_LOS.friendHexes||[]).map(function(e){return btNodeOf(e.boardId,e.col,e.row);}).filter(function(t){return t!=null&&t!==G.n&&btDist(G.n,t)<=3;});
     it.push({row:1,cmp:1,ic:'smoke',t:'配置場所',btns:[G.n].concat(near).slice(0,5).map(function(h){return [(G.tgt===h?'✓':'')+(h===G.n?'ここ':BTG.nodes[h].nm.replace(/^[a-z]+/,'')),"nmSgSet("+n+",'tgt',"+h+")"];})});}
   it.push({ic:'smoke',img:nmSmkCtrHTML('d2',30),t:'<span>'+sm.type+'　使用ナンバー <b>'+(un==null?'なし':un)+'</b>　DRM +'+drm+'　→ DR <b>'+(un==null?'-':un-drm)+'</b>以下で成功</span>',sub:'成功で'+BTG.nodes[G.tgt].nm+'に拡散煙幕+2'+(SD.dl.length?'　DRM内訳: '+SD.dl.join(' '):'')});
