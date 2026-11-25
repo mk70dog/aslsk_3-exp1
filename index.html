@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1653</title>
+<title>ASL SKシリーズv1654</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1653">
+<meta property="og:title" content="ASL SKシリーズv1654">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10978,7 +10978,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.853"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.854"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1654="v1654(";
 var APP_VERSION_HIST_v1653="v1653(士気チェックの見出しを1MC・2MC・3MC(修正なしはNMC)で表示";
 var APP_VERSION_HIST_v1652="v1652(士気チェックの枠を2列の結果パネルで左右に分けない(判定するボタンが離れない)";
 var APP_VERSION_HIST_v1651="v1651(シナリオ選択を開く時は選択中シナリオのキットの一覧を最初に出す";
@@ -39491,6 +39492,7 @@ function nmDbgHead(){var a=[];try{a.push('版: '+(typeof APP_VERSION!=='undefine
   try{a.push('ターン/フェイズ: '+(S.turn?'T'+S.turn.cur+(S.turn.half?'裏':'表')+' '+(S.turn.phase||''):'-'));}catch(e){}
   try{a.push('モード: '+nmModeNow()+'　オートダイス: '+(nmAdOn()?'ON':'OFF'));}catch(e){}
   try{var dsc=function(e){if(!e)return '-';var r=e.getBoundingClientRect(),cs=getComputedStyle(e);return e.tagName.toLowerCase()+(e.id?'#'+e.id:'')+(typeof e.className==='string'&&e.className?'.'+e.className.trim().split(/\s+/).slice(0,2).join('.'):'')+'['+Math.round(r.left)+','+Math.round(r.top)+' '+Math.round(r.width)+'x'+Math.round(r.height)+' '+cs.position+' bg'+cs.backgroundColor.replace(/\s/g,'')+']';};var pts=[[0.85,0.1],[0.85,0.4],[0.85,0.7],[0.5,0.4]];a.push('画面の点の要素(v1506 右上が黒い件の調査): '+pts.map(function(q){var x=Math.round(innerWidth*q[0]),y=Math.round(innerHeight*q[1]);return '('+x+','+y+') '+document.elementsFromPoint(x,y).slice(0,3).map(dsc).join(' > ');}).join(' | '));var mw=document.getElementById('losMapWrap'),cw=document.getElementById('losCropWrap'),sw=document.getElementById('losScrollWrap');a.push('地図: zoom '+S_LOS.zoom+' 回転 '+S_LOS.viewRot+' scroll '+(sw?sw.scrollLeft+','+sw.scrollTop+' / '+sw.scrollWidth+'x'+sw.scrollHeight:'-')+' crop '+dsc(cw)+' map '+dsc(mw)+' 画像 '+[].map.call(document.querySelectorAll('#losMapWrap img'),function(im){var r=im.getBoundingClientRect();return im.naturalWidth+'x'+im.naturalHeight+(im.complete?'':'(未)')+'@'+Math.round(r.left)+','+Math.round(r.top)+' '+Math.round(r.width)+'x'+Math.round(r.height);}).join(' '));}catch(e){a.push('点の要素: エラー '+e);}
+  try{var pb0=document.createElement('div');pb0.style.cssText='position:fixed;top:0;left:0;width:0;height:0;visibility:hidden;padding-top:env(safe-area-inset-top,0px)';document.body.appendChild(pb0);var sa0=getComputedStyle(pb0).paddingTop;pb0.remove();a.push('上の帯: safe-area-inset-top '+sa0+' / --nmsat '+getComputedStyle(document.documentElement).getPropertyValue('--nmsat')+' / '+(window.matchMedia&&matchMedia('(display-mode: standalone)').matches?'ホーム画面のアイコン':'Safari'));}catch(e){}
   try{var CC=nmTurnRoleCnt();a.push('1P/2P: このiPad '+(nmsRole()||'未設定')+' '+Object.keys(CC).map(function(k){return k+' 自分'+CC[k].m+'・相手'+CC[k].o+'→'+(nmTurnRoleOf(k)||'-');}).join(' '));}catch(e){}
   try{a.push('マップ同期: 判定の同期 '+(typeof nmJsLv==='function'?nmJsLv():'-')+' / nmsMode '+nmsMode()+' / タイマー '+(NMS.timer?'動作中':'止まっている')+' / 状態 '+(NMS.status||'-')+(NMS.msg?' '+NMS.msg:'')+' / 最後 '+(NMS.last?new Date(NMS.last).toTimeString().slice(0,8):'-')+' / 相手のデータ '+(NMS.remoteAt?new Date(NMS.remoteAt).toTimeString().slice(0,8):'-')+' / Gist '+(GIST_CONFIGURED()?'あり':'なし'));}catch(e){}
   try{var op=['btRm','nmIj','nmHq','nmHqPk','nmCcSc','nmRmPop','nmMvPk','nmFtMn'].filter(function(id){return document.getElementById(id);});a.push('開いている画面: '+(op.join(',')||'なし')+(typeof NM_RM_CUR!=='undefined'&&NM_RM_CUR?' (NM_RM_CUR='+NM_RM_CUR+')':''));}catch(e){}
@@ -42303,7 +42305,7 @@ function nmTbPosPop(){var o=document.getElementById('nmTbPop');if(o){o.remove();
    'html.nm-tbL #nmFtPh,html.nm-tbR #nmFtPh{display:none!important}',
    'html.nm-tbL #nmVerR,html.nm-tbR #nmVerR{transform:scale(.62);transform-origin:center;margin:-6px 0 0!important}',
    /* v581(ダルマ指示「左右にバーを設定時 上部時計の分ブランクを追加」→A): iPadの時計の帯の分(--nmsat)を画面幅いっぱいの帯にし、縦のバーと地図はその下から */
-   ':root{--nmsat:min(env(safe-area-inset-top,0px),24px)}',
+   ':root{--nmsat:min(env(safe-area-inset-top,0px),60px)}', /* v1654(ダルマ「マップ上側がぼやけている」iPadOS更新後): 時計の帯が24pxより高くなり、地図がその下に入ってぼかされていた → 上限 24px→60px */
    'html.nm-tbL.bt-mapfull #losScrollWrap{top:var(--nmsat)!important;left:var(--nmtbw)!important}html.nm-tbR.bt-mapfull #losScrollWrap{top:var(--nmsat)!important;right:var(--nmtbw)!important}',
    'html.nm-tbL.bt-mapfull::before,html.nm-tbR.bt-mapfull::before{content:"";position:fixed;left:0;right:0;top:0;height:var(--nmsat);z-index:8914;background:#0a0c14;box-shadow:0 2px 8px #0008;pointer-events:none}',
    'html.nm-tbL #nmFullTabs,html.nm-tbR #nmFullTabs{top:var(--nmsat)!important;padding-top:4px!important}',
