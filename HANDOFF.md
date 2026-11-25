@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-25 昼 引き継ぎ(セッション session_011tDAL5ExdK15KzVqn7kM5Y のまとめ) いまの作業=v1628 から再開、返事待ち: sample-ltmtr(軽迫撃砲をSWに)】** main=v1628。sample ブランチは全部 main に取り込み済み(残っているリモートの sample-* は削除できない(403)ので放置でよい)。
+- **【2026-11-25 昼 引き継ぎ(セッション session_011tDAL5ExdK15KzVqn7kM5Y のまとめ) いまの作業=v1629 から再開、返事待ちなし】** main=v1629。sample ブランチは全部 main に取り込み済み(残っているリモートの sample-* は削除できない(403)ので放置でよい)。
+  - v1629(ダルマ「軽迫撃砲(SW化)実施」): sample-ltmtr をマージ。NM_LTMTR(false で従来)。nmLtmOfTok=OB の「MTR50*…」「50mm…迫撃砲」で口径60以下→SWT の mtr*(nmSuObParse で sw)。nmScenGuns から外す。メニュー(nmRmBuildB)に nmLtmRows「迫撃砲 MTR 50mmで撃つ」→nmLtmOpen=nmVfOpen+NM_VF.ltm(nmVfEh が仮の砲 eh{gun,man,nqSel:0,__ltm}を返す)。vfire の 操作/集中射撃/方向の行を外し見出しを「4-4-7 の MTR 50mm」。未: 対戦モード(AI)、撃った後に持ち主を射撃済。確認 /tmp/s/mtr2.js。
   - sample-ltmtr(push済み): ダルマ「判定モード対戦モード共にmtrはユニットとスタックした方がわかりやすい?」→ASLSK4 6.9 60mm以下の迫撃砲は SW。SWT に mtr50_ge/mtr60_us/mtr51_gb/mtr50_so/mtr45_it/mtr46_pl(fp:0・pp・ltmtr=砲のid)、画像は VASL_CTR_MAP['u:SW|id']=砲の画像。編成の画面で SW として運ぶ(PP⚠)ところまで。未: シナリオOB/部隊の準備で砲→SW、撃つ(砲のTo Hit を持ち主の歩兵で)、対戦モード(AI)。/tmp/s/mtr.js(#nmTv を隠してから)。
   - v1628(ダルマ「ab判定バーを場所移動させると戻される」): 位置の記録が2つ(つまみ=S.nmAbPos=同期で戻る/本体=Bからのずれ)あった→nmAbDragDown で画面の位置を localStorage nmAbPosL_<id>(nmAbBd・btLosCd)に1つ。ダブルタップで自動の位置。確認 /tmp/s/abd.js(BTG=null→btEnsureGraph、.nmTvBody の窓を消してから)。smoke 0。
   - **重要(HANDOFF の更新のしかた)**: 「いまの作業」の更新に `sed 's/いまの作業=[^\n]*/…/'` を使うと、0章の(前の記録)の行まで全部書き換わる。このセッションの途中(v1584〜v1627)でそうなっていたので、2026-11-25 に 46d373b の HANDOFF.md から(前の記録)を復元した。**今後は5行目だけ: `sed -i '5s/いまの作業=[^ 】]*/いまの作業=vNNNN から再開、返事待ちなし/' HANDOFF.md` か Python で5行目だけ書き換える。**
