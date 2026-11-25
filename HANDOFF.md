@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-25 夕 引き継ぎ いまの作業=v1648 から再開、返事待ち: sample-ammoreset(ユニットのメニュー「状態(続き)」の下に「弾の欠乏(無し)」行。eh の apcrOut/apdsOut/heatOut/apOut/smkOut/wpOut があるときだけ「↺ APCR 無しを戻す」等と「↺ 全部戻す」。nmAmmoOutRow/nmAmmoOutReset、NM_AMMORESET=false で消す。判定モードのみ、AI対戦は未対応)】** main=v1648。車両ノートの裏画像は全シナリオの車両・砲に入れ済み(残りは車両ノートに裏がない 45mm AT・2cm FlaK38・40mm Bofors・105/155mm 米榴弾砲、80mm vz.36 は画像に s8 がないので生成のまま)(H_EXP1.pdf の画像 98枚、pdfimages -j で取り出し、右半分を切り出し→NM_HNIMG に jpeg、説明の位置は NM_HNBK に手で)。
+- **【2026-11-25 夕 引き継ぎ いまの作業=v1649 から再開、返事待ちなし】** main=v1649。車両ノートの裏画像は全シナリオの車両・砲に入れ済み(残りは車両ノートに裏がない 45mm AT・2cm FlaK38・40mm Bofors・105/155mm 米榴弾砲、80mm vz.36 は画像に s8 がないので生成のまま)(H_EXP1.pdf の画像 98枚、pdfimages -j で取り出し、右半分を切り出し→NM_HNIMG に jpeg、説明の位置は NM_HNBK に手で)。
+  - v1649(ダルマ「弾切れ解除」「実施」): sample-ammoreset をマージ。ユニットのメニュー「状態(続き)」の下に「弾切れ」行(eh の apcrOut/apdsOut/heatOut/apOut/smkOut/wpOut があるときだけ)、「↺ APCR 弾切れ解除」等と「↺ 全部 弾切れ解除」。nmAmmoOutRow/nmAmmoOutReset、NM_AMMORESET=false で消す。判定モードのみ(AI対戦は未対応)。smoke 0。
   - v1648(ダルマ「修復実施」): nmVfTH で弾が無く撃っていない扱い(R.noShot: 煙幕・WP・APCR・AP・APDS・HEAT の原DR>欠乏No.)なら目標獲得を前のまま(acqPrev に戻す)。あわせて地図の射撃で APCR の欠乏を eh.apcrOut に覚える(従来は覚えず何度でも APCR を選べた)・nmVfBuild で eh の *Out を w.u に写す(結果表示中 NM_VF.res の時は写さない=最後の1発の結果が「撃てません」にならない)。smoke 0。
   - v1647(ダルマ「57mm PTP obr.43 情報が表示しない」「8.8cm FlaK 18 これも」): シナリオカード(nmScenView)の砲チップは SCEN_PAGE 内の gunUnitTabChipHTML で描いていて、v1643 で足した gunCategoryChip のタップが効いていなかった→gunUnitTabChipHTML もタップで nmVehInfo(g.id)。軽迫撃砲も同じ。返事待ち: 弾が無く撃っていない扱いでも獲得マーカーを置く件(従来から)。smoke 0。
   - v1646(ダルマ「実施」): AP の欠乏No.(IV号D AP7・KV-2 AP9 のみ)を地図上の射撃(nmVf)と AI 対戦(btFireOrd)でも。btAPNum・BT_AMMO_OUT.AP=apOut・btAmmoOK(AP)は apOut だけ見る・原DR>No.=撃っていない扱い+以後AP無し、=No.で最後。弾の一覧から AP を外す。nmVfDeplNote に「AP 7」。既知(従来から APDS/HEAT も同じ): 弾が無かった時も獲得マーカーを置いてしまう。smoke 0。
