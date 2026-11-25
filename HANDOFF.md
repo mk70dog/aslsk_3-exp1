@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-25 昼 引き継ぎ(セッション session_011tDAL5ExdK15KzVqn7kM5Y のまとめ) いまの作業=v1640 から再開、返事待ちなし】** main=v1640。sample ブランチは全部 main に取り込み済み(残っているリモートの sample-* は削除できない(403)ので放置でよい)。
+- **【2026-11-25 昼 引き継ぎ(セッション session_011tDAL5ExdK15KzVqn7kM5Y のまとめ) いまの作業=v1640 から再開、返事待ち: sample-vehinfo(車両をタップで表裏の説明)】** main=v1640。sample ブランチは全部 main に取り込み済み(残っているリモートの sample-* は削除できない(403)ので放置でよい)。
+  - sample-vehinfo(push済み): afvCategoryChip(シナリオ選択の部隊表の車両)をタップ→nmVehInfo(id)。REF_CTR_SETS.afv に同じ画像(f.k)があれば REF_CTR_GUIDE の説明図(表/裏)、無ければ表の画像+AFV_DATA の一覧。RefCtrSet で再描画。ついでに「ELR undefined」(f.elr 無し)を出さない。/tmp/s/vi.js。
   - v1640(ダルマ「2号Aを 2号Fのカウンターを使用する」画像=シナリオ選択 S33 独軍 OB に「PzKpfw IIA」の文字だけ): SCEN_PAGE の resolveAfvForObToken と btAfvData にも afvNormLabel(IIA→II号F)。nmScenAfvs は前から afv_pz2f_ge。
   - v1639(ダルマ「士気チェックのデフォルトをこっちに変更」画像=結果パネル内の水色枠): btRmFullApply の v1056 専用パネル(#nmMcOv)を既定で出さない。「専用パネルで開く」(nmMcOvOpen→NM_MC_OVON=key)の時だけ。NM_MCOV_DEF=1 で従来。smoke 0。
   - v1638(ダルマ「b」): sample-pickmk をマージし既定=B(四隅のかぎ+右上に距離の丸)。NM_PICKMK=0 で旧(緑の輪)、'A'/'C' も可。smoke 0。
