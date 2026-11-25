@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1643</title>
+<title>ASL SKシリーズv1644</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1643">
+<meta property="og:title" content="ASL SKシリーズv1644">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -1821,7 +1821,7 @@ var GUN_DATA=[
   {id:"g_57oqf6pdr_gb", lbl:"OQF 6ポンド対戦車砲", minRange:0, gs:2, gsType:"AT", gunCategory:"AT", nat:"GBR", cal:57, thType:"ve", mount360:false, targetSize:"avg", qsu:true, qsuSrc:"confirmed", ctrCode:"57L", // ittFP等はQRDC「American 57L(Amer/Brit 57L)」行を代用(米57mm M1砲=英6pdrのライセンス生産版で同一兵器)。ctrCode=To Hit Chart画像確認(2026-09)
    // HE:1943年2月以降No.7、1944年以降No.8向上(月単位の変化は年単位データ構造の制約により近似)。*57L=期日までHE不可・以降限定支給の意味。
    // 未解決フラグ：H_EXP1.pdf裏面表記に「D6^J4E」という追加トークンあり(意味不明、第3の弾薬種の可能性)。今回はammo配列に反映せず、要再確認。
-   ammo:[{type:"AP",he:0,deplete:0,lbl:"AP"},{type:"APDS",he:0,deplete:{1944:6,1945:7},lbl:"APDS"},{type:"HE",ittFp:6,attFp:2,chFp:12,deplete:{1943:7,1944:8},lbl:"HE"}],
+   ammo:[{type:"AP",he:0,deplete:0,lbl:"AP"},{type:"APDS",he:0,deplete:{"1944-06":6,1945:7},lbl:"APDS"},{type:"HE",ittFp:6,attFp:2,chFp:12,deplete:{"1943-02":7,1944:8}/*v1644(ダルマ「確認」): 車両ノート裏面 *HE7ᶠ³/8⁴⁺・D6ᴶ⁴ᴱ/7⁵ に合わせ月まで(F3=1943年2月・J4=1944年6月)*/,lbl:"HE"}],
    ife:0, rof:3, b:12, x:6, pp:"—", m:10, ch:3, ittFP:6, apFP:2, repairNum:1,
    th:[10,10,10,10,10,10,9,9,9,9,9,9,8,8,8,8,8,8,7,7,7,7,7,7],
    chRed:2, thRed:[10,10,10,10,10,10,8,8,8,8,8,8,7,7,7,7,7,7,6,6,6,6,6,6],
@@ -2322,7 +2322,7 @@ var AFV_DATA=[
    mg:{bmg:1,cmg:4,rmg:2,aamg:4,bmgFixed:true}, gp:"normal", smoke:null}, // 2026-09追加(ASL_SK3_HistoricalNote10.pdfカウンター画像確認、アイコン無し): 中(Normal)接地圧。
   {id:"afv_sherman3a_ll_sov", lbl:"シャーマンIII(レンドリース)", nat:"SOV", targetSize:"large", mp:14,
    afFront:{hull:8,turret:8}, afSide:{hull:4,turret:6}, ot:false, afSrc:"confirmed(pdf)",
-   turretType:"T", ma:{kind:"gun",ctrCode:"US_75",cal:75,short:false,rof:1,b:12,lowAmmo:null,specialAmmo:[{type:"Smoke",deplete:8},{type:"WP",deplete:6,availFrom:"1944"}]}, // 修正実施(2026-08、H_EXP1.pdf画像確認): 裏面s8(主砲smoke)・WP6^J4+(1944年+)を追加。2026-09修正(Kato確認: AF8/8・高速回転砲塔): turretTypeを旧"ST"(低速)から正しい"T"(高速回転砲塔)へ訂正。
+   turretType:"T", ma:{kind:"gun",ctrCode:"US_75",cal:75,short:false,rof:1,b:12,lowAmmo:null,specialAmmo:[{type:"Smoke",deplete:8},{type:"WP",deplete:6,availFrom:"1944-06"}/*v1644: 車両ノート裏面 WP6ᴶ⁴⁺(1944年6月から)*/]}, // 修正実施(2026-08、H_EXP1.pdf画像確認): 裏面s8(主砲smoke)・WP6^J4+(1944年+)を追加。2026-09修正(Kato確認: AF8/8・高速回転砲塔): turretTypeを旧"ST"(低速)から正しい"T"(高速回転砲塔)へ訂正。
    mg:{bmg:2,cmg:4,rmg:null,aamg:4,bmgFixed:false}/*mg修正(2026-09、SK3原本Historical Note p.10のカウンター表面「2/4/4」): 旧bmg:2,cmg:4,aamg:null(EXP#1版の2/4)。ダルマ確認: 使うのはSK3版*/, gp:"normal", smoke:{type:"sD",deplete:6}}, // 修正実施(2026-08): smoke未登録だったため追加(裏面sD6確認)。2026-09追加(ASL_SK3_HistoricalNote10.pdfの「Sherman III(a)」カウンター画像確認、アイコン無し): 中(Normal)接地圧。
   {id:"afv_m4a276a_sov", lbl:"M4A2/76(a)", nat:"SOV", targetSize:"large", mp:14,
    afFront:{hull:11,turret:8}, afSide:{hull:4,turret:6}, ot:false, afSrc:"confirmed(pdf)",
@@ -10978,7 +10978,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.843"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.844"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1644="v1644(6ポンド砲のAPDS(1944年6月から)・HE(1943年2月から)、シャーマンIII(a)のWP(1944年6月から)を車両ノートに合わせる";
 var APP_VERSION_HIST_v1643="v1643(SK3シナリオの車両・砲の裏を車両ノートの実物画像に・砲もタップ/メニューで表裏の説明・PaK38 APCRの1年ずれ・III号N H9をHEATに・StuH42に煙幕弾s9・50mm迫撃砲X6";
 var APP_VERSION_HIST_v1642="v1642(ユニットのメニューに車両の説明(表・裏)";
 var APP_VERSION_HIST_v1641="v1641(S21の5両の裏に車両ノートの実物画像・シナリオ選択の車両をタップで表裏の説明(説明図のない車両はデータから生成)・T-34 M41/M43にAPCR追加";
