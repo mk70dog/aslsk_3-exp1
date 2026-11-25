@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-25 夕 引き継ぎ いまの作業=v1651 から再開、返事待ち: sample-mcnosplit(btRmFullApply で士気チェックの区間(「士気チェック:」行〜次の rmSep)を左右の列で割らない。cut が区間の途中なら区間の先頭か終わりへ、左右の高さが近い方。NM_MCNOSPLIT=false で旧)】** main=v1651。車両ノートの裏画像は全シナリオの車両・砲に入れ済み(残りは車両ノートに裏がない 45mm AT・2cm FlaK38・40mm Bofors・105/155mm 米榴弾砲、80mm vz.36 は画像に s8 がないので生成のまま)(H_EXP1.pdf の画像 98枚、pdfimages -j で取り出し、右半分を切り出し→NM_HNIMG に jpeg、説明の位置は NM_HNBK に手で)。
+- **【2026-11-25 夕 引き継ぎ いまの作業=v1652 から再開、返事待ち: S20 の SSR のどれから入れるか(提案: SSR1 Chart1 の dr 自動・SSR3 ソ連全員自己ラリー・SSR6 国籍違いの指揮修正なし・SSR2 撤退と VP 除外・勝利条件の VP 自動集計と丘陵ヘクス30超)】** main=v1652。車両ノートの裏画像は全シナリオの車両・砲に入れ済み(残りは車両ノートに裏がない 45mm AT・2cm FlaK38・40mm Bofors・105/155mm 米榴弾砲、80mm vz.36 は画像に s8 がないので生成のまま)(H_EXP1.pdf の画像 98枚、pdfimages -j で取り出し、右半分を切り出し→NM_HNIMG に jpeg、説明の位置は NM_HNBK に手で)。
+  - v1652(ダルマ「実施」): sample-mcnosplit をマージ。btRmFullApply で士気チェックの区間(「士気チェック:」行〜次の rmSep)を左右の列で割らない(区間の途中で切れる時は区間の先頭か終わりへ、左右の高さが近い方)。判定するボタンが「士気チェック(続き)」に離れない。NM_MCNOSPLIT=false で旧。smoke 0。
   - v1651(ダルマ「今のシナリオのキットの一覧が最初に開くように直す」): nmTvOpen('scen') の時 S.scen.kitFilter=null・viewRecords=false(SCEN_PAGE が選択中シナリオのキットにする)。カードの丸ボタンからもメニューのシナリオ選択からも同じ。NM_SCVKIT=false で旧動作。smoke 0。
   - v1650(ダルマ「b」): sample-scensel をマージ。シナリオカード(nmScV)の見出しの ✕ の左に丸いアイコンだけの「シナリオ選択」ボタン(既定 NM_SCVSEL_STYLE='B'、A/C/D/E も残す、NM_SCVSEL=false で消す)。押すとカードを閉じて nmTvOpen('scen')。未確認: 開いた時のキットが今のシナリオのキットになるか(試験では SK#1 が開いた)。smoke 0。
   - v1649(ダルマ「弾切れ解除」「実施」): sample-ammoreset をマージ。ユニットのメニュー「状態(続き)」の下に「弾切れ」行(eh の apcrOut/apdsOut/heatOut/apOut/smkOut/wpOut があるときだけ)、「↺ APCR 弾切れ解除」等と「↺ 全部 弾切れ解除」。nmAmmoOutRow/nmAmmoOutReset、NM_AMMORESET=false で消す。判定モードのみ(AI対戦は未対応)。smoke 0。
