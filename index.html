@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1635</title>
+<title>ASL SKシリーズv1636</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1635">
+<meta property="og:title" content="ASL SKシリーズv1636">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10978,7 +10978,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.835"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.836"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1636="v1636(士気チェックの窓にほかのパネルと同じ細かいドット";
 var APP_VERSION_HIST_v1635="v1635(車両の煙幕展張器: sD=自分のヘクス(射程・向きなし)、sM=距離1〜3・LOSの説明を表示";
 var APP_VERSION_HIST_v1634="v1634(車体ごと回す時のCA変更が少なすぎた不具合を修正(砲塔が目標を向くまでの数で非砲塔のDRM)";
 var APP_VERSION_HIST_v1633="v1633(目標が車両の時は使う武器の機関銃を押せない";
@@ -43435,6 +43436,7 @@ function nmVicStChip(vch){try{try{nmVicUpd();}catch(e){}var J=nmVicJudge();if(!J
   if(J.ctrl){var ok=J.ctrl.have>=J.ctrl.need;o+=vch((ok?'✓ ':'')+T('支配')+' '+J.ctrl.have+'/'+J.ctrl.need,ok?'#14321f':'#1b222c',ok?'#5ee08c':'#cfd8e3',ok?'#2f7a4a':'#4a5566');}
   if(J.exit){var ok2=J.exit.have>=J.exit.need;o+=vch((ok2?'✓ ':'')+T('退出')+' '+J.exit.have+'/'+J.exit.need+'VP',ok2?'#14321f':'#1b222c',ok2?'#5ee08c':'#cfd8e3',ok2?'#2f7a4a':'#4a5566');}
   return o;}catch(e){return '';}}
+(function(){try{var st=document.createElement('style');st.id='nmMcOvDot';st.textContent='html:root:root:root .mcOvBx:not(#x):not(#x):not(#x):not(#x){background-color:#1c1f27!important;background-image:radial-gradient(circle,#000a 1px,transparent 1.35px),radial-gradient(circle at 50% 70%,#ffffff14 1px,transparent 1.4px)!important;background-size:4px 4px,4px 4px!important}';document.head.appendChild(st);}catch(e){}})(); /* v1636(ダルマ「細かいドットを追加する」画像=士気チェックの窓): ほかのパネル(#btRm .rmBox)と同じ細かいドット */
 function nmBotCard(kind,flex){var c=curScen&&curScen();var sid=c&&c.id;var sh=(sid&&SCN_SHORT[sid])||null;
   if(kind==='ssr'&&c&&sh){var L=(sh.s||'').split(/\s*(?=[①②③④⑤⑥⑦⑧])/).filter(Boolean),NUM='①②③④⑤⑥⑦⑧',R=(typeof SSR_REFLECT!=='undefined'&&SSR_REFLECT[sid])||{},two=L.length>3,fx2='1 1 auto';
     var NC={ソ:'#e05a4f',独:'#9fb0c2',米:'#5aa0ff',英:'#d9b36c',仏:'#6fa8ff',伊:'#6cc070',日:'#ff8f8f'};var ell='white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0';
