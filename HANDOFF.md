@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-25 夕 引き継ぎ いまの作業=v1642 から再開、返事待ち: sample-hnsk3(SK3シナリオ S17〜S24 の車両6両・砲4門・軽迫撃砲3の裏に車両ノートの実物画像。砲もタップ/メニューで表裏の説明=nmVehInfo が g_ も扱う・nmGunRefGen。45mm AT は車両ノートに裏なし→生成。データ不一致の報告(PaK38 APCRが1年ずれ・III号N H9がHEになっている・StuH42 s9なし・50mm迫 X10→6)も返事待ち)】** main=v1642。次: 車両ノートの裏画像を S21 以外の車両にも順に広げる(H_EXP1.pdf の画像 98枚、pdfimages -j で取り出し、右半分を切り出し→NM_HNIMG に jpeg、説明の位置は NM_HNBK に手で)。
+- **【2026-11-25 夕 引き継ぎ いまの作業=v1643 から再開、返事待ちなし】** main=v1643。次: 車両ノートの裏画像を S21 以外の車両にも順に広げる(H_EXP1.pdf の画像 98枚、pdfimages -j で取り出し、右半分を切り出し→NM_HNIMG に jpeg、説明の位置は NM_HNBK に手で)。
+  - v1643(ダルマ「実施」): sample-hnsk3 をマージ。SK3(S17〜S24)の車両6両・砲4門・軽迫撃砲3の裏に車両ノートの実物画像(NM_HNIMG/NM_HNBK)。nmVehInfo が g_ の砲も扱う(nmViData・nmGunRefGen・REF_CTR_SETS.gun)。砲チップのタップ・地図の砲メニュー「砲の説明(表・裏)」。45mm AT は車両ノートに裏なし→生成。データ修正: PaK38 APCR {1941:5,1942:6,1943:5,1944:4}・III号N H9=HEAT・StuH42 に Smoke 9・g_50mm x 10→6。未対応(細かい): 6ポンド APDS と シャーマン WP は 1944年6月からが正しい(データは1944年1月から)。smoke 0。
   - v1642(ダルマ「実施」): sample-vimenu をマージ。nmUnitMenu の車両に「車両の説明(表・裏)」(煙幕展張器の前、nmVehInfo(ev.id))。NM_VIMENU=false で消す。smoke 0。
   - v1641(ダルマ「実施」): sample-vehinfo をマージ。シナリオ選択の車両チップをタップ→nmVehInfo(表裏の説明。説明図のない車両は nmVehRefGen でデータから生成)。S21 の5両(T-34 M41/M43・ティーガーE・IV号F2/H)は裏に車両ノート(H_EXP1.pdf)の実物画像(NM_HNIMG/NM_HNBK、NM_VIHN=false で生成版)。CS/Sz/Ⓡ は「フルASL用・SKでは使わない」。T-34 M41 に APCR {1942:4,1943:5,1944:6}、M43 に {..,1945:7} を追加(車両ノート裏面で確認)。smoke 0。
   - sample-vehinfo(push済み): afvCategoryChip(シナリオ選択の部隊表の車両)をタップ→nmVehInfo(id)。REF_CTR_SETS.afv に同じ画像(f.k)があれば REF_CTR_GUIDE の説明図(表/裏)、無ければ表の画像+AFV_DATA の一覧。RefCtrSet で再描画。ついでに「ELR undefined」(f.elr 無し)を出さない。/tmp/s/vi.js。
