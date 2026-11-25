@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1637</title>
+<title>ASL SKシリーズv1638</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1637">
+<meta property="og:title" content="ASL SKシリーズv1638">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10978,7 +10978,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.837"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.838"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1638="v1638(撃てる目標のマーカーを案B(四隅のかぎ+距離の丸)に";
 var APP_VERSION_HIST_v1637="v1637(砲塔に命中しDR=最終TK#はAPでもショック(効果なしと出ていた)";
 var APP_VERSION_HIST_v1636="v1636(士気チェックの窓にほかのパネルと同じ細かいドット";
 var APP_VERSION_HIST_v1635="v1635(車両の煙幕展張器: sD=自分のヘクス(射程・向きなし)、sM=距離1〜3・LOSの説明を表示";
@@ -40542,7 +40543,7 @@ function nmPickTap(cx,cy){var P=NM_PICK;if(!P)return false;var H=losHexAtClient(
   if(hit)NM_TGT_EH=hit.eh;nmPickEnd(hit?hit.tn:null);return true;}
 function nmPickOverlaySVG(dl){var P=NM_PICK;if(!P)return '';var h='';P.list.forEach(function(x){var H=nmHexOfNode(x.tn);var g=losColRowToGlobalCanon(H.boardId,H.col,H.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dl);
   if(x.blk)h+='<g opacity=".8"><circle cx="'+d.x+'" cy="'+d.y+'" r="34" fill="none" stroke="#888" stroke-width="3" stroke-dasharray="6 5"/><path d="M'+(d.x-10)+' '+(d.y-10)+'l20 20m0-20l-20 20" stroke="#bbb" stroke-width="4"/></g>';
-  else if(window.NM_PICKMK){var K=window.NM_PICKMK,R='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">',ax='<animate attributeName="opacity" values="1;.45;1" dur="1.2s" repeatCount="indefinite"/>',hp='';try{hp=btHexPoly(x.tn,dl);}catch(e){}
+  else if(window.NM_PICKMK!==0){var K=window.NM_PICKMK||'B',R='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')">',ax='<animate attributeName="opacity" values="1;.45;1" dur="1.2s" repeatCount="indefinite"/>',hp='';try{hp=btHexPoly(x.tn,dl);}catch(e){}
     if(K==='A')h+='<polygon points="'+hp+'" fill="none" stroke="#000" stroke-width="7" opacity=".5"/><polygon points="'+hp+'" fill="#40ff9014" stroke="#40ff90" stroke-width="3.5">'+ax+'</polygon>'+R+'<rect x="'+(d.x-18)+'" y="'+(d.y+38)+'" width="36" height="15" rx="7.5" fill="#0d1f16" stroke="#40ff90" stroke-width="1.5"/><text x="'+d.x+'" y="'+(d.y+49)+'" text-anchor="middle" font-size="10" font-weight="900" fill="#7fffb0" font-family="AppFont,AppJP,monospace">距離'+x.d+'</text></g>';
     else if(K==='B'){var L=13,o=34,c='#40ff90',br=function(sx,sy){return '<path d="M'+(d.x+sx*o)+' '+(d.y+sy*(o-L))+'V'+(d.y+sy*o)+'H'+(d.x+sx*(o-L))+'" fill="none" stroke="#000" stroke-width="7" opacity=".5"/><path d="M'+(d.x+sx*o)+' '+(d.y+sy*(o-L))+'V'+(d.y+sy*o)+'H'+(d.x+sx*(o-L))+'" fill="none" stroke="'+c+'" stroke-width="3.5" stroke-linecap="round">'+ax+'</path>';};h+=R+br(-1,-1)+br(1,-1)+br(-1,1)+br(1,1)+'<rect x="'+(d.x+o-6)+'" y="'+(d.y-o-12)+'" width="22" height="22" rx="11" fill="#40ff90" stroke="#0d1f16" stroke-width="1.5"/><text x="'+(d.x+o+5)+'" y="'+(d.y-o+3.5)+'" text-anchor="middle" font-size="11" font-weight="900" fill="#0d1f16" font-family="AppFont,AppJP,monospace">'+x.d+'</text></g>';}
     else h+=R+'<circle cx="'+(d.x+30)+'" cy="'+(d.y-30)+'" r="15" fill="#000" opacity=".45"/><circle cx="'+(d.x+30)+'" cy="'+(d.y-30)+'" r="13" fill="#3ca878" stroke="#fff" stroke-width="2">'+ax+'</circle><path d="M'+(d.x+22)+' '+(d.y-30)+'h16M'+(d.x+30)+' '+(d.y-38)+'v16" stroke="#fff" stroke-width="2"/><circle cx="'+(d.x+30)+'" cy="'+(d.y-30)+'" r="5" fill="none" stroke="#fff" stroke-width="2"/><text x="'+(d.x+30)+'" y="'+(d.y-8)+'" text-anchor="middle" font-size="10" font-weight="900" fill="#fff" stroke="#000" stroke-width="3" paint-order="stroke" font-family="AppFont,AppJP,monospace">'+x.d+'</text></g>';} /* sample-pickmk(ダルマ「マーカーのデザインを変える サンプルx3」): A=ヘクスの枠 B=四隅のかぎ C=右上の照準バッジ。カウンターを隠さない */
