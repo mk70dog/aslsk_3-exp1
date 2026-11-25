@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-25 昼 引き継ぎ(セッション session_011tDAL5ExdK15KzVqn7kM5Y のまとめ) いまの作業=v1638 から再開、返事待ちなし】** main=v1638。sample ブランチは全部 main に取り込み済み(残っているリモートの sample-* は削除できない(403)ので放置でよい)。
+- **【2026-11-25 昼 引き継ぎ(セッション session_011tDAL5ExdK15KzVqn7kM5Y のまとめ) いまの作業=v1639 から再開、返事待ちなし】** main=v1639。sample ブランチは全部 main に取り込み済み(残っているリモートの sample-* は削除できない(403)ので放置でよい)。
+  - v1639(ダルマ「士気チェックのデフォルトをこっちに変更」画像=結果パネル内の水色枠): btRmFullApply の v1056 専用パネル(#nmMcOv)を既定で出さない。「専用パネルで開く」(nmMcOvOpen→NM_MC_OVON=key)の時だけ。NM_MCOV_DEF=1 で従来。smoke 0。
   - v1638(ダルマ「b」): sample-pickmk をマージし既定=B(四隅のかぎ+右上に距離の丸)。NM_PICKMK=0 で旧(緑の輪)、'A'/'C' も可。smoke 0。
   - v1637(ダルマ「効果無し?」画像=IV号D AP 砲塔に命中 TK#2 DR2): nmVfEff で砲塔・DR=最終TK# を AP だと「効果なし」にしていた→弾薬に関係なく自動ショック(7.10・AFV DESTRUCTION TABLE)。TK# の説明文も。対戦車兵器は v1428、AI は btOrd 側で既に正しい。
   - sample-pickmk(push済み): ダルマ「マーカーのデザインを変える サンプルx3」(画像=地図で目標を選ぶ時の緑の輪 nmPickOverlaySVG)。window.NM_PICKMK='A'(ヘクスの枠+下に距離)/'B'(四隅のかぎ+右上に距離の丸)/'C'(右上の照準バッジ+距離)。/tmp/s/pmk.js。
