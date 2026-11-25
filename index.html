@@ -23630,10 +23630,29 @@ function gunCaliberChip(cal,desc,bc,wrap){
 // GUN_DATAのgunCategoryChip()と同じ体裁(上段=短いラベル、下段=枠付きバッジ)に統一。
 /* sample-vehinfo(ダルマ「車両を選択すると早見表と同様の車両の表裏の説明を表示」): シナリオの部隊表の車両をタップ→窓。早見表に説明のある車両は同じ表裏の説明図、無い車両は表の画像+データ(移動力・装甲・主砲・ROF・B#・機関銃・目標サイズ・煙幕・特殊弾) */
 function nmVehInfo(id){var v=AFV_DATA.filter(function(x){return x.id===id;})[0];if(!v)return;window.NM_VI=id;nmVehInfoDraw();}
+/* 早見表に説明図のない車両: AFV_DATA から表(標準の配置)と裏(特殊弾の欠乏ナンバー・煙幕)の説明を作る */
+function nmVehRefGen(v,k){var ma=v.ma||{},mg=v.mg||{},it=[],af=function(x,q){return x?(x.hull+(x.turret!=null&&x.turret!==x.hull?'/'+x.turret:'')):'?';};
+  var red=/red|mech/i.test(String(v.mr||v.mpCol||''))||v.mpRed;
+  it.push(['移動力 '+(v.mp||'?')+(red?'（赤）':''),(red?'赤字=機械的信頼性に問題・':'')+'楕円=全装軌/円=装輪など',[60,4,38,18],'L']);
+  var fT=v.afFront&&v.afFront.turret!=null&&v.afFront.turret<v.afFront.hull;
+  it.push(['前面装甲 '+af(v.afFront)+(fT?'（○）':''),fT?'○囲み=砲塔は1段階弱い':'車体/砲塔',[72,22,26,18],'L']);
+  it.push(['側面・背面装甲 '+af(v.afSide),'',[74,40,24,16],'L']);
+  if(v.gp&&v.gp!=='normal')it.push([(v.gp==='low'?'□':'○')+' 接地圧',v.gp==='low'?'□=低い(ボグしにくい)':'○=高い(ボグしやすい)',[2,2,16,16],'R']);
+  var tt={T:'普通の砲塔',ST:'遅い旋回(ST)',RST:'制限付きの遅い旋回(RST)','1MT':'1人砲塔(1MT)',NT:'砲塔なし(NT)'}[v.turretType]||'';if(tt)it.push(['砲塔 '+(v.turretType||''),tt,[4,4,64,62],'R']);
+  if(ma.rof)it.push(['□'+ma.rof+' ROF','色ダイスがこの数以下でもう一度撃てる',[4,48,22,18],'R']);
+  var mac=ma.ctrCode&&ma.ctrCode.indexOf('_')>0?ma.ctrCode.split('_')[1]:(ma.cal?ma.cal:'');if(mac)it.push(['主砲 '+mac+(ma.b&&ma.b<12?'  B'+ma.b:''),'口径mm＋砲身の長さ(L=長い)'+(ma.b&&ma.b<12?'。B#=故障ナンバー':''),[2,74,40,24],'R']);
+  var mgt=[mg.bmg,mg.cmg].map(function(x){return x||'-';}).join('/')+(mg.aamg?' AA'+mg.aamg:'');it.push(['機銃 '+mgt,'車体/同軸のFP'+(mg.aamg?'・AA=対空機銃(CE時)':''),[68,74,30,24],'L']);
+  var bi=[],btx=[],y=8;var SUP={'2':'²','3':'³','4':'⁴','5':'⁵'};((ma.specialAmmo)||[]).forEach(function(x){var d=x.deplete!=null?x.deplete:x.depleteByYear,ab={APCR:'A',APDS:'D',HEAT:'H',Smoke:'s',WP:'WP'}[x.type]||x.type.charAt(0),ds=d==null?'':(typeof d==='object'?Object.keys(d).map(function(q){return d[q]+(SUP[String(q).slice(-1)]||'');}).join('/'):d);btx.push([ab+ds,14,y,13,'l']);bi.push([ab+ds+' '+x.type,x.type+'の欠乏ナンバー(命中の原DRがこれ以下なら使える)'+(typeof d==='object'&&d?'。右肩は年: 2=1942・3=1943・4=1944以降':'')+(x.availFrom?'・'+x.availFrom+'から':''),[12,y-2,76,18],'R']);y+=18;});
+  if(v.smoke)(v.smoke.options||[v.smoke]).forEach(function(o){btx.push([o.type+(o.deplete||o.usage||''),14,y,13,'l']);bi.push([o.type+(o.deplete||o.usage||'')+' 煙幕',o.type==='sM'?'煙幕迫撃砲: 距離1〜3・LOS・TCA':'煙幕発射機: 自分のヘクス(射程・向きなし)',[12,y-2,76,18],'R']);y+=18;});
+  if(v.ot){btx.push(['OT',70,y,13,'l']);bi.push(['OT','上面開放(オープントップ)',[66,y-2,30,18],'R']);}
+  if(!bi.length){bi.push(['(特殊弾・煙幕なし)','裏面は名前と残骸の表示のみ',[10,40,80,20],'R']);}
+  var RC={ru:'#d58a1e',ge:'#8fc8ea',br:'#e8d8b8',am:'#b9c27a',it:'#c8c0a0',fr:'#a8c8e8'}[String(k).split('_')[0]]||'#c8c8c8';return {nm:(typeof afvOfficialName==='function'?afvOfficialName(v):v.lbl),f:{k:k,it:it},b:{rec:RC,k:k,tx:btx,nm:'裏',it:bi}};}
 function nmVehInfoDraw(){var id=window.NM_VI,v=AFV_DATA.filter(function(x){return x.id===id;})[0];var o=document.getElementById('nmVi');if(!v){if(o)o.remove();return;}
   if(!o){o=document.createElement('div');o.id='nmVi';o.style.cssText='position:fixed;inset:0;z-index:2147482500;background:#000a;display:flex;align-items:center;justify-content:center';o.onclick=function(e){if(e.target===o){window.NM_VI=null;o.remove();}};document.body.appendChild(o);}
   var k=VASL_CTR_MAP[v.id],L=REF_CTR_SETS.afv||[],ix=-1;L.forEach(function(e,i){if(e.f&&e.f.k===k)ix=i;});var body='';
-  if(ix>=0){S.refCtr=S.refCtr||{};var R=S.refCtr.afv=S.refCtr.afv||{ex:0,face:'f',sel:-1};if(R.ex!==ix){R.ex=ix;R.sel=-1;}var sv=REF_CTR_SETS.afv;REF_CTR_SETS.afv=[sv[ix]];R.ex=0;try{body=REF_CTR_GUIDE('afv','車両カウンターの見方');}finally{REF_CTR_SETS.afv=sv;R.ex=ix;}}
+  var GEN=null;if(ix<0&&k&&window.NM_VIGEN!==false){try{GEN=nmVehRefGen(v,k);}catch(e){console.log('vigen',e);}}
+  if(ix<0&&GEN){S.refCtr=S.refCtr||{};var R2=S.refCtr.afv=S.refCtr.afv||{ex:0,face:'f',sel:-1};var sv2=REF_CTR_SETS.afv,ex0=R2.ex;REF_CTR_SETS.afv=[GEN];R2.ex=0;try{body=REF_CTR_GUIDE('afv','車両カウンターの見方');}finally{REF_CTR_SETS.afv=sv2;R2.ex=ex0;}}
+  else if(ix>=0){S.refCtr=S.refCtr||{};var R=S.refCtr.afv=S.refCtr.afv||{ex:0,face:'f',sel:-1};if(R.ex!==ix){R.ex=ix;R.sel=-1;}var sv=REF_CTR_SETS.afv;REF_CTR_SETS.afv=[sv[ix]];R.ex=0;try{body=REF_CTR_GUIDE('afv','車両カウンターの見方');}finally{REF_CTR_SETS.afv=sv;R.ex=ix;}}
   else{var row=function(a,b){return '<tr><td style="color:#8fa6bd;padding:4px 10px;white-space:nowrap">'+a+'</td><td style="color:#e8eef4;padding:4px 10px">'+b+'</td></tr>';},af=function(x){return x?(x.hull+(x.turret!=null?' / 砲塔'+x.turret:'')):'?';},ma=v.ma||{},mg=v.mg||{},mgs=['bmg','cmg','rmg','aamg'].filter(function(q){return mg[q];}).map(function(q){return q.toUpperCase()+mg[q];}).join('・')||'なし',sa=((ma.specialAmmo)||[]).map(function(x){return x.type+(x.deplete?'('+(typeof x.deplete==='object'?JSON.stringify(x.deplete).replace(/[{}"]/g,''):x.deplete)+')':'');}).join('・');
     var sz={small:'小(+1)',vsmall:'極小(+2)',large:'大(−1)',vlarge:'極大(−2)',avg:'普通(0)'}[v.targetSize]||v.targetSize||'普通(0)';
     body='<div class="card"><div class="sh">'+T('車両カウンターの見方')+'　<span style="color:#8fa6bd;font-size:12px">(早見表に説明図がない車両は、データの一覧で表示)</span></div><div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap"><div>'+(vaslCtrHTML(v.id,200,'')||'')+'</div><table style="font-size:14px;border-collapse:collapse">'
