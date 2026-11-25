@@ -37203,7 +37203,7 @@ function nmStackOff(eh,sd){var at=nmAllAt(eh,sd),i=at.indexOf(eh);return {i:i,n:
 /* sample-ammoreset(ダルマ「無しをリセットするボタンを追加」): 欠乏(弾が無い)にした弾を元に戻す。間違えて振った時やシナリオをやり直す時用 */
 var NM_AMMO_OUT_K=[['apcrOut','APCR'],['apdsOut','APDS'],['heatOut','HEAT'],['apOut','AP'],['smkOut','煙幕弾'],['wpOut','WP']];
 function nmAmmoOutRow(it,n,sd,eh){if(window.NM_AMMORESET===false||!eh)return;var L=NM_AMMO_OUT_K.filter(function(k){return eh[k[0]];});if(!L.length)return;
-  it.push({row:1,cmp:0,ic:'',t:'<span style="font-size:11px;color:#8899aa">弾の欠乏(無し)</span>',btns:L.map(function(k){return ['↺ '+k[1]+' 無しを戻す',"nmAmmoOutReset("+n+",'"+sd+"','"+k[0]+"')"];}).concat(L.length>1?[['↺ 全部戻す',"nmAmmoOutReset("+n+",'"+sd+"','all')"]]:[])});}
+  it.push({row:1,cmp:0,ic:'',t:'<span style="font-size:11px;color:#8899aa">弾切れ</span>',btns:L.map(function(k){return ['↺ '+k[1]+' 弾切れ解除',"nmAmmoOutReset("+n+",'"+sd+"','"+k[0]+"')"];}).concat(L.length>1?[['↺ 全部 弾切れ解除',"nmAmmoOutReset("+n+",'"+sd+"','all')"]]:[])});}
 function nmAmmoOutReset(n,sd,k){var eh=nmUnitAt(NM_RM_HEX,sd);if(!eh)return;NM_AMMO_OUT_K.forEach(function(q){if(k==='all'||k===q[0])delete eh[q[0]];});try{nmStSave();}catch(e){}try{btRmReopen(n);}catch(e){}}
 function nmUnitMenu(it,H,n,sd){
   var L=NM_SIDE_LBL[sd],eh=nmUnitAt(H,sd);
