@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1633</title>
+<title>ASL SKシリーズv1634</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1633">
+<meta property="og:title" content="ASL SKシリーズv1634">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10978,7 +10978,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.833"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.834"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1634="v1634(車体ごと回す時のCA変更が少なすぎた不具合を修正(砲塔が目標を向くまでの数で非砲塔のDRM)";
 var APP_VERSION_HIST_v1633="v1633(目標が車両の時は使う武器の機関銃を押せない";
 var APP_VERSION_HIST_v1632="v1632(車両・砲の射撃で使う武器(主砲・煙幕弾・機関銃・煙幕発射機)を選べる";
 var APP_VERSION_HIST_v1631="v1631(誰もいない砲を撃てないにするのは同期オールの時だけ";
@@ -34996,7 +34997,7 @@ function btOrdEval(o){
     if(o.ph==='BFF'){ // Case8は移動射撃に適用しない。砲塔はMP消費ごとに自由に回せる。非砲塔はVCA内のみ
       var tt=btWType(w);if(k>0&&(tt==='NT'||!tt))return {ok:false,err:'非砲塔の主砲はVCA内のみ(先に向きを変えてください)'};
       // v284: 停止していない移動射撃(Non-Stopped)も可。Case 16(低い方のダイスを2倍)
-    }else if(o.caHull&&btOrdTurreted(w)){k=btSpinesTo(w.u.vca,btAng(A,T));add(btCACost('NT',k,!!AN.cover),'CA変更'+k+'(車体)');} // v311(ダルマ指示): 砲塔ではなく車体ごと向きを変える(非砲塔と同じDRM)
+    }else if(o.caHull&&btOrdTurreted(w)){k=Math.max(k,btSpinesTo(w.u.vca,btAng(A,T)));add(btCACost('NT',k,!!AN.cover),'CA変更'+k+'(車体)');} /* v1634(ダルマ報告「車体ごとの方がなぜかペナルティが低い」): 車体を回すと砲塔も一緒に回るので、回す数は砲塔が目標を向くまでの数(車体の向きだけで数えると、車体が目標を向いている時に0になっていた) */ // v311(ダルマ指示): 砲塔ではなく車体ごと向きを変える(非砲塔と同じDRM)
     else add(btCACost(btWType(w),k,!!AN.cover),'CA変更'+k);}
   if(rng===0)add(AN.cover?4:2,'自ヘクス');
   if(w.kind==='MA'){
