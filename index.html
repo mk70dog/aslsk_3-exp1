@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1626</title>
+<title>ASL SKシリーズv1627</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1626">
+<meta property="og:title" content="ASL SKシリーズv1627">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10969,7 +10969,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.826"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.827"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1627="v1627(バグ修正 ダルマ「6MF移動できない？」): 判定モードで地図の部隊(編成)を移動する時、MFをその部隊の中身(指揮官同行+2MF・携行PP)で出す。前はMFの出し方が「手動」の設定だと指揮官がいても4MF、射撃タブの欄が別・空でも違うMFになっていた。NM_MVGRPMF=0で旧動作";
 var APP_VERSION_HIST_v1626="v1626(ダルマ「マスターはデフォルトオフ パスワード6789」): マスターは初めオフ。オンにする時だけパスワード(6789)を聞き、ちがえばオンにしない";
 var APP_VERSION_HIST_v1625="v1625(ダルマ「判定モード マスターは両軍の部隊の準備 ＋新しい部隊 を使用できるようにする」→印は鍵「2 実施」): メニューの「このiPadの国」の下に鍵の印の「マスター」スイッチ(iPadごと)。オンにすると同期中でも相手の国の部隊の準備で＋新しい編成が使え、地図の配置パネルの＋新しい編成も相手の国で使える。NM_MASTER=0で無効";
 var APP_VERSION_HIST_v1624="v1624(ダルマ「空ヘクス右クリックも左クリックと同じにする」): 判定・対戦モードで何もないヘクスの右クリックも、左クリックと同じ配置パネルを開く(A→B測定中の右クリックは今までどおりAの付け替え)。NM_RC_EMPTY=0で旧動作(ヘクスメニュー)";
@@ -48747,6 +48748,8 @@ function losStackMFDetails(){
     if(scenMudHalfMP(veh))return {mf:veh.mp/2,members:[{vehicle:veh,mf:veh.mp/2}],slowestIdx:0,noGroup:false,isVehicle:true,vehicle:veh,mudHalf:true,printedMP:veh.mp}; // v11.299: S30 SSR1 印刷MPの半分まで
     return {mf:veh.mp,members:[{vehicle:veh,mf:veh.mp}],slowestIdx:0,noGroup:false,isVehicle:true,vehicle:veh};
   }
+  /* v1627(バグ修正 ダルマ「6MF移動できない？」): 地図の部隊を移動する時は、その部隊(編成)の中身でMFを出す。前は射撃タブの最初の欄で出していたため、欄が別の国の同じ記号の編成・古い中身・空だと指揮官がいても4MFになっていた。NM_MVGRPMF=0で旧動作 */
+  try{if(window.NM_MVGRPMF!==0&&typeof NM_MOVE!=='undefined'&&NM_MOVE&&NM_MOVE.eh&&NM_MOVE.eh.grp&&!NM_MOVE.eh.veh&&!/^相手/.test(String(NM_MOVE.eh.grp))){var svM=nmGeSaved(NM_MOVE.eh.grp);if(svM&&svM.pickerItems&&svM.pickerItems.length){var puM=losUnitMFPerUnit(svM,NM_MOVE.eh.grp);if(puM&&puM.units.length)return {mf:puM.mf,members:[{slot:NM_MOVE.eh.grp,saved:svM,mf:puM.mf,units:puM.units}],slowestIdx:0,noGroup:false};}}}catch(e){console.log('mvGrpMF',e);}
   if(S_LOS.mfSource==='group'){
     // 2026-08修正(ダルマ指示「射撃タブで選択中の欄を最優先/mapタブと連動同期」):
     // 射撃タブの最初のFireグループ(g)を単一の情報源とする。gのpickerItems/swは常に
