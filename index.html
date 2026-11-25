@@ -41106,7 +41106,7 @@ function nmScenView(){var sid=S.scen&&S.scen.sel;if(!sid){btToast('シナリオ�
 /* v748(ダルマ指示「早見表とユニットも地図で」): 判定ボードの早見表・ユニットを、タブへ移らずメインマップの上の全画面パネルで開く(中身はタブと同じ。操作で再描画されてもパネルの中身を作り直す) */
 var NM_TV=null;
 function nmTvBody(k){try{return k==='scen'?SCEN_PAGE():k==='ref'?REF_PAGE():UNIT_PAGE();}catch(e){return '<div style="color:#ff8080;padding:12px">表示できませんでした</div>';}}
-function nmTvOpen(k){NM_TV=k;var o=document.getElementById('nmTv');if(o)o.remove();var v=document.createElement('div');v.id='nmTv';
+function nmTvOpen(k){if(k==='scen'&&window.NM_SCVKIT!==false){try{if(S.scen&&S.scen.sel){S.scen.kitFilter=null;S.scen.viewRecords=false;}}catch(e){} /* kitFilter=null → SCEN_PAGE が選択中シナリオのキットにする */} /* v1651(ダルマ「今のシナリオのキットの一覧が最初に開くように」): シナリオ選択を開く時は選択中シナリオのキットを表示 */NM_TV=k;var o=document.getElementById('nmTv');if(o)o.remove();var v=document.createElement('div');v.id='nmTv';
   v.setAttribute('style','position:fixed;inset:0;z-index:9600;background:#000a;display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,monospace');
   v.onclick=function(e){if(e.target===v)nmTvClose();};
   v.innerHTML='<div style="width:min(1100px,calc(100vw - 16px));height:calc(100vh - var(--nmsumh,64px) - 24px);display:flex;flex-direction:column;background:#1f2227;border:1px solid #3a4250;border-radius:16px;box-shadow:0 12px 40px #000c;overflow:hidden" onclick="event.stopPropagation()">'
