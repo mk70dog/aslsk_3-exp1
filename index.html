@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1644</title>
+<title>ASL SKシリーズv1645</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1644">
+<meta property="og:title" content="ASL SKシリーズv1645">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -1798,7 +1798,7 @@ var GUN_DATA=[
    attBands:[{upTo:12,th:7},{upTo:24,th:9}]},
   {id:"g_37m3a1_us", lbl:"M3A1 37mm対戦車砲", minRange:0, gs:2, gsType:"AT", gunCategory:"AT", nat:"USA", cal:37, thType:"ve", mount360:false, targetSize:"avg", qsu:true, qsuSrc:"confirmed", ctrCode:"37LL", // ctrCode=To Hit Chart画像確認(2026-09、QRDC「British 37LL」行を代用、米単独行なし)
    // 実物カウンター確認済み(H_EXP1.pdf 7ページ右下、2026-08)：ROF2・37LL・M12・R1・QSU・X6・B#印字なし(規定値12)。Canister C7はSK非対象(散弾ルール未実装)。
-   ammo:[{type:"AP",he:0,deplete:0,lbl:"AP"},{type:"APCR",he:0,deplete:{1942:2},lbl:"APCR"},{type:"HE",ittFp:4,attFp:2,chFp:8,deplete:0,lbl:"HE"}],
+   ammo:[{type:"AP",he:0,deplete:0,lbl:"AP"},{type:"HE",ittFp:4,attFp:2,chFp:8,deplete:0,lbl:"HE"}]/*v1645: 裏面に APCR なし(C7ᴬ²⁺ はキャニスター)→APCR{1942:2}を削除*/,
    ife:0, rof:2, b:12, x:6, pp:"—", m:12, ch:3, ittFP:4, apFP:2, repairNum:1,
    th:[10,10,10,10,10,10,9,9,9,9,9,9,7,7,7,7,7,7,6,6,6,6,6,6],
    attBands:[{upTo:12,th:7},{upTo:24,th:7}]},
@@ -1846,7 +1846,7 @@ var GUN_DATA=[
   // 45mm PTP obr.32・OQF 25ポンド砲はFP/TH#確認できたがb#/X#/QSU/修理番号が元々未確認のため今回は見送り(PENDING継続)。
   {id:"g_76ppobr27_so", lbl:"76.2mm PP obr.27歩兵砲", minRange:0, gs:2, gsType:"INF", gunCategory:"INF", nat:"SOV", cal:76, thType:"ve", mount360:false, targetSize:"avg", qsu:true, qsuSrc:"confirmed", ctrCode:"76*", // 実物カウンター確認済み(H_EXP1.pdf、2026-09)：表面「INF/M8/ROF2/76*」を確認(星印=ソ連常時赤TH#使用[3.2.4]を示す表記)。ctrCode=To Hit Chart画像確認(2026-09、QRDC「Russian 76*」行)。同cal76の既存g_76inf(PTP obr.39、ctrCode"76L")とは別の独立した砲。
    // 修正(2026-09、H_EXP1.pdf埋め込みカウンター画像[14ページ]再精読)：裏面に「H6」の表記を発見、HE弾欠乏No.6と判明(旧deplete:0=無制限は誤り)。
-   ammo:[{type:"AP",he:0,deplete:0,lbl:"AP"},{type:"HE",ittFp:12,attFp:6,chFp:24,deplete:6,lbl:"HE"},{type:"Smoke",he:0,deplete:8,lbl:"Smoke"}],
+   ammo:[{type:"AP",he:0,deplete:0,lbl:"AP"},{type:"HE",ittFp:12,attFp:6,chFp:24,deplete:0,lbl:"HE"},{type:"HEAT",he:0,deplete:6,lbl:"HEAT"}/*v1645(ダルマ「実施」): 車両ノート裏面に合わせる H6=HEAT(旧 HE6 は誤読)*/,{type:"Smoke",he:0,deplete:8,lbl:"Smoke"}],
    ife:0, rof:2, b:12, x:6, pp:"—", m:8, ch:2, ittFP:12, repairNum:1,
    th:[10,10,10,10,10,10,8,8,8,8,8,8,6,6,6,6,6,6,5,5,5,5,5,5],
    attBands:[{upTo:12,th:7},{upTo:24,th:7}]},
@@ -2136,11 +2136,11 @@ var AFV_DATA=[
    mg:{bmg:null,cmg:5,rmg:null,aamg:null}/*mg修正(2026-09、H_EXP1カウンター画像照合): 旧bmg:null,cmg:4,rmg:null,aamg:null*/, gp:"low", smoke:{type:"sD",deplete:7}},
   {id:"afv_t3485_sov", lbl:"T-34/85", nat:"SOV", targetSize:"avg", mp:16,
    afFront:{hull:11,turret:11}, afSide:{hull:6,turret:8}, ot:false, afSrc:"confirmed",
-   turretType:"T", ma:{kind:"gun",ctrCode:"SOV_85L",cal:85,short:false,rof:1,b:12,lowAmmo:null}, // 2026-09修正(Kato確認: 高速回転砲塔): turretTypeを旧"ST"から正しい"T"へ訂正。
+   turretType:"T", ma:{kind:"gun",ctrCode:"SOV_85L",cal:85,short:false,rof:1,b:12,lowAmmo:null,specialAmmo:[{type:"APCR",depleteByYear:{1944:5,1945:6}}]}/*v1645(ダルマ「実施」): 車両ノート裏面に合わせる*/, // 2026-09修正(Kato確認: 高速回転砲塔): turretTypeを旧"ST"から正しい"T"へ訂正。
    mg:{bmg:2,cmg:4,rmg:null,aamg:null,bmgFixed:false}, gp:"normal", smoke:{type:"sD",deplete:6,note:"シナリオ中1回のみ使用可(本文・カウンター裏\"sD6*\"確認済み)"}}, // 修正実施(2026-08、H_EXP1.pdf再確認): smoke未登録だったため追加。2026-09追加(ダルマ指示「SK3シナリオ登場車両の接地圧を登録する」→「車両ノートで確認して」): ASLSK4_Rules_September_2021.pdf「Bog Example」「PF and Same Hex Fire Example」の2箇所で「+1 for Normal Ground Pressure」と明記されたDRM内訳付きの公式ワークド・イグザンプルにより中(Normal)接地圧と確認。ASL_SK_Rulebook_Ver5.0.pdf(日本語版)にも同一の例が「中設置圧+1DRM」として訳出されており、二重に裏付けあり(現物カウンター未確認だが、ルールブック本文の明示的な数値記載のため確定扱いとした)。
   {id:"afv_kv1m41_sov", lbl:"KV-1 M41", nat:"SOV", targetSize:"large", mp:11,
    afFront:{hull:11,turret:11}, afSide:{hull:8,turret:11}, ot:false, afSrc:"confirmed",
-   turretType:"RST", ma:{kind:"gun",ctrCode:"SOV_76L",cal:76,short:false,rof:0,b:12,lowAmmo:null}, // TH#確認(2026-09、マサヒコ提供): ルールブック本文のTo Hit/To Kill Example用例で「KV-1 M41=Russian 76L」と直接確認済み(確定)。2026-09修正(Kato確認: 制限付き低速砲塔): turretTypeを旧"ST"から正しい"RST"へ訂正。
+   turretType:"RST", ma:{kind:"gun",ctrCode:"SOV_76L",cal:76,short:false,rof:0,b:12,lowAmmo:null,specialAmmo:[{type:"APCR",depleteByYear:{1942:4,1943:5}}]}/*v1645(ダルマ「実施」): 車両ノート裏面に合わせる*/, // TH#確認(2026-09、マサヒコ提供): ルールブック本文のTo Hit/To Kill Example用例で「KV-1 M41=Russian 76L」と直接確認済み(確定)。2026-09修正(Kato確認: 制限付き低速砲塔): turretTypeを旧"ST"から正しい"RST"へ訂正。
    mg:{bmg:2,cmg:4,rmg:2,aamg:null,bmgFixed:false}, gp:"normal", smoke:null, mpRed:true, breakdownDR:11, stall:true}, // 2026-10追加(Kato確認「KV-1 マークなし」): 接地圧マーカー(○/□)なし→中(Normal)。CMG位置のR#表記からRMG=2をダルマ確認済み(通常CMG=4とは別スロット)。Note M適用(2026-09、HistoricalNote原文「See Russian Vehicle Note M」確認済み): 機械的信頼性DR11でImmobilized(7.10)
   // ═══ 2026-08追加: H_EXP1.pdf掲載の未確認車両プレースホルダー ═══
   // 方針(マサヒコ指示2026-08): 忘却防止のため、H_EXP1.pdfに掲載された全車両をここに登録する。
@@ -2176,7 +2176,7 @@ var AFV_DATA=[
    mg:{bmg:3,cmg:5,rmg:null,aamg:null,bmgFixed:false}, gp:"normal", smoke:{type:"sD",deplete:7}},
   {id:"afv_pz4d_ge", lbl:"IV号D", nat:"GER", targetSize:"avg", mp:14,
    afFront:{hull:3,turret:3}, afSide:{hull:2,turret:3}, ot:false, afSrc:"confirmed(pdf)",
-   turretType:"T", ma:{kind:"gun",ctrCode:"GER_75S",cal:75,short:true,rof:1,b:12,lowAmmo:null}, // TH#確認(2026-09、マサヒコ提供SK3版To Hit Chart): German 75*行(確定)。2026-09修正(Kato確認: 高速回転砲塔): turretTypeを旧"ST"から正しい"T"へ訂正。
+   turretType:"T", ma:{kind:"gun",ctrCode:"GER_75S",cal:75,short:true,rof:1,b:12,lowAmmo:null,specialAmmo:[{type:"HEAT",deplete:6},{type:"Smoke",deplete:9},{type:"AP",deplete:7}]}/*v1645(ダルマ「実施」): 車両ノート裏面に合わせる*/, // TH#確認(2026-09、マサヒコ提供SK3版To Hit Chart): German 75*行(確定)。2026-09修正(Kato確認: 高速回転砲塔): turretTypeを旧"ST"から正しい"T"へ訂正。
    mg:{bmg:3,cmg:5,rmg:null,aamg:null,bmgFixed:false}, gp:"normal", smoke:{type:"sD",deplete:7}}, // 2026-09追加(ASL_SK3_HistoricalNote7.pdfカウンター画像で「PZ IVD」に接地圧アイコン無しを確認): 中(Normal)。
   {id:"afv_pz4f2_ge", lbl:"IV号F2", nat:"GER", targetSize:"avg", mp:14,
    afFront:{hull:6,turret:6}, afSide:{hull:3,turret:4}, ot:false, afSrc:"confirmed(pdf)",
@@ -10978,7 +10978,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.844"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.845"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1645="v1645(残りのシナリオの車両・砲の裏を車両ノートの実物画像に・IV号D H6/s9/AP7・T-34/85とKV-1 M41のAPCR・76.2mm歩兵砲のH6をHEATに・37mm M3A1のAPCR削除";
 var APP_VERSION_HIST_v1644="v1644(6ポンド砲のAPDS(1944年6月から)・HE(1943年2月から)、シャーマンIII(a)のWP(1944年6月から)を車両ノートに合わせる";
 var APP_VERSION_HIST_v1643="v1643(SK3シナリオの車両・砲の裏を車両ノートの実物画像に・砲もタップ/メニューで表裏の説明・PaK38 APCRの1年ずれ・III号N H9をHEATに・StuH42に煙幕弾s9・50mm迫撃砲X6";
 var APP_VERSION_HIST_v1642="v1642(ユニットのメニューに車両の説明(表・裏)";
