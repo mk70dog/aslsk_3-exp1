@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-25 昼 引き継ぎ(セッション session_011tDAL5ExdK15KzVqn7kM5Y のまとめ) いまの作業=v1631 から再開、返事待ちなし】** main=v1631。sample ブランチは全部 main に取り込み済み(残っているリモートの sample-* は削除できない(403)ので放置でよい)。
+- **【2026-11-25 昼 引き継ぎ(セッション session_011tDAL5ExdK15KzVqn7kM5Y のまとめ) いまの作業=v1631 から再開、返事待ち: sample-vfwpn(車両の主砲以外)】** main=v1631。sample ブランチは全部 main に取り込み済み(残っているリモートの sample-* は削除できない(403)ので放置でよい)。
+  - sample-vfwpn(push済み): ダルマ「主砲以外も選択可能にする サンプル」(車両の射撃パネル)。nmRmVFireItems に「使う武器 主砲/機関銃」の行→nmVfToVm(機関銃パネル NM_VM へ目標・フェイズ・CE を引き継ぐ)、機関銃パネルにも同じ行→nmVmToVf。NM_VFWPN=false で消す。/tmp/s/wpn.js。
   - v1631(ダルマ「判定モードオール時のみにする」): nmGunMan の自動で誰もいない時の「操作なし(撃てない)」は nmJsLv()==='all' の時だけ。ほかは null(従来どおり乗員扱い・札なし)。乗員/非正規の自動判定はいつも。
   - v1630(ダルマ「全て実施」): ①迫撃砲(SW)で撃ったら nmStFired ラッパーで持ち主だけ ufired(全員撃ったらスタック) ②nmGunMan: eh.man が無ければ同じヘクスの中身から自動(乗員→分隊・HS、誰もいない=撃てない、auto:true)。nqSel を手で選べば none を解除。NM_GUNAUTO=false で従来 ③nmMhOpen で追加の分隊/HS(xs/xh)もヘクスから ④nmMhDo 成功で操作する部隊のマーカーも一緒に移動 ⑤nmGunOpSVG 砲の下に札(乗員緑/非正規橙/操作なし赤)、NM_GUNOPLBL=0で消す ⑥対戦モードは v1373 から軽迫撃砲=lmtr(SW)だった。btGunData が「MTR50*[2-13]」形式を解決できず other になっていたのを修正。確認 /tmp/s/gop.js・mtr2.js・btm.js。smoke 0。
   - v1629(ダルマ「軽迫撃砲(SW化)実施」): sample-ltmtr をマージ。NM_LTMTR(false で従来)。nmLtmOfTok=OB の「MTR50*…」「50mm…迫撃砲」で口径60以下→SWT の mtr*(nmSuObParse で sw)。nmScenGuns から外す。メニュー(nmRmBuildB)に nmLtmRows「迫撃砲 MTR 50mmで撃つ」→nmLtmOpen=nmVfOpen+NM_VF.ltm(nmVfEh が仮の砲 eh{gun,man,nqSel:0,__ltm}を返す)。vfire の 操作/集中射撃/方向の行を外し見出しを「4-4-7 の MTR 50mm」。未: 対戦モード(AI)、撃った後に持ち主を射撃済。確認 /tmp/s/mtr2.js。
