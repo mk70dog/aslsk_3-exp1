@@ -41197,6 +41197,9 @@ var NM_TVHQ=0; /* v870(バグ修正 ダルマ報告「ツールバー早見表�
 function nmTvClose(){NM_TV=null;NM_TVHQ=0;var o=document.getElementById('nmTv');if(o)o.remove();}
 function nmTvSync(){if(!NM_TV||NM_TV==='bk')return;var b=document.getElementById('nmTvBody');if(!b){NM_TV=null;return;}var st=b.scrollTop;b.innerHTML=nmTvBody(NM_TV);nmTvFlat(b);b.scrollTop=st;}
 function nmScenViewClose(){var o=document.getElementById('nmScV');if(o)o.remove();}
+/* sample-scensel(ダルマ「シナリオ選択画面に移動するボタンを追加」): シナリオカードの見出しに「シナリオ選択」ボタン。押すとカードを閉じてシナリオ選択(nmTvOpen('scen'))を開く。NM_SCVSEL=false で消す */
+(function(){var o=nmScenView;nmScenView=function(){var r=o.apply(this,arguments);try{if(window.NM_SCVSEL===false)return r;var v=document.getElementById('nmScV');if(!v||v.querySelector('.nmScVSel'))return r;var hd=v.firstElementChild,bs=hd&&hd.querySelectorAll('button'),cl=bs&&bs[bs.length-1];if(!cl)return r;
+  var b=document.createElement('button');b.className='b sm nmScVSel';b.setAttribute('style','height:40px;margin:0;padding:0 14px;font-size:14px;white-space:nowrap;color:#7ec8e3;border-color:#7ec8e3');b.innerHTML=((typeof NM_MI!=='undefined'&&NM_MI.list)||'☰')+' '+T('シナリオ選択');b.onclick=function(){nmScenViewClose();nmTvOpen('scen');};cl.parentNode.insertBefore(b,cl);}catch(e){console.log('scvsel',e);}return r;};})();
 function nmScenCard(){var sid=S.scen&&S.scen.sel;if(!sid){btToast('シナリオを選んでください');return;}
   if(!(window.ASL_SK3_EX_CARD_HAS&&ASL_SK3_EX_CARD_HAS(sid))){btToast('このシナリオの原文カードはありません');return;}ASL_SK3_EX_CARD_OPEN(sid);}
 function nmFtRb(){if(!NM_RB.items.length){btToast('リアル盤でやることはありません');return;}if(!S.nmRealOn){S.nmRealOn=true;NM_RB.open=true;}else NM_RB.open=!NM_RB.open;nmRbRender();}
