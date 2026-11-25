@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-25 昼 引き継ぎ(セッション session_011tDAL5ExdK15KzVqn7kM5Y のまとめ) いまの作業=v1632 から再開、返事待ちなし】** main=v1632。sample ブランチは全部 main に取り込み済み(残っているリモートの sample-* は削除できない(403)ので放置でよい)。
+- **【2026-11-25 昼 引き継ぎ(セッション session_011tDAL5ExdK15KzVqn7kM5Y のまとめ) いまの作業=v1633 から再開、返事待ちなし】** main=v1633。sample ブランチは全部 main に取り込み済み(残っているリモートの sample-* は削除できない(403)ので放置でよい)。
+  - v1633(ダルマ「目標が車両、砲、歩兵によって使える武器の表示が変わる?」→実施): sample-vfwpn2 をマージ。目標が車両(B.mode==='VTT')の時は使う武器の機関銃を灰色・押せない(「車両には撃てない」)。/tmp/s/wpn3.js。smoke 0。
   - v1632(ダルマ「煙幕弾は?」「実施」): sample-vfwpn をマージ。使う武器=主砲/煙幕弾 s#(nmVfWpn→V.wantAmmo='Smoke'、目標を選んでも Smoke のまま)/機関銃(nmVfToVm)/煙幕発射機(nmVfToSg→nmSgOpen)。2つ以上ある時だけ行を出す。smoke 0。
   - sample-vfwpn(push済み): ダルマ「主砲以外も選択可能にする サンプル」(車両の射撃パネル)。nmRmVFireItems に「使う武器 主砲/機関銃」の行→nmVfToVm(機関銃パネル NM_VM へ目標・フェイズ・CE を引き継ぐ)、機関銃パネルにも同じ行→nmVmToVf。NM_VFWPN=false で消す。/tmp/s/wpn.js。
   - v1631(ダルマ「判定モードオール時のみにする」): nmGunMan の自動で誰もいない時の「操作なし(撃てない)」は nmJsLv()==='all' の時だけ。ほかは null(従来どおり乗員扱い・札なし)。乗員/非正規の自動判定はいつも。
