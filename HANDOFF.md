@@ -2,7 +2,7 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-25 夕 引き継ぎ いまの作業=v1641 から再開、返事待ちなし】** main=v1641。次: 車両ノートの裏画像を S21 以外の車両にも順に広げる(H_EXP1.pdf の画像 98枚、pdfimages -j で取り出し、右半分を切り出し→NM_HNIMG に jpeg、説明の位置は NM_HNBK に手で)。
+- **【2026-11-25 夕 引き継ぎ いまの作業=v1641 から再開、返事待ち: sample-vimenu(ユニットのメニューに「車両の説明(表・裏)」。nmUnitMenu の煙幕展張器の前、NM_VIMENU=false で消す)】** main=v1641。次: 車両ノートの裏画像を S21 以外の車両にも順に広げる(H_EXP1.pdf の画像 98枚、pdfimages -j で取り出し、右半分を切り出し→NM_HNIMG に jpeg、説明の位置は NM_HNBK に手で)。
   - v1641(ダルマ「実施」): sample-vehinfo をマージ。シナリオ選択の車両チップをタップ→nmVehInfo(表裏の説明。説明図のない車両は nmVehRefGen でデータから生成)。S21 の5両(T-34 M41/M43・ティーガーE・IV号F2/H)は裏に車両ノート(H_EXP1.pdf)の実物画像(NM_HNIMG/NM_HNBK、NM_VIHN=false で生成版)。CS/Sz/Ⓡ は「フルASL用・SKでは使わない」。T-34 M41 に APCR {1942:4,1943:5,1944:6}、M43 に {..,1945:7} を追加(車両ノート裏面で確認)。smoke 0。
   - sample-vehinfo(push済み): afvCategoryChip(シナリオ選択の部隊表の車両)をタップ→nmVehInfo(id)。REF_CTR_SETS.afv に同じ画像(f.k)があれば REF_CTR_GUIDE の説明図(表/裏)、無ければ表の画像+AFV_DATA の一覧。RefCtrSet で再描画。ついでに「ELR undefined」(f.elr 無し)を出さない。/tmp/s/vi.js。
   - v1640(ダルマ「2号Aを 2号Fのカウンターを使用する」画像=シナリオ選択 S33 独軍 OB に「PzKpfw IIA」の文字だけ): SCEN_PAGE の resolveAfvForObToken と btAfvData にも afvNormLabel(IIA→II号F)。nmScenAfvs は前から afv_pz2f_ge。

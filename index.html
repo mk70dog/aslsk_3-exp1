@@ -37164,6 +37164,7 @@ function nmUnitMenu(it,H,n,sd){
     nmStFiredRow(it,n,sd,eh);
     it.push({ic:'wreck',t:'撃破(残骸にする)',sub:'マーカーを取り消して、このヘクスに'+nmAfvName(ev)+'の残骸を配置',f:"BtRmClose();nmStWreck("+n+",'"+sd+"')"});} /* v405 */
   if(ev&&ev.mp&&!NM_MOVE)it.push({ic:'move',t:'このカウンターを移動',sub:ev.mp+'MP。1ヘクスずつタップでマーカーが進む。方向・CE/BUを変えて「ここで止まる」','f':"nmMvStart("+n+",'"+sd+"')"}); /* v450 */
+  if(ev&&ev.id&&window.NM_VIMENU!==false&&typeof nmVehInfo==='function')it.push({ic:'info',t:'車両の説明(表・裏)',sub:'カウンターの見方・特殊弾・煙幕など',f:"nmVehInfo('"+ev.id+"')"}); /* sample-vimenu(ダルマ「メニューに車両の説明を追加」) */
   if(ev&&ev.smoke)it.push({ic:'smoke',t:'煙幕展張器('+((ev.smoke.options||[ev.smoke]).map(function(o){return o.type;}).join('/'))+')',sub:'DR ≦ 使用ナンバーで拡散煙幕+2',f:"nmSgOpen("+n+",'"+sd+"')"}); /* v418 */
   if(ev&&nmVmKeys(ev).length)it.push({ic:'fire',t:'ここから攻撃する(機関銃)',sub:nmVmKeys(ev).map(function(k){return k.toUpperCase()+ev.mg[k];}).join('・')+'　歩兵のマーカーへIFTで',f:"nmVmOpen("+n+",'"+sd+"')"}); /* v428 */
   if(ev)it.push({ic:'x',t:'このカウンターを消去',sub:L.nm+'の配置を取り消す',f:sd==='f'?"nmRmFriendDel()":"nmRmEnemy()"}); /* v669: 機関銃の下 */
