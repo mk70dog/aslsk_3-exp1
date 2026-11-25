@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1630</title>
+<title>ASL SKシリーズv1631</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1630">
+<meta property="og:title" content="ASL SKシリーズv1631">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10978,7 +10978,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.830"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.831"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1631="v1631(誰もいない砲を撃てないにするのは同期オールの時だけ";
 var APP_VERSION_HIST_v1630="v1630(迫撃砲で撃ったら持ち主を射撃済・砲の操作員をヘクスの中身から自動(人力移動も)・人力移動で操作する部隊も一緒に移動・砲に操作員の札・対戦モードのMTR50*形式";
 var APP_VERSION_HIST_v1629="v1629(軽迫撃砲(60mm以下)をSWに: 部隊の準備で部隊が持つ・メニューの「迫撃砲で撃つ」(判定モード)";
 var APP_VERSION_HIST_v1628="v1628(A→B判定バーを動かすと戻される不具合を修正(位置を端末に1つ記録)";
@@ -41491,7 +41492,7 @@ function nmGeCandLbl(items,x){var b=x.label.replace(/\[.*$/,''),same=(items||[])
 function nmIsCrew(x){return !!x&&/乗員|crew/i.test(x.label||'');}
 function nmGunManCands(eh){var H=nmHexOfN(btNodeOf(eh.boardId,eh.col,eh.row)),sd=nmSideList('f').indexOf(eh)>=0?'f':'e',o=[];if(!H)return o;
   nmAllAt(H,sd).forEach(function(e){if(!e.grp||e.veh||e.gun)return;var d=nmGeList(e.grp);(d.items||[]).forEach(function(x){o.push({slot:e.grp,x:x,nat:x.nat||d.nat,items:d.items});});});return o;}
-function nmGunMan(eh){var m=eh&&eh.man;if(!m){if(window.NM_GUNAUTO===false||!eh||!eh.gun||eh.__ltm)return null;var C=nmGunManCands(eh).filter(function(o){return o.x.kind==='mmc';}),pk=C.filter(function(o){return nmIsCrew(o.x)&&!o.x.broken;})[0]||C.filter(function(o){return !o.x.broken;})[0]||C[0];return pk?{slot:pk.slot,x:pk.x,nat:pk.nat,items:pk.items,crew:nmIsCrew(pk.x),missing:false,auto:true}:{missing:true,auto:true};} /* v1630(ダルマ「全て実施」): 操作するユニットを選んでいない時は、同じヘクスの中身から(乗員→分隊・半分隊、誰もいなければ撃てない)。NM_GUNAUTO=false で従来 */var c=nmGunManCands(eh).filter(function(o){return o.slot===m.slot&&o.x.pid===m.pid;})[0];return c?{slot:c.slot,x:c.x,nat:c.nat,items:c.items,crew:nmIsCrew(c.x),missing:false}:{missing:true};}
+function nmGunMan(eh){var m=eh&&eh.man;if(!m){if(window.NM_GUNAUTO===false||!eh||!eh.gun||eh.__ltm)return null;var C=nmGunManCands(eh).filter(function(o){return o.x.kind==='mmc';}),pk=C.filter(function(o){return nmIsCrew(o.x)&&!o.x.broken;})[0]||C.filter(function(o){return !o.x.broken;})[0]||C[0];if(pk)return {slot:pk.slot,x:pk.x,nat:pk.nat,items:pk.items,crew:nmIsCrew(pk.x),missing:false,auto:true};var all=false;try{all=nmJsLv()==='all';}catch(e){}return all?{missing:true,auto:true}:null;} /* v1631(ダルマ「判定モードオール時のみにする」): 誰もいない砲を「撃てない」にするのは同期オールの時だけ。それ以外は従来どおり乗員として撃てる */ /* v1630(ダルマ「全て実施」): 操作するユニットを選んでいない時は、同じヘクスの中身から(乗員→分隊・半分隊、誰もいなければ撃てない)。NM_GUNAUTO=false で従来 */var c=nmGunManCands(eh).filter(function(o){return o.slot===m.slot&&o.x.pid===m.pid;})[0];return c?{slot:c.slot,x:c.x,nat:c.nat,items:c.items,crew:nmIsCrew(c.x),missing:false}:{missing:true};}
 function nmVfNqSet(n,v){var eh=nmVfEh();if(!eh)return;eh.nqSel=v;try{nmVfClrRes();}catch(e){NM_VF.res=null;}try{nmStSave();}catch(e){}nmVfRe(n);}
 (function(){var o=nmGunPen;nmGunPen=function(eh){var r=o.apply(this,arguments);if(eh&&eh.gun&&eh.nqSel!=null){r.nq=eh.nqSel===1;r.none=false;if(!r.none)r.txt=(r.nq?'非正規操作(命中+2・B#−2)':'正規(乗員)')+(r.cap?'・鹵獲(ROF−1・B#−2)':'')+(r.brk?'・操作するユニットが混乱':'');}return r;};})();
 function nmGunPen(eh){var g=eh&&eh.gun?nmGun(eh.gun):null,M=nmGunMan(eh),r={nq:false,cap:false,none:false,brk:false,txt:''};if(!g||!M)return r;if(M.missing){r.none=true;r.txt='操作するユニットがいません(射撃できない)';return r;}
