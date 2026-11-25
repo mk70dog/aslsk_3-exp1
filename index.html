@@ -37853,6 +37853,7 @@ function nmRmVmItems(n){var V=NM_VM;if(!V)return nmRMenuItems(n);var C=nmVmCalc(
   it.push(V.tgt!=null?{ic:'back',t:'← 目標の選択に戻る',sub:'ほかの目標を選び直す',f:"nmVmSet("+n+",'tgt',null)"}:{ic:'back',t:'← 戻る',sub:'メニューに戻る',f:"NM_VM=null;btRmReopen("+n+")"});it.push({sep:1});
   if(!C){it.push({ic:'info',t:'車両のデータがありません'});return it;}
   it.push({ic:'turret',img:vaslCtrHTML(C.v.id,34,''),t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+nmAfvName(C.v)+' の機関銃</span>',sub:'@'+BTG.nodes[V.from].nm});
+  try{if(C.v.ma&&window.NM_VFWPN!==false){var gd0=afvToGunData(C.v);it.push({row:1,ic:'fire',t:'使う武器',btns:[['主砲 '+(gd0&&gd0.cal?gd0.cal+'mm':''),"nmVmToVf("+n+")"],['✓機関銃 '+nmVmKeys(C.v).map(function(k){return k.toUpperCase()+C.v.mg[k];}).join('・'),"0"]]});}}catch(e){} /* sample-vfwpn */
   if(!V.res){it.push({row:1,ic:'route',t:'フェイズ',btns:NM_VF_PH.map(function(x){return [(!NM_PHU&&V.ph===x[0]?'✓':'')+x[1],"NM_PHU=false;nmVmSet("+n+",'ph','"+x[0]+"')"];})});if(NM_PHU){it.push({ic:'info',t:'<span style="color:#ffd060;font-size:13px">↑ '+T('フェイズを選んでください')+'</span>',sub:T('選ぶと判定の設定とダイスが出ます')});return it;}
     it.push({row:1,ic:'turret',t:'ハッチ',btns:[[(V.ce?'':'✓')+'BU',"nmVmSet("+n+",'ce',false)"],[(V.ce?'✓':'')+'CE',"nmVmSet("+n+",'ce',true)"]]});
     it.push({row:1,ic:'fire',t:'機関銃',btns:C.mgs.map(function(x){var rf=((C.v&&C.v.mgRof)||{})[x.k];return [(x.on?'✓':'')+x.k.toUpperCase()+x.base+(rf?' ROF'+rf:'')+(x.ca?' '+(x.caTur?'砲塔':'車体')+x.ca+'本':'')+(x.ok?'':'×'),x.ok?"nmVmTog("+n+",'"+x.k+"')":null];})});
@@ -37931,7 +37932,7 @@ function nmVfO(B){var V=NM_VF,o={haOv:(V.ov&&V.ov.elev!=null)?V.ov.elev:null,caH
   try{var sx=scenShotDrm(btDist(V.from,V.tgt),p3||'PFPh');if(sx)o.xdrm={v:sx,l:'SSR'};}catch(e){}
   try{var X=V.xo||{};o.xdrms=NM_VF_XO.filter(function(q){return X[q[0]]&&(!q[3]||q[3](V,B));}).map(function(q){return {v:q[1],l:q[2]};});}catch(e){}return o;}
 function nmVfSet(n,k,v){var V=NM_VF;if(!V)return;if((k==='a'||k==='b')&&V.wrecked&&v){btToast('目標は撃破済み。別の目標を選んでください');return;}if(k==='tgt'||k==='a'||k==='b'){V.wrecked=0;V.wrB=null;}V[k]=v;if(k==='c1'||k==='c2'){}else V.reDice=0;if(k==='tgt'||k==='a')V.edit=0;if(k==='tgt'||k==='ammo'||k==='ph'||k==='ce'){V.a=0;V.b=0;V.res=null;V.c1=0;V.c2=0;V.res2=null;}if(k==='a'||k==='b'){V.res=null;V.c1=0;V.c2=0;V.res2=null;}if(k==='c1'||k==='c2'){V.res2=null;V.ntc=0;}if(k!=='c1'&&k!=='c2')V.ntc=0;
-  if(k==='tgt'){var B=nmVfBuild();V.ammo=B&&B.ammos.length?B.ammos[0]:null;var A=BTG.nodes[V.from],T=BTG.nodes[v];if(A&&T){S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB={x:T.x,y:T.y};try{LosRunPixel();}catch(e){}}}
+  if(k==='tgt'){var B=nmVfBuild();V.ammo=B&&B.ammos.length?(V.wantAmmo&&B.ammos.indexOf(V.wantAmmo)>=0?V.wantAmmo:B.ammos[0]):null;var A=BTG.nodes[V.from],T=BTG.nodes[v];if(A&&T){S_LOS.pxA={x:A.x,y:A.y};S_LOS.pxB={x:T.x,y:T.y};try{LosRunPixel();}catch(e){}}}
   Draw();nmVfRe(n);}
 function nmVfRoll(n,k){var V=NM_VF;if(!V)return;var d=function(){return 1+Math.floor(Math.random()*6);};if(k==='th'){V.a=d();V.b=d();nmVfTH(n);}else{V.c1=d();V.c2=d();nmVfEff(n);}}
 /* v692(ダルマ指示「ルールブックと元の射撃タブ・装甲戦闘車両タブ・砲撃タブと徹底的に見比べて修正」): 地域目標(ATT)を使う射撃(煙幕弾・WP・ATT)の補正。
@@ -38032,6 +38033,10 @@ function nmVfNtc(n,v){var V=NM_VF;if(!V)return;V.ntc=v||(2+Math.floor(Math.rando
 function nmVfApplySt(n,k){var V=NM_VF,B=nmVfBuild();if(!B||!B.te)return;var st=nmStOf(B.te);st[k]=!st[k];nmStSave();nmVfRe(n);}
 function nmVfApplyMal(n){var B=nmVfBuild();if(!B)return;var st=nmStOf(B.eh);st.mal=!st.mal;nmStSave();nmVfRe(n);}
 function nmVfApplyWreck(n){var V=NM_VF,tH=nmHexOfNode(V.tgt);BtRmClose();nmStWreck(n,V.sd==='f'?'e':'f',tH);NM_VF=null;}
+function nmVfToVm(n){var V=NM_VF;if(!V)return;var sd=V.sd,tg=V.tgt,ph=V.ph,ce=V.ce;nmVmOpen(V.from,sd);if(NM_VM){NM_VM.ce=ce;NM_VM.ph=ph;NM_PHU=false;if(tg!=null)nmVmSet(V.from,'tgt',tg);}NM_VF=null;}
+function nmVfWpn(n,k){var V=NM_VF;if(!V)return;V.wantAmmo=k==='smoke'?'Smoke':null;var B=nmVfBuild();if(V.tgt!=null&&B&&B.ammos.indexOf(V.wantAmmo||B.ammos[0])>=0)nmVfSet(n,'ammo',V.wantAmmo||B.ammos[0]);else nmVfRe(n);}
+function nmVfToSg(n){var V=NM_VF;if(!V)return;var from=V.from,sd=V.sd;NM_VF=null;nmSgOpen(from,sd);}
+function nmVmToVf(n){var V=NM_VM;if(!V)return;var sd=V.sd,tg=V.tgt,ph=V.ph,ce=V.ce;nmVfOpen(V.from,sd);if(NM_VF){NM_VF.ce=ce;NM_VF.ph=ph;NM_PHU=false;if(tg!=null)nmVfSet(V.from,'tgt',tg);}NM_VM=null;}
 function nmRmVFireItems(n){
   var V=NM_VF;if(!V)return nmRMenuItems(n);var B=nmVfBuild(),L=NM_SIDE_LBL[V.sd],it=[],sg=function(v){return (v>=0?'+':'')+v;},pc=function(p){return Math.round((p||0)*100)+'%';};
   it.push(V.tgt!=null?{ic:'back',t:'← 目標の選択に戻る',sub:'ほかの目標を選び直す',f:"nmVfSet("+n+",'tgt',null)"}:{ic:'back',t:'← 戻る',sub:'メニューに戻る',f:"NM_VF=null;btRmReopen("+n+")"});
@@ -38039,6 +38044,12 @@ function nmRmVFireItems(n){
   it.push({sep:1});
   if(!B){it.push({ic:'info',t:'攻撃する車両・砲のデータがありません'});return it;}
   it.push({ic:'turret',img:vaslCtrHTML((B.v||B.g).id,34,''),t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+(B.v?nmAfvName(B.v)+' の主砲':nmGunName(B.g))+' が攻撃する</span>',sub:B.gd.cal+'mm　B#'+((B.gd.b&&B.gd.b<99)?B.gd.b:12)+(B.gd.rof?'　ROF'+B.gd.rof:'')+'　@'+BTG.nodes[V.from].nm});
+  try{if(window.NM_VFWPN!==false){var WB=[],sm=null;try{sm=nmVfDepl(B,'Smoke');}catch(e){}var isS=V.ammo==='Smoke'||V.wantAmmo==='Smoke';
+    WB.push([(isS?'':'✓')+(B.v?'主砲 ':'')+B.gd.cal+'mm',"nmVfWpn("+n+",'ma')"]);
+    if(sm!=null)WB.push([(isS?'✓':'')+'煙幕弾 s'+sm,"nmVfWpn("+n+",'smoke')"]);
+    if(B.v&&nmVmKeys(B.v).length)WB.push(['機関銃 '+nmVmKeys(B.v).map(function(k){return k.toUpperCase()+B.v.mg[k];}).join('・'),"nmVfToVm("+n+")"]);
+    if(B.v&&B.v.smoke)WB.push(['煙幕発射機 '+(B.v.smoke.options||[B.v.smoke]).map(function(o){return o.type;}).join('/'),"nmVfToSg("+n+")"]);
+    if(WB.length>1)it.push({row:1,ic:'fire',t:'使う武器',btns:WB});}}catch(e){console.log('vfwpn',e);} /* sample-vfwpn(ダルマ「主砲以外も選択可能にする」「煙幕弾は?」) */
   var vdone=!!(V.res&&!V.edit); /* v413: 撃った後は設定を畳む */
   if(vdone){it.push({row:1,ic:'route',t:'<span style="font-size:13px">'+((NM_VF_PH.filter(function(x){return x[0]===V.ph;})[0]||[])[1]||'')+'射撃'+(B.v?'・'+(V.ce?'CE':'BU'):'')+'・'+(V.ammo||'')+'</span>',btns:[['設定を変える',"NM_VF.edit=1;nmVfRe("+n+")"]]});}
   else{
