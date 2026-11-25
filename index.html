@@ -37853,6 +37853,7 @@ function nmRmVmItems(n){var V=NM_VM;if(!V)return nmRMenuItems(n);var C=nmVmCalc(
   it.push(V.tgt!=null?{ic:'back',t:'← 目標の選択に戻る',sub:'ほかの目標を選び直す',f:"nmVmSet("+n+",'tgt',null)"}:{ic:'back',t:'← 戻る',sub:'メニューに戻る',f:"NM_VM=null;btRmReopen("+n+")"});it.push({sep:1});
   if(!C){it.push({ic:'info',t:'車両のデータがありません'});return it;}
   it.push({ic:'turret',img:vaslCtrHTML(C.v.id,34,''),t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+nmAfvName(C.v)+' の機関銃</span>',sub:'@'+BTG.nodes[V.from].nm});
+  try{if(C.v.ma&&window.NM_VFWPN!==false){var gd0=afvToGunData(C.v);it.push({row:1,ic:'fire',t:'使う武器',btns:[['主砲 '+(gd0&&gd0.cal?gd0.cal+'mm':''),"nmVmToVf("+n+")"],['✓機関銃 '+nmVmKeys(C.v).map(function(k){return k.toUpperCase()+C.v.mg[k];}).join('・'),"0"]]});}}catch(e){} /* sample-vfwpn */
   if(!V.res){it.push({row:1,ic:'route',t:'フェイズ',btns:NM_VF_PH.map(function(x){return [(!NM_PHU&&V.ph===x[0]?'✓':'')+x[1],"NM_PHU=false;nmVmSet("+n+",'ph','"+x[0]+"')"];})});if(NM_PHU){it.push({ic:'info',t:'<span style="color:#ffd060;font-size:13px">↑ '+T('フェイズを選んでください')+'</span>',sub:T('選ぶと判定の設定とダイスが出ます')});return it;}
     it.push({row:1,ic:'turret',t:'ハッチ',btns:[[(V.ce?'':'✓')+'BU',"nmVmSet("+n+",'ce',false)"],[(V.ce?'✓':'')+'CE',"nmVmSet("+n+",'ce',true)"]]});
     it.push({row:1,ic:'fire',t:'機関銃',btns:C.mgs.map(function(x){var rf=((C.v&&C.v.mgRof)||{})[x.k];return [(x.on?'✓':'')+x.k.toUpperCase()+x.base+(rf?' ROF'+rf:'')+(x.ca?' '+(x.caTur?'砲塔':'車体')+x.ca+'本':'')+(x.ok?'':'×'),x.ok?"nmVmTog("+n+",'"+x.k+"')":null];})});
@@ -38032,6 +38033,8 @@ function nmVfNtc(n,v){var V=NM_VF;if(!V)return;V.ntc=v||(2+Math.floor(Math.rando
 function nmVfApplySt(n,k){var V=NM_VF,B=nmVfBuild();if(!B||!B.te)return;var st=nmStOf(B.te);st[k]=!st[k];nmStSave();nmVfRe(n);}
 function nmVfApplyMal(n){var B=nmVfBuild();if(!B)return;var st=nmStOf(B.eh);st.mal=!st.mal;nmStSave();nmVfRe(n);}
 function nmVfApplyWreck(n){var V=NM_VF,tH=nmHexOfNode(V.tgt);BtRmClose();nmStWreck(n,V.sd==='f'?'e':'f',tH);NM_VF=null;}
+function nmVfToVm(n){var V=NM_VF;if(!V)return;var sd=V.sd,tg=V.tgt,ph=V.ph,ce=V.ce;nmVmOpen(V.from,sd);if(NM_VM){NM_VM.ce=ce;NM_VM.ph=ph;NM_PHU=false;if(tg!=null)nmVmSet(V.from,'tgt',tg);}NM_VF=null;}
+function nmVmToVf(n){var V=NM_VM;if(!V)return;var sd=V.sd,tg=V.tgt,ph=V.ph,ce=V.ce;nmVfOpen(V.from,sd);if(NM_VF){NM_VF.ce=ce;NM_VF.ph=ph;NM_PHU=false;if(tg!=null)nmVfSet(V.from,'tgt',tg);}NM_VM=null;}
 function nmRmVFireItems(n){
   var V=NM_VF;if(!V)return nmRMenuItems(n);var B=nmVfBuild(),L=NM_SIDE_LBL[V.sd],it=[],sg=function(v){return (v>=0?'+':'')+v;},pc=function(p){return Math.round((p||0)*100)+'%';};
   it.push(V.tgt!=null?{ic:'back',t:'← 目標の選択に戻る',sub:'ほかの目標を選び直す',f:"nmVfSet("+n+",'tgt',null)"}:{ic:'back',t:'← 戻る',sub:'メニューに戻る',f:"NM_VF=null;btRmReopen("+n+")"});
@@ -38039,6 +38042,7 @@ function nmRmVFireItems(n){
   it.push({sep:1});
   if(!B){it.push({ic:'info',t:'攻撃する車両・砲のデータがありません'});return it;}
   it.push({ic:'turret',img:vaslCtrHTML((B.v||B.g).id,34,''),t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+(B.v?nmAfvName(B.v)+' の主砲':nmGunName(B.g))+' が攻撃する</span>',sub:B.gd.cal+'mm　B#'+((B.gd.b&&B.gd.b<99)?B.gd.b:12)+(B.gd.rof?'　ROF'+B.gd.rof:'')+'　@'+BTG.nodes[V.from].nm});
+  try{if(B.v&&nmVmKeys(B.v).length&&window.NM_VFWPN!==false)it.push({row:1,ic:'fire',t:'使う武器',btns:[['✓主砲 '+B.gd.cal+'mm',"0"],['機関銃 '+nmVmKeys(B.v).map(function(k){return k.toUpperCase()+B.v.mg[k];}).join('・'),"nmVfToVm("+n+")"]]});}catch(e){} /* sample-vfwpn(ダルマ「主砲以外も選択可能にする」) */
   var vdone=!!(V.res&&!V.edit); /* v413: 撃った後は設定を畳む */
   if(vdone){it.push({row:1,ic:'route',t:'<span style="font-size:13px">'+((NM_VF_PH.filter(function(x){return x[0]===V.ph;})[0]||[])[1]||'')+'射撃'+(B.v?'・'+(V.ce?'CE':'BU'):'')+'・'+(V.ammo||'')+'</span>',btns:[['設定を変える',"NM_VF.edit=1;nmVfRe("+n+")"]]});}
   else{
