@@ -2,7 +2,8 @@
 
 ## 0. いまの作業(作業の区切りごとに更新して push する)
 
-- **【2026-11-25 昼 引き継ぎ(セッション session_011tDAL5ExdK15KzVqn7kM5Y のまとめ) いまの作業=v1636 から再開、返事待ち: sample-pickmk(撃てる目標のマーカー A/B/C)】** main=v1636。sample ブランチは全部 main に取り込み済み(残っているリモートの sample-* は削除できない(403)ので放置でよい)。
+- **【2026-11-25 昼 引き継ぎ(セッション session_011tDAL5ExdK15KzVqn7kM5Y のまとめ) いまの作業=v1637 から再開、返事待ち: sample-pickmk(撃てる目標のマーカー A/B/C)】** main=v1637。sample ブランチは全部 main に取り込み済み(残っているリモートの sample-* は削除できない(403)ので放置でよい)。
+  - v1637(ダルマ「効果無し?」画像=IV号D AP 砲塔に命中 TK#2 DR2): nmVfEff で砲塔・DR=最終TK# を AP だと「効果なし」にしていた→弾薬に関係なく自動ショック(7.10・AFV DESTRUCTION TABLE)。TK# の説明文も。対戦車兵器は v1428、AI は btOrd 側で既に正しい。
   - sample-pickmk(push済み): ダルマ「マーカーのデザインを変える サンプルx3」(画像=地図で目標を選ぶ時の緑の輪 nmPickOverlaySVG)。window.NM_PICKMK='A'(ヘクスの枠+下に距離)/'B'(四隅のかぎ+右上に距離の丸)/'C'(右上の照準バッジ+距離)。/tmp/s/pmk.js。
   - v1636(ダルマ「細かいドットを追加する」画像=士気チェックの窓 .mcOvBx): style#nmMcOvDot で #btRm .rmBox と同じドット(背景#1c1f27・4px)。
   - v1635(ダルマ「射程は? 向きは?」→「実施」): nmRmSgItems(車両)の見出し・メニューを「煙幕展張器」に。sD=「自分のヘクスに置く(射程・向きなし)」、sM=「距離1〜3・LOSが通る・TCAの外はCA変更DRM」の説明行。計算は従来どおり(nmSgDrm)。smoke 0。

@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1636</title>
+<title>ASL SKシリーズv1637</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1636">
+<meta property="og:title" content="ASL SKシリーズv1637">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10978,7 +10978,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.836"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.837"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1637="v1637(砲塔に命中しDR=最終TK#はAPでもショック(効果なしと出ていた)";
 var APP_VERSION_HIST_v1636="v1636(士気チェックの窓にほかのパネルと同じ細かいドット";
 var APP_VERSION_HIST_v1635="v1635(車両の煙幕展張器: sD=自分のヘクス(射程・向きなし)、sM=距離1〜3・LOSの説明を表示";
 var APP_VERSION_HIST_v1634="v1634(車体ごと回す時のCA変更が少なすぎた不具合を修正(砲塔が目標を向くまでの数で非砲塔のDRM)";
@@ -38023,7 +38024,7 @@ function nmVfTH(n){var V=NM_VF,B=nmVfBuild();if(!V||!B||!V.a||!V.b)return;if(V.i
 function nmVfEff(n){var V=NM_VF,B=nmVfBuild(),R=V&&V.res;if(!R||!R.hit||!V.c1||!V.c2)return;var c=V.c1+V.c2,o={c:c};
   if(B.mode==='VTT'){if(R.tk==null){o.t='TK#なし';o.col='#8899aa';}
     else if(c<R.tk){o.t='撃破';o.col='#ff4040';}
-    else if(c===R.tk){if(R.loc==='hull'){o.t='走行不能';o.col='#ffb040';}else if(V.ammo==='HE'){o.t='ショック';o.col='#ffb040';}else{o.t='効果なし';o.col='#8899aa';}}
+    else if(c===R.tk){if(R.loc==='hull'){o.t='走行不能';o.col='#ffb040';}else{o.t='ショック(砲塔に命中・DR=TK#: 自動、NTCなし)';o.col='#ffb040';}} /* v1637(ダルマ「効果無し?」): 砲塔に DR=最終TK# は弾薬に関係なく自動ショック(7.10・AFV DESTRUCTION TABLE「= TK#: Im H / Sh T」)。以前は AP だと効果なしと出ていた */
     else if(c===R.tk+1){if(V.ammo==='HE'){o.t=R.loc==='turret'?'ショック':'走行不能';o.col='#ffb040';}else{o.t='ショックの可能性(NTC: 2D6が8を超えるとショック)';o.col='#c8a032';o.ntc=1;}}
     else{o.t='効果なし';o.col='#8899aa';}}
   else{var col=ci(R.fp),r=IFT[Math.max(0,Math.min(15,c+R.idrm))][col],m=rm(r);o.t=m.t;o.col=m.c;o.iftCol=IFT_LBL[col];}
@@ -38116,7 +38117,7 @@ function nmRmVFireItems(n){
   if(R.wp&&B.te&&!B.te.veh)nmMcSection(it,n,B.te,'MC'+(R.wpDrm?(R.wpDrm>0?'+':'')+R.wpDrm:''),'wp:'+V.tgt+':'+V.a+V.b,'nmVfRe'); /* v440: WPのNMC(sample-wptem: TEM分の加減入り) */
   if(R.hit&&!R.smk){
     if(nmVfIsAtt(B)&&B.mode==='ITT')R.idrm=(R.idrm||0)+nmVfAttTem(B); /* v439: ATTはTEMをIFTへ */
-    if(B.mode==='VTT')it.push({ic:'tgt',t:'<span style="display:inline-block;width:fit-content;max-width:100%;padding:2px 10px;border:1px solid #c8a032;border-radius:10px;background:#1d1a12;color:#ffd070;font-size:14px;font-weight:600;letter-spacing:.5px">TK# '+(R.basic==null?'なし':(R.basic+(R.raw===2?'×2(CH)':'')+(R.face==='rear'?'+1(背面)':'')+'−AF'+R.af+' = <b>'+R.tk+'</b>'))+'</span>',sub:nmVfTgtAspect(B)+'　'+(R.tk!=null?'2D6が'+R.tk+'未満で撃破・同じで'+(R.loc==='hull'?'走行不能':(V.ammo==='HE'?'ショック':'効果なし'))+'・'+(R.tk+1)+'で'+(V.ammo==='HE'?(R.loc==='turret'?'ショック':'走行不能'):'ショックの可能性'):'')});
+    if(B.mode==='VTT')it.push({ic:'tgt',t:'<span style="display:inline-block;width:fit-content;max-width:100%;padding:2px 10px;border:1px solid #c8a032;border-radius:10px;background:#1d1a12;color:#ffd070;font-size:14px;font-weight:600;letter-spacing:.5px">TK# '+(R.basic==null?'なし':(R.basic+(R.raw===2?'×2(CH)':'')+(R.face==='rear'?'+1(背面)':'')+'−AF'+R.af+' = <b>'+R.tk+'</b>'))+'</span>',sub:nmVfTgtAspect(B)+'　'+(R.tk!=null?'2D6が'+R.tk+'未満で撃破・同じで'+(R.loc==='hull'?'走行不能':'ショック')+'・'+(R.tk+1)+'で'+(V.ammo==='HE'?(R.loc==='turret'?'ショック':'走行不能'):'ショックの可能性'):'')});
     else it.push({ic:'tgt',t:'<span>'+(R.ch?'クリティカル(TEM反転) ':'')+R.fp+'FP　'+IFT_LBL[ci(R.fp)]+'列'+(R.idrm?'　DRM '+sg(R.idrm):'')+'</span>',sub:'IFTで効果を判定'+(!V.res2?'<div style="margin-top:8px">'+nmIftTblHTML(R.fp,R.idrm||0)+'</div>':'')}); /* ダルマ「他もIFTの場合には同じ表を表示する」 */
     var O=V.res2;
     if(O){it.push({ic:'fire',t:'<span>'+diceEmojiStr(V.c1,V.c2)+'　'+O.c+(B.mode==='ITT'&&R.idrm?' '+sg(R.idrm):'')+'　<b style="color:'+O.col+'">'+O.t+'</b></span>',sub:B.mode==='VTT'?'TK#'+R.tk:(O.iftCol+'列')});
@@ -44364,7 +44365,7 @@ function nmIjNvDraw(){var J=NM_IJ,V=NM_VF;if(!J||!V)return;var hA=document.getEl
   if(R){var O=V.res2,sgn=function(v){return v?sg(v):'';};
     h+='<div class="nvRes" style="border-color:'+(R.hit||R.ife?'#c8a032':'#556677')+'">'+(R.ife?'<div style="display:none">':'')+'<div class="nvRt">'+diceEmojiStr(V.a,V.b)+' '+(ev.case16?'Case16('+Math.max(V.a,V.b)+'+'+Math.min(V.a,V.b)+'×2)='+R.thr:R.raw)+((R.fin-R.thr)?' '+sg(R.fin-R.thr):'')+' = '+R.fin+' <b style="color:'+(R.hit?'#ffd060':'#8899aa')+'">'+(R.hit?'命中':'外れ')+'</b> <span class="nvDim">TH#'+(R.th||ev.th)+(R.hit&&B.mode==='VTT'?' ・ '+(R.loc==='turret'?'砲塔':'車体')+'・'+({front:'前面',side:'側面',rear:'背面'}[R.face])+'に命中':'')+(R.hit&&B.mode==='VTT'&&R.raw===2?' ・ クリティカルヒット':'')+'</span></div>'+(R.ife?'</div>':'');
     (R.notes||[]).forEach(function(t){h+='<div class="ijNote" style="color:#c8a032">'+t+'</div>';});
-    if(R.hit&&!R.smk&&B.mode==='VTT'){h+='<div class="ijNote" style="margin-top:6px;color:#9fd0e8">'+nmVfTgtAspect(B)+'</div><div class="nvRt" style="margin-top:2px">TK# '+(R.basic==null?'なし':(R.basic+(R.raw===2?'×2(CH)':'')+(R.face==='rear'?'+1(背面)':'')+'−AF'+R.af+' = <b>'+R.tk+'</b>'))+'</div>'+(R.tk!=null?'<div class="nvDim">2D6が'+R.tk+'未満で撃破・同じで'+(R.loc==='hull'?'走行不能':(V.ammo==='HE'?'ショック':'効果なし'))+'・'+(R.tk+1)+'で'+(V.ammo==='HE'?(R.loc==='turret'?'ショック':'走行不能'):'ショックの可能性')+'</div>':'');
+    if(R.hit&&!R.smk&&B.mode==='VTT'){h+='<div class="ijNote" style="margin-top:6px;color:#9fd0e8">'+nmVfTgtAspect(B)+'</div><div class="nvRt" style="margin-top:2px">TK# '+(R.basic==null?'なし':(R.basic+(R.raw===2?'×2(CH)':'')+(R.face==='rear'?'+1(背面)':'')+'−AF'+R.af+' = <b>'+R.tk+'</b>'))+'</div>'+(R.tk!=null?'<div class="nvDim">2D6が'+R.tk+'未満で撃破・同じで'+(R.loc==='hull'?'走行不能':'ショック')+'・'+(R.tk+1)+'で'+(V.ammo==='HE'?(R.loc==='turret'?'ショック':'走行不能'):'ショックの可能性')+'</div>':'');
       if(O){h+='<div class="nvRt">'+diceEmojiStr(V.c1,V.c2)+' '+O.c+' <b style="color:'+O.col+'">'+O.t+'</b></div>';
         if(O.ntc){if(V.ntc)h+='<div class="nvRt">NTC DR'+V.ntc+' <b style="color:'+(V.ntc>8?'#ffb040':'#3ca878')+'">'+(V.ntc>8?'8を超えた → ショック':'8以下 → 効果なし')+'</b></div>';else h+='<div class="ijS" style="margin-top:6px">'+T('NTC(乗員の士気8)のダイス')+' <span style="color:#8fa6bd;font-size:11px">'+T('8を超えたらショック')+'</span></div><div class="ijRow" style="align-items:center">'+dice('n1','赤','#ff9090')+'<span style="width:12px"></span>'+dice('n2','白','#e8eef4')+'</div>';}
         var ts=nmStOf(te),acts='';
