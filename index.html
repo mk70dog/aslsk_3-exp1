@@ -3510,9 +3510,11 @@ function getScenarioSSRFlags(){
 // SSR_REFLECT[シナリオID][SSR番号(1始まり)] = 反映内容の説明。シナリオタブとSSRポップアップの該当SSR直下に「反映済」タグ付きで表示する。
 // 追加時は反映ロジック(SCENARIO_SSR_FLAGS/scenShotDrm/各タブのボタン等)と必ずセットで登録すること(注記だけ先に追加しない)。
 var SSR_REFLECT={
+  S36:{3:'地図の射撃・AFV タブ: T-34/85 の APCR 欠乏No.を 6 にする'}, // v1676
+  S44:{3:'地図の移動: OA vz 30(t) が隣に装甲車のいないヘクスから動き出す時、DR 8以下の始動判定を出す(失敗=このMPhは動けない)'}, // v1676
   S42:{1:'判定モードの地図: 生垣は TEM+2・越えるのに+2MF(v1667)'}, // v1674
   S41:{2:'煙幕手榴弾(地図・移動タブ): 独 4-6-7 の煙幕指数を3にする'}, // v1674
-  S47:{2:'煙幕手榴弾(地図・移動タブ): 米 7-4-7 の煙幕指数+2。士気チェック・クラス低下: 米 MMC は下線付き士気(ELR で置き換えない)'}, // v1674
+  S47:{3:'地図: ヘクスのメニュー「要塞化する」で伊が建物を5ヘクスまで要塞化(TEM+1)。印は伊のiPadだけに出る',2:'煙幕手榴弾(地図・移動タブ): 米 7-4-7 の煙幕指数+2。士気チェック・クラス低下: 米 MMC は下線付き士気(ELR で置き換えない)'}, // v1674
   S51:{1:'マップ: sS5・sAA2 に戦車残骸を自動で置く(判定モード=シナリオ選択時、アプリ対戦=準備のとき)。残骸のヘクスの歩兵は+1TEM、通り抜ける射線は+1妨害、車両の進入は+1MP(道路沿い+2MP)。アプリ対戦: 独MMCは隣・同じヘクスに置けない(OB から1つずつ・部隊の準備の両方)',2:'アプリ対戦: T1 米の準備射撃フェイズの最初に事前砲爆撃を自動で解決(人間が米なら地域を選ぶ窓・アプリは自動で選ぶ)。地域内の独ユニット全部が NTC(失敗=釘付け、色dr5・6なら混乱+DM/成功でも色dr5・6なら CX)',3:'アプリ対戦: 独の分隊がパンツァーファウスト(射程2・19発、ツールバーの PF、アプリも使う)。判定モード: 下の帯の PF チップで残り数'}, // ダルマ「ssrは全てアプリ対応済みのマーク」
   S31:{1:'マップ: EmRRヘクス(盤面x Y9・Z8・AA8・BB7・CC7・EE6・FF5・GG6、Y10・DD6は道路のまま)を登録。LOS判定でEmRR上にいないユニットのLOSがEmRRを通過して直後の1ヘクスを超える非EmRRヘクスへ伸びる場合は遮断(射撃側・目標がEmRRより高い標高なら不適用)。EmRRヘクスのTEMは0。移動ルートでEmRRへの進入は2(隣接EmRRからは1)',2:'射撃タブ(ピッカー)・マップのMF: 伊軍MMCを未熟兵(指揮官同行でも解除されない)として自動判定(畏縮2列・SW/FTのB#/X#-1・3MF)。不意打ち・白兵戦(CCV)・PAATC・爆薬・LATWは各タブの未熟兵ボタンで指定'}, // v11.302
   S20:{4:'射撃タブ(ピッカー)・マップのMF: 5-3-6/2-2-6を未熟兵として扱わない(畏縮1列・B#/X#の未熟兵-1なし・4MF)。移動タブの煙幕手榴弾: 5-3-6/2-2-6は煙幕能力なし(指数0)。士気/損耗タブ(MC): 米軍6-6-7/3-4-7をピッカーで選ぶと「士気値下線あり(ELR置換免除)」を自動でON'}, // v11.301
@@ -23319,6 +23321,7 @@ function GclearAmmoDepletedAll(){
 // deplete が{年:欠乏No.}のオブジェクトなら、S.gun.depletionYearに応じた値を返す（年代依存：APCR等、SK#2 6.2）。
 // 選択中の西暦年がデータの最小キーより前の場合は-1を返し「供給自体がまだ存在しない」ことを示す。
 function resolveDeplete(ammo){
+  try{if(ammo&&ammo.type){var vOv=AFV_DATA.filter(function(v){return v.ma&&v.ma.specialAmmo&&v.ma.specialAmmo.indexOf(ammo)>=0;})[0];var ov=vOv&&scnAmmoOvr(vOv.id,ammo.type);if(ov!=null)return ov;}}catch(e){} /* v1676 S36 */
   if(!ammo||ammo.deplete==null)return 0;
   var d=ammo.deplete;
   if(typeof d!=="object")return d;
@@ -29541,9 +29544,12 @@ function losVicHexesOverlayOneSVG(sc,vh,vhIdx,dispLayout){
 // マーカー・ラベル付きで表示するオーバーレイ。現在表示中のボード(S_LOS.boards)に含まれる
 // マークのみ対象とする(別ボードのマークは非表示、GET LOGには常に全ボード分を出力する)。
 function losBuildingMarksOverlaySVG(dispLayout){
+  try{nmFortApply();}catch(e){}
   var keys=Object.keys(S_LOS.buildingMarks);
   if(!keys.length)return '';
   var h='';
+  try{if(nmFortScen()&&nmFortVisible())nmFortList().forEach(function(m){var g=losColRowToGlobalCanon(m.boardId,m.col,m.row);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dispLayout);var pts=losHexPolygonPoints(d.x,d.y,losBoardRotById(m.boardId));h+='<polygon points="'+pts+'" fill="rgba(230,140,40,0.28)" stroke="#e88a28" stroke-width="3" stroke-dasharray="7 4"/>';h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><text x="'+d.x+'" y="'+(d.y+14)+'" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="bold" fill="#ffb060" style="paint-order:stroke;stroke:#000;stroke-width:3px">要塞 +1</text></g>';});}catch(e){}
+  keys=keys.filter(function(k){return !/^FORT\|/.test(k);});
   // 2026-08修正(ダルマ指示「マークをブルーに変更、ボタンだけではなくマーカーもブルーに
   // する」): マップ上のMARKマーカー色をダークグレー→ブルー(MARKボタンの新色judg3d blu
   // と統一)に変更。
@@ -36362,7 +36368,10 @@ function btReactionCC(opt,log){
 }
 // ---- 特殊弾(APCR、6.2) ----
 function btAPCRNum(w){return btSpecNum(w,'APCR');} /* v1262: 年月キー("1944-08")にも対応(旧版は年だけで、M4A3(76)W の 1944/8以降のAPCRが出なかった) */
-function btSpecNum(w,type){var sa=null;
+/* v1676: シナリオ別の弾の欠乏No.(S36 SSR3: T-34/85 の APCR は 6) */
+var SCN_AMMO_OVR={S36:{afv_t3485_sov:{APCR:6}}};
+function scnAmmoOvr(vid,type){try{var sc=S.scen&&S.scen.sel,o=window.NM_AMMOOVR!==false&&SCN_AMMO_OVR[sc]&&SCN_AMMO_OVR[sc][vid];return o&&o[type]!=null?o[type]:null;}catch(e){return null;}}
+function btSpecNum(w,type){var sa=null;try{var ov=w&&w.v&&scnAmmoOvr(w.v.id,type);if(ov!=null)return ov;}catch(e){}
   if(w.kind==='MA'&&w.v&&w.v.ma&&w.v.ma.specialAmmo)sa=w.v.ma.specialAmmo.filter(function(x){return x.type===type;})[0];
   if(!sa&&w.gd&&w.gd.ammo)sa=w.gd.ammo.filter(function(x){return x.type===type;})[0];
   if(!sa)return null;if(sa.availFrom&&!nmAmmoFromOk(sa.availFrom))return null; /* v1263: 供給開始(availFrom)より前は無し */var dep=sa.depleteByYear||sa.deplete;if(dep==null)return null;
@@ -36827,6 +36836,12 @@ function gB2Hd(l,v){return '<div style="display:flex;justify-content:space-betwe
 function gB2Btn(l,on,dis,fn,ttl,red){return '<button class="b sm'+(on?(red?' on red':' on'):'')+(dis?' disabled':'')+'" '+(ttl?'title="'+ttl+'" ':'')+'style="height:30px;min-width:0;padding:0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;margin:0" onclick="'+(fn||'')+'">'+l+'</button>';}
 function gB2Note(t){return '<div style="font-size:11px;color:#556677;margin-top:4px;line-height:1.35">'+t+'</div>';}
 function nmMarkKey(H){var bi=-1;(S_LOS.boards||[]).forEach(function(b,i){if(bi<0&&b.id===H.boardId)bi=i;});return bi+':'+H.boardId+':'+H.col+':'+H.row;}
+/* v1676(ダルマ「対応可能?」→「実施」S47 SSR3): 伊が建物を最大5ヘクス要塞化。保存・同期は建物のマーク(buildingMarks)に 'FORT|' のキーで入れる。TEM は地図の下準備(BTG.nodes[].tem)に +1。印は伊のiPad(またはこのiPadの国が未設定・マスター)だけに出す */
+function nmFortScen(){var sc=S.scen&&S.scen.sel;return window.NM_FORT!==false&&sc==='S47';}
+function nmFortVisible(){try{var k=nmMyNatNow();return !k||k==='ITA'||nmMasterOn();}catch(e){return true;}}
+function nmFortList(){var M=S_LOS.buildingMarks||{};return Object.keys(M).filter(function(k){return /^FORT\|/.test(k);}).map(function(k){return M[k];});}
+function nmRmFort(){var H=NM_RM_HEX;if(!H)return;var k='FORT|'+nmMarkKey(H);if(!S_LOS.buildingMarks)S_LOS.buildingMarks={};if(S_LOS.buildingMarks[k])delete S_LOS.buildingMarks[k];else{if(nmFortList().length>=5){btToast('要塞化は5ヘクスまでです');return;}S_LOS.buildingMarks[k]={fort:1,name:losHexNameFromColRow(H.col,H.row),boardId:H.boardId,col:H.col,row:H.row};}BtRmClose();nmFortApply();try{saveState();}catch(e){}Draw();btToast(S_LOS.buildingMarks[k]?'要塞化しました(TEM+1)':'要塞化を取り消しました');}
+function nmFortApply(){try{if(typeof BTG==='undefined'||!BTG||!BTG.nodes)return;var on=nmFortScen(),L={};if(on)nmFortList().forEach(function(m){L[m.boardId+':'+m.col+':'+m.row]=1;});BTG.nodes.forEach(function(N){var f=!!L[N.b+':'+N.c+':'+N.r];if(f&&!N.fort){N.tem0=N.tem;N.tem=(N.tem||0)+1;N.fort=1;}else if(!f&&N.fort){N.tem=N.tem0;N.fort=0;}});}catch(e){console.log('fort',e);}}
 function nmRmMark(){var H=NM_RM_HEX;if(!H)return;BtRmClose();if(!S_LOS.buildingMarks)S_LOS.buildingMarks={};var k=nmMarkKey(H);if(S_LOS.buildingMarks[k])delete S_LOS.buildingMarks[k];else S_LOS.buildingMarks[k]={name:losHexNameFromColRow(H.col,H.row),boardId:H.boardId,col:H.col,row:H.row};try{saveState();}catch(e){}Draw();}
 function nmRmEnemy(){var H=NM_RM_HEX;if(!H)return;BtRmClose();var e=nmEnemyAt(H);if(e){ /* v1504(ダルマ報告「消去を押すと増える」画像=盤の継ぎ目 DD10 の敵の部隊): 1つの時は losToggleEnemyHexAt(盤・列・行が完全に同じものだけ探す)に任せていたので、継ぎ目のヘクスで別の盤の表記だと見つからず、新しいマーカーを足していた。見つけたマーカーをそのまま消す */var L=S_LOS.enemyHexes;L.splice(L.indexOf(e),1);NM_SEL_EH=null;try{saveState();}catch(x){}}else losToggleEnemyHexAt(H.boardId,H.col,H.row);Draw();}
 function nmRmWreck(){var H=NM_RM_HEX;if(!H)return;BtRmClose();losCycleWreckHexAt(H.boardId,H.col,H.row);Draw();}
@@ -37042,6 +37057,7 @@ function nmRMenuItems(n,part){
   it.push({row:1,ic:'wreck',img:wc?nmWreckCtrHTML(null,30,wc):'',t:'残骸',btns:[['－',"nmRmWreckStep("+n+",-1)",wc<=0],[wc?wc+'個':'0個',null],['＋',"nmRmWreckStep("+n+",1)",wc>=3]]});
   var smT=sm?nmSmkType(sm):null;
   it.push({ic:'smoke',img:smT?nmSmkCtrHTML(smT.k,34):'',t:'煙幕の配置',sub:'ここ: '+(smT?smT.nm+' +'+smT.v:'なし')+'　タップで種類を決める',f:"nmRmSubOpen('smoke',"+n+")"});
+  try{var fN=BTG&&BTG.nodes[n];if(nmFortScen()&&fN&&fN.bldgT&&nmFortVisible()){var fOn=!!(S_LOS.buildingMarks||{})['FORT|'+nmMarkKey(H)],fc=nmFortList().length;it.push({ic:'hex',t:fOn?'要塞化を取り消す':'要塞化する',sub:'S47 SSR3: 伊が建物を最大5ヘクスまで要塞化(TEM+1)　'+fc+'/5　相手のiPadには印を出さない',f:"nmRmFort()"});}}catch(e){} /* v1676 */
   var mkOn=!!(S_LOS.buildingMarks||{})[nmMarkKey(H)];it.push({ic:'hex',t:mkOn?'このヘクスのマークを取り消す':'このヘクスをマークする',sub:mkOn?'青いマークを消す':'青い枠で印を付ける(勝利条件ヘクスの確認など)',f:"nmRmMark()"}); /* v392 */
   it.push({sep:1});
   if(n>=0){it.push({ic:'hex',t:'このヘクスの情報・地形のルール',sub:nm+' '+terr,f:"nmRmInfo("+n+")"});it=V;
@@ -40405,10 +40421,12 @@ function nmVicJudge(){var c=curScen();if(!c||!c.vic)return null;var tx=String(c.
     o.ctrl={have:have0,need:need0,hexes:VH.map(function(x){return x.h;}),vpEach:vpEach};if(!vpEach)o.lines.push(nmNatLbl(who)+'の支配 '+have0+'/'+need0+(have0>=need0?' → 条件を満たしています':' → まだ'));}
   else if(/支配/.test(tx)&&hx.length&&o.sd){var have=hx.filter(function(h){return nmVicCtrl(bd+h)===o.sd;}).length,need=hx.length;
     if((m=/(\d)\S{0,3}のうち(\d)\S{0,3}以上/.exec(tx)))need=+m[2];o.ctrl={have:have,need:need,hexes:hx};o.lines.push(nmNatLbl(who)+'の支配 '+have+'/'+need+(have>=need?' → 条件を満たしています':' → まだ'));}
+  if(FX&&c.id==='S48'&&o.sd&&window.NM_VIC48!==false){try{var bh=nmVic48();o.bld={have:bh.length,need:1,hexes:bh};o.lines.push('伊の統制状態の分隊(またはHS2個)がいる建物ヘクス '+bh.length+(bh.length?'('+bh.join('・')+') → 条件を満たしています':' → まだ'));}catch(e){}} /* v1676 S48 */
   if((FX?/退出|脱出/:/退出/).test(tx)&&(m=FX?/VP\s*(\d+)以上|(\d+)\s*VP以上/.exec(tx):/VP\s*(\d+)以上/.exec(tx))){var nd=+(m[1]||m[2]),sc=S.scen.sel,ev=(S.nmExitVP&&S.nmExitVP[sc])||{vp:0,list:[]};
     if(vpEach&&o.ctrl){var tot=o.ctrl.have*vpEach+ev.vp;o.vp={have:tot,need:nd};o.exit={need:nd,have:ev.vp,list:ev.list,mix:1};o.lines.push('VP '+tot+'/'+nd+'(支配 '+o.ctrl.have+'×'+vpEach+' + 脱出 '+ev.vp+')'+(tot>=nd?' → 条件を満たしています':''));}
     else{o.exit={need:nd,have:ev.vp,list:ev.list};o.lines.push('退出VP '+ev.vp+'/'+nd+(ev.vp>=nd?' → 条件を満たしています':''));}}
   return o;}
+function nmVic48(){var sd=nmSuSide('ITA'),od=sd==='f'?'e':'f',out=[];BTG.nodes.forEach(function(N,i){if(!N.bldgT)return;var H=nmHexOfNode(i),sq=0;nmAllAt(H,sd).forEach(function(e){if(!e.grp||e.veh||e.gun)return;(nmGeList(e.grp).items||[]).forEach(function(x){if(x.kind!=='mmc'||x.broken||/乗員|Crew/i.test(x.label))return;var D=UNITS[x.nat||'ITA']||{},u=(D.mmc||[]).filter(function(q){return q.lbl===x.label;})[0];sq+=(u&&u.hs)||/\(HS\)/.test(x.label)?0.5:1;});});if(sq>=1&&!nmAllAt(H,od).length)out.push(N.nm);});return out;} /* v1676: S48 伊の勝利(統制状態の分隊 または HS2個 がいて、相手のいない建物ヘクス) */
 function nmExitVPOf(eh){var c=curScen(),tx=String(c&&c.vic||''),vp=0,lg=[];
   if(eh.grp&&!eh.veh&&!eh.gun){(nmGeList(eh.grp).items||[]).forEach(function(x){var v=0;if(x.kind==='smc'){var m=/([+-]\d)$/.exec(x.label),c0=m?+m[1]:0;v=c0<=-2?3:(c0===-1?2:1);}else{var D=UNITS[x.nat]||{},u=(D.mmc||[]).filter(function(q){return q.lbl===x.label;})[0];v=(u&&u.hs)?1:2;}vp+=v;lg.push(x.label+' '+v);});}
   else if(eh.veh){var v1=nmAfv(eh.veh),nm=v1?nmAfvName(v1):'',re=/([^、。]+?)は各(\d+)VP/g,mm,got=0;while((mm=re.exec(tx))){var key=mm[1].replace(/^.*[、・]/,'').replace(/\s/g,'');if(v1&&(key.indexOf(nm)>=0||nm.indexOf(key.slice(0,3))>=0||(v1.lbl&&key.indexOf(v1.lbl.slice(0,3))>=0)))got=+mm[2];}
@@ -43684,7 +43702,8 @@ function nmVicStBelow(){var k=nmVicStK(),D=nmVicStData();if(!D||k!==2)return '';
 function nmVicStRight(){var k=nmVicStK(),D=nmVicStData();if(k!==3||!D)return '';return '<div style="flex:0 0 auto;display:flex!important;flex-direction:row!important;align-items:baseline!important;gap:4px;line-height:1;padding:6px 10px;border-radius:9px;white-space:nowrap;border:1px solid '+(D.ok?'#2f7a4a':'#4a5566')+';background:'+(D.ok?'#14321f':'#14171d')+'"><span style="font-size:11px;color:'+(D.ok?'#5ee08c':'#8fa6bd')+'">'+(D.ok?'✓'+T('達成'):T('支配'))+'</span><b style="font-size:20px;font-weight:900;color:'+(D.ok?'#5ee08c':'#fff')+'">'+D.have+'</b><span style="font-size:12px;color:#8fa6bd">/'+D.need+'</span></div>';}
 function nmVicStChip(vch){try{try{nmVicUpd();}catch(e){}var J=nmVicJudge();if(!J)return '';var o='';
   if(!J.ctrl&&J.sd&&(window.NM_VICFIX===false||/支配|占領/.test(String((curScen()||{}).vic||'')))){var VH=nmVicHexes();if(VH.length){var c0=curScen(),m0=/(\d+)\S{0,3}以上/.exec(String(c0.vic||'')),hv=VH.filter(function(x){return nmVicCtrl(x.nm)===J.sd;}).length;J.ctrl={have:hv,need:m0&&!/全て/.test(c0.vic)?+m0[1]:VH.length};}} /* 勝利条件の文にヘクス名が無い時(例 S24「建物を全て支配」)は勝利ヘクス(vicHexes)で数える */
-  if(J.vp){var okv=J.vp.have>=J.vp.need;o+=vch((okv?'✓ ':'')+'VP '+J.vp.have+'/'+J.vp.need,okv?'#14321f':'#1b222c',okv?'#5ee08c':'#cfd8e3',okv?'#2f7a4a':'#4a5566');return o;}
+  if(J.bld){var okb=J.bld.have>=1;o+=vch((okb?'✓ ':'')+'建物 '+J.bld.have+'/1',okb?'#14321f':'#1b222c',okb?'#5ee08c':'#cfd8e3',okb?'#2f7a4a':'#4a5566');return o;}
+if(J.vp){var okv=J.vp.have>=J.vp.need;o+=vch((okv?'✓ ':'')+'VP '+J.vp.have+'/'+J.vp.need,okv?'#14321f':'#1b222c',okv?'#5ee08c':'#cfd8e3',okv?'#2f7a4a':'#4a5566');return o;}
    if(J.ctrl){var ok=J.ctrl.have>=J.ctrl.need;o+=vch((ok?'✓ ':'')+T('支配')+' '+J.ctrl.have+'/'+J.ctrl.need,ok?'#14321f':'#1b222c',ok?'#5ee08c':'#cfd8e3',ok?'#2f7a4a':'#4a5566');}
   if(J.exit){var ok2=J.exit.have>=J.exit.need;o+=vch((ok2?'✓ ':'')+T('退出')+' '+J.exit.have+'/'+J.exit.need+'VP',ok2?'#14321f':'#1b222c',ok2?'#5ee08c':'#cfd8e3',ok2?'#2f7a4a':'#4a5566');}
   return o;}catch(e){return '';}}
@@ -46042,12 +46061,12 @@ function nmRmVehItems(n,sd){
   h+='<div class="plBigs" style="grid-template-columns:repeat(3,1fr)">'+big('grp',NM_PL_IC.grp,T('部隊'),grps.length+'個 作成済み')+big('veh',NM_PL_IC.veh,T('車両'),vehs.length+'種類')+big('gun',NM_PL_IC.gun,T('砲'),guns.length+'種類')+'</div>'
     /* v809(ダルマ指示「煙幕残骸マークに仕切りか枠を追加」): ユニット(編成・車両・砲)と、自軍・敵軍に関係ない煙幕・残骸・マークを枠で分ける */
     +'<div style="margin:10px 0 2px;border:1px solid #4a5568;border-radius:12px;padding:16px 8px 8px;position:relative;background:#ffffff06"><span style="position:absolute;top:-9px;left:12px;padding:0 8px;background:#1b1e24;color:#9fb0c4;font-size:12px;font-weight:800;letter-spacing:.04em">'+T('地形・マーカー(自軍・敵軍なし)')+'</span>'
-    +'<div class="plBigs" style="grid-template-columns:repeat(3,1fr);margin:0">'+big('smoke',NM_PL_IC.smoke||'☁',T('煙幕'),smT0?smT0.nm+' +'+smT0.v:'なし')+big('wreck',NM_PL_IC.wreck||'✖',T('残骸'),wc0?wc0+'個':'なし')+big('mark',NM_PL_IC.mark||'⚑',T('マーク'),mk0?'あり':'なし')+'</div></div>';
+    +'<div class="plBigs" style="grid-template-columns:repeat(3,1fr);margin:0">'+big('smoke',NM_PL_IC.smoke||'☁',T('煙幕'),smT0?smT0.nm+' +'+smT0.v:'なし')+big('wreck',NM_PL_IC.wreck||'✖',T('残骸'),wc0?wc0+'個':'なし')+big('mark',NM_PL_IC.mark||'⚑',T('マーク'),(function(){try{if(nmFortScen()&&nmFortVisible()&&NM_RM_HEX&&(S_LOS.buildingMarks||{})['FORT|'+nmMarkKey(NM_RM_HEX)])return (mk0?'あり・':'')+'要塞';}catch(e){}return mk0?'あり':'なし';})())+'</div></div>';
   h+='<div class="plSec">'+({grp:T('部隊'),veh:T('車両'),gun:T('砲'),smoke:T('煙幕'),wreck:T('残骸'),mark:T('マーク')})[K]+' — '+(env?T('このヘクスに置く'):T('タップでこのヘクスに配置'))+'</div><div class="plGrid">';
   if(K==='smoke'){NM_SMK_T.forEach(function(t){var on=smT0&&smT0.k===t.k;h+='<button class="plTile'+(on?' on':'')+'" onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push("nmPlSmoke("+n+",'"+t.k+"')")-1)+')"><span class="plImg">'+nmSmkCtrHTML(t.k,52)+'</span><span class="plNm">'+t.nm+' +'+t.v+'</span></button>';});
     h+='<button class="plTile'+(smT0?'':' dim')+'" onclick="event.stopPropagation();btRmDo('+(BT_RM_FN.push("nmPlSmoke("+n+",null)")-1)+')"><span style="font-size:24px">✕</span><span class="plNm">'+T('煙幕を消す')+'</span></button>';}
   else if(K==='wreck'){h+='<div class="plTile" style="grid-column:1/-1;flex-direction:row;display:flex;align-items:center;justify-content:space-between;gap:10px"><span class="plImg">'+(wc0?nmWreckCtrHTML(null,48,wc0):'')+'</span><span class="plNm" style="flex:1">'+T('残骸')+' '+wc0+'個(最大3)</span><button onclick="event.stopPropagation();nmPlWreck('+n+',-1)" style="padding:10px 18px;font-size:20px"'+(wc0<=0?' disabled':'')+'>－</button><button onclick="event.stopPropagation();nmPlWreck('+n+',1)" style="padding:10px 18px;font-size:20px"'+(wc0>=3?' disabled':'')+'>＋</button></div>';}
-  else if(K==='mark'){h+='<button class="plTile'+(mk0?' on':'')+'" style="grid-column:1/-1" onclick="event.stopPropagation();nmRmMark()"><span class="plNm">'+(mk0?T('このヘクスのマークを取り消す'):T('このヘクスをマークする'))+'</span><small>'+T('青い枠で印を付ける(勝利条件ヘクスの確認など)')+'</small></button>';}
+  else if(K==='mark'){h+='<button class="plTile'+(mk0?' on':'')+'" style="grid-column:1/-1" onclick="event.stopPropagation();nmRmMark()"><span class="plNm">'+(mk0?T('このヘクスのマークを取り消す'):T('このヘクスをマークする'))+'</span><small>'+T('青い枠で印を付ける(勝利条件ヘクスの確認など)')+'</small></button>';try{var fN1=BTG&&BTG.nodes[n],H1=NM_RM_HEX;if(nmFortScen()&&fN1&&fN1.bldgT&&H1&&nmFortVisible()){var fOn1=!!(S_LOS.buildingMarks||{})['FORT|'+nmMarkKey(H1)];h+='<button class="plTile'+(fOn1?' on':'')+'" style="grid-column:1/-1;border-color:#e88a28" onclick="event.stopPropagation();nmRmFort()"><span class="plNm">'+(fOn1?'要塞化を取り消す':'要塞化する(TEM+1)')+'</span><small>S47 SSR3: 伊は建物を5ヘクスまで要塞化　'+nmFortList().length+'/5　印は伊のiPadだけに出る</small></button>';}}catch(e){} /* v1676 */}
   else if(K==='grp'){
     grps.forEach(function(slot){var d=nmGeList(slot),s0=nmGrpSrcs(slot,1)||[],src=s0.filter(function(x,i){return s0.indexOf(x)===i;}).slice(0,3).reverse(),on=!!eh&&eh.grp===slot&&!eh.veh&&!eh.gun;
       var imgs=src.map(function(u,i){return '<img src="'+u+'" style="left:'+(8+i*9)+'px;top:'+(4+i*5)+'px">';}).join('');
@@ -51273,6 +51292,17 @@ function nmMvLogStep(a,h,sp,cost){var M=(typeof NM_MOVE!=='undefined')?NM_MOVE:n
   nmDbg('移動の記録 1歩: '+nmMvHx(a.boardId,a.col,a.row)+'→'+nmMvHx(h.boardId,h.col,h.row)+(a.boardId!==h.boardId?'(境目 '+a.boardId+'→'+h.boardId+')':'')+' 起点の向き'+nmMvAng(a.vca,a.boardId)+'→進入後の向き'+nmMvAng(h.vca,h.boardId)+' 回転'+(sp||0)+'(+'+(cost||0)+'MP) 累計'+h.moveCum+'MP / マーカー 車体'+nmMvAng(e.facing,e.boardId)+' 砲塔'+nmMvAng(e.tca,e.boardId));}
 (function(){if(window.__nmMvLog)return;window.__nmMvLog=1;[['nmMvStart','開始'],['nmMvEnd','終了'],['nmMvCancel','取り消し']].forEach(function(q){var o=window[q[0]];if(typeof o!=='function')return;window[q[0]]=function(){if(q[1]!=='開始'&&window.NM_MVLOG!==false)nmMvLogEh(q[1]+'(前)');var r=o.apply(this,arguments);if(q[1]==='開始'&&window.NM_MVLOG!==false)nmMvLogEh('開始');return r;};});
   var oe=window.nmMvEnd;})();
+/* v1676(S44 SSR3): 他の装甲車と隣り合っていない装甲車は、動き出す前に DR8 以下の始動判定。失敗=このMPhは動けない(Recall は対象外) */
+function nmS44Key(){var t=S.turn||{};return (t.cur||0)+':'+(t.half||0);}
+function nmS44Need(eh,sd){try{if(window.NM_S44===false||!(S.scen&&S.scen.sel==='S44')||!eh||eh.veh!=='afv_oavz30t_alm')return false;var n0=btNodeOf(eh.boardId,eh.col,eh.row);return !nmSideList(sd).some(function(o){if(o===eh||o.veh!=='afv_oavz30t_alm')return false;var n1=btNodeOf(o.boardId,o.col,o.row);return n1!=null&&n0!=null&&btDist(n0,n1)<=1;});}catch(e){return false;}}
+function nmS44Gate(n,sd,eh,go){var st=nmStOf(eh),k=nmS44Key();if(st.s44==='ok:'+k){go();return;}if(st.s44==='ng:'+k){btToast('S44 SSR3: このMPhは始動に失敗しています(動けません)');return;}
+  var o=document.getElementById('nmS44');if(o)o.remove();o=document.createElement('div');o.id='nmS44';o.style.cssText='position:fixed;inset:0;z-index:100070;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,sans-serif';
+  var b='display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:36px;margin:3px;border-radius:7px;background:#262d38;color:#e8eef4;font-weight:700;cursor:pointer;border:1px solid #39414f';
+  var fin=function(dr){o.remove();var ok=dr<=8;st.s44=(ok?'ok:':'ng:')+k;try{nmStSave(eh.grp);}catch(e){try{nmStSave();}catch(e2){}}try{logResult(function(){return {tabLbl:'MAP 始動',text:'S44 SSR3 始動判定 DR'+dr+(ok?' → 成功(動ける)':' → 失敗(このMPhは動けない)'),color:ok?'#00aa55':'#cc3333',detail:null};});}catch(e){}btToast('始動判定 DR'+dr+(ok?': 成功':': 失敗 このMPhは動けません'));if(ok)go();};
+  window.__nmS44Fin=fin;
+  o.innerHTML='<div style="width:min(440px,92vw);background:#1c1f27;border-radius:12px;padding:16px 18px;color:#e8eef4;box-shadow:0 0 0 1px #2a2f3a,0 16px 48px rgba(0,0,0,.7)"><div style="font-size:11px;letter-spacing:3px;color:#3ca878;font-weight:900">SSR3 · S44</div><div style="font-size:16px;margin:4px 0 8px">装甲車の始動判定</div><div style="font-size:13px;line-height:1.6;color:#cfd8e3">隣に装甲車がいないので、動くには <b style="color:#ffd24a">DR 8以下</b> が必要です。失敗するとこのMPhは動けません。</div><div style="margin:12px 0 6px"><span style="'+b+';padding:0 16px;background:#2a2416;border-color:#c8a032;color:#ffd060" onclick="var w=1+Math.floor(Math.random()*6),r=1+Math.floor(Math.random()*6);try{diceRollAnim(w,r,\'始動\',function(){__nmS44Fin(w+r);});}catch(e){__nmS44Fin(w+r);}">ダイスを振る</span></div><div style="font-size:12px;color:#8899aa">出目を入れる</div><div>'+[2,3,4,5,6,7,8,9,10,11,12].map(function(v){return '<span style="'+b+'" onclick="__nmS44Fin('+v+')">'+v+'</span>';}).join('')+'</div><div style="text-align:right;margin-top:8px"><span style="'+b+';padding:0 14px" onclick="document.getElementById(\'nmS44\').remove()">やめる</span></div></div>';
+  document.body.appendChild(o);}
+(function(){var ms=window.nmMvStart;if(typeof ms!=='function')return;window.nmMvStart=function(n,sd){var a=arguments,self=this;try{var eh=nmUnitAt(nmHexOfNode(n),sd);if(nmS44Need(eh,sd)){nmS44Gate(n,sd,eh,function(){ms.apply(self,a);});return;}}catch(e){console.log('s44',e);}return ms.apply(this,arguments);};})();
 function nmMaCheck(){var m=S_LOS.motionAttempt;if(!m||!m.wd||!m.rd)return;var M=(typeof NM_MOVE!=='undefined')?NM_MOVE:null;if(!M||!M.eh||!M.eh.veh)return;
   var v=nmAfv(M.eh.veh);if(!v||v.breakdownDR==null)return;var res=nmMaRes(v,m.wd+m.rd);if(res==='stall'){if(window.NM_MRSTALL!==false)nmMaStall();return;}if(res!=='imm')return;
   var eh=M.eh;try{nmBkSnap('機械的故障の前');}catch(e){}var u=0;try{u=nmMvUsed();}catch(e){}if(u<=1){var o=M.orig;eh.boardId=o.b;eh.col=o.c;eh.row=o.r;}
