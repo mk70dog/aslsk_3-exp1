@@ -29971,6 +29971,7 @@ function btBuildGraph(){
     n.bldgT=/Building|Multiple|Fortified/.test(t);
     n.cover=n.bldgT?'bldg':(t==='Woods'?'woods':(t==='Stone Rubble'?'bldg':''));
     n.og=(t==='Open Ground'||t==='Dirt Road'||t==='Paved Road'||(t==='Grain'&&!S_LOS.grainSeason)); // FFMO・阻止の対象となる開豁地
+    if(t==='Orchard'&&window.NM_ORRD!==false&&btHexRoadFrac(n)>=0.15){n.og=true;n.orRd=1;} /* v1675(ダルマ「繁み 並木道」→「全て実施」): 果樹園として読まれた並木道(sF5・sG5・pU7 など)も、道路として読まれた並木道と同じく FFMO の対象にする(道路沿いの LOS は妨害なし=FFMO あり、木を横切れば妨害で FFMO なし) */
     n.bldg=0;
     n.edge=n.nb.length<6;
   });
@@ -30074,6 +30075,7 @@ function btInfCost(a,b){
   return {c:c,road:road};
 }
 var BT_GPROM=null;
+function btHexRoadFrac(n){try{var d=LOS_BOARD_DATA[n.b];if(!d)return 0;var c=losHexCenterPx(n.c,n.r),tot=0,rd=0;for(var gx=Math.floor(c.x-LOS_GEO_HEX_W/2);gx<=c.x+LOS_GEO_HEX_W/2;gx+=3)for(var gy=Math.floor(c.y-LOS_GEO_HEX_H/2);gy<=c.y+LOS_GEO_HEX_H/2;gy+=3){var cr=losPixelToHexColRow(gx,gy);if(cr.col!==n.c||cr.row!==n.r)continue;var ti=losTerrainInfoAt(n.b,gx,gy);if(!ti)continue;tot++;if(ti.name==='Dirt Road'||ti.name==='Paved Road')rd++;}return tot?rd/tot:0;}catch(e){return 0;}}
 function btEnsureGraph(){
   if(btGraphReady())return Promise.resolve(BTG);
   if(BT_GPROM)return BT_GPROM;
