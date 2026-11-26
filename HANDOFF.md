@@ -14,7 +14,8 @@
 
 - v1659(ダルマ画像「同期できませんでした: 送信 429」=v1656 の待機中): 待機中は「GitHubの使用回数の上限のため送信を止めています(あと約N分、HH:MMごろ再開)」と出す(nmGhWaitTxt、編成同期・マップ同期のエラー文)。
 
-- **【2026-11-26 いまの作業=v1660 から再開(返事待ち: iPadOS更新後の地図上部のぼやけ v1654 の確認)。以前: 2026-11-25 夕 引き継ぎ v1653、返事待ちなし(S20 の SSR 追加は保留: 提案: SSR1 Chart1 の dr 自動・SSR3 ソ連全員自己ラリー・SSR6 国籍違いの指揮修正なし・SSR2 撤退と VP 除外・勝利条件の VP 自動集計と丘陵ヘクス30超)】** main=v1653。車両ノートの裏画像は全シナリオの車両・砲に入れ済み(残りは車両ノートに裏がない 45mm AT・2cm FlaK38・40mm Bofors・105/155mm 米榴弾砲、80mm vz.36 は画像に s8 がないので生成のまま)(H_EXP1.pdf の画像 98枚、pdfimages -j で取り出し、右半分を切り出し→NM_HNIMG に jpeg、説明の位置は NM_HNBK に手で)。
+- **【2026-11-26 いまの作業=v1661 から再開(返事待ち: iPadOS更新後の地図上部のぼやけ v1654 の確認)。以前: 2026-11-25 夕 引き継ぎ v1653、返事待ちなし(S20 の SSR 追加は保留: 提案: SSR1 Chart1 の dr 自動・SSR3 ソ連全員自己ラリー・SSR6 国籍違いの指揮修正なし・SSR2 撤退と VP 除外・勝利条件の VP 自動集計と丘陵ヘクス30超)】** main=v1653。車両ノートの裏画像は全シナリオの車両・砲に入れ済み(残りは車両ノートに裏がない 45mm AT・2cm FlaK38・40mm Bofors・105/155mm 米榴弾砲、80mm vz.36 は画像に s8 がないので生成のまま)(H_EXP1.pdf の画像 98枚、pdfimages -j で取り出し、右半分を切り出し→NM_HNIMG に jpeg、説明の位置は NM_HNBK に手で)。
+  - v1661(ダルマ「移動すると必要がないのに勝手に車両の方角が変わることがある」+ログ・画像 IV号F2): マーカーの車両を動かす時、ルートの起点の vca が空で、最初の1歩の方向へ無償で向き直っていた(正面2ヘクスのどちらへ進んでも向きが変わり、向き変更のMPも数えず)。起点の vca を NM_MOVE.eh.facing にする(LosMapClick の newVCA 計算の直前)。NM_MVFACE=false で旧。確認: 向き0なら正面2ヘクス(tQ3・tP2)は向きそのまま2MP、それ以外は回転分のMP。smoke 0。返事待ち: sample-bogst(状態にBOG)。
   - v1660(ダルマ「機械的信頼性のペナルティを移動に反映させる」→「実施」): sample-mrel をマージ。nmMaRes(ok/imm/stall)・nmMaStall(遅延DRを NM_MOVE.extra に、元のヘクスで停止、発進で再判定、使い切りで移動終了)。Note M は12=走行不能・11=失速、パンターG/ヤクトパンターは12=失速。motionAttemptResultHTML の失速表示も nmMaIsStall。NM_MRSTALL=false で旧。smoke 0。
   - v1653(ダルマ「実施」): sample-nmc をマージ。士気チェックの見出し MC(DRM+1)→1MC・2MC・3MC、DRM0は NMC、負は MC(DRM-1)のまま(nmMcSection と砲の乗員)。NM_NMC=false で旧。smoke 0。
   - v1652(ダルマ「実施」): sample-mcnosplit をマージ。btRmFullApply で士気チェックの区間(「士気チェック:」行〜次の rmSep)を左右の列で割らない(区間の途中で切れる時は区間の先頭か終わりへ、左右の高さが近い方)。判定するボタンが「士気チェック(続き)」に離れない。NM_MCNOSPLIT=false で旧。smoke 0。
