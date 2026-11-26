@@ -3544,7 +3544,7 @@ try{SSR_REFLECT.S44=Object.assign({},SSR_REFLECT.S44,{3:'地図の移動: OA vz 
   SSR_REFLECT.S35=Object.assign({},SSR_REFLECT.S35,{5:'SSR の窓の「▶ 判定」: ヘクスを地図で選ぶ→dr(1・2 で効果、目標は無作為)',6:'SSR の窓の「▶ 判定」: ヘクスを地図で選ぶ→To Hit DR→歩兵 36FP / AFV の TK・直撃'}); /* v1677 */
   SSR_REFLECT.S36=Object.assign({},SSR_REFLECT.S36,{1:'SSR の窓の「▶ 判定」: 4.5/5.5/6.5 を選ぶとターン表の終わりが変わる・盤と除く戦力を表示',2:'SSR の窓の「▶ 判定」: 増援表の dr'}); /* v1678 */
   SSR_REFLECT.S46=Object.assign({},SSR_REFLECT.S46,{4:'地図の移動: T4 以降に部隊が動き出す時、MMC ごとに TC の窓(失敗=CX)。SSR の窓の「▶ 判定」で説明'});
-  SSR_REFLECT.S59=Object.assign({},SSR_REFLECT.S59,{2:'SSR の窓の「▶ 判定」: RtPh の dr → 準備射撃フェイズの艦砲(1=尖塔破壊・2=ずれて 30FP)'});
+  SSR_REFLECT.S59=Object.assign({},SSR_REFLECT.S59,{3:'SSR の窓の「▶ 判定」でトンネルを地図で記録(独の iPad だけ)。入口にいる独の部隊のメニューに「トンネルに入る/出る」'},{2:'SSR の窓の「▶ 判定」: RtPh の dr → 準備射撃フェイズの艦砲(1=尖塔破壊・2=ずれて 30FP)'});
   SSR_REFLECT.S41=Object.assign({},SSR_REFLECT.S41,{1:'SSR の窓の「▶ 判定」: 着弾ヘクスを地図で選ぶ→ずれの dr→着弾と周り6ヘクスに 16FP(林は −1)'});
   SSR_REFLECT.S43=Object.assign({},SSR_REFLECT.S43,{2:'SSR の窓の「▶ 判定」: 着弾ヘクスを地図で選ぶ→ずれの dr→着弾と周り6ヘクスに 16FP(林は −1)・使った回数/3'});}catch(e){} /* v1674: S20 が2回書かれていて SSR4 の反映済みが消えていた */
 // 降雪(S4/S46): 判定時の追加DRM。状態はS.scenSnow(シナリオタブのボタンで切替)。
@@ -29556,7 +29556,8 @@ function losVicHexesOverlayOneSVG(sc,vh,vhIdx,dispLayout){
 // マーカー・ラベル付きで表示するオーバーレイ。現在表示中のボード(S_LOS.boards)に含まれる
 // マークのみ対象とする(別ボードのマークは非表示、GET LOGには常に全ボード分を出力する)。
 function losBuildingMarksOverlaySVG(dispLayout){
-  try{nmFortApply();}catch(e){}
+  try{nmFortApply();}catch(e){}var tunH='';try{tunH=nmTunOverlaySVG(dispLayout);}catch(e){}if(tunH)return tunH+losBuildingMarksOverlaySVG0(dispLayout);return losBuildingMarksOverlaySVG0(dispLayout);}
+function losBuildingMarksOverlaySVG0(dispLayout){
   var keys=Object.keys(S_LOS.buildingMarks);
   if(!keys.length)return '';
   var h='';
@@ -43851,7 +43852,7 @@ function nmSaOpen(kind,ssrNo){var o=document.getElementById('nmScnTxt');if(o)o.r
   btEnsureGraph().then(function(){nmSaDraw();});}
 function nmSaClose(){NM_SA_TAP=0;NM_SA=null;var o=document.getElementById('nmSa');if(o)o.remove();}
 function nmSaArm(){NM_SA_TAP=1;var o=document.getElementById('nmSa');if(o)o.style.display='none';btToast(T('ヘクスをタップ'));}
-function nmSaTapAt(cx,cy){if(!NM_SA_TAP||!NM_SA)return false;var hx=losHexAtClient(cx,cy);if(!hx)return true;var n=null;try{n=btNodeOf(hx.boardId,hx.col,hx.row);}catch(e){}if(n==null||n<0)return true;NM_SA_TAP=0;NM_SA.tgt=n;NM_SA.hit=null;NM_SA.rows=null;NM_SA.cd=0;NM_SA.wd=0;NM_SA.step='roll';var o=document.getElementById('nmSa');if(o)o.style.display='flex';nmSaDraw();return true;}
+function nmSaTapAt(cx,cy){if(!NM_SA_TAP||!NM_SA)return false;var hx=losHexAtClient(cx,cy);if(!hx)return true;var n=null;try{n=btNodeOf(hx.boardId,hx.col,hx.row);}catch(e){}if(n==null||n<0)return true;NM_SA_TAP=0;if(typeof NM_TUN_PICK!=='undefined'&&NM_TUN_PICK){nmTunTap(n);return true;}NM_SA.tgt=n;NM_SA.hit=null;NM_SA.rows=null;NM_SA.cd=0;NM_SA.wd=0;NM_SA.step='roll';var o=document.getElementById('nmSa');if(o)o.style.display='flex';nmSaDraw();return true;}
 function nmSaLog(t,col){try{logResult(function(){return {tabLbl:'MAP SSR',text:t,color:col||'#c8a032',detail:null};});}catch(e){}}
 /* 事前砲撃・艦砲のずれ */
 function nmSaDrift(cd,wd){var A=NM_SA;A.cd=cd;A.wd=wd;var to=A.tgt;if(A.kind==='naval'){to=nmSaNbDir(A.tgt,wd);}else if(cd>=5){to=nmSaNbDir(A.tgt,wd);}A.hit=to;
@@ -43860,7 +43861,7 @@ function nmSaDrift(cd,wd){var A=NM_SA;A.cd=cd;A.wd=wd;var to=A.tgt;if(A.kind==='
   nmSaLog(nmSaTitle()+': '+BTG.nodes[A.tgt].nm+(A.kind==='naval'?' 白dr'+wd:' 色dr'+cd+'・白dr'+wd)+' → '+(to>=0?BTG.nodes[to].nm+(to!==A.tgt?'(ずれた)':''):'盤外'));nmSaDraw();}
 function nmSaAtkRoll(k,dr){var A=NM_SA,r=A.rows[k];if(!r)return;r.dr=dr||(nmSaRoll()+nmSaRoll());r.res=nmSaIft(r.fp,r.dr,r.drm);nmSaLog(nmSaTitle()+' '+BTG.nodes[r.i].nm+' '+r.fp+'FP DR'+r.dr+(r.drm?(r.drm>0?'+':'')+r.drm:'')+' → '+r.res+(r.U.length?'('+r.U.map(function(u){return u.nm;}).join('・')+')':''),'#c8a032');nmSaDraw();}
 function nmSaAtkAll(){var A=NM_SA;A.rows.forEach(function(r,k){if(!r.dr&&r.U.length)nmSaAtkRoll(k);});nmSaDraw();}
-function nmSaTitle(){var A=NM_SA;return ({len36:'S36 SSR1 ゲームの長さ',reinf36:'S36 SSR2 増援表',fat46:'S46 SSR4 疲労',barrage3:'S41 SSR1 事前砲撃',barrage1:'S43 SSR2 独の事前砲撃',sniper:'S35 SSR5 ソの狙撃',stuka:'S35 SSR6 シュトゥーカ',naval:'S59 SSR2 艦砲射撃'})[A.kind]||'SSR';}
+function nmSaTitle(){var A=NM_SA;return ({tun59:'S59 SSR3 独のトンネル',len36:'S36 SSR1 ゲームの長さ',reinf36:'S36 SSR2 増援表',fat46:'S46 SSR4 疲労',barrage3:'S41 SSR1 事前砲撃',barrage1:'S43 SSR2 独の事前砲撃',sniper:'S35 SSR5 ソの狙撃',stuka:'S35 SSR6 シュトゥーカ',naval:'S59 SSR2 艦砲射撃'})[A.kind]||'SSR';}
 function nmSaUse(k,d){var sc=S.scen.sel,U=S.nmSaUse[sc];U[k]=(U[k]||0)+(d||1);try{saveState();}catch(e){}}
 function nmSaDraw(){var A=NM_SA;if(!A)return;var o=document.getElementById('nmSa');if(!o){o=document.createElement('div');o.id='nmSa';o.style.cssText='position:fixed;inset:0;z-index:100065;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,sans-serif';o.onclick=function(e){if(e.target===o)nmSaClose();};document.body.appendChild(o);}
   var b='display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;margin:2px;padding:0 8px;border-radius:7px;background:#262d38;color:#e8eef4;font-weight:700;cursor:pointer;border:1px solid #39414f;font-size:14px';
@@ -43869,12 +43870,13 @@ function nmSaDraw(){var A=NM_SA;if(!A)return;var o=document.getElementById('nmSa
   var note=({barrage3:'T1 米の準備射撃フェイズの最初に3ヘクス。ヘクスごとにこの窓で1回ずつ',barrage1:'独の準備射撃/防御射撃フェイズの始めに、記録した2ヘクスのどちらかへ(ゲーム中3回まで)',sniper:'ソの防御射撃フェイズごとに1回。dr 1・2 で効果',stuka:'独の防御射撃フェイズごとに1回',naval:'各 RtPh の始めに dr、1 なら次の準備射撃フェイズの最初に艦砲'})[A.kind]||'';
   var cnt=A.kind==='barrage1'?'　使った回数 '+(use.barrage1||0)+'/3':(A.kind==='barrage3'?'　使った回数 '+(use.barrage3||0)+'/3':'');
   h+='<div style="font-size:11px;letter-spacing:3px;color:#3ca878;font-weight:900">SSR'+A.ssr+' · '+sc+'</div><div style="font-size:17px;margin:2px 0 6px">'+nmSaTitle().replace(/^S\d+ SSR\d+ /,'')+'</div><div style="font-size:12px;color:#8fa6bd;margin-bottom:10px">'+note+cnt+'</div>';
-  if(/^(len36|reinf36|fat46)$/.test(A.kind)){h+=nmSaDraw2(A);}
+  if(A.kind==='tun59'){h+=nmTunDraw(A);}
+  else if(/^(len36|reinf36|fat46)$/.test(A.kind)){h+=nmSaDraw2(A);}
   else if(A.kind==='naval'&&A.step==='call'){var pend=!!use.navalPend;h+='<div style="font-size:13px;margin-bottom:6px">'+(pend?'<b style="color:#ffd24a">艦砲の要請が通っています</b> → 準備射撃フェイズの最初に解決':'RtPh の始めの dr(1 で次の準備射撃フェイズに艦砲)')+'</div>';
     if(!pend)h+='<span style="'+gold+'" onclick="nmSaNavalCall(0)">dr を振る</span> '+[1,2,3,4,5,6].map(function(v){return '<span style="'+b+'" onclick="nmSaNavalCall('+v+')">'+v+'</span>';}).join('');
     else h+='<span style="'+gold+'" onclick="NM_SA.tgt=BTG.nodes.findIndex(function(x){return x.nm===\'pQ6\';});NM_SA.step=\'roll\';nmSaDraw()">艦砲を解決する(Q6)</span> <span style="'+b+'" onclick="S.nmSaUse[S.scen.sel].navalPend=0;nmSaDraw()">取り消す</span>';
     if(use.steepleGone)h+='<div style="font-size:12px;color:#ff8080;margin-top:6px">尖塔は破壊済み(もう振れません)</div>';}
-  if(A.kind!=='naval'&&!/^(len36|reinf36|fat46)$/.test(A.kind)){h+='<div style="display:flex;align-items:center;gap:8px;margin:4px 0 8px"><span style="flex:1;font-size:14px">'+(A.kind==='sniper'||A.kind==='stuka'?'目標ヘクス':'着弾ヘクス')+': <b style="color:#ffd24a">'+(N?N.nm:'—')+'</b></span><span style="'+gold+'" onclick="nmSaArm()">地図で選ぶ</span></div>';}
+  if(A.kind!=='naval'&&!/^(len36|reinf36|fat46|tun59)$/.test(A.kind)){h+='<div style="display:flex;align-items:center;gap:8px;margin:4px 0 8px"><span style="flex:1;font-size:14px">'+(A.kind==='sniper'||A.kind==='stuka'?'目標ヘクス':'着弾ヘクス')+': <b style="color:#ffd24a">'+(N?N.nm:'—')+'</b></span><span style="'+gold+'" onclick="nmSaArm()">地図で選ぶ</span></div>';}
   if(N&&A.step!=='pick'&&A.step!=='call'){
     if(A.kind==='barrage3'||A.kind==='barrage1'||A.kind==='naval'){
       if(A.step==='roll'){if(A.kind==='naval'){h+='<div style="font-size:13px;margin-bottom:4px">1個のダイス: 1=尖塔破壊・Q6 の他は 30FP(+3TEM) / 2=Q6 から白 dr の向きへずれて 30FP / 3〜6=効果なし</div><span style="'+gold+'" onclick="nmSaNavalDo(0)">ダイスを振る</span> '+[1,2,3,4,5,6].map(function(v){return '<span style="'+b+'" onclick="nmSaNavalDo('+v+')">'+v+'</span>';}).join('');}
@@ -43889,6 +43891,36 @@ function nmSaDraw(){var A=NM_SA;if(!A)return;var o=document.getElementById('nmSa
   }
   h+='<div style="text-align:right;margin-top:12px"><span style="'+b+'" onclick="nmSaClose()">閉じる</span></div>';
   o.innerHTML='<div onclick="event.stopPropagation()" style="width:min(560px,94vw);max-height:84vh;overflow:auto;background:#1c1f27;border-radius:12px;padding:14px 16px;color:#e8eef4;box-shadow:0 0 0 1px #2a2f3a,0 16px 48px rgba(0,0,0,.7)">'+h+'</div>';}
+/* v1682(△ S59 SSR3 トンネル): 独が配置前に秘密に記録(3本まで・入口は3ヘクス以内の別々の建物ヘクス2つ)。記録はこの iPad だけ(同期しない)。
+   使い方: 入口にいる独の部隊のメニューに「トンネルに入る」→ 突撃フェイズに「トンネルから出る(→ もう一方の入口)」。中にいる間は「トンネル内」の印(攻撃されない)。米は使えない */
+NM_SSR_ACT.S59=Object.assign({},NM_SSR_ACT.S59,{3:'tun59'});
+function nmTunL(){var sc=S.scen&&S.scen.sel;if(!S.nmTun)S.nmTun={};if(!S.nmTun[sc])S.nmTun[sc]=[];return S.nmTun[sc];}
+function nmTunOn(){return window.NM_TUN!==false&&S.scen&&S.scen.sel==='S59';}
+function nmTunVisible(){try{var k=nmMyNatNow();return !k||k==='GER'||nmMasterOn();}catch(e){return true;}}
+function nmTunOther(nm){var t=nmTunL().filter(function(x){return x.a===nm||x.b===nm;})[0];return t?(t.a===nm?t.b:t.a):null;}
+var NM_TUN_PICK=null;
+function nmTunAdd(){if(nmTunL().length>=3){btToast('トンネルは3本までです');return;}NM_TUN_PICK={a:null};NM_SA_TAP=1;var o=document.getElementById('nmSa');if(o)o.style.display='none';btToast('入口1の建物ヘクスをタップ');}
+function nmTunTap(n){var N=BTG.nodes[n];if(!N||!N.bldgT){btToast('建物のヘクスを選んでください');NM_SA_TAP=1;return;}var P=NM_TUN_PICK;
+  if(!P.a){P.a=N.nm;P.an=n;NM_SA_TAP=1;btToast('入口2の建物ヘクスをタップ(3ヘクス以内)');return;}
+  if(N.nm===P.a||btDist(P.an,n)>3){btToast('入口1から3ヘクス以内の、別の建物ヘクスを選んでください');NM_SA_TAP=1;return;}
+  nmTunL().push({a:P.a,b:N.nm});NM_TUN_PICK=null;try{saveState();}catch(e){}btToast('トンネル '+P.a+' ⇄ '+N.nm+' を記録しました');var o=document.getElementById('nmSa');if(o)o.style.display='flex';nmSaDraw();try{Draw();}catch(e){}}
+function nmTunDel(k){nmTunL().splice(k,1);try{saveState();}catch(e){}nmSaDraw();try{Draw();}catch(e){}}
+function nmTunDraw(A){var b='display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:32px;margin:2px;padding:0 10px;border-radius:7px;background:#262d38;color:#e8eef4;font-weight:700;cursor:pointer;border:1px solid #39414f;font-size:14px',gold=b+';background:#2a2416;border-color:#c8a032;color:#ffd060';
+  if(!nmTunVisible())return '<div style="font-size:13px;color:#8fa6bd">トンネルは独の iPad だけに表示します(このiPadの国が独・未設定・マスターの時)</div>';
+  var L=nmTunL();return '<div style="font-size:13px;line-height:1.7;margin-bottom:8px">・配置前に秘密に記録(3本まで・入口は3ヘクス以内の別々の建物ヘクス2つ)。記録はこの iPad だけ<br>・移動フェイズの始めに入口にいる独の部隊は、部隊のメニュー「トンネルに入る」(1本につき1フェイズ1回)<br>・突撃フェイズに「トンネルから出る」でもう一方の入口へ。米がいれば白兵戦(独の不意打ち dr −2)<br>・中にいる間は撃たれない。混乱ユニットも条件つきで潰走フェイズに通れる。米は使えない</div><div style="display:grid;gap:4px">'+L.map(function(t,k){return '<div style="display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:7px;background:#14171d"><b style="flex:1;color:#ffb060">トンネル'+(k+1)+': '+t.a+' ⇄ '+t.b+'</b><span style="'+b+'" onclick="nmTunDel('+k+')">消す</span></div>';}).join('')+'</div><div style="margin-top:8px">'+(L.length<3?'<span style="'+gold+'" onclick="nmTunAdd()">＋ トンネルを地図で記録</span>':'')+'<span style="font-size:12px;color:#8fa6bd;margin-left:6px">'+L.length+'/3</span></div>';}
+/* 部隊のメニュー */
+function nmTunGo(n,sd,inn){var H=nmHexOfNode(n),eh=nmUnitAt(H,sd);if(!eh)return;var st=nmStOf(eh),N=BTG.nodes[n];
+  if(inn){st.inTun=N.nm;try{nmStSave(eh.grp);}catch(e){}nmSaLog('S59 SSR3 '+nmGrpLbl(eh.grp)+' が '+N.nm+' からトンネルに入る');btToast('トンネルに入りました(突撃フェイズに出る)');}
+  else{var to=nmTunOther(st.inTun||N.nm),j=BTG.nodes.findIndex(function(x){return x.nm===to;});if(j<0)return;var T2=nmHexOfNode(j);eh.boardId=T2.boardId;eh.col=T2.col;eh.row=T2.row;delete st.inTun;try{nmStSave(eh.grp);}catch(e){}var us=nmAllAt(T2,sd==='f'?'e':'f').length;nmSaLog('S59 SSR3 '+nmGrpLbl(eh.grp)+' がトンネルから '+to+' に出る'+(us?'(米がいる→白兵戦・独の不意打ち dr −2)':''));btToast(to+' に出ました'+(us?'。米がいるので白兵戦(独の不意打ち dr −2)':''));}
+  try{saveState();}catch(e){}BtRmClose();Draw();}
+(function(){var o=window.nmUnitMenu;if(typeof o!=='function')return;window.nmUnitMenu=function(it,H,n,sd){var r=o.apply(this,arguments);try{if(nmTunOn()&&nmTunVisible()){var eh=nmUnitAt(H,sd),N=BTG.nodes[n];if(eh&&eh.grp&&!eh.veh&&!eh.gun&&(nmGeList(eh.grp).nat||'')==='GER'){var st=nmStOf(eh),oth=nmTunOther(N.nm);
+    if(st.inTun)it.push({ic:'move',t:'トンネルから出る → '+nmTunOther(st.inTun),sub:'S59 SSR3: 突撃フェイズにもう一方の入口へ(米がいれば白兵戦)',f:"nmTunGo("+n+",'"+sd+"',0)"});
+    else if(oth)it.push({ic:'move',t:'トンネルに入る('+N.nm+' ⇄ '+oth+')',sub:'S59 SSR3: 移動フェイズの始めに入口にいる時。中では撃たれない',f:"nmTunGo("+n+",'"+sd+"',1)"});}}}catch(e){console.log('tun',e);}return r;};})();
+/* 地図: 入口の印(独のiPadだけ)と トンネル内の印 */
+function nmTunOverlaySVG(dispLayout){if(!nmTunOn())return '';var h='';try{var vis=nmTunVisible();var mk=function(nm,lbl,col){var N=BTG&&BTG.nodes.filter(function(x){return x.nm===nm;})[0];if(!N)return;var g=losColRowToGlobalCanon(N.b,N.c,N.r);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dispLayout);h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><text x="'+d.x+'" y="'+(d.y-22)+'" text-anchor="middle" font-size="12" font-weight="bold" fill="'+col+'" style="paint-order:stroke;stroke:#000;stroke-width:3px">'+lbl+'</text></g>';};
+  if(vis)nmTunL().forEach(function(t,k){mk(t.a,'⇄T'+(k+1),'#ffb060');mk(t.b,'⇄T'+(k+1),'#ffb060');});
+  ['f','e'].forEach(function(sd){nmSideList(sd).forEach(function(e){var st=e.st||{};if(st.inTun)mk(st.inTun,'トンネル内','#ff8080');});});}catch(e){}return h;}
+
 function nmSaNavalCall(v){var d=v||nmSaRoll(),sc=S.scen.sel;if(S.nmSaUse[sc].steepleGone){btToast('尖塔は破壊済みです');return;}nmSaLog('S59 SSR2 艦砲の要請 dr'+d+(d===1?' → 次の準備射撃フェイズに艦砲':' → なし'));if(d===1)S.nmSaUse[sc].navalPend=1;try{saveState();}catch(e){}btToast('dr'+d+(d===1?': 艦砲が来ます':': なし'));nmSaDraw();}
 function nmSaNavalDo(v){var A=NM_SA,d=v||nmSaRoll(),sc=S.scen.sel;S.nmSaUse[sc].navalPend=0;if(d>=3){nmSaLog('S59 SSR2 艦砲 dr'+d+' → 効果なし');A.step='call';btToast('dr'+d+': 効果なし');nmSaDraw();return;}
   if(d===1){S.nmSaUse[sc].steepleGone=1;A.cd=1;A.wd=0;A.hit=A.tgt;A.rows=[{i:A.tgt,U:nmSaUnits(A.tgt),drm:3,fp:30,dr:0}];A.step='atk';nmSaLog('S59 SSR2 艦砲 dr1 → 尖塔(と中のユニット・SW)は破壊。Q6 の他のユニットに 30FP(+3TEM)');try{saveState();}catch(e){}nmSaDraw();return;}
