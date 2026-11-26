@@ -3511,7 +3511,6 @@ function getScenarioSSRFlags(){
 // 追加時は反映ロジック(SCENARIO_SSR_FLAGS/scenShotDrm/各タブのボタン等)と必ずセットで登録すること(注記だけ先に追加しない)。
 var SSR_REFLECT={
   S36:{3:'地図の射撃・AFV タブ: T-34/85 の APCR 欠乏No.を 6 にする'}, // v1676
-  S44:{3:'地図の移動: OA vz 30(t) が隣に装甲車のいないヘクスから動き出す時、DR 8以下の始動判定を出す(失敗=このMPhは動けない)'}, // v1676
   S42:{1:'判定モードの地図: 生垣は TEM+2・越えるのに+2MF(v1667)'}, // v1674
   S41:{2:'煙幕手榴弾(地図・移動タブ): 独 4-6-7 の煙幕指数を3にする'}, // v1674
   S47:{3:'地図: ヘクスのメニュー「要塞化する」で伊が建物を5ヘクスまで要塞化(TEM+1)。印は伊のiPadだけに出る',2:'煙幕手榴弾(地図・移動タブ): 米 7-4-7 の煙幕指数+2。士気チェック・クラス低下: 米 MMC は下線付き士気(ELR で置き換えない)'}, // v1674
@@ -3540,7 +3539,12 @@ var SSR_REFLECT={
   S44:{2:'PAATCカード: 「SSR：波軍MMC +1」ボタンで反映'},
   S46:{1:'マップ(移動ルート): 道路移動ボーナスを無効にし、建物・林以外に進入する歩兵に追加+0.5MFを自動加算(煙幕の使用制限は表示のみ)',2:'マップ(LOS・標高): 丘(標高1)の開豁地部分を林として扱い、標高は0にする(丘上の道路・建物は元のまま。盤面画像は元のまま)',3:'降雪の状態はこのSSR直下の「降雪中」ボタンで切替。降雪中は、射程6ヘクス以下の射撃に+1、7ヘクス以上に+2のDRMを自動加算(射撃・砲撃/戦車・対戦車タブ。FFMOは打ち消さず、残存火力・阻止射撃には適用しない。射程は射撃タブでは先頭グループの射程)'}
 };
-try{SSR_REFLECT.S20=Object.assign({},SSR_REFLECT.S20,SSR_REFLECT.S20b);delete SSR_REFLECT.S20b;}catch(e){} /* v1674: S20 が2回書かれていて SSR4 の反映済みが消えていた */
+try{SSR_REFLECT.S20=Object.assign({},SSR_REFLECT.S20,SSR_REFLECT.S20b);delete SSR_REFLECT.S20b;}catch(e){}
+try{SSR_REFLECT.S44=Object.assign({},SSR_REFLECT.S44,{3:'地図の移動: OA vz 30(t) が隣に装甲車のいないヘクスから動き出す時、DR 8以下の始動判定を出す(失敗=このMPhは動けない)'}); /* v1676(v1677 で重複を直した) */
+  SSR_REFLECT.S35=Object.assign({},SSR_REFLECT.S35,{5:'SSR の窓の「▶ 判定」: ヘクスを地図で選ぶ→dr(1・2 で効果、目標は無作為)',6:'SSR の窓の「▶ 判定」: ヘクスを地図で選ぶ→To Hit DR→歩兵 36FP / AFV の TK・直撃'}); /* v1677 */
+  SSR_REFLECT.S59=Object.assign({},SSR_REFLECT.S59,{2:'SSR の窓の「▶ 判定」: RtPh の dr → 準備射撃フェイズの艦砲(1=尖塔破壊・2=ずれて 30FP)'});
+  SSR_REFLECT.S41=Object.assign({},SSR_REFLECT.S41,{1:'SSR の窓の「▶ 判定」: 着弾ヘクスを地図で選ぶ→ずれの dr→着弾と周り6ヘクスに 16FP(林は −1)'});
+  SSR_REFLECT.S43=Object.assign({},SSR_REFLECT.S43,{2:'SSR の窓の「▶ 判定」: 着弾ヘクスを地図で選ぶ→ずれの dr→着弾と周り6ヘクスに 16FP(林は −1)・使った回数/3'});}catch(e){} /* v1674: S20 が2回書かれていて SSR4 の反映済みが消えていた */
 // 降雪(S4/S46): 判定時の追加DRM。状態はS.scenSnow(シナリオタブのボタンで切替)。
 // 不意打ち(Ambush)のシナリオSSR: S18(露エリート/1st Line -1)、S27(ニュージーランド軍MMC/SMC -1)。該当しなければnull。
 function ambSsrLabel(){
@@ -43786,6 +43790,74 @@ S36:{v:'ソ連が北端から合計 20VP 以上を脱出させた時点で勝ち
  'ソの T-34/85 の APCR 枯渇ナンバーは 6']}
 };
 
+/* v1677(ダルマ「対応可能?」→「実施」手間「中」): 判定モードで使う SSR の判定窓(nmSa)。SSR の窓の項目の「▶ 判定」から開く。
+   事前砲撃(S41 SSR1・S43 SSR2): 着弾ヘクスを地図で選ぶ→色 dr 5・6 なら白 dr の向きへ1ヘクスずれる(1=ヘクス番号の上、時計回り)→着弾と周り6ヘクスに 16FP(迫撃砲: 林は −1)。
+   狙撃(S35 SSR5)・シュトゥーカ(S35 SSR6)・艦砲(S59 SSR2)。結果は表示とログ(ユニットへの反映は今までどおり手で) */
+var NM_SA=null,NM_SA_TAP=0;
+var NM_SSR_ACT={S41:{1:'barrage3'},S43:{2:'barrage1'},S35:{5:'sniper',6:'stuka'},S59:{2:'naval'}};
+function nmSaKinds(){var sc=S.scen&&S.scen.sel;return (window.NM_SSRACT!==false&&NM_SSR_ACT[sc])||{};}
+function nmSaRoll(n){return 1+Math.floor(Math.random()*6);}
+function nmSaNbDir(i,d){var N=BTG.nodes[i];if(!N)return null;var up=losColRowToGlobalCanonPrecise(N.b,N.c,N.r-1);if(!up)return null;var a1=Math.atan2(up.y-N.y,up.x-N.x),want=a1+(d-1)*Math.PI/3,best=null,bd=9;
+  (N.nb||[]).forEach(function(j){var M=BTG.nodes[j];var a=Math.atan2(M.y-N.y,M.x-N.x),df=Math.abs(Math.atan2(Math.sin(a-want),Math.cos(a-want)));if(df<bd){bd=df;best=j;}});return bd<0.35?best:-1;}
+function nmSaUnits(i){var H=nmHexOfNode(i),o=[];['f','e'].forEach(function(sd){nmAllAt(H,sd).forEach(function(e){var nm='';try{nm=e.veh?nmAfvName(nmAfv(e.veh)):(e.gun?nmGunName(nmGun(e.gun)):(e.grp?nmGrpText(e.grp):'マーカー'));}catch(x){}o.push({sd:sd,eh:e,nm:nm,veh:!!e.veh});});});return o;}
+function nmSaTemMtr(i){var N=BTG.nodes[i];if(!N)return 0;if(/Woods/.test(N.terr||''))return -1;return N.tem||0;}
+function nmSaIft(fp,dr,drm){var f=dr+drm,ix=f<=0?0:(f>=15?15:f);return IFT[ix][ci(fp)];}
+function nmSaOpen(kind,ssrNo){var o=document.getElementById('nmScnTxt');if(o)o.remove();NM_SA={kind:kind,ssr:ssrNo,step:'pick',tgt:null,hit:null,cd:0,wd:0,rows:null,log:[]};
+  var sc=S.scen.sel;if(!S.nmSaUse)S.nmSaUse={};if(!S.nmSaUse[sc])S.nmSaUse[sc]={};
+  if(kind==='naval'){NM_SA.step='call';}
+  btEnsureGraph().then(function(){nmSaDraw();});}
+function nmSaClose(){NM_SA_TAP=0;NM_SA=null;var o=document.getElementById('nmSa');if(o)o.remove();}
+function nmSaArm(){NM_SA_TAP=1;var o=document.getElementById('nmSa');if(o)o.style.display='none';btToast(T('ヘクスをタップ'));}
+function nmSaTapAt(cx,cy){if(!NM_SA_TAP||!NM_SA)return false;var hx=losHexAtClient(cx,cy);if(!hx)return true;var n=null;try{n=btNodeOf(hx.boardId,hx.col,hx.row);}catch(e){}if(n==null||n<0)return true;NM_SA_TAP=0;NM_SA.tgt=n;NM_SA.hit=null;NM_SA.rows=null;NM_SA.cd=0;NM_SA.wd=0;NM_SA.step='roll';var o=document.getElementById('nmSa');if(o)o.style.display='flex';nmSaDraw();return true;}
+function nmSaLog(t,col){try{logResult(function(){return {tabLbl:'MAP SSR',text:t,color:col||'#c8a032',detail:null};});}catch(e){}}
+/* 事前砲撃・艦砲のずれ */
+function nmSaDrift(cd,wd){var A=NM_SA;A.cd=cd;A.wd=wd;var to=A.tgt;if(A.kind==='naval'){to=nmSaNbDir(A.tgt,wd);}else if(cd>=5){to=nmSaNbDir(A.tgt,wd);}A.hit=to;
+  var hs=to!=null&&to>=0?[to].concat(A.kind==='naval'?[]:BTG.nodes[to].nb):[];var fp=A.kind==='naval'?30:16;
+  A.rows=hs.map(function(i){var U=nmSaUnits(i),drm=A.kind==='naval'?(BTG.nodes[i].tem||0):nmSaTemMtr(i);return {i:i,U:U,drm:drm,fp:fp,dr:0};});A.step='atk';
+  nmSaLog(nmSaTitle()+': '+BTG.nodes[A.tgt].nm+(A.kind==='naval'?' 白dr'+wd:' 色dr'+cd+'・白dr'+wd)+' → '+(to>=0?BTG.nodes[to].nm+(to!==A.tgt?'(ずれた)':''):'盤外'));nmSaDraw();}
+function nmSaAtkRoll(k,dr){var A=NM_SA,r=A.rows[k];if(!r)return;r.dr=dr||(nmSaRoll()+nmSaRoll());r.res=nmSaIft(r.fp,r.dr,r.drm);nmSaLog(nmSaTitle()+' '+BTG.nodes[r.i].nm+' '+r.fp+'FP DR'+r.dr+(r.drm?(r.drm>0?'+':'')+r.drm:'')+' → '+r.res+(r.U.length?'('+r.U.map(function(u){return u.nm;}).join('・')+')':''),'#c8a032');nmSaDraw();}
+function nmSaAtkAll(){var A=NM_SA;A.rows.forEach(function(r,k){if(!r.dr&&r.U.length)nmSaAtkRoll(k);});nmSaDraw();}
+function nmSaTitle(){var A=NM_SA;return ({barrage3:'S41 SSR1 事前砲撃',barrage1:'S43 SSR2 独の事前砲撃',sniper:'S35 SSR5 ソの狙撃',stuka:'S35 SSR6 シュトゥーカ',naval:'S59 SSR2 艦砲射撃'})[A.kind]||'SSR';}
+function nmSaUse(k,d){var sc=S.scen.sel,U=S.nmSaUse[sc];U[k]=(U[k]||0)+(d||1);try{saveState();}catch(e){}}
+function nmSaDraw(){var A=NM_SA;if(!A)return;var o=document.getElementById('nmSa');if(!o){o=document.createElement('div');o.id='nmSa';o.style.cssText='position:fixed;inset:0;z-index:100065;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,sans-serif';o.onclick=function(e){if(e.target===o)nmSaClose();};document.body.appendChild(o);}
+  var b='display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;margin:2px;padding:0 8px;border-radius:7px;background:#262d38;color:#e8eef4;font-weight:700;cursor:pointer;border:1px solid #39414f;font-size:14px';
+  var gold=b+';background:#2a2416;border-color:#c8a032;color:#ffd060';
+  var sc=S.scen.sel,use=(S.nmSaUse&&S.nmSaUse[sc])||{},h='',N=A.tgt!=null?BTG.nodes[A.tgt]:null;
+  var note=({barrage3:'T1 米の準備射撃フェイズの最初に3ヘクス。ヘクスごとにこの窓で1回ずつ',barrage1:'独の準備射撃/防御射撃フェイズの始めに、記録した2ヘクスのどちらかへ(ゲーム中3回まで)',sniper:'ソの防御射撃フェイズごとに1回。dr 1・2 で効果',stuka:'独の防御射撃フェイズごとに1回',naval:'各 RtPh の始めに dr、1 なら次の準備射撃フェイズの最初に艦砲'})[A.kind]||'';
+  var cnt=A.kind==='barrage1'?'　使った回数 '+(use.barrage1||0)+'/3':(A.kind==='barrage3'?'　使った回数 '+(use.barrage3||0)+'/3':'');
+  h+='<div style="font-size:11px;letter-spacing:3px;color:#3ca878;font-weight:900">SSR'+A.ssr+' · '+sc+'</div><div style="font-size:17px;margin:2px 0 6px">'+nmSaTitle().replace(/^S\d+ SSR\d+ /,'')+'</div><div style="font-size:12px;color:#8fa6bd;margin-bottom:10px">'+note+cnt+'</div>';
+  if(A.kind==='naval'&&A.step==='call'){var pend=!!use.navalPend;h+='<div style="font-size:13px;margin-bottom:6px">'+(pend?'<b style="color:#ffd24a">艦砲の要請が通っています</b> → 準備射撃フェイズの最初に解決':'RtPh の始めの dr(1 で次の準備射撃フェイズに艦砲)')+'</div>';
+    if(!pend)h+='<span style="'+gold+'" onclick="nmSaNavalCall(0)">dr を振る</span> '+[1,2,3,4,5,6].map(function(v){return '<span style="'+b+'" onclick="nmSaNavalCall('+v+')">'+v+'</span>';}).join('');
+    else h+='<span style="'+gold+'" onclick="NM_SA.tgt=BTG.nodes.findIndex(function(x){return x.nm===\'pQ6\';});NM_SA.step=\'roll\';nmSaDraw()">艦砲を解決する(Q6)</span> <span style="'+b+'" onclick="S.nmSaUse[S.scen.sel].navalPend=0;nmSaDraw()">取り消す</span>';
+    if(use.steepleGone)h+='<div style="font-size:12px;color:#ff8080;margin-top:6px">尖塔は破壊済み(もう振れません)</div>';}
+  if(A.kind!=='naval'){h+='<div style="display:flex;align-items:center;gap:8px;margin:4px 0 8px"><span style="flex:1;font-size:14px">'+(A.kind==='sniper'||A.kind==='stuka'?'目標ヘクス':'着弾ヘクス')+': <b style="color:#ffd24a">'+(N?N.nm:'—')+'</b></span><span style="'+gold+'" onclick="nmSaArm()">地図で選ぶ</span></div>';}
+  if(N&&A.step!=='pick'&&A.step!=='call'){
+    if(A.kind==='barrage3'||A.kind==='barrage1'||A.kind==='naval'){
+      if(A.step==='roll'){if(A.kind==='naval'){h+='<div style="font-size:13px;margin-bottom:4px">1個のダイス: 1=尖塔破壊・Q6 の他は 30FP(+3TEM) / 2=Q6 から白 dr の向きへずれて 30FP / 3〜6=効果なし</div><span style="'+gold+'" onclick="nmSaNavalDo(0)">ダイスを振る</span> '+[1,2,3,4,5,6].map(function(v){return '<span style="'+b+'" onclick="nmSaNavalDo('+v+')">'+v+'</span>';}).join('');}
+        else{h+='<div style="font-size:13px;margin-bottom:4px">色 dr 1〜4=そのまま / 5・6=白 dr の向きへ1ヘクスずれる(1=ヘクス番号の上、時計回り)</div><span style="'+gold+'" onclick="nmSaDrift(nmSaRoll(),nmSaRoll())">ダイスを振る</span><div style="font-size:12px;color:#8899aa;margin-top:6px">出目を入れる(色 / 白)</div><div><select id="nmSaCd" style="font-size:15px">'+[1,2,3,4,5,6].map(function(v){return '<option>'+v+'</option>';}).join('')+'</select> / <select id="nmSaWd" style="font-size:15px">'+[1,2,3,4,5,6].map(function(v){return '<option>'+v+'</option>';}).join('')+'</select> <span style="'+b+'" onclick="nmSaDrift(+document.getElementById(\'nmSaCd\').value,+document.getElementById(\'nmSaWd\').value)">決める</span></div>';}}
+      if(A.step==='atk'){var hit=A.hit;h+='<div style="font-size:14px;margin:4px 0">'+(A.kind==='naval'?'白 dr '+A.wd:'色 dr '+A.cd+'・白 dr '+A.wd)+' → 着弾 <b style="color:#ffd24a">'+(hit!=null&&hit>=0?BTG.nodes[hit].nm:'盤外(効果なし)')+'</b>'+(hit!=null&&hit>=0&&hit!==A.tgt?'(ずれた)':'')+'</div>';
+        if(A.rows&&A.rows.length){h+='<div style="font-size:12px;color:#8fa6bd;margin-bottom:4px">'+(A.rows[0].fp)+'FP の攻撃(ヘクスごとに DR。'+(A.kind==='naval'?'通常の TEM':'TEM あり・林は迫撃砲の空中炸裂で −1')+')</div><div style="display:grid;gap:4px">'+A.rows.map(function(r,k){var M=BTG.nodes[r.i];return '<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;background:#14171d'+(r.U.length?'':';opacity:.55')+'"><b style="flex:0 0 52px">'+M.nm+'</b><span style="flex:1;font-size:12px">'+(r.U.length?r.U.map(function(u){return '<span style="color:'+NM_SIDE_LBL[u.sd].col+'">'+u.nm+'</span>';}).join('・'):'ユニットなし')+' <span style="color:#8899aa">('+(r.drm>=0?'+':'')+r.drm+')</span></span>'+(r.dr?'<span style="font-size:13px">DR'+r.dr+' → <b style="color:#ffd24a">'+r.res+'</b></span>':(r.U.length?'<span style="'+b+'" onclick="nmSaAtkRoll('+k+')">DR</span><select onchange="nmSaAtkRoll('+k+',+this.value)" style="font-size:14px"><option>目</option>'+[2,3,4,5,6,7,8,9,10,11,12].map(function(v){return '<option>'+v+'</option>';}).join('')+'</select>':''))+'</div>';}).join('')+'</div>';
+          if(A.rows.some(function(r){return r.U.length&&!r.dr;}))h+='<div style="margin-top:6px"><span style="'+gold+'" onclick="nmSaAtkAll()">ユニットのいるヘクスを全部振る</span></div>';}
+        h+='<div style="font-size:12px;color:#8899aa;margin-top:8px">結果(KIA・K・MC・PTC)はユニットに手で反映してください</div>';
+        if(A.kind!=='naval')h+='<div style="margin-top:8px"><span style="'+b+'" onclick="nmSaUse(\''+A.kind+'\');NM_SA.tgt=null;NM_SA.step=\'pick\';NM_SA.rows=null;nmSaDraw()">次の着弾(使った回数+1)</span></div>';}}
+    if(A.kind==='sniper'){h+=A.res?'<div style="font-size:14px;margin:4px 0">dr '+A.res.dr+' → <b style="color:#ffd24a">'+A.res.t+'</b></div>':'<span style="'+gold+'" onclick="nmSaSniper(0)">dr を振る</span> '+[1,2,3,4,5,6].map(function(v){return '<span style="'+b+'" onclick="nmSaSniper('+v+')">'+v+'</span>';}).join('');}
+    if(A.kind==='stuka'){h+=A.res?'<div style="font-size:14px;margin:4px 0;line-height:1.7">'+A.res.t+'</div>':'<div style="font-size:12px;color:#8fa6bd;margin-bottom:4px">To Hit DR: 歩兵は 8以下で 36FP / AFV は 6〜10 で TK(T-34=7・KV-1=6)、5以下は直撃で除去</div><span style="'+gold+'" onclick="nmSaStuka(0)">DR を振る</span><select onchange="nmSaStuka(+this.value)" style="font-size:14px"><option>目</option>'+[2,3,4,5,6,7,8,9,10,11,12].map(function(v){return '<option>'+v+'</option>';}).join('')+'</select>';}
+  }
+  h+='<div style="text-align:right;margin-top:12px"><span style="'+b+'" onclick="nmSaClose()">閉じる</span></div>';
+  o.innerHTML='<div onclick="event.stopPropagation()" style="width:min(560px,94vw);max-height:84vh;overflow:auto;background:#1c1f27;border-radius:12px;padding:14px 16px;color:#e8eef4;box-shadow:0 0 0 1px #2a2f3a,0 16px 48px rgba(0,0,0,.7)">'+h+'</div>';}
+function nmSaNavalCall(v){var d=v||nmSaRoll(),sc=S.scen.sel;if(S.nmSaUse[sc].steepleGone){btToast('尖塔は破壊済みです');return;}nmSaLog('S59 SSR2 艦砲の要請 dr'+d+(d===1?' → 次の準備射撃フェイズに艦砲':' → なし'));if(d===1)S.nmSaUse[sc].navalPend=1;try{saveState();}catch(e){}btToast('dr'+d+(d===1?': 艦砲が来ます':': なし'));nmSaDraw();}
+function nmSaNavalDo(v){var A=NM_SA,d=v||nmSaRoll(),sc=S.scen.sel;S.nmSaUse[sc].navalPend=0;if(d>=3){nmSaLog('S59 SSR2 艦砲 dr'+d+' → 効果なし');A.step='call';btToast('dr'+d+': 効果なし');nmSaDraw();return;}
+  if(d===1){S.nmSaUse[sc].steepleGone=1;A.cd=1;A.wd=0;A.hit=A.tgt;A.rows=[{i:A.tgt,U:nmSaUnits(A.tgt),drm:3,fp:30,dr:0}];A.step='atk';nmSaLog('S59 SSR2 艦砲 dr1 → 尖塔(と中のユニット・SW)は破壊。Q6 の他のユニットに 30FP(+3TEM)');try{saveState();}catch(e){}nmSaDraw();return;}
+  var w=nmSaRoll();nmSaDrift(0,w);}
+function nmSaSniper(v){var A=NM_SA,d=v||nmSaRoll(),U=nmSaUnits(A.tgt).filter(function(u){return !(u.veh&&!u.eh.ce);}),pick=U.length?U[Math.floor(Math.random()*U.length)]:null;
+  var t=d===1?'指揮官は除去 / MMC は混乱 / CE の AFV 乗員は STUN':(d===2?'指揮官は負傷 / MMC は釘付け / CE の AFV 乗員は STUN':'効果なし');
+  A.res={dr:d,t:t+(d<=2&&pick?'<div style="font-size:12px;color:#cfd8e3">無作為に選んだ目標: '+pick.nm+'</div>':'')};nmSaLog('S35 SSR5 狙撃 '+BTG.nodes[A.tgt].nm+' dr'+d+' → '+t+(d<=2&&pick?'(目標 '+pick.nm+')':''));nmSaDraw();}
+function nmSaStuka(v){var A=NM_SA,d=v||(nmSaRoll()+nmSaRoll()),U=nmSaUnits(A.tgt),L=[],N=BTG.nodes[A.tgt];
+  var inf=U.filter(function(u){return !u.veh;}),afv=U.filter(function(u){return u.veh;});
+  if(inf.length||!afv.length){if(d<=8){var d2=nmSaRoll()+nmSaRoll(),r=nmSaIft(36,d2,N.tem||0);L.push('歩兵: 命中 → 36FP DR'+d2+(N.tem?'+'+N.tem:'')+' → <b style="color:#ffd24a">'+r+'</b>');}else L.push('歩兵: ミス(DR'+d+' > 8)');}
+  afv.forEach(function(u){var nm=u.nm||'AFV',tk=/KV/.test(nm)?6:7;if(d<=5)L.push(nm+': 直撃 → <b style="color:#ff8080">除去</b>');else if(d<=10){var k=nmSaRoll()+nmSaRoll();L.push(nm+': 命中 → TK '+tk+' に DR'+k+' → <b style="color:#ffd24a">'+(k<tk?'撃破':(k===tk?'Shock':'効果なし'))+'</b>');}else L.push(nm+': ミス');});
+  A.res={t:'To Hit DR '+d+'<br>'+L.join('<br>')};nmSaLog('S35 SSR6 シュトゥーカ '+N.nm+' DR'+d+' / '+L.join(' / ').replace(/<[^>]+>/g,''));nmSaDraw();}
+
 function nmSumHTML(t){var L=String(t||'').split('\n');return L.map(function(x,i){var b=/^・/.test(x);x=x.replace(/^・/,'').replace(/【([^】]+)】/,'<b style="color:#ffe9a3;font-weight:700">$1</b>　');return '<div style="'+(b?'display:flex;gap:6px;margin-top:3px':(i?'margin-top:3px':''))+'">'+(b?'<span style="color:#8899aa">・</span><span style="flex:1">'+x+'</span>':x)+'</div>';}).join('');}
 function nmScnTxtPop(kind){var c=curScen();if(!c)return;var o=document.getElementById('nmScnTxt');if(o)o.remove();o=document.createElement('div');o.id='nmScnTxt';o.style.cssText='position:fixed;inset:0;z-index:100060;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,sans-serif';o.onclick=function(e){if(e.target===o)o.remove();};
   /* v1187(ダルマ指示「SSR・勝利条件 枠なし・閉じるマーク・背景を細かいドット・シックにカッコよく」sample-scntxt2 ミックス3): アイコンのカプセル+英字タグ(SSR=緑/VICTORY=金)の見出し、右上に丸い✕、項目は暗いカード(大きい番号・アプリ対応のピル)、勝利条件は「〜の勝利」を金色 */
@@ -43796,7 +43868,7 @@ function nmScnTxtPop(kind){var c=curScen();if(!c)return;var o=document.getElemen
   var hl=function(t){return String(t||'').replace(/((?:ソ連|ソ連|独軍|独軍|米軍|米軍|英軍|英軍|仏軍(FFI)|仏軍|伊軍|日本軍)?の?勝利)/,'<b style="color:#ffd24a">$1</b>');};
   var SM=window.NM_SUMTXT!==false&&SCN_SUM[c.id],full=!SM||!!S.nmTxtFull;if(SM&&!full)hl=function(t){return nmSumHTML(t).replace(/((?:米|独|ソ連|ソ|伊|ポーランド|スロバキア|仏|英)?の勝ち|で勝ち|ば勝ち)/,'<b style="color:#ffd24a">$1</b>');};
   var swB=SM?'<div style="display:flex;justify-content:flex-end;gap:6px;margin:-6px 0 10px"><span onclick="S.nmTxtFull='+(full?'false':'true')+';try{saveState();}catch(e){}nmScnTxtPop(\''+kind+'\')" style="cursor:pointer;font-size:12px;padding:4px 12px;border-radius:14px;border:1px solid #4a5566;background:#1b222c;color:#cfd8e3">'+(full?'↩ 要約を見る':'原文の訳を見る')+'</span></div>':'';
-  var body=swB+(ssr?'<div style="display:grid;gap:8px">'+(SM&&!full?SM.s:c.ssr||[]).map(function(x,i){if(SM&&!full)x=nmSumHTML(x);var ok=!!R[i+1];return '<div style="display:flex;gap:12px;align-items:center;padding:10px 14px;'+card+'"><b style="flex:0 0 22px;font-size:20px;color:'+(ok?'#3ca878':'#ffd070')+';font-weight:900;text-align:center">'+(i+1)+'</b><div style="flex:1;font-size:13px;line-height:1.6">'+x+'</div>'+(ok?pill:'')+'</div>';}).join('')+'</div>'
+  var body=swB+(ssr?'<div style="display:grid;gap:8px">'+(SM&&!full?SM.s:c.ssr||[]).map(function(x,i){if(SM&&!full)x=nmSumHTML(x);var ok=!!R[i+1];return '<div style="display:flex;gap:12px;align-items:center;padding:10px 14px;'+card+'"><b style="flex:0 0 22px;font-size:20px;color:'+(ok?'#3ca878':'#ffd070')+';font-weight:900;text-align:center">'+(i+1)+'</b><div style="flex:1;font-size:13px;line-height:1.6">'+x+'</div>'+(ok?pill:'')+(nmSaKinds()[i+1]?'<span onclick="nmSaOpen(\''+nmSaKinds()[i+1]+'\','+(i+1)+')" style="flex:0 0 auto;cursor:pointer;font-size:12px;font-weight:800;color:#14110a;background:#ffd24a;border-radius:9px;padding:4px 10px">▶ 判定</span>':'')+'</div>';}).join('')+'</div>'
     :'<div style="padding:14px 16px;'+card+'font-size:14.5px;line-height:1.8;font-weight:400">'+hl(SM&&!full?SM.v:c.vic||'')+'</div>');
   o.innerHTML='<div onclick="event.stopPropagation()" style="width:min(680px,92vw);max-height:80vh;overflow:auto;border:0;border-radius:10px;color:#e8eef4;padding:14px 18px;background-color:#1c1f27;background-image:radial-gradient(circle,rgba(0,0,0,.667) 1px,rgba(0,0,0,0) 1.35px),radial-gradient(circle at 50% 70%,rgba(255,255,255,.08) 1px,rgba(0,0,0,0) 1.4px);background-size:4px 4px,4px 4px;box-shadow:0 0 0 1px #2a2f3a,0 16px 48px rgba(0,0,0,.7)"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><span style="flex:0 0 auto;width:44px;height:40px;border-radius:20px;background:#1b222c;border:1px solid #4a5566;display:flex;align-items:center;justify-content:center">'+ic+'</span><div style="flex:1;min-width:0"><div style="font-size:11px;letter-spacing:3px;color:'+acc+';font-weight:900">'+tag+' · '+c.id+'</div><div style="font-size:17px;font-weight:400;margin-top:1px">'+(c.jp||'')+'</div></div><button class="nmRnd" data-nmmk="close" title="'+T('閉じる')+'" aria-label="'+T('閉じる')+'" onclick="document.getElementById(\'nmScnTxt\').remove()"><span>✕</span></button></div>'+body+'</div>';document.body.appendChild(o);}
 function nmBotSet(w,k){if(w==='L')S.nmBotL=k;else if(w==='M')S.nmBotM=k;else S.nmBotR=k;try{saveState();}catch(e){}try{nmFtBotFill();}catch(e){}var m=document.getElementById('nmFtMn');if(m){var b=document.getElementById('nmFtMenuB');m.remove();if(b){nmFtMenu(b);var d=document.querySelector('#nmFtMn details:last-of-type');try{[...document.querySelectorAll('#nmFtMn details')].forEach(function(x){if(/表示の設定/.test(x.querySelector('summary').textContent))x.open=true;});}catch(e){}}}}
@@ -52360,7 +52432,7 @@ function LosMapClick(ev){
   // パンモード中はマップ移動専用。地点A/Bの指定は行わない(誤操作防止のハードガード)
   if(S_LOS.panMode)return;
   if(NM_HQ_TAPFN&&ev.clientX!=null){if(nmHqTapAt(ev.clientX,ev.clientY))return;} /* v1449 */
-  if(NM_RAQ_TAP&&ev.clientX!=null){if(nmRaqTapAt(ev.clientX,ev.clientY))return;} /* v1450 */
+  if(NM_RAQ_TAP&&ev.clientX!=null){if(nmRaqTapAt(ev.clientX,ev.clientY))return;} /* v1450 */   if(typeof NM_SA_TAP!=='undefined'&&NM_SA_TAP&&ev.clientX!=null){if(nmSaTapAt(ev.clientX,ev.clientY))return;} /* v1677 */
   if(window.NM_ABMV&&ev.clientX!=null&&!window.NM_IJ){if(nmAbMvTap(ev.clientX,ev.clientY))return;}
   if(typeof nmLPEaten==='function'&&nmLPEaten()){BT_LP.eat=false;return;} /* v342: 長押しでメニューを出した後のタップは捨てる */
   if(NM_TOOL&&ev.clientX!=null){var tH=losHexAtClient(ev.clientX,ev.clientY);if(tH){var tY=window.pageYOffset||0;NM_DBL=null;nmToolRunN(btNodeOf(tH.boardId,tH.col,tH.row));window.scrollTo(0,tY);}return;} /* v500(バグ修正 ダルマ報告「攻撃するヘクスをタップのマーク マップでタップするとマークが変わってしまう」): ボタンを選んでいる時のタップは、マーカーの選び直し・ダブルタップより先にボタンの操作にする */
