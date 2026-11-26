@@ -40357,13 +40357,13 @@ function nmMvStart(n,sd){var H=nmHexOfNode(n),eh=nmUnitAt(H,sd);if(!eh)return;Bt
 function nmMvSync(){var M=NM_MOVE;if(!M||!M.live)return;if(!S_LOS.routeMode){NM_MOVE=null;return;}var rh=S_LOS.route&&S_LOS.route.hexes;if(!rh||!rh.length)return;var L=rh[rh.length-1];
   if(nmSideList(M.sd).indexOf(M.eh)<0){NM_MOVE=null;return;}var ob0=M.eh.boardId;M.eh.boardId=L.boardId;M.eh.col=L.col;M.eh.row=L.row;if(M.eh.veh)M.eh.ce=!!S_LOS.mfVehicleCE;
   /* v611(バグ修正 ダルマ報告「移動で停止したら車両の方向が変わってしまった」): マーカーの向きは盤面ごとの番号。移動で動いた向き(経路の向き)をマーカーへ反映し、盤をまたいだら砲塔の向きも盤の回転差で変換する */
-  try{if(M.eh.veh){if(ob0!==L.boardId&&M.eh.tca!=null)M.eh.tca=(((M.eh.tca+Math.round((losBoardRotById(ob0)-losBoardRotById(L.boardId))/60))%6)+6)%6;if(L.vca!=null)M.eh.facing=L.vca;}}catch(e){}}
+  try{if(M.eh.veh){if(ob0!==L.boardId&&M.eh.tca!=null)M.eh.tca=(((M.eh.tca+Math.round((losBoardRotById(ob0)-losBoardRotById(L.boardId))/60))%6)+6)%6;if(L.vca!=null)M.eh.facing=L.vca;}}catch(e){}if(window.NM_SEAMFB!==false)M.eh.fb=M.eh.boardId;} /* v1663(ダルマ「移動でマップの境目で車両や砲の向きが変わってしまう」): ここで向きを新しい盤の番号にしたので、nmFaceSync が同じ換算をもう一度しないよう記録した盤も更新 */
 function nmMvUsed(){var rh=S_LOS.route&&S_LOS.route.hexes;if(!rh||!rh.length)return 0;var L=rh[rh.length-1];return (L.moveCum!=null?L.moveCum:(S_LOS.route.totalCost||0))+((NM_MOVE&&NM_MOVE.extra)||0);} /* v831: 停止・発進のMPも使用に入れる */
 function nmMvEnd(mode){var M=NM_MOVE;if(!M)return;nmMvSync();var eh=M.eh,st=nmStOf(eh),u=nmMvUsed();
   if(eh.veh){if(mode==='mot')st.mv='mot';else st.mv=u>3?4:(u>1?3:(u>0?1:0));}else if(u>0)st.mv=1;
   NM_MOVE=null;if(S_LOS.routeMode)LosToggleRouteMode();S_LOS.route=null;try{saveState();}catch(e){}BtRmClose();Draw();
   btToast(eh.veh?('止まりました: '+(mode==='mot'?'Motion':(u+'MP使用'))):('止まりました: '+u+'MF使用'));}
-function nmMvCancel(){var M=NM_MOVE;if(!M)return;var e=M.eh,o=M.orig;e.boardId=o.b;e.col=o.c;e.row=o.r;e.facing=o.f;e.tca=o.t;e.st=o.st;e.ce=o.ce;NM_MOVE=null;if(S_LOS.routeMode)LosToggleRouteMode();S_LOS.route=null;try{saveState();}catch(e2){}BtRmClose();Draw();btToast('移動を取り消しました');}
+function nmMvCancel(){var M=NM_MOVE;if(!M)return;var e=M.eh,o=M.orig;e.boardId=o.b;e.col=o.c;e.row=o.r;e.facing=o.f;e.tca=o.t;e.fb=o.b;e.st=o.st;e.ce=o.ce;NM_MOVE=null;if(S_LOS.routeMode)LosToggleRouteMode();S_LOS.route=null;try{saveState();}catch(e2){}BtRmClose();Draw();btToast('移動を取り消しました');}
 function nmCeBlockMsg(eh){try{var st=(eh&&eh.st)||{};if(st.stun||st.shock)return '麻痺・Shockの車両はCEにできません(7.7)';if(st.fired==='準備')return '準備射撃(PFPh)で撃った車両は、このMPhにハッチを切り替えられません(7.7)';if(st.fired==='移動射撃')return '移動中射撃をした車両は、このMPhにハッチを切り替えられません(7.7)';}catch(e){}return '';} /* v1135 */
 function nmMvCE(n,v){var M=NM_MOVE;if(!M)return;v=!!v;if(!!M.eh.ce===v){btRmReopen(n);return;}var bm=nmCeBlockMsg(M.eh);if(bm&&!(v===false&&(M.eh.st||{}).stun)){btToast(bm);btRmReopen(n);return;}if(M.ceDone){btToast('ハッチの切り替えはMPh(移動フェイズ)中1回まで(7.7)');btRmReopen(n);return;}if(M.ce0===undefined)M.ce0=!!M.eh.ce;M.ceDone=1;M.eh.ce=v;try{nmRmCE(v,n);}catch(e){S_LOS.mfVehicleCE=v;btRmReopen(n);}} /* v1135: ヘクスメニューも1回まで */
 function nmMvMenu(n){var M=NM_MOVE;if(!M||!S_LOS.routeMode)return [];var eh=M.eh,v=eh.veh?nmAfv(eh.veh):null,u=nmMvUsed(),it=[],en=nmNodeOfEh(eh);
@@ -51069,7 +51069,7 @@ function nmMaRes(v,dr){if(!v||v.breakdownDR==null||!dr)return 'ok';if(dr<v.break
 function nmMaIsStall(v,dr){return nmMaRes(v,dr)==='stall';}
 function nmMaStall(){var m=S_LOS.motionAttempt,M=(typeof NM_MOVE!=='undefined')?NM_MOVE:null;if(!m||!M||!M.eh||!M.eh.veh||!m.dwd||!m.drd||m._stallDone)return;var v=nmAfv(M.eh.veh);if(!v)return;
   var dl=m.dwd+m.drd;m._stallDone=1;try{nmBkSnap('失速の前');}catch(e){}var u0=0;try{u0=nmMvUsed();}catch(e){}
-  if(u0>1){var o=M.orig;M.eh.boardId=o.b;M.eh.col=o.c;M.eh.row=o.r;M.eh.facing=o.f;M.eh.tca=o.t;} /* 動き出す前の失速なので元のヘクスへ */
+  if(u0>1){var o=M.orig;M.eh.boardId=o.b;M.eh.col=o.c;M.eh.row=o.r;M.eh.facing=o.f;M.eh.tca=o.t;M.eh.fb=o.b;} /* 動き出す前の失速なので元のヘクスへ */
   M.extra=(M.extra||0)+dl;M.stopped=true;M.stalled=(M.stalled||0)+1;var tot=v.mp||0,u=0;try{u=nmMvUsed();}catch(e){}if(!u)u=1+dl;
   if(tot&&u>=tot){var st=nmStOf(M.eh);st.mv=4;NM_MOVE=null;S_LOS.nmStallPop=false;if(S_LOS.routeMode)LosToggleRouteMode();S_LOS.route=null;try{nmStSave();}catch(e){}try{saveState();}catch(e){}try{BtRmClose();}catch(e){}Draw();btToast(nmAfvName(v)+': 失速 遅延'+dl+'MP → MPを使い切り、このMPhは終わり');return;}
   S_LOS.nmStallPop=false;try{saveState();}catch(e){}Draw();btToast(nmAfvName(v)+': 失速 遅延'+dl+'MP(使用'+u+'/'+tot+')。もう一度始動するなら「発進(1MP)」');}
