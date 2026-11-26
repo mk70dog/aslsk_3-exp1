@@ -52395,6 +52395,7 @@ function LosMapClick(ev){
       // VCAをその新しい向きに更新する。起点直後の最初の移動(前段のVCAが未確立)は、進入方向へ
       // 無償で正対する(初期向きの設定として扱う)。盤面をまたぐ移動はVCAの引継ぎを行わない
       // (安全側でコスト0・向き不明のまま)。
+      try{if(isVeh&&hexes.length===1&&last.vca==null&&window.NM_MVFACE!==false&&typeof NM_MOVE!=='undefined'&&NM_MOVE&&NM_MOVE.eh&&NM_MOVE.eh.veh&&NM_MOVE.eh.facing!=null&&NM_MOVE.eh.boardId===last.boardId){last.vca=NM_MOVE.eh.facing;last.vcaAuto=false;}}catch(e){} /* v1661(ダルマ「移動すると必要がないのに勝手に車両の方角が変わる」): マーカーの車両を動かす時、起点の向きをマーカーの向きにする。今までは起点の向きが空で、最初の1歩の方向へ無償で向き直っていた(正面2ヘクスのどちらへ進んでも向きが変わり、向きを変えるMPも数えていなかった) */
       var vcaTurnCost=0,vcaTurnHexspines=0,newVCA=last.vca;
       if(isVeh){
         var curDir=null,lastVcaCur=last.vca;
