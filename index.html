@@ -37405,7 +37405,8 @@ function nmDragPick(cx,cy){
   if(typeof btActive!=='function'||S_LOS.panMode||S_LOS.routeMode&&false)return null;
   var hx=losHexAtClient(cx,cy);if(!hx)return null;
   var f=nmUnitAt(hx,'f'),e=nmUnitAt(hx,'e');
-  var fa=nmAllAt(hx,'f'),ea=nmAllAt(hx,'e');if(fa.length)return {sd:'f',ref:fa[fa.length-1]};if(ea.length)return {sd:'e',ref:ea[ea.length-1]};return null; /* v419: いちばん上(最後)のマーカー */
+  var fa=nmAllAt(hx,'f'),ea=nmAllAt(hx,'e');var pf=window.NM_DRAG_PREF;if(pf&&window.NM_STKTOP!==false){if(fa.indexOf(pf)>=0)return {sd:'f',ref:pf};if(ea.indexOf(pf)>=0)return {sd:'e',ref:pf};} /* v1680: メニューで選んでいる部隊を動かす */
+  if(fa.length)return {sd:'f',ref:fa[fa.length-1]};if(ea.length)return {sd:'e',ref:ea[ea.length-1]};return null; /* v419: いちばん上(最後)のマーカー */
 }
 function nmDragGhost(x,y){
   var g=document.getElementById('nmDragG');
@@ -44645,9 +44646,11 @@ function nmRmSizeInit(){try{var box=document.querySelector('#btRm .rmBox');if(!b
   L.forEach(function(x,i){if(x&&typeof x.f==='string'&&/^nmSelK\('[fe]',\d+\);NM_RM_SUB='unit1'/.test(x.f)){last=i;var m=/^nmSelK\('([fe])',(\d+)\)/.exec(x.f),sd=m[1],k=+m[2],eh=nmAllAt(H,sd)[k],on=!!(window.NM_RM_INLEH&&eh===window.NM_RM_INLEH);
     x.f="nmRmInlTog('"+sd+"',"+k+","+n+")";x.sub=String(x.sub||'').replace('タップでこのマーカーの操作',on?'タップで閉じる':'タップで操作を下に表示');if(on){selIdx=i;x.t=String(x.t).replace(/^<span>/,'<span class="nmInlOn"><span style="color:#ffd24a">▼ </span>');}}});
   if(selIdx<0||!window.NM_RM_INLEH)return L;var eh=window.NM_RM_INLEH,sd=nmAllAt(H,'f').indexOf(eh)>=0?'f':'e',keep=NM_SEL_EH;NM_SEL_EH=eh;var u=[];nmUnitMenu(u,H,n,sd);window.NM_BQ_FORCE=eh;var BQ=null;try{BQ=nmRmBuildB(n,u,[]);}catch(e){console.log('inlB',e);}window.NM_BQ_FORCE=null;
-  var add=BQ?BQ.top.slice(1):u.slice(1);add=[{html:'<div style="flex:1 1 100%;width:100%;border-top:2px solid #ffd24a;margin:2px 0 0"></div>'}].concat(add).concat([{html:'<div style="flex:1 1 100%;width:100%;border-top:2px solid #ffd24a;margin:0 0 4px"></div>'}]);
+  var add=BQ?BQ.top.slice(1):u.slice(1);try{if(window.NM_STKTOP!==false){var SL=nmAllAt(H,sd),kk=SL.indexOf(eh),isTop=kk===SL.length-1;add.splice.apply(add,[Math.min(1,add.length),0].concat([{row:1,ic:'sel',t:'重なり<div style="font-size:11px;color:#8fa6bd">ドラッグで動くのはこの部隊</div>',btns:[[(isTop?'✓ いちばん上':'いちばん上にする'),isTop?"btToast('いちばん上です')":"nmStackTop('"+sd+"',"+kk+","+n+")"]]}]));}}catch(e){} /* v1680(ダルマ「同じヘクスの複数部隊をドラッグで移動」A・C): 選んでいる部隊をドラッグで動かす+いちばん上にする */
+  add=[{html:'<div style="flex:1 1 100%;width:100%;border-top:2px solid #ffd24a;margin:2px 0 0"></div>'}].concat(add).concat([{html:'<div style="flex:1 1 100%;width:100%;border-top:2px solid #ffd24a;margin:0 0 4px"></div>'}]);
   L.splice.apply(L,[last+1,0].concat(add)); /* 部隊の一覧の下(一覧の行は動かない) */}catch(e){console.log('inlunit',e);}return L;};})();
-function nmRmInlTog(sd,k,n){var eh=nmAllAt(NM_RM_HEX,sd)[k]||null;nmSelK(sd,k);window.NM_RM_INLEH=(window.NM_RM_INLEH===eh)?null:eh;window.NM_RM_GROW=1;btRmReopen(n);}
+function nmStackTop(sd,k,n){var H=NM_RM_HEX,eh=nmAllAt(H,sd)[k],L=nmSideList(sd);if(!eh)return;var i=L.indexOf(eh);if(i<0)return;L.splice(i,1);L.push(eh);window.NM_DRAG_PREF=eh;try{nmDbg('重なり: '+(eh.grp?nmGrpLbl(eh.grp):eh.veh||eh.gun||'')+' をいちばん上に');}catch(e){}try{saveState();}catch(e){}Draw();btRmReopen(n);btToast('いちばん上にしました');}
+function nmRmInlTog(sd,k,n){var eh=nmAllAt(NM_RM_HEX,sd)[k]||null;nmSelK(sd,k);window.NM_RM_INLEH=(window.NM_RM_INLEH===eh)?null:eh;window.NM_DRAG_PREF=window.NM_RM_INLEH||null;window.NM_RM_GROW=1;btRmReopen(n);}
 (function(){try{var st=document.createElement('style');st.id='nmInlCss';st.textContent='html:root:root:root:root #btRm .rmIt:has(.nmInlOn){outline:2px solid #ffd24a!important;outline-offset:-2px;background:#2b2610!important}';document.head.appendChild(st);}catch(e){}})();
 /* v1497(ダルマ「メニューのサイズを記憶して戻っても同じ形サイズで表示する」): メニューから判定パネル(全画面の .rmFull など)へ進んで戻った時、進む前のメニューの位置・幅・高さに戻す */
 function nmRmTopMark(){try{var b=document.querySelector('#btRm .rmBox');if(b)b.__top=nmRmIsMenu(b)&&!NM_RM_SUB&&!window.NM_FACE&&!window.NM_RM_VEH;}catch(e){}} /* 一番上のヘクス/ユニットのメニューか(方向・配置などのサブ画面は除く) */
