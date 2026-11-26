@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1666</title>
+<title>ASL SKシリーズv1667</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1666">
+<meta property="og:title" content="ASL SKシリーズv1667">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10978,7 +10978,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.866"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.867"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1667="v1667(判定モードの生垣: LOS(射撃側・目標のヘクス辺は越えて見える/他は同じ高さで遮断)、目標ヘクス辺の生垣TEM自動、ルートで生垣越え+1MF(S42は+2)";
 var APP_VERSION_HIST_v1666="v1666(射角の外の回す数(CA変更)も境界線上の幅±1.5°に(v1665 の直し漏れ)";
 var APP_VERSION_HIST_v1665="v1665(射角(CA)の境界線上の判定幅を±1.5°に(正面の2ヘクスが射角の外と判定されることがあった)";
 var APP_VERSION_HIST_v1664="v1664(車両の移動を1歩ごとにシステムログへ(盤・ヘクス・車体/砲塔の向き・回転MP)";
@@ -49302,6 +49303,16 @@ function losHexTerrainInfoGlobal(hexId){
   return losTerrainInfoAt(hexId.boardId,cx,cy);
 }
 // LOS判定コア(グローバル連結座標系ベース、los_engine.py check_los()のJS移植)
+/* v1667: 判定モードの生垣。値はシナリオ別(S42 SSR: TEM+2・2+COT、通常: TEM+1・+1MF) */
+function losHedgeVals(){var sel=S.scen&&S.scen.sel;return sel==='S42'?{tem:2,mf:2}:{tem:1,mf:1};}
+function losHexPitchAt(h){if(!h)return null;var c0=losColRowToGlobalCanonPrecise(h.boardId,h.col,h.row),c1=losColRowToGlobalCanonPrecise(h.boardId,h.col,h.row+1)||losColRowToGlobalCanonPrecise(h.boardId,h.col,h.row-1);
+  if(!c0||!c1)return null;return Math.hypot(c1.x-c0.x,c1.y-c0.y);}
+/* 2ヘクス(隣接)の間のヘクス辺が生垣か(ヘクス辺に沿って生垣の画素が3割以上) */
+function losHedgeHexside(h1,h2){if(!h1||!h2||window.NM_HEDGEJ===false)return false;
+  var c1=losColRowToGlobalCanonPrecise(h1.boardId,h1.col,h1.row),c2=losColRowToGlobalCanonPrecise(h2.boardId,h2.col,h2.row);if(!c1||!c2)return false;
+  var mx=(c1.x+c2.x)/2,my=(c1.y+c2.y)/2,dx=c2.x-c1.x,dy=c2.y-c1.y,L=Math.hypot(dx,dy);if(!L)return false;var px=-dy/L,py=dx/L,k=0,tot=0;
+  for(var t=-0.25;t<=0.2501;t+=0.05){for(var q=-0.04;q<=0.0401;q+=0.04){var ti=losTerrainInfoAtGlobal(Math.round(mx+px*t*L+dx*q),Math.round(my+py*t*L+dy*q));tot++;if(ti&&ti.name==='Hedge')k++;}}
+  return k/tot>=0.3;}
 function losCheckLOSGlobal(ax,ay,bx,by,orchardInSeason,grainInSeason){
   for(var bi=0;bi<S_LOS.boards.length;bi++){
     if(!LOS_BOARD_DATA[S_LOS.boards[bi].id])return {error:'notLoaded'};
@@ -49638,6 +49649,7 @@ function losCheckLOSGlobal(ax,ay,bx,by,orchardInSeason,grainInSeason){
     }
     var t=losEffectiveTerrainInfoGlobal(gx,gy,hexId);
     if(!t)continue;
+    if(t.name==='Hedge'&&window.NM_HEDGEJ!==false)continue; /* v1667: 生垣(ヘクス辺)は後段 losHedgeScan で判定 */
     if(t.name==='Grain'&&!grainInSeason)continue;
     var isSplit=t.inh&&t.spl>0.0;
     var isObstacleHere;
@@ -49822,6 +49834,25 @@ function losCheckLOSGlobal(ax,ay,bx,by,orchardInSeason,grainInSeason){
       hindranceHexes.push([idB?idB.name:ownHexB,T('煙幕')+'+'+ownSmkLevelB,null,true]);
     }
   }
+  /* v1667(ダルマ「S41 生垣が反映されていない？」): 判定モードの生垣。射撃側・目標のヘクス辺の生垣は越えて見える(アプリ対戦の btFLOS と同じ)。
+     それ以外の生垣は同じ高さのLOSを遮断(高低差のあるLOSは遮断しない)。目標のヘクス辺の生垣をLOSが越えれば生垣TEM。NM_HEDGEJ=false で旧動作 */
+  var hedgeB=false;
+  if(window.NM_HEDGEJ!==false&&ownCenterA&&ownCenterB){
+    var hgPitch=losHexPitchAt(idB)||losHexPitchAt(idA);
+    if(hgPitch){
+      var hgLim=hgPitch*0.7,hgBlk=null;
+      for(var hi2=0;hi2<path.length;hi2++){
+        var hx=path[hi2][0],hy=path[hi2][1];
+        var hti=losTerrainInfoAtGlobal(Math.floor(hx),Math.floor(hy));
+        if(!hti||hti.name!=='Hedge')continue;
+        var hdA=Math.hypot(hx-ownCenterA.x,hy-ownCenterA.y),hdB=Math.hypot(hx-ownCenterB.x,hy-ownCenterB.y);
+        if(hdB<=hgLim){hedgeB=true;continue;}
+        if(hdA<=hgLim)continue;
+        if(!hgBlk&&sameElev&&losElevAtGlobal(Math.floor(hx),Math.floor(hy))===elevA)hgBlk=[hx,hy];
+      }
+      if(hgBlk&&!blocked){var hgId=losHexIdentityAtGlobal(hgBlk[0],hgBlk[1]);blocked=true;blockingTerrain='Hedge';blockingHex=hgId?hgId.name:'?';blockingReason='obstacle';blockingPx=hgBlk;}
+    }
+  }
   if(hindranceDrm>=6){
     blocked=true;
     blockingTerrain=blockingTerrain||T('妨害DRM累積+6以上');
@@ -49839,6 +49870,7 @@ function losCheckLOSGlobal(ax,ay,bx,by,orchardInSeason,grainInSeason){
   // 非EmRRヘクス(=EmRRの向こう側の非隣接ヘクス)に対して遮断される。半層の障害物のため、射撃側・目標がEmRRより高い標高にいる場合は適用しない。
   // EmRRヘクスはTEMを与えない(TEM 0)。
   if(idB&&scenIsEmRR(idB.boardId,idB.col,idB.row))temB=0;
+  var hedgeTemB=false;if(hedgeB){var hgV=losHedgeVals();if((temB||0)<hgV.tem){temB=hgV.tem;hedgeTemB=true;}} /* v1667: 生垣TEM(建物などと重ねない・良い方) */
   if(!blocked&&S.scen&&S.scen.sel==='S31'&&idA&&idB&&!scenIsEmRR(idA.boardId,idA.col,idA.row)&&!scenIsEmRR(idB.boardId,idB.col,idB.row)){
     var emI=-1;
     for(var ei=0;ei<hexTrace.length;ei++){var et=hexTrace[ei];if(et.isA||et.isB)continue;if(scenIsEmRR(et.bId,et.col,et.row)){emI=ei;break;}}
@@ -49859,7 +49891,7 @@ function losCheckLOSGlobal(ax,ay,bx,by,orchardInSeason,grainInSeason){
   return {blocked:blocked,blockingTerrain:blockingTerrain,blockingHex:blockingHex,blockingReason:blockingReason,
     blockingPx:blockingPx,hindranceDrm:hindranceDrm,hindranceHexes:hindranceHexes,pathLen:path.length,
     elevA:elevA,elevB:elevB,hexA:idA?idA.name:'?',hexB:idB?idB.name:'?',dataReady:true,hexTrace:hexTrace,
-    terrainA:terrainA,terrainB:terrainB,temB:temB,range:range,lang:S.lang}; // v11.282: lang=判定時の表示言語
+    terrainA:terrainA,terrainB:terrainB,temB:temB,hedgeTemB:hedgeTemB,range:range,lang:S.lang}; // v11.282: lang=判定時の表示言語
 }
 // シナリオのdt(例:"1944/6")から季節設定を導出。取れなければnull。
 // 麦畑季節内=6〜9月、果樹園季節内=4〜10月(SKルール1.1.1地形タイプの麦畑/果樹園季節記載に基づく)
@@ -52010,6 +52042,7 @@ function losComputeApplyData(){
   var elevVal=(r.elevA===r.elevB)?'same':(r.elevA>r.elevB?'firer':'target');
   var temVal=(r.temB!=null)?r.temB:0;
   var temId=LOS_TEM_ID_BY_VALUE[temVal]||'open';
+  if(r.hedgeTemB)temId='hedge'; /* v1667 */
   // v11.237修正(ダルマ「確認修正実施」): 繁み・果樹園(季節不問)・季節内の麦畑はTEM0だが開豁地ではないためFFMO/阻止が無効(ASLSK4 1.1.1)。
   // 従来はTEM0→'open'に逆引きされFFMOが適用可能だった。季節外の麦畑は開豁地扱いのまま。
   if(temVal===0&&(r.terrainB==='Brush'||r.terrainB==='Orchard'||(r.terrainB==='Grain'&&S_LOS.grainSeason)))temId='grain_orchard';
@@ -52475,6 +52508,7 @@ function LosMapClick(ev){
       if(rtRule.elevExtraMF&&last.elev!=null&&newElev!=null&&newElev!==last.elev&&roadSideType!=='Paved Road')ssrExtra+=rtRule.elevExtraMF; // v11.282: 舗装道路ヘクスサイド経由の移動を除く
       if(!isVeh&&rtRule.infExtraMF&&!SCEN_INF_EXEMPT_TERRAIN[info.name])ssrExtra+=rtRule.infExtraMF; // S46 SSR1: 建物・林以外は歩兵+0.5MF
       if(ssrExtra>0)stepCost+=ssrExtra;
+      var hedgeX=(!isVeh&&losHedgeHexside(last,{boardId:rtBoardId,col:col,row:row}));if(hedgeX)stepCost+=losHedgeVals().mf; /* v1667: 生垣を越える(歩兵 +1MF、S42は+2) */
       var s28chk=!!(rtRule.s28Check&&isVeh&&(info.name==='Open Ground'||info.name==='SwampS28')&&!(newElev>0));
       // 2026-08追加(ダルマ指示「未対応部の反映」): 残骸/他車両が登録されているヘクスへの
       // 車両の追加コスト(SK1ルールブック「7.4 AFVの遮蔽効果と残骸」)。1個につき+1MP
@@ -52554,7 +52588,7 @@ function LosMapClick(ev){
       last.cum=last.moveCum;
       // 道路移動ボーナス(歩兵専用ルール)は車両には適用しない。
       var newRoadOk=isVeh?false:(last.roadOk&&hasRoad&&!rtRule.noRoadBonus);
-      hexes.push({boardId:rtBoardId,col:col,row:row,cost:stepCost,moveCum:newMoveCum,cum:newMoveCum+stopAdd,terrain:info.name,onRoad:!!roadSideType,roadOk:newRoadOk,elev:newElev,climbing:climbing,bogRequired:bogRequired,ssrChk:s28chk,ssrExtra:ssrExtra,woodsAll:woodsAllUsed,wreckCnt:wreckCnt,wreckAddCost:wreckAddCost,vcaTurnHexspines:vcaTurnHexspines,vcaAutoChange:vcaTurnCost>0,vca:newVCA,minMoveApplied:minMoveApplied});try{if(isVeh&&window.NM_MVLOG!==false)nmMvLogStep(last,hexes[hexes.length-1],vcaTurnHexspines,vcaTurnCost);}catch(e){}
+      hexes.push({boardId:rtBoardId,col:col,row:row,cost:stepCost,moveCum:newMoveCum,cum:newMoveCum+stopAdd,terrain:info.name,onRoad:!!roadSideType,roadOk:newRoadOk,elev:newElev,climbing:climbing,bogRequired:bogRequired,ssrChk:s28chk,ssrExtra:ssrExtra,hedgeX:hedgeX,woodsAll:woodsAllUsed,wreckCnt:wreckCnt,wreckAddCost:wreckAddCost,vcaTurnHexspines:vcaTurnHexspines,vcaAutoChange:vcaTurnCost>0,vca:newVCA,minMoveApplied:minMoveApplied});try{if(isVeh&&window.NM_MVLOG!==false)nmMvLogStep(last,hexes[hexes.length-1],vcaTurnHexspines,vcaTurnCost);}catch(e){}
       // 2026-09修正(ダルマ指摘「停止1MPも現在の最終ヘクスに反映させる」): route.totalCost(最終合計・
       // 表示用)は新しい終端ヘクスのcum(停止込み)をそのまま使う。
       route.totalCost=newMoveCum+stopAdd;
