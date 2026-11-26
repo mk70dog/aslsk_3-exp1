@@ -43686,6 +43686,65 @@ function nmBotCard(kind,flex){var c=curScen&&curScen();var sid=c&&c.id;var sh=(s
   return null;}
 (function(){try{var st=document.createElement('style');st.id='nmHqXCss';st.textContent='html:root:root:root:root #nmHq#nmHq button.nmHqX.nmHqX.nmHqX{font-size:0!important;width:34px!important;height:34px!important;min-width:0!important;padding:0!important;margin:0!important;border-radius:17px!important;background:#14171d!important;border:1px solid #4a5566!important;box-shadow:0 3px 0 #0e0e0c,0 4px 2px rgba(0,0,0,.45)!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important}html:root:root:root:root #nmHq#nmHq button.nmHqX.nmHqX.nmHqX span{font-size:18px!important;color:#e8eef4!important;line-height:1!important;font-weight:400!important}html:root:root:root:root #nmHq#nmHq button.nmHqX.nmHqX.nmHqX::before{content:none!important;background:none!important}';document.head.appendChild(st);}catch(e){}})(); /* v1182(ダルマ指示「閉じる 小さくする」案B): マルチ判定の閉じるを丸い✕(34px)に */
 /* v1461(ダルマ「少し小さくする サンプル」→「b」): 見出し19→17・SSR本文15→13・勝利条件本文16.5→14.5 */ /* ダルマ指示「見出し 本文 フォント普通にする」sample-thinfont→「実施」: SSR・勝利条件の窓の見出し(シナリオ名)と勝利条件の本文を普通の太さ(400) */
+/* sample-sumtxt(ダルマ「ssr 勝利条件 をわかりやすく要約して再編集する」EXP1): 要約(SCN_SUM)を標準表示にし、上のボタンで原文の訳に切り替え(S.nmTxtFull) */
+var SCN_SUM={
+S41:{v:'終了時、米が P6 から2ヘクス以内の建物ヘクスを全部支配していれば米の勝ち',s:[
+ '【米 T1 の事前砲撃】\n・T1 米の準備射撃フェイズの最初に3ヘクスを砲撃\n・ヘクスごとに色ダイス dr: 1〜4=そのまま / 5・6=白ダイスの向きへ1ヘクスずれる\n・着弾ヘクスと周り6ヘクスの全ユニットに 16FP の迫撃砲攻撃(TEM あり・ヘクスごとに振る)',
+ '独の 4-6-7 の煙幕能力は 3']},
+S42:{v:'終了時、米が建物 G5・J5・J7 を全部支配していれば米の勝ち',s:[
+ '【ボカージュ】生垣は TEM+2、越えるのに +2MF(通常は +1・+1)',
+ '【独の隠蔽配置】\n・独の MMC(一緒の SMC/SW も)は建物・麦畑・果樹園に、位置を秘密にして置ける\n・撃つ・動く・米が入ろうとする・米の攻撃が NE 以外 → 盤に出す\n・米が入ろうとした時: MPh=手前に戻して移動終了 / RtPh=別の道へ / APh=白兵戦(建物なら独の不意打ち dr−2)\n・隠れているユニットへの攻撃は FP 半分の地域射撃(砲撃は +2)']},
+S43:{v:'終了時、米が D〜J 列・番号5以下の建物を全部支配していれば米の勝ち',s:[
+ '【独の隠蔽配置(2個)】独の MMC 2個(+SMC/SW)を建物に秘密配置。出す条件・入ろうとした時の扱いは S42 と同じ(攻撃は FP 半分)',
+ '【独の事前砲撃(最大3回)】\n・配置前に目標の候補2ヘクスを秘密に記録\n・独の準備射撃/防御射撃フェイズの始めに、そのどちらかへ砲撃(ゲーム中3回まで)\n・ずれ方・16FP の攻撃は S41 と同じ']},
+S44:{v:'スロバキアが 6VP 以上取れば勝ち\n・建物 M7・M5・K6 の支配: 各2VP\n・P3/P6 の道路から盤外へ出た装甲車: 各1VP',s:[
+ '【ポーランドの隠蔽配置】位置を秘密にして置ける。出す条件・入ろうとした時の扱いは S42 と同じ',
+ 'ポーランドの MMC は PAATC に +1',
+ '【装甲車の始動】MPh の始めに他の装甲車と隣り合っていない装甲車は、動くのに DR 8以下が必要(Recall 中は除く)']},
+S45:{v:'終了時、ポーランドが複数ヘクス建物を1つ以上支配していればポーランドの勝ち',s:[
+ 'ポーランドはスロバキアの配置前に、T2 増援の進入ヘクスを秘密に1つ記録。増援はそこから2ヘクス以内に進入',
+ 'スロバキアは CC 列とそれより北に、分隊は置けない。HS(+SMC/SW)は4個まで']},
+S46:{v:'ソ連が西端から 7VP 以上を退出させた時点で勝ち\n・分隊 2 / HS 1 / SMC: −1=2・−2=3・0と+1=1',s:[
+ '【深雪】道路ボーナスなし。歩兵は建物・林以外に入る時 +0.5MF。煙幕は建物の中だけ',
+ '丘はなく、丘の形の林として扱う',
+ '【降雪】\n・各プレイヤーは自分の手番の始めに判定: 10以上で降り始め、3以下で止む\n・降雪中は妨害: 射程6以下 +1 / 7以上 +2\n・残留火力・阻止には効かない。FFMO は消さない',
+ '【疲労】\n・T3 以降は倍速移動なし\n・T4 以降、MMC は MPh に動き出す時に TC(指揮修正あり)。失敗=動けるが CX、すでに CX なら動けない\n・ELR を超える差で失敗すると破壊(DM なし)\n・RtPh・APh は対象外。独の増援は登場ターンは不要']},
+S47:{v:'終了時、複数ヘクス建物に統制状態の伊 MMC(操作班以外)が1つもなければ米の勝ち。ただし米の損失が 15VP を超えたら勝てない\n・分隊・操作班 2 / HS 1 / SMC: −1=2・−2=3・−3=4・0と+1=1\n・鹵獲・除去した対戦車砲・迫撃砲 2',s:[
+ '米の砲は T1、操作班以上で人力移動すれば自動で成功',
+ '米の 7-4-7 は突撃工兵(煙幕 +2)。米の MMC は全部、下線付きの士気',
+ '【伊の要塞化】伊は配置エリアの建物を最大5ヘクス、秘密に要塞化(TEM+1: 木造 +3・石造 +4)。要塞化ヘクスに釘付けでない統制状態の分隊以上がいる間、相手は入れない',
+ '【S48 と続けて遊ぶ時】\n・終了時の米の残りを S48 の米 OB にする\n・米の勝ち=伊は引き継がない / 伊の勝ち=伊はその位置のまま引き継ぐ\n・最後の白兵戦は決着まで続ける。全員統制状態に戻し、マーカーは外す\n・総合の勝者は S48 の勝者']},
+S48:{v:'終了時、伊が「統制状態の分隊(または HS 2個)がいる建物ヘクス」を1つでも持っていれば伊の勝ち',s:[
+ '【S47 から続けて遊ぶ時】S47 の米の残りを米 OB にする。S47 で米の勝ち=伊は引き継がない / 伊の勝ち=伊はその位置のまま追加(米はその隣に置けない)。全員統制状態から開始']},
+S49:{v:'終了時、独が建物 O2・S6・W8 を全部支配していれば独の勝ち',s:[
+ '【米の隠蔽配置(分隊2個)】林・建物・果樹園に秘密配置。出す条件・入ろうとした時の扱いは S42 と同じ(林でも白兵戦の不意打ち −2)']},
+S50:{v:'終了時、次を満たせば独の勝ち\n・I1-K5-I6-I10 の道路のどこか1ヘクスに LOS がある統制状態の MMC・AFV で、合計 21FP 以上の攻撃ができる\n・ROF・PBF/TPBF は数えない。煙幕の妨害は無視\n・AFV は道路が CA の中の時だけ。ショック・UK は 0FP\n・MA は HE ありで 16FP、HE 切れで 2FP。PSK は 12FP(3ヘクス以内)',s:[
+ '仏(FFI)の歩兵・SW は英軍のカウンター、砲と車両は米軍のカウンターを使う']},
+S51:{v:'終了時、米が sH4 か rP5 を統制状態のユニットで占領していれば米の勝ち',s:[
+ '独の MMC は最初、他の独 MMC と隣り合わせ・同じヘクスに置けない。sS5・sAA2 に戦車の残骸',
+ '【米の砲爆撃】\n・配置前に地域を秘密に選ぶ(s盤 N〜P 列 か、r盤 A〜P 列の番号1・2)\n・T1 米の準備射撃フェイズの最初に、その地域の独ユニット全部が NTC\n・失敗=釘付け、失敗かつ色ダイス5・6=混乱+DM、成功でも色ダイス5・6=CX',
+ '独はパンツァーファウストを使える']},
+S59:{v:'次のどちらかで米の勝ち\n・終了時、M 列とそれより東の建物を全部支配\n・プレイ中に統制状態の独ユニットが1つもいなくなる',s:[
+ '【Q6 の尖塔】\n・SMC1・HS1・SW1 を余分に置ける(コインなどで示す)。上り下り 1MF\n・尖塔からの LOS: 目標の手前(隣)のヘクスに果樹園がなく、LOS が建物に触れなければ見える。間の煙幕は1ヘクスごとに +2',
+ '【米の艦砲射撃】\n・各 RtPh の始めに dr、1 なら次の準備射撃フェイズの最初に艦砲\n・1個のダイス: 1=尖塔と中のユニットは破壊、Q6 の他は 30FP(+3TEM) / 2=Q6 から1ヘクスずれたヘクスに 30FP / 3〜6=効果なし\n・尖塔が壊れるまで毎ターン振れる',
+ '【独のトンネル(3本)】\n・配置前に秘密に記録(3ヘクス以内の別々の建物ヘクス2つが入口)\n・MPh の始めに入口にいた独 MMC(+SMC/SW)は入れる(1本につき MPh に1回)。中にいる間は撃たれない\n・APh にもう一方の入口から出る。米がいれば白兵戦(不意打ちあり、独の不意打ち dr −2)\n・混乱ユニットも条件つきで RtPh に通れる。米は使えない']},
+S34:{v:'独が南端から合計 40VP 以上を脱出させた時点で勝ち\n・MA が使える AFV 6(使えない 5) / 分隊 2 / HS 1 / SMC 1+マイナスの数',s:[
+ '【夕暮れ】射程7以上の IFT・TH に +1(歩兵目標・地域目標の IFT は対象外)。残留火力・阻止には効かず、FFMO も消さない',
+ '米はバズーカを持つユニットを秘密にできる(撃った・混乱した・敵が入った時に公開)']},
+S35:{v:'終了時、独がヘクス番号8以上の建物を全部支配していれば独の勝ち',s:[
+ '【瓦礫と砲弾孔】\n・林は石造の瓦礫: 歩兵 3MF、車両は MP の半分+ボグ(+3)、TEM+3、LOS は完全に遮る\n・果樹園は砲弾孔: LOS に影響なし、歩兵 TEM+1、2MF(1MF で入ると開豁地扱い)',
+ 'ソの 6-2-8/3-2-8 は二線級(下線付きの士気、混乱面の士気 +1)。ソのエリート・一線級は不意打ち dr −1。独の 8-3-8 の煙幕は 5',
+ '【塹壕の T-34 M41】動けず VCA も変えられない。TH に +1、車体への命中はミス。道路・開豁地・砲弾孔にだけ置ける。除去されても残骸なし。BMG は使えない',
+ '【政治委員】ソの 8-0・6+1 は政治委員(士気 10・8、ELR なし)。同じヘクスのソ歩兵は士気 +1、回復で DM の +4 なし。混乱ユニットの回復は必ず行い、失敗するとクラス低下(下がない時は損耗)',
+ '【ソの狙撃】ソの防御射撃フェイズごとに1回、dr 1・2 で狙撃。1=指揮官除去・MMC 混乱・CE 乗員 STUN / 2=指揮官負傷・MMC 釘付け・CE 乗員 STUN',
+ '【独のシュトゥーカ】独の防御射撃フェイズごとに1回。TH DR 8以下で歩兵に 36FP。AFV は DR 6〜10 で TK(T-34=7・KV-1=6)、DR 5以下は直撃で除去']},
+S36:{v:'ソ連が北端から合計 20VP 以上を脱出させた時点で勝ち\n・分隊 2 / HS 1 / SMC: −1=2・0と+1=1\n・T-34/85 7 / IS-2 8(MA 故障は −1)',s:[
+ '【ゲームの長さ】ソは配置前に 4.5 / 5.5 / 6.5 ターンを秘密に決め、独の配置後に公開\n・4.5: 盤 x と v(番号4以上)。ソ OB から 6-2-8×2・8-1・MMG・DC・T-34/85・IS-2 を除く\n・5.5: 盤 x と v。4-4-7×2・7-0・LMG・IS-2 を除く\n・6.5: 3枚全部。除くものなし\n・アプリのターン表は 6.5 ターンで登録',
+ '独 T2 の回復フェイズの始めに、増援表で dr して増援を決める',
+ 'ソの T-34/85 の APCR 枯渇ナンバーは 6']}
+};
+
+function nmSumHTML(t){var L=String(t||'').split('\n');return L.map(function(x,i){var b=/^・/.test(x);x=x.replace(/^・/,'').replace(/【([^】]+)】/,'<b style="color:#ffe9a3;font-weight:700">$1</b>　');return '<div style="'+(b?'display:flex;gap:6px;margin-top:3px':(i?'margin-top:3px':''))+'">'+(b?'<span style="color:#8899aa">・</span><span style="flex:1">'+x+'</span>':x)+'</div>';}).join('');}
 function nmScnTxtPop(kind){var c=curScen();if(!c)return;var o=document.getElementById('nmScnTxt');if(o)o.remove();o=document.createElement('div');o.id='nmScnTxt';o.style.cssText='position:fixed;inset:0;z-index:100060;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,sans-serif';o.onclick=function(e){if(e.target===o)o.remove();};
   /* v1187(ダルマ指示「SSR・勝利条件 枠なし・閉じるマーク・背景を細かいドット・シックにカッコよく」sample-scntxt2 ミックス3): アイコンのカプセル+英字タグ(SSR=緑/VICTORY=金)の見出し、右上に丸い✕、項目は暗いカード(大きい番号・アプリ対応のピル)、勝利条件は「〜の勝利」を金色 */
   var R=(typeof SSR_REFLECT!=='undefined'&&SSR_REFLECT[c.id])||{},ssr=kind==='ssr',acc=ssr?'#3ca878':'#ffd24a',tag=ssr?'SSR':'VICTORY';
@@ -43693,8 +43752,10 @@ function nmScnTxtPop(kind){var c=curScen();if(!c)return;var o=document.getElemen
   var card='background:#14171d;border-radius:8px;box-shadow:0 3px 0 #0e0e0c,0 4px 2px rgba(0,0,0,.45);';
   var pill='<span style="flex:0 0 auto;font-size:10.5px;font-weight:800;color:#06140c;background:#3ca878;border-radius:9px;padding:2px 8px">'+T('アプリ対応')+'</span>';
   var hl=function(t){return String(t||'').replace(/((?:ソ連|ソ連|独軍|独軍|米軍|米軍|英軍|英軍|仏軍(FFI)|仏軍|伊軍|日本軍)?の?勝利)/,'<b style="color:#ffd24a">$1</b>');};
-  var body=ssr?'<div style="display:grid;gap:8px">'+(c.ssr||[]).map(function(x,i){var ok=!!R[i+1];return '<div style="display:flex;gap:12px;align-items:center;padding:10px 14px;'+card+'"><b style="flex:0 0 22px;font-size:20px;color:'+(ok?'#3ca878':'#ffd070')+';font-weight:900;text-align:center">'+(i+1)+'</b><div style="flex:1;font-size:13px;line-height:1.6">'+x+'</div>'+(ok?pill:'')+'</div>';}).join('')+'</div>'
-    :'<div style="padding:14px 16px;'+card+'font-size:14.5px;line-height:1.8;font-weight:400">'+hl(c.vic||'')+'</div>';
+  var SM=window.NM_SUMTXT!==false&&SCN_SUM[c.id],full=!SM||!!S.nmTxtFull;if(SM&&!full)hl=function(t){return nmSumHTML(t).replace(/((?:米|独|ソ連|ソ|伊|ポーランド|スロバキア|仏|英)?の勝ち|で勝ち|ば勝ち)/,'<b style="color:#ffd24a">$1</b>');};
+  var swB=SM?'<div style="display:flex;justify-content:flex-end;gap:6px;margin:-6px 0 10px"><span onclick="S.nmTxtFull='+(full?'false':'true')+';try{saveState();}catch(e){}nmScnTxtPop(\''+kind+'\')" style="cursor:pointer;font-size:12px;padding:4px 12px;border-radius:14px;border:1px solid #4a5566;background:#1b222c;color:#cfd8e3">'+(full?'↩ 要約を見る':'原文の訳を見る')+'</span></div>':'';
+  var body=swB+(ssr?'<div style="display:grid;gap:8px">'+(SM&&!full?SM.s:c.ssr||[]).map(function(x,i){if(SM&&!full)x=nmSumHTML(x);var ok=!!R[i+1];return '<div style="display:flex;gap:12px;align-items:center;padding:10px 14px;'+card+'"><b style="flex:0 0 22px;font-size:20px;color:'+(ok?'#3ca878':'#ffd070')+';font-weight:900;text-align:center">'+(i+1)+'</b><div style="flex:1;font-size:13px;line-height:1.6">'+x+'</div>'+(ok?pill:'')+'</div>';}).join('')+'</div>'
+    :'<div style="padding:14px 16px;'+card+'font-size:14.5px;line-height:1.8;font-weight:400">'+hl(SM&&!full?SM.v:c.vic||'')+'</div>');
   o.innerHTML='<div onclick="event.stopPropagation()" style="width:min(680px,92vw);max-height:80vh;overflow:auto;border:0;border-radius:10px;color:#e8eef4;padding:14px 18px;background-color:#1c1f27;background-image:radial-gradient(circle,rgba(0,0,0,.667) 1px,rgba(0,0,0,0) 1.35px),radial-gradient(circle at 50% 70%,rgba(255,255,255,.08) 1px,rgba(0,0,0,0) 1.4px);background-size:4px 4px,4px 4px;box-shadow:0 0 0 1px #2a2f3a,0 16px 48px rgba(0,0,0,.7)"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><span style="flex:0 0 auto;width:44px;height:40px;border-radius:20px;background:#1b222c;border:1px solid #4a5566;display:flex;align-items:center;justify-content:center">'+ic+'</span><div style="flex:1;min-width:0"><div style="font-size:11px;letter-spacing:3px;color:'+acc+';font-weight:900">'+tag+' · '+c.id+'</div><div style="font-size:17px;font-weight:400;margin-top:1px">'+(c.jp||'')+'</div></div><button class="nmRnd" data-nmmk="close" title="'+T('閉じる')+'" aria-label="'+T('閉じる')+'" onclick="document.getElementById(\'nmScnTxt\').remove()"><span>✕</span></button></div>'+body+'</div>';document.body.appendChild(o);}
 function nmBotSet(w,k){if(w==='L')S.nmBotL=k;else if(w==='M')S.nmBotM=k;else S.nmBotR=k;try{saveState();}catch(e){}try{nmFtBotFill();}catch(e){}var m=document.getElementById('nmFtMn');if(m){var b=document.getElementById('nmFtMenuB');m.remove();if(b){nmFtMenu(b);var d=document.querySelector('#nmFtMn details:last-of-type');try{[...document.querySelectorAll('#nmFtMn details')].forEach(function(x){if(/表示の設定/.test(x.querySelector('summary').textContent))x.open=true;});}catch(e){}}}}
 /* v1376(ダルマ「画面の設定にフォントサイズの変更」→画面全体): 文字の大きさ=画面全体の倍率(CSS zoom)。S.nmFz = s/m/l/xl */
