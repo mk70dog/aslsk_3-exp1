@@ -3544,6 +3544,7 @@ try{SSR_REFLECT.S44=Object.assign({},SSR_REFLECT.S44,{3:'地図の移動: OA vz 
   SSR_REFLECT.S35=Object.assign({},SSR_REFLECT.S35,{5:'SSR の窓の「▶ 判定」: ヘクスを地図で選ぶ→dr(1・2 で効果、目標は無作為)',6:'SSR の窓の「▶ 判定」: ヘクスを地図で選ぶ→To Hit DR→歩兵 36FP / AFV の TK・直撃'}); /* v1677 */
   SSR_REFLECT.S36=Object.assign({},SSR_REFLECT.S36,{1:'SSR の窓の「▶ 判定」: 4.5/5.5/6.5 を選ぶとターン表の終わりが変わる・盤と除く戦力を表示',2:'SSR の窓の「▶ 判定」: 増援表の dr'}); /* v1678 */
   SSR_REFLECT.S46=Object.assign({},SSR_REFLECT.S46,{4:'地図の移動: T4 以降に部隊が動き出す時、MMC ごとに TC の窓(失敗=CX)。SSR の窓の「▶ 判定」で説明'});
+  SSR_REFLECT.S47=Object.assign({},SSR_REFLECT.S47,{4:'SSR の窓の「▶ 判定」: 「S48 へ」で生き残った米(と伊の勝ちなら伊の位置)を S48 へ引き継ぐ'});SSR_REFLECT.S48=Object.assign({},SSR_REFLECT.S48,{1:'S47 の SSR4 から引き継ぎ(米は部隊の準備に、伊の勝ちなら伊はその位置)'}); /* v1683 */
   SSR_REFLECT.S59=Object.assign({},SSR_REFLECT.S59,{3:'SSR の窓の「▶ 判定」でトンネルを地図で記録(独の iPad だけ)。入口にいる独の部隊のメニューに「トンネルに入る/出る」'},{2:'SSR の窓の「▶ 判定」: RtPh の dr → 準備射撃フェイズの艦砲(1=尖塔破壊・2=ずれて 30FP)'});
   SSR_REFLECT.S41=Object.assign({},SSR_REFLECT.S41,{1:'SSR の窓の「▶ 判定」: 着弾ヘクスを地図で選ぶ→ずれの dr→着弾と周り6ヘクスに 16FP(林は −1)'});
   SSR_REFLECT.S43=Object.assign({},SSR_REFLECT.S43,{2:'SSR の窓の「▶ 判定」: 着弾ヘクスを地図で選ぶ→ずれの dr→着弾と周り6ヘクスに 16FP(林は −1)・使った回数/3'});}catch(e){} /* v1674: S20 が2回書かれていて SSR4 の反映済みが消えていた */
@@ -43862,7 +43863,7 @@ function nmSaDrift(cd,wd){var A=NM_SA;A.cd=cd;A.wd=wd;var to=A.tgt;if(A.kind==='
   nmSaLog(nmSaTitle()+': '+BTG.nodes[A.tgt].nm+(A.kind==='naval'?' 白dr'+wd:' 色dr'+cd+'・白dr'+wd)+' → '+(to>=0?BTG.nodes[to].nm+(to!==A.tgt?'(ずれた)':''):'盤外'));nmSaDraw();}
 function nmSaAtkRoll(k,dr){var A=NM_SA,r=A.rows[k];if(!r)return;r.dr=dr||(nmSaRoll()+nmSaRoll());r.res=nmSaIft(r.fp,r.dr,r.drm);nmSaLog(nmSaTitle()+' '+BTG.nodes[r.i].nm+' '+r.fp+'FP DR'+r.dr+(r.drm?(r.drm>0?'+':'')+r.drm:'')+' → '+r.res+(r.U.length?'('+r.U.map(function(u){return u.nm;}).join('・')+')':''),'#c8a032');nmSaDraw();}
 function nmSaAtkAll(){var A=NM_SA;A.rows.forEach(function(r,k){if(!r.dr&&r.U.length)nmSaAtkRoll(k);});nmSaDraw();}
-function nmSaTitle(){var A=NM_SA;return ({tun59:'S59 SSR3 独のトンネル',len36:'S36 SSR1 ゲームの長さ',reinf36:'S36 SSR2 増援表',fat46:'S46 SSR4 疲労',barrage3:'S41 SSR1 事前砲撃',barrage1:'S43 SSR2 独の事前砲撃',sniper:'S35 SSR5 ソの狙撃',stuka:'S35 SSR6 シュトゥーカ',naval:'S59 SSR2 艦砲射撃'})[A.kind]||'SSR';}
+function nmSaTitle(){var A=NM_SA;return ({link47:'S47 SSR4 S48 へ続ける',link48:'S48 SSR1 S47 から続ける',tun59:'S59 SSR3 独のトンネル',len36:'S36 SSR1 ゲームの長さ',reinf36:'S36 SSR2 増援表',fat46:'S46 SSR4 疲労',barrage3:'S41 SSR1 事前砲撃',barrage1:'S43 SSR2 独の事前砲撃',sniper:'S35 SSR5 ソの狙撃',stuka:'S35 SSR6 シュトゥーカ',naval:'S59 SSR2 艦砲射撃'})[A.kind]||'SSR';}
 function nmSaUse(k,d){var sc=S.scen.sel,U=S.nmSaUse[sc];U[k]=(U[k]||0)+(d||1);try{saveState();}catch(e){}}
 function nmSaDraw(){var A=NM_SA;if(!A)return;var o=document.getElementById('nmSa');if(!o){o=document.createElement('div');o.id='nmSa';o.style.cssText='position:fixed;inset:0;z-index:100065;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;font-family:AppFont,AppJP,sans-serif';o.onclick=function(e){if(e.target===o)nmSaClose();};document.body.appendChild(o);}
   var b='display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;margin:2px;padding:0 8px;border-radius:7px;background:#262d38;color:#e8eef4;font-weight:700;cursor:pointer;border:1px solid #39414f;font-size:14px';
@@ -43872,12 +43873,13 @@ function nmSaDraw(){var A=NM_SA;if(!A)return;var o=document.getElementById('nmSa
   var cnt=A.kind==='barrage1'?'　使った回数 '+(use.barrage1||0)+'/3':(A.kind==='barrage3'?'　使った回数 '+(use.barrage3||0)+'/3':'');
   h+='<div style="font-size:11px;letter-spacing:3px;color:#3ca878;font-weight:900">SSR'+A.ssr+' · '+sc+'</div><div style="font-size:17px;margin:2px 0 6px">'+nmSaTitle().replace(/^S\d+ SSR\d+ /,'')+'</div><div style="font-size:12px;color:#8fa6bd;margin-bottom:10px">'+note+cnt+'</div>';
   if(A.kind==='tun59'){h+=nmTunDraw(A);}
+  else if(A.kind==='link47'||A.kind==='link48'){h+=nmLinkDraw(A);}
   else if(/^(len36|reinf36|fat46)$/.test(A.kind)){h+=nmSaDraw2(A);}
   else if(A.kind==='naval'&&A.step==='call'){var pend=!!use.navalPend;h+='<div style="font-size:13px;margin-bottom:6px">'+(pend?'<b style="color:#ffd24a">艦砲の要請が通っています</b> → 準備射撃フェイズの最初に解決':'RtPh の始めの dr(1 で次の準備射撃フェイズに艦砲)')+'</div>';
     if(!pend)h+='<span style="'+gold+'" onclick="nmSaNavalCall(0)">dr を振る</span> '+[1,2,3,4,5,6].map(function(v){return '<span style="'+b+'" onclick="nmSaNavalCall('+v+')">'+v+'</span>';}).join('');
     else h+='<span style="'+gold+'" onclick="NM_SA.tgt=BTG.nodes.findIndex(function(x){return x.nm===\'pQ6\';});NM_SA.step=\'roll\';nmSaDraw()">艦砲を解決する(Q6)</span> <span style="'+b+'" onclick="S.nmSaUse[S.scen.sel].navalPend=0;nmSaDraw()">取り消す</span>';
     if(use.steepleGone)h+='<div style="font-size:12px;color:#ff8080;margin-top:6px">尖塔は破壊済み(もう振れません)</div>';}
-  if(A.kind!=='naval'&&!/^(len36|reinf36|fat46|tun59)$/.test(A.kind)){h+='<div style="display:flex;align-items:center;gap:8px;margin:4px 0 8px"><span style="flex:1;font-size:14px">'+(A.kind==='sniper'||A.kind==='stuka'?'目標ヘクス':'着弾ヘクス')+': <b style="color:#ffd24a">'+(N?N.nm:'—')+'</b></span><span style="'+gold+'" onclick="nmSaArm()">地図で選ぶ</span></div>';}
+  if(A.kind!=='naval'&&!/^(len36|reinf36|fat46|tun59|link47|link48)$/.test(A.kind)){h+='<div style="display:flex;align-items:center;gap:8px;margin:4px 0 8px"><span style="flex:1;font-size:14px">'+(A.kind==='sniper'||A.kind==='stuka'?'目標ヘクス':'着弾ヘクス')+': <b style="color:#ffd24a">'+(N?N.nm:'—')+'</b></span><span style="'+gold+'" onclick="nmSaArm()">地図で選ぶ</span></div>';}
   if(N&&A.step!=='pick'&&A.step!=='call'){
     if(A.kind==='barrage3'||A.kind==='barrage1'||A.kind==='naval'){
       if(A.step==='roll'){if(A.kind==='naval'){h+='<div style="font-size:13px;margin-bottom:4px">1個のダイス: 1=尖塔破壊・Q6 の他は 30FP(+3TEM) / 2=Q6 から白 dr の向きへずれて 30FP / 3〜6=効果なし</div><span style="'+gold+'" onclick="nmSaNavalDo(0)">ダイスを振る</span> '+[1,2,3,4,5,6].map(function(v){return '<span style="'+b+'" onclick="nmSaNavalDo('+v+')">'+v+'</span>';}).join('');}
@@ -43921,6 +43923,24 @@ function nmTunGo(n,sd,inn){var H=nmHexOfNode(n),eh=nmUnitAt(H,sd);if(!eh)return;
 function nmTunOverlaySVG(dispLayout){if(!nmTunOn())return '';var h='';try{var vis=nmTunVisible();var mk=function(nm,lbl,col){var N=BTG&&BTG.nodes.filter(function(x){return x.nm===nm;})[0];if(!N)return;var g=losColRowToGlobalCanon(N.b,N.c,N.r);if(!g)return;var d=losCanonicalToDisplay(g.x,g.y,dispLayout);h+='<g transform="rotate('+(-S_LOS.viewRot)+' '+d.x+' '+d.y+')"><text x="'+d.x+'" y="'+(d.y-22)+'" text-anchor="middle" font-size="12" font-weight="bold" fill="'+col+'" style="paint-order:stroke;stroke:#000;stroke-width:3px">'+lbl+'</text></g>';};
   if(vis)nmTunL().forEach(function(t,k){mk(t.a,'⇄T'+(k+1),'#ffb060');mk(t.b,'⇄T'+(k+1),'#ffb060');});
   ['f','e'].forEach(function(sd){nmSideList(sd).forEach(function(e){var st=e.st||{};if(st.inTun)mk(st.inTun,'トンネル内','#ff8080');});});}catch(e){}return h;}
+
+/* v1683(△ S47 SSR4 / S48 SSR1 連結): S47 の終了時に「S48 へ引き継ぐ」。生き残った米の部隊(編成・SW)を S48 の米の編成に入れる(配置は S48 の手順で)。
+   伊の勝ちなら伊の部隊はその位置のまま S48 の地図に置く。全員統制状態に戻す(混乱・釘付け・CX・射撃済などを外す) */
+NM_SSR_ACT.S47=Object.assign({},NM_SSR_ACT.S47,{4:'link47'});NM_SSR_ACT.S48=Object.assign({},NM_SSR_ACT.S48,{1:'link48'});
+function nmLinkGrab(){var out=[];['f','e'].forEach(function(sd){nmSideList(sd).forEach(function(e){var x={sd:sd,eh:JSON.parse(JSON.stringify(e))};if(e.grp){var g=nmGeActive(e.grp)||nmGeSaved(e.grp),c={};if(g)NM_UNDO_F.forEach(function(f){if(g[f]!==undefined)c[f]=JSON.parse(JSON.stringify(g[f]));});c.pickerNat=c.pickerNat||nmGeList(e.grp).nat;x.slot=e.grp;x.g=c;x.nat=c.pickerNat;}else if(e.veh){x.nat=(nmAfv(e.veh)||{}).nat||'';}else if(e.gun){x.nat='?';}out.push(x);});});return out;}
+function nmLink47Do(win){var L=nmLinkGrab(),us=L.filter(function(x){return x.nat==='USA'||(x.eh.gun&&x.sd===nmSuSide('USA'));}),it=L.filter(function(x){return x.nat==='ITA'||(x.eh.gun&&x.sd===nmSuSide('ITA'));});
+  var good=function(g){(g.pickerItems||[]).forEach(function(i){i.broken=false;i.pinned=false;i.cx=false;});return g;};
+  S.nmLink48={win:win,at:Date.now(),us:us.map(function(x){if(x.g)good(x.g);return x;}),it:win==='ITA'?it.map(function(x){if(x.g)good(x.g);return x;}):[],loss:(S.nmLoss&&S.nmLoss.S47)||0};
+  nmSaLog('S47 SSR4: '+(win==='USA'?'米':'伊')+'の勝ちで S48 へ引き継ぐ(米 '+us.length+'・伊 '+(win==='ITA'?it.length:0)+')');
+  nmSaClose();SSEL('S48');try{NAVTAB('los');}catch(e){}setTimeout(nmLink48Apply,300);}
+function nmLink48Apply(){var K=S.nmLink48;if(!K||!(S.scen&&S.scen.sel==='S48'))return;var sc='S48';if(!S.savedGroups)S.savedGroups={};if(!S.savedGroups[sc])S.savedGroups[sc]={};
+  var put=function(x,place){if(x.g&&x.slot){S.savedGroups[sc][x.slot]=JSON.parse(JSON.stringify(x.g));}if(place){var sd=nmSuSide(x.nat==='ITA'?'ITA':'USA')||x.sd,e=JSON.parse(JSON.stringify(x.eh));e.st={};nmSideList(sd).push(e);}};
+  K.us.forEach(function(x){if(x.g)put(x,false);});K.it.forEach(function(x){put(x,true);});K.done=1;
+  try{saveState();}catch(e){}try{Draw();}catch(e){}btToast('S47 から引き継ぎました: 米の部隊 '+K.us.filter(function(x){return x.g;}).length+'(部隊の準備から配置)'+(K.win==='ITA'?'・伊はその位置のまま':''));}
+function nmLinkDraw(A){var b='display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;margin:2px;padding:0 12px;border-radius:7px;background:#262d38;color:#e8eef4;font-weight:700;cursor:pointer;border:1px solid #39414f;font-size:14px',gold=b+';background:#2a2416;border-color:#c8a032;color:#ffd060';
+  if(A.kind==='link47'){var J=null;try{J=nmVicJudge();}catch(e){}var sug=J&&J.v47?(!J.v47.length&&(J.loss47||0)<=15?'USA':'ITA'):null,L=nmLinkGrab(),nu=L.filter(function(x){return x.nat==='USA';}).length,ni=L.filter(function(x){return x.nat==='ITA';}).length;
+    return '<div style="font-size:13px;line-height:1.7;margin-bottom:8px">S47 が終わったら、S48 へ続けます。<br>・生き残った米の部隊(編成・SW)を S48 の米の編成に入れます(配置は S48 の手順で)<br>・伊の勝ちなら、伊の部隊はその位置のまま S48 の地図に置きます(米は伊の隣に置けない)<br>・全員統制状態に戻し、マーカーは外します。最後の白兵戦は決着まで続けてから押してください<br>・総合の勝者は S48 の勝者</div><div style="font-size:13px;margin-bottom:8px">いまの地図: 米の部隊 '+nu+'・伊の部隊 '+ni+(sug?'　<span style="color:#ffd24a">勝利条件の判定: '+(sug==='USA'?'米の勝ち':'伊の勝ち')+'</span>':'')+'</div><span style="'+(sug==='USA'?gold:b)+'" onclick="nmLink47Do(\'USA\')">米の勝ちで S48 へ</span> <span style="'+(sug==='ITA'?gold:b)+'" onclick="nmLink47Do(\'ITA\')">伊の勝ちで S48 へ</span><div style="font-size:12px;color:#8fa6bd;margin-top:6px">押すとシナリオが S48 に変わります(S47 の地図は残りません)</div>';}
+  var K=S.nmLink48;return '<div style="font-size:13px;line-height:1.7">'+(K?'S47 から引き継ぎ済み('+(K.win==='USA'?'米':'伊')+'の勝ち): 米の部隊 '+K.us.filter(function(x){return x.g;}).length+'・伊の部隊 '+K.it.length+'<br>米は「部隊の準備」から配置してください'+(K.win==='ITA'?'。伊はその位置のまま(米は伊の隣に置けない)':'。伊は S48 の伊 OB を使う'):'S47 から続けて遊ぶ時は、S47 の SSR4 の「▶ 判定」で「S48 へ」を押してください')+'</div>';}
 
 function nmSaNavalCall(v){var d=v||nmSaRoll(),sc=S.scen.sel;if(S.nmSaUse[sc].steepleGone){btToast('尖塔は破壊済みです');return;}nmSaLog('S59 SSR2 艦砲の要請 dr'+d+(d===1?' → 次の準備射撃フェイズに艦砲':' → なし'));if(d===1)S.nmSaUse[sc].navalPend=1;try{saveState();}catch(e){}btToast('dr'+d+(d===1?': 艦砲が来ます':': なし'));nmSaDraw();}
 function nmSaNavalDo(v){var A=NM_SA,d=v||nmSaRoll(),sc=S.scen.sel;S.nmSaUse[sc].navalPend=0;if(d>=3){nmSaLog('S59 SSR2 艦砲 dr'+d+' → 効果なし');A.step='call';btToast('dr'+d+': 効果なし');nmSaDraw();return;}
