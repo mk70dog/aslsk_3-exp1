@@ -51079,6 +51079,15 @@ function nmMaStall(){var m=S_LOS.motionAttempt,M=(typeof NM_MOVE!=='undefined')?
 (function(){if(window.__nmMaSt)return;window.__nmMaSt=1;['LosSetMotionAttemptDWD','LosSetMotionAttemptDRD'].forEach(function(f){var o=window[f];if(typeof o!=='function')return;window[f]=function(){var r=o.apply(this,arguments);try{if(window.NM_MRSTALL!==false)nmMaStall();}catch(e){console.log(e);}return r;};});
   var od=window.LosMotionAttemptRollDelay;if(typeof od==='function')window.LosMotionAttemptRollDelay=function(){var w=1+Math.floor(Math.random()*6),r=1+Math.floor(Math.random()*6),go=function(){var m=S_LOS.motionAttempt;m.dwd=w;m.drd=r;Draw();try{if(window.NM_MRSTALL!==false)nmMaStall();}catch(e){}};if(typeof btDiceAnimOn==='function'&&!btDiceAnimOn()){go();return;}try{diceRollAnim(w,r,T('遅延MP'),go,{hold:500});}catch(e){go();}};
   var sg=window.nmMvStopGo;if(typeof sg==='function')window.nmMvStopGo=function(stop){var r=sg.apply(this,arguments);try{var M=NM_MOVE;if(!stop&&M&&M.stalled&&window.NM_MRSTALL!==false){S_LOS.motionAttempt={wd:0,rd:0};S_LOS.nmStallPop=true;Draw();}}catch(e){}return r;};})();
+
+/* v1664(ダルマ「境目で向きが変わる ログでわからない？」→「実施」): 車両の移動を1歩ごとにログへ。盤・ヘクス・車体/砲塔の向き(画面上の角度)・向きを変えたMP */
+function nmMvAng(f,b){if(f==null)return '?';return (((f*60+(losBoardRotById(b)||0))%360)+360)%360+'°';}
+function nmMvHx(b,c,r){try{return b+losHexNameFromColRow(c,r);}catch(e){return b+':'+c+','+r;}}
+function nmMvLogEh(t){try{var M=(typeof NM_MOVE!=='undefined')?NM_MOVE:null;if(!M||!M.eh||!M.eh.veh)return;var e=M.eh,v=nmAfv(e.veh);nmDbg('移動の記録 '+t+': '+(v?nmAfvName(v):e.veh)+' @'+nmMvHx(e.boardId,e.col,e.row)+'(盤'+e.boardId+' '+(losBoardRotById(e.boardId)||0)+'°) 車体'+nmMvAng(e.facing,e.boardId)+' 砲塔'+nmMvAng(e.tca,e.boardId)+(e.fb&&e.fb!==e.boardId?' fb='+e.fb:''));}catch(x){}}
+function nmMvLogStep(a,h,sp,cost){var M=(typeof NM_MOVE!=='undefined')?NM_MOVE:null;if(!M||!M.eh||!M.eh.veh)return;var e=M.eh;
+  nmDbg('移動の記録 1歩: '+nmMvHx(a.boardId,a.col,a.row)+'→'+nmMvHx(h.boardId,h.col,h.row)+(a.boardId!==h.boardId?'(境目 '+a.boardId+'→'+h.boardId+')':'')+' 起点の向き'+nmMvAng(a.vca,a.boardId)+'→進入後の向き'+nmMvAng(h.vca,h.boardId)+' 回転'+(sp||0)+'(+'+(cost||0)+'MP) 累計'+h.moveCum+'MP / マーカー 車体'+nmMvAng(e.facing,e.boardId)+' 砲塔'+nmMvAng(e.tca,e.boardId));}
+(function(){if(window.__nmMvLog)return;window.__nmMvLog=1;[['nmMvStart','開始'],['nmMvEnd','終了'],['nmMvCancel','取り消し']].forEach(function(q){var o=window[q[0]];if(typeof o!=='function')return;window[q[0]]=function(){if(q[1]!=='開始'&&window.NM_MVLOG!==false)nmMvLogEh(q[1]+'(前)');var r=o.apply(this,arguments);if(q[1]==='開始'&&window.NM_MVLOG!==false)nmMvLogEh('開始');return r;};});
+  var oe=window.nmMvEnd;})();
 function nmMaCheck(){var m=S_LOS.motionAttempt;if(!m||!m.wd||!m.rd)return;var M=(typeof NM_MOVE!=='undefined')?NM_MOVE:null;if(!M||!M.eh||!M.eh.veh)return;
   var v=nmAfv(M.eh.veh);if(!v||v.breakdownDR==null)return;var res=nmMaRes(v,m.wd+m.rd);if(res==='stall'){if(window.NM_MRSTALL!==false)nmMaStall();return;}if(res!=='imm')return;
   var eh=M.eh;try{nmBkSnap('機械的故障の前');}catch(e){}var u=0;try{u=nmMvUsed();}catch(e){}if(u<=1){var o=M.orig;eh.boardId=o.b;eh.col=o.c;eh.row=o.r;}
@@ -52542,7 +52551,7 @@ function LosMapClick(ev){
       last.cum=last.moveCum;
       // 道路移動ボーナス(歩兵専用ルール)は車両には適用しない。
       var newRoadOk=isVeh?false:(last.roadOk&&hasRoad&&!rtRule.noRoadBonus);
-      hexes.push({boardId:rtBoardId,col:col,row:row,cost:stepCost,moveCum:newMoveCum,cum:newMoveCum+stopAdd,terrain:info.name,onRoad:!!roadSideType,roadOk:newRoadOk,elev:newElev,climbing:climbing,bogRequired:bogRequired,ssrChk:s28chk,ssrExtra:ssrExtra,woodsAll:woodsAllUsed,wreckCnt:wreckCnt,wreckAddCost:wreckAddCost,vcaTurnHexspines:vcaTurnHexspines,vcaAutoChange:vcaTurnCost>0,vca:newVCA,minMoveApplied:minMoveApplied});
+      hexes.push({boardId:rtBoardId,col:col,row:row,cost:stepCost,moveCum:newMoveCum,cum:newMoveCum+stopAdd,terrain:info.name,onRoad:!!roadSideType,roadOk:newRoadOk,elev:newElev,climbing:climbing,bogRequired:bogRequired,ssrChk:s28chk,ssrExtra:ssrExtra,woodsAll:woodsAllUsed,wreckCnt:wreckCnt,wreckAddCost:wreckAddCost,vcaTurnHexspines:vcaTurnHexspines,vcaAutoChange:vcaTurnCost>0,vca:newVCA,minMoveApplied:minMoveApplied});try{if(isVeh&&window.NM_MVLOG!==false)nmMvLogStep(last,hexes[hexes.length-1],vcaTurnHexspines,vcaTurnCost);}catch(e){}
       // 2026-09修正(ダルマ指摘「停止1MPも現在の最終ヘクスに反映させる」): route.totalCost(最終合計・
       // 表示用)は新しい終端ヘクスのcum(停止込み)をそのまま使う。
       route.totalCost=newMoveCum+stopAdd;
