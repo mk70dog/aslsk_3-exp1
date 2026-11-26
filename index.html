@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1658</title>
+<title>ASL SKシリーズv1659</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1658">
+<meta property="og:title" content="ASL SKシリーズv1659">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10978,7 +10978,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.858"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.859"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1659="v1659(";
 var APP_VERSION_HIST_v1658="v1658(";
 var APP_VERSION_HIST_v1657="v1657(";
 var APP_VERSION_HIST_v1656="v1656(";
@@ -38662,7 +38663,7 @@ function nmsRe(n){NM_RM_SUB='sync';btRmReopen(n);} /* v619(バグ修正 ダル�
 function nmsSetRole(n,r){try{localStorage.setItem('aslsk_mapsync_side',r||'');}catch(e){}NMS.lastHash='';NMS.remoteAt=0;nmsRe(n);}
 function nmsFile(r){return r?'aslsk_map_'+r+'.json':NMS_FILE;}
 /* v1656(ダルマ「同期エラー」ログ: 08:47 から 自動同期失敗 送信 403 が1時間続いた): GitHub の Gist への書き込みが 403/429 のとき、理由(GitHubのメッセージ・残り回数・待つ秒数)をログに出し、言われた時間(なければ60秒→最大10分で倍々)書き込みを止める。短い間に書き込みすぎると GitHub が一時的に止める(secondary rate limit)ため */
-var NM_GH_BO={until:0,n:0,last:''};var NM_GH_EC={};
+var NM_GH_BO={until:0,n:0,last:''};function nmGhWaitTxt(){var w=NM_GH_BO.until-Date.now();if(w<=0)return '';var hh=new Date(NM_GH_BO.until);return 'GitHubの使用回数の上限のため送信を止めています(あと約'+Math.ceil(w/60000)+'分、'+hh.getHours()+':'+String(hh.getMinutes()).padStart(2,'0')+'ごろ再開)';} /* v1659 */var NM_GH_EC={};
 (function(){var of=window.fetch;if(!of)return;window.fetch=function(u,o){try{var isW=typeof u==='string'&&/api\.github\.com\/gists/.test(u)&&o&&/^(PATCH|POST)$/i.test(o.method||'');if(isW&&Date.now()<NM_GH_BO.until){var w=Math.ceil((NM_GH_BO.until-Date.now())/1000);return Promise.resolve(new Response(JSON.stringify({message:'待機中(GitHubの制限) あと'+w+'秒'}),{status:429,headers:{'Content-Type':'application/json'}}));}
   var isG=typeof u==='string'&&/api\.github\.com\/gists\/[^/?]+/.test(u)&&(!o||!o.method||/^GET$/i.test(o.method));
   if(isG&&window.NM_GH_ETAG!==0){var key=u.replace(/[?#].*$/,''),C=NM_GH_EC[key],o2=Object.assign({},o||{}),hd=new Headers((o&&o.headers)||{});if(C&&C.etag)hd.set('If-None-Match',C.etag);o2.headers=hd; /* v1657: 前と同じ中身なら GitHub は 304 を返し、使用回数に数えない */
@@ -38678,14 +38679,14 @@ function nmsHdr(){return {'Authorization':'token '+gistGetToken(),'Accept':'appl
 function nmsPush(cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);return;}var sc=S.scen&&S.scen.sel;if(!sc){NMS.msg='シナリオが選ばれていません';if(cb)cb(false);return;}
   var h=nmsHash(),at=Date.now(),body={files:{}};body.files[nmsFile(nmsRole())]={content:JSON.stringify({v:1,scen:sc,at:at,dev:nmsDev(),side:nmsRole(),map:JSON.parse(h)})};
   NMS.busy=true;NMS.status='送信中';fetch('https://api.github.com/gists/'+gistGetId(),{method:'PATCH',headers:nmsHdr(),body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw new Error('PATCH '+r.status);
-    NMS.busy=false;NMS.lastHash=h;if(!nmsRole())NMS.remoteAt=at;try{localStorage.setItem('aslsk_map_myat_'+sc,String(at));}catch(x){}NMS.last=Date.now();NMS.status='送信済み';try{var mm=JSON.parse(h);nmDbg('マップ同期: 送信 自軍'+(mm.friendHexes||[]).length+'・敵軍'+(mm.enemyHexes||[]).length+' この国 '+(mm.myNat||'-')+'='+(mm.mySide||'-')+' ('+nmsFile(nmsRole())+')');}catch(x){}NMS.msg='';if(cb)cb(true);nmsRedraw();}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=String(e.message||e);if(cb)cb(false);nmsRedraw();});}
+    NMS.busy=false;NMS.lastHash=h;if(!nmsRole())NMS.remoteAt=at;try{localStorage.setItem('aslsk_map_myat_'+sc,String(at));}catch(x){}NMS.last=Date.now();NMS.status='送信済み';try{var mm=JSON.parse(h);nmDbg('マップ同期: 送信 自軍'+(mm.friendHexes||[]).length+'・敵軍'+(mm.enemyHexes||[]).length+' この国 '+(mm.myNat||'-')+'='+(mm.mySide||'-')+' ('+nmsFile(nmsRole())+')');}catch(x){}NMS.msg='';if(cb)cb(true);nmsRedraw();}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=nmGhWaitTxt()||String(e.message||e);if(cb)cb(false);nmsRedraw();});}
 function nmsPull(force,cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);return;}NMS.busy=true;NMS.status=NMS.status||'受信中';
   fetch('https://api.github.com/gists/'+gistGetId()+'?t='+Date.now(),{headers:nmsHdr(),cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('GET '+r.status);return r.json();}).then(function(gist){
     NMS.busy=false;var rl=nmsRole(),f=(gist.files||{})[nmsFile(rl?(rl==='p1'?'p2':'p1'):'')];if(!f||!f.content){NMS.status=rl?'まだ相手のデータがありません':'まだ共有データがありません';if(cb)cb(false);nmsRedraw();return;}
     var P=JSON.parse(f.content);NMS.remoteScen=P.scen;NMS.from=P.dev;
     if(P.scen!==(S.scen&&S.scen.sel)){NMS.status='相手は別のシナリオ('+P.scen+')';if(cb)cb(false);nmsRedraw();return;}
     if(!force&&(P.at<=NMS.remoteAt||(!rl&&P.dev===nmsDev()))){NMS.status=NMS.status==='受信中'?'最新':NMS.status;NMS.last=Date.now();if(cb)cb(false);nmsRedraw();return;}
-    nmsApply(P,rl);NMS.remoteAt=P.at;NMS.last=Date.now();NMS.status='受信して反映';NMS.msg='';if(cb)cb(true);}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=String(e.message||e);if(cb)cb(false);nmsRedraw();});}
+    nmsApply(P,rl);NMS.remoteAt=P.at;NMS.last=Date.now();NMS.status='受信して反映';NMS.msg='';if(cb)cb(true);}).catch(function(e){NMS.busy=false;NMS.status='エラー';NMS.msg=nmGhWaitTxt()||String(e.message||e);if(cb)cb(false);nmsRedraw();});}
 function nmsApply(P,rl){var m=P.map||{},sc=P.scen;try{nmOppLblSet(sc,P.lbl);}catch(e){}nmBkSnap('受信前(共有で置き換え)');
   /* v1412(ダルマ指示「マップ上のカウンターの位置は同期しないようにする」): マップ同期の受信で自軍・敵軍のカウンター(friendHexes/enemyHexes)の位置は置き換えない(以前: 2Pなら相手の自軍→こちらの敵軍を上書き) */try{nmDbg('マップ同期を受信(カウンターの位置は変えない)');}catch(e){}
   var jAllP=false;try{jAllP=!!rl&&S.nmMode!=='online'&&nmJsLv()==='all';}catch(e){}var myAt=0;try{myAt=+localStorage.getItem('aslsk_map_myat_'+sc)||0;}catch(e){}
@@ -40862,7 +40863,7 @@ function nmGsSync(o){o=o||{};var Q=!!o.auto,sc=S.scen&&S.scen.sel;if(!sc){if(!Q)
       nmGsDone('このiPad('+me+'): 送信 '+nOwn+'編成・受信 相手'+nIn+'編成'+(got.length?'・'+got.filter(function(x){return !/^編成/.test(x);}).join('・'):'').replace(/・$/,''));};
     if(!needSend){fin();return;}
     body.files['aslsk_grp_'+rl+'.json']={content:JSON.stringify({v:2,scen:sc,at:Date.now(),dev:nmsDev(),side:rl,groups:own,lbl:nmOppLblPack(),turn:turn,pf:pf,map:mapSnap,edits:edits,ack:ack})};
-    return fetch('https://api.github.com/gists/'+gistGetId(),{method:'PATCH',headers:nmsHdr(),body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw new Error('送信 '+r.status);fin();});}).catch(function(e){NM_GS.busy=false;nmGsBtnSt('');if(Q){try{nmDbg('自動同期失敗: '+(e.message||e));}catch(x){}return;}nmGsDone('同期できませんでした: '+(e.message||e));});}
+    return fetch('https://api.github.com/gists/'+gistGetId(),{method:'PATCH',headers:nmsHdr(),body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw new Error('送信 '+r.status);fin();});}).catch(function(e){NM_GS.busy=false;nmGsBtnSt('');if(Q){try{nmDbg('自動同期失敗: '+(e.message||e));}catch(x){}return;}nmGsDone('同期できませんでした: '+(nmGhWaitTxt()||e.message||e));});}
 try{setTimeout(nmAsLoop,4000);}catch(e){}
 /* v826(ダルマ確認「⇅同期を長押しで1P/2Pを選び直す」→実施) */
 function nmGsLpStart(){nmGsLpEnd();NM_GS.lpDone=0;NM_GS.lpT=setTimeout(function(){NM_GS.lpDone=1;var r=nmsRole();nmGsRoleAsk('今は「'+(r==='p1'?'1P':r==='p2'?'2P':'未設定')+'」です。このiPadをどちらにしますか？');},600);}
