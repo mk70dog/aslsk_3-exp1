@@ -22584,7 +22584,7 @@ function motionAttemptCardHTML(afv,mode){
   h+='<div style="font-size:12px;color:#4499ee;margin:7px 0 3px">WHITE DIE</div>';
   h+=rDiceHTML(m.wd,false,'GsetMotionAttemptWD',m._rolling);
   h+='</div>';
-  h+=motionAttemptResultHTML(afv.breakdownDR,m.wd,m.rd,{stall:!!afv.stall,dwd:m.dwd,drd:m.drd,dwdFn:'GsetMotionAttemptDWD',drdFn:'GsetMotionAttemptDRD',delayAutoFn:'GsetMotionAttemptDelayAutoDice',delayRolling:m._drolling});
+  h+=motionAttemptResultHTML(afv.breakdownDR,m.wd,m.rd,{stall:nmMaIsStall(afv,(m.wd||0)+(m.rd||0)),dwd:m.dwd,drd:m.drd,dwdFn:'GsetMotionAttemptDWD',drdFn:'GsetMotionAttemptDRD',delayAutoFn:'GsetMotionAttemptDelayAutoDice',delayRolling:m._drolling});
   h+='</div>';
   return h;
 }
@@ -27603,7 +27603,7 @@ function MR_CARD(){
   h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">RED DIE</div>'+rDiceHTML(m.rd,true,'MrRD',m._rolling);
   h+='<div style="font-size:12px;color:#4499ee;margin:7px 0 3px">WHITE DIE</div>'+rDiceHTML(m.wd,false,'MrWD',m._rolling);
   h+='</div>';
-  h+=motionAttemptResultHTML(v.breakdownDR,m.wd,m.rd,{stall:!!v.stall,dwd:m.dwd,drd:m.drd,dwdFn:'MrDWD',drdFn:'MrDRD',delayAutoFn:'MrDelayAuto',delayRolling:m._drolling});
+  h+=motionAttemptResultHTML(v.breakdownDR,m.wd,m.rd,{stall:nmMaIsStall(v,(m.wd||0)+(m.rd||0)),dwd:m.dwd,drd:m.drd,dwdFn:'MrDWD',drdFn:'MrDRD',delayAutoFn:'MrDelayAuto',delayRolling:m._drolling});
   h+='</div></div>';
   return h;
 }
@@ -50780,7 +50780,7 @@ function losVehicleReliabilityCardHTML(){
   h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+maTitleHTML(veh,'start')+'</div>';
   h+='<div class="lbl">WHITE DIE</div>'+rDiceHTML(m.wd,false,'LosSetMotionAttemptWD',false);
   h+='<div class="lbl" style="margin-top:6px">RED DIE</div>'+rDiceHTML(m.rd,true,'LosSetMotionAttemptRD',false);
-  h+=nmMaRollBtns(veh,m); /* v513(ダルマ報告「ダイスロールが手動のみ」) */h+=motionAttemptResultHTML(veh.breakdownDR,m.wd,m.rd,{stall:!!veh.stall,dwd:m.dwd,drd:m.drd,dwdFn:'LosSetMotionAttemptDWD',drdFn:'LosSetMotionAttemptDRD'});
+  h+=nmMaRollBtns(veh,m); /* v513(ダルマ報告「ダイスロールが手動のみ」) */h+=motionAttemptResultHTML(veh.breakdownDR,m.wd,m.rd,{stall:nmMaIsStall(veh,(m.wd||0)+(m.rd||0)),dwd:m.dwd,drd:m.drd,dwdFn:'LosSetMotionAttemptDWD',drdFn:'LosSetMotionAttemptDRD'});
   h+='</div>';
   return h;
 }
@@ -51057,8 +51057,24 @@ function LosMotionAttemptRollDelay(){var w=1+Math.floor(Math.random()*6),r=1+Mat
   if(typeof btDiceAnimOn==='function'&&!btDiceAnimOn()){go();return;}try{diceRollAnim(w,r,T('遅延MP'),go,{hold:500});}catch(e){go();}}
 /* v518(バグ修正 ダルマ報告「機械的故障したがマーカーがつかない」「続けて移動できてしまう」): HQの車両の移動で始動(機械的信頼性)判定が DR ≧ 故障ナンバー
    (失速のある車両は除く)なら、その車両に「走行不能」の印を付け、移動を終える(地点はそこで止まる)。走行不能の車両は移動を始められない */
+
+/* sample-mrel(ダルマ「機械的信頼性のペナルティを移動に反映させる」): 始動DRの結果を3つに分ける(ASLSK4 3.3.2・車両ノート)。
+   赤MP(機械的信頼性): DR ≧ 故障No.(12)→走行不能。ソ連の Note M(T-34 M41・KV-1・KV-2 など、breakdownDR 11・stall): 12→走行不能、11→失速。
+   パンターG・ヤクトパンター(MP黒・stall): 12→失速。失速=もう一度DRし、その目の遅延MP(停止の1MPを含む・始動の1MPは含まない)を使う。動けずに止まったまま。
+   MPが残っていれば「発進(1MP)」でもう一度始動でき、そのたびに判定。遅延が残りMPを超えたら全MPを使ってMPhを終える */
+function nmMaRes(v,dr){if(!v||v.breakdownDR==null||!dr)return 'ok';if(dr<v.breakdownDR)return 'ok';if(v.stall&&v.mpRed===false)return 'stall';if(v.stall&&v.mpRed&&dr<12)return 'stall';return 'imm';}
+function nmMaIsStall(v,dr){return nmMaRes(v,dr)==='stall';}
+function nmMaStall(){var m=S_LOS.motionAttempt,M=(typeof NM_MOVE!=='undefined')?NM_MOVE:null;if(!m||!M||!M.eh||!M.eh.veh||!m.dwd||!m.drd||m._stallDone)return;var v=nmAfv(M.eh.veh);if(!v)return;
+  var dl=m.dwd+m.drd;m._stallDone=1;try{nmBkSnap('失速の前');}catch(e){}var u0=0;try{u0=nmMvUsed();}catch(e){}
+  if(u0>1){var o=M.orig;M.eh.boardId=o.b;M.eh.col=o.c;M.eh.row=o.r;M.eh.facing=o.f;M.eh.tca=o.t;} /* 動き出す前の失速なので元のヘクスへ */
+  M.extra=(M.extra||0)+dl;M.stopped=true;M.stalled=(M.stalled||0)+1;var tot=v.mp||0,u=0;try{u=nmMvUsed();}catch(e){}if(!u)u=1+dl;
+  if(tot&&u>=tot){var st=nmStOf(M.eh);st.mv=4;NM_MOVE=null;S_LOS.nmStallPop=false;if(S_LOS.routeMode)LosToggleRouteMode();S_LOS.route=null;try{nmStSave();}catch(e){}try{saveState();}catch(e){}try{BtRmClose();}catch(e){}Draw();btToast(nmAfvName(v)+': 失速 遅延'+dl+'MP → MPを使い切り、このMPhは終わり');return;}
+  S_LOS.nmStallPop=false;try{saveState();}catch(e){}Draw();btToast(nmAfvName(v)+': 失速 遅延'+dl+'MP(使用'+u+'/'+tot+')。もう一度始動するなら「発進(1MP)」');}
+(function(){if(window.__nmMaSt)return;window.__nmMaSt=1;['LosSetMotionAttemptDWD','LosSetMotionAttemptDRD'].forEach(function(f){var o=window[f];if(typeof o!=='function')return;window[f]=function(){var r=o.apply(this,arguments);try{if(window.NM_MRSTALL!==false)nmMaStall();}catch(e){console.log(e);}return r;};});
+  var od=window.LosMotionAttemptRollDelay;if(typeof od==='function')window.LosMotionAttemptRollDelay=function(){var w=1+Math.floor(Math.random()*6),r=1+Math.floor(Math.random()*6),go=function(){var m=S_LOS.motionAttempt;m.dwd=w;m.drd=r;Draw();try{if(window.NM_MRSTALL!==false)nmMaStall();}catch(e){}};if(typeof btDiceAnimOn==='function'&&!btDiceAnimOn()){go();return;}try{diceRollAnim(w,r,T('遅延MP'),go,{hold:500});}catch(e){go();}};
+  var sg=window.nmMvStopGo;if(typeof sg==='function')window.nmMvStopGo=function(stop){var r=sg.apply(this,arguments);try{var M=NM_MOVE;if(!stop&&M&&M.stalled&&window.NM_MRSTALL!==false){S_LOS.motionAttempt={wd:0,rd:0};S_LOS.nmStallPop=true;Draw();}}catch(e){}return r;};})();
 function nmMaCheck(){var m=S_LOS.motionAttempt;if(!m||!m.wd||!m.rd)return;var M=(typeof NM_MOVE!=='undefined')?NM_MOVE:null;if(!M||!M.eh||!M.eh.veh)return;
-  var v=nmAfv(M.eh.veh);if(!v||v.breakdownDR==null||v.stall)return;if(m.wd+m.rd<v.breakdownDR)return;
+  var v=nmAfv(M.eh.veh);if(!v||v.breakdownDR==null)return;var res=nmMaRes(v,m.wd+m.rd);if(res==='stall'){if(window.NM_MRSTALL!==false)nmMaStall();return;}if(res!=='imm')return;
   var eh=M.eh;try{nmBkSnap('機械的故障の前');}catch(e){}var u=0;try{u=nmMvUsed();}catch(e){}if(u<=1){var o=M.orig;eh.boardId=o.b;eh.col=o.c;eh.row=o.r;}
   var st=nmStOf(eh);st.imm=1;if(u>1)st.mv=u>3?4:(u>1?3:1);NM_MOVE=null;S_LOS.nmStallPop=false;if(S_LOS.routeMode)LosToggleRouteMode();S_LOS.route=null;try{nmStSave();}catch(e){}try{saveState();}catch(e){}try{BtRmClose();}catch(e){}Draw();
   btToast(nmAfvName(v)+': 機械的故障 → 走行不能(移動終了)');}
@@ -51472,7 +51488,7 @@ function losVehicleMFSummaryHTML(){
     h+='<div style="font-size:12px;color:#8899aa;margin-bottom:3px">'+maTitleHTML(veh,'start')+'</div>';
     h+='<div class="lbl">WHITE DIE</div>'+rDiceHTML(m.wd,false,'LosSetMotionAttemptWD',false);
     h+='<div class="lbl" style="margin-top:6px">RED DIE</div>'+rDiceHTML(m.rd,true,'LosSetMotionAttemptRD',false);
-    h+=nmMaRollBtns(veh,m); /* v513(ダルマ報告「ダイスロールが手動のみ」) */h+=motionAttemptResultHTML(veh.breakdownDR,m.wd,m.rd,{stall:!!veh.stall,dwd:m.dwd,drd:m.drd,dwdFn:'LosSetMotionAttemptDWD',drdFn:'LosSetMotionAttemptDRD'});
+    h+=nmMaRollBtns(veh,m); /* v513(ダルマ報告「ダイスロールが手動のみ」) */h+=motionAttemptResultHTML(veh.breakdownDR,m.wd,m.rd,{stall:nmMaIsStall(veh,(m.wd||0)+(m.rd||0)),dwd:m.dwd,drd:m.drd,dwdFn:'LosSetMotionAttemptDWD',drdFn:'LosSetMotionAttemptDRD'});
     h+='</div>';
   }
   // 2026-09追加(ダルマ指示「実施」: 移動タブ/移動ルートへの車両煙幕カード追加): 煙幕展張器(smoke)保持
