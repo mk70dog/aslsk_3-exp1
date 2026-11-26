@@ -38723,7 +38723,7 @@ function nmSyInfo(){var m=nmsMode(),st=NMS.status||'',ago=NMS.last?Math.round((D
   if(NMS.busy||st==='送信中'||st==='受信中')return {c:'#40ff90',t:'同期中…',spin:1,btn:1};
   if(st==='エラー')return {c:'#ff7060',t:'同期エラー',spin:0,btn:1};
   if(/別のシナリオ|まだ/.test(st))return {c:'#ffb040',t:(nmsRole()==='p1'?'1P':nmsRole()==='p2'?'2P':'')+' 相手待ち',spin:0,btn:1};
-  return {c:'#7cc4ff',t:(m==='auto'?'自動':'手動')+(agoT?' · '+agoT:''),spin:0,btn:1};}
+  return {c:'#7cc4ff',t:(m==='auto'&&!nmsMan()?'自動':'手動')+(agoT?' · '+agoT:''),spin:0,btn:1};}
 function nmSyChipFill(){var tb=document.getElementById('nmFullTabs');var el=document.getElementById('nmSyChip');if(!tb||nmModeNow()==='judge'||nmModeNow()==='ai'){if(el)el.remove();return;} /* sample-btside: 対戦モードでは同期の札を出さない */
   if(!document.getElementById('nmSyCss')){var st=document.createElement('style');st.id='nmSyCss';st.textContent='@keyframes nmSySp{to{transform:rotate(360deg)}}#nmSyChip{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 3px 0 7px;margin:0 4px;border-radius:7px;font:bold 12px AppFont,AppJP,monospace;background:#14181fdd;cursor:pointer;-webkit-user-select:none;user-select:none}#nmSyChip .ic{display:inline-flex}#nmSyChip.sp .ic svg{animation:nmSySp 1.4s linear infinite}#nmSyChip .nw{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:5px;border:1px solid;font-size:11px}@media(max-width:900px){#nmSyChip .tx{display:none}}';document.head.appendChild(st);}
   if(!el){el=document.createElement('span');el.id='nmSyChip';var off=tb.querySelector('.nmFullOff');if(off)tb.insertBefore(el,off);else tb.appendChild(el);
@@ -38733,7 +38733,8 @@ function nmSyChipFill(){var tb=document.getElementById('nmFullTabs');var el=docu
   if(el._h!==h+I.c+I.spin){el._h=h+I.c+I.spin;el.innerHTML=h;el.style.color=I.c;el.style.border='1px solid '+I.c+'99';var was=el._sp;el._sp=!!I.spin;el.className=I.spin?'sp':'';if(was&&!I.spin&&I.c!=='#ff7060'){el.classList.add('ok');setTimeout(function(){el.classList.remove('ok');},1300);}el.title='マップ同期: '+I.t;}}
 setInterval(function(){try{nmSyChipFill();}catch(e){}},1000);
 function nmsRedraw(full){if(full||S.tab==='los'){if(document.getElementById('btRm')&&!full)return;Draw();}}
-function nmsTick(){if(nmsMode()!=='auto'||!GIST_CONFIGURED()||NMS.busy)return;if(!(S.scen&&S.scen.sel))return;
+function nmsMan(){try{return window.NM_MSMAN!==false&&nmModeNow()==='judge'&&!nmAsOn();}catch(e){return false;}} /* sample-msman(ダルマ「同期オフ時マップ上の同期も手動時のみにする」): 判定モードで自動同期がOFFなら、マップの同期も ⇅同期 を押した時だけ */
+function nmsTick(){if(nmsMode()!=='auto'||!GIST_CONFIGURED()||NMS.busy)return;if(nmsMan())return;if(!(S.scen&&S.scen.sel))return;
   if(document.getElementById('nmDragG'))return;var h=nmsHash();
   if(NMS.lastHash&&h!==NMS.lastHash){if(!NMS.dirtyAt)NMS.dirtyAt=Date.now();if(Date.now()-NMS.dirtyAt>=2500){NMS.dirtyAt=0;nmsPush();}return;}
   NMS.dirtyAt=0;if(!NMS.lastHash){NMS.lastHash=h;if(!NMS.pushed1){NMS.pushed1=1;nmsPush();return;}} /* v1523(ダルマ「マップの同期がまだダメ」): 起動・同期オールにした直後は、変化が無いと送らなかった(前から置いていたカウンターが相手に届かない)。最初に1回送る */
@@ -40832,6 +40833,7 @@ function nmAsTurnLbl(t){var ph=(PHASE_SEQ.filter(function(x){return x.id===t.pha
 function nmGsSync(o){o=o||{};var Q=!!o.auto,sc=S.scen&&S.scen.sel;if(!sc){if(!Q)btToast('シナリオを選んでください');return;}
   if(!GIST_CONFIGURED()){if(!Q)btToast('GitHub Gistの設定がありません(シナリオタブ「BATTLE RECORD」の同期設定でトークンとGist IDを入れてください)');return;}
   var rl=nmsRole();if(!rl){if(!Q)nmGsRoleAsk();return;}if(NM_GS.busy){if(!Q)btToast('同期中です');return;}
+  if(!Q&&nmsMan()&&nmsMode()==='auto'){try{nmDbg('マップ同期: 手動(⇅同期)で送信・受信');}catch(e){}setTimeout(function(){nmsPush(function(){setTimeout(function(){nmsPull(false);},800);});},1500);} /* sample-msman: 手動の時は編成の同期のあとにマップも送って受け取る */
   try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot)nmGeSync(g.activeGroupSlot);}catch(e){}
   nmAsTouch();
   var me=rl==='p1'?'1P':'2P',op=rl==='p1'?'p2':'p1',opN=op==='p1'?'1P':'2P';
