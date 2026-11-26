@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1673</title>
+<title>ASL SKシリーズv1674</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1673">
+<meta property="og:title" content="ASL SKシリーズv1674">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -3510,6 +3510,9 @@ function getScenarioSSRFlags(){
 // SSR_REFLECT[シナリオID][SSR番号(1始まり)] = 反映内容の説明。シナリオタブとSSRポップアップの該当SSR直下に「反映済」タグ付きで表示する。
 // 追加時は反映ロジック(SCENARIO_SSR_FLAGS/scenShotDrm/各タブのボタン等)と必ずセットで登録すること(注記だけ先に追加しない)。
 var SSR_REFLECT={
+  S42:{1:'判定モードの地図: 生垣は TEM+2・越えるのに+2MF(v1667)'}, // v1674
+  S41:{2:'煙幕手榴弾(地図・移動タブ): 独 4-6-7 の煙幕指数を3にする'}, // v1674
+  S47:{2:'煙幕手榴弾(地図・移動タブ): 米 7-4-7 の煙幕指数+2。士気チェック・クラス低下: 米 MMC は下線付き士気(ELR で置き換えない)'}, // v1674
   S51:{1:'マップ: sS5・sAA2 に戦車残骸を自動で置く(判定モード=シナリオ選択時、アプリ対戦=準備のとき)。残骸のヘクスの歩兵は+1TEM、通り抜ける射線は+1妨害、車両の進入は+1MP(道路沿い+2MP)。アプリ対戦: 独MMCは隣・同じヘクスに置けない(OB から1つずつ・部隊の準備の両方)',2:'アプリ対戦: T1 米の準備射撃フェイズの最初に事前砲爆撃を自動で解決(人間が米なら地域を選ぶ窓・アプリは自動で選ぶ)。地域内の独ユニット全部が NTC(失敗=釘付け、色dr5・6なら混乱+DM/成功でも色dr5・6なら CX)',3:'アプリ対戦: 独の分隊がパンツァーファウスト(射程2・19発、ツールバーの PF、アプリも使う)。判定モード: 下の帯の PF チップで残り数'}, // ダルマ「ssrは全てアプリ対応済みのマーク」
   S31:{1:'マップ: EmRRヘクス(盤面x Y9・Z8・AA8・BB7・CC7・EE6・FF5・GG6、Y10・DD6は道路のまま)を登録。LOS判定でEmRR上にいないユニットのLOSがEmRRを通過して直後の1ヘクスを超える非EmRRヘクスへ伸びる場合は遮断(射撃側・目標がEmRRより高い標高なら不適用)。EmRRヘクスのTEMは0。移動ルートでEmRRへの進入は2(隣接EmRRからは1)',2:'射撃タブ(ピッカー)・マップのMF: 伊軍MMCを未熟兵(指揮官同行でも解除されない)として自動判定(畏縮2列・SW/FTのB#/X#-1・3MF)。不意打ち・白兵戦(CCV)・PAATC・爆薬・LATWは各タブの未熟兵ボタンで指定'}, // v11.302
   S20:{4:'射撃タブ(ピッカー)・マップのMF: 5-3-6/2-2-6を未熟兵として扱わない(畏縮1列・B#/X#の未熟兵-1なし・4MF)。移動タブの煙幕手榴弾: 5-3-6/2-2-6は煙幕能力なし(指数0)。士気/損耗タブ(MC): 米軍6-6-7/3-4-7をピッカーで選ぶと「士気値下線あり(ELR置換免除)」を自動でON'}, // v11.301
@@ -3523,7 +3526,7 @@ var SSR_REFLECT={
   S13:{3:'射撃タブ: 英軍・豪軍の1st LineのCowerを自動で免除',4:'マップ: 穀物地形を有効(季節内)にする(日付が4月でも麦畑のヒンドランス・1.5MFを適用)'},
   S24:{1:'移動タブ「煙幕手榴弾」の対象ユニット選択ピッカーで独8-3-8[E]/5-4-8[E]を選択すると、Smoke指数に自動で+2を加算(デジタルパネルの成功dr値・判定結果とも反映)',2:'白兵戦(対車両CC)タブ: S24選択中のみ表示される「SSR：独8-3-8[E]等 CCV+1」ボタンで反映',3:'対象ユニット(6-2-8[E]/3-2-8[E](HS))はELR_MAPに派生先が登録されていないため、通常のクラス低下判定でも既に対象外(該当ユニットなしと表示され実害なし)'},
   S16:{1:'マップ(移動ルート): 昇り降り(高度変更)のたびに追加+1MFを自動加算(舗装道路上を除く。歩兵・車両とも)',2:'マップ(LOS・TEM表示・移動): SSR直下のボタンで選んだ建物(P9またはO6)を要塞化建物(TEM+4)として扱う。選んだヘクスのみ(複数ヘクス建物の他のヘクスは通常表示)'},
-  S20:{5:'マップ(LOS・移動): 藪(Brush)ヘクスを果樹園として扱う。藪が他の地形要素と同居するヘクスは盤面の優勢地形で判定するため、同居ヘクスの区別は近似(盤面画像は元のまま)'},
+  S20b:{5:'マップ(LOS・移動): 藪(Brush)ヘクスを果樹園として扱う。藪が他の地形要素と同居するヘクスは盤面の優勢地形で判定するため、同居ヘクスの区別は近似(盤面画像は元のまま)'},
   S17:{1:'マップ(LOS): 森ヘクスを果樹園として扱う',2:'射撃タブ: 英軍のエリート/1st LineのCowerを免除し、分隊種別を問わずAssault Fireを使用可にする'},
   S18:{1:'マップ(LOS・移動): 森・果樹園を石造瓦礫として扱う',2:'不意打ちカード: 「SSR：露エリート/1st Line -1」ボタンで反映'},
   S19:{1:'マップ(LOS): 穀物を浸水(進入不可・LOSに影響なし)とし、CC6の森は開豁地として扱う'},
@@ -3535,6 +3538,7 @@ var SSR_REFLECT={
   S44:{2:'PAATCカード: 「SSR：波軍MMC +1」ボタンで反映'},
   S46:{1:'マップ(移動ルート): 道路移動ボーナスを無効にし、建物・林以外に進入する歩兵に追加+0.5MFを自動加算(煙幕の使用制限は表示のみ)',2:'マップ(LOS・標高): 丘(標高1)の開豁地部分を林として扱い、標高は0にする(丘上の道路・建物は元のまま。盤面画像は元のまま)',3:'降雪の状態はこのSSR直下の「降雪中」ボタンで切替。降雪中は、射程6ヘクス以下の射撃に+1、7ヘクス以上に+2のDRMを自動加算(射撃・砲撃/戦車・対戦車タブ。FFMOは打ち消さず、残存火力・阻止射撃には適用しない。射程は射撃タブでは先頭グループの射程)'}
 };
+try{SSR_REFLECT.S20=Object.assign({},SSR_REFLECT.S20,SSR_REFLECT.S20b);delete SSR_REFLECT.S20b;}catch(e){} /* v1674: S20 が2回書かれていて SSR4 の反映済みが消えていた */
 // 降雪(S4/S46): 判定時の追加DRM。状態はS.scenSnow(シナリオタブのボタンで切替)。
 // 不意打ち(Ambush)のシナリオSSR: S18(露エリート/1st Line -1)、S27(ニュージーランド軍MMC/SMC -1)。該当しなければnull。
 function ambSsrLabel(){
@@ -3998,7 +4002,8 @@ var CASUAL_MAP={
   SLO:{"4-4-7[E]":"2-4-7[E](HS)","3-4-7[1]":"1-3-7[1](HS)","3-3-6[C]":"1-2-6[C](HS)"}
 };
 /* v812(ダルマ「s24 ssrは反映できている？」の確認で発見): S24 SSR3 ソ連の6-2-8・3-2-8は下線付き士気でELRの対象外。のちにELR_MAP.SOVへ6-2-8[E]・3-2-8[E](HS)が追加され、SSR3が効かなくなっていた */
-function elrExempt(nat,label){try{if(S.scen&&S.scen.sel==='S24'&&nat==='SOV'&&/^(6-2-8|3-2-8)/.test(String(label||'')))return true;}catch(e){}return false;}
+function elrExempt(nat,label){try{var sc0=S.scen&&S.scen.sel;if((sc0==='S24'||sc0==='S35')&&nat==='SOV'&&/^(6-2-8|3-2-8)/.test(String(label||'')))return true;if(sc0==='S47'&&nat==='USA')return true;}catch(e){}return false;} /* v1674: S35 SSR2(ソ 6-2-8/3-2-8 下線)・S47 SSR2(米 MMC 全部 下線) */
+function ssrSmkAdj(nat,label,kind,v){try{var sc0=S.scen&&S.scen.sel;if(kind==='smc')return v;if(sc0==='S41'&&nat==='GER'&&/^4-6-7/.test(label))return 3;if(sc0==='S47'&&nat==='USA'&&/^7-4-7/.test(label))return v+2;}catch(e){}return v;} /* v1674: S41 SSR2(独 4-6-7 煙幕3)・S47 SSR2(米 7-4-7 突撃工兵 煙幕+2) */
 var ELR_MAP={
   USA:{"6-6-7[E]":"6-6-6[1]","6-6-6[1]":"5-4-6[2]","5-4-6[2]":"5-3-6[G]","3-4-7[E](HS)":"3-4-6[1](HS)","3-4-6[1](HS)":"2-3-6[2](HS)","2-3-6[2](HS)":"2-2-6[G](HS)"},
   GER:{"5-4-8[E]":"4-4-7[2]","4-6-8[E]":"4-6-7[1]","4-6-7[1]":"4-4-7[2]","4-4-7[2]":"4-3-6[C]","2-3-8[E](HS)":"2-3-7[2](HS)","2-4-8[E](HS)":"2-4-7[1](HS)","2-4-7[1](HS)":"2-3-7[2](HS)","2-3-7[2](HS)":"2-3-6[C](HS)"},
@@ -4831,7 +4836,7 @@ var SCN=[
    // 伊軍A5近傍進入欄(1つの大箱に5種類)は「12」が3-4-6の下、「2」が8-0の下、「3」がLMGの下にそれぞれ個別印字されており、8-1・MTRには数字が無い(デフォルト×1)ことを確認。
    // Gruppo Mobile E戦車はMR/35(f)で確定(2026-09、SKEP1 2020カウンターシート実測): カウンター実物に「MR/35(t)」表記(A〜Fとa・bの8種)、数量もOBの×8と完全一致。既存AFV_DATA(afv_mr35f_ita、MP8一致)に対応し、史実(シチリア1943年、鹵獲仏戦車使用の第101/102戦車大隊がシチリアで壊滅)ともS48の舞台設定と整合。車種同定は確定済み。2026-09追記(Kato提供カウンター画像確認): 前面AF「四角囲み4」・側面AF「四角囲み4」(共にhull4/turret6)を実際に確認し、既存登録値afFront:{hull:4,turret:6}/afSide:{hull:4,turret:6}と完全一致することを確認済み(旧「今後の課題」は解消)。
   },
-  {id:"S49",atk:"GER",north:"up",
+  {id:"S49",vicHexes:{board:"r",hexes:["O2","S6","W8"]}, /* v1674 */atk:"GER",north:"up",
    maps:[{id:"r",axis:"v",range:{from:"M",to:"GG"},dir:"GG0",letterPos:"br",rot:270,letterRot:180}],
    mapNote:"ボードr単板(縦置き)、Mヘクス列〜GGヘクス列のみプレイ可能、北は上方向。LOSタブも利用可能。", // 2026-09新規追加(ダルマ提供シナリオPDF ASL_SK_S49.pdfより実装、S49「料理番、事務兵、そしてバズーカ」)
    jp:"料理番、事務兵、そしてバズーカ",en:"Cooks, Clerks, and Bazookas",loc:"メクシミュー、フランス",dt:"1944/9/1",trn:7,
@@ -4886,7 +4891,7 @@ var SCN=[
    // OB数量について(2026-09、ダルマ現物確認済み・図による選択式): 独軍設置欄(1つの大箱に9種類)は「5」が5-4-8の下、「5」が4-4-7の下、「2」がLMGの下にそれぞれ個別印字されており、9-1・8-1・8-0・7-0・HMG・MMGには数字が無い(デフォルト×1)ことを確認。独軍T3増援欄(1つの大箱に3種類)は「3」が5-4-8の下のみに印字、9-2・LMGは数字なし(デフォルト×1)。
    // 米軍設置欄(1つの大箱に6種類)は「4」が6³-6-7の下、「11」が6³-6-6の下、「2」が8-1の下、「3」がMMGの下、「2」がDCの下にそれぞれ個別印字されており、7-0には数字が無い(デフォルト×1)ことを確認。
   },
-  {id:"S59",atk:"USA",north:"up",
+  {id:"S59",vicHexes:{board:"p",hexes:["M6","N3","N5","O4","O5","O6","O8","P3","Q5","Q6","Q8","R1","R2","R3","R5","R7","R8","S4","S6","T5","V5","Y6","Z5","AA5","AA6"]}, /* v1674: M列とそれより東の建物(地図の地形から) */atk:"USA",north:"up",
    maps:[{id:"p",letterPos:"bl"}],
    mapNote:"ボードp単板、ヘクス列制限なし(全盤使用)、北は上方向。LOSタブも利用可能。", // 2026-09新規追加(ダルマ提供シナリオPDF ASL_SK_S59.pdfより実装、S59「掃討戦」)
    jp:"掃討戦",en:"Mopping Up",loc:"サンローラン、フランス",dt:"1944/6/6",trn:7,
@@ -5129,7 +5134,7 @@ var SCN=[
   //   独軍(T3): 5-4-8[E]に「5」・LMG 3-8に「2」(9-1・8-0・MMG・DC・StuG IIIGは×1)。
   // 車両名=カウンター印字(T-34 M41→既存T-34/76(41/42)、KV-1 M41、StuG IIIG)。T-34 M41はSSR3で塹壕化(移動・VCA変更不可、TH+1、車体命中はミス)だが自動適用の仕組みは無くテキスト表示のみ。
   // SSR2(二線級・ELR免除等)・SSR4(政治委員)・SSR5(狙撃)・SSR6(シュトゥーカ)も同様にテキスト表示のみ。
-  {id:"S35",atk:"GER",north:"up",losSSR:"WoodsRubbleOrchardShellhole",
+  {id:"S35",vicHexes:{board:"z",hexes:["E8","E9","F8","G9","H8","J8","K9","L8","M8","M9","O8","P8"]}, /* v1674: ヘクス番号8以上の建物(地図の地形から) */atk:"GER",north:"up",losSSR:"WoodsRubbleOrchardShellhole",
    maps:[
      {id:"z",axis:"v",dir:"GG0",range:{from:"A",to:"P"},letterPos:"br",rot:270,letterRot:180,losPos:{col:0,row:0}}
    ],
@@ -10978,7 +10983,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.873"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.874"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1674="v1674(EXP1: 繁みが丘の上と下の間のLOSを遮っていたのを修正(同じ高さの妨害だけ)、勝利条件の自動判定(先頭の国・勝利ヘクス優先・40VP以上・脱出・占領・S44のVP合計・S35/S49/S59の勝利ヘクス)、SSR(S41 独4-6-7煙幕3・S47 米7-4-7煙幕+2と下線士気・S42反映済みの印)、S20の反映済みSSR4が消えていたのを修正";
 var APP_VERSION_HIST_v1673="v1673(編成の編集に 負傷・損耗・クラス低下(元に戻す付き)、ユニットメニューに 負傷・射撃済(準備/臨機/防御)、損耗で除去されたユニットの支援火器はヘクスに残す、スポット判定を軽く(ダイス入力は作り直さない・下の帯の作り直しを減らす・地図の描き直しを1回に)";
 var APP_VERSION_HIST_v1672="v1672(マップ同期: 受け取って反映しただけの変化を送り返さない(GitHubの回数を使う往復を止める)・送信のログに変わったもの";
 var APP_VERSION_HIST_v1671="v1671(編成の分割の表示: ユニットに番号・分割ボタンにカウンター・運んでいるSW・状態";
@@ -27897,7 +27903,7 @@ function smkPickedValue(){
   var v=u.smk;
   // 2026-09追加(ダルマ指示「S24 SSR1を反映させる」): 独軍の8-3-8[E]/5-4-8[E]はSmoke指数+2(S24選択中のみ)。
   if(S.scen&&S.scen.sel==='S24'&&m.pickerNat==='GER'&&(m.pickerLabel==='8-3-8[E]'||m.pickerLabel==='5-4-8[E]'))v+=2;
-  if(S.scen&&S.scen.sel==='S35'&&m.pickerNat==='GER'&&m.pickerLabel==='8-3-8[E]'&&m.pickerKind!=='smc')v=5; // v11.340: S35 SSR2「独軍の8-3-8分隊は煙幕発生能力が5」(印刷値3→5)
+  if(S.scen&&S.scen.sel==='S35'&&m.pickerNat==='GER'&&m.pickerLabel==='8-3-8[E]'&&m.pickerKind!=='smc')v=5;v=ssrSmkAdj(m.pickerNat,m.pickerLabel,m.pickerKind,v); // v11.340: S35 SSR2「独軍の8-3-8分隊は煙幕発生能力が5」(印刷値3→5)
   if(m.pickerKind!=='smc'&&ssrNoSmoke(m.pickerNat,m.pickerLabel))v=0; // v11.301: S20 SSR4 煙幕能力なし
   return v;
 }
@@ -28819,7 +28825,7 @@ var LOS_TERRAIN_TABLE={
   // (自動地形判定は盤面の生の地形を返すべきで、シナリオ固有ルールを地形定義自体に混ぜ込むべきではない)。
   // Brushの自動地形判定は初登録のため、LOS遮断特性(obs/hin/inh/spl/h)は視覚的に類似する果樹園と
   // 同値を暫定的に流用(公式資料での確認未了、要ダルマ確認)。
-  25:{name:"Brush",obs:true,hin:false,inh:true,spl:0.5,h:1},
+  25:{name:"Brush",obs:false,hin:true,inh:false,spl:0.0,h:0}, // v1674(EXP1 確認): SK ルールの繁みは「同じ高さの間の妨害(+1)、絵を横切る時だけ」。丘の上と下の間の LOS は妨害しない(麦畑と同じ)。旧値は果樹園の流用で、丘の上から下のヘクスへの LOS を遮っていた
   65:{name:"Dirt Road",obs:false,hin:false,inh:false,spl:0.0,h:0},
   66:{name:"Paved Road",obs:false,hin:false,inh:false,spl:0.0,h:0},
   90:{name:"Stone Rubble",obs:true,hin:false,inh:true,spl:0.0,h:1}, // 2026-08修正(ダルマ指示): h:0→1。SSR記述「ヘクス辺越しのLOSも固有建物と同様に遮断」に基づき建物同様の高さ1に統一(丘越しLOS判定で建物と同じ扱いにするため)
@@ -40359,7 +40365,7 @@ function nmRmAdvItems(n){var A=NM_ADV;if(!A)return nmRMenuItems(n);var it=[],its
   BTG.nodes[A.n].nb.forEach(function(b){var ic=btInfCost(A.n,b),N=BTG.nodes[b];if(!ic)return;var en=nmAllAt(nmHexOfNode(b),od);
     it.push({ic:en.length?'fire':'move',t:N.nm+'　'+btTerrJP(N.terr)+(en.length?'　<span style="color:#ff6060">敵: '+en.map(function(e){return nmMfTgtName(e);}).join('・')+' → 白兵戦</span>':''),sub:ic.c+'MF'+(ic.c>=4?'(CXの可能性)':''),f:"nmAdvGo("+n+","+b+")"});});
   return it;}
-function nmVicHexes(){var c=curScen(),v=c&&c.vicHexes;if(!v||!v.hexes)return [];return v.hexes.map(function(h){var nm=(v.board||'')+h,n=BTG.nodes.findIndex(function(x){return x.nm===nm;});return {h:h,nm:nm,n:n};});}
+function nmVicHexes(noArrow){var c=curScen(),v=c&&c.vicHexes;if(!v)return [];var A=Array.isArray(v)?v:[v],o=[];A.forEach(function(v1){if(!v1||!v1.hexes)return;v1.hexes.forEach(function(h){if(noArrow&&(v1.arrowHexes||[]).indexOf(h)>=0)return;var nm=(v1.board||'')+h,n=(typeof BTG!=='undefined'&&BTG&&BTG.nodes)?BTG.nodes.findIndex(function(x){return x.nm===nm;}):-1;o.push({h:h,nm:nm,n:n});});});return o;} /* v1674: 複数の盤(S51 の配列)にも対応・脱出の矢印ヘクスは支配に数えない */
 function nmVicCtrl(k,sd){var sc=S.scen&&S.scen.sel;if(!S.nmVicCtrl)S.nmVicCtrl={};if(!S.nmVicCtrl[sc])S.nmVicCtrl[sc]={};if(sd===undefined)return S.nmVicCtrl[sc][k]||null;if(sd)S.nmVicCtrl[sc][k]=sd;else delete S.nmVicCtrl[sc][k];try{saveState();}catch(e){}}
 function nmVicOcc(n){if(n<0)return null;var H=nmHexOfNode(n),f=nmAllAt(H,'f').some(function(e){return !e.grp||(nmGeList(e.grp).items||[]).some(function(x){return !x.broken;});}),e=nmAllAt(H,'e').some(function(e1){return !e1.grp||(nmGeList(e1.grp).items||[]).some(function(x){return !x.broken;});});return f&&!e?'f':e&&!f?'e':(f&&e?'both':null);}
 function nmVicUpd(){nmVicHexes().forEach(function(x){var o=nmVicOcc(x.n);if(o==='f'||o==='e')nmVicCtrl(x.nm,o);});}
@@ -40382,17 +40388,29 @@ function nmVfDepl(B,am){try{if(am==='APCR')return btAPCRNum(B.w);if(am==='AP')re
 function nmVfDeplNote(B){var o=[];(B.ammos||[]).forEach(function(am){var d=nmVfDepl(B,am);if(d==null)return;o.push((am==='WP'?'WP':am==='Smoke'?'煙幕弾':am)+' '+d);});return o.length?'弾薬欠乏No.: '+o.join(' ・ ')+'<br><span style="opacity:.8">命中の原DRが欠乏No.より小さい=あり・同じ=これで最後・大きい=無し(撃っていない扱い)(6.2)</span>':'';}
 function nmVfWp(B){var gd=B.gd||{},rw=((B.v&&B.v.ma&&B.v.ma.specialAmmo)||[]).filter(function(x){return x.type==='WP';})[0];if(rw&&!nmAmmoFromOk(rw.availFrom))return null;var a=(gd.ammo||[]).concat((B.v&&B.v.ma&&B.v.ma.specialAmmo)||[]).filter(function(x){return x.type==='WP';})[0];if(!a)return null;var d=a.deplete;
   if(d&&typeof d==='object')return nmAmmoPick(d,1);return d||null;}
-var NM_VIC_NAT={'独軍':'GER','独':'GER','ロシア':'SOV','ソ連':'SOV','米軍':'USA','米':'USA','英軍':'GBR','英':'GBR','伊軍':'ITA','伊':'ITA','フランス':'FFR','波軍':'POL','ギリシャ':'ALM'};
-function nmVicJudge(){var c=curScen();if(!c||!c.vic)return null;var tx=String(c.vic),o={lines:[]},m;
-  var who=null;Object.keys(NM_VIC_NAT).some(function(k){if(new RegExp(k+'(軍|の)?[^、。]{0,12}?(支配|勝利|退出)').test(tx)){who=NM_VIC_NAT[k];return true;}return false;});o.nat=who;o.sd=who?nmSuSide(who):null;
+var NM_VIC_NAT={'独軍':'GER','独':'GER','ロシア':'SOV','ソ連':'SOV','米軍':'USA','米':'USA','英軍':'GBR','英':'GBR','伊軍':'ITA','伊':'ITA','フランス':'FFR','波軍':'POL','ギリシャ':'ALM','スロバキア':'SLO','ポーランド':'POL','仏軍':'FFR'};
+/* v1674(ダルマ「exp1 勝利条件の対応確認」→お任せで実施): 文の先頭の国を勝つ側として読む(旧は国名と「支配/勝利」が12字以内の時だけで、EXP1 は全部読めなかった) */
+var NM_VIC_HEAD={米:'USA',独:'GER',ソ連:'SOV',ロシア:'SOV',英:'GBR',伊:'ITA',波:'POL',ポーランド:'POL',スロバキア:'SLO',仏:'FFR',フランス:'FFR',ギリシャ:'ALM'};
+function nmVicJudge(){var c=curScen();if(!c||!c.vic)return null;var tx=String(c.vic),o={lines:[]},m,FX=window.NM_VICFIX!==false;
+  var who=null;if(FX){var m0=/^(米|独|ソ連|ロシア|英|伊|波|ポーランド|スロバキア|仏|フランス|ギリシャ)(軍)?/.exec(tx);if(m0)who=NM_VIC_HEAD[m0[1]]||null;}
+  if(!who)Object.keys(NM_VIC_NAT).some(function(k){if(new RegExp(k+'(軍|の)?[^、。]{0,12}?(支配|勝利|退出)').test(tx)){who=NM_VIC_NAT[k];return true;}return false;});o.nat=who;o.sd=who?nmSuSide(who):null;
   var vh=c.vicHexes||{},bd=vh.board||'',hx=(tx.match(/[A-Z]{1,2}\d{1,2}/g)||[]).filter(function(h,i,a){return a.indexOf(h)===i&&/^[A-Z]{1,2}\d+$/.test(h);});
-  if(/支配/.test(tx)&&hx.length&&o.sd){var have=hx.filter(function(h){return nmVicCtrl(bd+h)===o.sd;}).length,need=hx.length;
+  if(FX){hx=[];var re0=/(^|[^A-Za-z0-9])([A-Z]{1,2}\d{1,2})(?![0-9])/g,mm0;while((mm0=re0.exec(tx)))if(hx.indexOf(mm0[2])<0)hx.push(mm0[2]);if(!bd&&c.maps&&c.maps.length===1)bd=c.maps[0].id;}
+  var VH=FX?nmVicHexes(true):[],vpEach=0;if(VH.length&&hx.length){var VHa=nmVicHexes(false);if(hx.every(function(h){return VHa.some(function(x){return x.h===h;});})){var VH2=VH.filter(function(x){return hx.indexOf(x.h)>=0;});if(VH2.length)VH=VH2;}} /* 文のヘクスが全部 勝利ヘクスに入っていれば文のヘクスで数える(S2「F8・L6・O6」・S6「3つのうち2つ」)。S41 の P6 のように基準点だけの時は勝利ヘクス全部 */
+  if(FX&&VH.length&&/支配|占領/.test(tx)&&o.sd){var have0=VH.filter(function(x){return nmVicCtrl(x.nm)===o.sd;}).length,need0=VH.length;if(/いずれか|1つ以上|1つでも/.test(tx))need0=1;if((m=/(\d)\S{0,3}のうち(\d)\S{0,3}以上/.exec(tx)))need0=+m[2];
+    if((m=/支配時(\d+)VP|支配[^。]{0,8}各(\d+)VP/.exec(tx)))vpEach=+(m[1]||m[2]);
+    o.ctrl={have:have0,need:need0,hexes:VH.map(function(x){return x.h;}),vpEach:vpEach};if(!vpEach)o.lines.push(nmNatLbl(who)+'の支配 '+have0+'/'+need0+(have0>=need0?' → 条件を満たしています':' → まだ'));}
+  else if(/支配/.test(tx)&&hx.length&&o.sd){var have=hx.filter(function(h){return nmVicCtrl(bd+h)===o.sd;}).length,need=hx.length;
     if((m=/(\d)\S{0,3}のうち(\d)\S{0,3}以上/.exec(tx)))need=+m[2];o.ctrl={have:have,need:need,hexes:hx};o.lines.push(nmNatLbl(who)+'の支配 '+have+'/'+need+(have>=need?' → 条件を満たしています':' → まだ'));}
-  if(/退出/.test(tx)&&(m=/VP\s*(\d+)以上/.exec(tx))){var sc=S.scen.sel,ev=(S.nmExitVP&&S.nmExitVP[sc])||{vp:0,list:[]};o.exit={need:+m[1],have:ev.vp,list:ev.list};o.lines.push('退出VP '+ev.vp+'/'+m[1]+(ev.vp>=+m[1]?' → 条件を満たしています':''));}
+  if((FX?/退出|脱出/:/退出/).test(tx)&&(m=FX?/VP\s*(\d+)以上|(\d+)\s*VP以上/.exec(tx):/VP\s*(\d+)以上/.exec(tx))){var nd=+(m[1]||m[2]),sc=S.scen.sel,ev=(S.nmExitVP&&S.nmExitVP[sc])||{vp:0,list:[]};
+    if(vpEach&&o.ctrl){var tot=o.ctrl.have*vpEach+ev.vp;o.vp={have:tot,need:nd};o.exit={need:nd,have:ev.vp,list:ev.list,mix:1};o.lines.push('VP '+tot+'/'+nd+'(支配 '+o.ctrl.have+'×'+vpEach+' + 脱出 '+ev.vp+')'+(tot>=nd?' → 条件を満たしています':''));}
+    else{o.exit={need:nd,have:ev.vp,list:ev.list};o.lines.push('退出VP '+ev.vp+'/'+nd+(ev.vp>=nd?' → 条件を満たしています':''));}}
   return o;}
 function nmExitVPOf(eh){var c=curScen(),tx=String(c&&c.vic||''),vp=0,lg=[];
   if(eh.grp&&!eh.veh&&!eh.gun){(nmGeList(eh.grp).items||[]).forEach(function(x){var v=0;if(x.kind==='smc'){var m=/([+-]\d)$/.exec(x.label),c0=m?+m[1]:0;v=c0<=-2?3:(c0===-1?2:1);}else{var D=UNITS[x.nat]||{},u=(D.mmc||[]).filter(function(q){return q.lbl===x.label;})[0];v=(u&&u.hs)?1:2;}vp+=v;lg.push(x.label+' '+v);});}
-  else if(eh.veh){var v1=nmAfv(eh.veh),nm=v1?nmAfvName(v1):'',re=/([^、。]+?)は各(\d+)VP/g,mm,got=0;while((mm=re.exec(tx))){var key=mm[1].replace(/^.*[、・]/,'').replace(/\s/g,'');if(v1&&(key.indexOf(nm)>=0||nm.indexOf(key.slice(0,3))>=0||(v1.lbl&&key.indexOf(v1.lbl.slice(0,3))>=0)))got=+mm[2];}vp=got;lg.push(nm+' '+got);}
+  else if(eh.veh){var v1=nmAfv(eh.veh),nm=v1?nmAfvName(v1):'',re=/([^、。]+?)は各(\d+)VP/g,mm,got=0;while((mm=re.exec(tx))){var key=mm[1].replace(/^.*[、・]/,'').replace(/\s/g,'');if(v1&&(key.indexOf(nm)>=0||nm.indexOf(key.slice(0,3))>=0||(v1.lbl&&key.indexOf(v1.lbl.slice(0,3))>=0)))got=+mm[2];}
+    if(!got&&window.NM_VICFIX!==false){var mA=/装甲車[^。]{0,12}?(?:それぞれ|各)(\d+)VP/.exec(tx),mF=/AFVの脱出は1両につき(\d+)VP/.exec(tx);if(mA)got=+mA[1];else if(mF)got=+mF[1];} /* v1674: S44「脱出させた装甲車はそれぞれ1VP」・S34「MAが機能するAFV 6VP」 */
+    vp=got;lg.push(nm+' '+got);}
   return {vp:vp,lg:lg};}
 function nmExitDo(n,sd){var eh=nmUnitAt(nmHexOfNode(n),sd);if(!eh)return;var r=nmExitVPOf(eh),sc=S.scen.sel;nmBkSnap('退出');if(!S.nmExitVP)S.nmExitVP={};if(!S.nmExitVP[sc])S.nmExitVP[sc]={vp:0,list:[]};
   S.nmExitVP[sc].vp+=r.vp;S.nmExitVP[sc].list.push(r.lg.join('・')+' = '+r.vp+'VP');var L=nmSideList(sd);L.splice(L.indexOf(eh),1);
@@ -43662,8 +43680,9 @@ function nmVicStHead(){var k=nmVicStK(),D=nmVicStData();if(!D)return '';
 function nmVicStBelow(){var k=nmVicStK(),D=nmVicStData();if(!D||k!==2)return '';var p=Math.round(D.have/D.need*100);return '<div style="width:100%;height:4px;margin-top:3px;border-radius:2px;background:#2a313d;overflow:hidden"><div style="width:'+p+'%;height:100%;background:'+(D.ok?'#3ccf6e':D.col)+'"></div></div>';}
 function nmVicStRight(){var k=nmVicStK(),D=nmVicStData();if(k!==3||!D)return '';return '<div style="flex:0 0 auto;display:flex!important;flex-direction:row!important;align-items:baseline!important;gap:4px;line-height:1;padding:6px 10px;border-radius:9px;white-space:nowrap;border:1px solid '+(D.ok?'#2f7a4a':'#4a5566')+';background:'+(D.ok?'#14321f':'#14171d')+'"><span style="font-size:11px;color:'+(D.ok?'#5ee08c':'#8fa6bd')+'">'+(D.ok?'✓'+T('達成'):T('支配'))+'</span><b style="font-size:20px;font-weight:900;color:'+(D.ok?'#5ee08c':'#fff')+'">'+D.have+'</b><span style="font-size:12px;color:#8fa6bd">/'+D.need+'</span></div>';}
 function nmVicStChip(vch){try{try{nmVicUpd();}catch(e){}var J=nmVicJudge();if(!J)return '';var o='';
-  if(!J.ctrl&&J.sd){var VH=nmVicHexes();if(VH.length){var c0=curScen(),m0=/(\d+)\S{0,3}以上/.exec(String(c0.vic||'')),hv=VH.filter(function(x){return nmVicCtrl(x.nm)===J.sd;}).length;J.ctrl={have:hv,need:m0&&!/全て/.test(c0.vic)?+m0[1]:VH.length};}} /* 勝利条件の文にヘクス名が無い時(例 S24「建物を全て支配」)は勝利ヘクス(vicHexes)で数える */
-  if(J.ctrl){var ok=J.ctrl.have>=J.ctrl.need;o+=vch((ok?'✓ ':'')+T('支配')+' '+J.ctrl.have+'/'+J.ctrl.need,ok?'#14321f':'#1b222c',ok?'#5ee08c':'#cfd8e3',ok?'#2f7a4a':'#4a5566');}
+  if(!J.ctrl&&J.sd&&(window.NM_VICFIX===false||/支配|占領/.test(String((curScen()||{}).vic||'')))){var VH=nmVicHexes();if(VH.length){var c0=curScen(),m0=/(\d+)\S{0,3}以上/.exec(String(c0.vic||'')),hv=VH.filter(function(x){return nmVicCtrl(x.nm)===J.sd;}).length;J.ctrl={have:hv,need:m0&&!/全て/.test(c0.vic)?+m0[1]:VH.length};}} /* 勝利条件の文にヘクス名が無い時(例 S24「建物を全て支配」)は勝利ヘクス(vicHexes)で数える */
+  if(J.vp){var okv=J.vp.have>=J.vp.need;o+=vch((okv?'✓ ':'')+'VP '+J.vp.have+'/'+J.vp.need,okv?'#14321f':'#1b222c',okv?'#5ee08c':'#cfd8e3',okv?'#2f7a4a':'#4a5566');return o;}
+   if(J.ctrl){var ok=J.ctrl.have>=J.ctrl.need;o+=vch((ok?'✓ ':'')+T('支配')+' '+J.ctrl.have+'/'+J.ctrl.need,ok?'#14321f':'#1b222c',ok?'#5ee08c':'#cfd8e3',ok?'#2f7a4a':'#4a5566');}
   if(J.exit){var ok2=J.exit.have>=J.exit.need;o+=vch((ok2?'✓ ':'')+T('退出')+' '+J.exit.have+'/'+J.exit.need+'VP',ok2?'#14321f':'#1b222c',ok2?'#5ee08c':'#cfd8e3',ok2?'#2f7a4a':'#4a5566');}
   return o;}catch(e){return '';}}
 (function(){try{var st=document.createElement('style');st.id='nmMcOvDot';st.textContent='html:root:root:root .mcOvBx:not(#x):not(#x):not(#x):not(#x){background-color:#1c1f27!important;background-image:radial-gradient(circle,#000a 1px,transparent 1.35px),radial-gradient(circle at 50% 70%,#ffffff14 1px,transparent 1.4px)!important;background-size:4px 4px,4px 4px!important}';document.head.appendChild(st);}catch(e){}})(); /* v1636(ダルマ「細かいドットを追加する」画像=士気チェックの窓): ほかのパネル(#btRm .rmBox)と同じ細かいドット */
@@ -45592,7 +45611,7 @@ function nmRmLwItems(n){var W=NM_LW;if(!W)return nmRMenuItems(n);var it=[],L=NM_
    フェイズを進めた時: MPh(移動フェイズ)の終わりに煙幕手榴弾、PFPh(準備射撃フェイズ)に入る時に拡散煙幕を外す */
 var NM_SG=null;
 function nmSmkVal(nat,kind,label){var d=UNITS[nat];if(!d)return null;var u=((kind==='smc'?d.smc:d.mmc)||[]).filter(function(x){return x.lbl===label;})[0];if(!u||u.smk==null)return null;var v=u.smk;
-  if(S.scen&&S.scen.sel==='S24'&&nat==='GER'&&(label==='8-3-8[E]'||label==='5-4-8[E]'))v+=2;if(S.scen&&S.scen.sel==='S35'&&nat==='GER'&&label==='8-3-8[E]'&&kind!=='smc')v=5;
+  if(S.scen&&S.scen.sel==='S24'&&nat==='GER'&&(label==='8-3-8[E]'||label==='5-4-8[E]'))v+=2;if(S.scen&&S.scen.sel==='S35'&&nat==='GER'&&label==='8-3-8[E]'&&kind!=='smc')v=5;v=ssrSmkAdj(nat,label,kind,v);
   try{if(kind!=='smc'&&ssrNoSmoke(nat,label))v=0;}catch(e){}return v;}
 function nmHidOf(tn){var q=nmClientOfNode(tn);var H=q?losHexAtClient(q.x,q.y):null;return H?{hid:H.hid,H:H}:null;}
 function nmSmokePut(tn,k){var o=nmHidOf(tn);if(!o)return;if(!S_LOS.smoke)S_LOS.smoke={};var t=NM_SMK_T.filter(function(x){return x.k===k;})[0];S_LOS.smoke[o.hid.id]={level:t.v,type:t.k,boardId:o.H.boardId,col:o.H.col,row:o.H.row};try{saveState();}catch(e){}}
