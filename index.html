@@ -16244,7 +16244,7 @@ function FIRE_PAGE(){
     h+='<span class="rarr">→</span>';
     h+='<div><div class="lbl">MODIFIED IFT'+(fst.fireMode==="SFF"||fst.fireMode==="FPF"||fst.tgtHIP?'<span style="color:#c8a032"> ×½</span>':fst.ph==="SFF"||fst.ph==="FPF"?'<span style="color:#c8a032"> ×½</span>':'')+'</div>'+seg7(String(R.ift.col).length<2?' '+String(R.ift.col):String(R.ift.col),'grn','IFT')+'</div>';
     h+='</div>';
-    h+='<div class="rmain" style="color:'+rm2.c+'">'+rmainHTML(rm2,R.raw,true,!!(R.swr&&R.swr.some(function(s){return s.fail||s.xFailFT||s.xFailB;})))+'</div>';
+    NM_RES_ROF=!!(R.swr&&R.swr.some(function(s){return s.ro==="維持成功";}));try{h+='<div class="rmain" style="color:'+rm2.c+'">'+rmainHTML(rm2,R.raw,true,!!(R.swr&&R.swr.some(function(s){return s.fail||s.xFailFT||s.xFailB;})))+'</div>';}finally{NM_RES_ROF=false;}
     if(fst.tgtCrewCE)h+=fireTgtCrewResultHTML(fst,R);
     // K/#・KIAでは乗員は損耗/除去(またはSTUN)され、他の目標ユニットが存在しないため、MC判定パネルは出さない(MC/PTC結果のみ乗員MCパネルを展開)
     if(!(fst.tgtCrewCE&&(/^K[1-4]$/.test(R.ift.r)||/KIA/.test(R.ift.r))))h+=mcJumpBtnHTML(R.ift.r,'fire',fst.tgtCrewCE);
@@ -16289,7 +16289,7 @@ function FIRE_PAGE(){
     var rofPendingSws=R.swr.filter(function(s){return s.ro==="維持成功"&&!R.rofChosenUids[s.uid];});
     var rofRowCards=[];
     rofPendingSws.forEach(function(s){
-      var c='<div class="resfp">'+ROF_OK_IMG('sw'); // v317(ダルマ指示): ROF成功の画像
+      var c='<div class="resfp">'+(NM_RESPHOTO!==false?'':ROF_OK_IMG('sw')); // v317(ダルマ指示): ROF成功の画像 / v1690: 写真の時は結果の横に出すのでここは出さない
       c+='<div style="color:#00dd66;font-size:12px;font-weight:bold;margin-bottom:5px">'+s.lbl+'<br>'+T('ROF Maintained ')+'</div>';
       c+='<div class="sumcard" style="margin-bottom:6px"><div class="lbl">'+T('全FP')+'</div>'+seg7fp(s.fp,undefined,'grn')+'</div>';
       c+='<button class="b sm on grn" style="width:100%;height:auto;padding:8px 4px;white-space:normal;line-height:1.3;margin-bottom:4px" onclick="RCstart(\''+s.uid+'\',\''+s.lbl+'\','+s.fp+','+s.b+','+s.x+','+s.rof+')">▶ '+T('ROF継続射撃')+'</button>';
@@ -16438,7 +16438,7 @@ function FIRE_PAGE(){
     h+='<span class="rarr">→</span>';
     h+='<div><div class="lbl">MODIFIED IFT</div>'+seg7(String(RC.ift.col).length<2?' '+String(RC.ift.col):String(RC.ift.col),'grn','IFT')+'</div>';
     h+='</div>';
-    h+='<div class="rmain" style="color:'+rcm.c+'">'+rmainHTML(rcm,RC.raw,true,!!(RC.memberResults&&RC.memberResults.some(function(mr){return mr.fail||mr.xFailFT||mr.xFailB;})))+'</div>';
+    NM_RES_ROF=!!RC.roOk;try{h+='<div class="rmain" style="color:'+rcm.c+'">'+rmainHTML(rcm,RC.raw,true,!!(RC.memberResults&&RC.memberResults.some(function(mr){return mr.fail||mr.xFailFT||mr.xFailB;})))+'</div>';}finally{NM_RES_ROF=false;}
     h+=mcJumpBtnHTML(RC.ift.r);
     if(RC.ift&&RC.ift.subOneFP)h+='<div class="rnote" style="color:#cc8800;font-size:12px">'+T('FPが1未満のため、使用できるIFTの列がなく効果なし（3.2.3）')+'</div>'; // v11.277
     if(RC.cow&&RC.ift.autoNE)
@@ -16480,7 +16480,7 @@ function FIRE_PAGE(){
     if(RC.roOk){
       var survivors=RC.memberResults?RC.memberResults.filter(function(r){return r.roOk;}):null;
       var dropped=RC.memberResults?RC.memberResults.filter(function(r){return !r.roOk;}):null;
-      h+='<div class="resfp" style="margin-top:4px;max-width:50%">'+ROF_OK_IMG('sw'); // v317
+      h+='<div class="resfp" style="margin-top:4px;max-width:50%">'+(NM_RESPHOTO!==false?'':ROF_OK_IMG('sw')); // v317 / v1690
       h+='<div style="color:#00dd66;font-size:11px;font-weight:bold;margin-bottom:5px">ROF Maintained </div>';
       h+='<div class="sumcard" style="margin-bottom:6px"><div class="lbl">▶ '+T('ROF継続射撃')+' — '+T('全FP')+'</div><div style="display:flex;align-items:center">'+seg7fp(chainBaseFP(rc3),undefined,'grn')+'</div></div>';
       if(survivors&&survivors.length<RC.memberResults.length){
@@ -48371,7 +48371,10 @@ function nmMalfOrFail(alt){var k=nmMalfKind();return (k&&BADGE_PHOTO_MALF[k])?nm
  // v1687(ダルマ指示「任務失敗 差し替え 同じようにする」)
 
 // v1688(ダルマ指示「国籍は縛らない」): 判定する側の国籍に関係なく、その結果の写真の中からランダムに出す(ソ連・その他の国籍も写真)
-function nmResPhotoTag(alt,mp,fl){if(NM_RESPHOTO===false)return null;var m=mp||BADGE_NAT_PHOTO,ks=Object.keys(m);if(!ks.length)return null;var b=m[ks[Math.floor(Math.random()*ks.length)]],lf=0;if(b&&typeof b==='object'){lf=b[1];b=b[0];}if(!b)return null; /* v1688(ダルマ指示「人が右にいる場合にはバッジを左に」): [写真,1]はバッジを左下 */
+// v1690(ダルマ指示「射撃でROF成功の場合 任務成功とROF成功を横並びで表示」): 射撃タブの結果で機関銃などがROFを維持した時は、結果の写真の右にROF成功の写真を並べる(下のROFの欄の画像は出さない)
+var NM_RES_ROF=false;
+function nmResPhotoTag(alt,mp,fl){if(NM_RES_ROF&&!fl&&!/ROF/.test(alt)){NM_RES_ROF=false;try{var a1=nmResPhotoTag(alt,mp,fl),a2=a1?nmRofMgPhoto():null;return a1&&a2?a1+a2:a1;}finally{NM_RES_ROF=true;}}return nmResPhotoTag0(alt,mp,fl);}
+function nmResPhotoTag0(alt,mp,fl){if(NM_RESPHOTO===false)return null;var m=mp||BADGE_NAT_PHOTO,ks=Object.keys(m);if(!ks.length)return null;var b=m[ks[Math.floor(Math.random()*ks.length)]],lf=0;if(b&&typeof b==='object'){lf=b[1];b=b[0];}if(!b)return null; /* v1688(ダルマ指示「人が右にいる場合にはバッジを左に」): [写真,1]はバッジを左下 */
   return '<span style="position:relative;display:'+(fl?'block;width:100%;aspect-ratio:16/9;max-height:24vh;margin:0 auto':'inline-block;height:150px;width:267px;vertical-align:middle;margin-right:8px')+';border-radius:5px;overflow:hidden;box-shadow:0 0 0 1px #2a3a50"><img src="data:image/jpeg;base64,'+b+'" style="display:block;width:100%;height:100%;object-fit:cover" alt="'+alt+'">'+nmResBadge(alt,lf)+'</span>';}
 // v1688(ダルマ指示「ROF成功 バッジ風 リボン無し」「右下」「1245ランダムで表示」「今までの画像も同じようにバッジに変更」): 写真の文字を右下の角丸バッジにし、色は 赤・緑(オリーブ)・黒に金・金に黒 からランダム
 var NM_RES_BADGE_COL=[['#c41e27','#fff','#fff'],['#4b5d23','#e9dfb0','#e9dfb0'],['#111','#e0b23c','#e0b23c'],['linear-gradient(#f3d36b,#c8921f)','#2a1a00','#2a1a00']];
