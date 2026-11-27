@@ -41436,7 +41436,9 @@ function nmDiceBox(){return document.querySelector('#nmIj #ijRes')||document.que
     var wt=function(l){return cur==='vfire'?'gun':cur==='vmg'?'sw':/MG|機関銃/.test(l)?'sw':/MTR|迫撃|砲|mm/.test(l)?'gun':'sw';};
     var ml=L.filter(function(l){return /故障/.test(l)&&!/修理/.test(l)&&!/故障\s*B\d+\s*原DR|故障なし/.test(l)&&!(window.__nmTxt0&&window.__nmTxt0.indexOf(l)>=0);})[0];if(ml)rs.malf=wt(ml); /* v1696(バグ修正 ダルマ報告「ダイス6x6でSW故障画面が表示しない」): 射撃パネルに前からある「故障 B12 原DR12以上」の案内の行を故障の行と取り違え、前からあった行として故障を消していた。案内の行と前からある行は数えない */
     var rl=L.filter(function(l){return /ROF維持/.test(l)&&!/ROF維持(失敗|できず|ならず)|打ち止め/.test(l);})[0];if(rl&&!(window.__nmTxt0&&window.__nmTxt0.indexOf(rl)>=0))rs.rof=wt(rl);try{rs.lw=(k9==='lw');}catch(x){}try{rs.vg=eh0&&eh0.veh?'veh':(eh0&&eh0.gun?'gun':(cur==='vfire'?'veh':null));}catch(x){} /* v549(バグ修正 ダルマ報告「撃破判定・NTCのあとにROF成功の画像」): 前からあったROFの行は数えない */
-    if(ml&&window.__nmTxt0&&window.__nmTxt0.indexOf(ml)>=0)delete rs.malf;return rs;}
+    if(ml&&window.__nmTxt0&&window.__nmTxt0.indexOf(ml)>=0)delete rs.malf;
+    try{if(!rs.malf&&nmPanelKey()==='mf'){var fR=getFireState(),RR=fR&&fR.res;if(RR&&RR.swr&&RR.swr.some(function(q){return q.fail||q.xFailB||q.xFailFT;}))rs.malf='sw';}}catch(x){} /* v1697(バグ修正 ダルマ報告「故障画像が表示しない」): 射撃パネルは文字ではなく判定の結果(SWごとの故障)から故障を見る */
+    return rs;}
   window.__nmShowRes=function(log0,eh0){var lg=S.log&&S.log[0];if(!lg||lg===log0)return;var rs=resFrom(nmDiceBox(),log0,eh0);if(rs)setTimeout(function(){nmResImgShow(rs);},250);}; /* v692: 少し待ってから振った判定(LOSの再計算待ち)も結果画像を出す */
   document.addEventListener('click',function(e){if(rec)return;if(typeof btActive==='function'&&btActive())return;
     var t=e.target&&e.target.closest&&(e.target.closest('#btRm')||e.target.closest('#nmIj #ijRes button,#nmIj .ijGo'));if(!t)return;rec=[];var log0=S.log&&S.log[0],eh0=NM_SEL_EH||NM_FT_SEL,txt0=((nmDiceBox()||{}).innerText)||'';window.__nmTxt0=txt0;Math.random=function(){var r=orig();var sk='';try{sk=(new Error()).stack||'';}catch(x){}if(!/hdrLogoRand|rotateTacBadge|pick\w*BadgeImg|nmsDev|SREC_DO_CREATE|nmResImg/.test(sk))rec.push(r);return r;}; /* v533(バグ修正 ダルマ報告「移動を選択するとダイスロールが表示」): 見出しのロゴ・バッジ画像の抽選などダイスでない乱数はダイスとして数えない */
