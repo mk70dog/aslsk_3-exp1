@@ -37532,8 +37532,10 @@ function nmDragEnd(x,y){
 }
 (function(){
   if(typeof document==='undefined'||window.__nmDragInit)return;window.__nmDragInit=1;
-  function onMap(e){return e.target&&e.target.closest&&e.target.closest('#losMapWrap');}
-  document.addEventListener('mousedown',function(e){if(e.button!==0||!onMap(e))return;if(nmDragStart(e.clientX,e.clientY,false))e.preventDefault();},true);
+  function onMap(e,x,y){if(e.target&&e.target.closest&&e.target.closest('#losMapWrap'))return true;
+    /* v1703(ダルマ指示「この状態でドラッグして移動できるようにする」): ユニットのメニュー(パネル)を開いたままでも、パネルの外の地図の上からカウンターをドラッグできる */
+    try{if(window.NM_RMDRAG!==0&&e.target&&e.target.id==='btRm'&&x!=null){var els=document.elementsFromPoint(x,y);if(els.some(function(el){return el.closest&&el.closest('#losMapWrap');})){window.__nmRmDrag=1;return true;}}}catch(x2){}return false;}
+  document.addEventListener('mousedown',function(e){window.__nmRmDrag=0;if(e.button!==0||!onMap(e,e.clientX,e.clientY))return;if(nmDragStart(e.clientX,e.clientY,false)){if(NM_DRAG)NM_DRAG.fromRm=window.__nmRmDrag;e.preventDefault();}},true);
   document.addEventListener('mousemove',function(e){if(NM_DRAG&&!NM_DRAG.touch){nmDragMove(e.clientX,e.clientY);if(NM_DRAG&&NM_DRAG.moving)e.preventDefault();}},true);
   document.addEventListener('mouseup',function(e){if(NM_DRAG&&!NM_DRAG.touch){if(nmDragEnd(e.clientX,e.clientY)){e.preventDefault();e.stopPropagation();}}},true);
   /* v361(バグ修正): ドラッグ開始の描き直しで指を置いた要素が地図から外れると、iPadではtouchmove/touchendがdocumentまで届かずドロップできなかった。
@@ -37545,12 +37547,14 @@ function nmDragEnd(x,y){
   function tEnd(e){if(e.__nmT)return;e.__nmT=1;if(!NM_DRAG||!NM_DRAG.touch)return;var t=e.changedTouches&&e.changedTouches[0];if(nmDragEnd(t?t.clientX:NM_DRAG.lx,t?t.clientY:NM_DRAG.ly))e.preventDefault();unbind();}
   function tCancel(e){if(e.__nmT)return;e.__nmT=1;if(NM_DRAG&&NM_DRAG.touch){var mv=NM_DRAG.moving;NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();if(mv)Draw();}unbind();}
   var tgt=null;function unbind(){if(!tgt)return;tgt.removeEventListener('touchmove',tMove,{capture:true});tgt.removeEventListener('touchend',tEnd,{capture:true});tgt.removeEventListener('touchcancel',tCancel,{capture:true});tgt=null;}
-  document.addEventListener('touchstart',function(e){if(!onMap(e)||e.touches.length!==1){if(NM_DRAG&&NM_DRAG.touch){NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();Draw();}return;}var t=e.touches[0];
-    if(nmDragStart(t.clientX,t.clientY,true)){unbind();tgt=e.target;tgt.addEventListener('touchmove',tMove,{capture:true,passive:false});tgt.addEventListener('touchend',tEnd,{capture:true,passive:false});tgt.addEventListener('touchcancel',tCancel,{capture:true});}},{capture:true,passive:true});
+  document.addEventListener('touchstart',function(e){window.__nmRmDrag=0;var t0=e.touches&&e.touches[0];if(!onMap(e,t0&&t0.clientX,t0&&t0.clientY)||e.touches.length!==1){if(NM_DRAG&&NM_DRAG.touch){NM_DRAG=null;var g=document.getElementById('nmDragG');if(g)g.remove();Draw();}return;}var t=e.touches[0];
+    if(nmDragStart(t.clientX,t.clientY,true)){if(NM_DRAG)NM_DRAG.fromRm=window.__nmRmDrag;unbind();tgt=e.target;tgt.addEventListener('touchmove',tMove,{capture:true,passive:false});tgt.addEventListener('touchend',tEnd,{capture:true,passive:false});tgt.addEventListener('touchcancel',tCancel,{capture:true});}},{capture:true,passive:true});
   document.addEventListener('touchmove',tMove,{capture:true,passive:false});
   document.addEventListener('touchend',tEnd,{capture:true,passive:false});
   document.addEventListener('touchcancel',tCancel,true);
 })();
+/* v1703: パネルを開いたままドラッグで動かした時は、動かした先のヘクスでパネルを開き直す */
+(function(){var o=window.nmDragEnd;if(typeof o!=='function'||o.__rm)return;var w=function(){var D=NM_DRAG,r=o.apply(this,arguments);try{if(r&&D&&D.fromRm&&D.moving&&D.ref&&document.getElementById('btRm')){var n=btNodeOf(D.ref.boardId,D.ref.col,D.ref.row);if(n!=null&&n>=0){NM_RM_HEX=nmHexOfN(n);btRmReopen(n);}}}catch(e){}return r;};w.__rm=1;window.nmDragEnd=w;})();
 /* v631(ダルマ指示「車両カウンターの砲塔バー・方向矢印をドラッグして方向を変更」): 車体の矢印の先・黄色い「砲」の丸をつかんで回すと、6方向のうち一番近い向きへ変わる */
 /* v676(ダルマ指示): 起点A/目標Bマーカーの方向バー。車両・砲のカウンターが無い/方向未設定のときだけ表示、ドラッグで決める。A=車体+砲塔、B=車体 */
 function nmMkO(w){var px=w==='A'?S_LOS.pxA:S_LOS.pxB;if(!px)return null;var n=null;try{n=nmNodeOfPx(px);}catch(e){}if(n==null||n<0)return null;var H=nmHexOfNode(n);if(!H)return null;var eh=null;try{eh=nmUnitAt(H,'f');if(!(eh&&(eh.veh||eh.gun)))eh=nmUnitAt(H,'e');}catch(e){}if(!(eh&&(eh.veh||eh.gun)))eh=null;var inf=false;if(!eh){try{inf=[].concat(nmAllAt(H,'f'),nmAllAt(H,'e')).some(function(e){return e&&e.grp&&!e.veh&&!e.gun;});}catch(e){}} /* v1490(ダルマ「歩兵のヘクスには砲と矢印を表示しない」): 車両・砲が無く歩兵の編成があるヘクスのA/Bには方向バーを出さない */return {n:n,H:H,eh:eh,on:!inf&&(!eh||eh.facing==null),bid:H.boardId};}
