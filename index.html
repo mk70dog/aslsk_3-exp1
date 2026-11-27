@@ -48374,7 +48374,10 @@ function nmMalfOrFail(alt){var k=nmMalfKind();return (k&&BADGE_PHOTO_MALF[k])?nm
 // v1688(ダルマ指示「国籍は縛らない」): 判定する側の国籍に関係なく、その結果の写真の中からランダムに出す(ソ連・その他の国籍も写真)
 // v1690(ダルマ指示「射撃でROF成功の場合 任務成功とROF成功を横並びで表示」): 射撃タブの結果で機関銃などがROFを維持した時は、結果の写真の右にROF成功の写真を並べる(下のROFの欄の画像は出さない)
 var NM_RES_ROF=false;
-function nmResPhotoTag(alt,mp,fl){if(NM_RES_ROF&&!fl&&!/ROF/.test(alt)){NM_RES_ROF=false;try{var a1=nmResPhotoTag(alt,mp,fl),a2=a1?nmRofMgPhoto():null;return a1&&a2?a1+a2:a1;}finally{NM_RES_ROF=true;}}return nmResPhotoTag0(alt,mp,fl);}
+// v1691(ダルマ指示「任務成功とROF成功を順番で表示」): 横に並べず、同じ場所で 結果の写真 → ROF成功の写真 を2秒ごとに交互に出す(CSSのアニメーション)
+function nmResSeq(a,b){try{if(!document.getElementById('nmResSeqCss')){var st=document.createElement('style');st.id='nmResSeqCss';st.textContent='@keyframes nmResSeqB{0%,42%{opacity:0}50%,92%{opacity:1}100%{opacity:0}}.nmResSeq{position:relative;display:inline-block;vertical-align:middle;margin-right:8px}.nmResSeq>span{margin-right:0!important}.nmResSeq>.nmB{position:absolute;left:0;top:0;opacity:0;animation:nmResSeqB 4s infinite}';document.head.appendChild(st);}}catch(e){}
+  return '<span class="nmResSeq">'+a+'<span class="nmB">'+b+'</span></span>';}
+function nmResPhotoTag(alt,mp,fl){if(NM_RES_ROF&&!fl&&!/ROF/.test(alt)){NM_RES_ROF=false;try{var a1=nmResPhotoTag(alt,mp,fl),a2=a1?nmRofMgPhoto():null;return a1&&a2?nmResSeq(a1,a2):a1;}finally{NM_RES_ROF=true;}}return nmResPhotoTag0(alt,mp,fl);}
 function nmResPhotoTag0(alt,mp,fl){if(NM_RESPHOTO===false)return null;var m=mp||BADGE_NAT_PHOTO,ks=Object.keys(m);if(!ks.length)return null;var b=m[ks[Math.floor(Math.random()*ks.length)]],lf=0;if(b&&typeof b==='object'){lf=b[1];b=b[0];}if(!b)return null; /* v1688(ダルマ指示「人が右にいる場合にはバッジを左に」): [写真,1]はバッジを左下 */
   return '<span style="position:relative;display:'+(fl?'block;width:100%;aspect-ratio:16/9;max-height:24vh;margin:0 auto':'inline-block;height:150px;width:267px;vertical-align:middle;margin-right:8px')+';border-radius:5px;overflow:hidden;box-shadow:0 0 0 1px #2a3a50"><img src="data:image/jpeg;base64,'+b+'" style="display:block;width:100%;height:100%;object-fit:cover" alt="'+alt+'">'+nmResBadge(alt,lf)+'</span>';}
 // v1688(ダルマ指示「ROF成功 バッジ風 リボン無し」「右下」「1245ランダムで表示」「今までの画像も同じようにバッジに変更」): 写真の文字を右下の角丸バッジにし、色は 赤・緑(オリーブ)・黒に金・金に黒 からランダム
