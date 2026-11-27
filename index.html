@@ -41450,7 +41450,7 @@ function nmResImgShow(r){var o=document.getElementById('nmResImg');if(o)o.remove
     if(k==='kill')ph=nmResPhotoTag('撃破',BADGE_NAT_PHOTO_KILL,1);
     else if(k==='ok'&&isHit)ph=r.rof?nmRofHitPhoto(r.vg||(r.rof==='gun'?null:null),1):nmResPhotoTag('命中',null,1);
     else if(k==='ok'&&!r.rof){var sv6=NM_RES_CODE;NM_RES_CODE=nmResCodeOf(t0);try{ph=nmResPhotoTag('任務成功',null,1);}finally{NM_RES_CODE=sv6;}}
-    else if(r.rof==='sw')ph=nmRofMgPhoto(1);
+    else if(r.rof==='sw'){var sv7=NM_RES_CODE;NM_RES_CODE=k==='ok'?nmResCodeOf(t0):null;try{var p1=k==='ok'?nmResPhotoTag('任務成功',null,1):nmResPhotoTag(/外れ|MISS|ミス/i.test(t0)?'外れ':'任務失敗',BADGE_NAT_PHOTO_FAIL,1),p2=nmRofMgPhoto(1);ph=p1&&p2?nmResSeq(p1,p2,1):(p2||p1);if(p1&&p2)r._seq=1;}finally{NM_RES_CODE=sv7;}} /* v1692(ダルマ報告「ROF成功しか表示しない」): 判定モードのポップアップも 結果の写真 → ROF成功の写真 の順に出す */
     else if(k==='ng'&&/効果なし|影響なし|No Effect|失敗/i.test(t0)&&!/外れ|ミス|不発|故障|MISS/i.test(t0))ph=nmResPhotoTag('任務失敗',BADGE_NAT_PHOTO_FAIL,1);
     else if(k==='ng'&&!r.rof)ph=nmResPhotoTag(/外れ|MISS|ミス/i.test(t0)?'外れ':/不発/.test(t0)?'不発':'任務失敗',BADGE_NAT_PHOTO_FAIL,1);
     else if(k==='ok'&&r.rof==='gun')ph=nmRofHitPhoto(r.vg,1);
@@ -41459,7 +41459,7 @@ function nmResImgShow(r){var o=document.getElementById('nmResImg');if(o)o.remove
   var col=k==='kill'?'#ff4040':k==='ng'?'#8899aa':'#60e060';var m=document.createElement('div');m.id='nmResImg';
   m.style.cssText='position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);z-index:9790;width:'+(r._big?'min(600px,90vw)':'min(320px,86vw)')+';background:#0b0d12f2;border:1px solid #2c323c;border-radius:12px;box-shadow:0 10px 30px #000d;padding:8px 10px;text-align:center;font-family:AppFont,AppJP,monospace;cursor:pointer;animation:nmResIn .18s ease-out';
   m.innerHTML=img+'<div style="font-size:11px;color:#8a94a2;margin-top:2px">'+r.lb+'</div><div style="font-size:15px;font-weight:900;color:'+col+';margin-top:2px;line-height:1.35;overflow-wrap:anywhere">'+r.t+'</div>';
-  m.onclick=function(){m.remove();};document.body.appendChild(m);nmResTapArm();setTimeout(function(){if(m.parentNode){m.style.transition='opacity .3s';m.style.opacity='0';setTimeout(function(){m.remove();},320);}},2500);
+  m.onclick=function(){m.remove();};document.body.appendChild(m);nmResTapArm();setTimeout(function(){if(m.parentNode){m.style.transition='opacity .3s';m.style.opacity='0';setTimeout(function(){m.remove();},320);}},r._seq?4200:2500);
   if(!document.getElementById('nmResCss')){var st=document.createElement('style');st.id='nmResCss';st.textContent='@keyframes nmResIn{from{opacity:0;transform:translate(-50%,-50%) scale(.92)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}';document.head.appendChild(st);}}
 /* v509(バグ修正 ダルマ報告「射撃判定後にA・Bが出る」): 射撃パネル(歩兵・主砲・機関銃・軽対戦車兵器)は目標までのLOSを測るため起点A・目標Bを使う。
    パネルを閉じたら、開く前の起点A・目標B(無ければ無し)に戻す */
@@ -48376,8 +48376,8 @@ function nmMalfOrFail(alt){var k=nmMalfKind();return (k&&BADGE_PHOTO_MALF[k])?nm
 // v1690(ダルマ指示「射撃でROF成功の場合 任務成功とROF成功を横並びで表示」): 射撃タブの結果で機関銃などがROFを維持した時は、結果の写真の右にROF成功の写真を並べる(下のROFの欄の画像は出さない)
 var NM_RES_ROF=false;
 // v1691(ダルマ指示「任務成功とROF成功を順番で表示」): 横に並べず、同じ場所で 結果の写真 → ROF成功の写真 を2秒ごとに交互に出す(CSSのアニメーション)
-function nmResSeq(a,b){try{if(!document.getElementById('nmResSeqCss')){var st=document.createElement('style');st.id='nmResSeqCss';st.textContent='@keyframes nmResSeqB{0%,42%{opacity:0}50%,92%{opacity:1}100%{opacity:0}}.nmResSeq{position:relative;display:inline-block;vertical-align:middle;margin-right:8px}.nmResSeq>span{margin-right:0!important}.nmResSeq>.nmB{position:absolute;left:0;top:0;opacity:0;animation:nmResSeqB 4s infinite}';document.head.appendChild(st);}}catch(e){}
-  return '<span class="nmResSeq">'+a+'<span class="nmB">'+b+'</span></span>';}
+function nmResSeq(a,b,bl){try{if(!document.getElementById('nmResSeqCss2')){var st=document.createElement('style');st.id='nmResSeqCss2';st.textContent='@keyframes nmResSeqB{0%,42%{opacity:0}50%,92%{opacity:1}100%{opacity:0}}@keyframes nmResSeqOnce{0%,40%{opacity:0}50%,100%{opacity:1}}.nmResSeq{position:relative;display:inline-block;vertical-align:middle;margin-right:8px}.nmResSeq.bl{display:block;margin:0}.nmResSeq>span{margin-right:0!important}.nmResSeq>.nmB{position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;animation:nmResSeqB 4s infinite}.nmResSeq.bl>.nmB{animation:nmResSeqOnce 3.6s forwards}.nmResSeq>.nmB>span{width:100%!important;height:100%!important;max-height:none!important;margin:0!important}';document.head.appendChild(st);}}catch(e){}
+  return '<span class="nmResSeq'+(bl?' bl':'')+'">'+a+'<span class="nmB">'+b+'</span></span>';}
 function nmResPhotoTag(alt,mp,fl){if(NM_RES_ROF&&!fl&&!/ROF/.test(alt)){NM_RES_ROF=false;try{var a1=nmResPhotoTag(alt,mp,fl),a2=a1?nmRofMgPhoto():null;return a1&&a2?nmResSeq(a1,a2):a1;}finally{NM_RES_ROF=true;}}return nmResPhotoTag0(alt,mp,fl);}
 function nmResPhotoTag0(alt,mp,fl){if(NM_RESPHOTO===false)return null;var m=mp||BADGE_NAT_PHOTO,ks=Object.keys(m);if(!ks.length)return null;var b=m[ks[Math.floor(Math.random()*ks.length)]],lf=0;if(b&&typeof b==='object'){lf=b[1];b=b[0];}if(!b)return null; /* v1688(ダルマ指示「人が右にいる場合にはバッジを左に」): [写真,1]はバッジを左下 */
   return '<span style="position:relative;display:'+(fl?'block;width:100%;aspect-ratio:16/9;max-height:24vh;margin:0 auto':'inline-block;height:150px;width:267px;vertical-align:middle;margin-right:8px')+';border-radius:5px;overflow:hidden;box-shadow:0 0 0 1px #2a3a50"><img src="data:image/jpeg;base64,'+b+'" style="display:block;width:100%;height:100%;object-fit:cover" alt="'+alt+'">'+nmResBadge(alt,lf)+'</span>';}
