@@ -12387,7 +12387,7 @@ try{if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function()
    判定モードの同期オールで、相手の国の側のカウンターは相手のiPadだけが動かす・消す・置く。受信した時の状態を覚え(nmOppLockSnap)、描くたびに
    こちらで足した・消した・動かしたものを元に戻す(nmOppLockEnforce)。判定用の仮のマーカー(ijTmp・ccTmp・lwTmp)はそのまま。ドラッグは始めない */
 var NM_OPPL=null,NM_OPPL_T=0;
-function nmOppLockSd(){try{if(!nmsRole()||S.nmMode==='online'||nmJsLv()!=='all')return '';var my=nmMyNatNow();if(!my)return '';var o=nmSuNats().filter(function(k){return k!==my;})[0];if(!o)return '';var a=nmSuSide(o),b=nmSuSide(my);return (a&&a!==b)?a:'';}catch(e){return '';}}
+function nmOppLockSd(){try{if(!nmsRole()||S.nmMode==='online'||nmJsLv()!=='all'||nmMasterOn())return ''; /* v1700: マスターは相手のカウンターも動かせる */var my=nmMyNatNow();if(!my)return '';var o=nmSuNats().filter(function(k){return k!==my;})[0];if(!o)return '';var a=nmSuSide(o),b=nmSuSide(my);return (a&&a!==b)?a:'';}catch(e){return '';}}
 function nmOppTmp(e){return !!(e&&(e.ijTmp||e.ccTmp||e.lwTmp));}
 function nmOppLockSnap(){var sd=nmOppLockSd();if(!sd){NM_OPPL=null;return;}var L=nmSideList(sd).filter(function(e){return !nmOppTmp(e);});NM_OPPL={sd:sd,sc:S.scen&&S.scen.sel,refs:L.slice(),pos:L.map(function(e){return [e.boardId,e.col,e.row];})};}
 function nmOppLockMsg(){var t=Date.now();if(t-NM_OPPL_T<2500)return;NM_OPPL_T=t;try{btToast(T('相手のカウンターは相手のiPadで動かす・消す・置きます(同期オール)'));}catch(e){}}
@@ -38791,7 +38791,20 @@ function nmsDev(){try{var d=localStorage.getItem('aslsk_dev_id');if(!d){d=Math.r
 function nmsPayloadMap(){var sc=S.scen&&S.scen.sel,_nh=function(L){return (L||[]).filter(function(e){return !e.hip;});},_hs={};try{(S_LOS.friendHexes||[]).concat(S_LOS.enemyHexes||[]).forEach(function(e){if(e.hip&&e.grp)_hs[e.grp]=1;});}catch(e){} /* v1684: 隠蔽配置の部隊は送らない */
   var _gr=nmGsOwn((sc&&S.savedGroups&&S.savedGroups[sc])||{});if(Object.keys(_hs).length){var g2={};Object.keys(_gr).forEach(function(k){if(!_hs[k])g2[k]=_gr[k];});_gr=g2;}
   return {friendHexes:_nh(S_LOS.friendHexes),enemyHexes:_nh(S_LOS.enemyHexes),wreckHexes:S_LOS.wreckHexes||{},wreckVeh:S_LOS.wreckVeh||{},smoke:S_LOS.smoke||{},buildingMarks:S_LOS.buildingMarks||{},pxA:S_LOS.pxA||null,pxB:S_LOS.pxB||null,route:S_LOS.route||null,resid:S_LOS.resid||{},s36:S.nmS36Len||null,
-  groups:_gr,myNat:(function(){try{return nmMyNatNow()||'';}catch(e){return '';}})(),mySide:(function(){try{var k=nmMyNatNow();return k?nmSuSide(k):'';}catch(e){return '';}})(),lbl:nmOppLblPack()};} /* v1525: 送る側の国と、その国が送る側の地図で自軍(f)/敵軍(e)のどちらか */
+  groups:_gr,myNat:(function(){try{return nmMyNatNow()||'';}catch(e){return '';}})(),mySide:(function(){try{var k=nmMyNatNow();return k?nmSuSide(k):'';}catch(e){return '';}})(),lbl:nmOppLblPack(),mOpp:(function(){try{return nmMOppPack();}catch(e){return null;}})()};} /* v1525: 送る側の国と、その国が送る側の地図で自軍(f)/敵軍(e)のどちらか */
+/* v1700(ダルマ指示「同期オール マスター時は相手のマップ上のユニットを移動可能にする」): マスターのiPadは同期オールでも相手の国のカウンターを動かせる。
+   マスターが相手のカウンターを動かした(受け取った時から変わった)時だけ、送るデータに mOpp(相手の国・その国のカウンター一覧)を入れる。
+   相手のiPadは mOpp が自分の国あてで、まだ反映していない内容なら、自分の国の側をそれに置き換える(隠蔽配置・判定用の仮マーカーは残す) */
+var NM_MOPP_RECV=null;
+function nmMOppKey(e){return [String(e.grp||'').replace(/^相手/,''),e.veh||'',e.gun||'',e.boardId,e.col,e.row,JSON.stringify(e.st||{}),e.facing==null?'':e.facing,e.tca==null?'':e.tca];}
+function nmMOppHash(L){return JSON.stringify((L||[]).filter(function(e){return !nmOppTmp(e)&&!e.hip;}).map(nmMOppKey));}
+function nmStrHash(t){var h=0;for(var i=0;i<t.length;i++){h=((h<<5)-h+t.charCodeAt(i))|0;}return (h>>>0).toString(36)+'_'+t.length;}
+function nmMOppPack(){if(!nmMasterOn()||NM_MOPP_RECV==null)return null;if(S.nmMode==='online'||nmJsLv()!=='all')return null;var my=nmMyNatNow();if(!my)return null;var o=nmSuNats().filter(function(k){return k!==my;})[0];if(!o)return null;var sd=nmSuSide(o);if(!sd)return null;
+  var L=nmSideList(sd),h=nmMOppHash(L);if(h===NM_MOPP_RECV)return null;
+  return {nat:o,id:nmStrHash(h),units:L.filter(function(e){return !nmOppTmp(e)&&!e.hip;}).map(function(e){var x=JSON.parse(JSON.stringify(e));if(x.grp&&!x.veh&&!x.gun)x.grp=String(x.grp).replace(/^相手/,'');return x;})};}
+function nmMOppApply(m,myK,sc){var q=m&&m.mOpp;if(!q||!myK||q.nat!==myK||!q.units)return;S.nmMOppSeen=S.nmMOppSeen||{};if(S.nmMOppSeen[sc]===q.id)return;S.nmMOppSeen[sc]=q.id;
+  var sd=nmSuSide(myK);if(!sd)return;var L=nmSideList(sd),keep=L.filter(function(e){return nmOppTmp(e)||e.hip;}),nw=q.units.map(function(e){return JSON.parse(JSON.stringify(e));});
+  L.length=0;nw.concat(keep).forEach(function(x){L.push(x);});try{nmDbg('マップ同期(同期オール): マスターが動かしたこちらの部隊 '+nw.length+'個を反映');}catch(e){}try{btToast(T('マスターがこちらのカウンターを動かしました'));}catch(e){}}
 function nmsHash(){try{var g=null;try{g=losPrimaryFireGroup();}catch(e){}if(g&&g.activeGroupSlot)nmGeSync(g.activeGroupSlot);}catch(e){}return JSON.stringify(nmsPayloadMap());}
 function nmsHdr(){return {'Authorization':'token '+gistGetToken(),'Accept':'application/vnd.github+json','Content-Type':'application/json'};}
 function nmsPush(cb){if(!GIST_CONFIGURED()||NMS.busy){if(cb)cb(false);return;}var sc=S.scen&&S.scen.sel;if(!sc){NMS.msg='シナリオが選ばれていません';if(cb)cb(false);return;}
@@ -38813,7 +38826,8 @@ function nmsApply(P,rl){var m=P.map||{},sc=P.scen;try{nmOppLblSet(sc,P.lbl);}cat
   var jAll=false;try{jAll=!!rl&&S.nmMode!=='online'&&nmJsLv()==='all';}catch(e){}
   if(jAll){ /* v1522→v1525(ダルマ報告「1Pの配置した部隊がきえて2Pの配置した部隊だけがお互いにマップ上に配置」): 自軍/敵軍は国で決まる(攻撃側=自軍の色、両方のiPadで同じ)ので、「相手の自軍=こちらの敵軍」ではなかった。相手の国(myNat)の側(mySide)にある相手のカウンターを、こちらでその国がいる側に置き、その側のこちらのカウンターだけ置き換える。こちらの国の側は変えない */
     var oN=m.myNat||'',oS=m.mySide||'',myK='';try{myK=nmMyNatNow();}catch(e){}
-    if(oN&&oS&&oN!==myK){var src=(oS==='f'?m.friendHexes:m.enemyHexes)||[],dst=nmSuSide(oN),fr=src.map(function(e){var x=JSON.parse(JSON.stringify(e));if(x.grp&&!x.veh&&!x.gun)x.grp='相手'+x.grp;return x;});if(dst==='f')S_LOS.friendHexes=fr;else S_LOS.enemyHexes=fr;try{nmOppLockSnap();}catch(e){} /* v1553 */try{nmDbg('マップ同期(同期オール): 相手('+nmNatLbl(oN)+')の部隊 '+fr.length+'個を'+(dst==='f'?'自軍':'敵軍')+'側に反映');}catch(e){}}
+    try{nmMOppApply(m,myK,sc);}catch(e){console.log('mopp',e);}
+    if(oN&&oS&&oN!==myK){var src=(oS==='f'?m.friendHexes:m.enemyHexes)||[],dst=nmSuSide(oN),fr=src.map(function(e){var x=JSON.parse(JSON.stringify(e));if(x.grp&&!x.veh&&!x.gun)x.grp='相手'+x.grp;return x;});if(dst==='f')S_LOS.friendHexes=fr;else S_LOS.enemyHexes=fr;try{nmOppLockSnap();}catch(e){} /* v1553 */try{NM_MOPP_RECV=nmMOppHash(fr);}catch(e){}try{nmDbg('マップ同期(同期オール): 相手('+nmNatLbl(oN)+')の部隊 '+fr.length+'個を'+(dst==='f'?'自軍':'敵軍')+'側に反映');}catch(e){}}
     else{try{nmDbg('マップ同期(同期オール): 相手の国が分からない・同じ国なので反映しない(相手 '+(oN||'-')+' / こちら '+(myK||'-')+')');}catch(e){}}}
   else{if(!S.savedGroups)S.savedGroups={};if(rl){var gl=S.savedGroups[sc]||(S.savedGroups[sc]={}),gr=m.groups||{};Object.keys(gr).forEach(function(k){if(!gl[k])gl[k]=gr[k];});}else S.savedGroups[sc]=m.groups||{};}
   try{var g=losPrimaryFireGroup();if(g&&g.activeGroupSlot&&S.savedGroups[sc][g.activeGroupSlot]){var keep=Draw;FgSelectGroupSlot(g.id,g.activeGroupSlot);}}catch(e){}
