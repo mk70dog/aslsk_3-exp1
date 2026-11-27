@@ -46050,7 +46050,13 @@ function nmGeSplitRows(it,n,G,d){var sp=G.spl||[],its=d.items||[];
     if(sp.length&&sp.length<its.length)it.push({ic:'move',t:'<span style="color:#3ca878">選んだ'+sp.length+'個で新しい部隊を作る</span>',sub:'同じヘクスに置く。持っているSWも一緒に移る',f:"nmGeSplitDo("+n+")"});}
   var oth=[];try{nmAllAt(NM_RM_HEX,G.sd).forEach(function(e){if(e.grp&&e.grp!==G.slot&&!e.veh&&!e.gun)oth.push(e.grp);});}catch(e){}
   if(!oth.length)return;
-  it.push({row:1,ic:'hex',t:'合流<div style="font-size:11px;color:#8899aa">同じヘクスの部隊をこの部隊に合流させる</div>',btns:oth.map(function(k){return [nmGrpLbl(k)+' '+(nmGrpText(k)||'')+' を合流',"nmGeMergeDo("+n+",'"+k+"')"];})});}
+  if(window.NM_MERGEV===false){it.push({row:1,ic:'hex',t:'合流<div style="font-size:11px;color:#8899aa">同じヘクスの部隊をこの部隊に合流させる</div>',btns:oth.map(function(k){return [nmGrpLbl(k)+' '+(nmGrpText(k)||'')+' を合流',"nmGeMergeDo("+n+",'"+k+"')"];})});return;}
+  /* v1704(ダルマ指示「合流がわかりにくい」): 同じヘクスのほかの部隊ごとに、その部隊のカウンター → この部隊 の形で見せ、まとめた後の中身も出す */
+  var ctr=function(k){var L=[];try{var dd=nmGeList(k);(dd.items||[]).forEach(function(x){L.push(vaslCtrHTML('u:'+(x.nat||dd.nat)+'|'+x.label,30)||('<span>'+x.label+'</span>'));});}catch(e){}return '<span style="display:inline-flex;gap:3px;align-items:center;vertical-align:middle">'+L.join('')+'</span>';};
+  var me=nmGrpLbl(G.slot),mine=(nmGrpText(G.slot)||'');
+  oth.forEach(function(k){var lk=nmGrpLbl(k),tx=nmGrpText(k)||'';
+    it.push({row:1,ic:'hex',t:'合流<div style="font-size:11px;color:#8899aa">同じヘクスのほかの部隊を、この部隊にまとめる</div><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px">'+ctr(k)+'<span style="font-weight:800">'+lk+'</span><span style="font-size:22px;color:#ffd060;line-height:1">→</span>'+ctr(G.slot)+'<span style="font-weight:800;color:#ffd060">'+me+'</span></div><div style="font-size:12px;color:#8fa6bd;margin-top:4px">まとめた後: '+me+' = '+(mine?mine+' + ':'')+tx+'　('+lk+'はなくなる)</div>',
+      btns:[[lk+' を '+me+' にまとめる',"nmGeMergeDo("+n+",'"+k+"')"]]});});}
 /* v1487: 1ユニットを編成 k から k2 へ(状態・持っているSW/LW/DCごと) */
 function nmGeMoveUnit(k,pid,k2,nat){var L=nmGeList(k).items||[],i=-1;L.forEach(function(x,q){if(x.pid===pid)i=q;});if(i<0)return null;var x=L[i],keep={};Object.keys(x).forEach(function(q){if(['pid','kind','label','nat'].indexOf(q)<0)keep[q]=x[q];});var car=nmSuTakeAll(k,pid);
   nmGeDelCore(k,i);nmGeSync(k);var sv=nmGeSaved(k2,nat);if(sv&&!(sv.pickerItems&&sv.pickerItems.length))sv.pickerNat=nat;nmGeAddCore(k2,x.nat||nat,x.kind,x.label);var L2=nmGeList(k2).items||[],y=L2[L2.length-1];if(!y)return null;Object.keys(keep).forEach(function(q){y[q]=keep[q];});nmSuGiveBack(k2,y.pid,car);nmGeSync(k2);return y;}
