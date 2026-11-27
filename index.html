@@ -48153,7 +48153,7 @@ function btFxNext(){
   c+='<div style="display:flex;align-items:center;gap:12px;margin-top:8px"><span class="fxDice">'+btFxDie(red,true,!short)+btFxDie(wht,false,!short)+'</span>';
   c+='<div class="fxCalc" style="font-size:14px;line-height:1.45;min-width:0;overflow-wrap:anywhere">'+calc.replace(/\[/,'<br><span style="font-size:11px;color:#8fb4d8">[').replace(/\]$/,']</span>')+(e.drmL&&e.drmL.length?'<br><span style="font-size:11px;color:#8fb4d8">('+e.drmL.join('・')+')</span>':'')+'</div></div>';
   var fxKind=/撃破/.test(resLbl)?'kill':(/効果なし|外れ/.test(resLbl)?'ng':'ok'); // v317: 撃った側の国籍の結果画像(撃破!!/成功!!/失敗……)
-  c+='<div class="fxRes" style="margin-top:6px;text-align:center;font-size:32px;font-weight:bold;font-family:AppFont,AppJP,monospace;letter-spacing:.06em;color:'+rc+';text-shadow:0 0 12px '+rc+'88,0 2px 0 #000">'+btFxNatImg(e.side,fxKind)+resLbl+'</div>';
+  c+='<div class="fxRes" style="margin-top:6px;text-align:center;font-size:32px;font-weight:bold;font-family:AppFont,AppJP,monospace;letter-spacing:.06em;color:'+rc+';text-shadow:0 0 12px '+rc+'88,0 2px 0 #000">'+btFxPhotoImg(e.side,fxKind)+resLbl+'</div>';
   var mcV=false;try{mcV=btMcOn()&&e.side!==BT.app&&/→\s*(\d*MC|PTC|K\/?\d+)\s*$/.test(String(e.log[0]||head));}catch(x){} /* v1597(ダルマ報告「相手が受けるMC PTCダイスロールが2度表示される」): あなたの射撃で相手にMC・PTCが出たときは、カードにはユニットごとの結果を出さず、次の判定パネルで1つずつ見せる */
   if(mcV){sub=sub.filter(function(l){return !/^\s*(MC|PTC|LLMC|LLTC)\s/.test(l);});sub.push('▶ '+T('各ユニットの判定は次の画面でダイスを表示'));}
   if(sub.length)c+='<div class="fxSub" style="font-size:11px;color:#cfe3f5;text-align:center;line-height:1.5">'+sub.map(function(l){if(/ROF維持/.test(l)&&typeof ROF_OK_IMG==='function')return '<div style="display:flex;align-items:center;justify-content:center;gap:8px;margin:3px 0">'+ROF_OK_IMG(/^ROF維持/.test(l)?'gun':'sw',';width:120px;margin:0')+'<b style="font-size:13px;color:#60e060">'+l+'</b></div>';return /^(砲塔を回した|車体ごと方向を変えた|車体の方向を変えた|砲の方向を変えた)/.test(l)?'<b style="font-size:13px;color:#ffd040">⟳ '+l+'</b>':l;}).join('<br>')+'</div>'; // v311: 向きの変更を目立たせる
@@ -48256,7 +48256,7 @@ function btFxResShow(e){
   var c='<div class="fxCard" style="max-width:min(460px,92vw)"><div style="font-size:13px;color:#ffcf40;font-weight:bold">'+title+'</div>';
   if(one){var col=x0.ok?'#60e060':'#ff5050';
     c+='<div style="font-size:12.5px;color:#cfe3f5;margin-top:6px;line-height:1.5;overflow-wrap:anywhere">'+x0.txt+'</div>';
-    c+='<div class="fxRes" style="margin-top:6px;text-align:center;font-size:32px;font-weight:bold;font-family:AppFont,AppJP,monospace;letter-spacing:.06em;color:'+col+';text-shadow:0 0 12px '+col+'88,0 2px 0 #000">'+btFxNatImg(btFxSideOf(x0.txt,e.head),x0.ok?'ok':'ng')+(x0.ok?'✓ ':'✗ ')+x0.res+'</div>';}
+    c+='<div class="fxRes" style="margin-top:6px;text-align:center;font-size:32px;font-weight:bold;font-family:AppFont,AppJP,monospace;letter-spacing:.06em;color:'+col+';text-shadow:0 0 12px '+col+'88,0 2px 0 #000">'+btFxPhotoImg(btFxSideOf(x0.txt,e.head),x0.ok?'ok':'ng')+(x0.ok?'✓ ':'✗ ')+x0.res+'</div>';}
   else{c+='<div style="margin-top:6px;display:flex;flex-direction:column;gap:3px">';
     e.items.slice(0,8).forEach(function(x){var col=x.ok?'#60e060':'#ff5050';
       c+='<div style="display:flex;gap:8px;align-items:baseline;font-size:12px;line-height:1.4"><b style="flex:0 0 auto;color:'+col+';min-width:64px">'+(x.ok?'✓ ':'✗ ')+x.res+'</b><span style="color:#cfe3f5;overflow-wrap:anywhere">'+(x.t!==title&&x.txt.indexOf(x.t)<0?'<span style="color:#8fb4d8">'+x.t+'</span> ':'')+x.txt+'</span></div>';});
@@ -48272,6 +48272,9 @@ function btFxResShow(e){
 
 // ---------- v317(ダルマ指示「判定結果の画像をアプリ対戦でも表示」「サンプル」) ----------
 // 射撃の演出カード・判定のカード(1件)に、撃った側/判定した側の国籍の結果画像(判定タブと同じ3枚)を出す。その国籍の画像がなければ出さない
+// v1688(ダルマ指示「対戦モードの地図の上に出る射撃の結果カードも写真とバッジに変更」): 撃破=撃破の写真、成功=任務成功の写真、失敗(効果なし・外れ)=任務失敗の写真。NM_RESPHOTO=false で国籍の漫画画像に戻る
+function btFxPhotoImg(side,kind){try{if(typeof NM_RESPHOTO!=='undefined'&&NM_RESPHOTO!==false&&typeof nmResPhotoTag==='function'){var ph=kind==='kill'?nmResPhotoTag('撃破',BADGE_NAT_PHOTO_KILL,1):kind==='ng'?nmResPhotoTag('任務失敗',BADGE_NAT_PHOTO_FAIL,1):nmResPhotoTag('任務成功',null,1);
+  if(ph)return '<div class="fxImg" style="margin:2px auto 4px;width:min(320px,100%);font-size:initial;letter-spacing:0;text-shadow:none">'+ph+'</div>';}}catch(e){}return btFxNatImg(side,kind);}
 function btFxNatImg(side,kind){
   var m=(typeof BADGE_NAT_IMG!=='undefined')&&side&&BADGE_NAT_IMG[side];var b=m&&m[kind];if(!b)return '';
   return '<div class="fxImg" style="margin:2px auto 4px"><img src="data:image/png;base64,'+b+'" style="display:block;margin:0 auto;height:min(180px,24vh);width:auto;max-width:100%;border-radius:5px;border:1px solid #2a3a50"></div>';
@@ -48361,7 +48364,7 @@ function nmResPhotoTag(alt,mp,fl){if(NM_RESPHOTO===false)return null;var m=mp||B
 var NM_RES_BADGE_COL=[['#c41e27','#fff','#fff'],['#4b5d23','#e9dfb0','#e9dfb0'],['#111','#e0b23c','#e0b23c'],['linear-gradient(#f3d36b,#c8921f)','#2a1a00','#2a1a00']];
 function nmResBadge(alt,lf){var c=/故障|失敗/.test(alt)?NM_RES_BADGE_COL[0]:/ROF/.test(alt)?NM_RES_BADGE_COL[1]:/撃破/.test(alt)?NM_RES_BADGE_COL[2]:/命中|成功/.test(alt)?NM_RES_BADGE_COL[3]:NM_RES_BADGE_COL[Math.floor(Math.random()*NM_RES_BADGE_COL.length)]; /* v1688(ダルマ指示): 故障・失敗=赤、ROF成功=緑、命中・任務成功=黄、撃破=黒 */ var a=String(alt||'').replace(/！/g,''),l1=a,l2='';
   var m=/^(.*?)(ROF)(.*)$/.exec(a);if(m){l1='ROF';l2=m[3]||'';if(m[1])l1=m[1]+'ROF';}else if(a.length>=4){l1=a.slice(0,2);l2=a.slice(2);}
-  return '<span style="position:absolute;'+(lf?'left':'right')+':10px;bottom:10px;background:'+c[0]+';border:2px solid '+c[1]+';border-radius:10px;padding:6px 10px 7px;color:'+c[2]+';font-family:NmResFont,AppJP,sans-serif;font-weight:400;line-height:1;text-align:center;box-shadow:0 3px 8px rgba(0,0,0,.7)"><span style="font-size:20px;letter-spacing:2px">'+l1+'</span>'+(l2?'<br><span style="font-size:18px;letter-spacing:'+(/ROF/.test(l1)?'0':'2px')+'">'+l2+'</span>':'')+'</span>';}
+  return '<span style="position:absolute;'+(lf?'left':'right')+':10px;bottom:10px;background:'+c[0]+';border:2px solid '+c[1]+';border-radius:10px;padding:6px 10px 7px;color:'+c[2]+';font-family:NmResFont,AppJP,sans-serif!important;font-weight:400;line-height:1;text-align:center;box-shadow:0 3px 8px rgba(0,0,0,.7)"><span style="font-family:NmResFont,AppJP,sans-serif!important;font-size:20px;letter-spacing:2px">'+l1+'</span>'+(l2?'<br><span style="font-family:NmResFont,AppJP,sans-serif!important;font-size:18px;letter-spacing:'+(/ROF/.test(l1)?'0':'2px')+'">'+l2+'</span>':'')+'</span>';}
 (function(){if(typeof window==='undefined'||window.__resPhotoInit)return;window.__resPhotoInit=1;
   [['SUCCESS_IMG_TAG','任務成功'],['HIT_IMG_TAG','命中'],['KIA_IMG_TAG','撃破','KILL']].forEach(function(q){var f=window[q[0]];if(typeof f!=='function')return;window[q[0]]=function(){if(typeof WEB_PUBLIC_HIDE_SCENARIO_CONTENT!=='undefined'&&WEB_PUBLIC_HIDE_SCENARIO_CONTENT)return '';var h=nmResPhotoTag(q[1],q[2]==='KILL'?BADGE_NAT_PHOTO_KILL:null);return h||f.apply(this,arguments);};});})();
 
