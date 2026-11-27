@@ -45911,7 +45911,7 @@ function nmVfPendSet(n,what){var V=NM_VF;if(!V||V.pend==null)return;var tn=V.pen
 function nmScnDi(def){try{var c=curScen();var d=c&&dtToDateIdx(c.dt);if(d!=null)return d;}catch(e){}return (S.latw&&S.latw.dateIdx!=null)?S.latw.dateIdx:def;} /* v1145: マップの判定(PF等)の年代は選択中シナリオの日付を優先 */
 function nmPfWep(nat){if(nat!=='GER')return null;var di=nmScnDi(99);var w=LATW_DATA.filter(function(w){return w.oneShot&&/^pf/.test(w.id)&&!(w.availIdx>di);}).sort(function(a,b){return (b.availIdx||0)-(a.availIdx||0);})[0]||null;
   try{if(w&&latwPfMonthBlocked(w))return null;}catch(e){}
-  try{if(w&&S.scen&&S.scen.sel){var c=curScen(),ssr=String((c&&(c.ssr||c.SSR))||''),ids=Object.keys(scenarioAfvIdsByVehId()||{}),foe=ids.some(function(id){var v=nmAfv(id);return v&&String(v.nat||'').split('/').indexOf('GER')<0;});if(!foe&&!/PF|パンツァーファウスト|Panzerfaust/i.test(ssr))return null;}}catch(e){} /* v1029(ダルマ「シナリオカードにPFは記載されていない 確認実施」): 4.4.2 PFは1943年10月以降、敵AFVがいるシナリオ(またはSSR)でのみ独軍歩兵の固有SW */
+  try{if(w&&S.scen&&S.scen.sel){var c=curScen(),ssr=String((c&&(c.ssr||c.SSR))||''),ids=Object.keys(scenarioAfvIdsByVehId()||{}),foe=ids.some(function(id){var v=nmAfv(id);return v&&String(v.nat||'').split('/').indexOf('GER')<0;});if(!foe&&!/パンツァーファウスト|Panzerfaust|(^|[^A-Za-z])PF(?![A-Za-z])/.test(ssr))return null; /* v1718(バグ修正 ダルマ質問「S41 S43 相手に車両が登場しないがPFは使用できる?」): SSRの「PFPh(準備射撃フェイズ)」をPFの記載と取り違えていた */}}catch(e){} /* v1029(ダルマ「シナリオカードにPFは記載されていない 確認実施」): 4.4.2 PFは1943年10月以降、敵AFVがいるシナリオ(またはSSR)でのみ独軍歩兵の固有SW */
   return w;}
 function nmPfOff(){var sc=S.scen&&S.scen.sel;return !!(sc&&S.pfOffScen&&S.pfOffScen[sc]);}
 function nmPfSetOff(n,v){var sc=S.scen&&S.scen.sel;if(!sc)return;if(!S.pfOffScen)S.pfOffScen={};if(v)S.pfOffScen[sc]=1;else delete S.pfOffScen[sc];
