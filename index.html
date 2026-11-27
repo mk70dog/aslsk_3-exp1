@@ -41440,6 +41440,13 @@ function nmResImgShow(r){var o=document.getElementById('nmResImg');if(o)o.remove
   if(r.rof&&k!=='kill'){try{var rb=BADGE_ROF_IMG[r.rof]||BADGE_ROF_IMG.gun;if(rb)img='<div style="margin:2px auto 4px"><img src="data:image/png;base64,'+rb+'" style="display:block;margin:0 auto;height:min(180px,24vh);width:auto;max-width:100%;border-radius:5px;border:1px solid #2a3a50"></div>';}catch(x){}}
   if(r.malf&&k!=='kill'){img='<div style="margin:2px auto 4px"><img src="'+BADGE_MALF_IMG[r.malf]+'" style="display:block;margin:0 auto;height:min(180px,24vh);width:auto;max-width:100%;border-radius:5px;border:1px solid #2a3a50"></div>';} /* v508: 故障は ROF成功より優先 */
   try{if(k==='ok'&&!r.rof&&!r.malf&&/命中/.test(r.t||'')&&!/命中せず|外れ/.test(r.t||'')&&typeof BADGE_HIT_IMG!=='undefined'){var hs=/^(USA|GBR|FFR|ALM|POL)$/.test(r.nat||'')?BADGE_HIT_IMG.usa:BADGE_HIT_IMG.ger;img='<div style="margin:2px auto 4px"><img src="'+hs+'" style="display:block;margin:0 auto;height:min(180px,24vh);width:auto;max-width:100%;image-rendering:auto;border-radius:5px;border:1px solid #2a3a50"></div>'; /* v567(ダルマ指示「画像を他と同じサイズにする」) */}}catch(x){} /* v559(ダルマ指示「命中の画像で表示」): 命中した時は命中の画像(米英など=ヘルメット、独ソなど=帽子) */
+  /* v1688(ダルマ指示「サンプルが古いタイプのタブ画面」): 判定モードの結果ポップアップも写真+赤帯の文字にする(撃破・命中・命中！ROF成功・任務成功・任務失敗)。外れ・故障・ROF成功(命中なし)は今までの画像。NM_RESPHOTO=false で戻る */
+  try{if(typeof NM_RESPHOTO!=='undefined'&&NM_RESPHOTO!==false&&!r.malf){var t0=r.t||'',ph=null,isHit=/命中/.test(t0)&&!/命中せず|外れ/.test(t0);
+    if(k==='kill')ph=nmResPhotoTag('撃破',BADGE_NAT_PHOTO_KILL,1);
+    else if(k==='ok'&&isHit)ph=nmResPhotoTag(r.rof?'命中！ROF成功':'命中',null,1);
+    else if(k==='ok'&&!r.rof)ph=nmResPhotoTag('任務成功',null,1);
+    else if(k==='ng'&&/効果なし|影響なし|No Effect|失敗/i.test(t0)&&!/外れ|ミス|不発|故障|MISS/i.test(t0))ph=nmResPhotoTag('任務失敗',BADGE_NAT_PHOTO_FAIL,1);
+    if(ph)img='<div style="margin:2px auto 4px">'+ph+'</div>';}}catch(x){}
   if(!img)return;
   var col=k==='kill'?'#ff4040':k==='ng'?'#8899aa':'#60e060';var m=document.createElement('div');m.id='nmResImg';
   m.style.cssText='position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);z-index:9790;width:'+(r._big?'min(600px,90vw)':'min(320px,86vw)')+';background:#0b0d12f2;border:1px solid #2c323c;border-radius:12px;box-shadow:0 10px 30px #000d;padding:8px 10px;text-align:center;font-family:AppFont,AppJP,monospace;cursor:pointer;animation:nmResIn .18s ease-out';
@@ -48337,8 +48344,8 @@ var BADGE_NAT_PHOTO_KILL={"GER":"/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAkGBwgHBgkIBwg
  // v1687(ダルマ指示「任務失敗 差し替え 同じようにする」)
 
 // v1688(ダルマ指示「国籍は縛らない」): 判定する側の国籍に関係なく、その結果の写真の中からランダムに出す(ソ連・その他の国籍も写真)
-function nmResPhotoTag(alt,mp){if(NM_RESPHOTO===false)return null;var m=mp||BADGE_NAT_PHOTO,ks=Object.keys(m);if(!ks.length)return null;var b=m[ks[Math.floor(Math.random()*ks.length)]];if(!b)return null;
-  return '<span style="position:relative;display:inline-block;height:150px;width:267px;vertical-align:middle;margin-right:8px;border-radius:5px;overflow:hidden;box-shadow:0 0 0 1px #2a3a50"><img src="data:image/jpeg;base64,'+b+'" style="display:block;width:100%;height:100%;object-fit:cover" alt="'+alt+'"><span style="position:absolute;left:12px;bottom:10px;font-family:NmResFont,AppJP,sans-serif;font-size:'+(alt.length>4?'24px':'30px')+';font-weight:400;letter-spacing:'+(alt.length>4?'2px':'5px')+';line-height:1;color:#fff;background:#b3121b;padding:4px 7px 6px 12px;box-shadow:0 2px 6px rgba(0,0,0,.7)">'+alt+'</span></span>';}
+function nmResPhotoTag(alt,mp,fl){if(NM_RESPHOTO===false)return null;var m=mp||BADGE_NAT_PHOTO,ks=Object.keys(m);if(!ks.length)return null;var b=m[ks[Math.floor(Math.random()*ks.length)]];if(!b)return null;
+  return '<span style="position:relative;display:'+(fl?'block;width:100%;aspect-ratio:16/9;max-height:24vh;margin:0 auto':'inline-block;height:150px;width:267px;vertical-align:middle;margin-right:8px')+';border-radius:5px;overflow:hidden;box-shadow:0 0 0 1px #2a3a50"><img src="data:image/jpeg;base64,'+b+'" style="display:block;width:100%;height:100%;object-fit:cover" alt="'+alt+'"><span style="position:absolute;left:12px;bottom:10px;font-family:NmResFont,AppJP,sans-serif;font-size:'+(alt.length>4?'24px':'30px')+';font-weight:400;letter-spacing:'+(alt.length>4?'2px':'5px')+';line-height:1;color:#fff;background:#b3121b;padding:4px 7px 6px 12px;box-shadow:0 2px 6px rgba(0,0,0,.7)">'+alt+'</span></span>';}
 (function(){if(typeof window==='undefined'||window.__resPhotoInit)return;window.__resPhotoInit=1;
   [['SUCCESS_IMG_TAG','任務成功'],['HIT_IMG_TAG','命中'],['KIA_IMG_TAG','撃破','KILL']].forEach(function(q){var f=window[q[0]];if(typeof f!=='function')return;window[q[0]]=function(){if(typeof WEB_PUBLIC_HIDE_SCENARIO_CONTENT!=='undefined'&&WEB_PUBLIC_HIDE_SCENARIO_CONTENT)return '';var h=nmResPhotoTag(q[1],q[2]==='KILL'?BADGE_NAT_PHOTO_KILL:null);return h||f.apply(this,arguments);};});})();
 
