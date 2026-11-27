@@ -48446,6 +48446,19 @@ function nmMalfOrFail(alt){var k=nmMalfKind();return (k&&BADGE_PHOTO_MALF[k])?nm
 var NM_RES_ROF=false;
 /* v1698(ダルマ指示「細かい設定を折りたたむ」): 射撃パネルの、毎回は変えない行(ユニットの状態・攻撃する側・目標・目標のFT保有・SWの担当)を「詳細設定 ▸」の1行にまとめ、最初は閉じておく。押すと開く(パネルを閉じると次は閉じた状態)。SWの担当が未設定の時はその行だけは出したまま。NM_MFADV_FOLD=0 で元に戻る */
 var NM_MF_ADV=0;
+/* v1705(ダルマ指示「ダイス入力・判定ボタン選択をスクロール無しで」): 車両・砲の射撃パネルも、毎回は変えない行(ハッチ・目標のハッチ・高所・集中射撃・目標獲得・弾薬欠乏の説明)を「詳細設定 ▸」にまとめる。NM_VFADV_FOLD=0 で戻る */
+var NM_VF_ADV=0;
+function nmVfAdvTog(n){NM_VF_ADV=NM_VF_ADV?0:1;try{nmVfRe(n);}catch(e){try{btRmReopen(n);}catch(e2){}}}
+function nmVfAdvFold(it,n){if(window.NM_VFADV_FOLD===0||!it||!it.length)return it;var tx=function(x){return String(x&&x.t||'').replace(/<br\s*\/?>/g,' ').replace(/<[^>]*>/g,'').trim();};
+  var isAdv=function(x){var t=tx(x);return /^(ハッチ|目標のハッチ|高所|集中射撃|目標獲得)$/.test(t)||/^目標のハッチ/.test(t)||/^同じ高さ|稜線を越えて/.test(t)||/^弾薬欠乏No/.test(t);};
+  var idx=[];it.forEach(function(x,i){if(x&&!x.sep&&isAdv(x))idx.push(i);});if(idx.length<2)return it;
+  var on=[];idx.forEach(function(i){var x=it[i],t=tx(x);if(x.btns)x.btns.forEach(function(b){var l=String(b[0]);if(/^✓/.test(l)&&!/^✓(BU|なし|自動)/.test(l))on.push((t==='目標のハッチ'?'目標':'')+l.replace(/^✓/,''));});});
+  var hd={ic:'sel',t:'<span>詳細設定 '+(NM_VF_ADV?'▾':'▸')+(on.length?'　<span style="color:#ffb040;font-size:13px">'+on.join('・')+'</span>':'')+'</span>',sub:NM_VF_ADV?'閉じる':'ハッチ・目標のハッチ・高所・集中射撃・目標獲得',f:"nmVfAdvTog("+n+")"};
+  if(NM_VF_ADV){it.splice(idx[0],0,hd);return it;}
+  var out=[];it.forEach(function(x,i){if(i===idx[0])out.push(hd);if(idx.indexOf(i)<0)out.push(x);});return out;}
+(function(){if(typeof window==='undefined'||window.__vfAdvInit)return;window.__vfAdvInit=1;var go=function(){var o=window.nmRmVFireItems;if(typeof o!=='function'||o.__adv)return;var w=function(n){return nmVfAdvFold(o.apply(this,arguments),n);};w.__adv=1;window.nmRmVFireItems=w;};
+  if(document.readyState==='complete')setTimeout(go,0);else window.addEventListener('load',function(){setTimeout(go,0);});})();
+
 function nmMfAdvTog(n){NM_MF_ADV=NM_MF_ADV?0:1;try{nmMfReopen(n);}catch(e){}}
 function nmMfAdvFold(it,n){if(window.NM_MFADV_FOLD===0||!it||!it.length)return it;var tx=function(x){return String(x&&x.t||'').replace(/<br\s*\/?>/g,' ').replace(/<[^>]*>/g,'').trim();};
   var unset=it.some(function(x){return /^SWの担当が未設定/.test(tx(x));});
