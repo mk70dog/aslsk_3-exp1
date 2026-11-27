@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1695</title>
+<title>ASL SKシリーズv1697</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1695">
+<meta property="og:title" content="ASL SKシリーズv1697">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10995,7 +10995,9 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.895"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.897"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1697="v1697(バグ修正 ダルマ報告「故障画像が表示しない」(v1696の続き): 判定モードの射撃パネルでは、結果の画像を選ぶ時に画面の文字ではなく判定の結果(SWごとの故障・即時除去)から故障を見るように";
+var APP_VERSION_HIST_v1696="v1696(バグ修正 ダルマ報告「ダイス6x6でSW故障画面が表示しない」: 判定モードの射撃パネルに前からある「故障 B12 原DR12以上」の案内の行を故障の行と取り違え、前からある行として故障を消していたため、故障の写真が出なかった。案内の行と前からある行は数えないように";
 var APP_VERSION_HIST_v1695="v1695(ダルマ指示「運搬/操作の担当ユニットが割り当てられていないSWをこの画面でできるようにする」: 判定モードの射撃パネルで、担当が未設定のSWがあれば「SWの担当が未設定」(おまかせ=担当の少ない分隊から順に割り当て)と、SWごとに担当の分隊・指揮官を選ぶ行を出す";
 var APP_VERSION_HIST_v1694="v1694(ダルマ指示「任務失敗の画像の後に故障画像を表示する」: 判定モードの結果ポップアップで武器が故障した時、結果の写真(任務失敗・1MCなど)→故障の写真の順に出す(4.2秒表示)";
 var APP_VERSION_HIST_v1693="v1693(ダルマ指示「ダイス入力 判定ボタンをスクロールせずに選択できるようにする」「他のパネルも同様に」: 判定パネルのダイスの行(赤・白など)を見出しとボタンの1行にまとめて低く(78px→46px)。2列のパネルが枠からはみ出す時は、高い方の列の端の項目を低い方へ移して左右の高さをそろえる(判定ボタンはダイス欄と離さない)。NM_DICECMP=0 / NM_COLFIT=0 で元に戻る";
@@ -41435,9 +41437,11 @@ function nmDiceBox(){return document.querySelector('#nmIj #ijRes')||document.que
     if(lg&&lg!==log0&&/士気/.test(String(lg.t||'')))return null; /* v781(ダルマ指示): 士気チェック(LLMC/LLTC含む)では結果判定画像(成功・撃破など)を出さない */
     var rs=(lg&&lg!==log0)?{t:String(lg.x||'').replace(/<[^>]*>/g,''),lb:String(lg.t||'').replace(/<[^>]*>/g,'')}:(pt?{t:pt,lb:''}:null);if(!rs)return null;rs.nat=eh0?nmIjEhNat(eh0):'';
     var wt=function(l){return cur==='vfire'?'gun':cur==='vmg'?'sw':/MG|機関銃/.test(l)?'sw':/MTR|迫撃|砲|mm/.test(l)?'gun':'sw';};
-    var ml=L.filter(function(l){return /故障/.test(l)&&!/修理/.test(l);})[0];if(ml)rs.malf=wt(ml);
+    var ml=L.filter(function(l){return /故障/.test(l)&&!/修理/.test(l)&&!/故障\s*B\d+\s*原DR|故障なし/.test(l)&&!(window.__nmTxt0&&window.__nmTxt0.indexOf(l)>=0);})[0];if(ml)rs.malf=wt(ml); /* v1696(バグ修正 ダルマ報告「ダイス6x6でSW故障画面が表示しない」): 射撃パネルに前からある「故障 B12 原DR12以上」の案内の行を故障の行と取り違え、前からあった行として故障を消していた。案内の行と前からある行は数えない */
     var rl=L.filter(function(l){return /ROF維持/.test(l)&&!/ROF維持(失敗|できず|ならず)|打ち止め/.test(l);})[0];if(rl&&!(window.__nmTxt0&&window.__nmTxt0.indexOf(rl)>=0))rs.rof=wt(rl);try{rs.lw=(k9==='lw');}catch(x){}try{rs.vg=eh0&&eh0.veh?'veh':(eh0&&eh0.gun?'gun':(cur==='vfire'?'veh':null));}catch(x){} /* v549(バグ修正 ダルマ報告「撃破判定・NTCのあとにROF成功の画像」): 前からあったROFの行は数えない */
-    if(ml&&window.__nmTxt0&&window.__nmTxt0.indexOf(ml)>=0)delete rs.malf;return rs;}
+    if(ml&&window.__nmTxt0&&window.__nmTxt0.indexOf(ml)>=0)delete rs.malf;
+    try{if(!rs.malf&&nmPanelKey()==='mf'){var fR=getFireState(),RR=fR&&fR.res;if(RR&&RR.swr&&RR.swr.some(function(q){return q.fail||q.xFailB||q.xFailFT;}))rs.malf='sw';}}catch(x){} /* v1697(バグ修正 ダルマ報告「故障画像が表示しない」): 射撃パネルは文字ではなく判定の結果(SWごとの故障)から故障を見る */
+    return rs;}
   window.__nmShowRes=function(log0,eh0){var lg=S.log&&S.log[0];if(!lg||lg===log0)return;var rs=resFrom(nmDiceBox(),log0,eh0);if(rs)setTimeout(function(){nmResImgShow(rs);},250);}; /* v692: 少し待ってから振った判定(LOSの再計算待ち)も結果画像を出す */
   document.addEventListener('click',function(e){if(rec)return;if(typeof btActive==='function'&&btActive())return;
     var t=e.target&&e.target.closest&&(e.target.closest('#btRm')||e.target.closest('#nmIj #ijRes button,#nmIj .ijGo'));if(!t)return;rec=[];var log0=S.log&&S.log[0],eh0=NM_SEL_EH||NM_FT_SEL,txt0=((nmDiceBox()||{}).innerText)||'';window.__nmTxt0=txt0;Math.random=function(){var r=orig();var sk='';try{sk=(new Error()).stack||'';}catch(x){}if(!/hdrLogoRand|rotateTacBadge|pick\w*BadgeImg|nmsDev|SREC_DO_CREATE|nmResImg/.test(sk))rec.push(r);return r;}; /* v533(バグ修正 ダルマ報告「移動を選択するとダイスロールが表示」): 見出しのロゴ・バッジ画像の抽選などダイスでない乱数はダイスとして数えない */
