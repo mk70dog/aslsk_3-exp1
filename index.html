@@ -48404,6 +48404,20 @@ function nmMalfOrFail(alt){var k=nmMalfKind();return (k&&BADGE_PHOTO_MALF[k])?nm
 // v1688(ダルマ指示「国籍は縛らない」): 判定する側の国籍に関係なく、その結果の写真の中からランダムに出す(ソ連・その他の国籍も写真)
 // v1690(ダルマ指示「射撃でROF成功の場合 任務成功とROF成功を横並びで表示」): 射撃タブの結果で機関銃などがROFを維持した時は、結果の写真の右にROF成功の写真を並べる(下のROFの欄の画像は出さない)
 var NM_RES_ROF=false;
+/* v1698(ダルマ指示「細かい設定を折りたたむ」): 射撃パネルの、毎回は変えない行(ユニットの状態・攻撃する側・目標・目標のFT保有・SWの担当)を「詳細設定 ▸」の1行にまとめ、最初は閉じておく。押すと開く(パネルを閉じると次は閉じた状態)。SWの担当が未設定の時はその行だけは出したまま。NM_MFADV_FOLD=0 で元に戻る */
+var NM_MF_ADV=0;
+function nmMfAdvTog(n){NM_MF_ADV=NM_MF_ADV?0:1;try{nmMfReopen(n);}catch(e){}}
+function nmMfAdvFold(it,n){if(window.NM_MFADV_FOLD===0||!it||!it.length)return it;var tx=function(x){return String(x&&x.t||'').replace(/<br\s*\/?>/g,' ').replace(/<[^>]*>/g,'').trim();};
+  var unset=it.some(function(x){return /^SWの担当が未設定/.test(tx(x));});
+  var isAdv=function(x){var t=tx(x);if(/^ユニットの状態|^攻撃する側・目標|^目標のFT保有|^SWの担当(?!が未設定)/.test(t))return true;if(!unset&&/の担当$/.test(t)&&x.btns)return true;return false;};
+  var idx=[];it.forEach(function(x,i){if(isAdv(x))idx.push(i);});if(idx.length<2)return it;
+  var on=[];idx.forEach(function(i){var x=it[i],t=tx(x);if(/^ユニットの状態/.test(t)){var m=t.replace(/^ユニットの状態\s*/,'');if(m)on.push(m);}else if(/^SWの担当/.test(t)){}else if(x.btns)x.btns.forEach(function(b){var l=String(b[0]);if(/^✓/.test(l)&&!/保有なし/.test(l))on.push(l.replace(/^✓/,''));});});
+  var hd={ic:'sel',t:'<span>詳細設定 '+(NM_MF_ADV?'▾':'▸')+(on.length?'　<span style="color:#ffb040;font-size:13px">'+on.join('・')+'</span>':'')+'</span>',sub:NM_MF_ADV?'閉じる':'ユニットの状態・CX・目標は砲/CE・FT保有・SWの担当',f:"nmMfAdvTog("+n+")"};
+  if(NM_MF_ADV){it.splice(idx[0],0,hd);return it;}
+  var out=[];it.forEach(function(x,i){if(i===idx[0])out.push(hd);if(idx.indexOf(i)<0)out.push(x);});return out;}
+(function(){if(typeof window==='undefined'||window.__mfAdvInit)return;window.__mfAdvInit=1;var go=function(){var o=window.nmRmMFireItems;if(typeof o!=='function'||o.__adv)return;var w=function(n){return nmMfAdvFold(o.apply(this,arguments),n);};w.__adv=1;window.nmRmMFireItems=w;var op=window.nmMfOpen;if(typeof op==='function'&&!op.__adv){var w2=function(){NM_MF_ADV=0;return op.apply(this,arguments);};w2.__adv=1;window.nmMfOpen=w2;}};
+  if(document.readyState==='complete')setTimeout(go,0);else window.addEventListener('load',function(){setTimeout(go,0);});})();
+
 // v1693(ダルマ指示「ダイス入力 判定ボタンをスクロールせずに選択できるようにする」): ダイスの行(赤・白など)を、見出しとボタンを1行にまとめて低くする(1行78px→約46px)。NM_DICECMP=0 で元に戻る
 (function(){try{if(typeof document==='undefined'||window.NM_DICECMP===0||document.getElementById('nmDiceCmpCss'))return;var st=document.createElement('style');st.id='nmDiceCmpCss';st.textContent='html:root:root:root:root:root #btRm#btRm#btRm#btRm .rmRow:has(>.dsRow){flex-wrap:nowrap!important;flex-flow:row nowrap!important;align-items:center!important;padding-top:3px!important;padding-bottom:3px!important;min-height:0!important;gap:8px!important}html:root:root:root:root:root #btRm#btRm#btRm#btRm .rmRow:has(>.dsRow)>.rmIc{display:none!important}html:root:root:root:root:root #btRm#btRm#btRm#btRm .rmRow:has(>.dsRow)>.rmTx{flex:0 0 auto!important;width:auto!important;min-width:26px!important;max-width:120px!important;margin:0!important;white-space:nowrap!important}html:root:root:root:root:root #btRm#btRm#btRm#btRm .rmRow:has(>.dsRow)>.dsRow{flex:1 1 0!important;flex-basis:0!important;width:auto!important;max-width:none!important;margin:0!important}html:root:root:root:root:root #btRm#btRm#btRm#btRm .rmRow:has(>.dsRow)>.dsRow>button.dsb.dsb:not(.zz){height:40px!important;min-height:40px!important}';(document.head||document.documentElement).appendChild(st);}catch(e){}})();
 
