@@ -37884,6 +37884,7 @@ function nmRmMFireItems(n){
   var cur=S.fireSub||'pfph',f0=getFireState(),done=!!(M.tgt!=null&&f0&&f0.res&&f0.res.ift&&!M.edit); /* v413(ダルマ指示「マップを直感的に」お任せ): 撃った後は設定を畳み、結果と次の操作だけにする */
   if(done){it.pop();it.push({ic:'fire',img:srcs.length?nmGrpImgHTML(srcs[0],M.slot):'',t:'<span><span style="color:'+L.col+'">'+L.nm+'</span>: '+nmGrpLbl(M.slot)+'　'+((NM_MF_PH.filter(function(x){return x[0]===cur;})[0]||[])[1]||'')+'射撃'+(cur==='dff'&&f0.fireMode?'('+f0.fireMode+')':'')+'</span>',sub:'設定を変える',f:"NM_MF.edit=1;nmMfReopen("+n+")"});}
   try{nmMfSwInfo(it,cur);}catch(e){}
+  try{if(!done)nmMfSwOwnerRows(it,n);}catch(e){} /* v1695 */
   var shEh=nmUnitAt(nmHexOfNode(M.from),M.sd);
   if(!done){if(shEh&&shEh.st&&shEh.st.fired&&!(f0res()))it.push({ic:'info',t:'<span style="color:#ffb040">このマーカーは射撃済('+shEh.st.fired+')</span>',sub:'もう一度撃てるか確かめてください(印はヘクスメニューの「射撃」で外せます)'});
   it.push({row:1,ic:'route',t:'フェイズ',btns:NM_MF_PH.map(function(x){return [(!NM_PHU&&cur===x[0]?'✓':'')+x[1],"NM_PHU=false;nmMfPh("+n+",'"+x[0]+"')"];})});if(NM_PHU){it.push({ic:'info',t:'<span style="color:#ffd060;font-size:13px">↑ '+T('フェイズを選んでください')+'</span>',sub:T('選ぶと判定の設定とダイスが出ます')});return it;}
@@ -37948,6 +37949,16 @@ function nmRmMFireItems(n){
   try{if(!done&&window.NM_DICE_BR!==0&&NM_iE>NM_iS){var _mv=it.splice(NM_iS,NM_iE-NM_iS);it.push({sep:1});it.push.apply(it,_mv);}}catch(e){} /* sample-dicebr(ダルマ「赤枠部分を右下に表示」): FP・列・DRMとダイスを、ユニットの状態・攻撃する側・目標・FT保有の後(右下)に */
   return it;
 }
+/* v1695(ダルマ指示「運搬/操作の担当ユニットが割り当てられていないSWをこの画面でできるようにする」): 編成に分隊が2つ以上いて担当が決まっていないSWがあれば、SWごとに担当の分隊・指揮官を選ぶ行を出す。「おまかせ」は担当のいない分隊から順に割り当てる */
+function nmMfSwOwnerRows(it,n){var f=getFireState();if(!f||!f.grps)return;var SW={};try{exSW().forEach(function(s){SW[s.uid]=s;});}catch(e){}
+  f.grps.forEach(function(g){if(!g.pickerItems||g.pickerItems.length<=1||!(g.sw||[]).length)return;var un=(g.sw||[]).filter(function(u){return !(g.swOwner&&g.swOwner[u]!=null);});if(!un.length&&!g.__nmOwnShow)return;g.__nmOwnShow=1;
+    var cnt={};g.pickerItems.forEach(function(p,i){var k=p.label;cnt[k]=(cnt[k]||0)+1;p.__nmNo=cnt[k];});var nm=function(p){var k=p.label,many=g.pickerItems.filter(function(x){return x.label===k;}).length>1;return String(k).replace(/\[.*?\]/,'')+(many?'-'+p.__nmNo:'');};
+    if(un.length)it.push({row:1,ic:'sel',t:'<span style="font-size:13px;color:#ff9a6a">SWの担当が未設定<br><small style="color:#8fa6bd">'+un.length+'個 · 判定の前に選ぶ</small></span>',btns:[['おまかせ',"nmMfSwOwnAuto("+n+","+g.id+")"]]});
+    (g.sw||[]).forEach(function(u){var s=SW[u],cur=g.swOwner&&g.swOwner[u];it.push({row:1,ic:'sel',t:'<span style="font-size:13px">'+(s?String(s.lbl).replace(/\s*#\d+/,''):'SW')+' の担当</span>',btns:g.pickerItems.filter(function(p){return p.kind==='mmc'||p.kind==='smc';}).map(function(p){return [(cur===p.pid?'✓':'')+nm(p),"nmMfSwOwnSet("+n+","+g.id+",'"+u+"',"+JSON.stringify(p.pid)+")"];})});});});}
+function nmMfSwOwnSet(n,gid,uid,pid){try{var f=getFireState(),g=f.grps.filter(function(x){return x.id===gid;})[0];if(g&&g.swOwner&&g.swOwner[uid]===pid)return;FgSetSwOwner(gid,uid,pid);}catch(e){}try{nmMfReopen(n);}catch(e){}}
+function nmMfSwOwnAuto(n,gid){try{var f=getFireState(),g=f.grps.filter(function(x){return x.id===gid;})[0];if(!g)return;g.swOwner=g.swOwner||{};var load={},P=g.pickerItems.filter(function(p){return p.kind==='mmc';});if(!P.length)P=g.pickerItems.filter(function(p){return p.kind==='smc';});
+  Object.keys(g.swOwner).forEach(function(u){var p=g.swOwner[u];if(p!=null)load[p]=(load[p]||0)+1;});
+  (g.sw||[]).forEach(function(u){if(g.swOwner[u]!=null)return;var best=null;P.forEach(function(p){if(best==null||(load[p.pid]||0)<(load[best.pid]||0))best=p;});if(best){g.swOwner[u]=best.pid;load[best.pid]=(load[best.pid]||0)+1;}});f.res=null;}catch(e){}try{nmMfReopen(n);}catch(e){}}
 /* v797(ダルマ指示「SWのROF 故障の数値を表示する」): 歩兵の射撃で、編成が使うSWごとに ROF(赤がROF以下でもう一度)と故障B#(原DRがB#以上で故障)・除去X#を出す。SFF/FPFのB#−2、未熟兵のB#−1、鹵獲も反映 */
 function nmMfSwInfo(it,ph){var f=getFireState();if(!f||!f.grps)return;var used={},own={};f.grps.forEach(function(g){(g.sw||[]).forEach(function(u){used[u]=1;own[u]=g;});});var L=exSW().filter(function(s){return used[s.uid];});if(!L.length)return;
   var fm=f.fireMode,bRed=(fm==='SFF'||fm==='FPF')?2:0,G={},ord=[];
