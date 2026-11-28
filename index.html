@@ -42412,9 +42412,11 @@ function nmRmMoreTog(n){NM_RM_MORE=!NM_RM_MORE;try{localStorage.setItem('nmRmMor
 (function(){var go=function(){var o=nmRMenuItems;nmRMenuItems=function(n){var it=o.apply(this,arguments);try{if(NM_RM_SUB||!it||!it.length)return it;
   var t=function(x){return x&&typeof x.t==='string'?x.t.replace(/<[^>]*>/g,''):'';};
   if(!it.some(function(x){return t(x)==='撃破(残骸にする)';}))return it;
-  var fold=function(x){var s=t(x);return /^煙幕手榴弾\(/.test(s)||s==='ボグ判定'||/^ボグ解消/.test(s)||s==='撃破(残骸にする)'||/^機械的信頼性/.test(s)||/^このヘクスの.*(を外す|を取り消す)$/.test(s);};
+  var SH=window.NM_RMSHOW!==0; /* v1730(ダルマ「ボグ判定 修理 残骸 を表示にする」): ボグ判定・修理・撃破(残骸)は「その他」に畳まず常に出す。修理(主砲・機関銃)の行を追加。NM_RMSHOW=0で戻る */
+   if(SH){var wi=-1;it.forEach(function(x,i){if(t(x)==='撃破(残骸にする)')wi=i;});var wm=wi>=0&&String(it[wi].f||'').match(/nmStWreck\((\d+),'(\w)'\)/);if(wm&&!it.some(function(x){return /^修理/.test(t(x));}))it.splice(wi,0,{ic:'fire',t:'修理(主砲・機関銃)',sub:'故障した主砲・機関銃をdrで修理(回復フェイズ)',f:"NM_HQFROM=0;nmRvOpen("+wm[1]+",'"+wm[2]+"')"});}
+   var fold=function(x){var s=t(x);if(SH&&(s==='ボグ判定'||/^ボグ解消/.test(s)||s==='撃破(残骸にする)'||/^修理/.test(s)))return false;return /^煙幕手榴弾\(/.test(s)||s==='ボグ判定'||/^ボグ解消/.test(s)||s==='撃破(残骸にする)'||/^機械的信頼性/.test(s)||/^このヘクスの.*(を外す|を取り消す)$/.test(s);};
   var keep=[],more=[],pos=-1;it.forEach(function(x){if(fold(x)){if(pos<0)pos=keep.length;more.push(x);}else keep.push(x);});if(!more.length)return it;
-  var tg={ic:'info',t:(NM_RM_MORE?'▲ その他を閉じる':'▼ その他')+(NM_RM_MORE?'':'(煙幕・ボグ・撃破・信頼性・配置の取り消し)'),f:"nmRmMoreTog("+n+")"};
+  var tg={ic:'info',t:(NM_RM_MORE?'▲ その他を閉じる':'▼ その他')+(NM_RM_MORE?'':(SH?'(煙幕・信頼性・配置の取り消し)':'(煙幕・ボグ・撃破・信頼性・配置の取り消し)')),f:"nmRmMoreTog("+n+")"};
   keep.splice.apply(keep,[pos,0,tg].concat(NM_RM_MORE?more:[]));return keep;}catch(e){console.log('rm more',e);return it;}};};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(go,0);});else setTimeout(go,0);})();
 (function(){var oB=nmMvBarHTML;nmMvBarHTML=function(){var h=oB.apply(this,arguments);try{var M=NM_MOVE;if(!h||!M)return h;
