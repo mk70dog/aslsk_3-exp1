@@ -38143,7 +38143,7 @@ function nmRmVmItems(n){var V=NM_VM;if(!V)return nmRMenuItems(n);var C=nmVmCalc(
     var ng=C.mgs.filter(function(x){return !x.ok;});if(ng.length)it.push({ic:'info',t:'<span style="font-size:12px;color:#8899aa">'+ng.map(function(x){return x.k.toUpperCase()+': '+x.why;}).join('　')+'</span>'});}
   it.push({sep:1});
   if(V.tgt==null){var M0=NM_MF;NM_MF={sd:V.sd,from:V.from};var tl=nmMfTgtList();NM_MF=M0;
-    it.push({ic:'tgt',t:'目標を選ぶ',sub:'歩兵(編成)はIFT、車両はTK判定'});
+    it.push({ic:'tgt',t:'目標を選ぶ',sub:'歩兵(編成)はIFT、車両はTK判定'});if(tl.some(function(x){return !x.blk;}))it.push({ic:'tgt',t:'<span style="color:#3ca878">地図で目標を選択</span>',sub:'撃てるマーカーに緑の輪が出ます',f:"nmPickStart('vm',"+n+")"}); /* v1726(ダルマ指示「地図で選ぶ を追加」): 車両の機関銃でも地図で目標を選ぶ */
     tl.forEach(function(x){var ok=!x.blk;it.push({ic:'tgt',img:nmMfTgtImg(x.eh),t:(ok?'<span>':'<span style="color:#667">')+nmMfTgtName(x.eh)+' @'+BTG.nodes[x.tn].nm+'</span>',sub:'距離'+x.d+(x.blk?'　LOS遮断':x.eh.veh?'　車両(TK判定)':''),f:ok?"NM_TGT_EH=nmSideList('"+(V.sd==='f'?'e':'f')+"')["+x.i+"];nmVmSet("+n+",'tgt',"+x.tn+")":''});});
     return it;}
   it.push({ic:'tgt',img:C.te?nmMfTgtImg(C.te):'',t:'目標: '+(C.te?nmMfTgtName(C.te):'')+' @'+BTG.nodes[V.tgt].nm,sub:'距離'+(C.rng!=null?C.rng:btDist(V.from,V.tgt))+'　選択し直す',f:"nmVmSet("+n+",'tgt',null)"});
@@ -40930,7 +40930,7 @@ function nmMfMode(n,v){FsetMode(v);nmMfReopen(n);}
 /* v412(ダルマ指示「マップを直感的に」お任せ): 攻撃する目標を地図でタップして選ぶ。攻撃する画面の「地図で目標をタップ」→メニューを閉じ、撃てる相手マーカーに緑の輪(LOS遮断は灰色の×)を出す。
    相手マーカーをタップ→攻撃する画面に戻って目標に決まる。それ以外をタップ→やめて攻撃する画面に戻る */
 var NM_PICK=null;
-function nmPickStart(kind,n){var sd=kind==='mf'?NM_MF.sd:NM_VF.sd,from=kind==='mf'?NM_MF.from:NM_VF.from;var M0=NM_MF;NM_MF={sd:sd,from:from};var tl=nmMfTgtList();NM_MF=M0;
+function nmPickStart(kind,n){var PS=kind==='mf'?NM_MF:kind==='vm'?NM_VM:NM_VF,sd=PS.sd,from=PS.from; /* v1726: 車両の機関銃(vm)も地図で選ぶ */var M0=NM_MF;NM_MF={sd:sd,from:from};var tl=nmMfTgtList();NM_MF=M0;
   NM_PICK={kind:kind,n:n,xy:BT_RM_XY,list:tl};
   /* v1724(ダルマ指示「+DRMをバッチで表示」): 車両・砲の射撃で目標を地図で選ぶ時、相手ごとの命中DRM(と命中率)を先に計算してバッジに出す */
   if(kind==='vf'&&NM_VF&&window.NM_PICKDRM!==0){var V0=NM_VF,tg0=V0.tgt,te0=NM_TGT_EH,res0=V0.res,am0=V0.ammo;try{tl.forEach(function(x){if(x.blk)return;try{V0.tgt=x.tn;NM_TGT_EH=x.eh;V0.res=null;var B=nmVfBuild();if(!B)return;if(!B.ammos||!B.ammos.length)return;if(!V0.ammo||B.ammos.indexOf(V0.ammo)<0)V0.ammo=B.ammos[0];var o=nmVfO(B),ev=btOrdEval(o);if(!ev||!ev.ok)return;var AJ=nmVfAttAdj(B,ev);if(AJ.err)return;x.drm=ev.drm+AJ.adj;x.dl=ev.drmL.concat(AJ.l);x.ph=AJ.att?nmPHit(AJ.th,x.drm,ev.case16):ev.pHit;}catch(e){}});}finally{V0.tgt=tg0;NM_TGT_EH=te0;V0.res=res0;V0.ammo=am0;}} /* v1725(バグ修正 ダルマ報告「表示されない」): 目標をまだ選んでいない時は弾薬が決まっておらず計算を飛ばしていた。弾薬が無ければ最初の弾薬(AP等)で計算する */
@@ -40938,8 +40938,8 @@ function nmPickStart(kind,n){var sd=kind==='mf'?NM_MF.sd:NM_VF.sd,from=kind==='m
 function nmPickBanner(on){var b=document.getElementById('nmPickBn');if(!on){if(b)b.remove();return;}
   if(!b){b=document.createElement('div');b.id='nmPickBn';b.style.cssText='position:fixed;left:50%;top:70px;transform:translateX(-50%);z-index:9500;background:#0d2a4a;border:2px solid #3ca878;border-radius:8px;padding:8px 14px;color:#e8f4ff;font-size:14px;font-weight:bold;box-shadow:0 6px 18px #000c;display:flex;gap:10px;align-items:center';document.body.appendChild(b);}
   b.innerHTML='<span>攻撃する目標の相手マーカーをタップ</span><button class="b sm" style="margin:0" onclick="event.stopPropagation();nmPickEnd(null)">やめる</button>';}
-function nmPickEnd(tn){var P=NM_PICK;if(!P)return;NM_PICK=null;nmPickBanner(false);BT_RM_XY=P.xy;var fr=P.kind==='mf'?NM_MF.from:NM_VF.from,q=nmClientOfNode(fr),H=q?losHexAtClient(q.x,q.y):null;if(!H)return;NM_RM_HEX=Object.assign(H,{n:P.n});
-  btRMenu(P.n);if(tn!=null){if(P.kind==='mf')nmMfTgt(P.n,tn);else nmVfSet(P.n,'tgt',tn);}else{NM_RM_SUB=P.kind==='mf'?'mfire':'vfire';btRmReopen(P.n);}Draw();}
+function nmPickEnd(tn){var P=NM_PICK;if(!P)return;NM_PICK=null;nmPickBanner(false);BT_RM_XY=P.xy;var fr=(P.kind==='mf'?NM_MF:P.kind==='vm'?NM_VM:NM_VF).from,q=nmClientOfNode(fr),H=q?losHexAtClient(q.x,q.y):null;if(!H)return;NM_RM_HEX=Object.assign(H,{n:P.n});
+  btRMenu(P.n);if(tn!=null){if(P.kind==='mf')nmMfTgt(P.n,tn);else if(P.kind==='vm')nmVmSet(P.n,'tgt',tn);else nmVfSet(P.n,'tgt',tn);}else{NM_RM_SUB=P.kind==='mf'?'mfire':P.kind==='vm'?'vmg':'vfire';btRmReopen(P.n);}Draw();}
 function nmPickTap(cx,cy){var P=NM_PICK;if(!P)return false;var H=losHexAtClient(cx,cy),tn=H?btNodeOf(H.boardId,H.col,H.row):null,hit=null;
   if(tn!=null)P.list.forEach(function(x){if(x.tn===tn)hit=x;});
   if(hit&&hit.blk){btToast('そのマーカーへはLOSが通りません');return true;}
