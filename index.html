@@ -37853,9 +37853,8 @@ function nmGrpStRows(n,sd,eh,sty){var slot=eh&&eh.grp;if(!slot)return [];var d=n
   var cnt=function(key){return its.filter(function(o){return !!o.x[key];}).length;},lb=function(t,key){var c=cnt(key);return (c===its.length?'✓':'')+t+(c&&c<its.length?' '+c+'/'+its.length:'');};
   if(sty==='A')return [{row:1,cmp:0,ic:'sel',t:'状態',btns:[[lb('混乱','broken'),"nmGrpStAll("+n+",'"+slot+"','brk')"],[lb('PIN','pinned'),"nmGrpStAll("+n+",'"+slot+"','pin')"],[lb('CX','cx'),"nmGrpStAll("+n+",'"+slot+"','cx')"]]}];
   var R0=its.map(function(o,j){var x=o.x;return {row:1,cmp:0,ic:j?'':'sel',t:'<span style="font-size:13px">'+(j?'':'<span style="color:#8899aa;font-size:11px">状態 </span>')+x.label+'</span>',btns:[[(x.broken?'✓':'')+'混乱',"nmGrpStOne("+n+",'"+slot+"',"+o.i+",'brk')"],[(x.pinned?'✓':'')+'PIN',"nmGrpStOne("+n+",'"+slot+"',"+o.i+",'pin')"],[(x.cx?'✓':'')+'CX',"nmGrpStOne("+n+",'"+slot+"',"+o.i+",'cx')"]].concat(window.NM_USTATE!==false&&x.kind==='smc'?[[(x.wounded?'✓':'')+'負傷',"nmGrpStOne("+n+",'"+slot+"',"+o.i+",'wnd')"]]:[]).concat(window.NM_GRPX!==0&&x.broken?[[(x.dm?'✓':'')+'DM',"nmGrpStOne("+n+",'"+slot+"',"+o.i+",'dm')"]]:[])};});
-  if(window.NM_GRPX!==0){try{var st=eh.st||(eh.st={}),mvI=st.mvI||0;R0.push({row:1,cmp:0,ic:'move',t:'<span style="font-size:13px">この手番の動き(防御射撃用)</span>',btns:[[(mvI==='mv'?'✓':'')+'移動した',"nmGrpMvI("+n+",'"+sd+"','mv')"],[(mvI==='ffmo'?'✓':'')+'開けた地形を移動',"nmGrpMvI("+n+",'"+sd+"','ffmo')"],[(mvI==='asl'?'✓':'')+'警戒移動',"nmGrpMvI("+n+",'"+sd+"','asl')"]]});
-    var sw=(d.sw||[]),ml=eh.swMal||[];if(sw.length||ml.length)R0.push({row:1,cmp:0,ic:'fire',t:'<span style="font-size:13px">SWの故障</span>',btns:sw.map(function(u){return [nmSwMalName(u),"nmGrpSwMal("+n+",'"+sd+"','"+u+"',1)"];}).concat(ml.map(function(m){return ['✓'+nmSwMalName(m.uid)+' 故障',"nmGrpSwMal("+n+",'"+sd+"','"+m.uid+"',0)"];}))});}catch(e){console.log('grpx',e);}}
-  return R0;} /* v1732(ダルマ「サンプル表示」): 歩兵の部隊のメニューに DM(混乱中のユニット)・移動の状態(移動した/開けた地形/警戒移動)・SWの故障を手で付ける行。NM_GRPX=0で戻る */
+  if(window.NM_GRPX!==0){try{var st=eh.st||(eh.st={}),mvI=st.mvI||0;    var sw=(d.sw||[]),ml=eh.swMal||[];if(sw.length||ml.length)R0.push({row:1,cmp:0,ic:'fire',t:'<span style="font-size:13px">SWの故障</span>',btns:sw.map(function(u){return [nmSwMalName(u),"nmGrpSwMal("+n+",'"+sd+"','"+u+"',1)"];}).concat(ml.map(function(m){return ['✓'+nmSwMalName(m.uid)+' 故障',"nmGrpSwMal("+n+",'"+sd+"','"+m.uid+"',0)"];}))});}catch(e){console.log('grpx',e);}}
+  return R0;} /* v1732(ダルマ「サンプル表示」→「実施」): 歩兵の部隊のメニューに DM(混乱中のユニット。地図の回復でDM+4に自動)・SWの故障を手で付ける行(移動の状態は外した)。NM_GRPX=0で戻る */
 function nmGrpMvI(n,sd,v){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(!eh)return;var st=nmStOf(eh);st.mvI=(st.mvI===v)?0:v;nmStSave();btRmReopen(n);}
 function nmGrpSwMal(n,sd,uid,on){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(!eh||!eh.grp)return;var slot=eh.grp;
   if(on){var own=nmGeList(slot).own[uid];nmSwGrpOut(slot,uid);if(!eh.swMal)eh.swMal=[];if(!eh.swMal.some(function(m){return m.uid===uid;}))eh.swMal.push({uid:uid,own:own==null?null:own});}
@@ -45486,7 +45485,7 @@ function nmRmVeItems(n){var V=NM_VE;if(!V)return nmRMenuItems(n);var it=[],ns=nm
   it.push({sep:1});
   it.push({ic:'info',t:'<span style="font-size:11px;color:#8fa6bd">'+T('車体・砲塔のどちらに当たるかは決まっていないので、どちらかで撃破かShockになれば「停止できる」としています。止まった時は、目標のAFV・残骸1個につきMPが1余分にかかる。ヘクスに止まれる非残骸の車両は片側1両まで。')+'</span>'});
   return it;}
-function nmRlOpen(n,sd){NM_RR=null;var H=nmHexOfNode(n),eh=nmUnitAt(H,sd);if(!eh||!eh.grp)return;NM_RL={n:n,sd:sd,slot:eh.grp,dm:false,mode:{},res:{}};NM_RM_SUB='rally';btRmReopen(n);}
+function nmRlOpen(n,sd){NM_RR=null;var H=nmHexOfNode(n),eh=nmUnitAt(H,sd);if(!eh||!eh.grp)return;NM_RL={n:n,sd:sd,slot:eh.grp,dm:(nmGeList(eh.grp).items||[]).some(function(x){return x.broken&&x.dm;}),mode:{},res:{}};NM_RM_SUB='rally';btRmReopen(n);}
 function nmRlSet(n,k,v){NM_RL[k]=v;NM_RM_SUB='rally';btRmReopen(n);}
 function nmRlMode(n,pid,m){NM_RL.mode[pid]=m;NM_RM_SUB='rally';btRmReopen(n);}
 function nmRlPick(n,pid){NM_RL.pick=pid;NM_RM_SUB='rally';btRmReopen(n);} /* v744(ダルマ指示「回復ユニットを選べるようにする」) */
@@ -45498,7 +45497,7 @@ function nmRlSelfOk(x){var u=nmRlUnit(x);if(x.kind==='smc'||u.sr)return {ok:true
 function nmRlDo(n,pid,dr){var R=NM_RL,its=nmGeList(R.slot).items,x=its.filter(function(q){return q.pid===pid;})[0];if(!x)return;var mode=R.mode[pid]||(nmRlLdr(its)&&x.kind!=='smc'?'ldr':'self');
   if(mode==='self'){var so=nmRlSelfOk(x);if(!so.ok){btToast(so.why);return;}if(so.lim){if(!S.rally)S.rally=deepCopy(INIT_RALLY);S.rally.mmcSelfRallyUsed=true;}}
   var c=nmRlCalc(x,its,mode),fin=dr+c.drm,st=dr===12?'a12':(fin<=c.bm?'ok':'fail'),lg=[],lbl0=x.label;
-  if(st==='ok'){x.broken=false;}else if(st==='a12'){nmCasRed(R.slot,x,lg);}
+  if(st==='ok'){x.broken=false;x.dm=false;}else if(st==='a12'){nmCasRed(R.slot,x,lg);}
   var txt=st==='ok'?'回復':st==='a12'?'原DR12 → 失敗＋損耗('+lg.join('・')+')':'失敗';
   R.res[pid]={dr:dr,fin:fin,st:st,txt:txt,lbl:lbl0};
   if(dr===2&&st==='ok'&&mode==='self'&&x.kind==='mmc'){var mu=nmMcUnitMor(x);R.res[pid].promo={slot:R.slot,nat:x.nat||nmGeList(R.slot).nat,mor:mu.mor,brk:true};} /* v426: 自己回復の原DR2 → 指揮官誕生判定 */
