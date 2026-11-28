@@ -37348,6 +37348,7 @@ function nmUnitMenu(it,H,n,sd){
     {var stc=nmStOf(eh);if(stc.cx||stc.imv)it.push({row:1,ic:'move',t:'<span>状態'+(stc.imv&&stc.mv?'　<span style="font-size:12px;color:#ffd060">この手番: '+nmImName(stc.imv)+'</span>':'')+'</span>',btns:[[(stc.cx?'✓':'')+'CX',"nmStTog("+n+",'"+sd+"','cx')"]]});} /* v525: 急速移動でCX */
     if(!NM_MOVE){it.push({ic:'move',t:'このカウンターを移動',sub:'種類を選ぶと開始。1ヘクスずつタップでマーカーが進む(MFを数える)。「ここで止まる」で確定'});it.push({row:1,ic:'',t:'',btns:NM_IM_OPT.map(function(o){return [o[1],"nmMvStartIm("+n+",'"+sd+"','"+o[0]+"')"];})});} /* v450 / v525: 移動・警戒移動・急速移動 */
     it.push({ic:'hex',t:nmGrpLbl(eh.grp)+'を編集',sub:'ユニットを加える・外す(射撃タブの編成'+eh.grp+'も同じ内容になる)',f:"nmGeOpen("+n+",'"+sd+"','"+eh.grp+"')"}); /* v1413(ダルマ指示「〜を編集を回復の上に表示」) */
+    if(nmLwList(eh).length||nmPfWep(nmGeList(eh.grp).nat))/* sample-lwtop(ダルマ「回復ボタンの上に軽対戦車兵器・機関銃で攻撃にする」) */ it.push({ic:'fire',t:'軽対戦車兵器'+(nmLwList(eh).some(function(x){return x.mg;})?'・機関銃':'')+'で攻撃',sub:(nmLwList(eh).map(function(x){return x.w.lbl;}).join('・')||'PFはこのシナリオでは使わない設定')+'　車両・建物内の歩兵へ',f:"nmLwOpen("+n+",'"+sd+"')"}); /* v417 / v431 */
     var nbk=nmGeList(eh.grp).items.filter(function(x){return x.broken;}).length;it.push({ic:'sel',t:nbk?'回復(混乱'+nbk+')':'回復',sub:nbk?'混乱しているユニットの回復。指揮官回復・自己回復をダイスで':'混乱しているユニットはいません(この部隊の回復パネル)',f:"nmRlOpen("+n+",'"+sd+"')"}); /* v416 → v1439(ダルマ「回復を追加」→ rlm2_1): 混乱がなくても出す。開くのはこの部隊の回復パネル */
     if(nbk)it.push({ic:'move',t:'潰走(混乱'+nbk+')',sub:'混乱したユニットを林・建物へ(6MF)。潰走義務・阻止の士気チェック・潰走できない時の除去',f:"nmRtmStartAt("+n+",'"+sd+"')"}); /* v430 → v947: 地図表示で */
     var hasDc=!!eh.dcPlaced;try{hasDc=hasDc||nmSuDcList(eh.grp).length>0;}catch(e){hasDc=true;}if(hasDc)it.push({ic:'fire',t:eh.dcPlaced?'爆薬(DC)を爆発させる → '+BTG.nodes[eh.dcPlaced.n].nm:'爆薬(DC)を配置',sub:eh.dcPlaced?'AFPh(前進射撃フェイズ): X#未満で30FP(TEM)':'隣接ヘクスへ設置(DCを持つ統制状態の分隊)',f:"nmDcOpen("+n+",'"+sd+"')"}); /* v430 */
@@ -37361,7 +37362,6 @@ function nmUnitMenu(it,H,n,sd){
       it.push({uact:1,ic:'fire',t:'白兵戦',sub:ccOk?'このヘクスに敵がいる。両方が同時に攻撃':'同じヘクスに敵がいる時にできます(突撃フェイズで敵のヘクスへ1ヘクス)',f:ccOk?"nmCCOpen("+n+")":"nmAdvOpen("+n+",'"+sd+"')"});
     }catch(e){console.log('uact',e);}}
     it.push({ic:'smoke',t:'煙幕手榴弾',sub:'自ヘクスか隣接ヘクスに煙幕を配置(dr ≦ 煙幕指数)',f:"nmSgOpen("+n+",'"+sd+"')"}); /* v418 */
-    if(nmLwList(eh).length||nmPfWep(nmGeList(eh.grp).nat))it.push({ic:'fire',t:'ここから攻撃する(軽対戦車兵器'+(nmLwList(eh).some(function(x){return x.mg;})?'・機関銃':'')+')',sub:(nmLwList(eh).map(function(x){return x.w.lbl;}).join('・')||'PFはこのシナリオでは使わない設定')+'　車両・建物内の歩兵へ',f:"nmLwOpen("+n+",'"+sd+"')"}); /* v417 / v431 */
     it.push({ic:'fire',t:'ここから攻撃する(射撃)',sub:nmGrpLbl(eh.grp)+'で'+(sd==='f'?'敵':'自軍')+'のマーカーを攻撃する。射撃タブと同じ計算でダイスまで',f:"nmMfOpen("+n+",'"+sd+"','"+eh.grp+"')"}); /* v403 */
     it.push({ic:'x',t:'カウンターを消去',sub:L.nm+'の配置を取り消す',f:sd==='f'?"nmRmFriendDel()":"nmRmEnemy()"});return;}
   var eg=(!ev&&eh.gun)?nmGun(eh.gun):null;
