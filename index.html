@@ -37679,7 +37679,7 @@ function nmFaceNq(n,v){var H=NM_RM_HEX,sd=NM_FACE&&NM_FACE.sd,eh=H&&sd&&nmUnitAt
 function nmVfFmSwItem(n){var V=NM_VF;if(!V)return null;var B=null;try{B=nmVfBuild();}catch(e){}if(!B)return null;var r=[];
   [['A',V.from,B.eh],['B',V.tgt,B.te]].forEach(function(q){var eh=q[2];if(!eh||!(eh.veh||eh.gun))return;var v=eh.veh?nmAfv(eh.veh):null,g=!v&&eh.gun?nmGun(eh.gun):null;r.push([(String(n)===String(q[1])?'✓':'')+q[0]+' '+(v?nmAfvName(v):g?nmGunName(g):'')+(eh.facing==null?' (未設定)':''),"nmVfFmSw('"+q[0]+"')"]);});
   return r.length>1?{row:1,ic:'turret',t:'設定する車両',btns:r}:null;}
-function nmVfFmSw(w){var V=NM_VF,B=nmVfBuild();if(!V||!B)return;var node=w==='A'?V.from:V.tgt,eh=w==='A'?B.eh:B.te;if(!eh)return;var sd=w==='A'?V.sd:(function(){try{return nmIjEhSd(eh);}catch(e){return V.sd==='f'?'e':'f';}})();NM_RM_HEX=nmHexOfN(node);NM_FACE={sd:sd};NM_RM_SUB=null;NM_VF_FROM=V.from;btRmReopen(node);}
+function nmVfFmSw(w){var V=NM_VF,B=nmVfBuild();if(!V||!B)return;var node=w==='A'?V.from:V.tgt,eh=w==='A'?B.eh:B.te;if(!eh)return;var sd=w==='A'?V.sd:(function(){try{return nmIjEhSd(eh);}catch(e){return V.sd==='f'?'e':'f';}})();NM_RM_HEX=nmHexOfN(node);NM_FACE={sd:sd};NM_SEL_EH=eh;NM_RM_SUB=null;NM_VF_FROM=V.from;btRmReopen(node);} /* v1723(バグ修正 ダルマ報告「向きを設定しても未設定表示が消えない」): 同じヘクスに車両が2両以上いると、向きのパネルは1両目を変え、表示は目標の車両を見ていた。設定する車両を選択中(NM_SEL_EH)にして同じ車両を変える */
 function nmRmFaceOpen(n,sd){NM_FACE={sd:sd};btRmReopen(n);}
 /* v401(ダルマ指示「マップタブ 敵軍マーカーに編成を選択可能にする」「右クリックから編成を編集できるようにする」): 射撃タブの編成(S.savedGroups / 射撃タブで選択中の編成)と共有。
    射撃タブで今選んでいる編成なら射撃タブの選択中の内容を直接変え(FgAddPickItem/FgRemovePickItem)、登録済みの内容にも同じものを書く */
@@ -38311,7 +38311,7 @@ function nmVfLog(B,k){var V=NM_VF,R=V.res;try{logResult(function(){var who=B.v?n
   var tx=k==='th'?(who+'→'+tg+' '+B.mode+'/'+V.ammo+' TH#'+R.ev.th+' '+diceEmojiStr(V.a,V.b)+'→'+R.fin+' '+(R.hit?'命中':'外れ')):(who+'→'+tg+' '+(B.mode==='VTT'?'TK#'+R.tk:R.fp+'FP')+' DR'+V.res2.c+' → '+V.res2.t);
   return {tabLbl:'MAP '+(B.v?'主砲':'砲撃'),text:tx,color:k==='th'?(R.hit?'#c8a032':'#556677'):V.res2.col,detail:null};});}catch(e){}}
 function nmVfFaceMap(n){var V=NM_VF;if(!V)return;if(NM_IJ&&NM_IJ.vfStage&&typeof nmIjFaceMap==='function'){nmIjFaceMap();return;} /* v1021(ダルマ「方向の設定をスポット判定の方式に統一」): スポット判定から来た時は同じ方式(A/B切替・地図にバー・隅に置く) */
-  var B=nmVfBuild();if(!B)return;var useA=!B.eh||B.eh.facing==null,node=useA?V.from:V.tgt,eh=useA?B.eh:B.te,sd=useA?V.sd:(function(){try{return nmIjEhSd(eh);}catch(e){return V.sd==='f'?'e':'f';}})();if(!eh)return;NM_RM_HEX=nmHexOfN(node);NM_FACE={sd:sd};NM_RM_SUB=null;NM_VF_FROM=V.from;btRmReopen(node);}
+  var B=nmVfBuild();if(!B)return;var useA=!B.eh||B.eh.facing==null,node=useA?V.from:V.tgt,eh=useA?B.eh:B.te,sd=useA?V.sd:(function(){try{return nmIjEhSd(eh);}catch(e){return V.sd==='f'?'e':'f';}})();if(!eh)return;NM_RM_HEX=nmHexOfN(node);NM_FACE={sd:sd};NM_SEL_EH=eh;NM_RM_SUB=null;NM_VF_FROM=V.from;btRmReopen(node);} /* v1723(バグ修正 ダルマ報告「向きを設定しても未設定表示が消えない」): 同じヘクスに車両が2両以上いると、向きのパネルは1両目を変え、表示は目標の車両を見ていた。設定する車両を選択中(NM_SEL_EH)にして同じ車両を変える */
 var NM_VF_FROM=null;
 function nmVfNtc(n,v){var V=NM_VF;if(!V)return;V.ntc=v||(2+Math.floor(Math.random()*6)+Math.floor(Math.random()*6));try{logResult(function(){return {tabLbl:'MAP NTC',text:'ショックの可能性 NTC DR'+V.ntc+' → '+(V.ntc>8?'ショック':'効果なし'),color:V.ntc>8?'#ffb040':'#3ca878',detail:null};});}catch(e){}Draw();nmVfRe(n);}
 function nmVfApplySt(n,k){var V=NM_VF,B=nmVfBuild();if(!B||!B.te)return;var st=nmStOf(B.te);st[k]=!st[k];nmStSave();nmVfRe(n);}
@@ -44896,7 +44896,7 @@ function nmRmXInit(){try{var box=document.querySelector('#btRm .rmBox.nmMu');if(
  +'#btRm .rmBox .nmRzBar{width:54px;height:5px;border-radius:3px;background:#8899aa}'
  +'#btRm .rmBox .nmRzC{position:absolute;right:0;bottom:0;width:26px;height:24px;cursor:nwse-resize;background:linear-gradient(135deg,transparent 0 55%,#8899aa 55% 62%,transparent 62% 72%,#8899aa 72% 79%,transparent 79%)}';
  document.head.appendChild(st);}catch(e){}})();
-function nmIjFmSw(w){var o=nmIjFmEh(w);if(!o)return;NM_IJFM=w;NM_RM_HEX=nmHexOfN(o.n);NM_FACE={sd:nmIjEhSd(o.eh)};try{Draw();}catch(e){}btRmReopen(o.n);}
+function nmIjFmSw(w){var o=nmIjFmEh(w);if(!o)return;NM_IJFM=w;NM_RM_HEX=nmHexOfN(o.n);NM_FACE={sd:nmIjEhSd(o.eh)};NM_SEL_EH=o.eh; /* v1723 */try{Draw();}catch(e){}btRmReopen(o.n);}
 function nmIjFmSwItem(){var r=[];['A','B'].forEach(function(w){var o=nmIjFmEh(w);if(!o)return;var v=o.eh.veh?nmAfv(o.eh.veh):null,g=!v&&o.eh.gun?nmGun(o.eh.gun):null;r.push([(NM_IJFM===w?'✓':'')+w+' '+(v?nmAfvName(v):g?nmGunName(g):'')+(o.eh.facing==null?' (未設定)':''),"nmIjFmSw('"+w+"')"]);});return r.length>1?{row:1,ic:'turret',t:'設定する車両',btns:r}:null;}
 /* v789(ダルマ指示「A車両とB車両と方向バーを表示する」): 地図で方向を設定している間は、判定用の仮のA・Bカウンターも地図に描き、車体(A青/B赤)・砲塔(黄の「砲」)の方向バーを出す。未設定は相手の方を向いた薄いバー */
 function nmIjFmBarsSVG(L){var J=NM_IJ;if(!window.NM_IJFM||!J||typeof BTG==='undefined'||!BTG)return '';var A=nmIjAtk(),te=nmIjTgtEh(),h='',vr=S_LOS.viewRot||0;
@@ -46454,7 +46454,7 @@ function nmRmVehItems(n,sd){
 }
 function nmRmSetVeh(n,id,sd){var H=NM_RM_HEX;if(!H)return;var eh=nmUnitAt(H,sd);if(eh){eh.grp=null;eh.gun=null;}
   if(!eh){if(sd==='f'){eh={boardId:H.boardId,col:H.col,row:H.row};nmSideList('f').push(eh);}else{losToggleEnemyHexAt(H.boardId,H.col,H.row);eh=nmEnemyAt(H);}if(!eh)return;}eh.veh=id||null;if(!id||!nmAfvTurret(nmAfv(id)))eh.tca=null;try{saveState();}catch(e){}Draw();NM_FACE={sd:sd||'e'};btRmReopen(n);} /* v356: 選んだら向きの画面 */
-function nmRmSetFace(n,d){try{losSaveMapScroll();}catch(e){} /* v1452: 方向を変えた時に地図が前の位置へ戻って揺れる(Draw が古いスクロール位置を戻す)のを防ぐ */var H=NM_RM_HEX,eh=H&&nmEnemyAt(H);if(!eh)return;if(!(NM_FACE&&eh.facing===d)&&d!=null&&!nmMvVcaCharge(eh,d)){Draw();btRmReopen(n);return;}if(NM_FACE&&eh.facing===d){btRmReopen(n);return;}losSetEnemyHexFacing(eh.boardId,eh.col,eh.row,d==null?eh.facing:d);try{saveState();}catch(e){}Draw();btRmReopen(n);}
+function nmRmSetFace(n,d){try{losSaveMapScroll();}catch(e){} /* v1452: 方向を変えた時に地図が前の位置へ戻って揺れる(Draw が古いスクロール位置を戻す)のを防ぐ */var H=NM_RM_HEX,eh=H&&nmEnemyAt(H);if(!eh)return;if(!(NM_FACE&&eh.facing===d)&&d!=null&&!nmMvVcaCharge(eh,d)){Draw();btRmReopen(n);return;}if(NM_FACE&&eh.facing===d){btRmReopen(n);return;}if(S_LOS.enemyHexes.indexOf(eh)>=0){var d2=d==null?eh.facing:d;eh.facing=(eh.facing===d2)?null:d2;S_LOS.enemyActive={boardId:eh.boardId,col:eh.col,row:eh.row};}else losSetEnemyHexFacing(eh.boardId,eh.col,eh.row,d==null?eh.facing:d); /* v1723: 同じヘクスの2両目も、選んだ車両そのものの向きを変える */try{saveState();}catch(e){}Draw();btRmReopen(n);}
 /* v343(ダルマ指示「残骸もVASLカウンター」): 残骸の車両(S_LOS.wreckVeh[key]=[車両id|null,...] 件数はwreckHexesのまま) */
 function nmWreckMarkSVG(d,n,small){
   var cx=d.x,cy=d.y,h='<g transform="rotate('+(-S_LOS.viewRot)+' '+cx+' '+cy+')">';
