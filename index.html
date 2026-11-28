@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded",ob);window.addEventListener("load",
 })();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ASLSK">
-<title>ASL SKシリーズv1735</title>
+<title>ASL SKシリーズv1736</title>
 <meta name="description" content="Advanced Squad Leader Starter Kit #1 (Fighting Wolves) の非公式ファン制作判定支援ツール。射撃・士気チェック・白兵戦・修理などの判定をブラウザ上でサポートします。">
-<meta property="og:title" content="ASL SKシリーズv1735">
+<meta property="og:title" content="ASL SKシリーズv1736">
 <meta property="og:description" content="ASL Starter Kit #1 の非公式ファン制作判定支援ツール（射撃・MC・CC・修理などをサポート）">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="icon-192.png?v=883">
@@ -10995,7 +10995,8 @@ var APP_VERSION_HIST_v591="v591(ダルマ指示「カウンターの色に変更
 var APP_VERSION_HIST_v590="v590(ダルマ指示「煙幕をボグの上に移動」): 車両の右クリックメニューで「煙幕展張」を「ボグ判定」の直前に並べ替え。";
 var APP_VERSION_HIST_v589="v589(ダルマ指示「マークをヘクスのサイズにする」): 全体マップの自軍/敵軍マークをヘクスと同サイズ・同向きの六角形(SVG)に変更。";
 var APP_VERSION_HIST_v588="v588(ダルマ指示「紫を別の色に変更」「敵軍の色 B(橙)」): 敵軍の色をマゼンタから橙(#ff8a2a)に変更(ボタンの左の線・敵軍マーカー・敵からのLOS線・ドラッグ中の枠)。LOSのB地点と遮蔽の印のマゼンタは変更なし";
-var APP_VERSION="ASLSK3M-v12.935"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION="ASLSK3M-v12.936"; /* v1348(ボグ解消パネルの表示条件) */ /* v1347(対戦モードのDC 対AFV攻撃) */ /* v1346(S25 ソ連アプリ強化 holdDef) */ /* v1345(対戦モードのボグ解消・アプリの突撃/潰走の矢印) */ /* v1344(メインメニューをタブに整理・下バーの並び替え) */ /* v1343(下バーの形をT1/T2/T3に入れ替え) */ /* v1342(次へボタン: ▶左+次フェイズ/フェイズ名(国籍)) */ /* v1341(次へボタンを次のフェイズ名+操作する側の2行に) */ /* v1340(盤の短辺の半ヘクス(A・GG列)に入れる) */ /* v1339(回復フェイズのパネルを自動で表示) */ /* v1338(対戦モードのツールバーに「移動の確認」) */ /* v1337(車両の移動パネル: 砲塔・CE/BU・形(横/縦/細)、操作バーのドラッグ移動・格納) */ /* v1336(ATRを実カウンターで表示) */ /* v1335(S25 2-3-7[1]を実カウンターで表示・全画面の方位マークを下のバーの上へ) */ /* v1334(射撃グループにLOSのないスタックを足そうとしたら理由を表示) */ /* v1333(ダルマ指摘「金まるがずれている」): 回復結果の吹き出しの▼が金の輪を指すように位置を修正 */
+var APP_VERSION_HIST_v1736="v1736(";
 var APP_VERSION_HIST_v1735="v1735(";
 var APP_VERSION_HIST_v1734="v1734(";
 var APP_VERSION_HIST_v1733="v1733(";
@@ -45994,8 +45995,9 @@ function nmLwCalc(){var W=NM_LW,w=nmLwW(W.wid);if(!w||W.tgt==null)return null;va
   r.th=w.mg?nmMgVttTH(rng,nmLwIsCap(w,W.slot)):latwTH(w,rng);if(!r.th){r.err='TH#がありません';return r;}
   var tu=null;if(fv){var tv=btFaceToward(btAng(T,A));tu={id:'nmF',nm:fv.lbl,vca:te.facing!=null?nmToBtFace(te.facing,te.boardId):tv,tca:te.tca!=null?nmToBtFace(te.tca,te.boardId):(te.facing!=null?nmToBtFace(te.facing,te.boardId):tv),mot:false,mvd:false};nmMvToU(tu,te);r.tu=tu;}
   add(TN.tem||0,'TEM'); /* v695: Motionの車両目標もTEM(対戦車タブと同じ) */add(nmHaOf(W,A,T,false),'高所'); /* v1250: 手動(⑤高所)にも対応 */add((los&&los.hindranceDrm)||0,'妨害');
-  if(w.backblast&&AN.bldgT)add(2,'後方噴射');
-  var its=nmGeList(W.slot).items,Ld=nmRlLdr(its);if(Ld&&its.some(function(x){return x.kind!=='smc'&&!x.broken;}))add(Ld.c,'指揮官');
+  var its=nmGeList(W.slot).items,pinF=its.length&&its.every(function(x){return x.kind==='smc'||x.pinned||x.broken;})&&its.some(function(x){return x.pinned;});
+  if(w.backblast&&AN.bldgT){r.bb=1;if(W.bbAtk||pinF){r.bbAtk=1;r.bbPin=!!pinF;}else add(2,'後方噴射');} /* v1736(ダルマ「pf psk 建物から撃てる？」→実施): 4.4.3 +2 TH DRM か、後方噴射の攻撃(ヘクスの全員に1FP列・赤のdrだけ・TEMなし)を選ぶ。PINの射手は+2を選べない */
+  Ld=nmRlLdr(its);if(Ld&&its.some(function(x){return x.kind!=='smc'&&!x.broken;}))add(Ld.c,'指揮官');
   if(its.length&&its.every(function(x){return x.kind==='smc'||x.pinned||x.broken;})&&its.some(function(x){return x.pinned;}))add(2,'PIN');
   if(tgtType==='gun'){var tg=nmGun(te.gun)||{},gsz=tg.targetSize||tg.size||'avg';add(gsz==='small'?1:gsz==='large'?-1:0,'目標サイズ');}
   if(fv){add(VEH_SIZE_DRM[fv.targetSize||'avg']||0,'目標サイズ');var mv=btMovingTargetDRM(tu);add(mv,'移動目標');if(!mv&&(/^atr/.test(w.id)||w.mg||w.atr))add(rng===1?-2:rng===2?-1:0,'Case25');}
@@ -46035,6 +46037,7 @@ function nmRmLwItems(n){var W=NM_LW;if(!W)return nmRMenuItems(n);var it=[],L=NM_
   var C=nmLwCalc();it.push({ic:'tgt',img:C.te?nmMfTgtImg(C.te):'',t:'目標: '+(C.te?nmMfTgtName(C.te):'')+' @'+BTG.nodes[W.tgt].nm,sub:'距離'+C.rng+'　選択し直す',f:"nmLwSet("+n+",'tgt',null)"});
   if(!W.res){try{if(C.te&&C.te.veh){nmTgtMvRow(it,n,C.te,'nmLwRe');nmTgtCeRow(it,n,'lw',C.te);}else if(C.te)nmInfMvRow(it,n,'lw');var au=nmOvAuto('lw');nmOvRow(it,n,'lw',au.tem,au.hind);var XO=W.xo||{};it.push({row:1,ic:'sel',t:'<span style="font-size:13px;color:#7ec8e3">その他の修正</span>',btns:[[(XO.cx?'✓':'')+'撃つ兵がCX +1',"NM_LW.xo=NM_LW.xo||{};NM_LW.xo.cx=!NM_LW.xo.cx;nmLwRe("+n+")"],[(XO.hip?'✓':'')+'HIPの砲 +2',"NM_LW.xo=NM_LW.xo||{};NM_LW.xo.hip=!NM_LW.xo.hip;nmLwRe("+n+")"]]});}catch(e){console.log(e);}} /* v518 */
   if(C.err){it.push({ic:'x',t:'撃てません: '+C.err});return it;}
+  if(!W.res&&C.bb)it.push({row:1,ic:'fire',t:'<span style="font-size:13px">建物内から撃つ(後方噴射 4.4.3)'+(C.bbPin?'<br><small style="color:#ffb040">PINの射手は+2を選べない</small>':'')+'</span>',btns:[[(!C.bbAtk?'✓':'')+'+2 TH DRM',C.bbPin?'':"NM_LW.bbAtk=0;nmLwRe("+n+")"],[(C.bbAtk?'✓':'')+'後方噴射の攻撃を受ける',"NM_LW.bbAtk=1;nmLwRe("+n+")"]]});
   if(!W.res)it.push({ic:'fire',t:'<span>TH# <b>'+C.th+'</b>　DRM <b>'+sg(C.drm)+'</b>　→ 原DR <b>'+(C.th-C.drm)+'</b>以下で命中</span>',sub:(C.dl.length?'DRM内訳: '+C.dl.join(' ')+'　':'')+(C.w.mg?'B#':'X#')+(C.w.malfThreshold||'-')+(C.fv?'　TK#'+C.tkBase+(C.w.mg?'(MG列・CHなし)':''):'　命中で'+C.ifp+'FP')});
   var dice=function(k1,k2,cb,lbl){it.push({ic:'fire',t:lbl,f:"NM_LW."+k1+"=1+Math.floor(Math.random()*6);NM_LW."+k2+"=1+Math.floor(Math.random()*6);"+cb+"("+n+")"});
     [[k1,'赤','#ff6060'],[k2,'白','#e8eef4']].forEach(function(x){var cv=W[x[0]];it.push({row:1,cmp:1,ic:'fire',t:'<span style="color:'+x[2]+'">'+x[1]+'</span>',btns:[1,2,3,4,5,6].map(function(v){return [(cv===v?'✓':'')+v,"NM_LW."+x[0]+"="+v+";nmLwRe("+n+")"];})});});
@@ -46051,6 +46054,7 @@ function nmRmLwItems(n){var W=NM_LW;if(!W)return nmRMenuItems(n);var it=[],L=NM_
   if(!R){it.push({sep:1});dice('a','b','nmLwTH','命中判定のダイスを振る');return it;}
   it.push({ic:'fire',t:'<span>'+diceEmojiStr(W.a,W.b)+'　'+R.raw+(C.drm?' '+sg(C.drm):'')+' = '+R.fin+'　<b style="color:'+(R.hit?'#c8a032':'#8899aa')+'">'+(R.hit?(R.isCH?'命中(CH)':'命中'):'ミス')+'</b></span>',sub:'TH#'+C.th+(R.hit&&C.fv?'　'+(R.loc==='turret'?'砲塔':'車体')+'・'+({front:'前面',side:'側面',rear:'背面'}[R.face]):'')});
   R.notes.forEach(function(t){it.push({ic:'info',t:'<span style="color:#ffb040">'+t+'</span>'});});
+  if(C.bbAtk){try{var bbr=IFT[W.a][ci(1)],bbm=rm(bbr);it.push({ic:'fire',t:'<span>後方噴射: 1FP列・赤のdr '+W.a+' → <b style="color:'+bbm.c+'">'+bbm.t+'</b></span>',sub:'撃ったヘクスの全員に(TEMなし)'});var feh=nmUnitAt(nmHexOfNode(W.n),W.sd);if(feh&&feh.grp)nmMcSection(it,n,feh,bbr,'bb:'+W.n+':'+W.a+':'+W.b,'nmLwRe');}catch(e){console.log('bb',e);}}
   if(R.malf&&!C.w.oneShot){var ap=W.malDone;it.push({ic:'fire',t:ap?'<span style="color:#3ca878">✓ '+ap+'</span>':(R.malf==='destroy'?C.w.lbl+'を編成から外す(除去)':C.w.lbl+'を故障中にする(修理待ち)'),sub:ap?'':(R.malf==='destroy'?'':'RPh(回復フェイズ)にdr1で修理・dr6で除去(「SWの修理」)'),f:ap?'':"nmLwMal("+n+")"});} /* v438 */
   if(R.hit){if(C.fv)it.push({ic:'tgt',t:'<span style="display:inline-block;width:fit-content;max-width:100%;padding:2px 10px;border:1px solid #c8a032;border-radius:10px;background:#1d1a12;color:#ffd070;font-size:14px;font-weight:600;letter-spacing:.5px">TK# '+(C.tkBase==null?'なし':(C.tkBase+(R.isCH?'×2(CH)':'')+(R.face==='rear'?'+1(背面)':'')+'−AF'+R.af+' = <b>'+R.tk+'</b>'))+'</span>'});
     else it.push({ic:'tgt',t:'<span>建物内の歩兵へ '+C.ifp+'FP('+IFT_LBL[ci(C.ifp)]+'列)</span>'});
