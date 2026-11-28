@@ -37162,7 +37162,7 @@ function nmRmBuildB(n,U,X2){
     if(!mv&&!x.f&&/このカウンターを移動/.test(x.t||'')){mvInf=true;imv.push(x);return;}
     if(mvInf&&x.row&&x.btns&&x.btns.some(function(b){return /nmMvStartIm\(/.test(String(b[1]));})){imv.push(x);mvInf=false;return;}
     if(!edt&&x.f&&/を編集$/.test(String(x.t||'').replace(/<[^>]*>/g,''))){edt=x;return;} /* ダルマ指示「移動の右に編成ボタンを追加」sample-edtile: 「部隊を編集」を大きなボタン「編成」に */
-    if(/ヘクスにカウンターを配置|白兵戦|退出/.test(x.t||'')){hexIt.push(x);return;}
+    if(!x.uact&&/ヘクスにカウンターを配置|白兵戦|退出/.test(x.t||'')){hexIt.push(x);return;}
     rest.push(x);});
   if(!head)return null;
   if(!atk&&!face&&!del)return null;
@@ -37346,9 +37346,13 @@ function nmUnitMenu(it,H,n,sd){
     var hasDc=!!eh.dcPlaced;try{hasDc=hasDc||nmSuDcList(eh.grp).length>0;}catch(e){hasDc=true;}if(hasDc)it.push({ic:'fire',t:eh.dcPlaced?'爆薬(DC)を爆発させる → '+BTG.nodes[eh.dcPlaced.n].nm:'爆薬(DC)を配置',sub:eh.dcPlaced?'AFPh(前進射撃フェイズ): X#未満で30FP(TEM)':'隣接ヘクスへ設置(DCを持つ統制状態の分隊)',f:"nmDcOpen("+n+",'"+sd+"')"}); /* v430 */
     nmSxRow(it,n,sd,eh); /* v434 */
     if(S.turn&&S.turn.phase==='aph')it.push({ic:'move',t:'突撃(隣接1ヘクス)',sub:'APh(突撃フェイズ): 統制状態のユニットが1ヘクス。敵のいるヘクスへは白兵戦',f:"nmAdvOpen("+n+",'"+sd+"')"}); /* v439 */
-    if((nmGeList(eh.grp).sw||[]).some(function(u){return nmGeSwBase(u).id==='ft241';}))it.push({ic:'fire',t:'火炎放射器で車両を攻撃する',sub:'射程2まで。TK#8(射程2は4)＋CE1・OT2、AFなし。X#で燃料切れ除去',f:"nmFtOpen("+n+",'"+sd+"')"}); /* v438 */
+    if((nmGeList(eh.grp).sw||[]).some(function(u){return nmGeSwBase(u).id==='ft241';})){if(window.NM_UACT!==0)it.push({uact:1,row:1,ic:'fire',t:'<span>火炎放射器<br><small style="color:#8fa6bd;font-size:11px">射程2まで。X#で燃料切れ除去</small></span>',btns:[['車両へ',"nmFtOpen("+n+",'"+sd+"')"],['歩兵へ',"nmMfOpen("+n+",'"+sd+"','"+eh.grp+"')"]]});else it.push({ic:'fire',t:'火炎放射器で車両を攻撃する',sub:'射程2まで。TK#8(射程2は4)＋CE1・OT2、AFなし。X#で燃料切れ除去',f:"nmFtOpen("+n+",'"+sd+"')"});} /* sample-unitact(ダルマ「火炎放射器の項目は車両、歩兵へ両方」): 歩兵へは射撃(FTの24FPを含めて計算) */ /* v438 */
     var rfp=(S_LOS.resid||{})[nmResKey(nmHexOfNode(n))];if(rfp)it.push({ic:'fire',t:'残留火力の攻撃('+rfp+'FP)',sub:'このヘクスに入った時の攻撃(FFMO・FFNAM)',f:"nmRaOpen("+n+",'"+sd+"')"}); /* v437 */
     if((eh.swMal||[]).length)it.push({ic:'fire',t:'SWの修理(故障'+eh.swMal.length+')',sub:eh.swMal.map(function(m){return nmSwMalName(m.uid);}).join('・')+'　dr≦R#で修理・dr6で除去',f:"nmSrOpen("+n+",'"+sd+"','"+eh.grp+"')"}); /* v425 */
+    if(window.NM_UACT!==0){try{ /* sample-unitact(ダルマ「爆薬 白兵戦 火炎放射器(火炎放射器所持時表示) 追加」) */
+      var ccOk=false;try{ccOk=nmCCSides(nmHexOfNode(n)).ok;}catch(e){}
+      it.push({uact:1,ic:'fire',t:'白兵戦',sub:ccOk?'このヘクスに敵がいる。両方が同時に攻撃':'同じヘクスに敵がいる時にできます(突撃フェイズで敵のヘクスへ1ヘクス)',f:ccOk?"nmCCOpen("+n+")":"nmAdvOpen("+n+",'"+sd+"')"});
+    }catch(e){console.log('uact',e);}}
     it.push({ic:'smoke',t:'煙幕手榴弾',sub:'自ヘクスか隣接ヘクスに煙幕を配置(dr ≦ 煙幕指数)',f:"nmSgOpen("+n+",'"+sd+"')"}); /* v418 */
     if(nmLwList(eh).length||nmPfWep(nmGeList(eh.grp).nat))it.push({ic:'fire',t:'ここから攻撃する(軽対戦車兵器'+(nmLwList(eh).some(function(x){return x.mg;})?'・機関銃':'')+')',sub:(nmLwList(eh).map(function(x){return x.w.lbl;}).join('・')||'PFはこのシナリオでは使わない設定')+'　車両・建物内の歩兵へ',f:"nmLwOpen("+n+",'"+sd+"')"}); /* v417 / v431 */
     it.push({ic:'fire',t:'ここから攻撃する(射撃)',sub:nmGrpLbl(eh.grp)+'で'+(sd==='f'?'敵':'自軍')+'のマーカーを攻撃する。射撃タブと同じ計算でダイスまで',f:"nmMfOpen("+n+",'"+sd+"','"+eh.grp+"')"}); /* v403 */
@@ -40160,7 +40164,9 @@ function nmSuReset(){var U=NM_SU;if(!U.rst){U.rst=1;nmSuDraw();setTimeout(functi
 /* ---- 受け渡し(プレイ中) ---- */
 var NM_SX=null;
 function nmSxRow(it,n,sd,eh){var c=nmSuCarry(eh.grp),k=0;Object.keys(c).forEach(function(p){k+=c[p].length;});var dr=nmSxDrops(nmHexOfNode(n)).length;if(!k&&!dr)return;
-  it.push({ic:'fire',t:'支援火器の受け渡し'+(k?'('+k+')':'')+(dr?'　<span style="color:#c8a032">置いてある'+dr+'</span>':''),sub:'運ぶユニットを変える・同じヘクスの編成に渡す・置く/拾う',f:"nmSxOpen("+n+",'"+sd+"')"});}
+  var dn='';try{dn=nmSxDrops(nmHexOfNode(n)).map(function(x){return nmSxName(x.kind,x.id);}).join('・');}catch(e){}
+  if(!k&&dr&&window.NM_UACT!==0){it.push({ic:'fire',t:'支援火器を拾う　<span style="color:#c8a032">置いてある'+dr+'</span>',sub:(dn?dn+'　':'')+'このヘクスに置いてあるSWを部隊のユニットに持たせる',f:"nmSxOpen("+n+",'"+sd+"')"});return;} /* sample-unitact(ダルマ「支援火器を拾う・渡す」): SWを持っていなくて置いてある時は「拾う」 */
+  it.push({ic:'fire',t:'支援火器の受け渡し'+(k?'('+k+')':'')+(dr?'　<span style="color:#c8a032">置いてある'+dr+'</span>':''),sub:(dr&&dn?'置いてある: '+dn+'　':'')+'運ぶユニットを変える・同じヘクスの編成に渡す・置く/拾う',f:"nmSxOpen("+n+",'"+sd+"')"});}
 function nmSxDrops(H){var sc=nmSuScen(),L=((S.nmSwDrop||{})[sc])||[];return L.filter(function(x){return x.b===H.boardId&&x.c===H.col&&x.r===H.row;});}
 function nmSxOpen(n,sd){var eh=nmUnitAt(nmHexOfNode(n),sd);if(!eh||!eh.grp)return;NM_SX={n:n,sd:sd,slot:eh.grp};NM_RM_SUB='swx';btRmReopen(n);}
 function nmSxRe(n){NM_RM_SUB='swx';btRmReopen(n);}
