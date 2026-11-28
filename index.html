@@ -37353,6 +37353,11 @@ function nmUnitMenu(it,H,n,sd){
     if((nmGeList(eh.grp).sw||[]).some(function(u){return nmGeSwBase(u).id==='ft241';})){if(window.NM_UACT!==0)it.push({uact:1,row:1,ic:'fire',t:'<span>火炎放射器<br><small style="color:#8fa6bd;font-size:11px">射程2まで。X#で燃料切れ除去</small></span>',btns:[['車両へ',"nmFtOpen("+n+",'"+sd+"')"],['歩兵へ',"nmMfOpen("+n+",'"+sd+"','"+eh.grp+"')"]]});else it.push({ic:'fire',t:'火炎放射器で車両を攻撃する',sub:'射程2まで。TK#8(射程2は4)＋CE1・OT2、AFなし。X#で燃料切れ除去',f:"nmFtOpen("+n+",'"+sd+"')"});} /* sample-unitact(ダルマ「火炎放射器の項目は車両、歩兵へ両方」): 歩兵へは射撃(FTの24FPを含めて計算) */ /* v438 */
     var rfp=(S_LOS.resid||{})[nmResKey(nmHexOfNode(n))];if(rfp)it.push({ic:'fire',t:'残留火力の攻撃('+rfp+'FP)',sub:'このヘクスに入った時の攻撃(FFMO・FFNAM)',f:"nmRaOpen("+n+",'"+sd+"')"}); /* v437 */
     if((eh.swMal||[]).length)it.push({ic:'fire',t:'SWの修理(故障'+eh.swMal.length+')',sub:eh.swMal.map(function(m){return nmSwMalName(m.uid);}).join('・')+'　dr≦R#で修理・dr6で除去',f:"nmSrOpen("+n+",'"+sd+"','"+eh.grp+"')"}); /* v425 */
+    if(window.NM_QSPL!==0){try{ /* sample-qsplit(ダルマ「分隊の合流や分割がアプリだと少し手間」→案1・2): ユニットのメニューから1タップで分割・合流 */
+      var qits=nmGeList(eh.grp).items||[];if(qits.length>=2)it.push({uact:1,row:1,ic:'sel',t:'<span>分割<br><small style="color:#8fa6bd;font-size:11px">タップした1個を新しい部隊に</small></span>',btns:qits.map(function(x){return [x.label,"nmQSplit("+n+",'"+sd+"','"+eh.grp+"',"+x.pid+")"];})});
+      var qoth=[];nmAllAt(nmHexOfNode(n),sd).forEach(function(e){if(e.grp&&e.grp!==eh.grp&&!e.veh&&!e.gun&&qoth.indexOf(e.grp)<0)qoth.push(e.grp);});
+      if(qoth.length)it.push({uact:1,row:1,ic:'hex',t:'<span>合流<br><small style="color:#8fa6bd;font-size:11px">同じヘクスの部隊をこの部隊に</small></span>',btns:qoth.map(function(k){return [nmGrpLbl(k)+'と合流',"nmQMerge("+n+",'"+sd+"','"+eh.grp+"','"+k+"')"];})});
+    }catch(e){console.log('qspl',e);}}
     if(window.NM_UACT!==0){try{ /* sample-unitact(ダルマ「爆薬 白兵戦 火炎放射器(火炎放射器所持時表示) 追加」) */
       var ccOk=false;try{ccOk=nmCCSides(nmHexOfNode(n)).ok;}catch(e){}
       it.push({uact:1,ic:'fire',t:'白兵戦',sub:ccOk?'このヘクスに敵がいる。両方が同時に攻撃':'同じヘクスに敵がいる時にできます(突撃フェイズで敵のヘクスへ1ヘクス)',f:ccOk?"nmCCOpen("+n+")":"nmAdvOpen("+n+",'"+sd+"')"});
@@ -46164,6 +46169,9 @@ function nmGeMergeDo(n,k){var G=NM_GE;if(!G||!k||k===G.slot)return;var H=NM_RM_H
   try{(nmSuDcList(k)||[]).slice().forEach(function(){nmSuDcDel(k,0);nmSuDcAdd(G.slot,null);});}catch(e){}
   nmGeSync(k);nmGeSync(G.slot);var L=nmSideList(G.sd);for(var i=L.length-1;i>=0;i--){var e=L[i];if(e&&e.grp===k&&e.boardId===H.boardId&&e.col===H.col&&e.row===H.row)L.splice(i,1);}
   try{nmDbg('部隊を合流: '+lb+' → '+nmGrpLbl(G.slot));}catch(e){}try{saveState();}catch(e){}Draw();btToast(lb+' '+T('を合流しました'));NM_RM_SUB='grpedit';btRmReopen(n);}
+function nmQReopen(n,sd,g){NM_GE=null;NM_RM_SUB=null;try{var L=nmAllAt(NM_RM_HEX,sd),k=-1;L.forEach(function(e,i){if(e.grp===g)k=i;});var eh=L[k]||null;if(L.length>1&&eh){nmSelK(sd,k);window.NM_RM_INLEH=eh;window.NM_DRAG_PREF=eh;window.NM_RM_GROW=1;}}catch(e){}btRmReopen(n);} /* 分割・合流のあと、元の部隊の操作を開いたまま */
+function nmQSplit(n,sd,g,pid){NM_GE={sd:sd,slot:g,spl:[pid]};NM_RM_HEX=nmHexOfN(n);nmGeSplitDo(n);nmQReopen(n,sd,g);}
+function nmQMerge(n,sd,g,k){NM_GE={sd:sd,slot:g};NM_RM_HEX=nmHexOfN(n);nmGeMergeDo(n,k);nmQReopen(n,sd,g);}
 function nmGeSplTog(n,pid){var G=NM_GE;if(!G)return;G.spl=G.spl||[];var i=G.spl.indexOf(pid);if(i>=0)G.spl.splice(i,1);else G.spl.push(pid);NM_RM_SUB='grpedit';btRmReopen(n);}
 function nmRmGrpEditItems(n){
   var G=NM_GE;if(!G)return nmRMenuItems(n);var L=NM_SIDE_LBL[G.sd],d=nmGeList(G.slot),nat=d.nat,it=[],nc=(UNITS[nat]&&UNITS[nat].col)||'#ccddee';
