@@ -48880,7 +48880,7 @@ function losEnemyHexOverlaySVG(dispLayout){
       // LOSラインを表示しない(v10.32の非表示に戻す。当時は範囲を±60度と誤っていたが、現在はルールブック準拠の±30度)。
       var dO=losCanonicalToDisplay(origin.x,origin.y,dispLayout);
       var dT=losCanonicalToDisplay(target.x,target.y,dispLayout);
-      if(!inFront){h+='<line x1="'+dO.x+'" y1="'+dO.y+'" x2="'+dT.x+'" y2="'+dT.y+'" stroke="'+LCOL+'" stroke-width="1" stroke-dasharray="3,4" stroke-opacity="0.45"/>';return;} /* v380: 向き(CA)の範囲外は細い薄線 */
+      if(!inFront){h+='<line x1="'+dO.x+'" y1="'+dO.y+'" x2="'+dT.x+'" y2="'+dT.y+'" stroke="#000" stroke-width="4" stroke-dasharray="0.1,7" stroke-linecap="round" stroke-opacity="0.35"/><line x1="'+dO.x+'" y1="'+dO.y+'" x2="'+dT.x+'" y2="'+dT.y+'" stroke="#c4ccd4" stroke-width="2.5" stroke-dasharray="0.1,7" stroke-linecap="round" stroke-opacity="0.95"/>';return;} /* v1720(ダルマ指示「LOSライン射角外はグレー点線で表示」): 射角(CA)の外はグレーの点線(黒い縁取りで地図上でも見える) */ /* v380: 向き(CA)の範囲外は細い薄線 */
       h+='<line x1="'+dO.x+'" y1="'+dO.y+'" x2="'+dT.x+'" y2="'+dT.y+'" stroke="'+LCOL+'" stroke-width="2" stroke-dasharray="6,3" stroke-opacity="0.9"/>';
     });
   });
