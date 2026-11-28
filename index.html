@@ -37162,7 +37162,7 @@ function nmRmBuildB(n,U,X2){
     if(!mv&&!x.f&&/このカウンターを移動/.test(x.t||'')){mvInf=true;imv.push(x);return;}
     if(mvInf&&x.row&&x.btns&&x.btns.some(function(b){return /nmMvStartIm\(/.test(String(b[1]));})){imv.push(x);mvInf=false;return;}
     if(!edt&&x.f&&/を編集$/.test(String(x.t||'').replace(/<[^>]*>/g,''))){edt=x;return;} /* ダルマ指示「移動の右に編成ボタンを追加」sample-edtile: 「部隊を編集」を大きなボタン「編成」に */
-    if(/ヘクスにカウンターを配置|白兵戦|退出/.test(x.t||'')){hexIt.push(x);return;}
+    if(!x.uact&&/ヘクスにカウンターを配置|白兵戦|退出/.test(x.t||'')){hexIt.push(x);return;}
     rest.push(x);});
   if(!head)return null;
   if(!atk&&!face&&!del)return null;
@@ -37349,6 +37349,11 @@ function nmUnitMenu(it,H,n,sd){
     if((nmGeList(eh.grp).sw||[]).some(function(u){return nmGeSwBase(u).id==='ft241';}))it.push({ic:'fire',t:'火炎放射器で車両を攻撃する',sub:'射程2まで。TK#8(射程2は4)＋CE1・OT2、AFなし。X#で燃料切れ除去',f:"nmFtOpen("+n+",'"+sd+"')"}); /* v438 */
     var rfp=(S_LOS.resid||{})[nmResKey(nmHexOfNode(n))];if(rfp)it.push({ic:'fire',t:'残留火力の攻撃('+rfp+'FP)',sub:'このヘクスに入った時の攻撃(FFMO・FFNAM)',f:"nmRaOpen("+n+",'"+sd+"')"}); /* v437 */
     if((eh.swMal||[]).length)it.push({ic:'fire',t:'SWの修理(故障'+eh.swMal.length+')',sub:eh.swMal.map(function(m){return nmSwMalName(m.uid);}).join('・')+'　dr≦R#で修理・dr6で除去',f:"nmSrOpen("+n+",'"+sd+"','"+eh.grp+"')"}); /* v425 */
+    if(window.NM_UACT!==0){try{ /* sample-unitact(ダルマ「爆薬 白兵戦 火炎放射器(火炎放射器所持時表示) 追加」) */
+      if(!hasDc)it.push({ic:'fire',t:'爆薬(DC)',sub:'この部隊はDCを持っていません。部隊の編成でDCを持たせると配置できます',f:"nmGeOpen("+n+",'"+sd+"','"+eh.grp+"')",dim:1});
+      var ccOk=false;try{ccOk=nmCCSides(nmHexOfNode(n)).ok;}catch(e){}
+      it.push({uact:1,ic:'fire',t:'白兵戦',sub:ccOk?'このヘクスに敵がいる。両方が同時に攻撃':'同じヘクスに敵がいる時にできます(突撃フェイズで敵のヘクスへ1ヘクス)',f:ccOk?"nmCCOpen("+n+")":"nmAdvOpen("+n+",'"+sd+"')"});
+    }catch(e){console.log('uact',e);}}
     it.push({ic:'smoke',t:'煙幕手榴弾',sub:'自ヘクスか隣接ヘクスに煙幕を配置(dr ≦ 煙幕指数)',f:"nmSgOpen("+n+",'"+sd+"')"}); /* v418 */
     if(nmLwList(eh).length||nmPfWep(nmGeList(eh.grp).nat))it.push({ic:'fire',t:'ここから攻撃する(軽対戦車兵器'+(nmLwList(eh).some(function(x){return x.mg;})?'・機関銃':'')+')',sub:(nmLwList(eh).map(function(x){return x.w.lbl;}).join('・')||'PFはこのシナリオでは使わない設定')+'　車両・建物内の歩兵へ',f:"nmLwOpen("+n+",'"+sd+"')"}); /* v417 / v431 */
     it.push({ic:'fire',t:'ここから攻撃する(射撃)',sub:nmGrpLbl(eh.grp)+'で'+(sd==='f'?'敵':'自軍')+'のマーカーを攻撃する。射撃タブと同じ計算でダイスまで',f:"nmMfOpen("+n+",'"+sd+"','"+eh.grp+"')"}); /* v403 */
