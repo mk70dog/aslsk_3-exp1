@@ -40164,7 +40164,9 @@ function nmSuReset(){var U=NM_SU;if(!U.rst){U.rst=1;nmSuDraw();setTimeout(functi
 /* ---- 受け渡し(プレイ中) ---- */
 var NM_SX=null;
 function nmSxRow(it,n,sd,eh){var c=nmSuCarry(eh.grp),k=0;Object.keys(c).forEach(function(p){k+=c[p].length;});var dr=nmSxDrops(nmHexOfNode(n)).length;if(!k&&!dr)return;
-  it.push({ic:'fire',t:'支援火器の受け渡し'+(k?'('+k+')':'')+(dr?'　<span style="color:#c8a032">置いてある'+dr+'</span>':''),sub:'運ぶユニットを変える・同じヘクスの編成に渡す・置く/拾う',f:"nmSxOpen("+n+",'"+sd+"')"});}
+  var dn='';try{dn=nmSxDrops(nmHexOfNode(n)).map(function(x){return nmSxName(x.kind,x.id);}).join('・');}catch(e){}
+  if(!k&&dr&&window.NM_UACT!==0){it.push({ic:'fire',t:'支援火器を拾う　<span style="color:#c8a032">置いてある'+dr+'</span>',sub:(dn?dn+'　':'')+'このヘクスに置いてあるSWを部隊のユニットに持たせる',f:"nmSxOpen("+n+",'"+sd+"')"});return;} /* sample-unitact(ダルマ「支援火器を拾う・渡す」): SWを持っていなくて置いてある時は「拾う」 */
+  it.push({ic:'fire',t:'支援火器の受け渡し'+(k?'('+k+')':'')+(dr?'　<span style="color:#c8a032">置いてある'+dr+'</span>':''),sub:(dr&&dn?'置いてある: '+dn+'　':'')+'運ぶユニットを変える・同じヘクスの編成に渡す・置く/拾う',f:"nmSxOpen("+n+",'"+sd+"')"});}
 function nmSxDrops(H){var sc=nmSuScen(),L=((S.nmSwDrop||{})[sc])||[];return L.filter(function(x){return x.b===H.boardId&&x.c===H.col&&x.r===H.row;});}
 function nmSxOpen(n,sd){var eh=nmUnitAt(nmHexOfNode(n),sd);if(!eh||!eh.grp)return;NM_SX={n:n,sd:sd,slot:eh.grp};NM_RM_SUB='swx';btRmReopen(n);}
 function nmSxRe(n){NM_RM_SUB='swx';btRmReopen(n);}
